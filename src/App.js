@@ -1,24 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+import { useContext } from 'react';
+import { Route, Routes } from 'react-router-dom'
+
+import ThemeContext from './store/theme-context';
+
+import Layout from './components/Layout/Layout';
+import Salons from './pages/Salons/Salons';
+import NotFound from './pages/NotFound/NotFound';
+
+
 
 function App() {
+
+  const themeCtx = useContext(ThemeContext)
+
+  const routes = (
+    <Routes>
+      <Route path="/salons" element={<Salons />} />
+      <Route path='*' element={<NotFound />} />
+    </Routes>
+  )
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Layout dir={themeCtx.direction}>
+      {routes}
+    </Layout>
   );
 }
 
