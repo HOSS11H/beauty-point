@@ -1,42 +1,35 @@
+import {useState} from 'react';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 
+import LogoDark from '../../images/logo/logo_dark.png';
+import LogoLight from '../../images/logo/logo_white.png';
+
 const LogoWrapper =styled(NavLink)`
-    height: 11%;
-    color: ${ ( { theme } ) => theme.palette.mode === 'dark' ? theme.vars.white : theme.vars.black };
-    text-transform: capitalize;
+    width: 170px;
+    height: 50px;
     display: flex;
-    justify-content: center;
     align-items: center;
-    font-size: 36px;
-    text-decoration: none;
-    @media (min-width: 768px) {
-        height: 80%;
-    }
+    justify-content: center;
 `
-const FooterLogoWrapper =styled(LogoWrapper)`
-    justify-content: flex-start;
-    margin-bottom: 14px;
-    @media screen and (max-width: 600px) {
-        justify-content: center;
-    }
-`
-const LogoSpan =styled.span`
-    color: ${ ( { theme} ) => theme.vars.primary };
+const LogoImg = styled.img`
+    width: 100%;
+    object-fit: cover;
 `
 
 const Logo = ( props ) => {
+
+    const [ logoColor, setLogoColor] = useState('light')
+
+    const logoColorHandler = ( ( ) => {
+        setLogoColor( prevState => (prevState === 'light' ? 'dark' : 'light') );
+    } )
+
     return (
-        <LogoWrapper to='/' onClick={props.action}> 
-            synd <LogoSpan>o</LogoSpan>
+        <LogoWrapper to='/' onClick={props.action}>
+            {logoColor === 'light' && <LogoImg src={LogoLight} alt='logo'/>}
+            {logoColor === 'dark' && <LogoImg src={LogoDark} alt='logo'/>}
         </LogoWrapper>
-    )
-}
-export const FooterLogo = ( props ) => {
-    return (
-        <FooterLogoWrapper to='/' onClick={props.action}> 
-            synd <LogoSpan>o</LogoSpan>
-        </FooterLogoWrapper>
     )
 }
 

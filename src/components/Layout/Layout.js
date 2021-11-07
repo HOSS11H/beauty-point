@@ -21,17 +21,16 @@ const Layout = props => {
     } , [ ] )
 
     return (
-            <Main dir={props.dir}>
-                <Toolbar sideDrawerToggle={sideDrawertoggleHandler}  />
-                <SideDrawer opened={sideDrawerState} 
-                    event={sideDrawerCancelHandler} 
-                    authentication={props.isAuth} />
-                <Wrapper>
-                    {props.children}
-                </Wrapper>
-            </Main>
+        <Main dir={props.dir}>
+            <Toolbar sideDrawerToggle={sideDrawertoggleHandler}  />
+            <SideDrawer opened={sideDrawerState} 
+                event={sideDrawerCancelHandler} 
+                authentication={props.isAuth} />
+            <Wrapper>
+                {props.children}
+            </Wrapper>
+        </Main>
     )
-
 };
 
 

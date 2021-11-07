@@ -19,7 +19,7 @@ const app = (
           <StyleSheetManager stylisPlugins={[rtlPlugin]}>
             <App />
           </StyleSheetManager>
-      </ThemeContextProvider >
+      </ThemeContextProvider>
     </BrowserRouter>
   </React.StrictMode>
 )

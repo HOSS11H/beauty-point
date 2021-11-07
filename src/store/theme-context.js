@@ -27,9 +27,13 @@ export const ThemeContextProvider = props => {
             createTheme({
                 direction: direction,
                 vars: {
-                    primary: '#00acb1',
+                    primary: '#EF14E2',
                     black: '#000000',
                     white: '#f4f4f4',
+                },
+                fonts: {
+                    ar: "'Cairo', sans-serif",
+                    en: "'Poppins', sans-serif",
                 },
                 palette: {
                     mode,
