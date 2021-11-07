@@ -1,42 +1,10 @@
-/* fonts */
-@font-face {
-    font-family: 'JF-Flat-light';
-    src: url("./assets/fonts/JF-Flat-light.eot");
-    src: url("./assets/fonts/JF-Flat-light.eot?#iefix") format("embedded-opentype"), url("./assets/fonts/JF-Flat-light.woff2") format("woff2");
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'JFFlat-Light';
-    src: url("./assets/fonts/JFFlat-Light.svg#JFFlat-Light") format("svg"), url("./assets/fonts/JFFlat-Light.ttf") format("truetype"), url("./assets/fonts/JFFlat-Light.woff") format("woff");
-    font-weight: normal;
-    font-style: normal;
-}
 
 @font-face {
     font-family: 'JFFlat-Regular';
-    src: url("./assets/fonts/JFFlat-Regular.eot");
-    src: url("./assets/fonts/JFFlat-Regular.eot?#iefix") format("embedded-opentype"), url("./assets/fonts/JFFlat-Regular.svg#JFFlat-Regular") format("svg"), url("./assets/fonts/JFFlat-Regular.ttf") format("truetype"), url("./assets/fonts/JFFlat-Regular.woff") format("woff"), url("./assets/fonts/JFFlat-Regular.woff2") format("woff2");
+    src:  format("embedded-opentype"), url("../fonts/JFFlat-Regular.ttf") format("truetype"), url("../fonts/JFFlat-Regular.woff") format("woff"), url("../fonts/JFFlat-Regular.woff2") format("woff2");
     font-weight: normal;
     font-style: normal;
 }
-
-@font-face {
-    font-family: 'JF-Flat-medium';
-    src: url("./assets/fonts/JF-Flat-medium.eot");
-    src: url("./assets/fonts/JF-Flat-medium.eot?#iefix") format("embedded-opentype"), url("./assets/fonts/JF-Flat-medium.woff2") format("woff2");
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'JFFlat-Medium';
-    src: url("./assets/fonts/JFFlat-Medium.svg#JFFlat-Medium") format("svg"), url("./assets/fonts/JFFlat-Medium.ttf") format("truetype"), url("./assets/fonts/JFFlat-Medium.woff") format("woff");
-    font-weight: normal;
-    font-style: normal;
-}
-
 html {
     overflow-x: hidden
 }
@@ -235,7 +203,7 @@ section {
 }
 
 .home {
-    background-image: url(./assets/images/1.png);
+    background-image: url(../img/1.png);
     width: 100vw;
     background-repeat: no-repeat;
     margin-top: 0;
@@ -430,13 +398,6 @@ ul {
     max-width: 1580px
 }
 
-.back-img {
-    background-image: url(./assets/images/lannd-bg.png);
-    background-position: bottom;
-    background-repeat: no-repeat;
-    background-size: cover;
-    height: 100vh
-}
 
 .landing-circle {
     position: absolute;
@@ -513,14 +474,6 @@ ul {
     margin-top: 35px
 }
 
-.pc-bg {
-    background-image: url(./assets/images/screen1.png);
-    width: 515px;
-    height: 290px;
-    display: inline-block;
-    position: relative;
-    background-repeat: no-repeat
-}
 
 .pc-bg:hover .img-scroll {
     background-position: center 100% !important
@@ -935,7 +888,7 @@ ul {
 }
 
 .home-two {
-    background-image: url(./assets/images/home2/home2-slider.png);
+    /* background-image: url(../img/home2/home2-slider.png); */
     background-position: bottom
 }
 
@@ -953,7 +906,7 @@ ul {
 }
 
 .home-three {
-    background-image: url(./assets/images/home3/home3-slider.png);
+    background-image: url(../img/home3-slider.png);
     background-size: contain;
     background-position: top
 }
@@ -1099,7 +1052,7 @@ ul {
 
 .about {
     width: 100vw;
-    background-image: url(./assets/images/about-bg.png);
+    background-image: url(../img/about-bg.png);
     background-size: cover;
     background-repeat: no-repeat;
     margin-top: 0;
@@ -1185,7 +1138,7 @@ ul {
 }
 
 .feature {
-    background-image: url(./assets/images/rtl/feature-bg.png);
+    /* background-image: url(../img/rtl/feature-bg.png); */
     width: 100vw;
     min-height: 855px;
     background-repeat: no-repeat;
@@ -1234,7 +1187,7 @@ ul {
 }
 
 .screenshot {
-    background-image: url(./assets/images/screenshot-bg.png);
+    /* background-image: url(../img/screenshot-bg.png); */
     background-repeat: no-repeat;
     background-size: cover;
     margin-top: 0;
@@ -2402,7 +2355,7 @@ iframe.video-play {
 }
 
 .about-second {
-    background-image: url(./assets/images/rtl/about-bg1.png) !important;
+    /* background-image: url(../img/rtl/about-bg1.png) !important; */
     background-position: right;
 }
 
@@ -2639,13 +2592,13 @@ form.CommentForm {
 
 .commentNafso {
     padding-right: 35px;
-    background: url(./assets/images/commenter.png) no-repeat;
+    /* background: url(../img/commenter.png) no-repeat; */
 }
 
 .commentNafso {
     padding-right: 55px;
     padding-top: 20px;
-    background: url(./assets/images/commenter.png) no-repeat right top;
+    /* background: url(../img/commenter.png) no-repeat right top; */
     border-bottom: 1px solid #ccc;
     padding-bottom: 10px;
     margin-bottom: 10px;
@@ -2687,7 +2640,7 @@ form.CommentForm {
 }
 
 .adminReply {
-    background: url(./assets/images/admin.png) no-repeat top right;
+    /* background: url(../img/admin.png) no-repeat top right; */
     padding-right: 40px;
 }
 
@@ -2792,7 +2745,7 @@ p.slide-cap-desc {
     top: 61px !important;
 }
 .download {
-    background-image: url(./assets/img/download-area-bg.png) !important;
+    background-image: url(../img/download-area-bg.png) !important;
     background-repeat: no-repeat;
     background-size: 100% 100%;
 }

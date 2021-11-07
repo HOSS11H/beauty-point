@@ -113,7 +113,7 @@
 }
 
 .rtl .about {
-    background-image: url(./assets/img/about-bg.png);
+    background-image: url(../img/about-bg.png);
     background-position: right
 }
 
@@ -151,12 +151,9 @@
     outline: none
 }
 
-.rtl .home.home-two {
-    background-image: url(./assets/img/home2-slider.png)
-}
 
 .rtl .home-three {
-    background-image: url(./assets/img/home3-slider.png);
+    background-image: url(../img/home3-slider.png);
     background-size: 100% 100%;
 }
 
@@ -168,7 +165,7 @@
 }
 
 .download {
-    background-image: url(./assets/img/download-area-bg.png);
+    background-image: url(../img/download-area-bg.png);
     background-repeat: no-repeat;
     background-size: 100% 100%;
     text-align: center;

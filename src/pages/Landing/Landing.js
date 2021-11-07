@@ -1,29 +1,29 @@
-/* import { useEffect } from 'react';
+import { useEffect } from 'react';
 
-import './assets/css/all.min.css';
-import './assets/css/bootstrap.min.css';
-import './assets/css/animate.min.css';
-import './assets/css/owl.carousel.min.css';
-import './assets/css/owl.theme.css';
-import './assets/css/style.css';
-import './assets/css/rtl.css';
-import './assets/css/responsive.css';
+import  '../../assets/css/all.min.css';
+import '../../assets/css/bootstrap.min.css';
+import '../../assets/css/animate.min.css';
+import '../../assets/css/owl.carousel.min.css';
+import '../../assets/css/owl.theme.css';
+import '../../assets/css/style.css';
+import '../../assets/css/rtl.css';
+import '../../assets/css/responsive.css';
 
-import image1 from './assets/img/1.png'
-import image2 from './assets/img/2.png'
-import image3 from './assets/img/3.png'
-import image4 from './assets/img/4.png'
-import image5 from './assets/img/5.png'
+import image1 from '../../assets/img/1.png'
+import image2 from '../../assets/img/2.png'
+import image3 from '../../assets/img/3.png'
+import image4 from '../../assets/img/4.png'
+import image5 from '../../assets/img/5.png'
 
 
-import {appendScript} from './assets/load';
+import {appendScript} from '../../assets/load';
 
 
 const Landing = props => {
 
 
     useEffect( () => {
-        const fPath = './'
+        const fPath = '/assests/'
 
         const scripts = [
             fPath + 'js/jquery-3.6.0.min.js',
@@ -399,4 +399,4 @@ const Landing = props => {
         </div>
     )
 }
-export default Landing; */
+export default Landing;

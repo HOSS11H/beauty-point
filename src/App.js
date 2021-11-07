@@ -6,6 +6,7 @@ import ThemeContext from './store/theme-context';
 import Layout from './components/Layout/Layout';
 import Auth from './pages/Auth/Auth';
 import NotFound from './pages/NotFound/NotFound';
+import Landing from './pages/Landing/Landing';
 
 
 
@@ -15,7 +16,8 @@ function App() {
 
   const routes = (
     <Routes>
-      <Route path="/" element={<Auth />} />
+      <Route path="/auth" element={<Auth />} />
+      <Route path="/" element={<Landing />} />
       <Route path='*' element={<NotFound />} />
     </Routes>
   )
