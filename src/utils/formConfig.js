@@ -1,8 +1,8 @@
 import Input from '../components/UI/Input/Input';
 import {
     requiredRule,
-    minLengthRule,
-    maxLengthRule,
+    isNumberRule,
+    requiredCheckRule,
     passwordMatchRule,
     isEmailRule,
 } from './inputValidationRules';
@@ -36,8 +36,7 @@ function createFormFieldConfig(label, placeholder, name, type, defaultValue = ''
                 />
             );
         },
-        label,
-        placeholder,
+        name,
         value: defaultValue,
         valid: valid,
         errorMessage: '',
@@ -48,41 +47,81 @@ function createFormFieldConfig(label, placeholder, name, type, defaultValue = ''
 // object representation of Login form
 export const loginForm = {
     email : {
-        ...createFormFieldConfig( 'بريد الكتروني'  ,'admin@example.com', 'email', 'email'),
+        ...createFormFieldConfig( {ar: 'بريد الكتروني', en: 'email' }  ,'admin@example.com', 'email', 'email'),
         validationRules: [
-            requiredRule('email'),
-            isEmailRule('email'),
+            requiredRule({en: `email required`, ar: `بريد الكتروني مطلوب`}),
+            isEmailRule( {en: `email should be a valid email`, ar: `البريد الالكتروني يجب أن يكون بريد الكتروني صحيح`}),
         ],
     },
     password : {
-        ...createFormFieldConfig( 'الرقم السري' ,'......', 'password', 'password',undefined ,undefined , undefined , undefined , false),
+        ...createFormFieldConfig( { ar: 'الرقم السري', en: 'password' }  ,'......', 'password', 'password',undefined ,undefined , undefined , undefined , false),
         validationRules : [
-            requiredRule('password'),
+            requiredRule( { en: `password required`, ar: `رقم السر مطلوب` }),
         ]
     }
 }
-// object representation of Signup form
-export const signupForm = {
+// object representation of Subscribe form
+export const subscribeForm = {
     email : {
-        ...createFormFieldConfig('Email', 'email', 'text'),
+        ...createFormFieldConfig( {ar: 'بريد الكتروني', en: 'email' }  ,'admin@example.com', 'email', 'email'),
         validationRules: [
-            requiredRule('email'),
-            minLengthRule('email', 4),
-            isEmailRule('email'),
+            requiredRule('email', {en: `email required`, ar: `بريد الكتروني مطلوب`}),
+            isEmailRule( {en: `email should be a valid email`, ar: `البريد الالكتروني يجب أن يكون بريد الكتروني صحيح`}),
         ],
     },
     password : {
-        ...createFormFieldConfig('Password', 'password', 'password',),
+        ...createFormFieldConfig( { ar: 'الرقم السري', en: 'password' }  ,'......', 'password', 'password',undefined ,undefined , undefined , undefined , false),
         validationRules : [
-            requiredRule('password'),
-            minLengthRule('password', 4),
-            maxLengthRule('password', 8),
+            requiredRule( { en: `password required`, ar: `رقم السر مطلوب` }),
         ]
-    } ,
+    },
     confirmPassword : {
-        ...createFormFieldConfig('Enter Password Again', 'confirmPassword', 'password'),
+        ...createFormFieldConfig( { ar: 'تأكيد الرقم السري', en: 're-enter password' }  ,'......', 'confirmPassword', 'password',undefined ,undefined , undefined , undefined , false),
         validationRules : [
-            passwordMatchRule(),
+            passwordMatchRule({ ar: 'يجب تطابق كلمتي المرور', en: `passwords don't match` }),
         ]
-    }
+    },
+    name: {
+        ...createFormFieldConfig({ ar: 'الاسم', en: 'name' }, 'ahmed masoud', 'name', 'text'),
+        validationRules: [
+            requiredRule( {en: `name required`, ar: `الاسم مطلوب`} ),
+        ],
+    },
+    sallonName: {
+        ...createFormFieldConfig({ ar: 'اسم الصالون', en: 'sallon name' }, 'ahmed masoud sallon' ,'sallonName', 'text'),
+        validationRules: [
+            requiredRule( {en: `sallon name required`, ar: `اسم الصالون مطلوب`} ),
+        ],
+    },
+    address: {
+        ...createFormFieldConfig({ ar: 'العنوان', en: 'address' }, 'foo bar zee address' ,'address', 'address'),
+        validationRules: [
+            requiredRule( {en: `address required`, ar: `عنوان الصالون مطلوب`} ),
+        ],
+    },
+    phoneNum: {
+        ...createFormFieldConfig({ ar: 'رقم الهاتف', en: 'phone' }, '123321123' ,'phoneNum', 'phone'),
+        validationRules: [
+            requiredRule( {en: `phone number required`, ar: `رقم الهاتف مطلوب`} ),
+            isNumberRule( {en: `phone number should be a number`, ar: `رقم الهاتف يجب أن يكون رقم`} ),
+        ],
+    },
+    website: {
+        ...createFormFieldConfig({ ar: 'رابط الموقع', en: 'website link' }, 'https://website.com' ,'website', 'website'),
+        validationRules: [
+            requiredRule( {en: `website link required`, ar: `رابط الموقع مطلوب`} ),
+        ],
+    },
+    terms: {
+        ...createFormFieldConfig(
+        { 
+            ar: {text: 'انا موافق علي بند الاستخدام وسياسة الخصوصية وقد قرأتها بالكامل', linkText: 'بنود الاستخدام وسياسة الخصوصية', } , 
+            en: {text: 'I have read and agree terms & conditions', linkText: 'view terms & conditions', } ,
+            link: 'https://beautypoint.app',
+        },
+        undefined  ,'terms', 'checkbox', false ),
+        validationRules: [
+            requiredCheckRule( {en: `you should agree terms & conditions`, ar: `يجب أن توافق علي بنود الاستخدام وسياسة الخصوصية`} ),
+        ],
+    },
 }

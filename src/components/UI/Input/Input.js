@@ -1,15 +1,23 @@
+import { useContext, useState } from "react";
+import ThemeContext from "../../../store/theme-context";
+
 import styled from "styled-components";
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
+import Checkbox from '@mui/material/Checkbox';
 
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
+import RoomOutlinedIcon from '@mui/icons-material/RoomOutlined';
+import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
+import WebIcon from '@mui/icons-material/Web';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import MailIcon from '@mui/icons-material/Mail';
-import { useState } from "react";
+
+
+
 
 const InputContainer = styled.div`
     display: flex;
@@ -20,7 +28,7 @@ const InputContainer = styled.div`
 const InputLabel = styled.label`
     font-size:18px;
     font-weight: 600;;
-    color: #9b9b9b;
+    color: ${ ( { theme } ) => theme.palette.text.secondary };
     text-transform: capitalize;
     margin-bottom: 10px;
     text-align: center;
@@ -31,6 +39,35 @@ const ErrorMessage = styled.p`
     color: #DF1338;
     text-transform: capitalize;
     margin-bottom: 0;
+    color: ${ ( { theme } ) => theme.palette.error.main };
+`
+
+const CustomCheckbox = styled.div`
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    margin-bottom: 15px;
+    span {
+        color: ${ ( { theme } ) => theme.palette.text.secondary };
+    }
+    a {
+        display: block;
+        color: ${ ( { theme } ) => theme.palette.primary.main };
+    }
+`
+const CustomLabel = styled.label`
+    font-size: 15px;
+    font-weight: 400;
+    text-align: left;
+    margin-bottom: 0;
+    span {
+        color: ${ ( { theme } ) => theme.palette.text.secondary };
+    }
+    a {
+        display: inline-block;
+        margin-left: 5px;
+        color: ${ ( { theme } ) => theme.palette.primary.main };
+    }
 `
 
 const Input = ( props ) => {
@@ -51,6 +88,8 @@ const Input = ( props ) => {
     
     const [ passwordVisible, setPasswordVisible ] = useState(showPassword);
 
+    const themeCtx = useContext(ThemeContext)
+
     const handlePasswordChange = () => {
         setPasswordVisible(prevState => !prevState);
     };
@@ -60,7 +99,9 @@ const Input = ( props ) => {
     
     return (
         <InputContainer>
-            <InputLabel>{label}</InputLabel>
+            {
+                type !== 'checkbox' && <InputLabel>{themeCtx.direction === 'rtl' ?  label.ar : label.en }</InputLabel>
+            }
             {
                 type === 'text' &&
                     <TextField id={name} placeholder={placeholder} variant="outlined" 
@@ -70,7 +111,7 @@ const Input = ( props ) => {
             {
                 type === 'email' &&
                     <TextField id={name} placeholder={placeholder} variant="outlined" 
-                        type= 'text' name={name} value={value} onChange={handleChange}
+                        type= 'email' name={name} value={value} onChange={handleChange}
                         InputProps={{
                             startAdornment: (
                                 <InputAdornment position="start">
@@ -116,8 +157,62 @@ const Input = ( props ) => {
                         ))}
                     </TextField>
             }
+            {
+                type === 'address' &&
+                    <TextField id={name} placeholder={placeholder} variant="outlined" 
+                        type= 'text' name={name} value={value} onChange={handleChange}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <RoomOutlinedIcon />
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+            }
+            {
+                type === 'phone' &&
+                    <TextField id={name} placeholder={placeholder} variant="outlined" 
+                        type= 'text' name={name} value={value} onChange={handleChange}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <LocalPhoneIcon />
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+            }
+            {
+                type === 'website' &&
+                    <TextField id={name} placeholder={placeholder} variant="outlined" 
+                        type= 'text' name={name} value={value} onChange={handleChange}
+                        InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <WebIcon />
+                                </InputAdornment>
+                            ),
+                        }}
+                    />
+            }
+            {
+                type === 'checkbox' &&
+                    <CustomCheckbox>
+                        <Checkbox 
+                            id={name}
+                            name={name}
+                            checked={value}
+                            onChange={ (e) => handleChange({ target : { name: name, value: e.target.checked } }) }
+                            inputProps={{ 'aria-label': 'controlled' }} />
+                        <CustomLabel >
+                            <span>{themeCtx.direction === 'rtl' ?  label.ar.text : label.en.text }</span>
+                            <a href={label.link}>{themeCtx.direction === 'rtl' ?  label.ar.linkText : label.en.linkText }</a>
+                        </CustomLabel>
+                    </CustomCheckbox>
+            }
             {errorMessage && !isValid && (
-                <ErrorMessage>{errorMessage}</ErrorMessage>
+                <ErrorMessage>{themeCtx.direction === 'rtl' ?  errorMessage.ar : errorMessage.en }</ErrorMessage>
             )}
         </InputContainer>
     )

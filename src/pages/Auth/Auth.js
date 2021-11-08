@@ -1,14 +1,18 @@
 import { useContext, useState } from 'react';
 import axios from 'axios';
 import useForm from '../../hooks/useForm';
-import { loginForm, signupForm } from '../../utils/formConfig';
-import styled  from 'styled-components';
+import { loginForm, subscribeForm } from '../../utils/formConfig';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../../store/auth-context';
+
+import ThemeContext from '../../store/theme-context';
+import styled  from 'styled-components';
 import { Container, Grid } from '@mui/material';
+import { Button } from '../../components/UI/Button/Button'; 
 
 const AuthContainer = styled.div`
     min-height: 100vh;
+    padding: 100px 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -27,6 +31,7 @@ const FormHeading = styled.h1`
     margin: 0 0 20px;
     text-align: center;
     text-transform: capitalize;
+    color: ${ ( { theme } ) => theme.palette.text.primary };
 `
 const ErrorMessage = styled.p`
     font-size: 18px;
@@ -35,29 +40,6 @@ const ErrorMessage = styled.p`
     text-align: center;
     text-transform: capitalize;
     color: #DF1338;
-`
-const Button = styled.button`
-    font-size:17px;
-    padding:15px 30px;
-    display: flex;
-    align-items:center;
-    justify-content: center;
-    height: 50px;
-    margin-bottom: 10px;
-    width:100%;
-    background: linear-gradient(90deg, #034694 0%, #0170C1 100%);
-    color: #fff;
-    border:0;
-    outline: none;
-    cursor: pointer;
-    text-transform: capitalize;
-    transition: 0.3s ease-in-out;
-    box-shadow: 0px 8px 12px rgba(3, 72, 150, 0.15);
-    &:disabled {
-        background: #eee;
-        color: #999;
-        box-shadow: none;
-    }
 `
 const FormLink = styled.p`
     font-size: 16px;
@@ -84,24 +66,24 @@ const Auth = props => {
 
     const authCtx = useContext(AuthContext);
 
-    console.log(authCtx.isLoggedIn);
+    const themeCtx = useContext(ThemeContext)
 
     const navigate = useNavigate();
 
-    const [ isLogin , setIsLogin ] = useState(true);
+    const [ isLogin , setIsLogin ] = useState(false);
 
     const [ errorMessage , setErrorMessage ] = useState(null);
 
 
     const { renderFormInputs: loginInputs, isFormValid: isLoginDataValid, form: loginData } = useForm(loginForm);
-    const { renderFormInputs: signupInputs, isFormValid: isSignupDataValid, form: signupData } = useForm(signupForm);
+    const { renderFormInputs: subscribeInputs, isFormValid: isSubscribeDataValid, form: subscribeData } = useForm(subscribeForm);
 
     let authIsValid;
 
     if (isLogin) {
         authIsValid = isLoginDataValid();
     } else {
-        authIsValid = isSignupDataValid()
+        authIsValid = isSubscribeDataValid()
     }
 
     const switchAuthModeHandler = ( ) => {
@@ -122,8 +104,8 @@ const Auth = props => {
         } else {
             url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDteusGiWoNp_qFEn36zfPtJPSwRS8hpyg`;
             authData = {
-                email: signupData.email.value,
-                password: signupData.password.value,
+                email: subscribeData.email.value,
+                password: subscribeData.password.value,
                 returnSecureToken: true,
             }
         }
@@ -139,6 +121,40 @@ const Auth = props => {
                 setErrorMessage(err.response.data.error.message.split('_').join(' ').toLowerCase())
             })
     }
+
+    let loginFormText = {
+        heading: 'Login',
+        passwordRestoreMessage: 'forget Password ?',
+        passwordMessageLink: 'reset',
+        button: 'login',
+        formSwitchText: `Don't have account ?`,
+        formSwitchLink: `subscribe`,
+    }
+    let subscribeFormText = {
+        heading: 'be a service provider',
+        button: 'subscribe',
+        formSwitchText: `have an account ?`,
+        formSwitchLink: `login`,
+    }
+
+    if (themeCtx.direction === 'rtl' ) {
+        loginFormText = {
+            heading: 'تسجيل الدخول',
+            passwordRestoreMessage: 'نسيت كلمة المرور؟   ',
+            passwordMessageLink: 'استعادة',
+            button: 'تسجيل الدخول',
+            formSwitchText: `اذا لم يكن لديك حساب ؟`,
+            formSwitchLink: `اشتراك`,
+        }
+        subscribeFormText = {
+            heading: 'الاشتراك كمقدم خدمة',
+            button: 'اشتراك',
+            formSwitchText: `هل لديك حساب ؟`,
+            formSwitchLink: `تسجيل الدخول`,
+        }
+    }
+
+
     return (
         <AuthContainer>
             <Container maxWidth="md">
@@ -148,33 +164,33 @@ const Auth = props => {
                     <Grid item xs={12} md={6} >
                         <FormWrapper>
                             <FormHeading>
-                                { isLogin && 'تسجيل الدخول' }
-                                { !isLogin&& 'الاشتراك كمقدم خدمة' }
+                                { isLogin && loginFormText.heading }
+                                { !isLogin&& subscribeFormText.heading }
                             </FormHeading>
-                            { isLogin ? loginInputs() : signupInputs() }
+                            { isLogin ? loginInputs() : subscribeInputs() }
                             { isLogin && (
                                 <FormLink>
-                                    نسيت كلمة المرور؟   
+                                    {loginFormText.passwordRestoreMessage}
                                     <span >
-                                        استعادة
+                                        {loginFormText.passwordMessageLink}
                                     </span>
                                 </FormLink>
                             )}
                             { errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-                            <Button onClick={submitHandler} disabled={!authIsValid} >{isLogin ? 'Login' : 'Create Account'}</Button>
+                            <Button onClick={submitHandler} disabled={!authIsValid} >{isLogin ? loginFormText.button : subscribeFormText.button}</Button>
                             { isLogin && (
                                 <FormLink>
-                                    اذا لم يكن لديك حساب ؟
+                                    {loginFormText.formSwitchText}
                                     <span onClick={switchAuthModeHandler}>
-                                        اشتراك
+                                        {loginFormText.formSwitchLink}
                                     </span>
                                 </FormLink>
                             )}
                             { !isLogin && (
                                 <FormLink>
-                                    هل لديك حساب ؟
+                                    {subscribeFormText.formSwitchText}
                                     <span onClick={switchAuthModeHandler}>
-                                        تسجيل الدخول
+                                        {subscribeFormText.formSwitchLink}
                                     </span>
                                 </FormLink>
                             )}

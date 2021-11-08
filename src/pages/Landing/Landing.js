@@ -1,7 +1,9 @@
 import { useEffect } from 'react';
 
+import { NavLink } from 'react-router-dom';
+
 import  '../../assets/css/all.min.css';
-import '../../assets/css/bootstrap.min.css';
+//import '../../assets/css/bootstrap.min.css';
 import '../../assets/css/animate.min.css';
 import '../../assets/css/owl.carousel.min.css';
 import '../../assets/css/owl.theme.css';
@@ -48,7 +50,7 @@ const Landing = props => {
             <nav className="navbar navbar-expand-lg navbar-light theme-nav fixed-top">
                 <div className="container">
                     <a className="navbar-brand" href="https://beautypoint.app">
-                        <img src="./assets/img/logo_white.png" className="logo-white" alt="logo" />
+                        <img src="../../assets/img/logo_white.png" className="logo-white" alt="logo" />
                         <img src="https://beautypoint.app/img/logo.png" className="d-none logo-dark" alt="logo" />
                     </a>
                     <button className="navbar-toggler collapsed" type="button" data-toggle="collapse"
@@ -74,7 +76,7 @@ const Landing = props => {
                                 <a className="nav-link" href="https://beautypoint.app/home">صفحة الجميلات </a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="https://beautypoint.app/login">الصالونات </a>
+                                <NavLink className="nav-link" to="/auth">الصالونات</NavLink>
                             </li>
 
                             <li className="nav-item">
@@ -104,12 +106,12 @@ const Landing = props => {
                                             <a
                                                 href="https://apps.apple.com/ma/app/beauty-point-%D8%A8%D9%8A%D9%88%D8%AA%D9%8A-%D8%A8%D9%88%D9%8A%D9%86%D8%AA/id1588135043?l=ar">
                                                 <img className="store"
-                                                    src="./assets/img/appstore.png"
+                                                    src="../../assets/img/appstore.png"
                                                     alt="appstore" />
                                             </a>
                                             <a href="https://play.google.com/store/apps/details?id=com.con_point.beauty">
                                                 <img className="ml-10 store"
-                                                    src="./assets/img/play-store.png"
+                                                    src="../../assets/img/play-store.png"
                                                     alt="play-store" />
                                             </a>
                                         </div>
@@ -121,7 +123,7 @@ const Landing = props => {
                             <div className="home-right">
                                 <img className="img-fluid" data-tilt="" data-tilt-perspective="110" data-tilt-speed="400"
                                     data-tilt-max="1.2"
-                                    src="./assets/img/splash and home.png"
+                                    src="../../assets/img/splash and home.png"
                                     alt="slider-caption"
                                     style={ { willChange: 'transform', transform: 'perspective(110px) rotateX(0deg) rotateY(0deg)' , } } />
                             </div>
@@ -132,10 +134,10 @@ const Landing = props => {
             <section className="about" id="about">
                 <div className="about-decor">
                     <div className="about-circle1">
-                        <img src="./assets/img/team1.png" alt="team1" />
+                        <img src="../../assets/img/team1.png" alt="team1" />
                     </div>
                     <div className="about-circle2">
-                        <img src="./assets/img/main-banner1.png" alt="banner1" />
+                        <img src="../../assets/img/main-banner1.png" alt="banner1" />
                     </div>
                 </div>
                 <div className="container">
@@ -165,7 +167,7 @@ const Landing = props => {
                         <div className="col-md-7 d-medium-none">
                             <div className="about-right">
                                 <div className="about-phone">
-                                    <img className="img-fluid" src="./assets/img/splash.png"
+                                    <img className="img-fluid" src="../../assets/img/splash.png"
                                         alt="aboutus" />
                                 </div>
                             </div>
@@ -176,13 +178,13 @@ const Landing = props => {
             <section className="feature" id="feature">
                 <div className="feature-decor">
                     <div className="feature-circle1">
-                        <img src="./assets/img/main-banner1.png" alt="" />
+                        <img src="../../assets/img/main-banner1.png" alt="" />
                     </div>
                 </div>
                 <div className="container">
                     <div className="row">
                         <div className="feature-phone">
-                            <img className="img-fluid" src="./assets/img/map.png" alt="" />
+                            <img className="img-fluid" src="../../assets/img/map.png" alt="" />
                         </div>
                         <div className="set-margin col-lg-8">
                             <div className="row">
@@ -309,13 +311,13 @@ const Landing = props => {
             <section className="screenshot padding-top-bottom" id="screenshot">
                 <div className="screenshot-decor">
                     <div className="screenshot-circle1"><img
-                            src="./assets/img/team1.png"
+                            src="../../assets/img/team1.png"
                             alt="feature-circle-two" /></div>
                     <div className="screenshot-circle2"><img
-                            src="./assets/img/main-banner1.png" alt="feature-circle" />
+                            src="../../assets/img/main-banner1.png" alt="feature-circle" />
                     </div>
                     <div className="screenshot-circle3"><img
-                            src="./assets/img/main-banner1.png"
+                            src="../../assets/img/main-banner1.png"
                             alt="feature-circle-three" /></div>
                 </div>
                 <div className="container">
@@ -325,7 +327,7 @@ const Landing = props => {
                                 <img className="mobile-light-left"
                                     src="https://beautybooking.app/public/site/assets/images/light.png" alt="light" />
                                 <img className="mob-mocup img-fluid"
-                                    src="./assets/img/mob.png"
+                                    src="../../assets/img/mob.png"
                                     alt="screenshot-mob" />
                                 <img className="mobile-light-right"
                                     src="https://beautybooking.app/public/site/assets/images/light-right.png" alt="light-right" />
@@ -377,16 +379,16 @@ const Landing = props => {
                     <div className="down-img">
                         <a
                             href="https://apps.apple.com/ma/app/beauty-point-%D8%A8%D9%8A%D9%88%D8%AA%D9%8A-%D8%A8%D9%88%D9%8A%D9%86%D8%AA/id1588135043?l=ar">
-                            <img className="store" src="./assets/img/appstore.png"
+                            <img className="store" src="../../assets/img/appstore.png"
                                 alt="appstore" />
                         </a>
                         <a href="https://play.google.com/store/apps/details?id=com.con_point.beauty">
-                            <img className="store" src="./assets/img/play-store.png"
+                            <img className="store" src="../../assets/img/play-store.png"
                                 alt="play-store" />
                         </a>
                     </div>
                     <div className="FooterLastImg">
-                        <img src="./assets/img/splash.png" style={{width: '700px',}} alt="Bottom Bg" />
+                        <img src="../../assets/img/splash.png" style={{width: '700px',}} alt="Bottom Bg" />
                     </div>
                 </div>
             </section>

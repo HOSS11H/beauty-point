@@ -14,22 +14,46 @@ function createValidationRule(ruleName, errorMessage, validateFunc) {
     };
 }
 
-export function requiredRule(inputName) {
+export function requiredRule(errorMessage) {
     return createValidationRule(
         'required',
-        `${inputName} required`,
+        errorMessage,
         (inputValue, formObj) => inputValue.length !== 0
     );
 }
+export function requiredCheckRule(errorMessage) {
+    return createValidationRule(
+        'required',
+        errorMessage,
+        (inputValue, formObj) =>  inputValue === true
+    );
+}
 
-export function isEmailRule(inputName) {
+export function isEmailRule(errorMessage) {
     return createValidationRule(
         'isEmail',
-        `${inputName} should be a valid email`,
+        errorMessage,
         (inputValue, formObj) => {
             const pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             return pattern.test(inputValue);
         }
+    );
+}
+
+export function requiredLengthRule(inputName, requiredCharacters) {
+    return createValidationRule(
+        'requiredLength',
+        `${inputName} must be ${requiredCharacters} characters`,
+        (inputValue, formObj) => inputValue.trim().length === requiredCharacters
+    );
+}
+export function isNumberRule(errorMessage) {
+    return createValidationRule(
+        'isNumber',
+        errorMessage,
+        (inputValue, formObj) => {
+            return !isNaN(inputValue)
+        }    
     );
 }
 
@@ -49,10 +73,10 @@ export function maxLengthRule(inputName, maxCharacters) {
     );
 }
 
-export function passwordMatchRule() {
+export function passwordMatchRule(errorMessage) {
     return createValidationRule(
         'passwordMatch',
-        `passwords do not match`,
+        errorMessage,
         (inputValue, formObj) => inputValue === formObj.password.value
     );
 }
