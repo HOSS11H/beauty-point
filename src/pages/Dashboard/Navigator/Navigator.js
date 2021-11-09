@@ -1,4 +1,5 @@
-import * as React from 'react';
+import { useContext } from 'react';
+import styled from 'styled-components';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -17,6 +18,7 @@ import SettingsInputComponentIcon from '@mui/icons-material/SettingsInputCompone
 import TimerIcon from '@mui/icons-material/Timer';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PhonelinkSetupIcon from '@mui/icons-material/PhonelinkSetup';
+import ThemeContext from '../../../store/theme-context';
 
 const categories = [
     {
@@ -56,6 +58,25 @@ const item = {
     },
 };
 
+const CustomListItemButton = styled(ListItemButton)`
+    &.MuiListItemButton-root {
+        padding: 5px 20px;
+        color: ${({ theme }) => theme.palette.background.default};
+        background-color: 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+        &.Mui-selected {
+            color: ${({ theme }) => theme.palette.common.white};
+            background-color: ${({ theme }) => theme.vars.primary};
+            &:hover, &:focus {
+                color: ${({ theme }) => theme.palette.common.white};
+                background-color: ${({ theme }) => theme.vars.primary};
+            }
+        }
+        &:hover, &:focus {
+            color: ${({ theme }) => theme.palette.common.white};
+            background-color: ${({ theme }) => theme.vars.primary};
+        }
+    }
+`
 const itemCategory = {
     boxShadow: '0 -1px 0 rgb(255,255,255,0.1) inset',
     py: 1.5,
@@ -65,8 +86,10 @@ const itemCategory = {
 export default function Navigator(props) {
     const { ...other } = props;
 
+    const themeCtx = useContext(ThemeContext)
+
     return (
-        <Drawer variant="permanent" {...other}>
+        <Drawer variant="permanent" {...other} anchor={themeCtx.direction === 'ltr' ? 'left' : 'right' }>
             <List disablePadding>
                 <ListItem sx={{ ...item, ...itemCategory, fontSize: 22, color: '#fff' }}>
                     Paperbase
@@ -78,16 +101,16 @@ export default function Navigator(props) {
                     <ListItemText>Project Overview</ListItemText>
                 </ListItem>
                 {categories.map(({ id, children }) => (
-                    <Box key={id} sx={{ bgcolor: '#101F33' }}>
+                    <Box key={id} sx={{ bgcolor: themeCtx.theme.vars.main }}>
                         <ListItem sx={{ py: 2, px: 3 }}>
                             <ListItemText sx={{ color: '#fff' }}>{id}</ListItemText>
                         </ListItem>
                         {children.map(({ id: childId, icon, active }) => (
                             <ListItem disablePadding key={childId}>
-                                <ListItemButton selected={active} sx={item}>
+                                <CustomListItemButton selected={active}>
                                     <ListItemIcon>{icon}</ListItemIcon>
                                     <ListItemText>{childId}</ListItemText>
-                                </ListItemButton>
+                                </CustomListItemButton>
                             </ListItem>
                         ))}
 

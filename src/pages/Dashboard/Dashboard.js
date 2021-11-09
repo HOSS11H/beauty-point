@@ -59,7 +59,7 @@ theme = {
 		MuiDrawer: {
 			styleOverrides: {
 				paper: {
-					backgroundColor: '#081627',
+					backgroundColor: 'rgb(44, 19, 56)',
 				},
 			},
 		},
