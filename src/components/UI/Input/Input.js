@@ -47,6 +47,7 @@ const CustomCheckbox = styled.div`
     align-items: center;
     font-size: 15px;
     margin-bottom: 15px;
+    text-align: left;
     span {
         color: ${ ( { theme } ) => theme.palette.text.secondary };
     }
