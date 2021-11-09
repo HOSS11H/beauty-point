@@ -1,23 +1,17 @@
-import * as React from 'react';
+import  { useState, useCallback, useEffect } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import Navigator from './Navigator/Navigator';
 import Content from './Content/Content';
 import Header from './Header/Header';
+import { Outlet } from 'react-router';
 
 function Copyright() {
 	return (
-		<Typography variant="body2" color="text.secondary" align="center">
-			{'Copyright © '}
-			<Link color="inherit" href="https://mui.com/">
-				Your Website
-			</Link>{' '}
-			{new Date().getFullYear()}.
-		</Typography>
+		<h1>Copyright</h1>
 	);
 }
 
@@ -59,7 +53,7 @@ theme = {
 		MuiDrawer: {
 			styleOverrides: {
 				paper: {
-					backgroundColor: 'rgb(44, 19, 56)',
+					backgroundColor: '#fff',
 				},
 			},
 		},
@@ -136,8 +130,8 @@ theme = {
 		MuiListItemText: {
 			styleOverrides: {
 				primary: {
-					fontSize: 14,
-					fontWeight: theme.typography.fontWeightMedium,
+					fontSize: 16,
+					fontWeight: theme.typography.fontWeightRegular,
 				},
 			},
 		},
@@ -148,7 +142,7 @@ theme = {
 					minWidth: 'auto',
 					marginRight: theme.spacing(2),
 					'& svg': {
-						fontSize: 20,
+						fontSize: 22,
 					},
 				},
 			},
@@ -166,14 +160,14 @@ theme = {
 
 const drawerWidth = 256;
 
-export default function Dashboard() {
-	const [mobileOpen, setMobileOpen] = React.useState(false);
+export default function Dashboard( props ) {
+	const [mobileOpen, setMobileOpen] = useState(false);
 	const isSmUp = useMediaQuery(theme.breakpoints.up('sm'));
 
-	const handleDrawerToggle = () => {
-		setMobileOpen(!mobileOpen);
-	};
 
+	const handleDrawerToggle = useCallback( () => {
+		setMobileOpen(!mobileOpen);
+	} , [ mobileOpen ] ) ;
 	return (
 		<ThemeProvider theme={theme}>
 			<Box sx={{ display: 'flex', minHeight: '100vh' }}>
@@ -200,6 +194,7 @@ export default function Dashboard() {
 					<Header onDrawerToggle={handleDrawerToggle} />
 					<Box component="main" sx={{ flex: 1, py: 6, px: 4, bgcolor: '#eaeff1' }}>
 						<Content />
+						<Outlet />
 					</Box>
 					<Box component="footer" sx={{ p: 2, bgcolor: '#eaeff1' }}>
 						<Copyright />

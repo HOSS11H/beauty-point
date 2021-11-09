@@ -75,6 +75,7 @@ const Auth = props => {
     const [ errorMessage , setErrorMessage ] = useState(null);
 
 
+
     const { renderFormInputs: loginInputs, isFormValid: isLoginDataValid, form: loginData } = useForm(loginForm);
     const { renderFormInputs: subscribeInputs, isFormValid: isSubscribeDataValid, form: subscribeData } = useForm(subscribeForm);
 
@@ -92,7 +93,7 @@ const Auth = props => {
     }
     const submitHandler = ( event ) => {
         event.preventDefault();
-        let url ;
+        /* let url ;
         let authData;
         if (isLogin) {
             url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDteusGiWoNp_qFEn36zfPtJPSwRS8hpyg`
@@ -119,7 +120,8 @@ const Auth = props => {
             .catch(err => {
                 console.log(err.response);
                 setErrorMessage(err.response.data.error.message.split('_').join(' ').toLowerCase())
-            })
+            }) */
+            navigate('/dashboard/authentication', { replace: true });
     }
 
     let loginFormText = {

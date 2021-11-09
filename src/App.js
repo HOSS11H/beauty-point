@@ -12,13 +12,16 @@ import Dashboard from './pages/Dashboard/Dashboard';
 
 
 function App() {
-
+  
   const themeCtx = useContext(ThemeContext)
 
   const routes = (
     <Routes>
       <Route path="/auth" element={<Auth />} />
-      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/dashboard/*" element={<Dashboard />} >
+        <Route path="authentication" element={<h1>authentication</h1>} />
+        <Route path="database" element={<h1>database</h1>} />
+      </ Route>
       <Route path="/" element={<Landing />} />
       <Route path='*' element={<NotFound />} />
     </Routes>
