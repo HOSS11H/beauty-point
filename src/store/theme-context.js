@@ -13,7 +13,7 @@ const ThemeContext = React.createContext({
 export const ThemeContextProvider = props => {
 
     const [ mode, setMode ] = useState('light');
-    const [ direction, setDirection ] = useState('rtl');
+    const [ direction, setDirection ] = useState('ltr');
 
     const toggleModeHandler = ( ( ) => {
         setMode( prevState => (prevState === 'light' ? 'dark' : 'light') );
