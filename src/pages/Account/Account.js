@@ -1,11 +1,9 @@
-import  { useState, useCallback, useEffect } from 'react';
+import  { useState, useCallback } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
 import Navigator from './Navigator/Navigator';
-import Content from './Content/Content';
 import Header from './Header/Header';
 import { Outlet } from 'react-router';
 
@@ -54,6 +52,8 @@ theme = {
 			styleOverrides: {
 				paper: {
 					backgroundColor: '#fff',
+					boxShadow: 'rgb(113 122 131 / 11%) 0px 7px 30px 0px' , 
+					borderRight: '0',
 				},
 			},
 		},
@@ -160,7 +160,7 @@ theme = {
 
 const drawerWidth = 256;
 
-export default function Dashboard( props ) {
+export default function Account( props ) {
 	const [mobileOpen, setMobileOpen] = useState(false);
 	const isSmUp = useMediaQuery(theme.breakpoints.up('sm'));
 
@@ -174,7 +174,7 @@ export default function Dashboard( props ) {
 				<CssBaseline />
 				<Box
 					component="nav"
-					sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+					sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 },  }}
 				>
 					{isSmUp ? null : (
 						<Navigator
@@ -192,11 +192,10 @@ export default function Dashboard( props ) {
 				</Box>
 				<Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
 					<Header onDrawerToggle={handleDrawerToggle} />
-					<Box component="main" sx={{ flex: 1, py: 6, px: 4, bgcolor: '#eaeff1' }}>
-						<Content />
+					<Box component="main" sx={{ flex: 1, py: 6, px: 4, bgcolor: '#fff' }}>
 						<Outlet />
 					</Box>
-					<Box component="footer" sx={{ p: 2, bgcolor: '#eaeff1' }}>
+					<Box component="footer" sx={{ p: 2, bgcolor: '#fff' }}>
 						<Copyright />
 					</Box>
 				</Box>

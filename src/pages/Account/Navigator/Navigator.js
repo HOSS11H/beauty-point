@@ -9,7 +9,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import PeopleIcon from '@mui/icons-material/People';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 import DnsRoundedIcon from '@mui/icons-material/DnsRounded';
 import PermMediaOutlinedIcon from '@mui/icons-material/PhotoSizeSelectActual';
 import PublicIcon from '@mui/icons-material/Public';
@@ -22,9 +22,9 @@ const categories = [
         id: 'dashboard',
         children: [
             {
-                id: 'authentication',
-                name: 'Authentication',
-                icon: <PeopleIcon />,
+                id: 'dashboard',
+                name: 'Dashboard',
+                icon: <DashboardIcon />,
             },
             { id: 'database', name: 'Database', icon: <DnsRoundedIcon /> },
             { id: 'storage', name: 'Storage', icon: <PermMediaOutlinedIcon /> },
@@ -69,10 +69,6 @@ const CustomNavLink = styled(NavLink)`
         & .MuiListItemButton-root {
             color: ${({ theme }) => theme.palette.common.white};
             background-color: ${({ theme }) => theme.vars.primary};
-            &:hover {
-                color: ${({ theme }) => theme.palette.common.white};
-                background-color: ${({ theme }) => theme.vars.primary};
-            }
         }
     }
 `
@@ -91,7 +87,7 @@ export default function Navigator(props) {
 
     return (
         <Drawer variant="permanent" {...other} anchor={themeCtx.direction === 'ltr' ? 'left' : 'right' }  >
-            <List disablePadding sx={{ px: '16px', py: '16px' }} >
+            <List disablePadding sx={{ px: '16px', py: '16px', }} >
                 <Logo>
                     Beauty Point
                 </Logo>

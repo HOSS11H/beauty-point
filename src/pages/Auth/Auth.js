@@ -121,7 +121,7 @@ const Auth = props => {
                 console.log(err.response);
                 setErrorMessage(err.response.data.error.message.split('_').join(' ').toLowerCase())
             }) */
-            navigate('/dashboard/authentication', { replace: true });
+            navigate('/account/dashboard', { replace: true });
     }
 
     let loginFormText = {
