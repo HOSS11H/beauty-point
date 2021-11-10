@@ -1,4 +1,4 @@
-import  { useState, useCallback } from 'react';
+import  { useState, useCallback, useContext } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -6,12 +6,8 @@ import Box from '@mui/material/Box';
 import Navigator from './Navigator/Navigator';
 import Header from './Header/Header';
 import { Outlet } from 'react-router';
+import ThemeContext from '../../store/theme-context';
 
-function Copyright() {
-	return (
-		<h1>Copyright</h1>
-	);
-}
 
 let theme = createTheme({
 	palette: {
@@ -45,122 +41,88 @@ let theme = createTheme({
 	},
 });
 
-theme = {
-	...theme,
-	components: {
-		MuiDrawer: {
-			styleOverrides: {
-				paper: {
-					backgroundColor: '#fff',
-					boxShadow: 'rgb(113 122 131 / 11%) 0px 7px 30px 0px' , 
-					borderRight: '0',
-				},
-			},
-		},
-		MuiButton: {
-			styleOverrides: {
-				root: {
-					textTransform: 'none',
-				},
-				contained: {
-					boxShadow: 'none',
-					'&:active': {
-						boxShadow: 'none',
-					},
-				},
-			},
-		},
-		MuiTabs: {
-			styleOverrides: {
-				root: {
-					marginLeft: theme.spacing(1),
-				},
-				indicator: {
-					height: 3,
-					borderTopLeftRadius: 3,
-					borderTopRightRadius: 3,
-					backgroundColor: theme.palette.common.white,
-				},
-			},
-		},
-		MuiTab: {
-			styleOverrides: {
-				root: {
-					textTransform: 'none',
-					margin: '0 16px',
-					minWidth: 0,
-					padding: 0,
-					[theme.breakpoints.up('md')]: {
-						padding: 0,
-						minWidth: 0,
-					},
-				},
-			},
-		},
-		MuiIconButton: {
-			styleOverrides: {
-				root: {
-					padding: theme.spacing(1),
-				},
-			},
-		},
-		MuiTooltip: {
-			styleOverrides: {
-				tooltip: {
-					borderRadius: 4,
-				},
-			},
-		},
-		MuiDivider: {
-			styleOverrides: {
-				root: {
-					backgroundColor: 'rgb(255,255,255,0.15)',
-				},
-			},
-		},
-		MuiListItemButton: {
-			styleOverrides: {
-				root: {
-					'&.Mui-selected': {
-						color: '#4fc3f7',
-					},
-				},
-			},
-		},
-		MuiListItemText: {
-			styleOverrides: {
-				primary: {
-					fontSize: 16,
-					fontWeight: theme.typography.fontWeightRegular,
-				},
-			},
-		},
-		MuiListItemIcon: {
-			styleOverrides: {
-				root: {
-					color: 'inherit',
-					minWidth: 'auto',
-					marginRight: theme.spacing(2),
-					'& svg': {
-						fontSize: 22,
-					},
-				},
-			},
-		},
-		MuiAvatar: {
-			styleOverrides: {
-				root: {
-					width: 32,
-					height: 32,
-				},
-			},
-		},
-	},
-};
+
 
 const drawerWidth = 256;
 
 export default function Account( props ) {
+
+	const themeCtx = useContext(ThemeContext)
+
+
+	const customTheme = {
+		...themeCtx.theme,
+		components: {
+			MuiDrawer: {
+				styleOverrides: {
+					paper: {
+						backgroundColor: '#fff',
+						boxShadow: 'rgb(113 122 131 / 11%) 0px 7px 30px 0px' , 
+						borderRight: '0',
+					},
+				},
+			},
+			MuiIconButton: {
+				styleOverrides: {
+					root: {
+						padding: theme.spacing(1),
+					},
+				},
+			},
+			MuiTooltip: {
+				styleOverrides: {
+					tooltip: {
+						borderRadius: 4,
+					},
+				},
+			},
+			MuiDivider: {
+				styleOverrides: {
+					root: {
+						backgroundColor: 'rgb(255,255,255,0.15)',
+					},
+				},
+			},
+			MuiListItemButton: {
+				styleOverrides: {
+					root: {
+						'&.Mui-selected': {
+							color: '#4fc3f7',
+						},
+					},
+				},
+			},
+			MuiListItemText: {
+				styleOverrides: {
+					primary: {
+						fontSize: 16,
+						fontWeight: theme.typography.fontWeightRegular,
+					},
+				},
+			},
+			MuiListItemIcon: {
+				styleOverrides: {
+					root: {
+						color: 'inherit',
+						minWidth: 'auto',
+						marginRight: theme.spacing(2),
+						'& svg': {
+							fontSize: 22,
+						},
+					},
+				},
+			},
+			MuiAvatar: {
+				styleOverrides: {
+					root: {
+						width: 32,
+						height: 32,
+					},
+				},
+			},
+		},
+	}
+
 	const [mobileOpen, setMobileOpen] = useState(false);
 	const isSmUp = useMediaQuery(theme.breakpoints.up('sm'));
 
@@ -169,7 +131,7 @@ export default function Account( props ) {
 		setMobileOpen(!mobileOpen);
 	} , [ mobileOpen ] ) ;
 	return (
-		<ThemeProvider theme={theme}>
+		<ThemeProvider theme={customTheme}>
 			<Box sx={{ display: 'flex', minHeight: '100vh' }}>
 				<CssBaseline />
 				<Box
@@ -194,9 +156,6 @@ export default function Account( props ) {
 					<Header onDrawerToggle={handleDrawerToggle} />
 					<Box component="main" sx={{ flex: 1, py: 6, px: 4, bgcolor: '#fff' }}>
 						<Outlet />
-					</Box>
-					<Box component="footer" sx={{ p: 2, bgcolor: '#fff' }}>
-						<Copyright />
 					</Box>
 				</Box>
 			</Box>

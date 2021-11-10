@@ -17,13 +17,15 @@ import SettingsEthernetIcon from '@mui/icons-material/SettingsEthernet';
 import SettingsInputComponentIcon from '@mui/icons-material/SettingsInputComponent';
 import ThemeContext from '../../../store/theme-context';
 
+import { useTranslation } from 'react-i18next';
+
 const categories = [
     {
         id: 'dashboard',
         children: [
             {
                 id: 'dashboard',
-                name: 'Dashboard',
+                name: 'dashboard',
                 icon: <DashboardIcon />,
             },
             { id: 'database', name: 'Database', icon: <DnsRoundedIcon /> },
@@ -57,9 +59,7 @@ const CustomListItemButton = styled(ListItemButton)`
         padding: 0px 15px;
         color: ${({ theme }) => theme.palette.text.primary};
         transition: 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-        & .MuiTypography-root {
-            font-family: ${ ( {theme}  ) => theme.direction === 'rtl' ? theme.fonts.ar : theme.fonts.en };
-        }
+        text-transform: capitalize;
     }
 `
 const CustomNavLink = styled(NavLink)`
@@ -81,6 +81,7 @@ export default function Navigator(props) {
     const themeCtx = useContext(ThemeContext)
 
     const  params  = useParams();
+    const { t } = useTranslation();
 
     console.log(params);
 
@@ -103,7 +104,7 @@ export default function Navigator(props) {
                                 >
                                     <CustomListItemButton selected={params === childId }>
                                         <ListItemIcon>{icon}</ListItemIcon>
-                                        <ListItemText>{name}</ListItemText>
+                                        <ListItemText>{t(name)}</ListItemText>
                                     </CustomListItemButton>
                                 </CustomNavLink>
                             </ListItem>

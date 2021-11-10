@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import axios from 'axios';
+import axios from '../../utils/axios-instance';
 import useForm from '../../hooks/useForm';
 import { loginForm, subscribeForm } from '../../utils/formConfig';
 import { useNavigate } from 'react-router-dom';
@@ -8,7 +8,7 @@ import AuthContext from '../../store/auth-context';
 import ThemeContext from '../../store/theme-context';
 import styled  from 'styled-components';
 import { Container, Grid } from '@mui/material';
-import { Button } from '../../components/UI/Button/Button'; 
+import { CustomButton } from '../../components/UI/Button/Button'; 
 
 const AuthContainer = styled.div`
     min-height: 100vh;
@@ -93,35 +93,38 @@ const Auth = props => {
     }
     const submitHandler = ( event ) => {
         event.preventDefault();
-        /* let url ;
+        let url ;
         let authData;
         if (isLogin) {
-            url = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDteusGiWoNp_qFEn36zfPtJPSwRS8hpyg`
+            url = `/auth/sign-in`
             authData = {
                 email: loginData.email.value,
                 password: loginData.password.value,
-                returnSecureToken: true,
             }
         } else {
             url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDteusGiWoNp_qFEn36zfPtJPSwRS8hpyg`;
             authData = {
                 email: subscribeData.email.value,
                 password: subscribeData.password.value,
-                returnSecureToken: true,
             }
         }
         setErrorMessage(null);
-        axios.post(url, authData)
+        axios.post(url, authData, {
+            headers: {
+                'Access-Control-Allow-Origin': 'http://localhost:3000',
+                'Access-Control-Allow-Credentials': 'true'
+            }
+        })
             .then(res => {
                 console.log('success', res.data)
                 navigate('/', { replace: true });
                 authCtx.login(res.data.idToken);
+                navigate('/account/dashboard', { replace: true });
             })
             .catch(err => {
-                console.log(err.response);
+                console.log(err);
                 setErrorMessage(err.response.data.error.message.split('_').join(' ').toLowerCase())
-            }) */
-            navigate('/account/dashboard', { replace: true });
+            })
     }
 
     let loginFormText = {
@@ -179,7 +182,7 @@ const Auth = props => {
                                 </FormLink>
                             )}
                             { errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-                            <Button onClick={submitHandler} disabled={!authIsValid} >{isLogin ? loginFormText.button : subscribeFormText.button}</Button>
+                            <CustomButton onClick={submitHandler} disabled={!authIsValid} >{isLogin ? loginFormText.button : subscribeFormText.button}</CustomButton>
                             { isLogin && (
                                 <FormLink>
                                     {loginFormText.formSwitchText}

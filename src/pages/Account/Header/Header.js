@@ -9,6 +9,9 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import ThemeContext from '../../../store/theme-context';
+import SearchIcon from '@mui/icons-material/Search';
+import {ButtonSmall} from '../../../components/UI/Button/Button';
+import TextField from '@mui/material/TextField';
 
 function Header(props) {
     const { onDrawerToggle } = props;
@@ -30,6 +33,29 @@ function Header(props) {
                                 <MenuIcon />
                             </IconButton>
                         </Grid>
+                        <Toolbar sx={{ paddingTop: '8px'}} >
+                            <Grid container spacing={2} alignItems="center">
+                                <Grid item>
+                                    <SearchIcon color="inherit" sx={{ display: 'block' }} />
+                                </Grid>
+                                <Grid item xs>
+                                    <TextField
+                                        fullWidth
+                                        placeholder="Search by email address, phone number, or user UID"
+                                        InputProps={{
+                                            disableUnderline: true,
+                                            sx: { fontSize: 'default' },
+                                        }}
+                                        variant="standard"
+                                    />
+                                </Grid>
+                                <Grid item>
+                                    <ButtonSmall variant="contained" sx={{ mr: 1, backgroundColor: themeCtx.theme.vars.primary }}>
+                                        Add user
+                                    </ButtonSmall>
+                                </Grid>
+                            </Grid>
+                        </Toolbar>
                         <Grid item xs />
                         <Grid item>
                             <Tooltip title="Alerts • No alerts">
