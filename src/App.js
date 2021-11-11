@@ -9,6 +9,7 @@ import NotFound from './pages/NotFound/NotFound';
 import Landing from './pages/Landing/Landing';
 import Account from './pages/Account/Account';
 import Dashboard from './pages/Account/Content/Dashboard/Dashboard';
+import Services from './pages/Account/Content/Services/Services';
 
 
 
@@ -21,7 +22,7 @@ function App() {
       <Route path="/auth" element={<Auth />} />
       <Route path="/account/*" element={<Account />} >
         <Route path="dashboard" element={<Dashboard />} />
-        <Route path="database" element={<h1>database</h1>} />
+        <Route path="services" element={<Services />} />
       </ Route>
       <Route path="/" element={<Landing />} />
       <Route path='*' element={<NotFound />} />

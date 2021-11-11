@@ -1670,7 +1670,7 @@
   dependencies:
     "@babel/runtime" "^7.16.0"
 
-"@mui/material@^5.0.0", "@mui/material@^5.0.0-rc.1", "@mui/material@^5.1.0":
+"@mui/material@^5.0.0", "@mui/material@^5.0.0-rc.1", "@mui/material@^5.0.6", "@mui/material@^5.1.0":
   "integrity" "sha512-K76v7zRhpJToInSI8sRcEmTwpVFBZ223VIusjZRKXN8JzX+PuErG7skfa1yUuhc3f4VEqcYYUw0LvI+DJJ05eg=="
   "resolved" "https://registry.npmjs.org/@mui/material/-/material-5.1.0.tgz"
   "version" "5.1.0"
@@ -1725,7 +1725,7 @@
   "resolved" "https://registry.npmjs.org/@mui/types/-/types-7.1.0.tgz"
   "version" "7.1.0"
 
-"@mui/utils@^5.1.0":
+"@mui/utils@^5.0.1", "@mui/utils@^5.1.0":
   "integrity" "sha512-TbAa3DZBGE6xjrVsQ6e0Iw0jwgGZqPg/48aZJJWXJJjU8NU5OhBRutYhrk/kbdDRmsIArHNdpJayBSi7yETYvg=="
   "resolved" "https://registry.npmjs.org/@mui/utils/-/utils-5.1.0.tgz"
   "version" "5.1.0"
@@ -1735,6 +1735,16 @@
     "@types/react-is" "^16.7.1 || ^17.0.0"
     "prop-types" "^15.7.2"
     "react-is" "^17.0.2"
+
+"@mui/x-data-grid@^5.0.0-beta.7":
+  "integrity" "sha512-0h7uJ/1xvXghJwGPRFcPUPB0zNlKpfAqFU2dBdAtUl6DK2ca1cPfd+sLNzApa4yvxjGUxLyNxvcc5xutka0t8A=="
+  "resolved" "https://registry.npmjs.org/@mui/x-data-grid/-/x-data-grid-5.0.0-beta.7.tgz"
+  "version" "5.0.0-beta.7"
+  dependencies:
+    "@mui/utils" "^5.0.1"
+    "clsx" "^1.1.1"
+    "prop-types" "^15.7.2"
+    "reselect" "^4.1.1"
 
 "@nodelib/fs.scandir@2.1.5":
   "integrity" "sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g=="
@@ -10026,6 +10036,11 @@
   "integrity" "sha1-kl0mAdOaxIXgkc8NpcbmlNw9yv8="
   "resolved" "https://registry.npmjs.org/requires-port/-/requires-port-1.0.0.tgz"
   "version" "1.0.0"
+
+"reselect@^4.1.1":
+  "integrity" "sha512-wg60ebcPOtxcptIUfrr7Jt3h4BR86cCW3R7y4qt65lnNb4yz4QgrXcbSioVsIOYguyz42+XTHIyJ5TEruzkFgQ=="
+  "resolved" "https://registry.npmjs.org/reselect/-/reselect-4.1.2.tgz"
+  "version" "4.1.2"
 
 "resolve-cwd@^2.0.0":
   "integrity" "sha1-AKn3OHVW4nA46uIyyqNypqWbZlo="

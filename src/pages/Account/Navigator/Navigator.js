@@ -10,11 +10,11 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import DnsRoundedIcon from '@mui/icons-material/DnsRounded';
 import PermMediaOutlinedIcon from '@mui/icons-material/PhotoSizeSelectActual';
 import PublicIcon from '@mui/icons-material/Public';
 import SettingsEthernetIcon from '@mui/icons-material/SettingsEthernet';
 import SettingsInputComponentIcon from '@mui/icons-material/SettingsInputComponent';
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import ThemeContext from '../../../store/theme-context';
 
 import { useTranslation } from 'react-i18next';
@@ -28,7 +28,7 @@ const categories = [
                 name: 'dashboard',
                 icon: <DashboardIcon />,
             },
-            { id: 'database', name: 'Database', icon: <DnsRoundedIcon /> },
+            { id: 'services', name: 'services', icon: <FormatListBulletedIcon /> },
             { id: 'storage', name: 'Storage', icon: <PermMediaOutlinedIcon /> },
             { id: 'hosting', name: 'Hosting', icon: <PublicIcon /> },
             { id: 'functions', name: 'Functions', icon: <SettingsEthernetIcon /> },
