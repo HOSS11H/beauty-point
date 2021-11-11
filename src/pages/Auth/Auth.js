@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import axios from '../../utils/axios-instance';
 import useForm from '../../hooks/useForm';
 import { loginForm, subscribeForm } from '../../utils/formConfig';
@@ -8,7 +8,7 @@ import AuthContext from '../../store/auth-context';
 import ThemeContext from '../../store/theme-context';
 import styled  from 'styled-components';
 import { Container, Grid } from '@mui/material';
-import { CustomButton } from '../../components/UI/Button/Button'; 
+import { CustomButton } from '../../components/UI/Button/Button';
 
 const AuthContainer = styled.div`
     min-height: 100vh;
@@ -70,11 +70,9 @@ const Auth = props => {
 
     const navigate = useNavigate();
 
-    const [ isLogin , setIsLogin ] = useState(false);
+    const [ isLogin , setIsLogin ] = useState(true);
 
     const [ errorMessage , setErrorMessage ] = useState(null);
-
-
 
     const { renderFormInputs: loginInputs, isFormValid: isLoginDataValid, form: loginData } = useForm(loginForm);
     const { renderFormInputs: subscribeInputs, isFormValid: isSubscribeDataValid, form: subscribeData } = useForm(subscribeForm);
@@ -100,6 +98,8 @@ const Auth = props => {
             authData = {
                 email: loginData.email.value,
                 password: loginData.password.value,
+                fcm_token: 'sdadasdasdasdasasdasdasadasdasdadadassdasdasdaadsadadsasdasdasdasadsdasdasdsadsasdadasdasdasdasasdasdasadasdasdadadassdasdasdaadsadadsasdasdasdasadsdasdasdsadsa',
+                device_name: 'dsadasdsas'
             }
         } else {
             url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDteusGiWoNp_qFEn36zfPtJPSwRS8hpyg`;
@@ -109,15 +109,11 @@ const Auth = props => {
             }
         }
         setErrorMessage(null);
-        axios.post(url, authData, {
-            headers: {
-                'Accept': 'application/json',
-            }
-        })
+        axios.post(url, authData)
             .then(res => {
-                console.log('success', res.data)
-                navigate('/', { replace: true });
-                authCtx.login(res.data.idToken);
+                console.log('success', res.data.token);
+                localStorage.setItem('token', res.data.token);
+                authCtx.login(res.data.token);
                 navigate('/account/dashboard', { replace: true });
             })
             .catch(err => {

@@ -1,16 +1,18 @@
 import axios from 'axios';
 
 const instance = axios.create({
-    baseURL: 'http://beautypoint.sa/api/v1',
+    baseURL: '/api/v1',
 });
 
+instance.defaults.withCredentials = true;
 instance.interceptors.request.use(function (config) {
-    // Do something before request is sent
-    console.log(config);
+    config.headers['Accept-Language'] = 'ar';
+    config.headers['Accept'] = 'application/json';
+    config.headers['Content-Type'] = 'application/json';
+    config.headers['Authorization'] = 'Bearer ' + localStorage.getItem('token');
     return config;
 }, function (error) {
-    // Do something with request error
-    return Promise.reject(error);
+    console.log(error);
 });
 
 export default instance;

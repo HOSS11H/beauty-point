@@ -9,7 +9,7 @@ function useForm(formObj) {
             return renderInput(onInputChange, value, valid, errorMessage, name);
         });
     }
-    
+
     const isInputFieldValid = useCallback(
         (inputField) => {
             for (const rule of inputField.validationRules) {
@@ -29,7 +29,6 @@ function useForm(formObj) {
                 const inputObj = { ...form[name] };
                 // update value
                 inputObj.value = value;
-                console.log(inputObj);
                 // update input field's validity
                 const isValidInput = isInputFieldValid(inputObj);
                 // if input is valid and it was previously invalid
@@ -41,14 +40,14 @@ function useForm(formObj) {
                     // set its valid status to false
                     inputObj.valid = false;
                 }
-                
+
                 // mark input field as touched
                 inputObj.touched = true;
                 setForm({ ...form, [name]: inputObj });
         },
         [ form, isInputFieldValid ]
     );
-        
+
     /**
      * returns boolean value indicating whether overall form is valid
      *
