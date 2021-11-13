@@ -69,13 +69,7 @@ const CustomNavLink = styled(NavLink)`
         & .MuiListItemButton-root {
             color: ${({ theme }) => theme.palette.common.white};
             background-color: ${({ theme }) => theme.vars.primary};
-            text-align: left;
         }
-    }
-`
-const CustomListItemIcon = styled(ListItemIcon)`
-    &.MuiListItemIcon-root {
-        
     }
 `
 
@@ -109,8 +103,8 @@ export default function Navigator(props) {
                                     to={`${childId}`}
                                 >
                                     <CustomListItemButton selected={params === childId }>
-                                        <CustomListItemIcon>{icon}</CustomListItemIcon>
-                                        <ListItemText>{t(name)}</ListItemText>
+                                        <ListItemIcon>{icon}</ListItemIcon>
+                                        <ListItemText >{t(name)}</ListItemText>
                                     </CustomListItemButton>
                                 </CustomNavLink>
                             </ListItem>

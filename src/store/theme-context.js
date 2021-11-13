@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { createTheme } from '@mui/material/styles';
 import { ThemeProvider } from 'styled-components';
 import { useTranslation } from 'react-i18next';
+import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
+
 
 const ThemeContext = React.createContext({
     mode: '',
@@ -17,8 +19,8 @@ export const ThemeContextProvider = props => {
 
     const { t, i18n } = useTranslation();
 
-    const intialMode = localStorage.getItem('mode') || 'light';
-    const intialDirection = localStorage.getItem('direction') || 'rtl';
+    const intialMode = localStorage.getItem('mode') || "light";
+    const intialDirection = localStorage.getItem('direction') || "rtl";
     const intialLanguage = localStorage.getItem('language') || 'ar'; ;
 
 
@@ -31,25 +33,25 @@ export const ThemeContextProvider = props => {
     
     const toggleModeHandler = ( ( ) => {
         setMode( prevState =>{
-            if(prevState === 'dark'){
-                localStorage.setItem('mode', 'light');
-                return 'light';
+            if(prevState === "dark"){
+                localStorage.setItem('mode', "light");
+                return "light";
             }
             else{
-                localStorage.setItem('mode', 'dark');
-                return 'dark';
+                localStorage.setItem('mode', "dark");
+                return "dark";
             }
         });
     } )
     const toggleDirectionHandler = ( ( ) => {
         setDirection( prevState =>{
-            if(prevState === 'ltr'){
-                localStorage.setItem('direction', 'rtl');
-                return 'rtl';
+            if(prevState === "ltr"){
+                localStorage.setItem('direction', "rtl");
+                return "rtl";
             }
             else{
-                localStorage.setItem('direction', 'ltr');
-                return 'ltr';
+                localStorage.setItem('direction', "ltr");
+                return "ltr";
             }
         } );
         setLanguage( prevState =>{
@@ -76,12 +78,12 @@ export const ThemeContextProvider = props => {
             }
         });
         setDirection( prevState =>{
-            if( prevState === 'ltr' ){
-                localStorage.setItem('direction', 'rtl');
-                return 'rtl';
+            if( prevState === "ltr" ){
+                localStorage.setItem('direction', "rtl");
+                return "rtl";
             } else {
-                localStorage.setItem('direction', 'ltr');
-                return 'ltr';
+                localStorage.setItem('direction', "ltr");
+                return "ltr";
             }
         } );
     } )
@@ -92,8 +94,6 @@ export const ThemeContextProvider = props => {
                 direction: direction,
                 vars: {
                     primary: '#EF14E2',
-                    black: '#000000',
-                    white: '#f4f4f4',
                 },
                 fonts: {
                     ar: "'Cairo', sans-serif",
@@ -103,7 +103,7 @@ export const ThemeContextProvider = props => {
                     mode,
                 },
                 typography: {
-                    fontFamily: direction === 'ltr' ? "'Poppins', sans-serif" : "'Cairo', sans-serif",
+                    fontFamily: direction === "ltr" ? "'Poppins', sans-serif" : "'Cairo', sans-serif",
                 },
             }),
         [mode, direction],
@@ -120,13 +120,15 @@ export const ThemeContextProvider = props => {
     }
     // We Use Styled Componet To Pass The Theme
     // We Pass The Theme Through The Context To Access It In Our Components
-    console.log(contextValue);
+    console.log(contextValue.theme);
 
     return (
         <ThemeContext.Provider value={contextValue}>
-            <ThemeProvider theme={contextValue.theme}>
-                {props.children}
-            </ThemeProvider>
+            <MuiThemeProvider theme={contextValue.theme}>
+                <ThemeProvider theme={contextValue.theme}>
+                    {props.children}
+                </ThemeProvider>
+            </MuiThemeProvider>
         </ThemeContext.Provider>
     )
 }

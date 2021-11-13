@@ -72,6 +72,10 @@ const ClientInfo = styled.ul`
         svg {
             width: 20px;
             height: 20px;
+            &.MuiSvgIcon-root  {
+                margin:0;
+                margin-right: 8px;
+            }
         }
     }
 `
@@ -115,6 +119,10 @@ const BookingAppointment = styled.ul`
         svg {
             width: 20px;
             height: 20px;
+            &.MuiSvgIcon-root  {
+                margin:0;
+                margin-right: 8px;
+            }
         }
     }
 `

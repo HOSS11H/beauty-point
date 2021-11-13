@@ -313,11 +313,9 @@ function ServicesTable() {
                                                 </ServiceData>
                                             </TableCell>
                                             <TableCell align="center">
-                                                <ServiceData>
-                                                    <ServiceStatus>
-                                                        active
-                                                    </ServiceStatus>
-                                                </ServiceData>
+                                                <ServiceStatus>
+                                                    active
+                                                </ServiceStatus>
                                             </TableCell>
                                             <TableCell align="center">
                                                 <ServiceData>
