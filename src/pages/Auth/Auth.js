@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import axios from '../../utils/axios-instance';
 import useForm from '../../hooks/useForm';
 import { loginForm, subscribeForm } from '../../utils/formConfig';
@@ -89,8 +89,8 @@ const Auth = props => {
         setIsLogin(prevState => !prevState);
         setErrorMessage(null)
     }
-    const submitHandler = ( event ) => {
-        event.preventDefault();
+    const submitHandler = async ( e ) => {
+        e.preventDefault();
         let url ;
         let authData;
         if (isLogin) {
@@ -98,7 +98,7 @@ const Auth = props => {
             authData = {
                 email: loginData.email.value,
                 password: loginData.password.value,
-                fcm_token: 'sdadasdasdasdasasdasdasadasdasdadadassdasdasdaadsadadsasdasdasdasadsdasdasdsadsasdadasdasdasdasasdasdasadasdasdadadassdasdasdaadsadadsasdasdasdasadsdasdasdsadsa',
+                fcm_token: 'sdadasdasdasdasasdasdasadasdasdadadassdasdasdaadsadadsasdasdasdasadsdasdasdsadsasdadasdasdasdasasdasdasadasdasdad',
                 device_name: 'dsadasdsas'
             }
         } else {
@@ -109,17 +109,17 @@ const Auth = props => {
             }
         }
         setErrorMessage(null);
-        axios.post(url, authData)
-            .then(res => {
-                console.log('success', res.data.token);
-                localStorage.setItem('token', res.data.token);
-                authCtx.login(res.data.token);
-                navigate('/account/dashboard', { replace: true });
-            })
-            .catch(err => {
-                console.log(err);
-                setErrorMessage(err.response.data.error.message.split('_').join(' ').toLowerCase())
-            })
+        try {
+            const res = await axios.post(url, authData);
+            console.log('success', res.data.token);
+            authCtx.login(res.data.token);
+            navigate('/account/dashboard', { replace: true });
+        }
+        catch (err) {
+            console.log(err.message)
+            setErrorMessage(err.message.split('_').join(' ').toLowerCase())
+        }
+
     }
 
     let loginFormText = {
