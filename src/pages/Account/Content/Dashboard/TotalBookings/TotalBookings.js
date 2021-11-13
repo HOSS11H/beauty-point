@@ -20,9 +20,9 @@ const TotalBookings = props => {
 
     const { fetchedTotalBookings, fetchTotalBookingsHandler } = props;
 
-    useEffect(() => {
+    /* useEffect(() => {
         fetchTotalBookingsHandler( lang ) ;
-    }, [fetchTotalBookingsHandler, lang]);
+    }, [fetchTotalBookingsHandler, lang]); */
 
     return ( 
         <CustomCard heading={`total bookings : `} total='26' loading={false}>

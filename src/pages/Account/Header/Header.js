@@ -1,4 +1,5 @@
 import {useContext, Fragment} from 'react';
+import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
@@ -13,6 +14,13 @@ import SearchIcon from '@mui/icons-material/Search';
 import {ButtonSmall} from '../../../components/UI/Button/Button';
 import TextField from '@mui/material/TextField';
 
+
+const ButtonSearch = styled(ButtonSmall)`
+    &.MuiButton-root {
+        margin-right: 8px;
+    }
+`
+
 function Header(props) {
     const { onDrawerToggle } = props;
 
@@ -23,7 +31,7 @@ function Header(props) {
             <AppBar sx={{ color: themeCtx.theme.palette.text.primary, backgroundColor: '#fff', boxShadow: 'rgb(113 122 131 / 11%) 0px 7px 30px 0px' ,  }} position="sticky" elevation={0}>
                 <Toolbar>
                     <Grid container spacing={1} alignItems="center">
-                        <Grid sx={{ display: { sm: 'none', xs: 'block' } }} item>
+                        <Grid sx={{ display: { md: 'none', xs: 'block' } }} item>
                             <IconButton
                                 color="inherit"
                                 aria-label="open drawer"
@@ -50,9 +58,9 @@ function Header(props) {
                                     />
                                 </Grid>
                                 <Grid item>
-                                    <ButtonSmall variant="contained" sx={{ mr: 1, backgroundColor: themeCtx.theme.vars.primary }}>
-                                        Add user
-                                    </ButtonSmall>
+                                    <ButtonSearch>
+                                        search
+                                    </ButtonSearch>
                                 </Grid>
                             </Grid>
                         </Toolbar>

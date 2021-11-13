@@ -69,7 +69,13 @@ const CustomNavLink = styled(NavLink)`
         & .MuiListItemButton-root {
             color: ${({ theme }) => theme.palette.common.white};
             background-color: ${({ theme }) => theme.vars.primary};
+            text-align: left;
         }
+    }
+`
+const CustomListItemIcon = styled(ListItemIcon)`
+    &.MuiListItemIcon-root {
+        
     }
 `
 
@@ -89,7 +95,7 @@ export default function Navigator(props) {
     return (
         <Drawer variant="permanent" {...other} anchor={themeCtx.direction === 'ltr' ? 'left' : 'right' }  >
             <List disablePadding sx={{ px: '16px', py: '16px', }} >
-                <Logo>
+                <Logo onClick={themeCtx.toggleLanguage}>
                     Beauty Point
                 </Logo>
                 {categories.map(({ id, children }) => (
@@ -103,7 +109,7 @@ export default function Navigator(props) {
                                     to={`${childId}`}
                                 >
                                     <CustomListItemButton selected={params === childId }>
-                                        <ListItemIcon>{icon}</ListItemIcon>
+                                        <CustomListItemIcon>{icon}</CustomListItemIcon>
                                         <ListItemText>{t(name)}</ListItemText>
                                     </CustomListItemButton>
                                 </CustomNavLink>

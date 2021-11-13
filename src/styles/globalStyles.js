@@ -9,6 +9,8 @@ const GlobalStyle = createGlobalStyle`
         margin: 0;
         padding: 0;
         font-family: ${ ( {theme}  ) => theme.direction === 'rtl' ? theme.fonts.ar : theme.fonts.en };
+        text-align: left;
+        font-size: 16px;
     }
     button {
         font-family: ${ ( {theme}  ) => theme.direction === 'rtl' ? theme.fonts.ar : theme.fonts.en };

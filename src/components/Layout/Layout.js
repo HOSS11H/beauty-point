@@ -4,6 +4,7 @@ const Wrapper = styled.div`
 `
 const Main = styled.main`
     overflow-x: hidden;
+    text-align: left;
 `
 
 const Layout = props => {

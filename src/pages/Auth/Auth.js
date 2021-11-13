@@ -109,17 +109,16 @@ const Auth = props => {
             }
         }
         setErrorMessage(null);
-        try {
-            const res = await axios.post(url, authData);
-            console.log('success', res.data.token);
-            authCtx.login(res.data.token);
-            navigate('/account/dashboard', { replace: true });
-        }
-        catch (err) {
-            console.log(err.message)
-            setErrorMessage(err.message.split('_').join(' ').toLowerCase())
-        }
-
+        axios.post(url, authData)
+            .then(res => {
+                console.log('success', res.data.token);
+                authCtx.login(res.data.token);
+                navigate('/account/dashboard', { replace: true });
+            })
+            .catch( err => {
+                console.log(err.message)
+                setErrorMessage(err.message.split('_').join(' ').toLowerCase())
+            })
     }
 
     let loginFormText = {

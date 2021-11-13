@@ -13,11 +13,9 @@ import { BrowserRouter } from 'react-router-dom';
 
 import './i18n';
 
-import { StyleSheetManager } from "styled-components";
-import rtlPlugin from "stylis-plugin-rtl";
-
 import { ThemeContextProvider } from './store/theme-context';
 import GlobalStyle from './styles/globalStyles';
+import { AuthContextProvider } from './store/auth-context';
 
 const rootReducer = combineReducers({
 	bookings: bookingsReducer,
@@ -40,17 +38,18 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(logger, thunk)));
 
 
+
 const app = (
 	<React.StrictMode>
 		<Provider store={store}>
-			<BrowserRouter>
-				<ThemeContextProvider>
-					<GlobalStyle />
-					<App />
-					{/* <StyleSheetManager stylisPlugins={[rtlPlugin]}>
-						</StyleSheetManager> */}
-				</ThemeContextProvider>
-			</BrowserRouter>
+			<AuthContextProvider>
+				<BrowserRouter>
+					<ThemeContextProvider>
+						<GlobalStyle />
+						<App />
+					</ThemeContextProvider>
+				</BrowserRouter>
+			</AuthContextProvider>
 		</Provider >
 	</React.StrictMode>
 )

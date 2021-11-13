@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { createTheme } from '@mui/material/styles';
 import { ThemeProvider } from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
 const ThemeContext = React.createContext({
-    mode: 'light',
-    direction: 'ltr',
-    lang: 'en',
+    mode: '',
+    direction: '',
+    lang: '',
     toggleMode: ( ) => { },
     toggleDirection: ( ) => { },
     toggleLanguage: ( ) => { },
@@ -14,18 +15,75 @@ const ThemeContext = React.createContext({
 
 export const ThemeContextProvider = props => {
 
-    const [ mode, setMode ] = useState('light');
-    const [ direction, setDirection ] = useState('ltr');
-    const [ language, setLanguage ] = useState('en');
+    const { t, i18n } = useTranslation();
 
+    const intialMode = localStorage.getItem('mode') || 'light';
+    const intialDirection = localStorage.getItem('direction') || 'rtl';
+    const intialLanguage = localStorage.getItem('language') || 'ar'; ;
+
+
+    const [ mode, setMode ] = useState(intialMode);
+    const [ direction, setDirection ] = useState(intialDirection);
+    const [ language, setLanguage ] = useState(intialLanguage);
+
+    document.getElementsByTagName('body')[0].dir = direction;
+
+    
     const toggleModeHandler = ( ( ) => {
-        setMode( prevState => (prevState === 'light' ? 'dark' : 'light') );
+        setMode( prevState =>{
+            if(prevState === 'dark'){
+                localStorage.setItem('mode', 'light');
+                return 'light';
+            }
+            else{
+                localStorage.setItem('mode', 'dark');
+                return 'dark';
+            }
+        });
     } )
     const toggleDirectionHandler = ( ( ) => {
-        setDirection( prevState => (prevState === 'ltr' ? 'rtl' : 'ltr') );
+        setDirection( prevState =>{
+            if(prevState === 'ltr'){
+                localStorage.setItem('direction', 'rtl');
+                return 'rtl';
+            }
+            else{
+                localStorage.setItem('direction', 'ltr');
+                return 'ltr';
+            }
+        } );
+        setLanguage( prevState =>{
+            if(prevState === 'en'){
+                localStorage.setItem('language', 'ar');
+                return 'ar';
+            }
+            else{
+                localStorage.setItem('language', 'en');
+                return 'en';
+            }
+        } );
     } )
     const toggleLanguageHandler = ( ( ) => {
-        setLanguage( prevState => (prevState === 'en' ? 'ar' : 'en') );
+        setLanguage( prevState =>{
+            if( prevState === 'en' ){
+                i18n.changeLanguage('ar');
+                localStorage.setItem('language', 'ar');
+                return 'ar';
+            } else {
+                i18n.changeLanguage('en');
+                localStorage.setItem('language', 'en');
+                return 'en';
+            }
+        });
+        setDirection( prevState =>{
+            if( prevState === 'ltr' ){
+                localStorage.setItem('direction', 'rtl');
+                return 'rtl';
+            } else {
+                localStorage.setItem('direction', 'ltr');
+                return 'ltr';
+            }
+        } );
     } )
     
     const theme = React.useMemo(
@@ -51,7 +109,6 @@ export const ThemeContextProvider = props => {
         [mode, direction],
     );
     
-
     const contextValue = {
         mode: mode,
         direction: direction,
@@ -63,11 +120,11 @@ export const ThemeContextProvider = props => {
     }
     // We Use Styled Componet To Pass The Theme
     // We Pass The Theme Through The Context To Access It In Our Components
-    // We Use Styled Engin To Customize MUI Components
+    console.log(contextValue);
 
     return (
         <ThemeContext.Provider value={contextValue}>
-            <ThemeProvider theme={theme}>
+            <ThemeProvider theme={contextValue.theme}>
                 {props.children}
             </ThemeProvider>
         </ThemeContext.Provider>

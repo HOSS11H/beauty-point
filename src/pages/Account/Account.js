@@ -136,7 +136,7 @@ export default function Account( props ) {
 				<CssBaseline />
 				<Box
 					component="nav"
-					sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 },  }}
+					sx={{ width: { md: drawerWidth }, flexShrink: { sm: 0 },  }}
 				>
 					{isSmUp ? null : (
 						<Navigator
@@ -149,7 +149,7 @@ export default function Account( props ) {
 
 					<Navigator
 						PaperProps={{ style: { width: drawerWidth } }}
-						sx={{ display: { sm: 'block', xs: 'none' } }}
+						sx={{ display: { md: 'block', xs: 'none' } }}
 					/>
 				</Box>
 				<Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
