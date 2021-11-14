@@ -56,23 +56,17 @@ export const fetchTotalBookingsFailed = ( errorMessage ) => {
         error: errorMessage,
     }
 }
-export const fetchTotalBookings = ( language ) => {
+export const fetchTotalBookings = ( language, token ) => {
     return dispatch => {
         dispatch( fetchTotalBookingsStart( ) )
         axios.get('/vendor/company-status', { 
             headers: {
                 'Accept-Language': language,
-                'Authorization': 'Bearer ' + localStorage.getItem('token')
+                'Authorization': `Bearer ${token}`,
             }
         }).then( response => {
-                let fetchedProducts = [ ];
-                console.log(response)
-                for ( let color in response.data ) {
-                    let dollars =  formatCurrency(response.data[color].priceCents / 100) ;
-                    let fetchedProduct= { id: color, price: dollars ,  ...response.data[color] }
-                    fetchedProducts.push(fetchedProduct);
-                }
-                    dispatch( fetchTotalBookingsSuccess( fetchedProducts ) );
+                console.log(response.data.bookings_count);
+                dispatch( fetchTotalBookingsSuccess( response.data.bookings_count ) );
             })
             .catch( err => {
                 dispatch( fetchTotalBookingsFailed( err.message  ) )

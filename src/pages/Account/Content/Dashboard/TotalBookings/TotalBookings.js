@@ -10,58 +10,62 @@ import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import { fetchTotalBookings } from '../../../../../store/actions/index';
 import ThemeContext from '../../../../../store/theme-context';
+import AuthContext from '../../../../../store/auth-context';
 
 
 const TotalBookings = props => {
 
     const themeCtx = useContext(ThemeContext)
+    const authCtx = useContext(AuthContext)
 
     const { lang } = themeCtx
+    const { token } = authCtx
 
-    const { fetchedTotalBookings, fetchTotalBookingsHandler } = props;
+    const { fetchedTotalBookings, fetchTotalBookingsHandler, loadingTotalBookings } = props;
 
-    /* useEffect(() => {
-        fetchTotalBookingsHandler( lang ) ;
-    }, [fetchTotalBookingsHandler, lang]); */
+    useEffect(() => {
+        fetchTotalBookingsHandler( lang , token ) ;
+    }, [ fetchTotalBookingsHandler, lang , token ]);
 
-    return ( 
-        <CustomCard heading={`total bookings : `} total='26' loading={false}>
+    let loadedTotalBookings ;
+
+    
+    if ( Object.keys(fetchedTotalBookings).length > 0 ) { 
+        loadedTotalBookings = (
             <Grid container spacing={3}>
-                <Grid item sm={6} md={4} >
-                    <Booking icon={<EventIcon />} name='completed bookings' num='10' completed />
+                <Grid item xs={6} md={4} >
+                    <Booking icon={<EventIcon />} name='completed bookings' num={fetchedTotalBookings.completed} completed />
                 </Grid>
-                <Grid item sm={6} md={4} >
-                    <Booking icon={<EventIcon />} name='pending bookings' num='10' pending />
+                <Grid item xs={6} md={4} >
+                    <Booking icon={<EventIcon />} name='pending bookings' num={fetchedTotalBookings.pending} pending />
                 </Grid>
-                <Grid item sm={6} md={4} >
-                    <Booking icon={<EventIcon />} name='approved bookings' num='10' approved />
+                <Grid item xs={6} md={4} >
+                    <Booking icon={<EventIcon />} name='approved bookings' num={fetchedTotalBookings.approved} approved />
                 </Grid>
-                <Grid item sm={6} md={4} >
-                    <Booking icon={<EventIcon />} name='in progress bookings' num='10' inProgress />
+                <Grid item xs={6} md={4} >
+                    <Booking icon={<EventIcon />} name='in progress bookings' num={fetchedTotalBookings.in_progress} inProgress />
                 </Grid>
-                <Grid item sm={6} md={4} >
-                    <Booking icon={<EventIcon />} name='canceled bookings' num='10' canceled />
+                <Grid item xs={6} md={4} >
+                    <Booking icon={<EventIcon />} name='canceled bookings' num={fetchedTotalBookings.canceled} canceled />
                 </Grid>
-                <Grid item sm={6} md={4} >
-                    <Booking icon={<AccountBalanceIcon />} name='walk in bookings' num='10' walkIn />
-                </Grid>
-                <Grid item sm={6} md={4} >
-                    <Booking icon={<PhonelinkIcon />} name='online bookings' num='10' online />
-                </Grid>
-                <Grid item sm={6} md={4} >
-                    <Booking icon={<PeopleAltIcon />} name='total customers' num='10' customers />
-                </Grid>
-                <Grid item sm={6} md={4} >
-                    <Booking icon={<AttachMoneyIcon />} name='total earnings' num='10' earnings />
+                <Grid item xs={6} md={4} >
+                    <Booking icon={<AttachMoneyIcon />} name='total earnings' num={fetchedTotalBookings.total} earnings />
                 </Grid>
             </Grid>
+        )
+    }
+
+    return ( 
+        <CustomCard heading={`total bookings : `} total={ Object.keys(fetchedTotalBookings).length > 0 ? fetchedTotalBookings.total : 0 } loading={loadingTotalBookings}>
+            { loadedTotalBookings }
         </CustomCard>
     )
 }
 
 const mapStateToProps = state => {
     return {
-        fetchedTotalBookings: state.bookings.totalBookings
+        fetchedTotalBookings: state.bookings.totalBookings,
+        loadingTotalBookings: state.bookings.fetchingTotalBookings,
     }
 }
 
