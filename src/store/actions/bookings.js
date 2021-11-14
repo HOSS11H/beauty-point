@@ -20,18 +20,29 @@ export const fetchBookingsFailed = ( errorMessage ) => {
         error: errorMessage,
     }
 }
-export const fetchBookings = (  ) => {
+export const fetchBookings = ( language, token  ) => {
     return dispatch => {
+        console.log(language, token)
         dispatch( fetchBookingsStart( ) )
-        axios.get('https://color-shop-c3776-default-rtdb.firebaseio.com/colors.json')
+        axios.get('/vendors/bookings', { 
+            headers: {
+                'Accept-Language': language,
+                'Authorization': `Bearer ${token}`,
+            }
+        })
             .then( response => {
-                let fetchedProducts = [ ];
-                for ( let color in response.data ) {
-                    let dollars =  formatCurrency(response.data[color].priceCents / 100) ;
-                    let fetchedProduct= { id: color, price: dollars ,  ...response.data[color] }
-                    fetchedProducts.push(fetchedProduct);
-                }
-                    dispatch( fetchBookingsSuccess( fetchedProducts ) );
+                    let editedData = response.data.data.map( item => {
+                        const formattedTime = new Date( item.date_time ).toLocaleString()
+                        const arr = formattedTime.replace(/:.. /," ").split(", ");
+                        let date = arr[0]
+                        let time = arr[1]
+                        return {
+                            ...item,
+                            date: date,
+                            time: time,
+                        }
+                    }) 
+                    dispatch( fetchBookingsSuccess( { ...response.data , data: editedData } ) );
                 })
                 .catch( err => {
                     dispatch( fetchBookingsFailed( err.message  ) )
@@ -65,7 +76,6 @@ export const fetchTotalBookings = ( language, token ) => {
                 'Authorization': `Bearer ${token}`,
             }
         }).then( response => {
-                console.log(response.data.bookings_count);
                 dispatch( fetchTotalBookingsSuccess( response.data.bookings_count ) );
             })
             .catch( err => {

@@ -3,7 +3,7 @@ import * as actionTypes from '../actions/actionTypes';
 import { updateObject } from '../../shared/utility';
 
 const intialState = {
-    bookings: [ ],
+    bookings: { data: [ ] } ,
     totalBookings: [ ],
     fetchingBookings: false,
     errorFetchingBookings: false,

@@ -1,4 +1,10 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
+import { useContext, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { fetchBookings } from '../../../../../store/actions/index';
+import ThemeContext from '../../../../../store/theme-context';
+import AuthContext from '../../../../../store/auth-context';
+
 import CustomCard from '../../../../../components/UI/Card/Card';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -12,36 +18,23 @@ import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
 
-function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-}
+import Avatar from '@mui/material/Avatar';
+import PersonIcon from '@mui/icons-material/Person';
 
-const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
 
-const Booking= styled.div`
+const Booking = styled.div`
     display: flex;
     align-items: center;
 `
-const ClientImg = styled.div`
+const ClientImg = styled(Avatar)`
     width: 40px;
     height: 40px;
     border-radius: 50%;
     flex-shrink: 0;
     margin-right: 20px;
     cursor: pointer;
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
 `
-const BookingContent= styled.div`
+const BookingContent = styled.div`
     flex-grow: 1;
 `
 const ClientName = styled.a`
@@ -119,33 +112,29 @@ const BookingAppointment = styled.ul`
         svg {
             width: 20px;
             height: 20px;
-            &.MuiSvgIcon-root  {
-                margin:0;
-                margin-right: 8px;
-            }
         }
     }
 `
 
-const BookingStatus= styled.div`
+const BookingStatus = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
     height: 35px;
     padding: 0 15px;
     border-radius: 12px;
-    color: ${({theme})=>theme.palette.common.white};
+    color: ${({ theme }) => theme.palette.common.white};
     font-size: 14px;
     text-transform: capitalize;
     font-weight: 500;
     &.pending {
-        background-color: ${ ( { theme } ) => theme.palette.warning.light};
+        background-color: ${({ theme }) => theme.palette.warning.light};
     }
     &.canceled {
-        background-color: ${ ( { theme } ) => theme.palette.warning.dark};
+        background-color: ${({ theme }) => theme.palette.warning.dark};
     }
     &.approved {
-        background-color: ${ ( { theme } ) => theme.palette.primary.main};
+        background-color: ${({ theme }) => theme.palette.primary.main};
     }
 `
 
@@ -153,49 +142,81 @@ const BookingStatus= styled.div`
 
 const RecentBookings = props => {
 
+    const themeCtx = useContext(ThemeContext)
+    const authCtx = useContext(AuthContext)
+
+    const { lang } = themeCtx
+    const { token } = authCtx
+
+    const { fetchedBookings, fetchBookingsHandler, loadingBookings } = props;
+
+    useEffect(() => {
+        fetchBookingsHandler(lang, token);
+    }, [fetchBookingsHandler, lang, token]);
+
+    let loadedBookings = []
+
+    if (fetchedBookings.data.length > 0) {
+
+        loadedBookings = fetchedBookings.data.map( (booking, index) => {
+            return (
+                <TableRow
+                    key={booking.id}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                >
+                    <TableCell component="th" scope="row">
+                        <Booking>
+                            <ClientImg >
+                                <PersonIcon />
+                            </ClientImg>
+                            <BookingContent>
+                                <ClientName>{booking.user_name}</ClientName>
+                                <ClientInfo>
+                                    <li><MailIcon sx={{ mr: 1 }} />{booking.user_email}</li>
+                                    <li><PhoneAndroidIcon sx={{ mr: 1 }} />{booking.mobile}</li>
+                                </ClientInfo>
+                            </BookingContent>
+                        </Booking>
+                    </TableCell>
+                    <TableCell align="right">
+                        <BookingItems>
+                            {
+                                booking.items.map( ( item , index) => {
+                                    let loadedItems ;
+                                    if ( item.business_service ) {
+                                        loadedItems =  (
+                                            <li key={index} >
+                                                <FiberManualRecordIcon sx={{ mr: 1 }} /> {`${item.quantity} x ${item.business_service.name}`}
+                                            </li>
+                                        )
+                                    }
+                                    return loadedItems
+                                })
+                            }
+                        </BookingItems>
+                    </TableCell>
+                    <TableCell align="right">
+                        <BookingAppointment>
+                            <li><EventNoteIcon sx={{ mr: 1 }} />{booking.date}</li>
+                            <li><WatchLaterIcon sx={{ mr: 1 }} />{booking.time}</li>
+                        </BookingAppointment>
+                    </TableCell>
+                    <TableCell align="right">
+                        <BookingStatus className={booking.status}>
+                            {booking.status}
+                        </BookingStatus>
+                    </TableCell>
+                </TableRow>
+            )
+        })
+    }
+
     return (
-        <CustomCard heading={`recent booking`} loading={false}>
+        <CustomCard heading={`recent booking`} loading={loadingBookings}>
             <TableContainer component={Paper} sx={{ boxShadow: 'none' }} >
                 <Table sx={{ minWidth: 650, overflowX: 'auto' }} aria-label="simple table">
                     <TableBody>
-                        {rows.map((row) => (
-                            <TableRow
-                                key={row.name}
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                            >
-                                <TableCell component="th" scope="row">
-                                    <Booking>
-                                        <ClientImg>
-                                            <img  alt="client" />
-                                        </ClientImg>
-                                        <BookingContent>
-                                            <ClientName>{row.name}</ClientName>
-                                            <ClientInfo>
-                                                <li><MailIcon sx={ { mr: 1 } } />{row.calories}</li>
-                                                <li><PhoneAndroidIcon sx={ { mr: 1 } } />{row.calories}</li>
-                                            </ClientInfo>
-                                        </BookingContent>
-                                    </Booking>
-                                </TableCell>
-                                <TableCell align="right">
-                                    <BookingItems>
-                                        <li><FiberManualRecordIcon sx={ { mr: 1 } } />{row.calories}</li>
-                                        <li><FiberManualRecordIcon sx={ { mr: 1 } } />{row.calories}</li>
-                                    </BookingItems>
-                                </TableCell>
-                                <TableCell align="right">
-                                    <BookingAppointment>
-                                        <li><EventNoteIcon sx={ { mr: 1 } } />{row.calories}</li>
-                                        <li><WatchLaterIcon sx={ { mr: 1 } } />{row.calories}</li>
-                                    </BookingAppointment>
-                                </TableCell>
-                                <TableCell align="right">
-                                    <BookingStatus className={`pending`}>
-                                        pending
-                                    </BookingStatus>
-                                </TableCell>
-                            </TableRow>
-                        ))}
+                        {loadedBookings}
                     </TableBody>
                 </Table>
             </TableContainer>
@@ -203,4 +224,17 @@ const RecentBookings = props => {
     )
 }
 
-export default RecentBookings;
+const mapStateToProps = state => {
+    return {
+        fetchedBookings: state.bookings.bookings,
+        loadingBookings: state.bookings.fetchingBookings,
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        fetchBookingsHandler: (language, token) => dispatch(fetchBookings(language, token))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(RecentBookings);

@@ -4,9 +4,6 @@ import { connect } from 'react-redux';
 import CustomCard from '../../../../../components/UI/Card/Card';
 import Booking from '../../../../../components/UI/Dashboard/Booking/Booking';
 import EventIcon from '@mui/icons-material/Event';
-import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
-import PhonelinkIcon from '@mui/icons-material/Phonelink';
-import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import { fetchTotalBookings } from '../../../../../store/actions/index';
 import ThemeContext from '../../../../../store/theme-context';
@@ -28,7 +25,6 @@ const TotalBookings = props => {
     }, [ fetchTotalBookingsHandler, lang , token ]);
 
     let loadedTotalBookings ;
-
     
     if ( Object.keys(fetchedTotalBookings).length > 0 ) { 
         loadedTotalBookings = (
@@ -71,7 +67,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchTotalBookingsHandler: ( language ) => dispatch( fetchTotalBookings( language ) )
+        fetchTotalBookingsHandler: ( language , token ) => dispatch( fetchTotalBookings( language , token ) )
     }
 }
 

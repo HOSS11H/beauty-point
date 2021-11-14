@@ -120,7 +120,6 @@ export const ThemeContextProvider = props => {
     }
     // We Use Styled Componet To Pass The Theme
     // We Pass The Theme Through The Context To Access It In Our Components
-    console.log(contextValue.theme);
 
     return (
         <ThemeContext.Provider value={contextValue}>
