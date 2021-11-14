@@ -1,4 +1,4 @@
-import {useContext, Fragment} from 'react';
+import  { Fragment} from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import AppBar from '@mui/material/AppBar';
@@ -9,7 +9,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
-import ThemeContext from '../../../store/theme-context';
 import SearchIcon from '@mui/icons-material/Search';
 import {ButtonSmall} from '../../../components/UI/Button/Button';
 import TextField from '@mui/material/TextField';
@@ -24,11 +23,10 @@ const ButtonSearch = styled(ButtonSmall)`
 function Header(props) {
     const { onDrawerToggle } = props;
 
-    const themeCtx = useContext(ThemeContext);
 
     return (
         <Fragment>
-            <AppBar sx={{ color: themeCtx.theme.palette.text.primary, backgroundColor: '#fff', boxShadow: 'rgb(113 122 131 / 11%) 0px 7px 30px 0px' ,  }} position="sticky" elevation={0}>
+            <AppBar sx={{ boxShadow: 'rgb(113 122 131 / 11%) 0px 7px 30px 0px' ,  }} position="sticky" elevation={0}>
                 <Toolbar>
                     <Grid container spacing={1} alignItems="center">
                         <Grid sx={{ display: { md: 'none', xs: 'block' } }} item>

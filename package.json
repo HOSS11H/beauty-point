@@ -16,9 +16,9 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "craco  start",
+    "build": "craco  build",
+    "test": "craco  test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -40,10 +40,12 @@
     ]
   },
   "devDependencies": {
+    "@craco/craco": "^6.4.0",
     "@emotion/react": "^11.5.0",
     "@emotion/styled": "^11.3.0",
     "@mui/icons-material": "^5.1.0",
     "@mui/material": "^5.1.0",
+    "@mui/styled-engine-sc": "^5.1.0",
     "@mui/x-data-grid": "^5.0.0-beta.7",
     "axios": "^0.24.0",
     "i18next": "^21.4.2",

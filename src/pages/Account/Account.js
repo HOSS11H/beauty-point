@@ -32,10 +32,11 @@ export default function Account( props ) {
 							},
 						},
 					},
-					MuiToolbar: {
+					MuiAppBar: {
 						styleOverrides: {
 							root: {
-								//backgroundColor: theme.palette.background.default,
+								backgroundColor: theme.palette.background.default,
+								color: theme.palette.text.primary,
 								padding: theme.spacing(1),
 							},
 						},
@@ -66,7 +67,6 @@ export default function Account( props ) {
 							primary: {
 								fontSize: 16,
 								fontWeight: theme.typography.fontWeightRegular,
-								textAlign:  theme.direction === 'ltr' ? 'left' : 'right',
 							},
 						},
 					},
@@ -75,8 +75,6 @@ export default function Account( props ) {
 							root: {
 								color: 'inherit',
 								minWidth: 'auto',
-								marginRight:  theme.direction === 'ltr' && theme.spacing(2),
-								marginLeft:  theme.direction === 'rtl' && theme.spacing(2),
 								'& svg': {
 									fontSize: 22,
 								},
@@ -97,7 +95,7 @@ export default function Account( props ) {
     );
 
 	const [mobileOpen, setMobileOpen] = useState(false);
-	const isSmUp = useMediaQuery(theme.breakpoints.up('sm'));
+	const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
 
 
 	const handleDrawerToggle = useCallback( () => {
@@ -112,7 +110,7 @@ export default function Account( props ) {
 						component="nav"
 						sx={{ width: { md: drawerWidth }, flexShrink: { sm: 0 },  }}
 					>
-						{isSmUp ? null : (
+						{isMdUp ? null : (
 							<Navigator
 								PaperProps={{ style: { width: drawerWidth } }}
 								variant="temporary"

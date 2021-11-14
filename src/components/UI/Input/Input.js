@@ -9,6 +9,7 @@ import Checkbox from '@mui/material/Checkbox';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 
+import LockIcon from '@mui/icons-material/Lock';
 import RoomOutlinedIcon from '@mui/icons-material/RoomOutlined';
 import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import WebIcon from '@mui/icons-material/Web';
@@ -127,6 +128,11 @@ const Input = ( props ) => {
                     <TextField id={name} placeholder={placeholder} variant="outlined" 
                         type={ passwordVisible ?  'text' : type } name={name} value={value} onChange={handleChange}
                         InputProps={{
+                            startAdornment: (
+                                <InputAdornment position="start">
+                                    <LockIcon />
+                                </InputAdornment>
+                            ),
                             endAdornment: (
                                 <IconButton
                                     aria-label="toggle password visibility"

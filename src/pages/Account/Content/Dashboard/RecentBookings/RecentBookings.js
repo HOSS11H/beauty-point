@@ -156,7 +156,7 @@ const RecentBookings = props => {
     return (
         <CustomCard heading={`recent booking`} loading={false}>
             <TableContainer component={Paper} sx={{ boxShadow: 'none' }} >
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <Table sx={{ minWidth: 650, overflowX: 'auto' }} aria-label="simple table">
                     <TableBody>
                         {rows.map((row) => (
                             <TableRow

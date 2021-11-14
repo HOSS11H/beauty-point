@@ -72,6 +72,9 @@ const CustomNavLink = styled(NavLink)`
         }
     }
 `
+const CustomListItemIcon = styled(ListItemIcon)`
+    margin-right: 16px;
+`
 
 
 export default function Navigator(props) {
@@ -83,11 +86,9 @@ export default function Navigator(props) {
     const  params  = useParams();
     const { t } = useTranslation();
 
-    console.log(params);
-
 
     return (
-        <Drawer variant="permanent" {...other} anchor={themeCtx.direction === 'ltr' ? 'left' : 'right' }  >
+        <Drawer variant="permanent" {...other} anchor='left'  >
             <List disablePadding sx={{ px: '16px', py: '16px', }} >
                 <Logo onClick={themeCtx.toggleLanguage}>
                     Beauty Point
@@ -103,7 +104,7 @@ export default function Navigator(props) {
                                     to={`${childId}`}
                                 >
                                     <CustomListItemButton selected={params === childId }>
-                                        <ListItemIcon>{icon}</ListItemIcon>
+                                        <CustomListItemIcon>{icon}</CustomListItemIcon>
                                         <ListItemText >{t(name)}</ListItemText>
                                     </CustomListItemButton>
                                 </CustomNavLink>
