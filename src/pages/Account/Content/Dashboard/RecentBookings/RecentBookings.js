@@ -92,6 +92,9 @@ const BookingItems = styled.ul`
             height: 14px;
             color: ${({ theme }) => theme.vars.primary};
         }
+        .divider {
+            margin: 0 5px;
+        }
     }
 `
 const BookingAppointment = styled.ul`
@@ -186,7 +189,10 @@ const RecentBookings = props => {
                                     if ( item.business_service ) {
                                         loadedItems =  (
                                             <li key={index} >
-                                                <FiberManualRecordIcon sx={{ mr: 1 }} /> {`${item.quantity} x ${item.business_service.name}`}
+                                                <FiberManualRecordIcon sx={{ mr: 1 }} />
+                                                <span>{item.quantity}</span>
+                                                <span className='divider'>x</span>
+                                                <span>{item.business_service.name}</span>
                                             </li>
                                         )
                                     }
