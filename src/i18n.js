@@ -13,8 +13,28 @@ const resources = {
     },
     ar: {
         translation: {
-            "dashboard": "لوحة التحكم",
             'total bookings: ': ' : مجموع الحجوزات',
+            'of': 'من',
+            'image': 'الصورة',
+            'name': 'الاسم',
+            'location': 'الموقع',
+            'category': 'الفئة',
+            'price': 'السعر',
+            'price after discount': 'السعر بعد الخصم',
+            'assigned emploees': 'الموظفين المختارين',
+            'status': 'الحالة',
+            'actions': 'الإجراءات',
+            'Edit': 'تعديل',
+            'View': 'عرض',
+            'Remove': 'حذف',
+            "dashboard": "لوحة التحكم",
+            'services': 'الخدمات',
+            'products': 'المنتجات',
+            'customers': 'العملاء',
+            'employees': 'الموظفين',
+            'deals': 'العروض',
+            'bookings': 'الحجوزات',
+            'points of sales': 'نقاط البيع',
         }
     }
 };

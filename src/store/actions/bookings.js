@@ -1,6 +1,5 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../utils/axios-instance';
-import { formatCurrency } from '../../shared/utility';
 
 
 export const fetchBookingsStart = (  ) => {

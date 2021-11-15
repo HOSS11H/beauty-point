@@ -1,13 +1,13 @@
 import { Fragment } from "react";
 
-import StickyHeadTable from './ServicesTable/ServicesTable';
+import ServicesTable from './ServicesTable/ServicesTable';
 
 export default function Services() {
 
 
     return (
         <Fragment>
-            <StickyHeadTable />
+            <ServicesTable />
         </Fragment>
     );
 }

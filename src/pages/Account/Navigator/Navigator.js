@@ -10,12 +10,14 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import PermMediaOutlinedIcon from '@mui/icons-material/PhotoSizeSelectActual';
-import PublicIcon from '@mui/icons-material/Public';
-import SettingsEthernetIcon from '@mui/icons-material/SettingsEthernet';
-import SettingsInputComponentIcon from '@mui/icons-material/SettingsInputComponent';
+import PersonIcon from '@mui/icons-material/Person';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import BookIcon from '@mui/icons-material/Book';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import ThemeContext from '../../../store/theme-context';
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 
 import { useTranslation } from 'react-i18next';
 
@@ -29,14 +31,12 @@ const categories = [
                 icon: <DashboardIcon />,
             },
             { id: 'services', name: 'services', icon: <FormatListBulletedIcon /> },
-            { id: 'storage', name: 'Storage', icon: <PermMediaOutlinedIcon /> },
-            { id: 'hosting', name: 'Hosting', icon: <PublicIcon /> },
-            { id: 'functions', name: 'Functions', icon: <SettingsEthernetIcon /> },
-            {
-                id: 'machine-learning',
-                name: 'Machine learning',
-                icon: <SettingsInputComponentIcon />,
-            },
+            { id: 'products', name: 'products', icon: <ShoppingCartIcon /> },
+            { id: 'customers', name: 'customers', icon: <PeopleAltIcon /> },
+            { id: 'employees', name: 'employees', icon: <PersonIcon /> },
+            { id: 'deals', name: 'deals', icon: <LocalOfferIcon /> },
+            { id: 'pos', name: 'points of sales', icon: <AddShoppingCartIcon /> },
+            { id: 'bookings', name: 'bookings', icon: <BookIcon /> },
         ],
     },
 ];

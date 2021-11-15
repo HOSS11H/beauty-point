@@ -8,6 +8,7 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 
 import bookingsReducer from './store/reducers/bookings'
+import servicesReducer from './store/reducers/services'
 
 import { BrowserRouter } from 'react-router-dom';
 
@@ -19,6 +20,7 @@ import { AuthContextProvider } from './store/auth-context';
 
 const rootReducer = combineReducers({
 	bookings: bookingsReducer,
+	services: servicesReducer,
 });
 
 
