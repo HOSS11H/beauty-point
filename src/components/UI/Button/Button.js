@@ -39,3 +39,14 @@ export const ButtonSmall = styled(CustomButton)`
         font-size:14px
     }
 `
+export const ButtonText = styled(Button)`
+    color: ${ ( { theme } ) => theme.vars.primary};
+`
+export const ButtonConfirm = styled(CustomButton)`
+    &.MuiButton-root {
+        min-width: 150px;
+        width: auto;
+        padding: 0 25px;
+        height: 50px;
+    }
+`

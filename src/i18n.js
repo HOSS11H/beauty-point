@@ -41,6 +41,10 @@ const resources = {
             'in progress bookings': 'الحجوزات الجارية',
             'canceled bookings': 'الحجوزات الملغية',
             'total earnings': 'إجمالي الربح',
+            'Do you want To delete this service?': 'هل تريد حذف هذه الخدمة؟',
+            'delete': 'حذف',
+            'close': 'إغلاق',
+            'You will not be able to recover the deleted record!': 'لن تستطيع استرداد السجل المحذوف!',
         }
     }
 };

@@ -13,6 +13,8 @@ import AuthContext from '../../../../../store/auth-context';
 import Actions from '../../../../../components/UI/Dashboard/Actions/Actions';
 import EnhancedTableHead from './TableHead/TableHead';
 import TablePaginationActions from './TablePagination/TablePagination';
+import DeleteModal from './DeleteModal/DeleteModal';
+import { deleteService } from '../../../../../store/actions/index';
 
 const ServicesTableWrapper = styled.div`
     display: flex;
@@ -100,7 +102,7 @@ const ServiceStatus = styled.div`
 
 function ServicesTable(props) {
 
-    const { fetchedServices, fetchServicesHandler, loadingServices } = props;
+    const { fetchedServices, fetchServicesHandler, loadingServices , deleteServiceHandler } = props;
 
     const themeCtx = useContext(ThemeContext)
     const authCtx = useContext(AuthContext)
@@ -110,6 +112,24 @@ function ServicesTable(props) {
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
+
+    const [ deleteModalOpened , setDeleteModalOpened ] = useState(false);
+
+    const [ selectedServiceId , setSelectedServiceId ] = useState(null);
+
+    const deleteModalOpenHandler = ( id ) => {
+        setDeleteModalOpened(true);
+        setSelectedServiceId(id);
+    }
+    const deleteModalCloseHandler = ( ) => {
+        setDeleteModalOpened(false);
+        setSelectedServiceId(null);
+    }
+
+    const deleteModalConfirmHandler = ( id ) => {
+        console.log(id)
+        deleteServiceHandler(token ,id );
+    }
 
 
     useEffect(() => {
@@ -122,7 +142,6 @@ function ServicesTable(props) {
 
     // Avoid a layout jump when reaching the last page with empty rows & On Initialize
     const emptyRows = (rowsPerPage - fetchedServices.data.length);
-    console.log('services returned')
     return (
         <ServicesTableWrapper>
             <Paper sx={{ width: '100%', boxShadow: 'none' }}>
@@ -197,7 +216,11 @@ function ServicesTable(props) {
                                             <ServiceStatus>{row.status}</ServiceStatus>
                                         </TableCell>
                                         <TableCell align="center">
-                                            <Actions edit remove view editHandler={() => { }} removeHandler={() => { }} viewHandler={() => { }} />
+                                            <Actions edit remove view 
+                                                editHandler={() => { }} 
+                                                removeHandler={ deleteModalOpenHandler.bind(null, row.id) } 
+                                                viewHandler={() => { }} 
+                                            />
                                         </TableCell>
                                     </TableRow>
                                 );
@@ -208,10 +231,7 @@ function ServicesTable(props) {
                                         height: (133) * emptyRows,
                                     }}
                                 >
-                                    <TableCell colSpan={9} >
-                                        <SkeletonsWrapper>
-                                        </SkeletonsWrapper>
-                                    </TableCell>
+                                    <TableCell colSpan={9} />
                                 </TableRow>
                             )}
                         </TableBody>
@@ -227,6 +247,9 @@ function ServicesTable(props) {
                     loading={loadingServices}
                 />
             </Paper>
+            <DeleteModal show={deleteModalOpened} id={selectedServiceId}
+                    onClose={deleteModalCloseHandler} onConfirm={deleteModalConfirmHandler.bind(null, selectedServiceId)}
+                    heading='Do you want To delete this service?'  confirmText='delete' />
         </ServicesTableWrapper>
     );
 }
@@ -241,6 +264,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         fetchServicesHandler: (language, token, page) => dispatch(fetchServices(language, token, page)),
+        deleteServiceHandler: ( token , id ) => dispatch( deleteService(token , id) ),
     }
 }
 

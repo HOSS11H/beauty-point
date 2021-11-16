@@ -28,12 +28,45 @@ export const fetchServices = ( language, token , page ) => {
                 'Authorization': `Bearer ${token}`,
             }
         }).then( response => {
-                console.log('services fetched')
                 dispatch( fetchServicesSuccess( response.data  ) );
             })
             .catch( err => {
                 console.log(err)
                 dispatch( fetchServicesFailed( err.message  ) )
+            } )
+        }
+}
+
+export const deleteServiceStart = (  ) => {
+    return {
+        type: actionTypes.DELETE_SERVICE_START,
+    }
+}
+export const deleteServiceSuccess = ( message ) => {
+    return {
+        type: actionTypes.DELETE_SERVICE_SUCCESS,
+        message: message,
+    }
+}
+export const deleteServiceFailed = ( message ) => {
+    return {
+        type: actionTypes.DELETE_SERVICE_FAILED,
+        message: message,
+    }
+}
+
+export const deleteService = (token , id ) => {
+    return dispatch => {
+        dispatch( deleteServiceStart( ) )
+        axios.delete(`/vendors/services/${id}`, { 
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            }
+        }).then( response => {
+                dispatch( deleteServiceSuccess( response  ) );
+            })
+            .catch( err => {
+                dispatch( deleteServiceFailed( err.message  ) )
             } )
         }
 }

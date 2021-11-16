@@ -4,4 +4,5 @@ export {
 } from './bookings'
 export {
     fetchServices,
+    deleteService,
 } from './services'
