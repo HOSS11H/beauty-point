@@ -6,7 +6,7 @@ import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 
 
-const ServiceImg = styled.div`
+const ProductImg = styled.div`
     width: 100px;
     height: 100px;
     border-radius: 10px;
@@ -20,7 +20,7 @@ const ServiceImg = styled.div`
         border-radius: 10px;
     }
 `
-const ServiceData = styled.p`
+const ProductData = styled.p`
     font-size: 14px;
     line-height:1.5;
     text-transform: capitalize;
@@ -28,7 +28,7 @@ const ServiceData = styled.p`
     color: ${({ theme }) => theme.palette.text.disabled};
     margin-bottom: 0px;
 `
-const ServiceEmployees = styled.ul`
+const ProductEmployees = styled.ul`
     margin: 0;
     padding: 0;
     display: flex;
@@ -51,7 +51,7 @@ const ServiceEmployees = styled.ul`
         margin-bottom: 5px;
     }
 `
-const ServiceStatus = styled.div`
+const ProductStatus = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
@@ -67,12 +67,12 @@ const ServiceStatus = styled.div`
 
 const EnhancedTableBody = props => {
 
-    const {fetchedServices, emptyRows, deleteModalOpenHandler} = props;
+    const {fetchedProducts, emptyRows, deleteModalOpenHandler} = props;
 
 
     return (
         <TableBody>
-            {fetchedServices.data.map((row, index) => {
+            {fetchedProducts.data.map((row, index) => {
                 const labelId = `enhanced-table-Image-${index}`;
                 return (
                     <TableRow
@@ -85,52 +85,35 @@ const EnhancedTableBody = props => {
                             id={labelId}
                             scope="row"
                         >
-                            <ServiceImg>
-                                <img src={row.service_image_url} alt="" />
-                            </ServiceImg>
+                            <ProductImg>
+                                <img src={row.product_image_url} alt="" />
+                            </ProductImg>
                         </TableCell>
                         <TableCell align="center">
-                            <ServiceData>
+                            <ProductData>
                                 {row.name}
-                            </ServiceData>
+                            </ProductData>
                         </TableCell>
                         <TableCell align="center">
-                            <ServiceData>
-                                {row.location.name}
-                            </ServiceData>
+                            <ProductData>
+                                {row.location_id}
+                            </ProductData>
                         </TableCell>
                         <TableCell align="center">
-                            <ServiceData>
-                                {row.category.name}
-                            </ServiceData>
-                        </TableCell>
-                        <TableCell align="center">
-                            <ServiceData>
+                            <ProductData>
                                 {row.formated_price}
-                            </ServiceData>
+                            </ProductData>
                         </TableCell>
                         <TableCell align="center">
-                            <ServiceData>
+                            <ProductData>
                                 {row.formated_discounted_price}
-                            </ServiceData>
+                            </ProductData>
                         </TableCell>
                         <TableCell align="center">
-                            <ServiceEmployees>
-                                {
-                                    row.users.map((employee, index) => {
-                                        let loadedEmployees;
-                                        if (employee) {
-                                            loadedEmployees = (
-                                                <li key={employee.id}>{employee.name}</li>
-                                            )
-                                        }
-                                        return loadedEmployees;
-                                    })
-                                }
-                            </ServiceEmployees>
+                            <ProductStatus>{row.status}</ProductStatus>
                         </TableCell>
                         <TableCell align="center">
-                            <ServiceStatus>{row.status}</ServiceStatus>
+                            <ProductData>{row.quantity}</ProductData>
                         </TableCell>
                         <TableCell align="center">
                             <Actions edit remove view

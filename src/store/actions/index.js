@@ -6,3 +6,7 @@ export {
     fetchServices,
     deleteService,
 } from './services'
+export {
+    fetchProducts,
+    deleteProduct,
+} from './products'

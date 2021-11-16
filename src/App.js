@@ -11,6 +11,7 @@ import Landing from './pages/Landing/Landing';
 import Account from './pages/Account/Account';
 import Dashboard from './pages/Account/Content/Dashboard/Dashboard';
 import Services from './pages/Account/Content/Services/Services';
+import Products from './pages/Account/Content/Products/Products';
 import { useContext } from "react";
 
 
@@ -25,6 +26,7 @@ function App() {
             <Route path="/account/*" element={<Account />} >
                 <Route path="dashboard" element={<Dashboard />} />
                 <Route path="services" element={<Services />} />
+                <Route path="products" element={<Products />} />
             </ Route>
             <Route path="/" element={<Landing />} />
             <Route path='*' element={<NotFound />} />
