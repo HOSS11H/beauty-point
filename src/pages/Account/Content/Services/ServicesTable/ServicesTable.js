@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from 'react';
-import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -14,19 +13,22 @@ import AuthContext from '../../../../../store/auth-context';
 import Actions from '../../../../../components/UI/Dashboard/Actions/Actions';
 import EnhancedTableHead from './TableHead/TableHead';
 import TablePaginationActions from './TablePagination/TablePagination';
-import Skeleton from '@mui/material/Skeleton';
 
 const ServicesTableWrapper = styled.div`
     display: flex;
-    padding: 20px;
     min-height: 100vh;
     max-width: 100%;
     box-shadow: rgb(90 114 123 / 11%) 0px 7px 30px 0px;
-    border-radius:20px;
     margin-bottom: 40px;
     background-color: ${({ theme }) => theme.palette.background.default};
+    border-radius:20px;
     &:last-child{
         margin-bottom:0;
+    }
+    .MuiPaper-root {
+        border-radius: 0;
+        border-radius:20px;
+        padding: 20px;
     }
 `
 

@@ -35,6 +35,12 @@ const resources = {
             'deals': 'العروض',
             'bookings': 'الحجوزات',
             'points of sales': 'نقاط البيع',
+            'completed bookings': 'الحجوزات المكتملة',
+            'pending bookings': 'الحجوزات المعلقة',
+            'approved bookings': 'الحجوزات المؤكدة',
+            'in progress bookings': 'الحجوزات الجارية',
+            'canceled bookings': 'الحجوزات الملغية',
+            'total earnings': 'إجمالي الربح',
         }
     }
 };

@@ -70,7 +70,7 @@ const ServiceHead = styled.p`
     line-height:1.5;
     text-transform: capitalize;
     font-weight: 600;
-    color: ${({ theme }) => theme.palette.text.default};
+    color: ${({ theme }) => theme.palette.text.primary};
     margin-bottom: 0px;
 `
 

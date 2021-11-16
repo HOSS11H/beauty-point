@@ -44,6 +44,7 @@ const ClientName = styled.a`
     text-transform: capitalize;
     font-weight: 600;
     color: ${({ theme }) => theme.palette.primary.main};
+    transition: 0.3s ease-in-out;
     margin-bottom: 5px;
     cursor: pointer;
 `
@@ -218,7 +219,7 @@ const RecentBookings = props => {
     }
 
     return (
-        <CustomCard heading={`recent booking`} loading={loadingBookings}>
+        <CustomCard heading={`recent booking`} loading={loadingBookings && (fetchedBookings.data.length === 0)}>
             <TableContainer component={Paper} sx={{ boxShadow: 'none' }} >
                 <Table sx={{ minWidth: 650, overflowX: 'auto' }} aria-label="simple table">
                     <TableBody>

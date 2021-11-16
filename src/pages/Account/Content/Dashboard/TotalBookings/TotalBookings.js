@@ -52,7 +52,7 @@ const TotalBookings = props => {
     }
 
     return ( 
-        <CustomCard heading={`total bookings : `} total={ Object.keys(fetchedTotalBookings).length > 0 ? fetchedTotalBookings.total : 0 } loading={loadingTotalBookings}>
+        <CustomCard heading={`total bookings : `} total={ Object.keys(fetchedTotalBookings).length > 0 ? fetchedTotalBookings.total : 0 } loading={loadingTotalBookings && (Object.keys(fetchedTotalBookings).length === 0)}>
             { loadedTotalBookings }
         </CustomCard>
     )
