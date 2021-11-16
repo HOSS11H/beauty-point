@@ -64,6 +64,7 @@ export const CardActions = styled.div`
     }
 `
 
+
 export function CustomModal(props) {
 
     const { show, heading, confirmText, onConfirm, onClose } = props;

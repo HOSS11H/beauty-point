@@ -36,7 +36,16 @@ const reducer = ( state = intialState , action ) => {
                 deletingServiceMessage: null,
             })
         case ( actionTypes.DELETE_SERVICE_SUCCESS ) :
+            console.log(action.serviceId)
+
+            const updatedServices = state.services.data.filter( service => service.id !== action.serviceId );
+            console.log( state.services.data, updatedServices );
             return updateObject( state , {
+                services: {
+                    ...state.services,
+                    data: updatedServices,
+                    total: state.services.total - 1,
+                },
                 deletingService: false,
                 deletingServiceSuccess: true,
                 deletingServiceMessage: action.message,

@@ -124,7 +124,7 @@ export default function Account( props ) {
 							sx={{ display: { md: 'block', xs: 'none' } }}
 						/>
 					</Box>
-					<Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', maxWidth: '100%' }}>
+					<Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', maxWidth: isMdUp ? `calc( 100% - ${drawerWidth}px)` : '100%'  }}>
 						<Header onDrawerToggle={handleDrawerToggle} />
 						<Box component="main" sx={{ flex: 1, py: 6, px: 4, bgcolor: theme.palette.background.default }}>
 							<Outlet />

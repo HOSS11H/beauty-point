@@ -24,8 +24,7 @@ export const fetchServices = ( language, token , page ) => {
         dispatch( fetchServicesStart( ) )
         axios.get(`/vendors/services?page=${page + 1}`, { 
             headers: {
-                'Accept-Language': language,
-                'Authorization': `Bearer ${token}`,
+                'Accept-Language': language
             }
         }).then( response => {
                 dispatch( fetchServicesSuccess( response.data  ) );
@@ -42,10 +41,11 @@ export const deleteServiceStart = (  ) => {
         type: actionTypes.DELETE_SERVICE_START,
     }
 }
-export const deleteServiceSuccess = ( message ) => {
+export const deleteServiceSuccess = ( message, deletedServiceId ) => {
     return {
         type: actionTypes.DELETE_SERVICE_SUCCESS,
         message: message,
+        serviceId: deletedServiceId,
     }
 }
 export const deleteServiceFailed = ( message ) => {
@@ -58,12 +58,9 @@ export const deleteServiceFailed = ( message ) => {
 export const deleteService = (token , id ) => {
     return dispatch => {
         dispatch( deleteServiceStart( ) )
-        axios.delete(`/vendors/services/${id}`, { 
-            headers: {
-                'Authorization': `Bearer ${token}`,
-            }
-        }).then( response => {
-                dispatch( deleteServiceSuccess( response  ) );
+        axios.delete(`/vendors/services/${id}`)
+            .then( response => {
+                dispatch( deleteServiceSuccess( response.data , id  ) );
             })
             .catch( err => {
                 dispatch( deleteServiceFailed( err.message  ) )

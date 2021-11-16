@@ -1,20 +1,17 @@
 import { useContext, useEffect, useState } from 'react';
 import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { fetchServices } from '../../../../../store/actions/index';
 import ThemeContext from '../../../../../store/theme-context';
 import AuthContext from '../../../../../store/auth-context';
-import Actions from '../../../../../components/UI/Dashboard/Actions/Actions';
 import EnhancedTableHead from './TableHead/TableHead';
 import TablePaginationActions from './TablePagination/TablePagination';
 import DeleteModal from './DeleteModal/DeleteModal';
 import { deleteService } from '../../../../../store/actions/index';
+import EnhancedTableBody from './TableBody/TableBody';
 
 const ServicesTableWrapper = styled.div`
     display: flex;
@@ -42,63 +39,7 @@ export const SkeletonsWrapper = styled.div`
     flex-direction: column;
 `
 
-const ServiceImg = styled.div`
-    width: 100px;
-    height: 100px;
-    border-radius: 10px;
-    flex-shrink: 0;
-    cursor: pointer;
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-`
-const ServiceData = styled.p`
-    font-size: 14px;
-    line-height:1.5;
-    text-transform: capitalize;
-    font-weight: 500;
-    color: ${({ theme }) => theme.palette.text.disabled};
-    margin-bottom: 0px;
-`
-const ServiceEmployees = styled.ul`
-    margin: 0;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    li {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        height: 30px;
-        padding: 0 10px;
-        border-radius: 12px;
-        color: ${({ theme }) => theme.palette.common.white};
-        font-size: 14px;
-        text-transform: capitalize;
-        font-weight: 500;
-        background-color: ${({ theme }) => theme.palette.info.main};
-        margin-right: 5px;
-        margin-bottom: 5px;
-    }
-`
-const ServiceStatus = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 30px;
-    padding: 0 10px;
-    border-radius: 12px;
-    color: ${({ theme }) => theme.palette.common.white};
-    font-size: 14px;
-    text-transform: capitalize;
-    font-weight: 500;
-    background-color: ${({ theme }) => theme.palette.success.main};
-`
+const intialRowsPerPage = 15
 
 function ServicesTable(props) {
 
@@ -111,7 +52,8 @@ function ServicesTable(props) {
     const { token } = authCtx
 
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+
+    const [rowsPerPage, setRowsPerPage] = useState(intialRowsPerPage);
 
     const [ deleteModalOpened , setDeleteModalOpened ] = useState(false);
 
@@ -127,14 +69,22 @@ function ServicesTable(props) {
     }
 
     const deleteModalConfirmHandler = ( id ) => {
-        console.log(id)
         deleteServiceHandler(token ,id );
+        setDeleteModalOpened(false);
+        setSelectedServiceId(null);
     }
 
+    console.log('rendered');
 
     useEffect(() => {
         fetchServicesHandler(lang, token, page);
     }, [fetchServicesHandler, lang, token, page]);
+
+    useEffect(() => {
+        if( fetchedServices.per_page ) {
+            setRowsPerPage(fetchedServices.per_page)
+        }
+    }, [ fetchedServices ])
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -142,6 +92,7 @@ function ServicesTable(props) {
 
     // Avoid a layout jump when reaching the last page with empty rows & On Initialize
     const emptyRows = (rowsPerPage - fetchedServices.data.length);
+
     return (
         <ServicesTableWrapper>
             <Paper sx={{ width: '100%', boxShadow: 'none' }}>
@@ -154,87 +105,11 @@ function ServicesTable(props) {
                         <EnhancedTableHead
                             rowCount={fetchedServices.data.length}
                         />
-                        <TableBody>
-                            {fetchedServices.data.map((row, index) => {
-                                const labelId = `enhanced-table-Image-${index}`;
-                                return (
-                                    <TableRow
-                                        hover
-                                        tabIndex={-1}
-                                        key={row.id}
-                                    >
-                                        <TableCell
-                                            component="th"
-                                            id={labelId}
-                                            scope="row"
-                                        >
-                                            <ServiceImg>
-                                                <img src={row.service_image_url} alt="" />
-                                            </ServiceImg>
-                                        </TableCell>
-                                        <TableCell align="center">
-                                            <ServiceData>
-                                                {row.name}
-                                            </ServiceData>
-                                        </TableCell>
-                                        <TableCell align="center">
-                                            <ServiceData>
-                                                {row.location.name}
-                                            </ServiceData>
-                                        </TableCell>
-                                        <TableCell align="center">
-                                            <ServiceData>
-                                                {row.category.name}
-                                            </ServiceData>
-                                        </TableCell>
-                                        <TableCell align="center">
-                                            <ServiceData>
-                                                {row.formated_price}
-                                            </ServiceData>
-                                        </TableCell>
-                                        <TableCell align="center">
-                                            <ServiceData>
-                                                {row.formated_discounted_price}
-                                            </ServiceData>
-                                        </TableCell>
-                                        <TableCell align="center">
-                                            <ServiceEmployees>
-                                                {
-                                                    row.users.map((employee, index) => {
-                                                        let loadedEmployees;
-                                                        if (employee) {
-                                                            loadedEmployees = (
-                                                                <li key={employee.id}>{employee.name}</li>
-                                                            )
-                                                        }
-                                                        return loadedEmployees;
-                                                    })
-                                                }
-                                            </ServiceEmployees>
-                                        </TableCell>
-                                        <TableCell align="center">
-                                            <ServiceStatus>{row.status}</ServiceStatus>
-                                        </TableCell>
-                                        <TableCell align="center">
-                                            <Actions edit remove view 
-                                                editHandler={() => { }} 
-                                                removeHandler={ deleteModalOpenHandler.bind(null, row.id) } 
-                                                viewHandler={() => { }} 
-                                            />
-                                        </TableCell>
-                                    </TableRow>
-                                );
-                            })}
-                            {emptyRows > 0 && (
-                                <TableRow
-                                    style={{
-                                        height: (133) * emptyRows,
-                                    }}
-                                >
-                                    <TableCell colSpan={9} />
-                                </TableRow>
-                            )}
-                        </TableBody>
+                        <EnhancedTableBody 
+                            fetchedServices={fetchedServices}
+                            emptyRows={emptyRows}
+                            deleteModalOpenHandler={deleteModalOpenHandler}
+                        />
                     </Table>
                 </TableContainer>
                 <TablePaginationActions
