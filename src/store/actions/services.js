@@ -28,6 +28,7 @@ export const fetchServices = ( language, token , page ) => {
                 'Authorization': `Bearer ${token}`,
             }
         }).then( response => {
+                console.log('services fetched')
                 dispatch( fetchServicesSuccess( response.data  ) );
             })
             .catch( err => {

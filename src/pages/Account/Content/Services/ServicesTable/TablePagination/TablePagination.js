@@ -17,6 +17,11 @@ const TablePaginationWrapper = styled.div`
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    @media screen and (max-width: 500px) {
+        flex-direction: column;
+        justify-content: center;
+        padding: 15px 0;
+    }
 `
 const PaginationData = styled.p`
     font-size: 14px;

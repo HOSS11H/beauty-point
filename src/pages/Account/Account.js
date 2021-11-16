@@ -104,7 +104,7 @@ export default function Account( props ) {
 	return (
 		<Fragment>
 			<ThemeProvider theme={customTheme}>
-				<Box sx={{ display: 'flex', minHeight: '100vh' }}>
+				<Box sx={{ display: 'flex', minHeight: '100vh', maxWidth: '100%' }}>
 					<CssBaseline />
 					<Box
 						component="nav"
@@ -124,7 +124,7 @@ export default function Account( props ) {
 							sx={{ display: { md: 'block', xs: 'none' } }}
 						/>
 					</Box>
-					<Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+					<Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', maxWidth: '100%' }}>
 						<Header onDrawerToggle={handleDrawerToggle} />
 						<Box component="main" sx={{ flex: 1, py: 6, px: 4, bgcolor: theme.palette.background.default }}>
 							<Outlet />

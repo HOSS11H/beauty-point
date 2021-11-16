@@ -14,6 +14,21 @@ import AuthContext from '../../../../../store/auth-context';
 import Actions from '../../../../../components/UI/Dashboard/Actions/Actions';
 import EnhancedTableHead from './TableHead/TableHead';
 import TablePaginationActions from './TablePagination/TablePagination';
+import Skeleton from '@mui/material/Skeleton';
+
+const ServicesTableWrapper = styled.div`
+    display: flex;
+    padding: 20px;
+    min-height: 100vh;
+    max-width: 100%;
+    box-shadow: rgb(90 114 123 / 11%) 0px 7px 30px 0px;
+    border-radius:20px;
+    margin-bottom: 40px;
+    background-color: ${({ theme }) => theme.palette.background.default};
+    &:last-child{
+        margin-bottom:0;
+    }
+`
 
 export const SkeletonsWrapper = styled.div`
     flex-grow: 1;
@@ -95,7 +110,6 @@ function ServicesTable(props) {
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
 
-
     useEffect(() => {
         fetchServicesHandler(lang, token, page);
     }, [fetchServicesHandler, lang, token, page]);
@@ -106,10 +120,10 @@ function ServicesTable(props) {
 
     // Avoid a layout jump when reaching the last page with empty rows & On Initialize
     const emptyRows = (rowsPerPage - fetchedServices.data.length);
-
+    console.log('services returned')
     return (
-        <Box sx={{ width: '100%' }}>
-            <Paper sx={{ width: '100%', mb: 2, boxShadow: 'rgb(90 114 123 / 11%) 0px 7px 30px 0px' }}>
+        <ServicesTableWrapper>
+            <Paper sx={{ width: '100%', boxShadow: 'none' }}>
                 <TableContainer>
                     <Table
                         sx={{ minWidth: 750 }}
@@ -192,7 +206,10 @@ function ServicesTable(props) {
                                         height: (133) * emptyRows,
                                     }}
                                 >
-                                    <TableCell colSpan={9} />
+                                    <TableCell colSpan={9} >
+                                        <SkeletonsWrapper>
+                                        </SkeletonsWrapper>
+                                    </TableCell>
                                 </TableRow>
                             )}
                         </TableBody>
@@ -208,7 +225,7 @@ function ServicesTable(props) {
                     loading={loadingServices}
                 />
             </Paper>
-        </Box>
+        </ServicesTableWrapper>
     );
 }
 
