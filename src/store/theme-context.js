@@ -86,17 +86,6 @@ export const ThemeContextProvider = props => {
                 return "ltr";
             }
         } );
-        // Only For Testing Mode
-        setMode( prevState =>{
-            if(prevState === "dark"){
-                localStorage.setItem('mode', "light");
-                return "light";
-            }
-            else{
-                localStorage.setItem('mode', "dark");
-                return "dark";
-            }
-        });
     } )
     
     const theme = React.useMemo(

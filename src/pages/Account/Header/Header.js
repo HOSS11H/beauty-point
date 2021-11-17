@@ -1,4 +1,4 @@
-import  { Fragment} from 'react';
+import { Fragment, useContext } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import AppBar from '@mui/material/AppBar';
@@ -9,24 +9,29 @@ import MenuIcon from '@mui/icons-material/Menu';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
-import SearchIcon from '@mui/icons-material/Search';
-import {ButtonSmall} from '../../../components/UI/Button/Button';
-import TextField from '@mui/material/TextField';
+import ThemeContext from '../../../store/theme-context';
+import WbSunnyIcon from '@mui/icons-material/WbSunny';
+import Brightness2Icon from '@mui/icons-material/Brightness2';
 
+import { ButtonSmall } from '../../../components/UI/Button/Button';
 
-const ButtonSearch = styled(ButtonSmall)`
+const SwitchBtn = styled(ButtonSmall)`
     &.MuiButton-root {
-        margin-right: 8px;
+        margin-bottom: 0;
+        width: auto;
+        padding: 0 15px;
     }
 `
 
 function Header(props) {
     const { onDrawerToggle } = props;
 
+    const themeCtx = useContext(ThemeContext)
+
 
     return (
         <Fragment>
-            <AppBar sx={{ boxShadow: 'rgb(113 122 131 / 11%) 0px 7px 30px 0px' ,  }} position="sticky" elevation={0}>
+            <AppBar sx={{ boxShadow: 'rgb(113 122 131 / 11%) 0px 7px 30px 0px', }} position="sticky" elevation={0}>
                 <Toolbar>
                     <Grid container spacing={1} alignItems="center">
                         <Grid sx={{ display: { md: 'none', xs: 'block' } }} item>
@@ -39,29 +44,12 @@ function Header(props) {
                                 <MenuIcon />
                             </IconButton>
                         </Grid>
-                        <Toolbar sx={{ paddingTop: '8px'}} >
-                            <Grid container spacing={2} alignItems="center">
-                                <Grid item>
-                                    <SearchIcon color="inherit" sx={{ display: 'block' }} />
-                                </Grid>
-                                <Grid item xs>
-                                    <TextField
-                                        fullWidth
-                                        placeholder="Search by email address, phone number, or user UID"
-                                        InputProps={{
-                                            disableUnderline: true,
-                                            sx: { fontSize: 'default' },
-                                        }}
-                                        variant="standard"
-                                    />
-                                </Grid>
-                                <Grid item>
-                                    <ButtonSearch>
-                                        search
-                                    </ButtonSearch>
-                                </Grid>
-                            </Grid>
-                        </Toolbar>
+                        <Grid item>
+                            <IconButton sx={{ mr: 1, color: themeCtx.theme.palette.mode === 'dark' ? themeCtx.theme.vars.white : themeCtx.theme.vars.black }} onClick={themeCtx.toggleMode} >
+                                {themeCtx.theme.palette.mode === 'dark' ? <WbSunnyIcon /> : <Brightness2Icon />}
+                            </IconButton>
+                            <SwitchBtn onClick={themeCtx.toggleLanguage} >{themeCtx.lang === 'ar' ? 'switch to EN' : 'الانتقال الي العربية' }</SwitchBtn>
+                        </Grid>
                         <Grid item xs />
                         <Grid item>
                             <Tooltip title="Alerts • No alerts">

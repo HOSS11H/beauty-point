@@ -90,7 +90,7 @@ export default function Navigator(props) {
     return (
         <Drawer variant="permanent" {...other} anchor='left'  >
             <List disablePadding sx={{ px: '16px', py: '16px', }} >
-                <Logo onClick={themeCtx.toggleLanguage}>
+                <Logo>
                     Beauty Point
                 </Logo>
                 {categories.map(({ id, children }) => (

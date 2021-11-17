@@ -31,13 +31,7 @@ const ProductsTableWrapper = styled.div`
     }
 `
 
-export const SkeletonsWrapper = styled.div`
-    flex-grow: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-`
+
 
 const intialRowsPerPage = 15
 
