@@ -10,6 +10,8 @@ import AuthContext from '../../../../../store/auth-context';
 import EnhancedTableHead from './TableHead/TableHead';
 import TablePaginationActions from '../../../../../components/UI/Dashboard/Table/TablePagination/TablePagination';
 import DeleteModal from './DeleteModal/DeleteModal';
+import ViewModal from './ViewModal/ViewModal';
+import EditModal from './EditModal/EditModal';
 import { deleteProduct } from '../../../../../store/actions/index';
 import EnhancedTableBody from './TableBody/TableBody';
 
@@ -51,8 +53,13 @@ function ProductsTable(props) {
 
     const [ deleteModalOpened , setDeleteModalOpened ] = useState(false);
 
+    const [ viewModalOpened , setViewModalOpened ] = useState(false);
+
+    const [ editModalOpened , setEditModalOpened ] = useState(false);
+
     const [ selectedProductId , setSelectedProductId ] = useState(null);
 
+    // Delete Modal
     const deleteModalOpenHandler = ( id ) => {
         setDeleteModalOpened(true);
         setSelectedProductId(id);
@@ -67,8 +74,37 @@ function ProductsTable(props) {
         setDeleteModalOpened(false);
         setSelectedProductId(null);
     }
+    // View Modal
+    const viewModalOpenHandler = ( id ) => {
+        setViewModalOpened(true);
+        setSelectedProductId(id);
+        console.log(id);
+    }
+    const viewModalCloseHandler = ( ) => {
+        setViewModalOpened(false);
+        setSelectedProductId(null);
+    }
 
-    console.log('rendered');
+    const viewModalConfirmHandler = ( id ) => {
+        setViewModalOpened(false);
+        setEditModalOpened(true);
+    }
+
+    // Edit Modal
+    const editModalOpenHandler = ( id ) => {
+        setEditModalOpened(true);
+        setSelectedProductId(id);
+    }
+    const editModalCloseHandler = ( ) => {
+        setEditModalOpened(false);
+        setSelectedProductId(null);
+    }
+
+    const editModalConfirmHandler = ( id ) => {
+        setEditModalOpened(false);
+        setSelectedProductId(null);
+    }
+
 
     useEffect(() => {
         fetchProductsHandler(lang, token, page);
@@ -103,6 +139,8 @@ function ProductsTable(props) {
                             fetchedProducts={fetchedProducts}
                             emptyRows={emptyRows}
                             deleteModalOpenHandler={deleteModalOpenHandler}
+                            viewModalOpenHandler= {viewModalOpenHandler}
+                            editModalOpenHandler= {editModalOpenHandler}
                         />
                     </Table>
                 </TableContainer>
@@ -119,6 +157,13 @@ function ProductsTable(props) {
             <DeleteModal show={deleteModalOpened} id={selectedProductId}
                     onClose={deleteModalCloseHandler} onConfirm={deleteModalConfirmHandler.bind(null, selectedProductId)}
                     heading='Do you want To delete this product?'  confirmText='delete' />
+            <ViewModal show={viewModalOpened} id={selectedProductId} fetchedProducts={fetchedProducts}
+                onClose={viewModalCloseHandler} onConfirm={viewModalConfirmHandler.bind(null, selectedProductId)}
+                heading='view service details' confirmText='edit' />
+            <EditModal show={editModalOpened} id={selectedProductId} fetchedProducts={fetchedProducts}
+                onClose={editModalCloseHandler} onConfirm={editModalConfirmHandler.bind(null, selectedProductId)}
+                heading='view service details' confirmText='edit' />
+
         </ProductsTableWrapper>
     );
 }

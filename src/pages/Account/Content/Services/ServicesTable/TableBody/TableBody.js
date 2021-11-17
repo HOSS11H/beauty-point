@@ -8,7 +8,7 @@ import { TableData, TableEmployees, TableImg, TableStatus } from '../../../../..
 
 const EnhancedTableBody = props => {
 
-    const {fetchedServices, emptyRows, deleteModalOpenHandler} = props;
+    const {fetchedServices, emptyRows, deleteModalOpenHandler, viewModalOpenHandler, editModalOpenHandler } = props;
 
     return (
         <TableBody>
@@ -74,9 +74,9 @@ const EnhancedTableBody = props => {
                         </TableCell>
                         <TableCell align="center">
                             <Actions edit remove view
-                                editHandler={() => { }}
                                 removeHandler={deleteModalOpenHandler.bind(null, row.id)}
-                                viewHandler={() => { }}
+                                viewHandler={viewModalOpenHandler.bind(null, row.id)}
+                                editHandler={editModalOpenHandler.bind(null, row.id)}
                             />
                         </TableCell>
                     </TableRow>

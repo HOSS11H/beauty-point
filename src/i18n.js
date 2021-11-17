@@ -51,6 +51,12 @@ const resources = {
             'original price': 'السعر الأصلي',
             'deal price': 'السعر بعد التخفيض',
             'deal usage': 'حد استخدام العرض',
+            'view service details': 'عرض تفاصيل الخدمة',
+            'edit': 'تعديل',
+            'discount type': 'نوع الخصم',
+            'discount value': 'قيمة الخصم',
+            'product name': 'اسم المنتج',
+            'description': 'الوصف',
         }
     }
 };

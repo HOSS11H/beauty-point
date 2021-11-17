@@ -8,10 +8,12 @@ import { fetchServices } from '../../../../../store/actions/index';
 import ThemeContext from '../../../../../store/theme-context';
 import AuthContext from '../../../../../store/auth-context';
 import EnhancedTableHead from './TableHead/TableHead';
-import DeleteModal from './DeleteModal/DeleteModal';
 import { deleteService } from '../../../../../store/actions/index';
 import EnhancedTableBody from './TableBody/TableBody';
 import TablePaginationActions from '../../../../../components/UI/Dashboard/Table/TablePagination/TablePagination';
+import DeleteModal from './DeleteModal/DeleteModal';
+import ViewModal from './ViewModal/ViewModal';
+import EditModal from './EditModal/EditModal';
 
 const ServicesTableWrapper = styled.div`
     display: flex;
@@ -35,7 +37,7 @@ const intialRowsPerPage = 15
 
 function ServicesTable(props) {
 
-    const { fetchedServices, fetchServicesHandler, loadingServices , deleteServiceHandler } = props;
+    const { fetchedServices, fetchServicesHandler, loadingServices, deleteServiceHandler } = props;
 
     const themeCtx = useContext(ThemeContext)
     const authCtx = useContext(AuthContext)
@@ -47,22 +49,58 @@ function ServicesTable(props) {
 
     const [rowsPerPage, setRowsPerPage] = useState(intialRowsPerPage);
 
-    const [ deleteModalOpened , setDeleteModalOpened ] = useState(false);
+    const [deleteModalOpened, setDeleteModalOpened] = useState(false);
 
-    const [ selectedServiceId , setSelectedServiceId ] = useState(null);
+    const [ viewModalOpened , setViewModalOpened ] = useState(false);
 
-    const deleteModalOpenHandler = ( id ) => {
+    const [ editModalOpened , setEditModalOpened ] = useState(false);
+
+    const [selectedServiceId, setSelectedServiceId] = useState(null);
+
+    // Delete Modal
+    const deleteModalOpenHandler = (id) => {
         setDeleteModalOpened(true);
         setSelectedServiceId(id);
     }
-    const deleteModalCloseHandler = ( ) => {
+    const deleteModalCloseHandler = () => {
         setDeleteModalOpened(false);
         setSelectedServiceId(null);
     }
 
-    const deleteModalConfirmHandler = ( id ) => {
-        deleteServiceHandler(token ,id );
+    const deleteModalConfirmHandler = (id) => {
+        deleteServiceHandler(token, id);
         setDeleteModalOpened(false);
+        setSelectedServiceId(null);
+    }
+
+    // View Modal
+    const viewModalOpenHandler = ( id ) => {
+        setViewModalOpened(true);
+        setSelectedServiceId(id);
+        console.log(id);
+    }
+    const viewModalCloseHandler = ( ) => {
+        setViewModalOpened(false);
+        setSelectedServiceId(null);
+    }
+
+    const viewModalConfirmHandler = ( id ) => {
+        setViewModalOpened(false);
+        setEditModalOpened(true);
+    }
+
+    // Edit Modal
+    const editModalOpenHandler = ( id ) => {
+        setEditModalOpened(true);
+        setSelectedServiceId(id);
+    }
+    const editModalCloseHandler = ( ) => {
+        setEditModalOpened(false);
+        setSelectedServiceId(null);
+    }
+
+    const editModalConfirmHandler = ( id ) => {
+        setEditModalOpened(false);
         setSelectedServiceId(null);
     }
 
@@ -73,10 +111,10 @@ function ServicesTable(props) {
     }, [fetchServicesHandler, lang, token, page]);
 
     useEffect(() => {
-        if( fetchedServices.per_page ) {
+        if (fetchedServices.per_page) {
             setRowsPerPage(fetchedServices.per_page)
         }
-    }, [ fetchedServices ])
+    }, [fetchedServices])
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -97,10 +135,12 @@ function ServicesTable(props) {
                         <EnhancedTableHead
                             rowCount={fetchedServices.data.length}
                         />
-                        <EnhancedTableBody 
+                        <EnhancedTableBody
                             fetchedServices={fetchedServices}
                             emptyRows={emptyRows}
                             deleteModalOpenHandler={deleteModalOpenHandler}
+                            viewModalOpenHandler= {viewModalOpenHandler}
+                            editModalOpenHandler= {editModalOpenHandler}
                         />
                     </Table>
                 </TableContainer>
@@ -115,8 +155,14 @@ function ServicesTable(props) {
                 />
             </Paper>
             <DeleteModal show={deleteModalOpened} id={selectedServiceId}
-                    onClose={deleteModalCloseHandler} onConfirm={deleteModalConfirmHandler.bind(null, selectedServiceId)}
-                    heading='Do you want To delete this service?'  confirmText='delete' />
+                onClose={deleteModalCloseHandler} onConfirm={deleteModalConfirmHandler.bind(null, selectedServiceId)}
+                heading='Do you want To delete this service?' confirmText='delete' />
+            <ViewModal show={viewModalOpened} id={selectedServiceId} fetchedServices={fetchedServices}
+                onClose={viewModalCloseHandler} onConfirm={viewModalConfirmHandler.bind(null, selectedServiceId)}
+                heading='view service details' confirmText='edit' />
+            <EditModal show={editModalOpened} id={selectedServiceId} fetchedServices={fetchedServices}
+                onClose={editModalCloseHandler} onConfirm={editModalConfirmHandler.bind(null, selectedServiceId)}
+                heading='view service details' confirmText='edit' />
         </ServicesTableWrapper>
     );
 }
@@ -131,7 +177,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         fetchServicesHandler: (language, token, page) => dispatch(fetchServices(language, token, page)),
-        deleteServiceHandler: ( token , id ) => dispatch( deleteService(token , id) ),
+        deleteServiceHandler: (token, id) => dispatch(deleteService(token, id)),
     }
 }
 
