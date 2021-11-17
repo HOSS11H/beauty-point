@@ -8,10 +8,10 @@ import { fetchServices } from '../../../../../store/actions/index';
 import ThemeContext from '../../../../../store/theme-context';
 import AuthContext from '../../../../../store/auth-context';
 import EnhancedTableHead from './TableHead/TableHead';
-import TablePaginationActions from './TablePagination/TablePagination';
 import DeleteModal from './DeleteModal/DeleteModal';
 import { deleteService } from '../../../../../store/actions/index';
 import EnhancedTableBody from './TableBody/TableBody';
+import TablePaginationActions from '../../../../../components/UI/Dashboard/Table/TablePagination/TablePagination';
 
 const ServicesTableWrapper = styled.div`
     display: flex;

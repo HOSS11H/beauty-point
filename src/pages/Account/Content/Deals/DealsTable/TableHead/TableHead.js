@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import { visuallyHidden } from '@mui/utils';
 import { useTranslation } from 'react-i18next';
 
-import styled from 'styled-components';
+import { TableHeading } from '../../../../../../components/UI/Dashboard/Table/Table';
 
 const headCells = [
     {
@@ -71,15 +71,6 @@ const headCells = [
     },
 ];
 
-const DealHead = styled.p`
-    font-size: 14px;
-    line-height:1.5;
-    text-transform: capitalize;
-    font-weight: 600;
-    color: ${({ theme }) => theme.palette.text.primary};
-    margin-bottom: 0px;
-`
-
 
 function EnhancedTableHead(props) {
 
@@ -105,9 +96,9 @@ function EnhancedTableHead(props) {
                             direction={orderBy === headCell.id ? order : 'asc'}
                             onClick={createSortHandler(headCell.id)}
                         >
-                            <DealHead>
+                            <TableHeading>
                                 {t(headCell.label)}
-                            </DealHead>
+                            </TableHeading>
                             {orderBy === headCell.id ? (
                                 <Box component="span" sx={visuallyHidden}>
                                     {order === 'desc' ? 'sorted descending' : 'sorted ascending'}

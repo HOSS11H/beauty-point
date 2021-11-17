@@ -8,7 +8,7 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
 import { useTranslation } from 'react-i18next';
 import { useContext } from 'react';
-import ThemeContext from '../../../../../../store/theme-context';
+import ThemeContext from '../../../../../store/theme-context';
 import CircularProgress from '@mui/material/CircularProgress';
 
 const TablePaginationWrapper = styled.div`
