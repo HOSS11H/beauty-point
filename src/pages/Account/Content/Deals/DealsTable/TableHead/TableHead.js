@@ -49,7 +49,7 @@ const headCells = [
         id: 'dealUsage',
         numeric: false,
         disablePadding: false,
-        label: 'deal-usage',
+        label: 'deal usage',
     },
     {
         id: 'location',

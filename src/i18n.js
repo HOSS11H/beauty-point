@@ -45,6 +45,12 @@ const resources = {
             'delete': 'حذف',
             'close': 'إغلاق',
             'You will not be able to recover the deleted record!': 'لن تستطيع استرداد السجل المحذوف!',
+            'quantity': 'الكمية',
+            'starts at': 'يبدأ في',
+            'ends at': 'ينتهي في',
+            'original price': 'السعر الأصلي',
+            'deal price': 'السعر بعد التخفيض',
+            'deal usage': 'حد استخدام العرض',
         }
     }
 };
