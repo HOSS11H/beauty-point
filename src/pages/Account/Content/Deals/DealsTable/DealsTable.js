@@ -10,6 +10,8 @@ import AuthContext from '../../../../../store/auth-context';
 import EnhancedTableHead from './TableHead/TableHead';
 import TablePaginationActions from '../../../../../components/UI/Dashboard/Table/TablePagination/TablePagination';
 import DeleteModal from './DeleteModal/DeleteModal';
+import ViewModal from './ViewModal/ViewModal';
+import EditModal from './EditModal/EditModal';
 import { deleteDeal } from '../../../../../store/actions/index';
 import EnhancedTableBody from './TableBody/TableBody';
 
@@ -37,7 +39,7 @@ const intialRowsPerPage = 15
 
 function DealsTable(props) {
 
-    const { fetchedDeals, fetchDealsHandler, loadingDeals , deleteDealHandler } = props;
+    const { fetchedDeals, fetchDealsHandler, loadingDeals, deleteDealHandler } = props;
 
     const themeCtx = useContext(ThemeContext)
     const authCtx = useContext(AuthContext)
@@ -49,36 +51,70 @@ function DealsTable(props) {
 
     const [rowsPerPage, setRowsPerPage] = useState(intialRowsPerPage);
 
-    const [ deleteModalOpened , setDeleteModalOpened ] = useState(false);
+    const [deleteModalOpened, setDeleteModalOpened] = useState(false);
 
-    const [ selectedDealId , setSelectedDealId ] = useState(null);
+    const [ viewModalOpened , setViewModalOpened ] = useState(false);
 
-    const deleteModalOpenHandler = ( id ) => {
+    const [ editModalOpened , setEditModalOpened ] = useState(false);
+
+    const [selectedDealId, setSelectedDealId] = useState(null);
+
+    // Delete Modal
+    const deleteModalOpenHandler = (id) => {
         setDeleteModalOpened(true);
         setSelectedDealId(id);
     }
-    const deleteModalCloseHandler = ( ) => {
+    const deleteModalCloseHandler = () => {
         setDeleteModalOpened(false);
         setSelectedDealId(null);
     }
 
-    const deleteModalConfirmHandler = ( id ) => {
-        deleteDealHandler(token ,id );
+    const deleteModalConfirmHandler = (id) => {
+        deleteDealHandler(token, id);
         setDeleteModalOpened(false);
         setSelectedDealId(null);
     }
 
-    console.log('rendered');
+    // View Modal
+    const viewModalOpenHandler = ( id ) => {
+        setViewModalOpened(true);
+        setSelectedDealId(id);
+    }
+    const viewModalCloseHandler = ( ) => {
+        setViewModalOpened(false);
+        setSelectedDealId(null);
+    }
+
+    const viewModalConfirmHandler = ( id ) => {
+        setViewModalOpened(false);
+        setEditModalOpened(true);
+    }
+
+    // Edit Modal
+    const editModalOpenHandler = ( id ) => {
+        setEditModalOpened(true);
+        setSelectedDealId(id);
+    }
+    const editModalCloseHandler = ( ) => {
+        setEditModalOpened(false);
+        setSelectedDealId(null);
+    }
+
+    const editModalConfirmHandler = ( id ) => {
+        setEditModalOpened(false);
+        setSelectedDealId(null);
+    }
+
 
     useEffect(() => {
         fetchDealsHandler(lang, token, page);
     }, [fetchDealsHandler, lang, token, page]);
 
     useEffect(() => {
-        if( fetchedDeals.per_page ) {
+        if (fetchedDeals.per_page) {
             setRowsPerPage(fetchedDeals.per_page)
         }
-    }, [ fetchedDeals ])
+    }, [fetchedDeals])
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -99,10 +135,12 @@ function DealsTable(props) {
                         <EnhancedTableHead
                             rowCount={fetchedDeals.data.length}
                         />
-                        <EnhancedTableBody 
+                        <EnhancedTableBody
                             fetchedDeals={fetchedDeals}
                             emptyRows={emptyRows}
                             deleteModalOpenHandler={deleteModalOpenHandler}
+                            editModalOpenHandler={editModalOpenHandler}
+                            viewModalOpenHandler={viewModalOpenHandler}
                         />
                     </Table>
                 </TableContainer>
@@ -117,8 +155,14 @@ function DealsTable(props) {
                 />
             </Paper>
             <DeleteModal show={deleteModalOpened} id={selectedDealId}
-                    onClose={deleteModalCloseHandler} onConfirm={deleteModalConfirmHandler.bind(null, selectedDealId)}
-                    heading='Do you want To delete this deal?'  confirmText='delete' />
+                onClose={deleteModalCloseHandler} onConfirm={deleteModalConfirmHandler.bind(null, selectedDealId)}
+                heading='Do you want To delete this deal?' confirmText='delete' />
+            <ViewModal show={viewModalOpened} id={selectedDealId} fetchedDeals={fetchedDeals}
+                onClose={viewModalCloseHandler} onConfirm={viewModalConfirmHandler.bind(null, selectedDealId)}
+                heading='view deal details' confirmText='edit' />
+            <EditModal show={editModalOpened} id={selectedDealId} fetchedDeals={fetchedDeals}
+                onClose={editModalCloseHandler} onConfirm={editModalConfirmHandler.bind(null, selectedDealId)}
+                heading='view deal details' confirmText='edit' />
         </DealsTableWrapper>
     );
 }
@@ -133,7 +177,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         fetchDealsHandler: (language, token, page) => dispatch(fetchDeals(language, token, page)),
-        deleteDealHandler: ( token , id ) => dispatch( deleteDeal(token , id) ),
+        deleteDealHandler: (token, id) => dispatch(deleteDeal(token, id)),
     }
 }
 

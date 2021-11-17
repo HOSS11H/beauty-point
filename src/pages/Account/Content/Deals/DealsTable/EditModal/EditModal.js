@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { Grid } from '@mui/material';
 
-const ProductImg = styled.div`
+const DealImg = styled.div`
     width: 100%;
     height: 200px;
     border-radius: 10px;
@@ -17,13 +17,13 @@ const ProductImg = styled.div`
         border-radius: 10px;
     }
 `
-const ProductData = styled.div`
+const DealData = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     text-align: left;
 `
-const ProductDataHeading = styled.p`
+const DealDataHeading = styled.p`
     font-size: 15px;
     line-height:1.5;
     text-transform: capitalize;
@@ -32,7 +32,7 @@ const ProductDataHeading = styled.p`
     margin-bottom: 5px;
 `
 
-const ProductDataInfo = styled.p`
+const DealDataInfo = styled.p`
     font-size: 14px;
     line-height:1.5;
     text-transform: capitalize;
@@ -40,7 +40,7 @@ const ProductDataInfo = styled.p`
     color: ${({ theme }) => theme.palette.text.disabled};
     margin-bottom: 0px;
 `
-const ProductDesc = styled.div`
+const DealDesc = styled.div`
     p {
         font-size: 14px;
         line-height:1.5;
@@ -54,19 +54,17 @@ const ProductDesc = styled.div`
 
 const EditModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, id, fetchedProducts } = props;
+    const { show, heading, confirmText, onConfirm, onClose, id, fetchedDeals } = props;
 
     const { t } = useTranslation();
 
-    const productIndex = fetchedProducts.data.findIndex(product => product.id === id);
+    const dealIndex = fetchedDeals.data.findIndex(deal => deal.id === id);
 
-    const productData = fetchedProducts.data[productIndex];
+    const dealData = fetchedDeals.data[dealIndex];
 
-    console.log(productData);
-    
     let content;
 
-    if (productData) {
+    if (dealData) {
         content = (
             <Grid container  spacing={2}>
                 

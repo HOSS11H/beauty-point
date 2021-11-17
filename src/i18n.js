@@ -57,6 +57,11 @@ const resources = {
             'discount value': 'قيمة الخصم',
             'product name': 'اسم المنتج',
             'description': 'الوصف',
+            'Do you want To delete this product?': 'هل تريد حذف هذا المنتج؟',
+            'view product details': 'عرض تفاصيل المنتج',
+            'Do you want To delete this deal?': 'هل تريد حذف هذا العرض؟',
+            'view deal details': 'عرض تفاصيل العرض',
+            'applies between': 'تنطبق بين',
         }
     }
 };

@@ -10,7 +10,7 @@ import { TableData, TableDate, TableImg, TableStatus } from '../../../../../../c
 
 const EnhancedTableBody = props => {
 
-    const { fetchedDeals, emptyRows, deleteModalOpenHandler } = props;
+    const { fetchedDeals, emptyRows, deleteModalOpenHandler, editModalOpenHandler, viewModalOpenHandler } = props;
 
 
     return (
@@ -72,9 +72,9 @@ const EnhancedTableBody = props => {
                         </TableCell>
                         <TableCell align="center">
                             <Actions edit remove view
-                                editHandler={() => { }}
                                 removeHandler={deleteModalOpenHandler.bind(null, row.id)}
-                                viewHandler={() => { }}
+                                editHandler={editModalOpenHandler.bind(null, row.id)}
+                                viewHandler={viewModalOpenHandler.bind(null, row.id)}
                             />
                         </TableCell>
                     </TableRow>

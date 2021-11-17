@@ -159,10 +159,10 @@ function ProductsTable(props) {
                     heading='Do you want To delete this product?'  confirmText='delete' />
             <ViewModal show={viewModalOpened} id={selectedProductId} fetchedProducts={fetchedProducts}
                 onClose={viewModalCloseHandler} onConfirm={viewModalConfirmHandler.bind(null, selectedProductId)}
-                heading='view service details' confirmText='edit' />
+                heading='view product details' confirmText='edit' />
             <EditModal show={editModalOpened} id={selectedProductId} fetchedProducts={fetchedProducts}
                 onClose={editModalCloseHandler} onConfirm={editModalConfirmHandler.bind(null, selectedProductId)}
-                heading='view service details' confirmText='edit' />
+                heading='view product details' confirmText='edit' />
 
         </ProductsTableWrapper>
     );
