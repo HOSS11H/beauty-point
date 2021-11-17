@@ -10,3 +10,7 @@ export {
     fetchProducts,
     deleteProduct,
 } from './products'
+export {
+    fetchDeals,
+    deleteDeal,
+} from './deals'

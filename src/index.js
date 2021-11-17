@@ -10,6 +10,7 @@ import thunk from 'redux-thunk';
 import bookingsReducer from './store/reducers/bookings'
 import servicesReducer from './store/reducers/services'
 import productsReducer from './store/reducers/products'
+import dealsReducer from './store/reducers/deals'
 
 import { BrowserRouter } from 'react-router-dom';
 
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
 	bookings: bookingsReducer,
 	services: servicesReducer,
 	products: productsReducer,
+	deals: dealsReducer,
 });
 
 

@@ -36,10 +36,7 @@ const reducer = ( state = intialState , action ) => {
                 deletingProductMessage: null,
             })
         case ( actionTypes.DELETE_PRODUCT_SUCCESS ) :
-            console.log(action.productId)
-
             const updatedProducts = state.products.data.filter( product => product.id !== action.productId );
-            console.log( state.products.data, updatedProducts );
             return updateObject( state , {
                 products: {
                     ...state.products,
