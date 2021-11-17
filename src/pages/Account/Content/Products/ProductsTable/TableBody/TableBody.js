@@ -28,29 +28,6 @@ const ProductData = styled.p`
     color: ${({ theme }) => theme.palette.text.disabled};
     margin-bottom: 0px;
 `
-const ProductEmployees = styled.ul`
-    margin: 0;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    li {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        height: 30px;
-        padding: 0 10px;
-        border-radius: 12px;
-        color: ${({ theme }) => theme.palette.common.white};
-        font-size: 14px;
-        text-transform: capitalize;
-        font-weight: 500;
-        background-color: ${({ theme }) => theme.palette.info.main};
-        margin-right: 5px;
-        margin-bottom: 5px;
-    }
-`
 const ProductStatus = styled.div`
     display: flex;
     align-items: center;
