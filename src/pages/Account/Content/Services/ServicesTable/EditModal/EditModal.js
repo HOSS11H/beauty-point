@@ -2,78 +2,76 @@ import { CustomModal } from '../../../../../../components/UI/Modal/Modal';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { Grid } from '@mui/material';
+import TextField from '@mui/material/TextField';
+import { useMemo, useState, useEffect, useCallback } from 'react';
 
-const ServiceImg = styled.div`
+const CustomTextField = styled(TextField)`
     width: 100%;
-    height: 200px;
-    border-radius: 10px;
-    flex-shrink: 0;
-    cursor: pointer;
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 10px;
-    }
-`
-const ServiceData = styled.div`
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    text-align: left;
-`
-const ServiceDataHeading = styled.p`
-    font-size: 15px;
-    line-height:1.5;
-    text-transform: capitalize;
-    font-weight: 600;
-    color: ${({ theme }) => theme.palette.text.primary};
-    margin-bottom: 5px;
-`
-
-const ServiceDataInfo = styled.p`
-    font-size: 14px;
-    line-height:1.5;
-    text-transform: capitalize;
-    font-weight: 500;
-    color: ${({ theme }) => theme.palette.text.disabled};
-    margin-bottom: 0px;
-`
-const ServiceDesc = styled.div`
-    p {
-        font-size: 14px;
-        line-height:1.5;
-        text-transform: capitalize;
-        font-weight: 500;
-        color: ${({ theme }) => theme.palette.text.disabled};
-    }
 `
 
 
 
 const EditModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, id, fetchedServices } = props;
-
     const { t } = useTranslation();
 
-    const serviceIndex = fetchedServices.data.findIndex(service => service.id === id);
+    const { show, heading, confirmText, onConfirm, onClose, id, fetchedServices } = props;
 
-    const serviceData = fetchedServices.data[serviceIndex];
+    let serviceData = useMemo(() => {
+        return {
+            name: '',
+            slug: '',
+        }
+    }, []);
+
+    const [ serviceName, setServiceName ] = useState(serviceData.name);
+
+    const [ serviceSlug, setServiceSlug ] = useState(serviceData.slug)
+
+    if( id ) {
+        const serviceIndex = fetchedServices.data.findIndex(service => service.id === id);
+        serviceData = {...fetchedServices.data[serviceIndex]};
+    }
+
+    useEffect(() => {
+        if(id && serviceName === '') {
+            setServiceName(serviceData.name);
+        }
+        if(id && serviceSlug === '') {
+            setServiceSlug(serviceData.slug);
+        }
+    }, [serviceData, id, serviceName, serviceSlug]);
+
+
+    const serviceNameChangeHandler = (event) => {
+        setServiceName(event.target.value);
+        setServiceSlug(event.target.value.replace(/\s+/g, '-').toLowerCase());
+    }
+
+    const closeModalHandler = useCallback( () => {
+        onClose();
+        setServiceName('');
+        setServiceSlug('');
+    }, [onClose ])
+
 
     let content;
 
     if (serviceData) {
         content = (
             <Grid container  spacing={2}>
-                
+                <Grid item xs={12} sm={6}>
+                    <CustomTextField id="service-name" label={t('name')} variant="outlined" value={serviceName} onChange={serviceNameChangeHandler} />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <CustomTextField id="service-slug" label={t('slug')} variant="outlined" value={serviceSlug} />
+                </Grid>
             </Grid>
         )
     }
 
     return (
-        <CustomModal show={show} heading={heading} confirmText={confirmText} onConfirm={onConfirm} onClose={onClose} >
+        <CustomModal show={show} heading={heading} confirmText={confirmText} onConfirm={onConfirm} onClose={closeModalHandler} >
             {content}
         </CustomModal>
     )

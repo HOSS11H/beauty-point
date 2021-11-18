@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState, useCallback } from 'react';
 import Table from '@mui/material/Table';
 import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
@@ -59,53 +59,6 @@ function ProductsTable(props) {
 
     const [ selectedProductId , setSelectedProductId ] = useState(null);
 
-    // Delete Modal
-    const deleteModalOpenHandler = ( id ) => {
-        setDeleteModalOpened(true);
-        setSelectedProductId(id);
-    }
-    const deleteModalCloseHandler = ( ) => {
-        setDeleteModalOpened(false);
-        setSelectedProductId(null);
-    }
-
-    const deleteModalConfirmHandler = ( id ) => {
-        deleteProductHandler(token ,id );
-        setDeleteModalOpened(false);
-        setSelectedProductId(null);
-    }
-    // View Modal
-    const viewModalOpenHandler = ( id ) => {
-        setViewModalOpened(true);
-        setSelectedProductId(id);
-        console.log(id);
-    }
-    const viewModalCloseHandler = ( ) => {
-        setViewModalOpened(false);
-        setSelectedProductId(null);
-    }
-
-    const viewModalConfirmHandler = ( id ) => {
-        setViewModalOpened(false);
-        setEditModalOpened(true);
-    }
-
-    // Edit Modal
-    const editModalOpenHandler = ( id ) => {
-        setEditModalOpened(true);
-        setSelectedProductId(id);
-    }
-    const editModalCloseHandler = ( ) => {
-        setEditModalOpened(false);
-        setSelectedProductId(null);
-    }
-
-    const editModalConfirmHandler = ( id ) => {
-        setEditModalOpened(false);
-        setSelectedProductId(null);
-    }
-
-
     useEffect(() => {
         fetchProductsHandler(lang, token, page);
     }, [fetchProductsHandler, lang, token, page]);
@@ -116,9 +69,55 @@ function ProductsTable(props) {
         }
     }, [ fetchedProducts ])
 
-    const handleChangePage = (event, newPage) => {
+    // Delete Modal
+    const deleteModalOpenHandler = useCallback(( id ) => {
+        setDeleteModalOpened(true);
+        setSelectedProductId(id);
+    }, [])
+    const deleteModalCloseHandler = (( ) => {
+        setDeleteModalOpened(false);
+        setSelectedProductId(null);
+    }, [])
+
+    const deleteModalConfirmHandler = useCallback(( id ) => {
+        deleteProductHandler(token ,id );
+        setDeleteModalOpened(false);
+        setSelectedProductId(null);
+    }, [token, deleteProductHandler])
+    // View Modal
+    const viewModalOpenHandler = useCallback(( id ) => {
+        setViewModalOpened(true);
+        setSelectedProductId(id);
+    }, [])
+    const viewModalCloseHandler = useCallback(( ) => {
+        setViewModalOpened(false);
+        setSelectedProductId(null);
+    }, [])
+
+    const viewModalConfirmHandler = useCallback(( id ) => {
+        setViewModalOpened(false);
+        setEditModalOpened(true);
+    }, [])
+
+    // Edit Modal
+    const editModalOpenHandler = useCallback(( id ) => {
+        setEditModalOpened(true);
+        setSelectedProductId(id);
+    }, [])
+    const editModalCloseHandler = useCallback(( ) => {
+        setEditModalOpened(false);
+        setSelectedProductId(null);
+    }, [])
+
+    const editModalConfirmHandler = useCallback(( id ) => {
+        setEditModalOpened(false);
+        setSelectedProductId(null);
+    }, [])
+
+
+    const handleChangePage = useCallback( (event, newPage) => {
         setPage(newPage);
-    };
+    }, []);
 
     // Avoid a layout jump when reaching the last page with empty rows & On Initialize
     const emptyRows = (rowsPerPage - fetchedProducts.data.length);

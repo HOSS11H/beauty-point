@@ -62,6 +62,7 @@ const resources = {
             'Do you want To delete this deal?': 'هل تريد حذف هذا العرض؟',
             'view deal details': 'عرض تفاصيل العرض',
             'applies between': 'تنطبق بين',
+            'edit service details': 'تعديل تفاصيل الخدمة',
         }
     }
 };

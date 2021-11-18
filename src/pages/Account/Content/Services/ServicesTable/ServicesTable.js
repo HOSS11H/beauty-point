@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import Table from '@mui/material/Table';
 import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
@@ -57,55 +57,6 @@ function ServicesTable(props) {
 
     const [selectedServiceId, setSelectedServiceId] = useState(null);
 
-    // Delete Modal
-    const deleteModalOpenHandler = (id) => {
-        setDeleteModalOpened(true);
-        setSelectedServiceId(id);
-    }
-    const deleteModalCloseHandler = () => {
-        setDeleteModalOpened(false);
-        setSelectedServiceId(null);
-    }
-
-    const deleteModalConfirmHandler = (id) => {
-        deleteServiceHandler(token, id);
-        setDeleteModalOpened(false);
-        setSelectedServiceId(null);
-    }
-
-    // View Modal
-    const viewModalOpenHandler = ( id ) => {
-        setViewModalOpened(true);
-        setSelectedServiceId(id);
-        console.log(id);
-    }
-    const viewModalCloseHandler = ( ) => {
-        setViewModalOpened(false);
-        setSelectedServiceId(null);
-    }
-
-    const viewModalConfirmHandler = ( id ) => {
-        setViewModalOpened(false);
-        setEditModalOpened(true);
-    }
-
-    // Edit Modal
-    const editModalOpenHandler = ( id ) => {
-        setEditModalOpened(true);
-        setSelectedServiceId(id);
-    }
-    const editModalCloseHandler = ( ) => {
-        setEditModalOpened(false);
-        setSelectedServiceId(null);
-    }
-
-    const editModalConfirmHandler = ( id ) => {
-        setEditModalOpened(false);
-        setSelectedServiceId(null);
-    }
-
-    console.log('rendered');
-
     useEffect(() => {
         fetchServicesHandler(lang, token, page);
     }, [fetchServicesHandler, lang, token, page]);
@@ -116,9 +67,57 @@ function ServicesTable(props) {
         }
     }, [fetchedServices])
 
-    const handleChangePage = (event, newPage) => {
+    // Delete Modal
+    const deleteModalOpenHandler = useCallback((id) => {
+        setDeleteModalOpened(true);
+        setSelectedServiceId(id);
+    }, [])
+    const deleteModalCloseHandler = useCallback(() => {
+        setDeleteModalOpened(false);
+        setSelectedServiceId(null);
+    }, [])
+
+    const deleteModalConfirmHandler = useCallback((id) => {
+        deleteServiceHandler(token, id);
+        setDeleteModalOpened(false);
+        setSelectedServiceId(null);
+    }, [deleteServiceHandler, token])
+
+    // View Modal
+    const viewModalOpenHandler = useCallback(( id ) => {
+        setViewModalOpened(true);
+        setSelectedServiceId(id);
+        console.log(id);
+    }, [])
+    const viewModalCloseHandler = useCallback(( ) => {
+        setViewModalOpened(false);
+        setSelectedServiceId(null);
+    }, [])
+
+    const viewModalConfirmHandler = useCallback(( id ) => {
+        setViewModalOpened(false);
+        setEditModalOpened(true);
+    }, [])
+
+    // Edit Modal
+    const editModalOpenHandler = useCallback(( id ) => {
+        setEditModalOpened(true);
+        setSelectedServiceId(id);
+    }, [])
+    const editModalCloseHandler = useCallback(( ) => {
+        setEditModalOpened(false);
+        setSelectedServiceId(null);
+    }, [])
+
+    const editModalConfirmHandler = useCallback(( id ) => {
+        setEditModalOpened(false);
+        setSelectedServiceId(null);
+    }, [])
+
+
+    const handleChangePage = useCallback((event, newPage) => {
         setPage(newPage);
-    };
+    }, []);
 
     // Avoid a layout jump when reaching the last page with empty rows & On Initialize
     const emptyRows = (rowsPerPage - fetchedServices.data.length);
@@ -162,7 +161,7 @@ function ServicesTable(props) {
                 heading='view service details' confirmText='edit' />
             <EditModal show={editModalOpened} id={selectedServiceId} fetchedServices={fetchedServices}
                 onClose={editModalCloseHandler} onConfirm={editModalConfirmHandler.bind(null, selectedServiceId)}
-                heading='view service details' confirmText='edit' />
+                heading='edit service details' confirmText='edit' />
         </ServicesTableWrapper>
     );
 }
