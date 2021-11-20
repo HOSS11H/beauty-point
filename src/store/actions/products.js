@@ -66,3 +66,37 @@ export const deleteProduct = (token , id ) => {
             } )
         }
 }
+
+export const searchProductsStart = (  ) => {
+    return {
+        type: actionTypes.SEARCH_PRODUCTS_START,
+    }
+}
+export const searchProductsSuccess = ( productsData ) => {
+    return {
+        type: actionTypes.SEARCH_PRODUCTS_SUCCESS,
+        products: productsData
+    }
+}
+export const searchProductsFailed = ( errorMessage ) => {
+    return {
+        type: actionTypes.SEARCH_PRODUCTS_FAILED,
+        error: errorMessage,
+    }
+}
+export const searchProducts = ( language , word ) => {
+    return dispatch => {
+        dispatch( searchProductsStart( ) )
+        axios.get(`/vendors/products?term=${word}`, { 
+            headers: {
+                'Accept-Language': language
+            }
+        }).then( response => {
+                dispatch( searchProductsSuccess( response.data  ) );
+            })
+            .catch( err => {
+                console.log(err)
+                dispatch( searchProductsFailed( err.message  ) )
+            } )
+        }
+}

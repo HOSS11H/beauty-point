@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState, useCallback } from 'react';
+import { useContext, useEffect, useState, useCallback, Fragment } from 'react';
 import Table from '@mui/material/Table';
 import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
@@ -14,6 +14,8 @@ import ViewModal from './ViewModal/ViewModal';
 import EditModal from './EditModal/EditModal';
 import { deleteProduct } from '../../../../../store/actions/index';
 import EnhancedTableBody from './TableBody/TableBody';
+import SearchMessage from "../../../../../components/Search/SearchMessage/SearchMessage";
+import { useTranslation } from 'react-i18next';
 
 const ProductsTableWrapper = styled.div`
     display: flex;
@@ -39,7 +41,9 @@ const intialRowsPerPage = 15
 
 function ProductsTable(props) {
 
-    const { fetchedProducts, fetchProductsHandler, loadingProducts , deleteProductHandler } = props;
+    const { t } = useTranslation()
+
+    const { fetchedProducts, fetchProductsHandler, loadingProducts , deleteProductHandler, searchingProducts, searchingProductsSuccess } = props;
 
     const themeCtx = useContext(ThemeContext)
     const authCtx = useContext(AuthContext)
@@ -122,9 +126,19 @@ function ProductsTable(props) {
     // Avoid a layout jump when reaching the last page with empty rows & On Initialize
     const emptyRows = (rowsPerPage - fetchedProducts.data.length);
 
-    return (
-        <ProductsTableWrapper>
-            <Paper sx={{ width: '100%', boxShadow: 'none' }}>
+
+    let content;
+
+    if (fetchedProducts.data.length === 0 && searchingProductsSuccess && !searchingProducts) {
+        content = (
+            <SearchMessage>
+                {t('No Products Found')}
+            </SearchMessage>
+        )
+    } else {
+        content = (
+            <Fragment>
+                <Paper sx={{ width: '100%', boxShadow: 'none' }}>
                 <TableContainer>
                     <Table
                         sx={{ minWidth: 750 }}
@@ -162,7 +176,13 @@ function ProductsTable(props) {
             <EditModal show={editModalOpened} id={selectedProductId} fetchedProducts={fetchedProducts}
                 onClose={editModalCloseHandler} onConfirm={editModalConfirmHandler.bind(null, selectedProductId)}
                 heading='view product details' confirmText='edit' />
+            </Fragment>
+        )
+    }
 
+    return (
+        <ProductsTableWrapper>
+            {content}
         </ProductsTableWrapper>
     );
 }
@@ -171,6 +191,8 @@ const mapStateToProps = state => {
     return {
         fetchedProducts: state.products.products,
         loadingProducts: state.products.fetchingProducts,
+        searchingProducts: state.products.searchingProducts,
+        searchingProductsSuccess: state.products.searchingProductsSuccess,
     }
 }
 
