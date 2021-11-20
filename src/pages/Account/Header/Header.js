@@ -20,6 +20,7 @@ const SwitchBtn = styled(ButtonSmall)`
         margin-bottom: 0;
         width: auto;
         padding: 0 15px;
+        font-family: ${ ( { theme } ) => theme.direction === "ltr" ? "'Cairo', sans-serif " : "'Poppins', sans-serif " };
     }
 `
 

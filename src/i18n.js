@@ -63,6 +63,8 @@ const resources = {
             'view deal details': 'عرض تفاصيل العرض',
             'applies between': 'تنطبق بين',
             'edit service details': 'تعديل تفاصيل الخدمة',
+            'search': 'بحث',
+            'Search...': 'بحث...',
         }
     }
 };
