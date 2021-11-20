@@ -9,6 +9,8 @@ const intialState = {
     deletingDeal: false,
     deletingDealSuccess: false,
     deletingDealMessage: null,
+    searchingDeals: false,
+    searchingDealsSuccess: false,
 } ;
 
 const reducer = ( state = intialState , action ) => {
@@ -53,6 +55,27 @@ const reducer = ( state = intialState , action ) => {
                 deletingDealSuccess: false,
                 deletingDealMessage: action.message,
             })
+            case ( actionTypes.SEARCH_DEALS_START ) :
+                return updateObject( state , {
+                    fetchingDeals: true,
+                    errorFetchingDeals: false,
+                    searchingDeals: true,
+                    searchingDealsSuccess: false,
+                })
+            case ( actionTypes.SEARCH_DEALS_SUCCESS ) :
+                return updateObject( state , {
+                    fetchingDeals: false,
+                    deals: action.deals,
+                    searchingDeals: false,
+                    searchingDealsSuccess: true,
+                })
+            case ( actionTypes.SEARCH_DEALS_FAILED ) :
+                return updateObject( state , {
+                    fetchingDeals: false,
+                    errorFetchingDeals: true,
+                    searchingDeals: false,
+                    searchingDealsSuccess: false,
+                })
         default :
             return state;
     }

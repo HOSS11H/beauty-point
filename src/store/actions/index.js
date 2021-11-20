@@ -15,4 +15,5 @@ export {
 export {
     fetchDeals,
     deleteDeal,
+    searchDeals,
 } from './deals'
