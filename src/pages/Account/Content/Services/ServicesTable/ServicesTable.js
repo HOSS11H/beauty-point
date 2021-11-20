@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState , Fragment } from 'react';
 import Table from '@mui/material/Table';
 import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
@@ -14,6 +14,8 @@ import TablePaginationActions from '../../../../../components/UI/Dashboard/Table
 import DeleteModal from './DeleteModal/DeleteModal';
 import ViewModal from './ViewModal/ViewModal';
 import EditModal from './EditModal/EditModal';
+import SearchMessage from "../../../../../components/Search/SearchMessage/SearchMessage";
+import { useTranslation } from 'react-i18next';
 
 const ServicesTableWrapper = styled.div`
     display: flex;
@@ -37,7 +39,9 @@ const intialRowsPerPage = 15
 
 function ServicesTable(props) {
 
-    const { fetchedServices, fetchServicesHandler, loadingServices, deleteServiceHandler } = props;
+    const { t } = useTranslation()
+
+    const { fetchedServices, fetchServicesHandler, loadingServices, deleteServiceHandler, searchingServices, searchingServicesSuccess } = props;
 
     const themeCtx = useContext(ThemeContext)
     const authCtx = useContext(AuthContext)
@@ -51,9 +55,9 @@ function ServicesTable(props) {
 
     const [deleteModalOpened, setDeleteModalOpened] = useState(false);
 
-    const [ viewModalOpened , setViewModalOpened ] = useState(false);
+    const [viewModalOpened, setViewModalOpened] = useState(false);
 
-    const [ editModalOpened , setEditModalOpened ] = useState(false);
+    const [editModalOpened, setEditModalOpened] = useState(false);
 
     const [selectedServiceId, setSelectedServiceId] = useState(null);
 
@@ -84,32 +88,32 @@ function ServicesTable(props) {
     }, [deleteServiceHandler, token])
 
     // View Modal
-    const viewModalOpenHandler = useCallback(( id ) => {
+    const viewModalOpenHandler = useCallback((id) => {
         setViewModalOpened(true);
         setSelectedServiceId(id);
         console.log(id);
     }, [])
-    const viewModalCloseHandler = useCallback(( ) => {
+    const viewModalCloseHandler = useCallback(() => {
         setViewModalOpened(false);
         setSelectedServiceId(null);
     }, [])
 
-    const viewModalConfirmHandler = useCallback(( id ) => {
+    const viewModalConfirmHandler = useCallback((id) => {
         setViewModalOpened(false);
         setEditModalOpened(true);
     }, [])
 
     // Edit Modal
-    const editModalOpenHandler = useCallback(( id ) => {
+    const editModalOpenHandler = useCallback((id) => {
         setEditModalOpened(true);
         setSelectedServiceId(id);
     }, [])
-    const editModalCloseHandler = useCallback(( ) => {
+    const editModalCloseHandler = useCallback(() => {
         setEditModalOpened(false);
         setSelectedServiceId(null);
     }, [])
 
-    const editModalConfirmHandler = useCallback(( id ) => {
+    const editModalConfirmHandler = useCallback((id) => {
         setEditModalOpened(false);
         setSelectedServiceId(null);
     }, [])
@@ -122,46 +126,63 @@ function ServicesTable(props) {
     // Avoid a layout jump when reaching the last page with empty rows & On Initialize
     const emptyRows = (rowsPerPage - fetchedServices.data.length);
 
+
+    let content;
+
+    if (fetchedServices.data.length === 0 && searchingServicesSuccess && !searchingServices) {
+        content = (
+            <SearchMessage>
+                {t('No Services Found')}
+            </SearchMessage>
+        )
+    } else {
+        content = (
+            <Fragment>
+                <Paper sx={{ width: '100%', boxShadow: 'none' }}>
+                    <TableContainer>
+                        <Table
+                            sx={{ minWidth: 750 }}
+                            aria-labelledby="tableTitle"
+                            size='medium'
+                        >
+                            <EnhancedTableHead
+                                rowCount={fetchedServices.data.length}
+                            />
+                            <EnhancedTableBody
+                                fetchedServices={fetchedServices}
+                                emptyRows={emptyRows}
+                                deleteModalOpenHandler={deleteModalOpenHandler}
+                                viewModalOpenHandler= {viewModalOpenHandler}
+                                editModalOpenHandler= {editModalOpenHandler}
+                            />
+                        </Table>
+                    </TableContainer>
+                    <TablePaginationActions
+                        component="div"
+                        count={fetchedServices.data.length}
+                        total={fetchedServices.total}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        loading={loadingServices}
+                    />
+                </Paper>
+                <DeleteModal show={deleteModalOpened} id={selectedServiceId}
+                    onClose={deleteModalCloseHandler} onConfirm={deleteModalConfirmHandler.bind(null, selectedServiceId)}
+                    heading='Do you want To delete this service?' confirmText='delete' />
+                <ViewModal show={viewModalOpened} id={selectedServiceId} fetchedServices={fetchedServices}
+                    onClose={viewModalCloseHandler} onConfirm={viewModalConfirmHandler.bind(null, selectedServiceId)}
+                    heading='view service details' confirmText='edit' />
+                <EditModal show={editModalOpened} id={selectedServiceId} fetchedServices={fetchedServices}
+                    onClose={editModalCloseHandler} onConfirm={editModalConfirmHandler.bind(null, selectedServiceId)}
+                    heading='edit service details' confirmText='edit' />
+            </Fragment>
+        )
+    }
+
     return (
         <ServicesTableWrapper>
-            <Paper sx={{ width: '100%', boxShadow: 'none' }}>
-                <TableContainer>
-                    <Table
-                        sx={{ minWidth: 750 }}
-                        aria-labelledby="tableTitle"
-                        size='medium'
-                    >
-                        <EnhancedTableHead
-                            rowCount={fetchedServices.data.length}
-                        />
-                        <EnhancedTableBody
-                            fetchedServices={fetchedServices}
-                            emptyRows={emptyRows}
-                            deleteModalOpenHandler={deleteModalOpenHandler}
-                            viewModalOpenHandler= {viewModalOpenHandler}
-                            editModalOpenHandler= {editModalOpenHandler}
-                        />
-                    </Table>
-                </TableContainer>
-                <TablePaginationActions
-                    component="div"
-                    count={fetchedServices.data.length}
-                    total={fetchedServices.total}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    loading={loadingServices}
-                />
-            </Paper>
-            <DeleteModal show={deleteModalOpened} id={selectedServiceId}
-                onClose={deleteModalCloseHandler} onConfirm={deleteModalConfirmHandler.bind(null, selectedServiceId)}
-                heading='Do you want To delete this service?' confirmText='delete' />
-            <ViewModal show={viewModalOpened} id={selectedServiceId} fetchedServices={fetchedServices}
-                onClose={viewModalCloseHandler} onConfirm={viewModalConfirmHandler.bind(null, selectedServiceId)}
-                heading='view service details' confirmText='edit' />
-            <EditModal show={editModalOpened} id={selectedServiceId} fetchedServices={fetchedServices}
-                onClose={editModalCloseHandler} onConfirm={editModalConfirmHandler.bind(null, selectedServiceId)}
-                heading='edit service details' confirmText='edit' />
+            {content}
         </ServicesTableWrapper>
     );
 }
@@ -170,6 +191,8 @@ const mapStateToProps = state => {
     return {
         fetchedServices: state.services.services,
         loadingServices: state.services.fetchingServices,
+        searchingServices: state.services.searchingServices,
+        searchingServicesSuccess: state.services.searchingServicesSuccess,
     }
 }
 

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import {useEffect, useState, useContext} from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import { useTranslation } from 'react-i18next';
+import ThemeContext from '../../../store/theme-context';
 
 const CustomAppBar = styled(AppBar)`
     box-shadow: rgb(90 114 123 / 11%) 0px 7px 30px 0px;
@@ -58,9 +59,28 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
 }));
 
-export default function SearchBar(props) {
+function SearchBar(props) {
+
+    const { searchHandler } = props;
+
+    const themeCtx = useContext(ThemeContext)
+
+    const { lang } = themeCtx;
 
     const { t } = useTranslation()
+
+    const [searchVal, setSearchVal] = useState('');
+
+    const searchChangeHandler = (e) => {
+        setSearchVal(e.target.value);
+    }
+
+    useEffect(() => {
+        const searchTimeout = setTimeout(() => {
+            searchHandler(lang, searchVal);
+        }, 500)
+        return () => clearTimeout(searchTimeout);
+    }, [searchVal, lang, searchHandler])
 
 
     return (
@@ -82,6 +102,8 @@ export default function SearchBar(props) {
                         <StyledInputBase
                             placeholder={t('Search...')}
                             inputProps={{ 'aria-label': 'search' }}
+                            value={searchVal}
+                            onChange={searchChangeHandler}
                         />
                     </Search>
                 </Toolbar>
@@ -89,3 +111,5 @@ export default function SearchBar(props) {
         </Box>
     );
 }
+
+export default SearchBar;

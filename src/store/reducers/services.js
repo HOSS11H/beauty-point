@@ -9,6 +9,8 @@ const intialState = {
     deletingService: false,
     deletingServiceSuccess: false,
     deletingServiceMessage: null,
+    searchingServices: false,
+    searchingServicesSuccess: false,
 } ;
 
 const reducer = ( state = intialState , action ) => {
@@ -55,6 +57,27 @@ const reducer = ( state = intialState , action ) => {
                 deletingService: false,
                 deletingServiceSuccess: false,
                 deletingServiceMessage: action.message,
+            })
+        case ( actionTypes.SEARCH_SERVICES_START ) :
+            return updateObject( state , {
+                fetchingServices: true,
+                errorFetchingServices: false,
+                searchingServices: true,
+                searchingServicesSuccess: false,
+            })
+        case ( actionTypes.SEARCH_SERVICES_SUCCESS ) :
+            return updateObject( state , {
+                fetchingServices: false,
+                services: action.services,
+                searchingServices: false,
+                searchingServicesSuccess: true,
+            })
+        case ( actionTypes.SEARCH_SERVICES_FAILED ) :
+            return updateObject( state , {
+                fetchingServices: false,
+                errorFetchingServices: true,
+                searchingServices: false,
+                searchingServicesSuccess: false,
             })
         default :
             return state;
