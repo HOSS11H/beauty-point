@@ -86,7 +86,7 @@ function SearchBar(props) {
     return (
         <Box sx={{ flexGrow: 1 }}>
             <CustomAppBar position="static">
-                <Toolbar>
+                <Toolbar sx={{ minHeight: 50 }}>
                     <Typography
                         variant="h6"
                         noWrap

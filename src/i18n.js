@@ -65,6 +65,9 @@ const resources = {
             'edit service details': 'تعديل تفاصيل الخدمة',
             'search': 'بحث',
             'Search...': 'بحث...',
+            'No Deals Found': 'لا توجد عروض',
+            'No Services Found': 'لا توجد خدمات',
+            'No Products Found': 'لا توجد منتجات',
         }
     }
 };
