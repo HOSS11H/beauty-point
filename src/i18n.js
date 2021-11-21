@@ -32,6 +32,7 @@ const resources = {
             'products': 'المنتجات',
             'customers': 'العملاء',
             'employees': 'الموظفين',
+            'employee': 'موظف',
             'deals': 'العروض',
             'bookings': 'الحجوزات',
             'points of sales': 'نقاط البيع',
@@ -68,6 +69,7 @@ const resources = {
             'No Deals Found': 'لا توجد عروض',
             'No Services Found': 'لا توجد خدمات',
             'No Products Found': 'لا توجد منتجات',
+            'discount': 'الخصم',
         }
     }
 };

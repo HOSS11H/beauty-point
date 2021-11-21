@@ -40,7 +40,6 @@ export const CardHeading = styled.div`
     }
 `
 export const CardBody = styled.div`
-    padding: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -49,13 +48,30 @@ export const CardBody = styled.div`
 `
 export const CardContent = styled.div`
     width: 100%;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding: 20px;
+    // Scroll //
+    -webkit-overflow-scrolling: touch;
+    &::-webkit-scrollbar {
+        height: 7px;
+        width: 8px;
+        background-color: ${({ theme }) => theme.palette.divider};
+        border-radius: 10px;
+    }
+    &::-webkit-scrollbar-thumb {
+        margin-left: 2px;
+        background: ${({ theme }) => theme.vars.primary};
+        border-radius: 10px;
+        cursor: pointer;
+    }
 `
 export const CardActions = styled.div`
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    margin-top: 25px;
+    padding: 20px;
     button {
         margin-right: 20px;
         &:last-child {
