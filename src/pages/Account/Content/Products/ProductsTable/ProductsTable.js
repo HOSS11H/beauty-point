@@ -78,7 +78,7 @@ function ProductsTable(props) {
         setDeleteModalOpened(true);
         setSelectedProductId(id);
     }, [])
-    const deleteModalCloseHandler = (( ) => {
+    const deleteModalCloseHandler = useCallback(( ) => {
         setDeleteModalOpened(false);
         setSelectedProductId(null);
     }, [])
