@@ -18,3 +18,9 @@ export {
     deleteDeal,
     searchDeals,
 } from './deals'
+export {
+    fetchLocations,
+} from './locations'
+export {
+    fetchCategories,
+} from './categories'
