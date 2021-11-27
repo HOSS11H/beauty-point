@@ -22,7 +22,7 @@ export const fetchCategoriesFailed = ( errorMessage ) => {
 export const fetchCategories = ( language ) => {
     return dispatch => {
         dispatch( fetchCategoriesStart( ) )
-        axios.get(`/vendors/categories`, { 
+        axios.get(`/categories`, { 
             headers: {
                 'Accept-Language': language
             }

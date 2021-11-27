@@ -6,7 +6,11 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
+import { useContext, useEffect, useMemo, useState, useCallback } from 'react';
+import { fetchCategories, fetchLocations } from '../../../../../store/actions/index';
+import { connect } from 'react-redux';
+import ThemeContext from '../../../../../store/theme-context';
+import debounce from 'lodash.debounce';
 
 const CustomTextField = styled(TextField)`
     width: 100%;
@@ -15,16 +19,29 @@ const FiltersWrapper = styled.div`
     margin-bottom: 30px;
 `
 
-const SearchFilters = ( props ) => {
+const SearchFilters = (props) => {
 
-    const { resultsHandler } = props; 
+    const { resultsHandler, fetchedLocations, fetchedCategories, fetchCategoriesHandler, fetchLocationsHandler } = props;
 
     const { t } = useTranslation()
 
+    const themeCtx = useContext(ThemeContext)
+
+    const { lang } = themeCtx
+
     const [type, setType] = useState('services');
-    const [category, setCategory] = useState('');
-    const [location, setLocation] = useState('');
+    const [category, setCategory] = useState('*');
+    const [location, setLocation] = useState('*');
     const [search, setSearch] = useState('');
+
+    useEffect(() => {
+        if (fetchedLocations.length === 0) {
+            fetchLocationsHandler(lang);
+        }
+        if (fetchedCategories.length === 0) {
+            fetchCategoriesHandler(lang);
+        }
+    }, [fetchedLocations, fetchedCategories, fetchCategoriesHandler, fetchLocationsHandler, lang])
 
     const handleTypeChange = (event) => {
         setType(event.target.value);
@@ -41,7 +58,7 @@ const SearchFilters = ( props ) => {
     const handleSearchChange = (event) => {
         setSearch(event.target.value);
         resultsHandler(type, category, location, event.target.value);
-    };
+    }
 
     return (
         <FiltersWrapper>
@@ -72,9 +89,12 @@ const SearchFilters = ( props ) => {
                             label="Category"
                             onChange={handleCategoryChange}
                         >
-                            <MenuItem value='hair'>{t('Hair')}</MenuItem>
-                            <MenuItem value='nails'>{t('nails')}</MenuItem>
-                            <MenuItem value='care'>care</MenuItem>
+                            <MenuItem value='*'>ALL</MenuItem>
+                            {
+                                fetchedCategories.map(category => {
+                                    return <MenuItem key={category.id} value={category.id}>{category.name}</MenuItem>
+                                })
+                            }
                         </Select>
                     </FormControl>
                 </Grid>
@@ -88,8 +108,12 @@ const SearchFilters = ( props ) => {
                             label="Location"
                             onChange={handleLocationChange}
                         >
-                            <MenuItem value='jeddah'>jeddah</MenuItem>
-                            <MenuItem value='riyadh'>Riyadh</MenuItem>
+                            <MenuItem value='*'>ALL</MenuItem>
+                            {
+                                fetchedLocations.map(location => {
+                                    return <MenuItem key={location.id} value={location.id}>{location.name}</MenuItem>
+                                })
+                            }
                         </Select>
                     </FormControl>
                 </Grid>
@@ -101,4 +125,19 @@ const SearchFilters = ( props ) => {
     )
 }
 
-export default SearchFilters;
+const mapStateToProps = (state) => {
+    return {
+        fetchedLocations: state.locations.locations,
+        fetchedCategories: state.categories.categories,
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchCategoriesHandler: (lang) => dispatch(fetchCategories(lang)),
+        fetchLocationsHandler: (lang) => dispatch(fetchLocations(lang)),
+    }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(SearchFilters);

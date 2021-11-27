@@ -22,7 +22,7 @@ export const fetchLocationsFailed = ( errorMessage ) => {
 export const fetchLocations = ( language ) => {
     return dispatch => {
         dispatch( fetchLocationsStart( ) )
-        axios.get(`/vendors/locations`, { 
+        axios.get(`/locations`, { 
             headers: {
                 'Accept-Language': language
             }
