@@ -1,0 +1,104 @@
+import { Grid } from '@mui/material';
+import styled from 'styled-components';
+import TextField from '@mui/material/TextField';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
+import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
+
+const CustomTextField = styled(TextField)`
+    width: 100%;
+`
+const FiltersWrapper = styled.div`
+    margin-bottom: 30px;
+`
+
+const SearchFilters = ( props ) => {
+
+    const { resultsHandler } = props; 
+
+    const { t } = useTranslation()
+
+    const [type, setType] = useState('services');
+    const [category, setCategory] = useState('');
+    const [location, setLocation] = useState('');
+    const [search, setSearch] = useState('');
+
+    const handleTypeChange = (event) => {
+        setType(event.target.value);
+        resultsHandler(event.target.value, category, location, search);
+    };
+    const handleCategoryChange = (event) => {
+        setCategory(event.target.value);
+        resultsHandler(type, event.target.value, location, search);
+    };
+    const handleLocationChange = (event) => {
+        setLocation(event.target.value);
+        resultsHandler(type, category, event.target.value, search);
+    };
+    const handleSearchChange = (event) => {
+        setSearch(event.target.value);
+        resultsHandler(type, category, location, event.target.value);
+    };
+
+    return (
+        <FiltersWrapper>
+            <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                    <FormControl fullWidth>
+                        <InputLabel id="item-type">{t('Type')}</InputLabel>
+                        <Select
+                            labelId="item-type"
+                            id="item-type-select"
+                            value={type}
+                            label="Type"
+                            onChange={handleTypeChange}
+                        >
+                            <MenuItem value='services'>{t('Services')}</MenuItem>
+                            <MenuItem value='products'>{t('Products')}</MenuItem>
+                            <MenuItem value='deals'>{t('Deals')}</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <FormControl fullWidth>
+                        <InputLabel id="item-category">{t('Category')}</InputLabel>
+                        <Select
+                            labelId="item-category"
+                            id="item-category-select"
+                            value={category}
+                            label="Category"
+                            onChange={handleCategoryChange}
+                        >
+                            <MenuItem value='hair'>{t('Hair')}</MenuItem>
+                            <MenuItem value='nails'>{t('nails')}</MenuItem>
+                            <MenuItem value='care'>care</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <FormControl fullWidth>
+                        <InputLabel id="item-location">location</InputLabel>
+                        <Select
+                            labelId="item-location"
+                            id="item-location-select"
+                            value={location}
+                            label="Location"
+                            onChange={handleLocationChange}
+                        >
+                            <MenuItem value='jeddah'>jeddah</MenuItem>
+                            <MenuItem value='riyadh'>Riyadh</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12}>
+                    <CustomTextField id="item-search" label={t('search')} variant="outlined" value={search} onChange={handleSearchChange} />
+                </Grid>
+            </Grid>
+        </FiltersWrapper>
+    )
+}
+
+export default SearchFilters;

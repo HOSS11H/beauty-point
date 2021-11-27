@@ -14,6 +14,7 @@ import Services from './pages/Account/Content/Services/Services';
 import Products from './pages/Account/Content/Products/Products';
 import Deals from './pages/Account/Content/Deals/Deals';
 import { useContext } from "react";
+import PointOfSale from "./pages/Account/Content/PointOfSale/PointOfSale";
 
 
 
@@ -29,6 +30,7 @@ function App() {
                 <Route path="services" element={<Services />} />
                 <Route path="products" element={<Products />} />
                 <Route path="deals" element={<Deals />} />
+                <Route path='point-of-sale' element={ <PointOfSale/> } />
             </ Route>
             <Route path="/" element={<Landing />} />
             <Route path='*' element={<NotFound />} />
