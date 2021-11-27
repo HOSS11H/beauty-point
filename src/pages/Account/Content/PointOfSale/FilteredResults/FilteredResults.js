@@ -23,7 +23,7 @@ const Content = styled.div`
 
 const FilteredResults = ( props ) => {
 
-    const { results, fetchedServices, fetchedProducts, fetchedDeals, fetchingServices, fetchingProducts, fetchingDeals } = props;
+    const { results, fetchedServices, fetchedProducts, fetchedDeals, fetchingServices, fetchingProducts, fetchingDeals, addToCart } = props;
 
 
     let fetchedData = { data: [ ], } ;
@@ -42,7 +42,7 @@ const FilteredResults = ( props ) => {
 
     content = (
         <Fragment>
-            {isGridView ? <GridView type={results} data={fetchedData.data} loading={fetchingServices || fetchingProducts || fetchingDeals} /> : <ListView type={results} data={fetchedData.data} loading={fetchingServices || fetchingProducts || fetchingDeals}/>}
+            {isGridView ? <GridView type={results} data={fetchedData.data} action={addToCart} loading={fetchingServices || fetchingProducts || fetchingDeals} /> : <ListView type={results} data={fetchedData.data} action={addToCart} loading={fetchingServices || fetchingProducts || fetchingDeals}/>}
         </Fragment>
     )
 

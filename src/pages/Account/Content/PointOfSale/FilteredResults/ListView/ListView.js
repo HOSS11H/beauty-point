@@ -69,7 +69,20 @@ const ListView = ( props ) => {
 
     const { t } = useTranslation()
 
-    const { data, loading } = props;
+    const { data, loading, action } = props;
+
+    const addItemHandler = ( id ) => {
+        console.log(id, data);
+        const addedItemIndex = data.findIndex( item  => item.id === id );
+        const addedItem = data[addedItemIndex];
+        const addedItemData = {
+            id: addedItem.id,
+            name: addedItem.name,
+            price: addedItem.discounted_price,
+            quantity: 1,
+        }
+        action(addedItemData);
+    }
 
     let content = data.map( (item, index) => {
         return (
@@ -81,7 +94,7 @@ const ListView = ( props ) => {
                             <ResultPrice>{item.formated_price}</ResultPrice>
                             {item.converted_price !== item.converted_discounted_price ? <ResultDiscount>{item.formated_discounted_price}</ResultDiscount> : null}
                         </PriceHolder>
-                        <AddResult>{t('add')}<AddIcon sx={{ml: 1}} /></AddResult>
+                        <AddResult onClick={ ( id ) => addItemHandler( item.id) } >{t('add')}<AddIcon sx={{ml: 1}} /></AddResult>
                     </ResultContent>
                 </ResultCard>
             </Grid>

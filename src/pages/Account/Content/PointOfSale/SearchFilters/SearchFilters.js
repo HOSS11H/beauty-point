@@ -6,7 +6,7 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import { useTranslation } from 'react-i18next';
-import { useContext, useEffect, useMemo, useState, useCallback } from 'react';
+import { useContext, useEffect, useState, } from 'react';
 import { fetchCategories, fetchLocations } from '../../../../../store/actions/index';
 import { connect } from 'react-redux';
 import ThemeContext from '../../../../../store/theme-context';

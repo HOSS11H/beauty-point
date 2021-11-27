@@ -1,5 +1,5 @@
 import { Grid } from '@mui/material';
-import { useContext, useState, useEffect, useCallback } from 'react';
+import { useContext, useState, useEffect, useCallback, useReducer } from 'react';
 import CustomCard from '../../../../components/UI/Card/Card';
 import FilteredResults from './FilteredResults/FilteredResults';
 import SearchFilters from './SearchFilters/SearchFilters';
@@ -7,22 +7,80 @@ import { connect } from 'react-redux';
 import { filterServices, fetchProducts, fetchDeals } from '../../../../store/actions/index';
 import AuthContext from '../../../../store/auth-context';
 import ThemeContext from '../../../../store/theme-context';
+import Cart from './Cart/Cart';
+import { updateObject } from '../../../../shared/utility';
+
+const cartReducer = (state, action) => {
+    switch(action.type) {
+        case 'ADD_TO_SERVICES':
+            const serviceIndex = state.services.findIndex(service => service.id === action.payload.id);
+            const updatedServices = [...state.services]
+            if (serviceIndex === -1) { 
+                updatedServices.push(action.payload)
+            } else {
+                const updatedItem = updatedServices[serviceIndex]
+                updatedItem.quantity = updatedItem.quantity + 1
+                updatedServices[serviceIndex] = updatedItem
+            }
+            return updateObject(state, {
+                services: updatedServices,
+            })
+        case 'ADD_TO_PRODUCTS':
+            const productIndex = state.products.findIndex(product => product.id === action.payload.id);
+            const updatedProducts = [...state.products]
+            if (productIndex === -1) { 
+                updatedProducts.push(action.payload)
+            } else {
+                const updatedItem = updatedProducts[productIndex]
+                updatedItem.quantity = updatedItem.quantity + 1
+                updatedProducts[productIndex] = updatedItem
+            }
+            return updateObject(state, {
+                products: updatedProducts,
+            })
+        case 'ADD_TO_DEALS':
+            const dealIndex = state.deals.findIndex(deal => deal.id === action.payload.id);
+            const updatedDeals = [...state.deals]
+            if (dealIndex === -1) { 
+                updatedDeals.push(action.payload)
+            } else {
+                const updatedItem = updatedDeals[dealIndex]
+                updatedItem.quantity = updatedItem.quantity + 1
+                updatedDeals[dealIndex] = updatedItem
+            }
+            return updateObject(state, {
+                deals: updatedDeals,
+            })
+        case 'REMOVE_FROM_CART':
+            return state.filter(item => item.id !== action.payload);
+        default:
+            return state;
+    }
+}
+
 
 const PointOfSale = ( props ) => {
 
     const {filterServicesHandler, fetchProductsHandler, fetchDealsHandler} = props
-
-    const [ shownType, setShownType ] = useState('services');
-    const [ shownCategory, setShownCategory ] = useState('*');
-    const [ shownLocation, setShownLocation ] = useState('*');
-    const [ searchWord, setSearchWord ] = useState('');
-
+    
     const themeCtx = useContext(ThemeContext)
     const authCtx = useContext(AuthContext)
 
     const { lang } = themeCtx
     const { token } = authCtx
     const page = 0;
+
+    const [ cart , dispatch ] = useReducer(cartReducer, {
+        services: [],
+        products: [],
+        deals: [],
+    });
+
+    const [ shownType, setShownType ] = useState('services');
+    const [ shownCategory, setShownCategory ] = useState('*');
+    const [ shownLocation, setShownLocation ] = useState('*');
+    const [ searchWord, setSearchWord ] = useState('');
+
 
 
     useEffect(() => {
@@ -33,7 +91,7 @@ const PointOfSale = ( props ) => {
         } else if(shownType === 'deals') {
             fetchDealsHandler(lang, token, page);
         }
-    }, []);
+    }, [fetchDealsHandler, fetchProductsHandler, filterServicesHandler, lang, searchWord, shownCategory, shownLocation, shownType, token]);
 
     const handleResultsChange = useCallback(( type, category , location, search ) => {
         setShownType(type);
@@ -50,17 +108,37 @@ const PointOfSale = ( props ) => {
         }
     }, [fetchDealsHandler, fetchProductsHandler, filterServicesHandler, lang, token])
 
+    const handleCartChange = useCallback(( itemData ) => {
+        if ( shownType === 'services' ) {
+            dispatch({
+                type: 'ADD_TO_SERVICES',
+                payload: itemData
+            })
+        }
+        if ( shownType === 'products' ) {
+            dispatch({
+                type: 'ADD_TO_PRODUCTS',
+                payload: itemData
+            })
+        }
+        if ( shownType === 'deals' ) {
+            dispatch({
+                type: 'ADD_TO_DEALS',
+                payload: itemData
+            })
+        }
+    }, [shownType])
 
     return (
-        <Grid container>
+        <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
                 <CustomCard heading='view services' >
                     <SearchFilters resultsHandler= {handleResultsChange}  />
-                    <FilteredResults results={shownType} />
+                    <FilteredResults results={shownType} addToCart={handleCartChange} />
                 </CustomCard>
             </Grid>
             <Grid item xs={12} md={6}>
-
+                <Cart />
             </Grid>
         </Grid>
     )
@@ -69,8 +147,8 @@ const PointOfSale = ( props ) => {
 const mapDispatchToProps = dispatch => {
     return {
         filterServicesHandler: (language, page, type, category , location, search) => dispatch(filterServices(language, page, type, category , location, search)),
-        filterProductsHandler: (language, token, page) => dispatch(fetchProducts(language, token, page)),
-        filterDealsHandler: (language, token, page) => dispatch(fetchDeals(language, token, page)),
+        fetchProductsHandler: (language, token, page) => dispatch(fetchProducts(language, token, page)),
+        fetchDealsHandler: (language, token, page) => dispatch(fetchDeals(language, token, page)),
     }
 }
 
