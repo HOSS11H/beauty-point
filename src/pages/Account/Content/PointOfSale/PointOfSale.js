@@ -25,6 +25,11 @@ const cartReducer = (state, action) => {
             return updateObject(state, {
                 services: updatedServices,
             })
+        case 'REMOVE_SERVICE':
+            const filteredServices = state.services.filter(service => service.id !== action.payload)
+            return updateObject(state, {
+                services: filteredServices,
+            })
         case 'ADD_TO_PRODUCTS':
             const productIndex = state.products.findIndex(product => product.id === action.payload.id);
             const updatedProducts = [...state.products]
@@ -38,6 +43,11 @@ const cartReducer = (state, action) => {
             return updateObject(state, {
                 products: updatedProducts,
             })
+        case 'REMOVE_PRODUCT':
+            const filteredProducts = state.products.filter(product => product.id !== action.payload)
+            return updateObject(state, {
+                products: filteredProducts,
+            })
         case 'ADD_TO_DEALS':
             const dealIndex = state.deals.findIndex(deal => deal.id === action.payload.id);
             const updatedDeals = [...state.deals]
@@ -50,6 +60,11 @@ const cartReducer = (state, action) => {
             }
             return updateObject(state, {
                 deals: updatedDeals,
+            })
+        case 'REMOVE_DEAL':
+            const filteredDeals = state.deals.filter(deal => deal.id !== action.payload)
+            return updateObject(state, {
+                deals: filteredDeals,
             })
         case 'REMOVE_FROM_CART':
             return state.filter(item => item.id !== action.payload);
@@ -108,7 +123,7 @@ const PointOfSale = ( props ) => {
         }
     }, [filterDealsHandler, filterProductsHandler, filterServicesHandler, lang])
 
-    const handleCartChange = useCallback(( itemData ) => {
+    const AddToCartHandler = useCallback(( itemData ) => {
         if ( shownType === 'services' ) {
             dispatch({
                 type: 'ADD_TO_SERVICES',
@@ -129,16 +144,38 @@ const PointOfSale = ( props ) => {
         }
     }, [shownType])
 
+    const RemoveFromCartHandler = useCallback(( type, itemId ) => {
+        console.log(type, itemId)
+        if (type === 'services') {
+            dispatch({
+                type: 'REMOVE_SERVICE',
+                payload: itemId
+            })
+        }
+        if (type === 'products') {
+            dispatch({
+                type: 'REMOVE_PRODUCT',
+                payload: itemId
+            })
+        }
+        if (type === 'deals') {
+            dispatch({
+                type: 'REMOVE_DEAL',
+                payload: itemId
+            })
+        }
+    } , [])
+
     return (
         <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
                 <CustomCard heading='view services' >
                     <SearchFilters resultsHandler= {handleResultsChange}  />
-                    <FilteredResults results={shownType} addToCart={handleCartChange} />
+                    <FilteredResults results={shownType} addToCart={AddToCartHandler} />
                 </CustomCard>
             </Grid>
             <Grid item xs={12} md={6}>
-                <Cart cartData={cart} />
+                <Cart cartData={cart} removeFromCart={RemoveFromCartHandler} />
             </Grid>
         </Grid>
     )

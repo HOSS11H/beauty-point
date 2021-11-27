@@ -11,19 +11,16 @@ import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import MailIcon from '@mui/icons-material/Mail';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
-import { TableData } from '../../../../../components/UI/Dashboard/Table/Table';
-import Actions from '../../../../../components/UI/Dashboard/Actions/Actions';
 
 import DateAdapter from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import SharedTableHead from './SharedTableHead/SharedTableHead';
+import CartItem from './CartItem/CartItem';
 
 const CustomerCard = styled.div`
     padding: 20px;
@@ -67,6 +64,26 @@ const CustomerInfo = styled.ul`
     }
 `
 
+const CustomMessage = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 70px;
+    flex-grow: 1;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid;
+    border-color: ${({ theme }) => theme.palette.divider};
+    p {
+            font-size: 24px;
+            line-height:1.5;
+            text-transform: capitalize;
+            font-weight: 500;
+            color: ${({ theme }) => theme.palette.text.disabled};
+        }
+`
+
 const customers = [
     { id: 0, name: 'ahmed', email: 'mail.com', phone: '0123456789' },
     { id: 1, name: 'ali', email: 'mail.com', phone: '0123456789' },
@@ -76,10 +93,12 @@ const customers = [
 
 const Cart = props => {
 
+    const { cartData, removeFromCart } = props;
+
     const { t } = useTranslation()
 
     const [customer, setCustomer] = useState('');
-    const [ customerData , setCustomerData ] = useState(null);
+    const [customerData, setCustomerData] = useState(null);
 
 
     const [dateTime, setDateTime] = useState(new Date());
@@ -154,136 +173,61 @@ const Cart = props => {
                     )
                 }
                 <Grid item xs={12}>
-                    <TableContainer component={Paper} sx={{ my: 2 }}>
-                        <Table aria-label="services table">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell align="right" >services</TableCell>
-                                    <TableCell align="right">price</TableCell>
-                                    <TableCell align="right">quantity</TableCell>
-                                    <TableCell align="right">price including taxes</TableCell>
-                                    <TableCell align="right">action</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {/* {rows.map((row) => (
-                                    <TableRow
-                                        key={row.name}
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                    >
-                                        <TableCell component="th" scope="row">
-                                            <TableData>{row.name}</TableData>
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <TableData>{row.calories}</TableData>
-                                        </TableCell>
-                                        <TableCell component="th" scope="row">
-                                            <TableData>{row.name}</TableData>
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <TableData>{row.calories}</TableData>
-                                        </TableCell>
-                                        <TableCell component="th" scope="row">
-                                            <TableData>{row.name}</TableData>
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <Actions remove
-                                                removeHandler={deleteModalOpenHandler.bind(null, row.id)}
-                                            />
-                                        </TableCell>
-                                    </TableRow>
-                                ))} */}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                    {cartData.services.length === 0 && (
+                        <CustomMessage>
+                            <p>{t('No Services')}</p>
+                        </CustomMessage>
+                    )}
+                    {cartData.services.length > 0 && (
+                        <TableContainer component={Paper} sx={{ my: 2 }}>
+                            <Table aria-label="services table">
+                                <SharedTableHead />
+                                <TableBody>
+                                    {cartData.services.map((row) => (
+                                        <CartItem type='services' key={row.id} row={row} remove={removeFromCart} />
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    )}
                 </Grid>
                 <Grid item xs={12}>
-                    <TableContainer component={Paper} sx={{ my: 2 }}>
-                        <Table aria-label="products table">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell align="right" >products</TableCell>
-                                    <TableCell align="right">price</TableCell>
-                                    <TableCell align="right">quantity</TableCell>
-                                    <TableCell align="right">price including taxes</TableCell>
-                                    <TableCell align="right">action</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {/* {rows.map((row) => (
-                                    <TableRow
-                                        key={row.name}
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                    >
-                                        <TableCell component="th" scope="row">
-                                            <TableData>{row.name}</TableData>
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <TableData>{row.calories}</TableData>
-                                        </TableCell>
-                                        <TableCell component="th" scope="row">
-                                            <TableData>{row.name}</TableData>
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <TableData>{row.calories}</TableData>
-                                        </TableCell>
-                                        <TableCell component="th" scope="row">
-                                            <TableData>{row.name}</TableData>
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <Actions remove
-                                                removeHandler={deleteModalOpenHandler.bind(null, row.id)}
-                                            />
-                                        </TableCell>
-                                    </TableRow>
-                                ))} */}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                    {cartData.products.length === 0 && (
+                        <CustomMessage>
+                            <p>{t('No Products')}</p>
+                        </CustomMessage>
+                    )}
+                    {cartData.products.length > 0 && (
+                        <TableContainer component={Paper} sx={{ my: 2 }}>
+                            <Table aria-label="products table">
+                                <SharedTableHead />
+                                <TableBody>
+                                    {cartData.products.map((row) => (
+                                        <CartItem type='products' key={row.id} row={row} remove={removeFromCart} />
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    )}
                 </Grid>
                 <Grid item xs={12}>
-                    <TableContainer component={Paper} sx={{ my: 2 }}>
-                        <Table aria-label="deals table">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell align="right" >deals</TableCell>
-                                    <TableCell align="right">price</TableCell>
-                                    <TableCell align="right">quantity</TableCell>
-                                    <TableCell align="right">price including taxes</TableCell>
-                                    <TableCell align="right">action</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {/* {rows.map((row) => (
-                                    <TableRow
-                                        key={row.name}
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                    >
-                                        <TableCell component="th" scope="row">
-                                            <TableData>{row.name}</TableData>
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <TableData>{row.calories}</TableData>
-                                        </TableCell>
-                                        <TableCell component="th" scope="row">
-                                            <TableData>{row.name}</TableData>
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <TableData>{row.calories}</TableData>
-                                        </TableCell>
-                                        <TableCell component="th" scope="row">
-                                            <TableData>{row.name}</TableData>
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            <Actions remove
-                                                removeHandler={deleteModalOpenHandler.bind(null, row.id)}
-                                            />
-                                        </TableCell>
-                                    </TableRow>
-                                ))} */}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                    {cartData.deals.length === 0 && (
+                        <CustomMessage>
+                            <p>{t('No Deals')}</p>
+                        </CustomMessage>
+                    )}
+                    {cartData.deals.length > 0 && (
+                        <TableContainer component={Paper} sx={{ my: 2 }}>
+                            <Table aria-label="deals table">
+                                <SharedTableHead />
+                                <TableBody>
+                                    {cartData.deals.map((row) => (
+                                        <CartItem type='deals' key={row.id} row={row} remove={removeFromCart} />
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    )}
                 </Grid>
             </Grid>
         </CustomCard>
