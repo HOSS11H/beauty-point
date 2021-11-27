@@ -12,11 +12,13 @@ export {
     fetchProducts,
     deleteProduct,
     searchProducts,
+    filterProducts,
 } from './products'
 export {
     fetchDeals,
     deleteDeal,
     searchDeals,
+    filterDeals,
 } from './deals'
 export {
     fetchLocations,

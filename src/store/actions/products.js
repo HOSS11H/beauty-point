@@ -100,3 +100,20 @@ export const searchProducts = ( language , word ) => {
             } )
         }
 }
+
+export const filterProducts = ( language, page , type, category , location, search ) => {
+    return dispatch => {
+        dispatch( fetchProductsStart( ) )
+        axios.get(`/vendors/${type}?page=${page + 1}term=${search}&location=${location}&category=${category}`, { 
+            headers: {
+                'Accept-Language': language
+            }
+        }).then( response => {
+                dispatch( fetchProductsSuccess( response.data  ) );
+            })
+            .catch( err => {
+                console.log(err)
+                dispatch( fetchProductsFailed( err.message  ) )
+            } )
+        }
+}
