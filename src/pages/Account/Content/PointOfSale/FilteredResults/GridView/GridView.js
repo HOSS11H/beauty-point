@@ -20,7 +20,7 @@ const ResultCard = styled(Card)`
         border-radius: 15px;
         background-color: ${({ theme }) => theme.palette.background.default};
         position: relative;
-        height: 300px;
+        height: 250px;
         width: 100%;
     }
 `
@@ -59,7 +59,7 @@ const ResultContent = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    padding:25px;
+    padding:20px;
 `
 const ResultName = styled.h3`
     font-size: 20px;
@@ -93,7 +93,7 @@ const AddResult = styled(CustomButton)`
         font-size: 16px;
         width: max-content;
         padding: 0 25px;
-        height: 50px;
+        height: 40px;
     }
 `
 
@@ -101,7 +101,7 @@ const GridView = ( props ) => {
 
     const { t } = useTranslation()
 
-    const { data, loading, action } = props;
+    const { data, type, loading, action } = props;
 
     const addItemHandler = ( id ) => {
         const addedItemIndex = data.findIndex( item  => item.id === id );
@@ -111,6 +111,7 @@ const GridView = ( props ) => {
             name: addedItem.name,
             price: addedItem.discounted_price,
             quantity: 1,
+            type: type,
         }
         action(addedItemData);
     }

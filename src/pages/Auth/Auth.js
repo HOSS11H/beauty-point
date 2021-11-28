@@ -98,8 +98,8 @@ const Auth = props => {
             authData = {
                 email: loginData.email.value,
                 password: loginData.password.value,
-                fcm_token: 'sdadasdasdasdasasdasdasadasdasdadadassdasdasdaadsadadsasdasdasdasadsdasdasdsadsasdadasdasdasdasasdasdasadasdasdad',
-                device_name: 'dsadasdsas'
+                fcm_token: 'asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231',
+                device_name: 'Y621312'
             }
         } else {
             url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDteusGiWoNp_qFEn36zfPtJPSwRS8hpyg`;

@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField';
 import TimePicker from '@mui/lab/TimePicker';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import { Grid } from '@mui/material';
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 import Paper from '@mui/material/Paper';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
@@ -17,17 +17,22 @@ import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 
 import DateAdapter from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import SharedTableHead from './SharedTableHead/SharedTableHead';
 import CartItem from './CartItem/CartItem';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import CheckIcon from '@mui/icons-material/Check';
+import { ButtonText, ButtonConfirm } from '../../../../../components/UI/Button/Button';
+
 
 const CustomerCard = styled.div`
     padding: 20px;
     border-radius: 8px;
     border: 1px solid;
     border-color: ${({ theme }) => theme.palette.divider};
-`
+    `
 const CustomerName = styled.h4`
     display: block;
     font-size: 16px;
@@ -37,7 +42,7 @@ const CustomerName = styled.h4`
     color: ${({ theme }) => theme.palette.primary.main};
     transition: 0.3s ease-in-out;
     margin-bottom: 5px;
-`
+    `
 const CustomerInfo = styled.ul`
     margin: 0;
     padding: 0;
@@ -62,7 +67,7 @@ const CustomerInfo = styled.ul`
             }
         }
     }
-`
+    `
 
 const CustomMessage = styled.div`
     display: flex;
@@ -76,12 +81,60 @@ const CustomMessage = styled.div`
     border: 1px solid;
     border-color: ${({ theme }) => theme.palette.divider};
     p {
-            font-size: 24px;
-            line-height:1.5;
-            text-transform: capitalize;
-            font-weight: 500;
-            color: ${({ theme }) => theme.palette.text.disabled};
+        font-size: 24px;
+        line-height:1.5;
+        text-transform: capitalize;
+        font-weight: 500;
+        color: ${({ theme }) => theme.palette.text.disabled};
+    }
+    `
+
+const CouponWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    `
+const Message = styled.p`
+    flex-basis: 100%;
+    font-size: 15px;
+    line-height:1.5;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: ${({ theme }) => theme.palette.success.main};
+    margin-top: 10px;;
+    ${ ( { exist } ) => exist && css`
+        color: ${({ theme }) => theme.palette.success.main};
+    `}
+    ${ ( { notExist } ) => notExist && css`
+        color: ${({ theme }) => theme.palette.error.main};
+    `}
+`
+
+const PriceCalculation = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    p {
+        font-size: 20px;
+        line-height:1.5;
+        text-transform: uppercase;
+        font-weight: 600;
+        color: ${({ theme }) => theme.palette.text.primary};
+    }
+`
+const CardActions = styled.div`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    button {
+        margin-right: 20px;
+        &:last-child {
+            margin-right: 0;
         }
+    }
 `
 
 const customers = [
@@ -89,11 +142,57 @@ const customers = [
     { id: 1, name: 'ali', email: 'mail.com', phone: '0123456789' },
     { id: 2, name: 'mahmoud', email: 'mail.com', phone: '0123456789' },
 ]
+const coupons = [
+    {
+        "id": 1,
+        "title": "SAVE $20",
+        "code": "SAVE20",
+        "startDateTime": "2021-10-28T14:15:09.000000Z",
+        "usesLimit": 0,
+        "amount": 20,
+        "discountType": "percentage",
+        "minimumPurchaseAmount": 20,
+        "days": [
+            "Sunday",
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday"
+        ],
+        "description": "Limited Time Coupon !! HURRY UP.",
+        "status": "active",
+        "endDateTime": "2021-12-27T14:15:09.000000Z"
+    },
+    {
+        "id": 7,
+        "title": "SAVE $10",
+        "code": "SAVE10",
+        "startDateTime": "2021-10-28T14:15:09.000000Z",
+        "usesLimit": 0,
+        "amount": 10,
+        "discountType": "percentage",
+        "minimumPurchaseAmount": 20,
+        "days": [
+            "Sunday",
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday"
+        ],
+        "description": "Limited Time Coupon !! HURRY UP.",
+        "status": "active",
+        "endDateTime": "2021-12-27T14:15:09.000000Z"
+    }
+]
 
 
 const Cart = props => {
 
-    const { cartData, removeFromCart, increaseItem, decreaseItem } = props;
+    const { cartData, removeFromCart, increaseItem, decreaseItem, resetCart } = props;
 
     const { t } = useTranslation()
 
@@ -102,6 +201,17 @@ const Cart = props => {
 
 
     const [dateTime, setDateTime] = useState(new Date());
+
+    const [totalPrice, setTotalPrice] = useState(0)
+
+    const [totalTaxes, setTotalTaxes] = useState(0)
+
+    const [coupon, setCoupon] = useState('')
+    const [couponExists, setCouponExists] = useState(false)
+    const [couponData, setCouponData] = useState({amount: 0})
+
+
+    const [discount, setDiscount] = useState(0)
 
 
     const handleDateChange = (newValue) => {
@@ -115,9 +225,41 @@ const Cart = props => {
         setCustomerData(updatedCustomerData);
     };
 
+    useEffect(() => {
+        console.log(couponData.amount)
+        let total = 0;
+        for (let section in cartData) {
+            for (let item of cartData[section]) {
+                total += item.price * item.quantity;
+            }
+        }
+        total= total - ( ( total * discount / 100 ) + (total * couponData.amount / 100 ) );
+        setTotalTaxes(total - (total/1.15))
+        setTotalPrice(total - ( total - (total/1.15) ));
+    }, [cartData, couponData, discount])
+
+    const couponChangeHandler = (event) => {
+        setCoupon(event.target.value)
+        const enteredCoupon = coupons.filter(coupon => coupon.code === event.target.value)
+        if (enteredCoupon.length > 0) {
+            setCouponExists(true)
+            setCouponData(enteredCoupon[0])
+        } else {
+            setCouponData({amount: 0})
+            setCouponExists(false)
+        }
+    }
+
+    const resetCartHandler = () => {
+        resetCart();
+    }
+    const purchaseCartHandler = ( ) => {
+        props.purchaseCart(customerData, dateTime, totalPrice, totalTaxes, coupon, discount);
+    }
+
     return (
         <CustomCard heading='Add To Cart' >
-            <Grid container spacing={2}>
+            <Grid container spacing={3}>
                 <Grid item xs={12} >
                     <LocalizationProvider dateAdapter={DateAdapter}>
                         <Grid container spacing={2}>
@@ -203,7 +345,7 @@ const Cart = props => {
                                 <SharedTableHead />
                                 <TableBody>
                                     {cartData.products.map((row) => (
-                                        <CartItem type='products' key={row.id} row={row} remove={removeFromCart} increase={increaseItem}  decrease={decreaseItem} />
+                                        <CartItem type='products' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} />
                                     ))}
                                 </TableBody>
                             </Table>
@@ -228,6 +370,50 @@ const Cart = props => {
                             </Table>
                         </TableContainer>
                     )}
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField
+                        type="number"
+                        label={t('Discount')}
+                        id="discount-value"
+                        sx={{ width: '100%' }}
+                        value={discount}
+                        onChange={(e) => setDiscount(e.target.value)}
+                        InputProps={{
+                            startAdornment: <InputAdornment position="start">%</InputAdornment>,
+                        }}
+                    />
+                </Grid>
+                <Grid item xs={12}>
+                    <CouponWrapper>
+                        <TextField
+                            label={t('Coupon')}
+                            id="coupon-value"
+                            sx={{ flexGrow: '1' }}
+                            value={coupon}
+                            onChange={couponChangeHandler}
+                        />
+                        {couponExists && <Message exist>{t('Coupon Exists')}</Message>}
+                        {!couponExists && coupon !== '' ? <Message notExist>{t(`Coupon Doesn't Exist`)}</Message> : null}
+                    </CouponWrapper>
+                </Grid>
+                <Grid item xs={12}>
+                    <PriceCalculation>
+                        <p>{t('total taxes')}</p>
+                        <p>{totalTaxes.toFixed(2)}</p>
+                    </PriceCalculation>
+                </Grid>
+                <Grid item xs={12}>
+                    <PriceCalculation>
+                        <p>{t('price after discount')}</p>
+                        <p>{totalPrice.toFixed(2)}</p>
+                    </PriceCalculation>
+                </Grid>
+                <Grid item xs={12}>
+                    <CardActions>
+                        <ButtonText variant='text' onClick={resetCartHandler}>{t('reset cart')}</ButtonText>
+                        <ButtonConfirm variant='contained' onClick={purchaseCartHandler}>{t('purchase')}</ButtonConfirm>
+                    </CardActions>
                 </Grid>
             </Grid>
         </CustomCard>

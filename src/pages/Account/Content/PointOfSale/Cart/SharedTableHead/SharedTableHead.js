@@ -10,6 +10,7 @@ const SharedTableHead = props => {
                 <TableCell align="center">price</TableCell>
                 <TableCell align="center">quantity</TableCell>
                 <TableCell align="center">price including taxes</TableCell>
+                <TableCell align="center">employees</TableCell>
                 <TableCell align="center">action</TableCell>
             </TableRow>
         </TableHead>

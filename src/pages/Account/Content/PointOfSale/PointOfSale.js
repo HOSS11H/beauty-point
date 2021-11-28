@@ -132,8 +132,13 @@ const cartReducer = (state, action) => {
             return updateObject(state, {
                 deals: decreasedDeals,
             })
-        case 'REMOVE_FROM_CART':
-            return state.filter(item => item.id !== action.payload);
+        case 'RESET_CART':
+            const intialState = {
+                services: [],
+                products: [],
+                deals: [],
+            }
+            return updateObject(state, intialState)
         default:
             return state;
     }
@@ -271,6 +276,11 @@ const PointOfSale = ( props ) => {
             })
         }
     } , [])
+    const resetCartHandler = useCallback((  ) => {
+        dispatch({
+            type: 'RESET_CART',
+        })
+    }, [])
     return (
         <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
@@ -280,7 +290,7 @@ const PointOfSale = ( props ) => {
                 </CustomCard>
             </Grid>
             <Grid item xs={12} md={6}>
-                <Cart cartData={cart} removeFromCart={removeFromCartHandler} increaseItem={increaseItemHandler} decreaseItem={decreaseItemHandler} />
+                <Cart cartData={cart} removeFromCart={removeFromCartHandler} increaseItem={increaseItemHandler} decreaseItem={decreaseItemHandler} resetCart={resetCartHandler} />
             </Grid>
         </Grid>
     )

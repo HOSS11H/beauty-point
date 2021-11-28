@@ -18,8 +18,9 @@ const SkeletonsWrapper = styled.div`
 const ResultCard = styled(Card)`
     &.MuiPaper-root {
         border-radius: 15px;
-        background: ${({ theme }) => theme.palette.action.focus};
+        background: #8f1487b3;
         position: relative;
+        cursor: pointer;
     }
 `
 const ResultContent = styled.div`
@@ -27,49 +28,42 @@ const ResultContent = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    padding:25px;
+    padding:15px 5px;
+    text-align: center;
 `
 const ResultName = styled.h3`
-    font-size: 20px;
+    font-size: 13px;
     line-height:1.5;
     text-transform: capitalize;
-    font-weight: 600;
-    margin-bottom: 10px;
-    color: ${({ theme }) => theme.palette.text.default};
+    font-weight: 700;
+    margin-bottom: 5px;
+    color: ${({ theme }) => theme.palette.common.white};
 `
 const PriceHolder = styled.div`
     display: flex;
     align-items: center;
-    margin-bottom: 15px;
+    justify-content: center;
+    flex-direction: column;
 `
 const ResultPrice = styled.h4`
-    font-size: 16px;
+    font-size: 13px;
     line-height:1.5;
-    font-weight: 600;
-    color: ${({ theme }) => theme.palette.text.default};
-    margin-right:15px;
+    font-weight: 700;
+    color: ${({ theme }) => theme.palette.common.white};
 `
 const ResultDiscount = styled.h4`
-    font-size: 16px;
+    font-size: 13px;
     line-height:1.5;
-    font-weight: 600;
-    color: ${({ theme }) => theme.palette.error.main};
+    font-weight: 700;
+    color: ${({ theme }) => theme.palette.common.black};
     text-decoration: line-through;
-`
-const AddResult = styled(CustomButton)`
-    &.MuiButton-root {
-        font-size: 16px;
-        width: max-content;
-        padding: 0 25px;
-        height: 50px;
-    }
 `
 
 const ListView = ( props ) => {
 
     const { t } = useTranslation()
 
-    const { data, loading, action } = props;
+    const { data, type, loading, action } = props;
 
     const addItemHandler = ( id ) => {
         console.log(id, data);
@@ -80,21 +74,21 @@ const ListView = ( props ) => {
             name: addedItem.name,
             price: addedItem.discounted_price,
             quantity: 1,
+            type: type,
         }
         action(addedItemData);
     }
 
     let content = data.map( (item, index) => {
         return (
-            <Grid item xs={12} sm={6} key={item.id}>
-                <ResultCard>
+            <Grid item xs={6} sm={3} md={4} lg={3} key={item.id}>
+                <ResultCard onClick={ ( id ) => addItemHandler( item.id) } >
                     <ResultContent>
                         <ResultName>{item.name}</ResultName>
                         <PriceHolder>
-                            <ResultPrice>{item.formated_price}</ResultPrice>
-                            {item.converted_price !== item.converted_discounted_price ? <ResultDiscount>{item.formated_discounted_price}</ResultDiscount> : null}
+                            <ResultPrice>{item.discounted_price.toFixed(2)}</ResultPrice>
+                            {item.converted_price !== item.converted_discounted_price ? <ResultDiscount>{item.price.toFixed(2)}</ResultDiscount> : null}
                         </PriceHolder>
-                        <AddResult onClick={ ( id ) => addItemHandler( item.id) } >{t('add')}<AddIcon sx={{ml: 1}} /></AddResult>
                     </ResultContent>
                 </ResultCard>
             </Grid>
