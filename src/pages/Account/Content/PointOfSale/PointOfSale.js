@@ -32,13 +32,25 @@ const cartReducer = (state, action) => {
             })
         case 'INCREASE_SERVICE' :
             const increasedServiceIndex = state.services.findIndex(service => service.id === action.payload);
+            const increasedService = {...state.services[increasedServiceIndex]}
+            increasedService.quantity = increasedService.quantity + 1;
             const increasedServices = [...state.services]
-            const increasedService = increasedServices[increasedServiceIndex]
-            console.log(increasedService)
-            increasedService.quantity = increasedService.quantity + 1
             increasedServices[increasedServiceIndex] = increasedService
             return updateObject(state, {
                 services: increasedServices,
+            })
+        case 'DECREASE_SERVICE' :
+            const decreasedServiceIndex = state.services.findIndex(service => service.id === action.payload);
+            const decreasedService = {...state.services[decreasedServiceIndex]}
+            const decreasedServices = [...state.services]
+            if (decreasedService.quantity === 1) {
+                decreasedServices.splice(decreasedServiceIndex, 1)
+            } else { 
+                decreasedService.quantity = decreasedService.quantity - 1
+                decreasedServices[decreasedServiceIndex] = decreasedService
+            }
+            return updateObject(state, {
+                services: decreasedServices,
             })
         case 'ADD_TO_PRODUCTS':
             const productIndex = state.products.findIndex(product => product.id === action.payload.id);
@@ -60,12 +72,25 @@ const cartReducer = (state, action) => {
             })
         case 'INCREASE_PRODUCT' :
             const increasedProductIndex = state.products.findIndex(product => product.id === action.payload);
-            const increasedProducts = [...state.products]
-            const increasedProduct = increasedProducts[increasedProductIndex]
+            const increasedProduct = {...state.products[increasedProductIndex]}
             increasedProduct.quantity = increasedProduct.quantity + 1
+            const increasedProducts = [...state.products]
             increasedProducts[increasedProductIndex] = increasedProduct
             return updateObject(state, {
                 products: increasedProducts,
+            })
+        case 'DECREASE_PRODUCT' :
+            const decreasedProductIndex = state.products.findIndex(product => product.id === action.payload);
+            const decreasedProduct = {...state.products[decreasedProductIndex]}
+            const decreasedProducts = [...state.products]
+            if (decreasedProduct.quantity === 1) {
+                decreasedProducts.splice(decreasedProductIndex, 1)
+            } else {
+                decreasedProduct.quantity = decreasedProduct.quantity - 1
+                decreasedProducts[decreasedProductIndex] = decreasedProduct
+            }
+            return updateObject(state, {
+                products: decreasedProducts,
             })
         case 'ADD_TO_DEALS':
             const dealIndex = state.deals.findIndex(deal => deal.id === action.payload.id);
@@ -87,12 +112,25 @@ const cartReducer = (state, action) => {
             })
         case 'INCREASE_DEAL' :
             const increasedDealIndex = state.deals.findIndex(deal => deal.id === action.payload);
-            const increasedDeals = [...state.deals]
-            const increasedDeal = increasedDeals[increasedDealIndex]
+            const increasedDeal = {...state.deals[increasedDealIndex]}
             increasedDeal.quantity = increasedDeal.quantity + 1
+            const increasedDeals = [...state.deals]
             increasedDeals[increasedDealIndex] = increasedDeal
             return updateObject(state, {
                 deals: increasedDeals,
+            })
+        case 'DECREASE_DEAL' :
+            const decreasedDealIndex = state.deals.findIndex(deal => deal.id === action.payload);
+            const decreasedDeal = {...state.deals[decreasedDealIndex]}
+            const decreasedDeals = [...state.deals]
+            if (decreasedDeal.quantity === 1) {
+                decreasedDeals.splice(decreasedDealIndex, 1)
+            } else {
+                decreasedDeal.quantity = decreasedDeal.quantity - 1
+                decreasedDeals[decreasedDealIndex] = decreasedDeal
+            }
+            return updateObject(state, {
+                deals: decreasedDeals,
             })
         case 'REMOVE_FROM_CART':
             return state.filter(item => item.id !== action.payload);
@@ -141,7 +179,6 @@ const PointOfSale = ( props ) => {
         setShownCategory(category);
         setShownLocation(location);
         setSearchWord(search);
-        console.log(lang, page, type, category , location, search)
         if(type === 'services') {
             filterServicesHandler(lang, page, type, category , location, search);
         } else if (type === 'products') {
@@ -214,6 +251,26 @@ const PointOfSale = ( props ) => {
             })
         }
     } , [])
+    const decreaseItemHandler = useCallback(( type, itemId ) => {
+        if (type === 'services') {
+            dispatch({
+                type: 'DECREASE_SERVICE',
+                payload: itemId
+            })
+        }
+        if (type === 'products') {
+            dispatch({
+                type: 'DECREASE_PRODUCT',
+                payload: itemId
+            })
+        }
+        if (type === 'deals') {
+            dispatch({
+                type: 'DECREASE_DEAL',
+                payload: itemId
+            })
+        }
+    } , [])
     return (
         <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
@@ -223,7 +280,7 @@ const PointOfSale = ( props ) => {
                 </CustomCard>
             </Grid>
             <Grid item xs={12} md={6}>
-                <Cart cartData={cart} removeFromCart={removeFromCartHandler} increaseItem={increaseItemHandler} />
+                <Cart cartData={cart} removeFromCart={removeFromCartHandler} increaseItem={increaseItemHandler} decreaseItem={decreaseItemHandler} />
             </Grid>
         </Grid>
     )

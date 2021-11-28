@@ -3,7 +3,7 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 
 const Wrapper = styled.div`
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     border-radius: 8px;
@@ -51,7 +51,7 @@ const Increment = props => {
 
     return (
         <Wrapper>
-            <ActionButton onClick={decrement}><RemoveIcon/></ActionButton>
+            <ActionButton onClick={ ( ) =>  decrement(type, id) }><RemoveIcon/></ActionButton>
             <DisplayValue>{value}</DisplayValue>
             <ActionButton onClick={ ( ) =>  increment(type, id) }><AddIcon/></ActionButton>
         </Wrapper>

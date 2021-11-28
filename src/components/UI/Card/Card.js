@@ -39,6 +39,7 @@ export const CardBody = styled.div`
 `
 export const CardContent = styled.div`
     flex-grow: 1;
+    width: 100%;
 `
 export const SkeletonsWrapper = styled.div`
     flex-grow: 1;
