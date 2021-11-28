@@ -266,6 +266,10 @@ const Cart = props => {
         setCustomer('');
         setCustomerData(null);
         setCustomerDataError(false)
+        setDiscount(0)
+        setCoupon('')
+        setCouponData({ amount: 0 })
+        setCouponExists(false)
         resetCart();
     }
     const purchaseCartHandler = (e) => {
@@ -287,6 +291,7 @@ const Cart = props => {
             discount: discount,
         }
         purchase(data);
+        console.log(data)
         resetCartHandler();
     }
 
