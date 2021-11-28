@@ -281,6 +281,11 @@ const PointOfSale = ( props ) => {
             type: 'RESET_CART',
         })
     }, [])
+
+    const purchaseCartHandler = useCallback(( purchasedData ) => {
+        console.log(purchasedData)
+    }, [])
+
     return (
         <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
@@ -290,7 +295,7 @@ const PointOfSale = ( props ) => {
                 </CustomCard>
             </Grid>
             <Grid item xs={12} md={6}>
-                <Cart cartData={cart} removeFromCart={removeFromCartHandler} increaseItem={increaseItemHandler} decreaseItem={decreaseItemHandler} resetCart={resetCartHandler} />
+                <Cart cartData={cart} removeFromCart={removeFromCartHandler} increaseItem={increaseItemHandler} decreaseItem={decreaseItemHandler} resetCart={resetCartHandler} purchase={purchaseCartHandler} />
             </Grid>
         </Grid>
     )

@@ -1,9 +1,7 @@
 import styled from 'styled-components';
 import Card from '@mui/material/Card';
-import {CustomButton} from '../../../../../../components/UI/Button/Button'
 import { Grid } from '@mui/material';
 import { useTranslation } from 'react-i18next';
-import AddIcon from '@mui/icons-material/Add';
 import Skeleton from '@mui/material/Skeleton';
 
 const SkeletonsWrapper = styled.div`

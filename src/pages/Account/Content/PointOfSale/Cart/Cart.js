@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField';
 import TimePicker from '@mui/lab/TimePicker';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import { Grid } from '@mui/material';
-import styled, {css} from 'styled-components';
+import styled, { css } from 'styled-components';
 import Paper from '@mui/material/Paper';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
@@ -102,10 +102,10 @@ const Message = styled.p`
     font-weight: 400;
     color: ${({ theme }) => theme.palette.success.main};
     margin-top: 10px;;
-    ${ ( { exist } ) => exist && css`
+    ${({ exist }) => exist && css`
         color: ${({ theme }) => theme.palette.success.main};
     `}
-    ${ ( { notExist } ) => notExist && css`
+    ${({ notExist }) => notExist && css`
         color: ${({ theme }) => theme.palette.error.main};
     `}
 `
@@ -192,12 +192,13 @@ const coupons = [
 
 const Cart = props => {
 
-    const { cartData, removeFromCart, increaseItem, decreaseItem, resetCart } = props;
+    const { cartData, removeFromCart, increaseItem, decreaseItem, resetCart, purchase } = props;
 
     const { t } = useTranslation()
 
     const [customer, setCustomer] = useState('');
     const [customerData, setCustomerData] = useState(null);
+    const [customerDataError, setCustomerDataError] = useState(false)
 
 
     const [dateTime, setDateTime] = useState(new Date());
@@ -206,13 +207,30 @@ const Cart = props => {
 
     const [totalTaxes, setTotalTaxes] = useState(0)
 
+    const [cartDataError, setCartDataError] = useState(false)
+
     const [coupon, setCoupon] = useState('')
     const [couponExists, setCouponExists] = useState(false)
-    const [couponData, setCouponData] = useState({amount: 0})
-
+    const [couponData, setCouponData] = useState({ amount: 0 })
 
     const [discount, setDiscount] = useState(0)
 
+    useEffect(() => {
+        let total = 0;
+        for (let section in cartData) {
+            for (let item of cartData[section]) {
+                total += item.price * item.quantity;
+            }
+        }
+        total = total - ((total * discount / 100) + (total * couponData.amount / 100));
+        setTotalTaxes(total - (total / 1.15))
+        setTotalPrice(total - (total - (total / 1.15)));
+
+        if (cartData.services.length !== 0 || cartData.products.length !== 0 || cartData.deals.length !== 0) {
+            setCartDataError(false)
+            return;
+        }
+    }, [cartData, couponData, discount])
 
     const handleDateChange = (newValue) => {
         setDateTime(newValue);
@@ -221,22 +239,11 @@ const Cart = props => {
     const handleCustomerChange = (event) => {
         const customerIndex = customers.findIndex(customer => customer.id === event.target.value);
         const updatedCustomerData = customers[customerIndex];
+        setCustomerDataError(false)
         setCustomer(event.target.value);
         setCustomerData(updatedCustomerData);
     };
 
-    useEffect(() => {
-        console.log(couponData.amount)
-        let total = 0;
-        for (let section in cartData) {
-            for (let item of cartData[section]) {
-                total += item.price * item.quantity;
-            }
-        }
-        total= total - ( ( total * discount / 100 ) + (total * couponData.amount / 100 ) );
-        setTotalTaxes(total - (total/1.15))
-        setTotalPrice(total - ( total - (total/1.15) ));
-    }, [cartData, couponData, discount])
 
     const couponChangeHandler = (event) => {
         setCoupon(event.target.value)
@@ -245,177 +252,209 @@ const Cart = props => {
             setCouponExists(true)
             setCouponData(enteredCoupon[0])
         } else {
-            setCouponData({amount: 0})
+            setCouponData({ amount: 0 })
             setCouponExists(false)
         }
     }
+    const discountChangeHandler = (event) => {
+        if (event.target.value >= 0) {
+            setDiscount(event.target.value)
+        }
+    }
 
-    const resetCartHandler = () => {
+    const resetCartHandler = (  ) => {
+        setCustomer('');
+        setCustomerData(null);
+        setCustomerDataError(false)
         resetCart();
     }
-    const purchaseCartHandler = ( ) => {
-        props.purchaseCart(customerData, dateTime, totalPrice, totalTaxes, coupon, discount);
+    const purchaseCartHandler = (e) => {
+        e.preventDefault();
+        if (cartData.services.length === 0 && cartData.products.length === 0 && cartData.deals.length === 0) {
+            setCartDataError(true)
+            return;
+        } else if (!customerData) {
+            setCustomerDataError(true)
+            return;
+        }
+        const data = {
+            customer: customerData,
+            dateTime: dateTime,
+            cart: cartData,
+            totalPrice: totalPrice,
+            totalTaxes: totalTaxes,
+            coupon: couponData,
+            discount: discount,
+        }
+        purchase(data);
+        resetCartHandler();
     }
 
     return (
         <CustomCard heading='Add To Cart' >
-            <Grid container spacing={3}>
-                <Grid item xs={12} >
-                    <LocalizationProvider dateAdapter={DateAdapter}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12} md={6}>
-                                <DesktopDatePicker
-                                    label="Date desktop"
-                                    inputFormat="MM/dd/yyyy"
-                                    value={dateTime}
-                                    onChange={handleDateChange}
-                                    renderInput={(params) => <TextField sx={{ width: '100%' }} {...params} />}
-                                />
+            <form>
+                <Grid container spacing={3}>
+                    <Grid item xs={12} >
+                        <LocalizationProvider dateAdapter={DateAdapter}>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} md={6}>
+                                    <DesktopDatePicker
+                                        label="Date desktop"
+                                        inputFormat="MM/dd/yyyy"
+                                        value={dateTime}
+                                        onChange={handleDateChange}
+                                        renderInput={(params) => <TextField sx={{ width: '100%' }} {...params} />}
+                                    />
+                                </Grid>
+                                <Grid item xs={12} md={6}>
+                                    <TimePicker
+                                        label="Time"
+                                        value={dateTime}
+                                        onChange={handleDateChange}
+                                        renderInput={(params) => <TextField sx={{ width: '100%' }}  {...params} />}
+                                    />
+                                </Grid>
                             </Grid>
-                            <Grid item xs={12} md={6}>
-                                <TimePicker
-                                    label="Time"
-                                    value={dateTime}
-                                    onChange={handleDateChange}
-                                    renderInput={(params) => <TextField sx={{ width: '100%' }}  {...params} />}
-                                />
+                        </LocalizationProvider>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <FormControl fullWidth>
+                            <InputLabel id="item-customer">{t('Customer')}</InputLabel>
+                            <Select
+                                labelId="item-customer"
+                                id="item-customer-select"
+                                value={customer}
+                                label="Customer"
+                                onChange={handleCustomerChange}
+                            >
+                                {
+                                    customers.map(customer => {
+                                        return <MenuItem key={customer.id} value={customer.id}>{customer.name}</MenuItem>
+                                    })
+                                }
+                            </Select>
+                        </FormControl>
+                        {customerDataError && <Message notExist>{t(`Please Choose Customer`)}</Message>}
+                    </Grid>
+                    {
+                        customerData && (
+                            <Grid item xs={12}>
+                                <CustomerCard>
+                                    <CustomerName>{customerData.name}</CustomerName>
+                                    <CustomerInfo>
+                                        <li><MailIcon sx={{ mr: 1 }} />{customerData.email}</li>
+                                        <li><PhoneAndroidIcon sx={{ mr: 1 }} />{customerData.phone}</li>
+                                    </CustomerInfo>
+                                </CustomerCard>
                             </Grid>
-                        </Grid>
-                    </LocalizationProvider>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <FormControl fullWidth>
-                        <InputLabel id="item-customer">{t('Customer')}</InputLabel>
-                        <Select
-                            labelId="item-customer"
-                            id="item-customer-select"
-                            value={customer}
-                            label="Customer"
-                            onChange={handleCustomerChange}
-                        >
-                            {
-                                customers.map(customer => {
-                                    return <MenuItem key={customer.id} value={customer.id}>{customer.name}</MenuItem>
-                                })
-                            }
-                        </Select>
-                    </FormControl>
-                </Grid>
-                {
-                    customerData && (
-                        <Grid item xs={12}>
-                            <CustomerCard>
-                                <CustomerName>{customerData.name}</CustomerName>
-                                <CustomerInfo>
-                                    <li><MailIcon sx={{ mr: 1 }} />{customerData.email}</li>
-                                    <li><PhoneAndroidIcon sx={{ mr: 1 }} />{customerData.phone}</li>
-                                </CustomerInfo>
-                            </CustomerCard>
-                        </Grid>
-                    )
-                }
-                <Grid item xs={12}>
-                    {cartData.services.length === 0 && (
-                        <CustomMessage>
-                            <p>{t('No Services')}</p>
-                        </CustomMessage>
-                    )}
-                    {cartData.services.length > 0 && (
-                        <TableContainer component={Paper} sx={{ my: 2 }}>
-                            <Table aria-label="services table">
-                                <SharedTableHead />
-                                <TableBody>
-                                    {cartData.services.map((row) => (
-                                        <CartItem type='services' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} />
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    )}
-                </Grid>
-                <Grid item xs={12}>
-                    {cartData.products.length === 0 && (
-                        <CustomMessage>
-                            <p>{t('No Products')}</p>
-                        </CustomMessage>
-                    )}
-                    {cartData.products.length > 0 && (
-                        <TableContainer component={Paper} sx={{ my: 2 }}>
-                            <Table aria-label="products table">
-                                <SharedTableHead />
-                                <TableBody>
-                                    {cartData.products.map((row) => (
-                                        <CartItem type='products' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} />
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    )}
-                </Grid>
-                <Grid item xs={12}>
-                    {cartData.deals.length === 0 && (
-                        <CustomMessage>
-                            <p>{t('No Deals')}</p>
-                        </CustomMessage>
-                    )}
-                    {cartData.deals.length > 0 && (
-                        <TableContainer component={Paper} sx={{ my: 2 }}>
-                            <Table aria-label="deals table">
-                                <SharedTableHead />
-                                <TableBody>
-                                    {cartData.deals.map((row) => (
-                                        <CartItem type='deals' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} />
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    )}
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        type="number"
-                        label={t('Discount')}
-                        id="discount-value"
-                        sx={{ width: '100%' }}
-                        value={discount}
-                        onChange={(e) => setDiscount(e.target.value)}
-                        InputProps={{
-                            startAdornment: <InputAdornment position="start">%</InputAdornment>,
-                        }}
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <CouponWrapper>
+                        )
+                    }
+                    <Grid item xs={12}>
+                        {cartData.services.length === 0 && (
+                            <CustomMessage>
+                                <p>{t('No Services')}</p>
+                            </CustomMessage>
+                        )}
+                        {cartData.services.length > 0 && (
+                            <TableContainer component={Paper} sx={{ my: 2 }}>
+                                <Table aria-label="services table">
+                                    <SharedTableHead />
+                                    <TableBody>
+                                        {cartData.services.map((row) => (
+                                            <CartItem type='services' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} />
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        )}
+                    </Grid>
+                    <Grid item xs={12}>
+                        {cartData.products.length === 0 && (
+                            <CustomMessage>
+                                <p>{t('No Products')}</p>
+                            </CustomMessage>
+                        )}
+                        {cartData.products.length > 0 && (
+                            <TableContainer component={Paper} sx={{ my: 2 }}>
+                                <Table aria-label="products table">
+                                    <SharedTableHead />
+                                    <TableBody>
+                                        {cartData.products.map((row) => (
+                                            <CartItem type='products' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} />
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        )}
+                    </Grid>
+                    <Grid item xs={12}>
+                        {cartData.deals.length === 0 && (
+                            <CustomMessage>
+                                <p>{t('No Deals')}</p>
+                            </CustomMessage>
+                        )}
+                        {cartData.deals.length > 0 && (
+                            <TableContainer component={Paper} sx={{ my: 2 }}>
+                                <Table aria-label="deals table">
+                                    <SharedTableHead />
+                                    <TableBody>
+                                        {cartData.deals.map((row) => (
+                                            <CartItem type='deals' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} />
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        )}
+                        {cartDataError && (
+                            <Message notExist>{t('Please Add Something')}</Message>
+                        )}
+                    </Grid>
+                    <Grid item xs={12}>
                         <TextField
-                            label={t('Coupon')}
-                            id="coupon-value"
-                            sx={{ flexGrow: '1' }}
-                            value={coupon}
-                            onChange={couponChangeHandler}
+                            type="number"
+                            label={t('Discount')}
+                            id="discount-value"
+                            sx={{ width: '100%' }}
+                            value={discount}
+                            onChange={discountChangeHandler}
+                            InputProps={{
+                                startAdornment: <InputAdornment position="start">%</InputAdornment>,
+                            }}
                         />
-                        {couponExists && <Message exist>{t('Coupon Exists')}</Message>}
-                        {!couponExists && coupon !== '' ? <Message notExist>{t(`Coupon Doesn't Exist`)}</Message> : null}
-                    </CouponWrapper>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <CouponWrapper>
+                            <TextField
+                                label={t('Coupon')}
+                                id="coupon-value"
+                                sx={{ flexGrow: '1' }}
+                                value={coupon}
+                                onChange={couponChangeHandler}
+                            />
+                            {couponExists && <Message exist>{t('Coupon Exists')}</Message>}
+                            {!couponExists && coupon !== '' ? <Message notExist>{t(`Coupon Doesn't Exist`)}</Message> : null}
+                        </CouponWrapper>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <PriceCalculation>
+                            <p>{t('total taxes')}</p>
+                            <p>{totalTaxes.toFixed(2)}</p>
+                        </PriceCalculation>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <PriceCalculation>
+                            <p>{t('price after discount')}</p>
+                            <p>{totalPrice.toFixed(2)}</p>
+                        </PriceCalculation>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <CardActions>
+                            <ButtonText variant='text' onClick={resetCartHandler}>{t('reset cart')}</ButtonText>
+                            <ButtonConfirm variant='contained' onClick={purchaseCartHandler}>{t('purchase')}</ButtonConfirm>
+                        </CardActions>
+                    </Grid>
                 </Grid>
-                <Grid item xs={12}>
-                    <PriceCalculation>
-                        <p>{t('total taxes')}</p>
-                        <p>{totalTaxes.toFixed(2)}</p>
-                    </PriceCalculation>
-                </Grid>
-                <Grid item xs={12}>
-                    <PriceCalculation>
-                        <p>{t('price after discount')}</p>
-                        <p>{totalPrice.toFixed(2)}</p>
-                    </PriceCalculation>
-                </Grid>
-                <Grid item xs={12}>
-                    <CardActions>
-                        <ButtonText variant='text' onClick={resetCartHandler}>{t('reset cart')}</ButtonText>
-                        <ButtonConfirm variant='contained' onClick={purchaseCartHandler}>{t('purchase')}</ButtonConfirm>
-                    </CardActions>
-                </Grid>
-            </Grid>
+            </form>
         </CustomCard>
     )
 }
