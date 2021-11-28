@@ -47,13 +47,13 @@ const DisplayValue = styled.div`
 
 const Increment = props => {
 
-    const { increment, decrement, value } = props
+    const { increment, decrement, value, id, type } = props
 
     return (
         <Wrapper>
             <ActionButton onClick={decrement}><RemoveIcon/></ActionButton>
             <DisplayValue>{value}</DisplayValue>
-            <ActionButton onClick={increment}><AddIcon/></ActionButton>
+            <ActionButton onClick={ ( ) =>  increment(type, id) }><AddIcon/></ActionButton>
         </Wrapper>
     )
 }

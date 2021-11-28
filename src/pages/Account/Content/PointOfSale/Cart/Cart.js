@@ -93,7 +93,7 @@ const customers = [
 
 const Cart = props => {
 
-    const { cartData, removeFromCart } = props;
+    const { cartData, removeFromCart, increaseItem } = props;
 
     const { t } = useTranslation()
 
@@ -184,7 +184,7 @@ const Cart = props => {
                                 <SharedTableHead />
                                 <TableBody>
                                     {cartData.services.map((row) => (
-                                        <CartItem type='services' key={row.id} row={row} remove={removeFromCart} />
+                                        <CartItem type='services' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} />
                                     ))}
                                 </TableBody>
                             </Table>
@@ -203,7 +203,7 @@ const Cart = props => {
                                 <SharedTableHead />
                                 <TableBody>
                                     {cartData.products.map((row) => (
-                                        <CartItem type='products' key={row.id} row={row} remove={removeFromCart} />
+                                        <CartItem type='products' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} />
                                     ))}
                                 </TableBody>
                             </Table>
@@ -222,7 +222,7 @@ const Cart = props => {
                                 <SharedTableHead />
                                 <TableBody>
                                     {cartData.deals.map((row) => (
-                                        <CartItem type='deals' key={row.id} row={row} remove={removeFromCart} />
+                                        <CartItem type='deals' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} />
                                     ))}
                                 </TableBody>
                             </Table>

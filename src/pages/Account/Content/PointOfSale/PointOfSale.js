@@ -30,6 +30,16 @@ const cartReducer = (state, action) => {
             return updateObject(state, {
                 services: filteredServices,
             })
+        case 'INCREASE_SERVICE' :
+            const increasedServiceIndex = state.services.findIndex(service => service.id === action.payload);
+            const increasedServices = [...state.services]
+            const increasedService = increasedServices[increasedServiceIndex]
+            console.log(increasedService)
+            increasedService.quantity = increasedService.quantity + 1
+            increasedServices[increasedServiceIndex] = increasedService
+            return updateObject(state, {
+                services: increasedServices,
+            })
         case 'ADD_TO_PRODUCTS':
             const productIndex = state.products.findIndex(product => product.id === action.payload.id);
             const updatedProducts = [...state.products]
@@ -48,6 +58,15 @@ const cartReducer = (state, action) => {
             return updateObject(state, {
                 products: filteredProducts,
             })
+        case 'INCREASE_PRODUCT' :
+            const increasedProductIndex = state.products.findIndex(product => product.id === action.payload);
+            const increasedProducts = [...state.products]
+            const increasedProduct = increasedProducts[increasedProductIndex]
+            increasedProduct.quantity = increasedProduct.quantity + 1
+            increasedProducts[increasedProductIndex] = increasedProduct
+            return updateObject(state, {
+                products: increasedProducts,
+            })
         case 'ADD_TO_DEALS':
             const dealIndex = state.deals.findIndex(deal => deal.id === action.payload.id);
             const updatedDeals = [...state.deals]
@@ -65,6 +84,15 @@ const cartReducer = (state, action) => {
             const filteredDeals = state.deals.filter(deal => deal.id !== action.payload)
             return updateObject(state, {
                 deals: filteredDeals,
+            })
+        case 'INCREASE_DEAL' :
+            const increasedDealIndex = state.deals.findIndex(deal => deal.id === action.payload);
+            const increasedDeals = [...state.deals]
+            const increasedDeal = increasedDeals[increasedDealIndex]
+            increasedDeal.quantity = increasedDeal.quantity + 1
+            increasedDeals[increasedDealIndex] = increasedDeal
+            return updateObject(state, {
+                deals: increasedDeals,
             })
         case 'REMOVE_FROM_CART':
             return state.filter(item => item.id !== action.payload);
@@ -123,7 +151,7 @@ const PointOfSale = ( props ) => {
         }
     }, [filterDealsHandler, filterProductsHandler, filterServicesHandler, lang])
 
-    const AddToCartHandler = useCallback(( itemData ) => {
+    const addToCartHandler = useCallback(( itemData ) => {
         if ( shownType === 'services' ) {
             dispatch({
                 type: 'ADD_TO_SERVICES',
@@ -144,7 +172,7 @@ const PointOfSale = ( props ) => {
         }
     }, [shownType])
 
-    const RemoveFromCartHandler = useCallback(( type, itemId ) => {
+    const removeFromCartHandler = useCallback(( type, itemId ) => {
         console.log(type, itemId)
         if (type === 'services') {
             dispatch({
@@ -166,16 +194,36 @@ const PointOfSale = ( props ) => {
         }
     } , [])
 
+    const increaseItemHandler = useCallback(( type, itemId ) => {
+        if (type === 'services') {
+            dispatch({
+                type: 'INCREASE_SERVICE',
+                payload: itemId
+            })
+        }
+        if (type === 'products') {
+            dispatch({
+                type: 'INCREASE_PRODUCT',
+                payload: itemId
+            })
+        }
+        if (type === 'deals') {
+            dispatch({
+                type: 'INCREASE_DEAL',
+                payload: itemId
+            })
+        }
+    } , [])
     return (
         <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
                 <CustomCard heading='view services' >
                     <SearchFilters resultsHandler= {handleResultsChange}  />
-                    <FilteredResults results={shownType} addToCart={AddToCartHandler} />
+                    <FilteredResults results={shownType} addToCart={addToCartHandler} />
                 </CustomCard>
             </Grid>
             <Grid item xs={12} md={6}>
-                <Cart cartData={cart} removeFromCart={RemoveFromCartHandler} />
+                <Cart cartData={cart} removeFromCart={removeFromCartHandler} increaseItem={increaseItemHandler} />
             </Grid>
         </Grid>
     )

@@ -26,7 +26,7 @@ const CartItem = props => {
                 <TableData>{row.quantity}</TableData>
             </TableCell>
             <TableCell align="center">
-                <Increment increment={() => {}}  decrement={() => {}} value={row.quantity} />
+                <Increment id={row.id} type={type} increment={increase}  decrement={() => {}} value={row.quantity} />
             </TableCell>
             <TableCell align="center">
                 <Actions remove
