@@ -282,12 +282,12 @@ const Cart = props => {
             return;
         }
         const data = {
-            customer: customerData,
+            customerId: customerData.id,
             dateTime: dateTime,
             cart: cartData,
             totalPrice: totalPrice,
             totalTaxes: totalTaxes,
-            coupon: couponData,
+            couponId: couponData.id,
             discount: discount,
         }
         purchase(data);

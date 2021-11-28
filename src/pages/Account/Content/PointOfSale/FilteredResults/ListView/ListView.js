@@ -69,7 +69,6 @@ const ListView = ( props ) => {
         const addedItem = data[addedItemIndex];
         const addedItemData = {
             id: addedItem.id,
-            name: addedItem.name,
             price: addedItem.discounted_price,
             quantity: 1,
             type: type,
