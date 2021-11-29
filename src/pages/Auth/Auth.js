@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import axios from '../../utils/axios-instance';
+import axios from '../../utils/axios-instance-v1';
 import useForm from '../../hooks/useForm';
 import { loginForm, subscribeForm } from '../../utils/formConfig';
 import { useNavigate } from 'react-router-dom';
