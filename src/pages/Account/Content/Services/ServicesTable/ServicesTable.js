@@ -62,8 +62,8 @@ function ServicesTable(props) {
     const [selectedServiceId, setSelectedServiceId] = useState(null);
 
     useEffect(() => {
-        fetchServicesHandler(lang, token, page);
-    }, [fetchServicesHandler, lang, token, page]);
+        fetchServicesHandler(lang, token, page,rowsPerPage );
+    }, [fetchServicesHandler, lang, token, page, rowsPerPage]);
 
     useEffect(() => {
         if (fetchedServices.per_page) {
@@ -160,7 +160,7 @@ function ServicesTable(props) {
                     <TablePaginationActions
                         component="div"
                         count={fetchedServices.data.length}
-                        total={fetchedServices.total}
+                        total={fetchedServices.meta &&  fetchedServices.meta.total}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onPageChange={handleChangePage}
@@ -198,7 +198,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchServicesHandler: (language, token, page) => dispatch(fetchServices(language, token, page)),
+        fetchServicesHandler: (language, token, page, perPage) => dispatch(fetchServices(language, token, page, perPage)),
         deleteServiceHandler: (token, id) => dispatch(deleteService(token, id)),
     }
 }

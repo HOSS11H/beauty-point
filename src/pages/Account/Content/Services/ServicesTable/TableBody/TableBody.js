@@ -5,11 +5,13 @@ import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import { TableData, TableEmployees, TableImg, TableStatus } from '../../../../../../components/UI/Dashboard/Table/Table';
 
+import Typography from '@mui/material/Typography';
+
 
 
 const EnhancedTableBody = props => {
 
-    const {fetchedServices, emptyRows, deleteModalOpenHandler, viewModalOpenHandler, editModalOpenHandler } = props;
+    const { fetchedServices, emptyRows, deleteModalOpenHandler, viewModalOpenHandler, editModalOpenHandler } = props;
 
     return (
         <TableBody>
@@ -27,7 +29,7 @@ const EnhancedTableBody = props => {
                             scope="row"
                         >
                             <TableImg>
-                                <img src={row.service_image_url} alt="" />
+                                <img src={row.image} alt="" />
                             </TableImg>
                         </TableCell>
                         <TableCell align="center">
@@ -47,18 +49,24 @@ const EnhancedTableBody = props => {
                         </TableCell>
                         <TableCell align="center">
                             <TableData>
-                                {row.formated_price}
+                                <span>{row.price}</span>
+                                <Typography variant="caption" sx={{ ml: '4px' }} display="inline-block">
+                                    ريال
+                                </Typography>
                             </TableData>
                         </TableCell>
                         <TableCell align="center">
                             <TableData>
-                                {row.formated_discounted_price}
+                                <span>{row.price_after_discount}</span>
+                                <Typography variant="caption" sx={{ ml: '4px' }} display="inline-block">
+                                    ريال
+                                </Typography>
                             </TableData>
                         </TableCell>
                         <TableCell align="center">
                             <TableEmployees>
                                 {
-                                    row.users.map((employee, index) => {
+                                    row.users &&  row.users.map((employee, index) => {
                                         let loadedEmployees;
                                         if (employee) {
                                             loadedEmployees = (
@@ -66,7 +74,7 @@ const EnhancedTableBody = props => {
                                             )
                                         }
                                         return loadedEmployees;
-                                    })
+                                        })
                                 }
                             </TableEmployees>
                         </TableCell>

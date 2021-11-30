@@ -76,7 +76,7 @@ const ViewModal = (props) => {
             <Grid container  spacing={2}>
                 <Grid item xs={12} md={6}>
                     <ServiceImg>
-                        <img src={serviceData.service_image_url} alt="service" />
+                        <img src={serviceData.image} alt="service" />
                     </ServiceImg>
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -108,7 +108,7 @@ const ViewModal = (props) => {
                         <Grid item xs={6}>
                             <ServiceData>
                                 <ServiceDataHeading>{t('discount price')}</ServiceDataHeading>
-                                <ServiceDataInfo>{serviceData.discount}</ServiceDataInfo>
+                                <ServiceDataInfo>{serviceData.discount} {serviceData.discount_type === 'percent' ? '%' : 'ريال' }</ServiceDataInfo>
                             </ServiceData>
                         </Grid>
                     </Grid>

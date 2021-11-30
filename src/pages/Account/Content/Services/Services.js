@@ -11,7 +11,7 @@ function Services(props) {
 
     return (
         <Fragment>
-            <SearchBar searchHandler={searchServicesHandler}/>
+            {/* <SearchBar searchHandler={searchServicesHandler}/> */}
             <ServicesTable />
         </Fragment>
     );

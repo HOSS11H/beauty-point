@@ -70,6 +70,8 @@ const resources = {
             'No Services Found': 'لا توجد خدمات',
             'No Products Found': 'لا توجد منتجات',
             'discount': 'الخصم',
+            'discount price': 'سعر الخصم',
+            'service name': 'اسم الخدمة',
         }
     }
 };

@@ -21,6 +21,7 @@ const ActionButton = styled.button`
     color: ${({ theme }) => theme.palette.common.white};
     flex-shrink: 0;
     margin-right: 10px;
+    cursor: pointer;
     &:last-child {
         margin-right: 0;
     }

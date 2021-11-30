@@ -19,10 +19,10 @@ export const fetchServicesFailed = ( errorMessage ) => {
         error: errorMessage,
     }
 }
-export const fetchServices = ( language, token , page ) => {
+export const fetchServices = ( language, token , page, perPage ) => {
     return dispatch => {
         dispatch( fetchServicesStart( ) )
-        axios.get(`/vendors/services?page=${page + 1}`, { 
+        axios.get(`/vendors/services?page=${page + 1}&per_page=15&include[]=category&include[]=location&include[]=bookingItems&include[]=company`, { 
             headers: {
                 'Accept-Language': language
             }
