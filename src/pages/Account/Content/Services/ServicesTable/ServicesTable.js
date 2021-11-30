@@ -173,13 +173,16 @@ function ServicesTable(props) {
                 <ViewModal show={viewModalOpened} id={selectedServiceId} fetchedServices={fetchedServices}
                     onClose={viewModalCloseHandler} onConfirm={viewModalConfirmHandler.bind(null, selectedServiceId)}
                     heading='view service details' confirmText='edit' />
-                <EditModal show={editModalOpened} id={selectedServiceId} fetchedServices={fetchedServices}
-                    onClose={editModalCloseHandler} onConfirm={editModalConfirmHandler.bind(null, selectedServiceId)}
-                    heading='edit service details' confirmText='edit' />
+                {
+                    editModalOpened && (
+                        <EditModal show={editModalOpened} id={selectedServiceId} fetchedServices={fetchedServices}
+                            onClose={editModalCloseHandler} onConfirm={editModalConfirmHandler.bind(null, selectedServiceId)}
+                            heading='edit service details' confirmText='edit' />
+                    )
+                }
             </Fragment>
         )
     }
-
     return (
         <ServicesTableWrapper>
             {content}

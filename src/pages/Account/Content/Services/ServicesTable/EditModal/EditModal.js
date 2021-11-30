@@ -1,5 +1,5 @@
 import ThemeContext from '../../../../../../store/theme-context'
-import { useMemo, useState, useEffect, useCallback, useContext } from 'react';
+import { useState, useEffect, useCallback, useContext } from 'react';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 
@@ -25,9 +25,10 @@ import ImageUploading from 'react-images-uploading';
 
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { EditorState, convertToRaw, ContentState  } from 'draft-js';
-import draftToHtml from 'draftjs-to-html';
+import { EditorState, ContentState  } from 'draft-js';
 import htmlToDraft from 'html-to-draftjs';
+import { connect } from 'react-redux';
+import { fetchEmployees } from '../../../../../../store/actions/index';
 
 
 const CustomTextField = styled(TextField)`
@@ -146,18 +147,6 @@ const MenuProps = {
     },
 };
 
-const names = [
-    'Oliver Hansen',
-    'Van Henry',
-    'April Tucker',
-    'Ralph Hubbard',
-    'Omar Alexander',
-    'Carlos Abbott',
-    'Miriam Wagner',
-    'Bradley Wilkerson',
-    'Virginia Andrews',
-    'Kelly Snyder',
-];
 function getStyles(name, employeeName, theme) {
     return {
         fontWeight:
@@ -169,123 +158,88 @@ function getStyles(name, employeeName, theme) {
 
 
 const EditModal = (props) => {
-
-    let serviceData = useMemo(() => {
-        return {
-            name: '',
-            slug: '',
-            price: '',
-            discount: '',
-            discount_type: 'percent',
-            net_price: '',
-            empolyees: [{ id: '1', name: 'abeer', }, { id: '2', name: 'abeer', }, { id: '3', name: 'abeer', }],
-            status: 'active',
-            description: ',<h3>Describe</h3>',
-        }
-    }, []);
-
+    
+    const { show, heading, confirmText, onConfirm, onClose, id, fetchedServices, fetchedEmployees, fetchEmployeesHandler } = props;
     const { t } = useTranslation();
-
     const themeCtx = useContext(ThemeContext)
+    const {lang} = themeCtx;
 
-    const { show, heading, confirmText, onConfirm, onClose, id, fetchedServices } = props;
+    const selectedServiceIndex = fetchedServices.data.findIndex(service => service.id === id);
 
-    const [images, setImages] = useState([]);
+    let serviceData = fetchedServices.data[selectedServiceIndex];
 
+    const { name, description, price, discount, discount_type, price_after_discount, users = [] , status, images, image } = serviceData;
+
+    
+    const [serviceName, setServiceName] = useState(name);
+    
+    const html = description;
+    const contentBlock = htmlToDraft(html);
+    const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+
+    const [editorState, setEditorState] = useState(EditorState.createWithContent(contentState))
+
+    const [servicePrice, setServicePrice] = useState(price);
+
+    const [serviceDiscount, setServiceDiscount] = useState(discount);
+
+    const [discountType, setDiscountType] = useState(discount_type);
+
+    const [priceAfterDiscount, setPriceAfterDiscount] = useState(price_after_discount);
+
+    const [employeeName, setEmployeeName] = useState(users);
+
+    const [serviceStatus, setServiceStatus] = useState(status);
+
+    const [ uploadedImages, setUploadedImages] = useState(images);
+
+    const [defaultImage, setDefaultImage] = useState(image);
+    
     const maxNumber = 69;
 
-    const [defaultImage, setDefaultImage] = useState('');
-
-    const defaultImageHandler = (event) => {
-        setDefaultImage(event.target.value);
-    };
-
-    const [serviceName, setServiceName] = useState(serviceData.name);
-
-    const [serviceSlug, setServiceSlug] = useState(serviceData.slug)
-
-    const [editorState, setEditorState] = useState(
-        EditorState.createEmpty()
-    )
-
-    // Convert Draft to HTML
-    const rawContentState = convertToRaw(editorState.getCurrentContent());
-    const markup = draftToHtml(rawContentState)
-    
-    // Convert HTML to Draft
+    useEffect(() => {
+        let netPrice;
+        if (discountType === 'percent') {
+            netPrice = (servicePrice - (servicePrice * (serviceDiscount / 100))).toFixed(2);
+            setPriceAfterDiscount(netPrice)
+        } else if (discountType === 'fixed') {
+            netPrice = (servicePrice - serviceDiscount).toFixed(2);
+            setPriceAfterDiscount(netPrice)
+        }
+    }, [discountType, serviceDiscount, servicePrice])
     
     useEffect(() => {
-        const html = serviceData.description;
-        const contentBlock = htmlToDraft(html);
-        if (contentBlock) {
-            const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
-            setEditorState(EditorState.createWithContent(contentState))
-        }
-    }, [])
-
-    const [servicePrice, setServicePrice] = useState(serviceData.price);
-
-    const [serviceDiscount, setServiceDiscount] = useState(serviceData.discount);
-
-    const [discountType, setDiscountType] = useState(serviceData.discount_type);
-
-    const [priceAfterDiscount, setPriceAfterDiscount] = useState(serviceData.net_price);
-
-    const [employeeName, setPersonName] = useState([]);
-
-    const [serviceStatus, setServiceStatus] = useState(serviceData.status);
-
-    const onImageChangeHandler = (imageList, addUpdateIndex) => {
-        // data for submit
-        setImages(imageList);
-    };
-
-    if (id) {
-        const serviceIndex = fetchedServices.data.findIndex(service => service.id === id);
-        serviceData = { ...fetchedServices.data[serviceIndex] };
-    }
-
-    useEffect(() => {
-        if (id && serviceName === '') {
-            setServiceName(serviceData.name);
-        }
-        if (id && serviceSlug === '') {
-            setServiceSlug(serviceData.slug);
-        }
-        if (id && servicePrice === '') {
-            setServicePrice(serviceData.price);
-        }
-        if (id && serviceDiscount === '') {
-            setServiceDiscount(serviceData.discount);
-        }
-        if (id && discountType === 'percent') {
-            setDiscountType(serviceData.discount_type);
-        }
-        if (id && priceAfterDiscount === '') {
-            console.log('excuted')
-            setPriceAfterDiscount(serviceData.net_price);
-        }
-        if (id && serviceStatus === '') {
-            console.log('excuted')
-            setServiceStatus(serviceData.net_price);
-        }
-    }, [serviceData, id, serviceName, serviceSlug, servicePrice, discountType, serviceDiscount, priceAfterDiscount, serviceStatus]);
+        fetchEmployeesHandler(lang);
+    }, [fetchEmployeesHandler, lang])
 
 
     const serviceNameChangeHandler = (event) => {
         setServiceName(event.target.value);
-        setServiceSlug(event.target.value.replace(/\s+/g, '-').toLowerCase());
     }
+    
+    const onImageChangeHandler = (imageList, addUpdateIndex) => {
+        // data for submit
+        setUploadedImages(imageList);
+    };
+    const defaultImageHandler = (event) => {
+        setDefaultImage(event.target.value);
+    };
+
+
 
     const onEditorChange = newState => {
         setEditorState(newState)
         console.log(newState)
     }
     const servicePriceChangeHandler = (event) => {
-        setServicePrice(event.target.value);
+        if (event.target.value >= 0) {
+            setServicePrice(event.target.value);
+        }
     }
     const serviceDiscountChangeHandler = (event) => {
-        setServiceDiscount(event.target.value);
+        if (event.target.value >= 0) {
+            setServiceDiscount(event.target.value);
+        }
     }
     const discountTypeChangeHandler = (event) => {
         setDiscountType(event.target.value);
@@ -298,27 +252,15 @@ const EditModal = (props) => {
         const {
             target: { value },
         } = event;
-        setPersonName(
+        setEmployeeName(
             // On autofill we get a the stringified value.
             typeof value === 'string' ? value.split(',') : value,
         );
     };
 
-    useEffect(() => {
-        let netPrice;
-        if (discountType === 'percent') {
-            netPrice = (servicePrice - (servicePrice * (serviceDiscount / 100))).toFixed(2);
-            setPriceAfterDiscount(netPrice)
-        } else if (discountType === 'fixed') {
-            netPrice = (servicePrice - serviceDiscount).toFixed(2);
-            setPriceAfterDiscount(netPrice)
-        }
-    }, [discountType, serviceDiscount, servicePrice])
-
     const closeModalHandler = useCallback(() => {
         onClose();
         setServiceName('');
-        setServiceSlug('');
         setServicePrice('')
         setDiscountType('percent')
         setPriceAfterDiscount('')
@@ -329,9 +271,6 @@ const EditModal = (props) => {
         <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
                 <CustomTextField id="service-name" label={t('name')} variant="outlined" value={serviceName} onChange={serviceNameChangeHandler} />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-                <CustomTextField id="service-slug" label={t('slug')} variant="outlined" value={serviceSlug} />
             </Grid>
             <Grid item xs={12}>
                 <EditorWrapper>
@@ -345,19 +284,19 @@ const EditModal = (props) => {
                 </EditorWrapper>
             </Grid>
             <Grid item xs={12} sm={6}>
-                <CustomTextField id="service-price" label={t('price')} variant="outlined" value={servicePrice} onChange={servicePriceChangeHandler} />
+                <CustomTextField id="service-price" type='number' label={t('price')} variant="outlined" value={servicePrice} onChange={servicePriceChangeHandler} />
             </Grid>
             <Grid item xs={12} sm={6}>
                 <CustomFormGroup>
-                    <CustomTextField id="service-discount" label={t('discount')} variant="outlined" value={serviceDiscount} onChange={serviceDiscountChangeHandler} />
+                    <CustomTextField id="service-discount" type='number' label={t('discount')} variant="outlined" value={serviceDiscount} onChange={serviceDiscountChangeHandler} />
                     <FormControl sx={{ minWidth: 120, ml: 1 }}>
                         <Select
                             value={discountType}
                             onChange={discountTypeChangeHandler}
                             inputProps={{ 'aria-label': 'Without label' }}
                         >
-                            <MenuItem value='percent'>percent</MenuItem>
-                            <MenuItem value='fixed'>fixed</MenuItem>
+                            <MenuItem value='percent'>{t('Percent')}</MenuItem>
+                            <MenuItem value='fixed'>{t('Fixed')}</MenuItem>
                         </Select>
                     </FormControl>
                 </CustomFormGroup>
@@ -387,13 +326,13 @@ const EditModal = (props) => {
                         )}
                         MenuProps={MenuProps}
                     >
-                        {names.map((name) => (
+                        {fetchedEmployees.map((user) => (
                             <MenuItem
-                                key={name}
-                                value={name}
-                                style={getStyles(name, employeeName, themeCtx.theme)}
+                                key={user.id}
+                                value={user.name}
+                                style={getStyles(user.name, employeeName, themeCtx.theme)}
                             >
-                                {name}
+                                {user.name}
                             </MenuItem>
                         ))}
                     </Select>
@@ -402,7 +341,7 @@ const EditModal = (props) => {
             <Grid item xs={12}>
                 <ImageUploading
                     multiple
-                    value={images}
+                    value={uploadedImages}
                     onChange={onImageChangeHandler}
                     maxNumber={maxNumber}
                     dataURLKey="data_url"
@@ -470,7 +409,6 @@ const EditModal = (props) => {
             </Grid>
         </Grid>
     )
-
     return (
         <CustomModal show={show} heading={heading} confirmText={confirmText} onConfirm={onConfirm} onClose={closeModalHandler} >
             {content}
@@ -478,4 +416,17 @@ const EditModal = (props) => {
     )
 }
 
-export default EditModal;
+const mapStateToProps = (state) => {
+    return {
+        fetchedEmployees: state.employees.employees,
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchEmployeesHandler: (lang) => dispatch(fetchEmployees(lang)),
+    }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditModal);

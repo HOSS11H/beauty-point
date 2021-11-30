@@ -26,3 +26,6 @@ export {
 export {
     fetchCategories,
 } from './categories'
+export {
+    fetchEmployees,
+} from './employees'

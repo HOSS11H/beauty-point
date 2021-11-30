@@ -6,6 +6,7 @@ import TableRow from '@mui/material/TableRow';
 import { TableData, TableEmployees, TableImg, TableStatus } from '../../../../../../components/UI/Dashboard/Table/Table';
 
 import Typography from '@mui/material/Typography';
+import { formatCurrency } from '../../../../../../shared/utility';
 
 
 
@@ -49,18 +50,12 @@ const EnhancedTableBody = props => {
                         </TableCell>
                         <TableCell align="center">
                             <TableData>
-                                <span>{row.price}</span>
-                                <Typography variant="caption" sx={{ ml: '4px' }} display="inline-block">
-                                    ريال
-                                </Typography>
+                                <span>{formatCurrency(row.price)}</span>
                             </TableData>
                         </TableCell>
                         <TableCell align="center">
                             <TableData>
-                                <span>{row.price_after_discount}</span>
-                                <Typography variant="caption" sx={{ ml: '4px' }} display="inline-block">
-                                    ريال
-                                </Typography>
+                                <span>{formatCurrency(row.price_after_discount)}</span>
                             </TableData>
                         </TableCell>
                         <TableCell align="center">

@@ -26,9 +26,9 @@ export const fetchCategories = ( language ) => {
             headers: {
                 'Accept-Language': language
             }
-        }).then( response => {
-                dispatch( fetchCategoriesSuccess( response.data  ) );
-            })
+            }).then( response => {
+                    dispatch( fetchCategoriesSuccess( response.data  ) );
+                })
             .catch( err => {
                 console.log(err)
                 dispatch( fetchCategoriesFailed( err.message  ) )
