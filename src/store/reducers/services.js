@@ -9,6 +9,9 @@ const intialState = {
     deletingService: false,
     deletingServiceSuccess: false,
     deletingServiceMessage: null,
+    updatingService: true,
+    updatingServiceSuccess: false,
+    updatingServiceMessage: null,
     searchingServices: false,
     searchingServicesSuccess: false,
 } ;
@@ -38,10 +41,7 @@ const reducer = ( state = intialState , action ) => {
                 deletingServiceMessage: null,
             })
         case ( actionTypes.DELETE_SERVICE_SUCCESS ) :
-            console.log(action.serviceId)
-
             const updatedServices = state.services.data.filter( service => service.id !== action.serviceId );
-            console.log( state.services.data, updatedServices );
             return updateObject( state , {
                 services: {
                     ...state.services,
@@ -57,6 +57,34 @@ const reducer = ( state = intialState , action ) => {
                 deletingService: false,
                 deletingServiceSuccess: false,
                 deletingServiceMessage: action.message,
+            })
+        case ( actionTypes.UPDATE_SERVICE_START ) :
+            return updateObject( state , {
+                updatingService: true,
+                updatingServiceSuccess: false,
+                updatingServiceMessage: null,
+            })
+        case ( actionTypes.UPDATE_SERVICE_SUCCESS ) :
+            const editedServiceIndex = state.services.findIndex(service => service.id === action.serviceData.id);
+            const editedService = {...state.services[editedServiceIndex]}
+            
+            const editedServices = [...state.services]
+            editedServices[editedServiceIndex] = editedService
+            
+            return updateObject( state , {
+                services: {
+                    ...state.services,
+                    data: editedServices,
+                },
+                updatingService: false,
+                updatingServiceSuccess: true,
+                updatingServiceMessage: action.message,
+            })
+        case ( actionTypes.UPDATE_SERVICE_FAILED ) :
+            return updateObject( state , {
+                updatingService: false,
+                updatingServiceSuccess: false,
+                updatingServiceMessage: action.message,
             })
         case ( actionTypes.SEARCH_SERVICES_START ) :
             return updateObject( state , {

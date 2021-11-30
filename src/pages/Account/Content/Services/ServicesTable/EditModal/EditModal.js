@@ -25,7 +25,7 @@ import ImageUploading from 'react-images-uploading';
 
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { EditorState, convertToRaw, ContentState  } from 'draft-js';
+import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 import { connect } from 'react-redux';
@@ -111,11 +111,11 @@ const EditorWrapper = styled.div`
         left: auto;
     }
     .rdw-dropdown-selectedtext {
-        color: ${ ( { theme } ) => theme.palette.common.black };
+        color: ${({ theme }) => theme.palette.common.black};
         justify-content: space-between;
     }
     .rdw-dropdown-optionwrapper {
-        color: ${ ( { theme } ) => theme.palette.common.black };
+        color: ${({ theme }) => theme.palette.common.black};
     }
     .rdw-embedded-modal {
         background-color: ${({ theme }) => theme.palette.background.default};
@@ -151,7 +151,7 @@ const MenuProps = {
 };
 
 function getStyles(employee, employeeName, theme) {
-    const selectedIndex = employeeName.findIndex( name => name.id === employee.id);
+    const selectedIndex = employeeName.findIndex(name => name.id === employee.id);
     return {
         fontWeight:
             selectedIndex === -1
@@ -162,27 +162,26 @@ function getStyles(employee, employeeName, theme) {
 
 
 const EditModal = (props) => {
-    
+
     const { show, heading, confirmText, onConfirm, onClose, id, fetchedServices, fetchedEmployees, fetchEmployeesHandler } = props;
     const { t } = useTranslation();
     const themeCtx = useContext(ThemeContext)
-    const {lang} = themeCtx;
+    const { lang } = themeCtx;
 
     const selectedServiceIndex = fetchedServices.data.findIndex(service => service.id === id);
 
     let serviceData = fetchedServices.data[selectedServiceIndex];
 
-    const { name, description, price, discount, discount_type, price_after_discount, users = [{
-        "id": 3,
-        "name": "Malik Griffith",
-        "email": "malik@example.com",
-        "mobile": "1111",
-        "calling_code": null
-    },] , status, images, image } = serviceData;
+    const { name, description, price, discount, discount_type, price_after_discount, users = [], status, images, image } = serviceData;
 
-    
+    let employeesIds = [];
+    users.map(employee => {
+        employeesIds.push(employee.id)
+        return employeesIds;
+    })
+
     const [serviceName, setServiceName] = useState(name);
-    
+
     const html = description;
     const contentBlock = htmlToDraft(html);
     const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
@@ -197,14 +196,14 @@ const EditModal = (props) => {
 
     const [priceAfterDiscount, setPriceAfterDiscount] = useState(price_after_discount);
 
-    const [employeeName, setEmployeeName] = useState(users);
+    const [employeeName, setEmployeeName] = useState(employeesIds);
 
     const [serviceStatus, setServiceStatus] = useState(status);
 
-    const [ uploadedImages, setUploadedImages] = useState(images);
+    const [uploadedImages, setUploadedImages] = useState(images);
 
     const [defaultImage, setDefaultImage] = useState(image);
-    
+
     const maxNumber = 69;
 
     useEffect(() => {
@@ -217,7 +216,7 @@ const EditModal = (props) => {
             setPriceAfterDiscount(netPrice)
         }
     }, [discountType, serviceDiscount, servicePrice])
-    
+
     useEffect(() => {
         fetchEmployeesHandler(lang);
     }, [fetchEmployeesHandler, lang])
@@ -226,7 +225,7 @@ const EditModal = (props) => {
     const serviceNameChangeHandler = (event) => {
         setServiceName(event.target.value);
     }
-    
+
     const onImageChangeHandler = (imageList, addUpdateIndex) => {
         // data for submit
         setUploadedImages(imageList);
@@ -266,23 +265,19 @@ const EditModal = (props) => {
             typeof value === 'string' ? value.split(',') : value,
         );
     };
-
+    console.log(employeeName)
     const closeModalHandler = useCallback(() => {
         onClose();
-        setServiceName('');
-        setServicePrice('')
-        setDiscountType('percent')
-        setPriceAfterDiscount('')
     }, [onClose])
 
     const confirmEditHandler = useCallback(() => {
-
-        let employeesIds = [ ];
-        employeeName.map(employee => {
-            employeesIds.push(employee.id)
-            return employeesIds;
+        const employeesData = [];
+        employeeName.map(employeeId => {
+            const employeeIndex = fetchedEmployees.findIndex(employee => employee.id === employeeId);
+            employeesData.push(fetchedEmployees[employeeIndex]);
+            return employeesData;
         })
-
+        console.log(employeesData)
         const data = {
             id: id,
             name: serviceName,
@@ -294,14 +289,15 @@ const EditModal = (props) => {
             time_type: serviceData.time_type,
             category_id: serviceData.category.id,
             location_id: serviceData.location.id,
-            employee_ids: employeesIds,
+            employee_ids: employeeName,
             status: serviceStatus,
             images: uploadedImages,
-            image: defaultImage
+            image: defaultImage,
+            users: employeesData,
         }
         onConfirm(data);
-        console.log(data)
-    }, [defaultImage, discountType, editorState, employeeName, id, onConfirm, serviceData.category.id, serviceData.location.id, serviceData.time, serviceData.time_type, serviceDiscount, serviceName, servicePrice, serviceStatus, uploadedImages])
+        console.log(data);
+    }, [defaultImage, discountType, editorState, employeeName, fetchedEmployees, id, onConfirm, serviceData.category.id, serviceData.location.id, serviceData.time, serviceData.time_type, serviceDiscount, serviceName, servicePrice, serviceStatus, uploadedImages])
 
     let content = (
         <Grid container spacing={2}>
@@ -309,7 +305,7 @@ const EditModal = (props) => {
                 <CustomTextField id="service-name" label={t('name')} variant="outlined" value={serviceName} onChange={serviceNameChangeHandler} />
             </Grid>
             <Grid item xs={12} sm={6}>
-                <FormControl sx={{width: '100%' }}>
+                <FormControl sx={{ width: '100%' }}>
                     <Select
                         value={serviceStatus}
                         onChange={serviceStatusChangeHandler}
@@ -367,17 +363,20 @@ const EditModal = (props) => {
                         input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
                         renderValue={(selected) => (
                             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                {selected.map((value) => (
-                                    <Chip key={value.id} label={value.name} />
-                                ))}
+                                {fetchedEmployees.length > 0 && selected.map((value) => {
+                                    const selected = fetchedEmployees.find(user => user.id === value);
+                                    return (
+                                        <Chip key={selected.id} label={selected.name} />
+                                    )
+                                })}
                             </Box>
                         )}
                         MenuProps={MenuProps}
                     >
-                        { fetchedEmployees.map((employee) => (
+                        {fetchedEmployees.map((employee) => (
                             <MenuItem
                                 key={employee.id}
-                                value={employee}
+                                value={employee.id}
                                 style={getStyles(employee, employeeName, themeCtx.theme)}
                             >
                                 {employee.name}
@@ -421,10 +420,10 @@ const EditModal = (props) => {
                                     onChange={defaultImageHandler}
                                     sx={{ width: '100%' }}
                                 >
-                                    <Grid container sx={{ width: '100%' }}  spacing={2} >
+                                    <Grid container sx={{ width: '100%' }} spacing={2} >
                                         {imageList.map((image, index) => (
                                             <Grid item xs={12} sm={6} key={index} >
-                                                <div style={ {width: '100%'} } >
+                                                <div style={{ width: '100%' }} >
                                                     <img src={image['data_url']} alt="" width="100" />
                                                     <ImageItemBottomBar>
                                                         <FormControlLabel value={image['data_url']} control={<Radio />} label="Default" />

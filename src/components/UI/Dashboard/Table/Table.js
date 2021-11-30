@@ -62,8 +62,7 @@ export const TableEmployees = styled.ul`
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        height: 30px;
-        padding: 0 10px;
+        padding: 5px 10px;
         border-radius: 12px;
         color: ${({ theme }) => theme.palette.common.white};
         font-size: 14px;

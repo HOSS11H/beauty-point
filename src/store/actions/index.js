@@ -7,6 +7,7 @@ export {
     deleteService,
     searchServices,
     filterServices,
+    updateService,
 } from './services'
 export {
     fetchProducts,

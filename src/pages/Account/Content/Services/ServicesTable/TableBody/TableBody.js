@@ -5,7 +5,6 @@ import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import { TableData, TableEmployees, TableImg, TableStatus } from '../../../../../../components/UI/Dashboard/Table/Table';
 
-import Typography from '@mui/material/Typography';
 import { formatCurrency } from '../../../../../../shared/utility';
 
 

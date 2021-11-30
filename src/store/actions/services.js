@@ -19,10 +19,10 @@ export const fetchServicesFailed = ( errorMessage ) => {
         error: errorMessage,
     }
 }
-export const fetchServices = ( language, token , page, perPage ) => {
+export const fetchServices = ( language, page, perPage ) => {
     return dispatch => {
         dispatch( fetchServicesStart( ) )
-        axios.get(`/vendors/services?page=${page + 1}&per_page=15&include[]=category&include[]=location&include[]=bookingItems&include[]=company`, { 
+        axios.get(`/vendors/services?page=${page + 1}&per_page=${perPage}&include[]=category&include[]=location&include[]=users&include[]=bookingItems&include[]=company`, { 
             headers: {
                 'Accept-Language': language
             }
@@ -78,7 +78,7 @@ export const deleteServiceFailed = ( message ) => {
     }
 }
 
-export const deleteService = (token , id ) => {
+export const deleteService = (id ) => {
     return dispatch => {
         dispatch( deleteServiceStart( ) )
         axios.delete(`/vendors/services/${id}`)
@@ -87,6 +87,37 @@ export const deleteService = (token , id ) => {
             })
             .catch( err => {
                 dispatch( deleteServiceFailed( err.message  ) )
+            } )
+        }
+}
+export const updateServiceStart = (  ) => {
+    return {
+        type: actionTypes.UPDATE_SERVICE_START,
+    }
+}
+export const updateServiceSuccess = ( message, updatedServiceData ) => {
+    return {
+        type: actionTypes.UPDATE_SERVICE_SUCCESS,
+        message: message,
+        serviceData: updatedServiceData,
+    }
+}
+export const updateServiceFailed = ( message ) => {
+    return {
+        type: actionTypes.UPDATE_SERVICE_FAILED,
+        message: message,
+    }
+}
+
+export const updateService = ( data ) => {
+    return dispatch => {
+        dispatch( updateServiceStart( ) )
+        axios.put(`/vendors/services/${data.id}`, data)
+            .then( response => {
+                dispatch( updateServiceSuccess( response.data, data ) );
+            })
+            .catch( err => {
+                dispatch( updateServiceFailed( err.message  ) )
             } )
         }
 }

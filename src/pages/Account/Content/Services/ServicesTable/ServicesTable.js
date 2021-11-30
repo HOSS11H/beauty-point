@@ -4,11 +4,10 @@ import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { fetchServices } from '../../../../../store/actions/index';
 import ThemeContext from '../../../../../store/theme-context';
 import AuthContext from '../../../../../store/auth-context';
 import EnhancedTableHead from './TableHead/TableHead';
-import { deleteService } from '../../../../../store/actions/index';
+import { fetchServices, deleteService, updateService } from '../../../../../store/actions/index';
 import EnhancedTableBody from './TableBody/TableBody';
 import TablePaginationActions from '../../../../../components/UI/Dashboard/Table/TablePagination/TablePagination';
 import DeleteModal from './DeleteModal/DeleteModal';
@@ -41,7 +40,7 @@ function ServicesTable(props) {
 
     const { t } = useTranslation()
 
-    const { fetchedServices, fetchServicesHandler, loadingServices, deleteServiceHandler, searchingServices, searchingServicesSuccess } = props;
+    const { fetchedServices, fetchServicesHandler, loadingServices, deleteServiceHandler, updateServiceHandler, searchingServices, searchingServicesSuccess } = props;
 
     const themeCtx = useContext(ThemeContext)
     const authCtx = useContext(AuthContext)
@@ -62,7 +61,7 @@ function ServicesTable(props) {
     const [selectedServiceId, setSelectedServiceId] = useState(null);
 
     useEffect(() => {
-        fetchServicesHandler(lang, token, page,rowsPerPage );
+        fetchServicesHandler(lang, page, rowsPerPage );
     }, [fetchServicesHandler, lang, token, page, rowsPerPage]);
 
     useEffect(() => {
@@ -82,10 +81,10 @@ function ServicesTable(props) {
     }, [])
 
     const deleteModalConfirmHandler = useCallback((id) => {
-        deleteServiceHandler(token, id);
+        deleteServiceHandler( id);
         setDeleteModalOpened(false);
         setSelectedServiceId(null);
-    }, [deleteServiceHandler, token])
+    }, [deleteServiceHandler])
 
     // View Modal
     const viewModalOpenHandler = useCallback((id) => {
@@ -116,7 +115,7 @@ function ServicesTable(props) {
     const editModalConfirmHandler = useCallback((data) => {
         setEditModalOpened(false);
         setSelectedServiceId(null);
-        console.log('confirm');
+        updateServiceHandler(data);
     }, [])
 
 
@@ -202,8 +201,9 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchServicesHandler: (language, token, page, perPage) => dispatch(fetchServices(language, token, page, perPage)),
-        deleteServiceHandler: (token, id) => dispatch(deleteService(token, id)),
+        fetchServicesHandler: (language, page, perPage) => dispatch(fetchServices(language, page, perPage)),
+        deleteServiceHandler: ( id) => dispatch(deleteService( id)),
+        updateServiceHandler: (data) => dispatch(updateService(data)),
     }
 }
 
