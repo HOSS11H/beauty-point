@@ -211,7 +211,7 @@ const EditModal = (props) => {
         if (discountType === 'percent') {
             netPrice = (servicePrice - (servicePrice * (serviceDiscount / 100))).toFixed(2);
             setPriceAfterDiscount(netPrice)
-        } else if (discountType === 'fixed') {
+        } else if (discountType === 'fixed'  ) {
             netPrice = (servicePrice - serviceDiscount).toFixed(2);
             setPriceAfterDiscount(netPrice)
         }
@@ -245,7 +245,7 @@ const EditModal = (props) => {
         }
     }
     const serviceDiscountChangeHandler = (event) => {
-        if (event.target.value >= 0) {
+        if (event.target.value >= 0 && event.target.value <= servicePrice) {
             setServiceDiscount(event.target.value);
         }
     }
@@ -265,7 +265,6 @@ const EditModal = (props) => {
             typeof value === 'string' ? value.split(',') : value,
         );
     };
-    console.log(employeeName)
     const closeModalHandler = useCallback(() => {
         onClose();
     }, [onClose])
@@ -277,13 +276,13 @@ const EditModal = (props) => {
             employeesData.push(fetchedEmployees[employeeIndex]);
             return employeesData;
         })
-        console.log(employeesData)
         const data = {
             id: id,
             name: serviceName,
             description: draftToHtml(convertToRaw(editorState.getCurrentContent())),
-            price: servicePrice,
-            discount: serviceDiscount,
+            price: +servicePrice,
+            price_after_discount: +priceAfterDiscount,
+            discount: +serviceDiscount,
             discount_type: discountType,
             time: serviceData.time,
             time_type: serviceData.time_type,
@@ -296,8 +295,7 @@ const EditModal = (props) => {
             users: employeesData,
         }
         onConfirm(data);
-        console.log(data);
-    }, [defaultImage, discountType, editorState, employeeName, fetchedEmployees, id, onConfirm, serviceData.category.id, serviceData.location.id, serviceData.time, serviceData.time_type, serviceDiscount, serviceName, servicePrice, serviceStatus, uploadedImages])
+    }, [defaultImage, discountType, editorState, employeeName, fetchedEmployees, id, onConfirm, priceAfterDiscount, serviceData.category.id, serviceData.location.id, serviceData.time, serviceData.time_type, serviceDiscount, serviceName, servicePrice, serviceStatus, uploadedImages])
 
     let content = (
         <Grid container spacing={2}>
@@ -312,7 +310,7 @@ const EditModal = (props) => {
                         inputProps={{ 'aria-label': 'Without label' }}
                     >
                         <MenuItem value='active'>{t('active')}</MenuItem>
-                        <MenuItem value='expired'>{t('expired')}</MenuItem>
+                        <MenuItem value='inactive'>{t('inactive')}</MenuItem>
                     </Select>
                 </FormControl>
             </Grid>

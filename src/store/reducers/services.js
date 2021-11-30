@@ -65,12 +65,23 @@ const reducer = ( state = intialState , action ) => {
                 updatingServiceMessage: null,
             })
         case ( actionTypes.UPDATE_SERVICE_SUCCESS ) :
-            const editedServiceIndex = state.services.findIndex(service => service.id === action.serviceData.id);
-            const editedService = {...state.services[editedServiceIndex]}
-            
-            const editedServices = [...state.services]
-            editedServices[editedServiceIndex] = editedService
-            
+            const editedServiceIndex = state.services.data.findIndex(service => service.id === action.serviceData.id);
+            let editedService = {...state.services.data[editedServiceIndex]}
+            const updatedEditedService = updateObject(editedService, {
+                name: action.serviceData.name,
+                description: action.serviceData.description,
+                price: action.serviceData.price,
+                price_after_discount: action.serviceData.price_after_discount,
+                discount: action.serviceData.discount,
+                discount_type: action.serviceData.discount_type,
+                users: action.serviceData.users,
+                status: action.serviceData.status,
+                image: action.serviceData.image,
+                images: action.serviceData.images,
+            })
+            console.log(updatedEditedService);
+            const editedServices = [...state.services.data]
+            editedServices[editedServiceIndex] = updatedEditedService
             return updateObject( state , {
                 services: {
                     ...state.services,

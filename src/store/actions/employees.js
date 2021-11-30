@@ -27,7 +27,6 @@ export const fetchEmployees = language => {
                 'Accept-Language': language
             }
         }).then(response => {
-                console.log(response.data);
                 dispatch(fetchEmployeesSuccess(response.data));
             })
             .catch(error => {
