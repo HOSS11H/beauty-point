@@ -147,10 +147,11 @@ const MenuProps = {
     },
 };
 
-function getStyles(name, employeeName, theme) {
+function getStyles(employee, employeeName, theme) {
+    const selectedIndex = employeeName.findIndex( name => name.id === employee.id);
     return {
         fontWeight:
-            employeeName.indexOf(name) === -1
+            selectedIndex === -1
                 ? theme.typography.fontWeightRegular
                 : theme.typography.fontWeightMedium,
     };
@@ -168,7 +169,13 @@ const EditModal = (props) => {
 
     let serviceData = fetchedServices.data[selectedServiceIndex];
 
-    const { name, description, price, discount, discount_type, price_after_discount, users = [] , status, images, image } = serviceData;
+    const { name, description, price, discount, discount_type, price_after_discount, users = [{
+        "id": 3,
+        "name": "Malik Griffith",
+        "email": "malik@example.com",
+        "mobile": "1111",
+        "calling_code": null
+    },] , status, images, image } = serviceData;
 
     
     const [serviceName, setServiceName] = useState(name);
@@ -320,19 +327,19 @@ const EditModal = (props) => {
                         renderValue={(selected) => (
                             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                                 {selected.map((value) => (
-                                    <Chip key={value} label={value} />
+                                    <Chip key={value.id} label={value.name} />
                                 ))}
                             </Box>
                         )}
                         MenuProps={MenuProps}
                     >
-                        {fetchedEmployees.map((user) => (
+                        { fetchedEmployees.map((employee) => (
                             <MenuItem
-                                key={user.id}
-                                value={user.name}
-                                style={getStyles(user.name, employeeName, themeCtx.theme)}
+                                key={employee.id}
+                                value={employee}
+                                style={getStyles(employee, employeeName, themeCtx.theme)}
                             >
-                                {user.name}
+                                {employee.name}
                             </MenuItem>
                         ))}
                     </Select>

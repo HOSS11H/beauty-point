@@ -27,7 +27,22 @@ export const fetchServices = ( language, token , page, perPage ) => {
                 'Accept-Language': language
             }
         }).then( response => {
-                dispatch( fetchServicesSuccess( response.data  ) );
+                const servicesData = response.data.data;
+                const convertedServicesData = servicesData.map((service) => {
+                    let formattedImages = []
+                    service.images.map( (image, index) => {
+                        let imageUrl = {
+                            'data_url' : `https://testbeauty.beautypoint.sa/user-uploads/service/${service.id}/${image}`,
+                        }
+                        formattedImages.push(imageUrl)
+                        return formattedImages;
+                    })
+                    return {
+                        ...service,
+                        images: formattedImages
+                    };
+                })
+                dispatch( fetchServicesSuccess( {...response.data, data: convertedServicesData}  ) );
             })
             .catch( err => {
                 console.log(err)
