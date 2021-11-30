@@ -28,15 +28,23 @@ export const fetchServices = ( language, token , page, perPage ) => {
             }
         }).then( response => {
                 const servicesData = response.data.data;
+                console.log( servicesData );
                 const convertedServicesData = servicesData.map((service) => {
                     let formattedImages = []
-                    service.images.map( (image, index) => {
+                    if (typeof service.images !== 'string') {
+                        service.images.map( (image, index) => {
+                            let imageUrl = {
+                                'data_url' : `https://testbeauty.beautypoint.sa/user-uploads/service/${service.id}/${image}`,
+                            }
+                            formattedImages.push(imageUrl)
+                            return formattedImages;
+                        })
+                    } else if ( typeof service.images === 'string' ) {
                         let imageUrl = {
-                            'data_url' : `https://testbeauty.beautypoint.sa/user-uploads/service/${service.id}/${image}`,
+                            'data_url' : `${service.images}`,
                         }
                         formattedImages.push(imageUrl)
-                        return formattedImages;
-                    })
+                    }
                     return {
                         ...service,
                         images: formattedImages

@@ -113,9 +113,10 @@ function ServicesTable(props) {
         setSelectedServiceId(null);
     }, [])
 
-    const editModalConfirmHandler = useCallback((id) => {
+    const editModalConfirmHandler = useCallback((data) => {
         setEditModalOpened(false);
         setSelectedServiceId(null);
+        console.log('confirm');
     }, [])
 
 
@@ -176,7 +177,7 @@ function ServicesTable(props) {
                 {
                     editModalOpened && (
                         <EditModal show={editModalOpened} id={selectedServiceId} fetchedServices={fetchedServices}
-                            onClose={editModalCloseHandler} onConfirm={editModalConfirmHandler.bind(null, selectedServiceId)}
+                            onClose={editModalCloseHandler} onConfirm={editModalConfirmHandler}
                             heading='edit service details' confirmText='edit' />
                     )
                 }

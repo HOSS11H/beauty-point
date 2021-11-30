@@ -25,10 +25,12 @@ import ImageUploading from 'react-images-uploading';
 
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { EditorState, ContentState  } from 'draft-js';
+import { EditorState, convertToRaw, ContentState  } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 import { connect } from 'react-redux';
 import { fetchEmployees } from '../../../../../../store/actions/index';
+import { width } from 'dom-helpers';
 
 
 const CustomTextField = styled(TextField)`
@@ -64,6 +66,7 @@ const UploadImageBody = styled.div`
     justify-content: space-between;
     margin-top: 15px;
     max-width: 100%;
+    width: 100%;
     img {
         width: 100%;
         height: 150px;
@@ -232,12 +235,11 @@ const EditModal = (props) => {
         setDefaultImage(event.target.value);
     };
 
-
-
     const onEditorChange = newState => {
         setEditorState(newState)
         console.log(newState)
     }
+
     const servicePriceChangeHandler = (event) => {
         if (event.target.value >= 0) {
             setServicePrice(event.target.value);
@@ -273,11 +275,50 @@ const EditModal = (props) => {
         setPriceAfterDiscount('')
     }, [onClose])
 
+    const confirmEditHandler = useCallback(() => {
+
+        let employeesIds = [ ];
+        employeeName.map(employee => {
+            employeesIds.push(employee.id)
+            return employeesIds;
+        })
+
+        const data = {
+            id: id,
+            name: serviceName,
+            description: draftToHtml(convertToRaw(editorState.getCurrentContent())),
+            price: servicePrice,
+            discount: serviceDiscount,
+            discount_type: discountType,
+            time: serviceData.time,
+            time_type: serviceData.time_type,
+            category_id: serviceData.category.id,
+            location_id: serviceData.location.id,
+            employee_ids: employeesIds,
+            status: serviceStatus,
+            images: uploadedImages,
+            image: defaultImage
+        }
+        onConfirm(data);
+        console.log(data)
+    }, [defaultImage, discountType, editorState, employeeName, id, onConfirm, serviceData.category.id, serviceData.location.id, serviceData.time, serviceData.time_type, serviceDiscount, serviceName, servicePrice, serviceStatus, uploadedImages])
 
     let content = (
         <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
                 <CustomTextField id="service-name" label={t('name')} variant="outlined" value={serviceName} onChange={serviceNameChangeHandler} />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+                <FormControl sx={{width: '100%' }}>
+                    <Select
+                        value={serviceStatus}
+                        onChange={serviceStatusChangeHandler}
+                        inputProps={{ 'aria-label': 'Without label' }}
+                    >
+                        <MenuItem value='active'>{t('active')}</MenuItem>
+                        <MenuItem value='expired'>{t('expired')}</MenuItem>
+                    </Select>
+                </FormControl>
             </Grid>
             <Grid item xs={12}>
                 <EditorWrapper>
@@ -366,10 +407,10 @@ const EditModal = (props) => {
                         <div className="upload__image-wrapper">
                             <UploadImageTopBar>
                                 <Button size="medium" sx={{ mr: 2, color: isDragging && 'red' }} variant="contained" startIcon={<PhotoCamera />} {...dragProps} onClick={onImageUpload} >
-                                    upload
+                                    {t('upload')}
                                 </Button>
                                 <Button size="medium" variant="outlined" startIcon={<DeleteIcon />} onClick={onImageRemoveAll}>
-                                    Remove all
+                                    {t('Remove all')}
                                 </Button>
                             </UploadImageTopBar>
                             <UploadImageBody>
@@ -378,20 +419,23 @@ const EditModal = (props) => {
                                     name="controlled-radio-buttons-group"
                                     value={defaultImage}
                                     onChange={defaultImageHandler}
+                                    sx={{ width: '100%' }}
                                 >
-                                    <Grid container spacing={2} >
+                                    <Grid container sx={{ width: '100%' }}  spacing={2} >
                                         {imageList.map((image, index) => (
                                             <Grid item xs={12} sm={6} key={index} >
-                                                <img src={image['data_url']} alt="" width="100" />
-                                                <ImageItemBottomBar>
-                                                    <FormControlLabel value={image['data_url']} control={<Radio />} label="Default" />
-                                                    <Button sx={{ mr: 1 }} size="large" variant="outlined" startIcon={<PhotoCamera />} onClick={() => onImageUpdate(index)}>
-                                                        update
-                                                    </Button>
-                                                    <IconButton aria-label="delete" size="large" onClick={() => onImageRemove(index)}>
-                                                        <DeleteIcon />
-                                                    </IconButton>
-                                                </ImageItemBottomBar>
+                                                <div style={ {width: '100%'} } >
+                                                    <img src={image['data_url']} alt="" width="100" />
+                                                    <ImageItemBottomBar>
+                                                        <FormControlLabel value={image['data_url']} control={<Radio />} label="Default" />
+                                                        <Button sx={{ mr: 1 }} size="large" variant="outlined" startIcon={<PhotoCamera />} onClick={() => onImageUpdate(index)}>
+                                                            {t('update')}
+                                                        </Button>
+                                                        <IconButton aria-label="delete" size="large" onClick={() => onImageRemove(index)}>
+                                                            <DeleteIcon />
+                                                        </IconButton>
+                                                    </ImageItemBottomBar>
+                                                </div>
                                             </Grid>
                                         ))}
                                     </Grid>
@@ -400,24 +444,11 @@ const EditModal = (props) => {
                         </div>
                     )}
                 </ImageUploading>
-
-            </Grid>
-            <Grid item xs={12} sm={4}>
-                <FormControl sx={{ m: 1, width: '100%' }}>
-                    <Select
-                        value={serviceStatus}
-                        onChange={serviceStatusChangeHandler}
-                        inputProps={{ 'aria-label': 'Without label' }}
-                    >
-                        <MenuItem value='active'>active</MenuItem>
-                        <MenuItem value='expired'>expired</MenuItem>
-                    </Select>
-                </FormControl>
             </Grid>
         </Grid>
     )
     return (
-        <CustomModal show={show} heading={heading} confirmText={confirmText} onConfirm={onConfirm} onClose={closeModalHandler} >
+        <CustomModal show={show} heading={heading} confirmText={confirmText} onConfirm={confirmEditHandler} onClose={closeModalHandler} >
             {content}
         </CustomModal>
     )
