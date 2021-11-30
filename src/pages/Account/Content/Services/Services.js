@@ -11,7 +11,7 @@ function Services(props) {
 
     return (
         <Fragment>
-            {/* <SearchBar searchHandler={searchServicesHandler}/> */}
+            <SearchBar searchHandler={searchServicesHandler}/>
             <ServicesTable />
         </Fragment>
     );
@@ -19,7 +19,7 @@ function Services(props) {
 
 const mapDispatchToProps = dispatch => {
     return {
-        searchServicesHandler: ( language, word ) => dispatch(searchServices( language, word )),
+        searchServicesHandler: (language, word) => dispatch(searchServices(language, word)),
     }
 }
 

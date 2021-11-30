@@ -143,7 +143,7 @@ export const searchServicesFailed = ( errorMessage ) => {
 export const searchServices = ( language , word ) => {
     return dispatch => {
         dispatch( searchServicesStart( ) )
-        axios.get(`/vendors/services?term=${word}`, { 
+        axios.get(`/vendors/services?term=${word}&include[]=category&include[]=location&include[]=users&include[]=bookingItems&include[]=company`, { 
             headers: {
                 'Accept-Language': language
             }
