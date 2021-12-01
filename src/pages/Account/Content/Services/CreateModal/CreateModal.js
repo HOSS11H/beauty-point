@@ -198,7 +198,7 @@ const CreateModal = (props) => {
     const [serviceCategoryError, setServiceCategoryError] = useState(false);
 
     const [timeRequired, setTimeRequired] = useState(0);
-    const [serviceTimeError, setServiceTimeyError] = useState(false);
+    const [serviceTimeError, setServiceTimeError] = useState(false);
 
     const [timeType, setTimeType] = useState('minutes');
 
@@ -245,6 +245,8 @@ const CreateModal = (props) => {
         if (imageList.length === 1) {
             setDefaultImage(imageList[0].data_url);
             setDefaultImageError(false);
+        } else {
+            setDefaultImage('');
         }
     };
     const defaultImageHandler = (event) => {
@@ -302,8 +304,8 @@ const CreateModal = (props) => {
     const serviceTimeChangeHandler = (event) => {
         if (event.target.value >= 0 ) {
             setTimeRequired(event.target.value);
+            setServiceTimeError(false);
         }
-        setServiceTimeyError(false);
     }
     const timeTypeChangeHandler = (event) => {
         setTimeType(event.target.value);
@@ -321,7 +323,7 @@ const CreateModal = (props) => {
             setServiceDescriptionError(true);
             return;
         }
-        if (servicePrice === 0) { 
+        if (+servicePrice === 0) { 
             setServicePriceError(true);
             return; 
         }
@@ -333,36 +335,42 @@ const CreateModal = (props) => {
             setServiceCategoryError(true);
             return;
         }
-        if (timeRequired === 0) {
-            setServiceTimeyError(true);
+        if (+timeRequired === 0) {
+            setServiceTimeError(true);
             return;
         }
         if (defaultImage === '') {
             setDefaultImageError(true);
             return;
         }
-
+        
         const employeesData = [];
         employeeName.map(employeeId => {
             const employeeIndex = fetchedEmployees.findIndex(employee => employee.id === employeeId);
             employeesData.push(fetchedEmployees[employeeIndex]);
             return employeesData;
         })
+        console.log(timeRequired)
         const data = {
             name: serviceName,
             description: draftToHtml(convertToRaw(editorState.getCurrentContent())),
             price: +servicePrice,
-            price_after_discount: +priceAfterDiscount,
             discount: +serviceDiscount,
             discount_type: discountType,
+            price_after_discount: +priceAfterDiscount,
+            time: +timeRequired,
+            time_type: timeType,
+            category_id: categoryName,
+            location_id: locationName,
             employee_ids: employeeName,
             status: serviceStatus,
             images: uploadedImages,
             image: defaultImage,
             users: employeesData,
         }
+        console.log(data);
         onConfirm(data);
-    }, [categoryName, defaultImage, discountType, editorState, employeeName, fetchedEmployees, locationName, onConfirm, priceAfterDiscount, serviceDiscount, serviceName, servicePrice, serviceStatus, timeRequired, uploadedImages])
+    }, [categoryName, defaultImage, discountType, editorState, employeeName, fetchedEmployees, locationName, onConfirm, priceAfterDiscount, serviceDiscount, serviceName, servicePrice, serviceStatus, timeRequired, timeType, uploadedImages])
 
     let content = (
         <Grid container spacing={2}>

@@ -225,9 +225,11 @@ const EditModal = (props) => {
     const onImageChangeHandler = (imageList, addUpdateIndex) => {
         // data for submit
         setUploadedImages(imageList);
-        if (imageList.length === 1) {
+        /* if (imageList.length === 1) {
             setDefaultImage(imageList[0].data_url);
-        }
+        } else {
+            setDefaultImage(image);
+        } */
     };
     const defaultImageHandler = (event) => {
         setDefaultImage(event.target.value);
