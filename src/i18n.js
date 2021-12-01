@@ -73,6 +73,12 @@ const resources = {
             'discount price': 'سعر الخصم',
             'service name': 'اسم الخدمة',
             'Create Service': 'إنشاء خدمة',
+            'update': 'تحديث',
+            'Remove all': 'حذف الكل',
+            'Percent': 'نسبة مئوية',
+            'Fixed': 'ثابت',
+            'active': 'نشط',
+            'inactive': 'غير نشط',
         }
     }
 };
