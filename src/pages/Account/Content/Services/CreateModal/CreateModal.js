@@ -30,6 +30,7 @@ import draftToHtml from 'draftjs-to-html';
 import { connect } from 'react-redux';
 import { fetchEmployees, fetchLocations, fetchCategories } from '../../../../../store/actions/index';
 import { formatCurrency } from '../../../../../shared/utility';
+import ValidationMessage from '../../../../../components/UI/ValidationMessage/ValidationMessage';
 
 
 const CustomTextField = styled(TextField)`
@@ -170,12 +171,17 @@ const CreateModal = (props) => {
     const { lang } = themeCtx;
 
     const [serviceName, setServiceName] = useState('');
-
-    const [servicePrice, setServicePrice] = useState(0);
-
+    const [serviceNameError, setServiceNameError] = useState(false);
+    
+    
+    
     const [editorState, setEditorState] = useState(
         EditorState.createEmpty()
     )
+    const [serviceDescriptionError, setServiceDescriptionError] = useState(false);
+        
+    const [servicePrice, setServicePrice] = useState(0);
+    const [servicePriceError, setServicePriceError] = useState(false);
 
     const [serviceDiscount, setServiceDiscount] = useState(0);
 
@@ -186,10 +192,13 @@ const CreateModal = (props) => {
     const [employeeName, setEmployeeName] = useState([]);
 
     const [locationName, setLocationName] = useState('');
+    const [serviceLocationError, setServiceLocationError] = useState(false);
 
     const [categoryName, setCategoryName] = useState('');
+    const [serviceCategoryError, setServiceCategoryError] = useState(false);
 
     const [timeRequired, setTimeRequired] = useState(0);
+    const [serviceTimeError, setServiceTimeyError] = useState(false);
 
     const [timeType, setTimeType] = useState('minutes');
 
@@ -198,6 +207,7 @@ const CreateModal = (props) => {
     const [uploadedImages, setUploadedImages] = useState([]);
 
     const [defaultImage, setDefaultImage] = useState('');
+    const [defaultImageError, setDefaultImageError] = useState(false);
 
     const maxNumber = 69;
 
@@ -221,24 +231,31 @@ const CreateModal = (props) => {
 
     const serviceNameChangeHandler = (event) => {
         setServiceName(event.target.value);
+        setServiceNameError(false);
+    }
+
+    const onEditorChange = newState => {
+        setEditorState(newState);
+        setServiceDescriptionError(false);
     }
 
     const onImageChangeHandler = (imageList, addUpdateIndex) => {
         // data for submit
         setUploadedImages(imageList);
+        if (imageList.length === 1) {
+            setDefaultImage(imageList[0].data_url);
+            setDefaultImageError(false);
+        }
     };
     const defaultImageHandler = (event) => {
         setDefaultImage(event.target.value);
+        setDefaultImageError(false);
     };
-
-    const onEditorChange = newState => {
-        setEditorState(newState)
-        console.log(newState)
-    }
 
     const servicePriceChangeHandler = (event) => {
         if (event.target.value >= 0) {
             setServicePrice(event.target.value);
+            setServicePriceError(false);
         }
     }
     const serviceDiscountChangeHandler = (event) => {
@@ -270,6 +287,7 @@ const CreateModal = (props) => {
             // On autofill we get a the stringified value.
             typeof value === 'string' ? value.split(',') : value,
         );
+        setServiceLocationError(false);
     };
     const handleCategoryChange = (event) => {
         const {
@@ -279,11 +297,13 @@ const CreateModal = (props) => {
             // On autofill we get a the stringified value.
             typeof value === 'string' ? value.split(',') : value,
         );
+        setServiceCategoryError(false);
     };
     const serviceTimeChangeHandler = (event) => {
         if (event.target.value >= 0 ) {
             setTimeRequired(event.target.value);
         }
+        setServiceTimeyError(false);
     }
     const timeTypeChangeHandler = (event) => {
         setTimeType(event.target.value);
@@ -293,6 +313,35 @@ const CreateModal = (props) => {
     }, [onClose])
 
     const confirmCreateHandler = useCallback(() => {
+        if ( serviceName === '') {
+            setServiceNameError(true);
+            return;
+        }
+        if (editorState.getCurrentContent().hasText() === false) {
+            setServiceDescriptionError(true);
+            return;
+        }
+        if (servicePrice === 0) { 
+            setServicePriceError(true);
+            return; 
+        }
+        if (locationName === '') {
+            setServiceLocationError(true);
+            return;
+        }
+        if (categoryName === '') {
+            setServiceCategoryError(true);
+            return;
+        }
+        if (timeRequired === 0) {
+            setServiceTimeyError(true);
+            return;
+        }
+        if (defaultImage === '') {
+            setDefaultImageError(true);
+            return;
+        }
+
         const employeesData = [];
         employeeName.map(employeeId => {
             const employeeIndex = fetchedEmployees.findIndex(employee => employee.id === employeeId);
@@ -313,12 +362,13 @@ const CreateModal = (props) => {
             users: employeesData,
         }
         onConfirm(data);
-    }, [defaultImage, discountType, editorState, employeeName, fetchedEmployees, onConfirm, priceAfterDiscount, serviceDiscount, serviceName, servicePrice, serviceStatus, uploadedImages])
+    }, [categoryName, defaultImage, discountType, editorState, employeeName, fetchedEmployees, locationName, onConfirm, priceAfterDiscount, serviceDiscount, serviceName, servicePrice, serviceStatus, timeRequired, uploadedImages])
 
     let content = (
         <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
                 <CustomTextField id="service-name" label={t('name')} variant="outlined" value={serviceName} onChange={serviceNameChangeHandler} />
+                {serviceNameError && <ValidationMessage notExist>{t(`Please add name`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6}>
                 <FormControl sx={{ width: '100%' }}>
@@ -342,9 +392,11 @@ const CreateModal = (props) => {
                         textAlignment={themeCtx.direction === 'rtl' ? 'right' : 'left'}
                     />
                 </EditorWrapper>
+                {serviceDescriptionError && <ValidationMessage notExist>{t(`Please add Description`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6}>
                 <CustomTextField id="service-price" type='number' label={t('price')} variant="outlined" value={servicePrice} onChange={servicePriceChangeHandler} />
+                {servicePriceError && <ValidationMessage notExist>{t(`Please add Price`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6}>
                 <CustomFormGroup>
@@ -386,6 +438,7 @@ const CreateModal = (props) => {
                         ))}
                     </Select>
                 </FormControl>
+                {serviceLocationError && <ValidationMessage notExist>{t(`Please add Location`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6}>
                 <FormControl sx={{ width: '100%' }}>
@@ -406,6 +459,7 @@ const CreateModal = (props) => {
                         ))}
                     </Select>
                 </FormControl>
+                {serviceCategoryError && <ValidationMessage notExist>{t(`Please add Category`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6}>
                 <CustomFormGroup>
@@ -422,6 +476,7 @@ const CreateModal = (props) => {
                         </Select>
                     </FormControl>
                 </CustomFormGroup>
+                {serviceTimeError && <ValidationMessage notExist>{t(`Please add Time`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6} >
                 <FormControl sx={{ width: '100%' }}>
@@ -515,6 +570,7 @@ const CreateModal = (props) => {
                         </div>
                     )}
                 </ImageUploading>
+                {defaultImageError && <ValidationMessage notExist>{t(`Please add default Image`)}</ValidationMessage>}
             </Grid>
         </Grid>
     )

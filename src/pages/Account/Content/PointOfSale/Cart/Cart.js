@@ -22,9 +22,8 @@ import { useTranslation } from 'react-i18next';
 import SharedTableHead from './SharedTableHead/SharedTableHead';
 import CartItem from './CartItem/CartItem';
 import InputAdornment from '@mui/material/InputAdornment';
-import IconButton from '@mui/material/IconButton';
-import CheckIcon from '@mui/icons-material/Check';
 import { ButtonText, ButtonConfirm } from '../../../../../components/UI/Button/Button';
+import ValidationMessage from '../../../../../components/UI/ValidationMessage/ValidationMessage';
 
 
 const CustomerCard = styled.div`
@@ -94,21 +93,6 @@ const CouponWrapper = styled.div`
     align-items: center;
     flex-wrap: wrap;
     `
-const Message = styled.p`
-    flex-basis: 100%;
-    font-size: 15px;
-    line-height:1.5;
-    text-transform: uppercase;
-    font-weight: 400;
-    color: ${({ theme }) => theme.palette.success.main};
-    margin-top: 10px;;
-    ${({ exist }) => exist && css`
-        color: ${({ theme }) => theme.palette.success.main};
-    `}
-    ${({ notExist }) => notExist && css`
-        color: ${({ theme }) => theme.palette.error.main};
-    `}
-`
 
 const PriceCalculation = styled.div`
     display: flex;
@@ -339,7 +323,7 @@ const Cart = props => {
                                 }
                             </Select>
                         </FormControl>
-                        {customerDataError && <Message notExist>{t(`Please Choose Customer`)}</Message>}
+                        {customerDataError && <ValidationMessage notExist>{t(`Please Choose Customer`)}</ValidationMessage>}
                     </Grid>
                     {
                         customerData && (
@@ -411,7 +395,7 @@ const Cart = props => {
                             </TableContainer>
                         )}
                         {cartDataError && (
-                            <Message notExist>{t('Please Add Something')}</Message>
+                            <ValidationMessage notExist>{t('Please Add Something')}</ValidationMessage>
                         )}
                     </Grid>
                     <Grid item xs={12}>
@@ -436,8 +420,8 @@ const Cart = props => {
                                 value={coupon}
                                 onChange={couponChangeHandler}
                             />
-                            {couponExists && <Message exist>{t('Coupon Exists')}</Message>}
-                            {!couponExists && coupon !== '' ? <Message notExist>{t(`Coupon Doesn't Exist`)}</Message> : null}
+                            {couponExists && <ValidationMessage exist>{t('Coupon Exists')}</ValidationMessage>}
+                            {!couponExists && coupon !== '' ? <ValidationMessage notExist>{t(`Coupon Doesn't Exist`)}</ValidationMessage> : null}
                         </CouponWrapper>
                     </Grid>
                     <Grid item xs={12}>

@@ -79,6 +79,14 @@ const resources = {
             'Fixed': 'ثابت',
             'active': 'نشط',
             'inactive': 'غير نشط',
+            'upload': 'تحميل',
+            'Please add name': 'يرجى إضافة اسم',
+            'Please add Description': 'يرجى إضافة وصف',
+            'Please add Price': 'يرجى إضافة سعر',
+            'Please add Time': 'يرجى إضافة وقت',
+            'Please add Category': 'يرجى إضافة فئة',
+            'Please add Location': 'يرجى إضافة موقع',
+            'Please add default Image': 'يرجى إضافة صورة إفتراضية',
         }
     }
 };
