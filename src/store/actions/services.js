@@ -121,6 +121,37 @@ export const updateService = ( data ) => {
             } )
         }
 }
+export const createServiceStart = (  ) => {
+    return {
+        type: actionTypes.CREATE_SERVICE_START,
+    }
+}
+export const createServiceSuccess = ( message, createdServiceData ) => {
+    return {
+        type: actionTypes.CREATE_SERVICE_SUCCESS,
+        message: message,
+        serviceData: createdServiceData,
+    }
+}
+export const createServiceFailed = ( message ) => {
+    return {
+        type: actionTypes.CREATE_SERVICE_FAILED,
+        message: message,
+    }
+}
+
+export const createService = ( data ) => {
+    return dispatch => {
+        dispatch( createServiceStart( ) )
+        axios.post(`/vendors/services/${data.id}`, data)
+            .then( response => {
+                dispatch( createServiceSuccess( null , {...data,  ...response.data } ) );
+            })
+            .catch( err => {
+                dispatch( createServiceFailed( err.message  ) )
+            } )
+        }
+}
 
 
 export const searchServicesStart = (  ) => {

@@ -343,14 +343,20 @@ const CreateModal = (props) => {
             setDefaultImageError(true);
             return;
         }
-        
+        // Data To Add To State
         const employeesData = [];
         employeeName.map(employeeId => {
             const employeeIndex = fetchedEmployees.findIndex(employee => employee.id === employeeId);
             employeesData.push(fetchedEmployees[employeeIndex]);
             return employeesData;
         })
-        console.log(timeRequired)
+
+        const selectedCategory = fetchedCategories.find(category => category.id === categoryName);
+        const categoryData = fetchedCategories[selectedCategory]
+
+        const selectedLocation = fetchedLocations.find(location => location.id === locationName);
+        const locationData = fetchedLocations[selectedLocation]
+
         const data = {
             name: serviceName,
             description: draftToHtml(convertToRaw(editorState.getCurrentContent())),
@@ -367,6 +373,8 @@ const CreateModal = (props) => {
             images: uploadedImages,
             image: defaultImage,
             users: employeesData,
+            category: categoryData,
+            location: locationData,
         }
         console.log(data);
         onConfirm(data);

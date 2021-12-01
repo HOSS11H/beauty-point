@@ -9,9 +9,12 @@ const intialState = {
     deletingService: false,
     deletingServiceSuccess: false,
     deletingServiceMessage: null,
-    updatingService: true,
+    updatingService: false,
     updatingServiceSuccess: false,
     updatingServiceMessage: null,
+    creatingService: false,
+    creatingServiceSuccess: false,
+    creatingServiceMessage: null,
     searchingServices: false,
     searchingServicesSuccess: false,
 } ;
@@ -96,6 +99,32 @@ const reducer = ( state = intialState , action ) => {
                 updatingService: false,
                 updatingServiceSuccess: false,
                 updatingServiceMessage: action.message,
+            })
+        case ( actionTypes.CREATE_SERVICE_START ) :
+            return updateObject( state , {
+                creatingService: true,
+                creatingServiceSuccess: false,
+                creatingServiceMessage: null,
+            })
+        case ( actionTypes.CREATE_SERVICE_SUCCESS ) :
+            const upgradedServices = [...state.services.data]
+            upgradedServices.push(action.serviceData);
+
+            return updateObject( state , {
+                services: {
+                    ...state.services,
+                    data: upgradedServices,
+                    total: state.services.total + 1,
+                },
+                creatingService: false,
+                creatingServiceSuccess: true,
+                creatingServiceMessage: action.message,
+            })
+        case ( actionTypes.CREATE_SERVICE_FAILED ) :
+            return updateObject( state , {
+                creatingService: false,
+                creatingServiceSuccess: false,
+                creatingServiceMessage: action.message,
             })
         case ( actionTypes.SEARCH_SERVICES_START ) :
             return updateObject( state , {
