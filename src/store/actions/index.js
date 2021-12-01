@@ -8,6 +8,7 @@ export {
     searchServices,
     filterServices,
     updateService,
+    createService,
 } from './services'
 export {
     fetchProducts,

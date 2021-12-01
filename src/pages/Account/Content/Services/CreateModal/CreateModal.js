@@ -352,10 +352,8 @@ const CreateModal = (props) => {
         })
 
         const selectedCategory = fetchedCategories.find(category => category.id === categoryName);
-        const categoryData = fetchedCategories[selectedCategory]
 
         const selectedLocation = fetchedLocations.find(location => location.id === locationName);
-        const locationData = fetchedLocations[selectedLocation]
 
         const data = {
             name: serviceName,
@@ -373,12 +371,25 @@ const CreateModal = (props) => {
             images: uploadedImages,
             image: defaultImage,
             users: employeesData,
-            category: categoryData,
-            location: locationData,
+            category: selectedCategory,
+            location: selectedLocation,
         }
-        console.log(data);
         onConfirm(data);
-    }, [categoryName, defaultImage, discountType, editorState, employeeName, fetchedEmployees, locationName, onConfirm, priceAfterDiscount, serviceDiscount, serviceName, servicePrice, serviceStatus, timeRequired, timeType, uploadedImages])
+        setServiceName('');
+        setEditorState(EditorState.createEmpty());
+        setServicePrice(0);
+        setServiceDiscount(0);
+        setDiscountType('percent');
+        setPriceAfterDiscount(0);
+        setEmployeeName([]);
+        setLocationName('');
+        setCategoryName('');
+        setTimeRequired(0);
+        setTimeType('minutes');
+        setServiceStatus('active');
+        setUploadedImages([]);
+        setDefaultImage('');
+    }, [categoryName, defaultImage, discountType, editorState, employeeName, fetchedCategories, fetchedEmployees, fetchedLocations, locationName, onConfirm, priceAfterDiscount, serviceDiscount, serviceName, servicePrice, serviceStatus, timeRequired, timeType, uploadedImages])
 
     let content = (
         <Grid container spacing={2}>

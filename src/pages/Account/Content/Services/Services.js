@@ -1,6 +1,6 @@
 import { Fragment, useState, useCallback } from "react";
 import { connect } from "react-redux";
-import { searchServices } from '../../../../store/actions/index';
+import { searchServices, createService } from '../../../../store/actions/index';
 import SearchBar from "../../../../components/Search/SearchBar/SearchBar";
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
@@ -29,7 +29,7 @@ function Services(props) {
 
     const { t } = useTranslation()
 
-    const { searchServicesHandler } = props;
+    const { searchServicesHandler, createServiceHandler } = props;
 
     const [createModalOpened, setCreateModalOpened] = useState(false);
 
@@ -41,8 +41,9 @@ function Services(props) {
         setCreateModalOpened(false);
     }, [])
 
-    const createModalConfirmHandler = useCallback((id) => {
+    const createModalConfirmHandler = useCallback((data) => {
         setCreateModalOpened(false);
+        createServiceHandler(data);
     }, [])
 
     return (
@@ -62,6 +63,7 @@ function Services(props) {
 const mapDispatchToProps = dispatch => {
     return {
         searchServicesHandler: (language, word) => dispatch(searchServices(language, word)),
+        createServiceHandler: (data) => dispatch(createService( data ))
     }
 }
 

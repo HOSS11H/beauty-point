@@ -45,11 +45,15 @@ const reducer = ( state = intialState , action ) => {
             })
         case ( actionTypes.DELETE_SERVICE_SUCCESS ) :
             const updatedServices = state.services.data.filter( service => service.id !== action.serviceId );
+            console.log(state.services)
             return updateObject( state , {
                 services: {
                     ...state.services,
                     data: updatedServices,
-                    total: state.services.total - 1,
+                    meta : {
+                        ...state.services.meta,
+                        total: state.services.meta.total - 1,
+                    }
                 },
                 deletingService: false,
                 deletingServiceSuccess: true,
@@ -114,7 +118,10 @@ const reducer = ( state = intialState , action ) => {
                 services: {
                     ...state.services,
                     data: upgradedServices,
-                    total: state.services.total + 1,
+                    meta : {
+                        ...state.services.meta,
+                        total: state.services.meta.total + 1,
+                    }
                 },
                 creatingService: false,
                 creatingServiceSuccess: true,

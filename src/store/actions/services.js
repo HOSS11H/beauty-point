@@ -143,9 +143,10 @@ export const createServiceFailed = ( message ) => {
 export const createService = ( data ) => {
     return dispatch => {
         dispatch( createServiceStart( ) )
-        axios.post(`/vendors/services/${data.id}`, data)
-            .then( response => {
-                dispatch( createServiceSuccess( null , {...data,  ...response.data } ) );
+        axios.post(`/vendors/services`, data)
+        .then( response => {
+            console.log(response)
+            dispatch( createServiceSuccess( null , {...data,  ...response.data } ) );
             })
             .catch( err => {
                 dispatch( createServiceFailed( err.message  ) )
@@ -174,7 +175,7 @@ export const searchServicesFailed = ( errorMessage ) => {
 export const searchServices = ( language , word ) => {
     return dispatch => {
         dispatch( searchServicesStart( ) )
-        axios.get(`/vendors/services?term=${word}&include[]=category&include[]=location&include[]=users&include[]=bookingItems&include[]=company`, { 
+        axios.get(`/vendors/services?term=${word}&per_page=15&include[]=category&include[]=location&include[]=users&include[]=bookingItems&include[]=company`, { 
             headers: {
                 'Accept-Language': language
             }
