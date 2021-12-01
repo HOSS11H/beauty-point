@@ -163,7 +163,7 @@ function getStyles(employee, employeeName, theme) {
 
 const EditModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, id, fetchedServices, fetchedEmployees, fetchEmployeesHandler } = props;
+    const { show, heading, confirmText, onConfirm, onClose, id, fetchedServices, fetchedEmployees } = props;
     const { t } = useTranslation();
     const themeCtx = useContext(ThemeContext)
     const { lang } = themeCtx;
@@ -216,10 +216,6 @@ const EditModal = (props) => {
             setPriceAfterDiscount(netPrice)
         }
     }, [discountType, serviceDiscount, servicePrice])
-
-    useEffect(() => {
-        fetchEmployeesHandler(lang);
-    }, [fetchEmployeesHandler, lang])
 
 
     const serviceNameChangeHandler = (event) => {
@@ -457,11 +453,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        fetchEmployeesHandler: (lang) => dispatch(fetchEmployees(lang)),
-    }
-}
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(EditModal);
+export default connect(mapStateToProps, null)(EditModal);

@@ -27,7 +27,7 @@ export const fetchCategories = ( language ) => {
                 'Accept-Language': language
             }
             }).then( response => {
-                    dispatch( fetchCategoriesSuccess( response.data  ) );
+                    dispatch( fetchCategoriesSuccess( response.data.data  ) );
                 })
             .catch( err => {
                 console.log(err)

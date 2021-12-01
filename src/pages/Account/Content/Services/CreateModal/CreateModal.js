@@ -28,7 +28,7 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { EditorState, convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import { connect } from 'react-redux';
-import { fetchEmployees } from '../../../../../store/actions/index';
+import { fetchEmployees, fetchLocations, fetchCategories } from '../../../../../store/actions/index';
 import { formatCurrency } from '../../../../../shared/utility';
 
 
@@ -162,8 +162,10 @@ function getStyles(employee, employeeName, theme) {
 
 const CreateModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, fetchedEmployees, fetchEmployeesHandler } = props;
+    const { show, heading, confirmText, onConfirm, onClose, fetchedEmployees, fetchedLocations, fetchedCategories, fetchEmployeesHandler, fetchLocationsHandler, fetchCategoriesHandler } = props;
+
     const { t } = useTranslation();
+
     const themeCtx = useContext(ThemeContext)
     const { lang } = themeCtx;
 
@@ -183,6 +185,14 @@ const CreateModal = (props) => {
 
     const [employeeName, setEmployeeName] = useState([]);
 
+    const [locationName, setLocationName] = useState('');
+
+    const [categoryName, setCategoryName] = useState('');
+
+    const [timeRequired, setTimeRequired] = useState(0);
+
+    const [timeType, setTimeType] = useState('minutes');
+
     const [serviceStatus, setServiceStatus] = useState('active');
 
     const [uploadedImages, setUploadedImages] = useState([]);
@@ -196,7 +206,7 @@ const CreateModal = (props) => {
         if (discountType === 'percent') {
             netPrice = (servicePrice - (servicePrice * (serviceDiscount / 100))).toFixed(2);
             setPriceAfterDiscount(netPrice)
-        } else if (discountType === 'fixed'  ) {
+        } else if (discountType === 'fixed') {
             netPrice = (servicePrice - serviceDiscount).toFixed(2);
             setPriceAfterDiscount(netPrice)
         }
@@ -204,7 +214,9 @@ const CreateModal = (props) => {
 
     useEffect(() => {
         fetchEmployeesHandler(lang);
-    }, [fetchEmployeesHandler, lang])
+        fetchLocationsHandler(lang);
+        fetchCategoriesHandler(lang);
+    }, [fetchCategoriesHandler, fetchEmployeesHandler, fetchLocationsHandler, lang])
 
 
     const serviceNameChangeHandler = (event) => {
@@ -250,6 +262,32 @@ const CreateModal = (props) => {
             typeof value === 'string' ? value.split(',') : value,
         );
     };
+    const handleLocationChange = (event) => {
+        const {
+            target: { value },
+        } = event;
+        setLocationName(
+            // On autofill we get a the stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+        );
+    };
+    const handleCategoryChange = (event) => {
+        const {
+            target: { value },
+        } = event;
+        setCategoryName(
+            // On autofill we get a the stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+        );
+    };
+    const serviceTimeChangeHandler = (event) => {
+        if (event.target.value >= 0 ) {
+            setTimeRequired(event.target.value);
+        }
+    }
+    const timeTypeChangeHandler = (event) => {
+        setTimeType(event.target.value);
+    }
     const closeModalHandler = useCallback(() => {
         onClose();
     }, [onClose])
@@ -329,7 +367,63 @@ const CreateModal = (props) => {
                     <p>{formatCurrency(priceAfterDiscount)}</p>
                 </PriceCalculation>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
+                <FormControl sx={{ width: '100%' }}>
+                    <InputLabel id="location-label">{t('location')}</InputLabel>
+                    <Select
+                        value={locationName}
+                        onChange={handleLocationChange}
+                        inputProps={{ 'aria-label': 'Without label' }}
+                    >
+                        {fetchedLocations.map((location) => (
+                            <MenuItem
+                                key={location.id}
+                                value={location.id}
+                                style={getStyles(location, employeeName, themeCtx.theme)}
+                            >
+                                {location.name}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+                <FormControl sx={{ width: '100%' }}>
+                    <InputLabel id="categories-label">{t('categories')}</InputLabel>
+                    <Select
+                        value={categoryName}
+                        onChange={handleCategoryChange}
+                        inputProps={{ 'aria-label': 'Without label' }}
+                    >
+                        {fetchedCategories.map((category) => (
+                            <MenuItem
+                                key={category.id}
+                                value={category.id}
+                                style={getStyles(category, employeeName, themeCtx.theme)}
+                            >
+                                {category.name}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+                <CustomFormGroup>
+                    <CustomTextField id="service-time" type='number' label={t('time')} variant="outlined" value={timeRequired} onChange={serviceTimeChangeHandler} />
+                    <FormControl sx={{ minWidth: 120, ml: 1 }}>
+                        <Select
+                            value={timeType}
+                            onChange={timeTypeChangeHandler}
+                            inputProps={{ 'aria-label': 'Without label' }}
+                        >
+                            <MenuItem value='minutes'>{t('minutes')}</MenuItem>
+                            <MenuItem value='hours'>{t('hours')}</MenuItem>
+                            <MenuItem value='days'>{t('days')}</MenuItem>
+                        </Select>
+                    </FormControl>
+                </CustomFormGroup>
+            </Grid>
+            <Grid item xs={12} sm={6} >
                 <FormControl sx={{ width: '100%' }}>
                     <InputLabel id="employee-label">{t('employee')}</InputLabel>
                     <Select
@@ -434,12 +528,16 @@ const CreateModal = (props) => {
 const mapStateToProps = (state) => {
     return {
         fetchedEmployees: state.employees.employees,
+        fetchedLocations: state.locations.locations,
+        fetchedCategories: state.categories.categories,
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
         fetchEmployeesHandler: (lang) => dispatch(fetchEmployees(lang)),
+        fetchLocationsHandler: (lang) => dispatch(fetchLocations(lang)),
+        fetchCategoriesHandler: (lang) => dispatch(fetchCategories(lang)),
     }
 }
 
