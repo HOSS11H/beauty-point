@@ -30,7 +30,7 @@ import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 import { connect } from 'react-redux';
 import { fetchEmployees } from '../../../../../../store/actions/index';
-import { width } from 'dom-helpers';
+import { formatCurrency } from '../../../../../../shared/utility';
 
 
 const CustomTextField = styled(TextField)`
@@ -346,7 +346,7 @@ const EditModal = (props) => {
             <Grid item xs={12}>
                 <PriceCalculation>
                     <p>{t('price after discount')}</p>
-                    <p>{priceAfterDiscount}</p>
+                    <p>{formatCurrency(priceAfterDiscount)}</p>
                 </PriceCalculation>
             </Grid>
             <Grid item xs={12}>

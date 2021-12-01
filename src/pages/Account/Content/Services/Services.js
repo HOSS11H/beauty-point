@@ -1,4 +1,4 @@
-import { Fragment } from "react";
+import { Fragment, useState, useCallback } from "react";
 import { connect } from "react-redux";
 import { searchServices } from '../../../../store/actions/index';
 import SearchBar from "../../../../components/Search/SearchBar/SearchBar";
@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 import ServicesTable from './ServicesTable/ServicesTable';
 import { CustomButton } from '../../../../components/UI/Button/Button';
+import CreateModal from "./CreateModal/CreateModal";
 
 const ActionsWrapper = styled.div`
     display: flex;
@@ -30,11 +31,28 @@ function Services(props) {
 
     const { searchServicesHandler } = props;
 
+    const [createModalOpened, setCreateModalOpened] = useState(false);
+
+    // Create Modal
+    const createModalOpenHandler = useCallback((id) => {
+        setCreateModalOpened(true);
+    }, [])
+    const createModalCloseHandler = useCallback(() => {
+        setCreateModalOpened(false);
+    }, [])
+
+    const createModalConfirmHandler = useCallback((id) => {
+        setCreateModalOpened(false);
+    }, [])
+
     return (
         <Fragment>
             <ActionsWrapper>
                 <SearchBar searchHandler={searchServicesHandler}/>
-                <CreateBtn>{t('Create Service')}</CreateBtn>
+                <CreateBtn onClick={createModalOpenHandler} >{t('Create Service')}</CreateBtn>
+                <CreateModal show={createModalOpened}
+                    onClose={createModalCloseHandler} onConfirm={createModalConfirmHandler}
+                    heading='create new service' confirmText='create' />
             </ActionsWrapper>
             <ServicesTable />
         </Fragment>

@@ -1,9 +1,9 @@
-import ThemeContext from '../../../../../../store/theme-context'
 import { useState, useEffect, useCallback, useContext } from 'react';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
+import ThemeContext from '../../../../../store/theme-context'
 
-import { CustomModal } from '../../../../../../components/UI/Modal/Modal';
+import { CustomModal } from '../../../../../components/UI/Modal/Modal';
 import { Grid } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
@@ -25,11 +25,11 @@ import ImageUploading from 'react-images-uploading';
 
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { EditorState, convertToRaw, ContentState } from 'draft-js';
+import { EditorState, convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
-import htmlToDraft from 'html-to-draftjs';
 import { connect } from 'react-redux';
-import { fetchEmployees } from '../../../../../../store/actions/index';
+import { fetchEmployees } from '../../../../../store/actions/index';
+import { formatCurrency } from '../../../../../shared/utility';
 
 
 const CustomTextField = styled(TextField)`
@@ -162,46 +162,32 @@ function getStyles(employee, employeeName, theme) {
 
 const CreateModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, id, fetchedServices, fetchedEmployees, fetchEmployeesHandler } = props;
+    const { show, heading, confirmText, onConfirm, onClose, fetchedEmployees, fetchEmployeesHandler } = props;
     const { t } = useTranslation();
     const themeCtx = useContext(ThemeContext)
     const { lang } = themeCtx;
 
-    const selectedServiceIndex = fetchedServices.data.findIndex(service => service.id === id);
+    const [serviceName, setServiceName] = useState('');
 
-    let serviceData = fetchedServices.data[selectedServiceIndex];
+    const [servicePrice, setServicePrice] = useState(0);
 
-    const { name, description, price, discount, discount_type, price_after_discount, users = [], status, images, image } = serviceData;
+    const [editorState, setEditorState] = useState(
+        EditorState.createEmpty()
+    )
 
-    let employeesIds = [];
-    users.map(employee => {
-        employeesIds.push(employee.id)
-        return employeesIds;
-    })
+    const [serviceDiscount, setServiceDiscount] = useState(0);
 
-    const [serviceName, setServiceName] = useState(name);
+    const [discountType, setDiscountType] = useState('percent');
 
-    const html = description;
-    const contentBlock = htmlToDraft(html);
-    const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+    const [priceAfterDiscount, setPriceAfterDiscount] = useState(0);
 
-    const [editorState, setEditorState] = useState(EditorState.createWithContent(contentState))
+    const [employeeName, setEmployeeName] = useState([]);
 
-    const [servicePrice, setServicePrice] = useState(price);
+    const [serviceStatus, setServiceStatus] = useState('active');
 
-    const [serviceDiscount, setServiceDiscount] = useState(discount);
+    const [uploadedImages, setUploadedImages] = useState([]);
 
-    const [discountType, setDiscountType] = useState(discount_type);
-
-    const [priceAfterDiscount, setPriceAfterDiscount] = useState(price_after_discount);
-
-    const [employeeName, setEmployeeName] = useState(employeesIds);
-
-    const [serviceStatus, setServiceStatus] = useState(status);
-
-    const [uploadedImages, setUploadedImages] = useState(images);
-
-    const [defaultImage, setDefaultImage] = useState(image);
+    const [defaultImage, setDefaultImage] = useState('');
 
     const maxNumber = 69;
 
@@ -276,17 +262,12 @@ const CreateModal = (props) => {
             return employeesData;
         })
         const data = {
-            id: id,
             name: serviceName,
             description: draftToHtml(convertToRaw(editorState.getCurrentContent())),
             price: +servicePrice,
             price_after_discount: +priceAfterDiscount,
             discount: +serviceDiscount,
             discount_type: discountType,
-            time: serviceData.time,
-            time_type: serviceData.time_type,
-            category_id: serviceData.category.id,
-            location_id: serviceData.location.id,
             employee_ids: employeeName,
             status: serviceStatus,
             images: uploadedImages,
@@ -294,7 +275,7 @@ const CreateModal = (props) => {
             users: employeesData,
         }
         onConfirm(data);
-    }, [defaultImage, discountType, editorState, employeeName, fetchedEmployees, id, onConfirm, priceAfterDiscount, serviceData.category.id, serviceData.location.id, serviceData.time, serviceData.time_type, serviceDiscount, serviceName, servicePrice, serviceStatus, uploadedImages])
+    }, [defaultImage, discountType, editorState, employeeName, fetchedEmployees, onConfirm, priceAfterDiscount, serviceDiscount, serviceName, servicePrice, serviceStatus, uploadedImages])
 
     let content = (
         <Grid container spacing={2}>
@@ -345,7 +326,7 @@ const CreateModal = (props) => {
             <Grid item xs={12}>
                 <PriceCalculation>
                     <p>{t('price after discount')}</p>
-                    <p>{priceAfterDiscount}</p>
+                    <p>{formatCurrency(priceAfterDiscount)}</p>
                 </PriceCalculation>
             </Grid>
             <Grid item xs={12}>
