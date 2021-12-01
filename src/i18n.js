@@ -72,6 +72,7 @@ const resources = {
             'discount': 'الخصم',
             'discount price': 'سعر الخصم',
             'service name': 'اسم الخدمة',
+            'Create Service': 'إنشاء خدمة',
         }
     }
 };

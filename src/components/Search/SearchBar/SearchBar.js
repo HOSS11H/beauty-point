@@ -13,6 +13,7 @@ const CustomAppBar = styled(AppBar)`
     box-shadow: rgb(90 114 123 / 11%) 0px 7px 30px 0px;
     border-radius:20px;
     margin-bottom: 40px;
+    padding: 0px;
     background-color: ${({ theme }) => theme.palette.background.default};
 `
 
