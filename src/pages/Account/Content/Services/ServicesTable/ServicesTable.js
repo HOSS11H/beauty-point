@@ -66,8 +66,8 @@ function ServicesTable(props) {
     }, [fetchServicesHandler, lang, order, orderBy, page, rowsPerPage]);
 
     useEffect(() => {
-        if (fetchedServices.per_page) {
-            setRowsPerPage(fetchedServices.per_page)
+        if (fetchedServices.meta.per_page) {
+            setRowsPerPage(+fetchedServices.meta.per_page)
         }
     }, [fetchedServices])
 

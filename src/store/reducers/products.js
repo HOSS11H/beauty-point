@@ -3,7 +3,7 @@ import * as actionTypes from '../actions/actionTypes';
 import { updateObject } from '../../shared/utility';
 
 const intialState = {
-    products: { data: [ ] } ,
+    products: { data: [ ], meta: {  } } ,
     fetchingProducts: false,
     errorFetchingProducts: false,
     deletingProduct: false,

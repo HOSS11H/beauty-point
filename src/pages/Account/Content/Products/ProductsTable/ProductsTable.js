@@ -53,6 +53,9 @@ function ProductsTable(props) {
 
     const [page, setPage] = useState(0);
 
+    const [order, setOrder] = useState('desc');
+    const [orderBy, setOrderBy] = useState('name');
+
     const [rowsPerPage, setRowsPerPage] = useState(intialRowsPerPage);
 
     const [ deleteModalOpened , setDeleteModalOpened ] = useState(false);
@@ -64,14 +67,20 @@ function ProductsTable(props) {
     const [ selectedProductId , setSelectedProductId ] = useState(null);
 
     useEffect(() => {
-        fetchProductsHandler(lang, token, page);
-    }, [fetchProductsHandler, lang, token, page]);
+        fetchProductsHandler(lang, page, rowsPerPage, orderBy, order);
+    }, [fetchProductsHandler, lang, token, page, rowsPerPage, orderBy, order]);
 
     useEffect(() => {
-        if( fetchedProducts.per_page ) {
-            setRowsPerPage(fetchedProducts.per_page)
+        if( fetchedProducts.meta.per_page ) {
+            setRowsPerPage(+fetchedProducts.meta.per_page)
         }
     }, [ fetchedProducts ])
+
+    const handleRequestSort = (event, property) => {
+        const isAsc = orderBy === property && order === 'asc';
+        setOrder(isAsc ? 'desc' : 'asc');
+        setOrderBy(property);
+    };
 
     // Delete Modal
     const deleteModalOpenHandler = useCallback(( id ) => {
@@ -147,6 +156,7 @@ function ProductsTable(props) {
                     >
                         <EnhancedTableHead
                             rowCount={fetchedProducts.data.length}
+                            onRequestSort={handleRequestSort}
                         />
                         <EnhancedTableBody 
                             fetchedProducts={fetchedProducts}
@@ -160,7 +170,7 @@ function ProductsTable(props) {
                 <TablePaginationActions
                     component="div"
                     count={fetchedProducts.data.length}
-                    total={fetchedProducts.total}
+                    total={fetchedProducts.meta.total}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}
@@ -198,7 +208,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchProductsHandler: (language, token, page) => dispatch(fetchProducts(language, token, page)),
+        fetchProductsHandler: (language, page, perPage, orderBy, order) => dispatch(fetchProducts(language, page, perPage, orderBy, order)),
         deleteProductHandler: ( token , id ) => dispatch( deleteProduct(token , id) ),
     }
 }

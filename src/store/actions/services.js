@@ -19,10 +19,10 @@ export const fetchServicesFailed = ( errorMessage ) => {
         error: errorMessage,
     }
 }
-export const fetchServices = ( language, perPage ) => {
+export const fetchServices = ( language, page, perPage, orderBy, orderDir ) => {
     return dispatch => {
         dispatch( fetchServicesStart( ) )
-        axios.get(`/vendors/services?per_page=${perPage}&include[]=category&include[]=location&include[]=users&include[]=bookingItems&include[]=company`, { 
+        axios.get(`/vendors/services?page=${page + 1}&per_page=${perPage}&order_by=${orderBy}&order_dir=${orderDir}&include[]=category&include[]=location&include[]=users&include[]=bookingItems&include[]=company`, { 
             headers: {
                 'Accept-Language': language
             }

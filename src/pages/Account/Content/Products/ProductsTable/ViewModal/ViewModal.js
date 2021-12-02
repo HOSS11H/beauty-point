@@ -3,6 +3,7 @@ import DOMPurify from "dompurify";
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { Grid } from '@mui/material';
+import { formatCurrency } from '../../../../../../shared/utility';
 
 const ProductImg = styled.div`
     width: 100%;
@@ -77,7 +78,7 @@ const ViewModal = (props) => {
             <Grid container  spacing={2}>
                 <Grid item xs={12} md={6}>
                     <ProductImg>
-                        <img src={productData.product_image_url} alt="product" />
+                        <img src={productData.image} alt="product" />
                     </ProductImg>
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -97,13 +98,13 @@ const ViewModal = (props) => {
                         <Grid item xs={6}>
                             <ProductData>
                                 <ProductDataHeading>{t('original price')}</ProductDataHeading>
-                                <ProductDataInfo>{productData.formated_price}</ProductDataInfo>
+                                <ProductDataInfo>{formatCurrency(productData.price)}</ProductDataInfo>
                             </ProductData>
                         </Grid>
                         <Grid item xs={6}>
                             <ProductData>
                                 <ProductDataHeading>{t('price after discount')}</ProductDataHeading>
-                                <ProductDataInfo>{productData.formated_discounted_price}</ProductDataInfo>
+                                <ProductDataInfo>{formatCurrency(productData.discount_price)}</ProductDataInfo>
                             </ProductData>
                         </Grid>
                         <Grid item xs={6}>

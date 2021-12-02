@@ -18,10 +18,10 @@ export const fetchProductsFailed = ( errorMessage ) => {
         error: errorMessage,
     }
 }
-export const fetchProducts = ( language, token , page ) => {
+export const fetchProducts = ( language, page, perPage, orderBy, orderDir ) => {
     return dispatch => {
         dispatch( fetchProductsStart( ) )
-        axios.get(`/vendors/products?page=${page + 1}`, { 
+        axios.get(`/vendors/products?page=${page + 1}&per_page=${perPage}&order_by=${orderBy}&order_dir=${orderDir}&include[]=category&include[]=location&include[]=users&include[]=bookingItems&include[]=company`, { 
             headers: {
                 'Accept-Language': language
             }

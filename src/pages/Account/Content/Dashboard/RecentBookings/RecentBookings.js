@@ -3,7 +3,6 @@ import { useContext, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { fetchBookings } from '../../../../../store/actions/index';
 import ThemeContext from '../../../../../store/theme-context';
-import AuthContext from '../../../../../store/auth-context';
 
 import CustomCard from '../../../../../components/UI/Card/Card';
 import Table from '@mui/material/Table';

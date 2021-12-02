@@ -4,6 +4,7 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import { TableData, TableImg, TableStatus } from '../../../../../../components/UI/Dashboard/Table/Table';
+import { formatCurrency } from '../../../../../../shared/utility';
 
 
 const EnhancedTableBody = props => {
@@ -27,7 +28,7 @@ const EnhancedTableBody = props => {
                             scope="row"
                         >
                             <TableImg>
-                                <img src={row.product_image_url} alt="" />
+                                <img src={row.image} alt="" />
                             </TableImg>
                         </TableCell>
                         <TableCell align="center">
@@ -37,17 +38,17 @@ const EnhancedTableBody = props => {
                         </TableCell>
                         <TableCell align="center">
                             <TableData>
-                                {row.location_id}
+                                {row.location.name}
                             </TableData>
                         </TableCell>
                         <TableCell align="center">
                             <TableData>
-                                {row.formated_price}
+                                {formatCurrency(row.price)}
                             </TableData>
                         </TableCell>
                         <TableCell align="center">
                             <TableData>
-                                {row.formated_discounted_price}
+                                {formatCurrency(row.discount_price)}
                             </TableData>
                         </TableCell>
                         <TableCell align="center">
