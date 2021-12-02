@@ -68,8 +68,7 @@ const ViewModal = (props) => {
     const productIndex = fetchedProducts.data.findIndex(product => product.id === id);
 
     const productData = fetchedProducts.data[productIndex];
-
-    console.log(productData);
+    
     let content;
 
     if (productData) {

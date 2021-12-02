@@ -45,6 +45,8 @@ function ProductsTable(props) {
 
     const { fetchedProducts, fetchProductsHandler, loadingProducts, deleteProductHandler, searchingProducts, searchingProductsSuccess } = props;
 
+    console.log(fetchedProducts)
+
     const themeCtx = useContext(ThemeContext)
     const authCtx = useContext(AuthContext)
 
@@ -188,7 +190,7 @@ function ProductsTable(props) {
                     heading='view product details' confirmText='edit' />
                 {
                     editModalOpened && (
-                        <EditModal show={editModalOpened} id={selectedProductId} fetchedproducts={fetchedProducts}
+                        <EditModal show={editModalOpened} id={selectedProductId} fetchedProducts={fetchedProducts}
                             onClose={editModalCloseHandler} onConfirm={editModalConfirmHandler}
                             heading='edit service details' confirmText='edit' />
                     )

@@ -170,7 +170,7 @@ const EditModal = (props) => {
 
     let serviceData = fetchedServices.data[selectedServiceIndex];
 
-    const { name, description, price, discount, discount_type, price_after_discount, users = [], status, images, image } = serviceData;
+    const { name, description, price, discount, discount_type, discount_price, users = [], status, images, image } = serviceData;
 
     let employeesIds = [];
     users.map(employee => {
@@ -192,7 +192,7 @@ const EditModal = (props) => {
 
     const [discountType, setDiscountType] = useState(discount_type);
 
-    const [priceAfterDiscount, setPriceAfterDiscount] = useState(price_after_discount);
+    const [priceAfterDiscount, setPriceAfterDiscount] = useState(discount_price);
 
     const [employeeName, setEmployeeName] = useState(employeesIds);
 

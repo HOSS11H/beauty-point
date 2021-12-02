@@ -150,8 +150,8 @@ const MenuProps = {
     },
 };
 
-function getStyles(employee, employeeName, theme) {
-    const selectedIndex = employeeName.findIndex(name => name.id === employee.id);
+function getStyles(selected, items, theme) {
+    const selectedIndex = items.findIndex(name => name.id === selected.id);
     return {
         fontWeight:
             selectedIndex === -1
@@ -458,7 +458,6 @@ const CreateModal = (props) => {
                             <MenuItem
                                 key={location.id}
                                 value={location.id}
-                                style={getStyles(location, employeeName, themeCtx.theme)}
                             >
                                 {location.name}
                             </MenuItem>
@@ -479,7 +478,6 @@ const CreateModal = (props) => {
                             <MenuItem
                                 key={category.id}
                                 value={category.id}
-                                style={getStyles(category, employeeName, themeCtx.theme)}
                             >
                                 {category.name}
                             </MenuItem>

@@ -9,15 +9,12 @@ import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import InputLabel from '@mui/material/InputLabel';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import OutlinedInput from '@mui/material/OutlinedInput';
 import IconButton from '@mui/material/IconButton';
-import Chip from '@mui/material/Chip';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import InputLabel from '@mui/material/InputLabel';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import DeleteIcon from '@mui/icons-material/Delete';
 
@@ -138,31 +135,9 @@ const EditorWrapper = styled.div`
 `
 
 
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-    PaperProps: {
-        style: {
-            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        },
-    },
-};
-
-function getStyles(employee, employeeName, theme) {
-    const selectedIndex = employeeName.findIndex(name => name.id === employee.id);
-    return {
-        fontWeight:
-            selectedIndex === -1
-                ? theme.typography.fontWeightRegular
-                : theme.typography.fontWeightMedium,
-    };
-}
-
-
 const EditModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, id, fetchedProducts, fetchedEmployees } = props;
+    const { show, heading, confirmText, onConfirm, onClose, id, fetchedProducts, fetchedLocations } = props;
     const { t } = useTranslation();
     const themeCtx = useContext(ThemeContext)
 
@@ -170,13 +145,7 @@ const EditModal = (props) => {
 
     let productData = fetchedProducts.data[selectedProductIndex];
 
-    const { name, description, price, discount, discount_type, price_after_discount, users = [], status, images, image } = productData;
-
-    let employeesIds = [];
-    users.map(employee => {
-        employeesIds.push(employee.id)
-        return employeesIds;
-    })
+    const { name, description, price, discount, discount_type, discount_price, location, status, image } = productData;
 
     const [productName, setProductName] = useState(name);
 
@@ -186,20 +155,20 @@ const EditModal = (props) => {
 
     const [editorState, setEditorState] = useState(EditorState.createWithContent(contentState))
 
+    const [locationName, setLocationName] = useState(location.id);
+
     const [productPrice, setProductPrice] = useState(price);
 
     const [productDiscount, setProductDiscount] = useState(discount);
 
     const [discountType, setDiscountType] = useState(discount_type);
 
-    const [priceAfterDiscount, setPriceAfterDiscount] = useState(price_after_discount);
-
-    const [employeeName, setEmployeeName] = useState(employeesIds);
+    const [priceAfterDiscount, setPriceAfterDiscount] = useState(discount_price);
 
     const [productStatus, setProductStatus] = useState(status);
 
-    const [uploadedImages, setUploadedImages] = useState(images);
-
+    const [uploadedImages, setUploadedImages] = useState([ { data_url: image} ]);
+    console.log(uploadedImages);
     const [defaultImage, setDefaultImage] = useState(image);
 
     const maxNumber = 69;
@@ -235,6 +204,15 @@ const EditModal = (props) => {
     const onEditorChange = newState => {
         setEditorState(newState)
     }
+    const handleLocationChange = (event) => {
+        const {
+            target: { value },
+        } = event;
+        setLocationName(
+            // On autofill we get a the stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+        );
+    };
 
     const productPriceChangeHandler = (event) => {
         if (event.target.value >= 0) {
@@ -253,26 +231,12 @@ const EditModal = (props) => {
         setProductStatus(event.target.value);
     }
 
-    const handleEmployeesChange = (event) => {
-        const {
-            target: { value },
-        } = event;
-        setEmployeeName(
-            // On autofill we get a the stringified value.
-            typeof value === 'string' ? value.split(',') : value,
-        );
-    };
     const closeModalHandler = useCallback(() => {
         onClose();
     }, [onClose])
 
     const confirmEditHandler = useCallback(() => {
-        const employeesData = [];
-        employeeName.map(employeeId => {
-            const employeeIndex = fetchedEmployees.findIndex(employee => employee.id === employeeId);
-            employeesData.push(fetchedEmployees[employeeIndex]);
-            return employeesData;
-        })
+
         const data = {
             id: id,
             name: productName,
@@ -283,16 +247,13 @@ const EditModal = (props) => {
             discount_type: discountType,
             time: productData.time,
             time_type: productData.time_type,
-            category_id: productData.category.id,
             location_id: productData.location.id,
-            employee_ids: employeeName,
             status: productStatus,
             images: uploadedImages,
             image: defaultImage,
-            users: employeesData,
         }
         onConfirm(data);
-    }, [defaultImage, discountType, editorState, employeeName, fetchedEmployees, id, onConfirm, priceAfterDiscount, productData.category.id, productData.location.id, productData.time, productData.time_type, productDiscount, productName, productPrice, productStatus, uploadedImages])
+    }, [defaultImage, discountType, editorState, id, onConfirm, priceAfterDiscount, productData.location.id, productData.time, productData.time_type, productDiscount, productName, productPrice, productStatus, uploadedImages])
 
     let content = (
         <Grid container spacing={2}>
@@ -322,6 +283,25 @@ const EditModal = (props) => {
                     />
                 </EditorWrapper>
             </Grid>
+            <Grid item xs={12}>
+                <FormControl sx={{ width: '100%' }}>
+                    <InputLabel id="location-label">{t('location')}</InputLabel>
+                    <Select
+                        value={locationName}
+                        onChange={handleLocationChange}
+                        inputProps={{ 'aria-label': 'Without label' }}
+                    >
+                        {fetchedLocations.map((location) => (
+                            <MenuItem
+                                key={location.id}
+                                value={location.id}
+                            >
+                                {location.name}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+            </Grid>
             <Grid item xs={12} sm={6}>
                 <CustomTextField id="product-price" type='number' label={t('price')} variant="outlined" value={productPrice} onChange={productPriceChangeHandler} />
             </Grid>
@@ -345,40 +325,6 @@ const EditModal = (props) => {
                     <p>{t('price after discount')}</p>
                     <p>{formatCurrency(priceAfterDiscount)}</p>
                 </PriceCalculation>
-            </Grid>
-            <Grid item xs={12}>
-                <FormControl sx={{ width: '100%' }}>
-                    <InputLabel id="employee-label">{t('employee')}</InputLabel>
-                    <Select
-                        labelId="employee-label"
-                        id="select-multiple-employees"
-                        multiple
-                        value={employeeName}
-                        onChange={handleEmployeesChange}
-                        input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
-                        renderValue={(selected) => (
-                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                {fetchedEmployees.length > 0 && selected.map((value) => {
-                                    const selected = fetchedEmployees.find(user => user.id === value);
-                                    return (
-                                        <Chip key={selected.id} label={selected.name} />
-                                    )
-                                })}
-                            </Box>
-                        )}
-                        MenuProps={MenuProps}
-                    >
-                        {fetchedEmployees.map((employee) => (
-                            <MenuItem
-                                key={employee.id}
-                                value={employee.id}
-                                style={getStyles(employee, employeeName, themeCtx.theme)}
-                            >
-                                {employee.name}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
             </Grid>
             <Grid item xs={12}>
                 <ImageUploading
@@ -450,7 +396,7 @@ const EditModal = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        fetchedEmployees: state.employees.employees,
+        fetchedLocations: state.locations.locations,
     }
 }
 

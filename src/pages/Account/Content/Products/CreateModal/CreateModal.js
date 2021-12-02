@@ -139,31 +139,9 @@ const EditorWrapper = styled.div`
 `
 
 
-
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-    PaperProps: {
-        style: {
-            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        },
-    },
-};
-
-function getStyles(employee, employeeName, theme) {
-    const selectedIndex = employeeName.findIndex(name => name.id === employee.id);
-    return {
-        fontWeight:
-            selectedIndex === -1
-                ? theme.typography.fontWeightRegular
-                : theme.typography.fontWeightMedium,
-    };
-}
-
-
 const CreateModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, fetchedEmployees, fetchedLocations, fetchedCategories, fetchEmployeesHandler, fetchLocationsHandler, fetchCategoriesHandler } = props;
+    const { show, heading, confirmText, onConfirm, onClose, fetchedLocations, fetchLocationsHandler,  } = props;
 
     const { t } = useTranslation();
 
@@ -189,13 +167,9 @@ const CreateModal = (props) => {
 
     const [priceAfterDiscount, setPriceAfterDiscount] = useState(0);
 
-    const [employeeName, setEmployeeName] = useState([]);
-
     const [locationName, setLocationName] = useState('');
     const [serviceLocationError, setServiceLocationError] = useState(false);
 
-    const [categoryName, setCategoryName] = useState('');
-    const [serviceCategoryError, setServiceCategoryError] = useState(false);
 
     const [timeRequired, setTimeRequired] = useState(0);
     const [serviceTimeError, setServiceTimeError] = useState(false);
@@ -223,10 +197,8 @@ const CreateModal = (props) => {
     }, [discountType, serviceDiscount, servicePrice])
 
     useEffect(() => {
-        fetchEmployeesHandler(lang);
         fetchLocationsHandler(lang);
-        fetchCategoriesHandler(lang);
-    }, [fetchCategoriesHandler, fetchEmployeesHandler, fetchLocationsHandler, lang])
+    }, [fetchLocationsHandler, lang])
 
 
     const serviceNameChangeHandler = (event) => {
@@ -272,15 +244,6 @@ const CreateModal = (props) => {
         setServiceStatus(event.target.value);
     }
 
-    const handleEmployeesChange = (event) => {
-        const {
-            target: { value },
-        } = event;
-        setEmployeeName(
-            // On autofill we get a the stringified value.
-            typeof value === 'string' ? value.split(',') : value,
-        );
-    };
     const handleLocationChange = (event) => {
         const {
             target: { value },
@@ -290,16 +253,6 @@ const CreateModal = (props) => {
             typeof value === 'string' ? value.split(',') : value,
         );
         setServiceLocationError(false);
-    };
-    const handleCategoryChange = (event) => {
-        const {
-            target: { value },
-        } = event;
-        setCategoryName(
-            // On autofill we get a the stringified value.
-            typeof value === 'string' ? value.split(',') : value,
-        );
-        setServiceCategoryError(false);
     };
     const serviceTimeChangeHandler = (event) => {
         if (event.target.value >= 0 ) {
@@ -331,10 +284,6 @@ const CreateModal = (props) => {
             setServiceLocationError(true);
             return;
         }
-        if (categoryName === '') {
-            setServiceCategoryError(true);
-            return;
-        }
         if (+timeRequired === 0) {
             setServiceTimeError(true);
             return;
@@ -343,15 +292,6 @@ const CreateModal = (props) => {
             setDefaultImageError(true);
             return;
         }
-        // Data To Add To State
-        const employeesData = [];
-        employeeName.map(employeeId => {
-            const employeeIndex = fetchedEmployees.findIndex(employee => employee.id === employeeId);
-            employeesData.push(fetchedEmployees[employeeIndex]);
-            return employeesData;
-        })
-
-        const selectedCategory = fetchedCategories.find(category => category.id === categoryName);
 
         const selectedLocation = fetchedLocations.find(location => location.id === locationName);
 
@@ -364,14 +304,10 @@ const CreateModal = (props) => {
             price_after_discount: +priceAfterDiscount,
             time: +timeRequired,
             time_type: timeType,
-            category_id: categoryName,
             location_id: locationName,
-            employee_ids: employeeName,
             status: serviceStatus,
             images: uploadedImages,
             image: defaultImage,
-            users: employeesData,
-            category: selectedCategory,
             location: selectedLocation,
         }
         onConfirm(data);
@@ -381,15 +317,13 @@ const CreateModal = (props) => {
         setServiceDiscount(0);
         setDiscountType('percent');
         setPriceAfterDiscount(0);
-        setEmployeeName([]);
         setLocationName('');
-        setCategoryName('');
         setTimeRequired(0);
         setTimeType('minutes');
         setServiceStatus('active');
         setUploadedImages([]);
         setDefaultImage('');
-    }, [categoryName, defaultImage, discountType, editorState, employeeName, fetchedCategories, fetchedEmployees, fetchedLocations, locationName, onConfirm, priceAfterDiscount, serviceDiscount, serviceName, servicePrice, serviceStatus, timeRequired, timeType, uploadedImages])
+    }, [defaultImage, discountType, editorState, fetchedLocations, locationName, onConfirm, priceAfterDiscount, serviceDiscount, serviceName, servicePrice, serviceStatus, timeRequired, timeType, uploadedImages])
 
     let content = (
         <Grid container spacing={2}>
@@ -458,7 +392,6 @@ const CreateModal = (props) => {
                             <MenuItem
                                 key={location.id}
                                 value={location.id}
-                                style={getStyles(location, employeeName, themeCtx.theme)}
                             >
                                 {location.name}
                             </MenuItem>
@@ -466,27 +399,6 @@ const CreateModal = (props) => {
                     </Select>
                 </FormControl>
                 {serviceLocationError && <ValidationMessage notExist>{t(`Please add Location`)}</ValidationMessage>}
-            </Grid>
-            <Grid item xs={12} sm={6}>
-                <FormControl sx={{ width: '100%' }}>
-                    <InputLabel id="categories-label">{t('categories')}</InputLabel>
-                    <Select
-                        value={categoryName}
-                        onChange={handleCategoryChange}
-                        inputProps={{ 'aria-label': 'Without label' }}
-                    >
-                        {fetchedCategories.map((category) => (
-                            <MenuItem
-                                key={category.id}
-                                value={category.id}
-                                style={getStyles(category, employeeName, themeCtx.theme)}
-                            >
-                                {category.name}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-                {serviceCategoryError && <ValidationMessage notExist>{t(`Please add Category`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6}>
                 <CustomFormGroup>
@@ -504,40 +416,6 @@ const CreateModal = (props) => {
                     </FormControl>
                 </CustomFormGroup>
                 {serviceTimeError && <ValidationMessage notExist>{t(`Please add Time`)}</ValidationMessage>}
-            </Grid>
-            <Grid item xs={12} sm={6} >
-                <FormControl sx={{ width: '100%' }}>
-                    <InputLabel id="employee-label">{t('employee')}</InputLabel>
-                    <Select
-                        labelId="employee-label"
-                        id="select-multiple-employees"
-                        multiple
-                        value={employeeName}
-                        onChange={handleEmployeesChange}
-                        input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
-                        renderValue={(selected) => (
-                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                {fetchedEmployees.length > 0 && selected.map((value) => {
-                                    const selected = fetchedEmployees.find(user => user.id === value);
-                                    return (
-                                        <Chip key={selected.id} label={selected.name} />
-                                    )
-                                })}
-                            </Box>
-                        )}
-                        MenuProps={MenuProps}
-                    >
-                        {fetchedEmployees.map((employee) => (
-                            <MenuItem
-                                key={employee.id}
-                                value={employee.id}
-                                style={getStyles(employee, employeeName, themeCtx.theme)}
-                            >
-                                {employee.name}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
             </Grid>
             <Grid item xs={12}>
                 <ImageUploading
@@ -610,17 +488,13 @@ const CreateModal = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        fetchedEmployees: state.employees.employees,
         fetchedLocations: state.locations.locations,
-        fetchedCategories: state.categories.categories,
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchEmployeesHandler: (lang) => dispatch(fetchEmployees(lang)),
         fetchLocationsHandler: (lang) => dispatch(fetchLocations(lang)),
-        fetchCategoriesHandler: (lang) => dispatch(fetchCategories(lang)),
     }
 }
 
