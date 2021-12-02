@@ -43,7 +43,7 @@ function ProductsTable(props) {
 
     const { t } = useTranslation()
 
-    const { fetchedProducts, fetchProductsHandler, loadingProducts , deleteProductHandler, searchingProducts, searchingProductsSuccess } = props;
+    const { fetchedProducts, fetchProductsHandler, loadingProducts, deleteProductHandler, searchingProducts, searchingProductsSuccess } = props;
 
     const themeCtx = useContext(ThemeContext)
     const authCtx = useContext(AuthContext)
@@ -58,23 +58,23 @@ function ProductsTable(props) {
 
     const [rowsPerPage, setRowsPerPage] = useState(intialRowsPerPage);
 
-    const [ deleteModalOpened , setDeleteModalOpened ] = useState(false);
+    const [deleteModalOpened, setDeleteModalOpened] = useState(false);
 
-    const [ viewModalOpened , setViewModalOpened ] = useState(false);
+    const [viewModalOpened, setViewModalOpened] = useState(false);
 
-    const [ editModalOpened , setEditModalOpened ] = useState(false);
+    const [editModalOpened, setEditModalOpened] = useState(false);
 
-    const [ selectedProductId , setSelectedProductId ] = useState(null);
+    const [selectedProductId, setSelectedProductId] = useState(null);
 
     useEffect(() => {
         fetchProductsHandler(lang, page, rowsPerPage, orderBy, order);
     }, [fetchProductsHandler, lang, token, page, rowsPerPage, orderBy, order]);
 
     useEffect(() => {
-        if( fetchedProducts.meta.per_page ) {
+        if (fetchedProducts.meta.per_page) {
             setRowsPerPage(+fetchedProducts.meta.per_page)
         }
-    }, [ fetchedProducts ])
+    }, [fetchedProducts])
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -83,52 +83,52 @@ function ProductsTable(props) {
     };
 
     // Delete Modal
-    const deleteModalOpenHandler = useCallback(( id ) => {
+    const deleteModalOpenHandler = useCallback((id) => {
         setDeleteModalOpened(true);
         setSelectedProductId(id);
     }, [])
-    const deleteModalCloseHandler = useCallback(( ) => {
+    const deleteModalCloseHandler = useCallback(() => {
         setDeleteModalOpened(false);
         setSelectedProductId(null);
     }, [])
 
-    const deleteModalConfirmHandler = useCallback(( id ) => {
-        deleteProductHandler(token ,id );
+    const deleteModalConfirmHandler = useCallback((id) => {
+        deleteProductHandler(token, id);
         setDeleteModalOpened(false);
         setSelectedProductId(null);
     }, [token, deleteProductHandler])
     // View Modal
-    const viewModalOpenHandler = useCallback(( id ) => {
+    const viewModalOpenHandler = useCallback((id) => {
         setViewModalOpened(true);
         setSelectedProductId(id);
     }, [])
-    const viewModalCloseHandler = useCallback(( ) => {
+    const viewModalCloseHandler = useCallback(() => {
         setViewModalOpened(false);
         setSelectedProductId(null);
     }, [])
 
-    const viewModalConfirmHandler = useCallback(( id ) => {
+    const viewModalConfirmHandler = useCallback((id) => {
         setViewModalOpened(false);
         setEditModalOpened(true);
     }, [])
 
     // Edit Modal
-    const editModalOpenHandler = useCallback(( id ) => {
+    const editModalOpenHandler = useCallback((id) => {
         setEditModalOpened(true);
         setSelectedProductId(id);
     }, [])
-    const editModalCloseHandler = useCallback(( ) => {
+    const editModalCloseHandler = useCallback(() => {
         setEditModalOpened(false);
         setSelectedProductId(null);
     }, [])
 
-    const editModalConfirmHandler = useCallback(( id ) => {
+    const editModalConfirmHandler = useCallback((id) => {
         setEditModalOpened(false);
         setSelectedProductId(null);
     }, [])
 
 
-    const handleChangePage = useCallback( (event, newPage) => {
+    const handleChangePage = useCallback((event, newPage) => {
         setPage(newPage);
     }, []);
 
@@ -148,47 +148,51 @@ function ProductsTable(props) {
         content = (
             <Fragment>
                 <Paper sx={{ width: '100%', boxShadow: 'none' }}>
-                <TableContainer>
-                    <Table
-                        sx={{ minWidth: 750 }}
-                        aria-labelledby="tableTitle"
-                        size='medium'
-                    >
-                        <EnhancedTableHead
-                            rowCount={fetchedProducts.data.length}
-                            onRequestSort={handleRequestSort}
-                            order={order}
-                            orderBy={orderBy}
-                            loading={loadingProducts}
-                        />
-                        <EnhancedTableBody 
-                            fetchedProducts={fetchedProducts}
-                            emptyRows={emptyRows}
-                            deleteModalOpenHandler={deleteModalOpenHandler}
-                            viewModalOpenHandler= {viewModalOpenHandler}
-                            editModalOpenHandler= {editModalOpenHandler}
-                        />
-                    </Table>
-                </TableContainer>
-                <TablePaginationActions
-                    component="div"
-                    count={fetchedProducts.data.length}
-                    total={fetchedProducts.meta.total}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    loading={loadingProducts}
-                />
-            </Paper>
-            <DeleteModal show={deleteModalOpened} id={selectedProductId}
+                    <TableContainer>
+                        <Table
+                            sx={{ minWidth: 750 }}
+                            aria-labelledby="tableTitle"
+                            size='medium'
+                        >
+                            <EnhancedTableHead
+                                rowCount={fetchedProducts.data.length}
+                                onRequestSort={handleRequestSort}
+                                order={order}
+                                orderBy={orderBy}
+                                loading={loadingProducts}
+                            />
+                            <EnhancedTableBody
+                                fetchedProducts={fetchedProducts}
+                                emptyRows={emptyRows}
+                                deleteModalOpenHandler={deleteModalOpenHandler}
+                                viewModalOpenHandler={viewModalOpenHandler}
+                                editModalOpenHandler={editModalOpenHandler}
+                            />
+                        </Table>
+                    </TableContainer>
+                    <TablePaginationActions
+                        component="div"
+                        count={fetchedProducts.data.length}
+                        total={fetchedProducts.meta.total}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        loading={loadingProducts}
+                    />
+                </Paper>
+                <DeleteModal show={deleteModalOpened} id={selectedProductId}
                     onClose={deleteModalCloseHandler} onConfirm={deleteModalConfirmHandler.bind(null, selectedProductId)}
-                    heading='Do you want To delete this product?'  confirmText='delete' />
-            <ViewModal show={viewModalOpened} id={selectedProductId} fetchedProducts={fetchedProducts}
-                onClose={viewModalCloseHandler} onConfirm={viewModalConfirmHandler.bind(null, selectedProductId)}
-                heading='view product details' confirmText='edit' />
-            <EditModal show={editModalOpened} id={selectedProductId} fetchedProducts={fetchedProducts}
-                onClose={editModalCloseHandler} onConfirm={editModalConfirmHandler.bind(null, selectedProductId)}
-                heading='view product details' confirmText='edit' />
+                    heading='Do you want To delete this product?' confirmText='delete' />
+                <ViewModal show={viewModalOpened} id={selectedProductId} fetchedProducts={fetchedProducts}
+                    onClose={viewModalCloseHandler} onConfirm={viewModalConfirmHandler.bind(null, selectedProductId)}
+                    heading='view product details' confirmText='edit' />
+                {
+                    editModalOpened && (
+                        <EditModal show={editModalOpened} id={selectedProductId} fetchedproducts={fetchedProducts}
+                            onClose={editModalCloseHandler} onConfirm={editModalConfirmHandler}
+                            heading='edit service details' confirmText='edit' />
+                    )
+                }
             </Fragment>
         )
     }
@@ -212,7 +216,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         fetchProductsHandler: (language, page, perPage, orderBy, order) => dispatch(fetchProducts(language, page, perPage, orderBy, order)),
-        deleteProductHandler: ( token , id ) => dispatch( deleteProduct(token , id) ),
+        deleteProductHandler: (token, id) => dispatch(deleteProduct(token, id)),
     }
 }
 

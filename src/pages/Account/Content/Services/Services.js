@@ -45,7 +45,7 @@ function Services(props) {
     const createModalConfirmHandler = useCallback((data) => {
         setCreateModalOpened(false);
         createServiceHandler(data);
-    }, [])
+    }, [createServiceHandler])
 
     return (
         <Fragment>

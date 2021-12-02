@@ -21,7 +21,7 @@ export const fetchProductsFailed = ( errorMessage ) => {
 export const fetchProducts = ( language, page, perPage, orderBy, orderDir ) => {
     return dispatch => {
         dispatch( fetchProductsStart( ) )
-        axios.get(`/vendors/products?page=${page + 1}&per_page=${perPage}&order_by=${orderBy}&order_dir=${orderDir}&include[]=category&include[]=location&include[]=users&include[]=bookingItems&include[]=company`, { 
+        axios.get(`/vendors/products?page=${page + 1}&per_page=${perPage}&order_by=${orderBy}&order_dir=${orderDir}&include[]=location`, { 
             headers: {
                 'Accept-Language': language
             }
@@ -87,7 +87,7 @@ export const searchProductsFailed = ( errorMessage ) => {
 export const searchProducts = ( language , word ) => {
     return dispatch => {
         dispatch( searchProductsStart( ) )
-        axios.get(`/vendors/products?term=${word}`, { 
+        axios.get(`/vendors/products?term=${word}&per_page=15&include[]=location`, { 
             headers: {
                 'Accept-Language': language
             }

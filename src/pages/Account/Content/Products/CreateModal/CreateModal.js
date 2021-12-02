@@ -1,9 +1,9 @@
-import ThemeContext from '../../../../../../store/theme-context'
 import { useState, useEffect, useCallback, useContext } from 'react';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
+import ThemeContext from '../../../../../store/theme-context'
 
-import { CustomModal } from '../../../../../../components/UI/Modal/Modal';
+import { CustomModal } from '../../../../../components/UI/Modal/Modal';
 import { Grid } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import FormControl from '@mui/material/FormControl';
@@ -25,12 +25,12 @@ import ImageUploading from 'react-images-uploading';
 
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { EditorState, convertToRaw, ContentState } from 'draft-js';
+import { EditorState, convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
-import htmlToDraft from 'html-to-draftjs';
 import { connect } from 'react-redux';
-import { fetchEmployees } from '../../../../../../store/actions/index';
-import { formatCurrency } from '../../../../../../shared/utility';
+import { fetchEmployees, fetchLocations, fetchCategories } from '../../../../../store/actions/index';
+import { formatCurrency } from '../../../../../shared/utility';
+import ValidationMessage from '../../../../../components/UI/ValidationMessage/ValidationMessage';
 
 
 const CustomTextField = styled(TextField)`
@@ -161,98 +161,115 @@ function getStyles(employee, employeeName, theme) {
 }
 
 
-const EditModal = (props) => {
+const CreateModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, id, fetchedProducts, fetchedEmployees } = props;
+    const { show, heading, confirmText, onConfirm, onClose, fetchedEmployees, fetchedLocations, fetchedCategories, fetchEmployeesHandler, fetchLocationsHandler, fetchCategoriesHandler } = props;
+
     const { t } = useTranslation();
+
     const themeCtx = useContext(ThemeContext)
     const { lang } = themeCtx;
 
-    const selectedProductIndex = fetchedProducts.data.findIndex(product => product.id === id);
+    const [serviceName, setServiceName] = useState('');
+    const [serviceNameError, setServiceNameError] = useState(false);
+    
+    
+    
+    const [editorState, setEditorState] = useState(
+        EditorState.createEmpty()
+    )
+    const [serviceDescriptionError, setServiceDescriptionError] = useState(false);
+        
+    const [servicePrice, setServicePrice] = useState(0);
+    const [servicePriceError, setServicePriceError] = useState(false);
 
-    let productData = fetchedProducts.data[selectedProductIndex];
+    const [serviceDiscount, setServiceDiscount] = useState(0);
 
-    const { name, description, price, discount, discount_type, price_after_discount, users = [], status, images, image } = productData;
+    const [discountType, setDiscountType] = useState('percent');
 
-    let employeesIds = [];
-    users.map(employee => {
-        employeesIds.push(employee.id)
-        return employeesIds;
-    })
+    const [priceAfterDiscount, setPriceAfterDiscount] = useState(0);
 
-    const [productName, setProductName] = useState(name);
+    const [employeeName, setEmployeeName] = useState([]);
 
-    const html = description;
-    const contentBlock = htmlToDraft(html);
-    const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+    const [locationName, setLocationName] = useState('');
+    const [serviceLocationError, setServiceLocationError] = useState(false);
 
-    const [editorState, setEditorState] = useState(EditorState.createWithContent(contentState))
+    const [categoryName, setCategoryName] = useState('');
+    const [serviceCategoryError, setServiceCategoryError] = useState(false);
 
-    const [productPrice, setProductPrice] = useState(price);
+    const [timeRequired, setTimeRequired] = useState(0);
+    const [serviceTimeError, setServiceTimeError] = useState(false);
 
-    const [productDiscount, setProductDiscount] = useState(discount);
+    const [timeType, setTimeType] = useState('minutes');
 
-    const [discountType, setDiscountType] = useState(discount_type);
+    const [serviceStatus, setServiceStatus] = useState('active');
 
-    const [priceAfterDiscount, setPriceAfterDiscount] = useState(price_after_discount);
+    const [uploadedImages, setUploadedImages] = useState([]);
 
-    const [employeeName, setEmployeeName] = useState(employeesIds);
-
-    const [productStatus, setProductStatus] = useState(status);
-
-    const [uploadedImages, setUploadedImages] = useState(images);
-
-    const [defaultImage, setDefaultImage] = useState(image);
+    const [defaultImage, setDefaultImage] = useState('');
+    const [defaultImageError, setDefaultImageError] = useState(false);
 
     const maxNumber = 69;
 
     useEffect(() => {
         let netPrice;
         if (discountType === 'percent') {
-            netPrice = (productPrice - (productPrice * (productDiscount / 100))).toFixed(2);
+            netPrice = (servicePrice - (servicePrice * (serviceDiscount / 100))).toFixed(2);
             setPriceAfterDiscount(netPrice)
-        } else if (discountType === 'fixed'  ) {
-            netPrice = (productPrice - productDiscount).toFixed(2);
+        } else if (discountType === 'fixed') {
+            netPrice = (servicePrice - serviceDiscount).toFixed(2);
             setPriceAfterDiscount(netPrice)
         }
-    }, [discountType, productDiscount, productPrice])
+    }, [discountType, serviceDiscount, servicePrice])
+
+    useEffect(() => {
+        fetchEmployeesHandler(lang);
+        fetchLocationsHandler(lang);
+        fetchCategoriesHandler(lang);
+    }, [fetchCategoriesHandler, fetchEmployeesHandler, fetchLocationsHandler, lang])
 
 
-    const productNameChangeHandler = (event) => {
-        setProductName(event.target.value);
+    const serviceNameChangeHandler = (event) => {
+        setServiceName(event.target.value);
+        setServiceNameError(false);
+    }
+
+    const onEditorChange = newState => {
+        setEditorState(newState);
+        setServiceDescriptionError(false);
     }
 
     const onImageChangeHandler = (imageList, addUpdateIndex) => {
         // data for submit
         setUploadedImages(imageList);
-        /* if (imageList.length === 1) {
+        if (imageList.length === 1) {
             setDefaultImage(imageList[0].data_url);
+            setDefaultImageError(false);
         } else {
-            setDefaultImage(image);
-        } */
+            setDefaultImage('');
+        }
     };
     const defaultImageHandler = (event) => {
         setDefaultImage(event.target.value);
+        setDefaultImageError(false);
     };
-    const onEditorChange = newState => {
-        setEditorState(newState)
-    }
 
-    const productPriceChangeHandler = (event) => {
+    const servicePriceChangeHandler = (event) => {
         if (event.target.value >= 0) {
-            setProductPrice(event.target.value);
+            setServicePrice(event.target.value);
+            setServicePriceError(false);
         }
     }
-    const productDiscountChangeHandler = (event) => {
-        if (event.target.value >= 0 && event.target.value <= productPrice) {
-            setProductDiscount(event.target.value);
+    const serviceDiscountChangeHandler = (event) => {
+        if (event.target.value >= 0 && event.target.value <= servicePrice) {
+            setServiceDiscount(event.target.value);
         }
     }
     const discountTypeChangeHandler = (event) => {
         setDiscountType(event.target.value);
     }
-    const productStatusChangeHandler = (event) => {
-        setProductStatus(event.target.value);
+    const serviceStatusChangeHandler = (event) => {
+        setServiceStatus(event.target.value);
     }
 
     const handleEmployeesChange = (event) => {
@@ -264,48 +281,127 @@ const EditModal = (props) => {
             typeof value === 'string' ? value.split(',') : value,
         );
     };
+    const handleLocationChange = (event) => {
+        const {
+            target: { value },
+        } = event;
+        setLocationName(
+            // On autofill we get a the stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+        );
+        setServiceLocationError(false);
+    };
+    const handleCategoryChange = (event) => {
+        const {
+            target: { value },
+        } = event;
+        setCategoryName(
+            // On autofill we get a the stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+        );
+        setServiceCategoryError(false);
+    };
+    const serviceTimeChangeHandler = (event) => {
+        if (event.target.value >= 0 ) {
+            setTimeRequired(event.target.value);
+            setServiceTimeError(false);
+        }
+    }
+    const timeTypeChangeHandler = (event) => {
+        setTimeType(event.target.value);
+    }
     const closeModalHandler = useCallback(() => {
         onClose();
     }, [onClose])
 
-    const confirmEditHandler = useCallback(() => {
+    const confirmCreateHandler = useCallback(() => {
+        if ( serviceName === '') {
+            setServiceNameError(true);
+            return;
+        }
+        if (editorState.getCurrentContent().hasText() === false) {
+            setServiceDescriptionError(true);
+            return;
+        }
+        if (+servicePrice === 0) { 
+            setServicePriceError(true);
+            return; 
+        }
+        if (locationName === '') {
+            setServiceLocationError(true);
+            return;
+        }
+        if (categoryName === '') {
+            setServiceCategoryError(true);
+            return;
+        }
+        if (+timeRequired === 0) {
+            setServiceTimeError(true);
+            return;
+        }
+        if (defaultImage === '') {
+            setDefaultImageError(true);
+            return;
+        }
+        // Data To Add To State
         const employeesData = [];
         employeeName.map(employeeId => {
             const employeeIndex = fetchedEmployees.findIndex(employee => employee.id === employeeId);
             employeesData.push(fetchedEmployees[employeeIndex]);
             return employeesData;
         })
+
+        const selectedCategory = fetchedCategories.find(category => category.id === categoryName);
+
+        const selectedLocation = fetchedLocations.find(location => location.id === locationName);
+
         const data = {
-            id: id,
-            name: productName,
+            name: serviceName,
             description: draftToHtml(convertToRaw(editorState.getCurrentContent())),
-            price: +productPrice,
-            price_after_discount: +priceAfterDiscount,
-            discount: +productDiscount,
+            price: +servicePrice,
+            discount: +serviceDiscount,
             discount_type: discountType,
-            time: productData.time,
-            time_type: productData.time_type,
-            category_id: productData.category.id,
-            location_id: productData.location.id,
+            price_after_discount: +priceAfterDiscount,
+            time: +timeRequired,
+            time_type: timeType,
+            category_id: categoryName,
+            location_id: locationName,
             employee_ids: employeeName,
-            status: productStatus,
+            status: serviceStatus,
             images: uploadedImages,
             image: defaultImage,
             users: employeesData,
+            category: selectedCategory,
+            location: selectedLocation,
         }
         onConfirm(data);
-    }, [defaultImage, discountType, editorState, employeeName, fetchedEmployees, id, onConfirm, priceAfterDiscount, productData.category.id, productData.location.id, productData.time, productData.time_type, productDiscount, productName, productPrice, productStatus, uploadedImages])
+        setServiceName('');
+        setEditorState(EditorState.createEmpty());
+        setServicePrice(0);
+        setServiceDiscount(0);
+        setDiscountType('percent');
+        setPriceAfterDiscount(0);
+        setEmployeeName([]);
+        setLocationName('');
+        setCategoryName('');
+        setTimeRequired(0);
+        setTimeType('minutes');
+        setServiceStatus('active');
+        setUploadedImages([]);
+        setDefaultImage('');
+    }, [categoryName, defaultImage, discountType, editorState, employeeName, fetchedCategories, fetchedEmployees, fetchedLocations, locationName, onConfirm, priceAfterDiscount, serviceDiscount, serviceName, servicePrice, serviceStatus, timeRequired, timeType, uploadedImages])
 
     let content = (
         <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
-                <CustomTextField id="product-name" label={t('name')} variant="outlined" value={productName} onChange={productNameChangeHandler} />
+                <CustomTextField id="service-name" label={t('name')} variant="outlined" value={serviceName} onChange={serviceNameChangeHandler} />
+                {serviceNameError && <ValidationMessage notExist>{t(`Please add name`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6}>
                 <FormControl sx={{ width: '100%' }}>
                     <Select
-                        value={productStatus}
-                        onChange={productStatusChangeHandler}
+                        value={serviceStatus}
+                        onChange={serviceStatusChangeHandler}
                         inputProps={{ 'aria-label': 'Without label' }}
                     >
                         <MenuItem value='active'>{t('active')}</MenuItem>
@@ -323,13 +419,15 @@ const EditModal = (props) => {
                         textAlignment={themeCtx.direction === 'rtl' ? 'right' : 'left'}
                     />
                 </EditorWrapper>
+                {serviceDescriptionError && <ValidationMessage notExist>{t(`Please add Description`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6}>
-                <CustomTextField id="product-price" type='number' label={t('price')} variant="outlined" value={productPrice} onChange={productPriceChangeHandler} />
+                <CustomTextField id="service-price" type='number' label={t('price')} variant="outlined" value={servicePrice} onChange={servicePriceChangeHandler} />
+                {servicePriceError && <ValidationMessage notExist>{t(`Please add Price`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6}>
                 <CustomFormGroup>
-                    <CustomTextField id="product-discount" type='number' label={t('discount')} variant="outlined" value={productDiscount} onChange={productDiscountChangeHandler} />
+                    <CustomTextField id="service-discount" type='number' label={t('discount')} variant="outlined" value={serviceDiscount} onChange={serviceDiscountChangeHandler} />
                     <FormControl sx={{ minWidth: 120, ml: 1 }}>
                         <Select
                             value={discountType}
@@ -348,7 +446,66 @@ const EditModal = (props) => {
                     <p>{formatCurrency(priceAfterDiscount)}</p>
                 </PriceCalculation>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
+                <FormControl sx={{ width: '100%' }}>
+                    <InputLabel id="location-label">{t('location')}</InputLabel>
+                    <Select
+                        value={locationName}
+                        onChange={handleLocationChange}
+                        inputProps={{ 'aria-label': 'Without label' }}
+                    >
+                        {fetchedLocations.map((location) => (
+                            <MenuItem
+                                key={location.id}
+                                value={location.id}
+                                style={getStyles(location, employeeName, themeCtx.theme)}
+                            >
+                                {location.name}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+                {serviceLocationError && <ValidationMessage notExist>{t(`Please add Location`)}</ValidationMessage>}
+            </Grid>
+            <Grid item xs={12} sm={6}>
+                <FormControl sx={{ width: '100%' }}>
+                    <InputLabel id="categories-label">{t('categories')}</InputLabel>
+                    <Select
+                        value={categoryName}
+                        onChange={handleCategoryChange}
+                        inputProps={{ 'aria-label': 'Without label' }}
+                    >
+                        {fetchedCategories.map((category) => (
+                            <MenuItem
+                                key={category.id}
+                                value={category.id}
+                                style={getStyles(category, employeeName, themeCtx.theme)}
+                            >
+                                {category.name}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+                {serviceCategoryError && <ValidationMessage notExist>{t(`Please add Category`)}</ValidationMessage>}
+            </Grid>
+            <Grid item xs={12} sm={6}>
+                <CustomFormGroup>
+                    <CustomTextField id="service-time" type='number' label={t('time')} variant="outlined" value={timeRequired} onChange={serviceTimeChangeHandler} />
+                    <FormControl sx={{ minWidth: 120, ml: 1 }}>
+                        <Select
+                            value={timeType}
+                            onChange={timeTypeChangeHandler}
+                            inputProps={{ 'aria-label': 'Without label' }}
+                        >
+                            <MenuItem value='minutes'>{t('minutes')}</MenuItem>
+                            <MenuItem value='hours'>{t('hours')}</MenuItem>
+                            <MenuItem value='days'>{t('days')}</MenuItem>
+                        </Select>
+                    </FormControl>
+                </CustomFormGroup>
+                {serviceTimeError && <ValidationMessage notExist>{t(`Please add Time`)}</ValidationMessage>}
+            </Grid>
+            <Grid item xs={12} sm={6} >
                 <FormControl sx={{ width: '100%' }}>
                     <InputLabel id="employee-label">{t('employee')}</InputLabel>
                     <Select
@@ -440,11 +597,12 @@ const EditModal = (props) => {
                         </div>
                     )}
                 </ImageUploading>
+                {defaultImageError && <ValidationMessage notExist>{t(`Please add default Image`)}</ValidationMessage>}
             </Grid>
         </Grid>
     )
     return (
-        <CustomModal show={show} heading={heading} confirmText={confirmText} onConfirm={confirmEditHandler} onClose={closeModalHandler} >
+        <CustomModal show={show} heading={heading} confirmText={confirmText} onConfirm={confirmCreateHandler} onClose={closeModalHandler} >
             {content}
         </CustomModal>
     )
@@ -453,7 +611,18 @@ const EditModal = (props) => {
 const mapStateToProps = (state) => {
     return {
         fetchedEmployees: state.employees.employees,
+        fetchedLocations: state.locations.locations,
+        fetchedCategories: state.categories.categories,
     }
 }
 
-export default connect(mapStateToProps, null)(EditModal);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchEmployeesHandler: (lang) => dispatch(fetchEmployees(lang)),
+        fetchLocationsHandler: (lang) => dispatch(fetchLocations(lang)),
+        fetchCategoriesHandler: (lang) => dispatch(fetchCategories(lang)),
+    }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreateModal);
