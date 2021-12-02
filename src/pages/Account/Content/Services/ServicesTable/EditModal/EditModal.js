@@ -29,7 +29,6 @@ import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 import { connect } from 'react-redux';
-import { fetchEmployees } from '../../../../../../store/actions/index';
 import { formatCurrency } from '../../../../../../shared/utility';
 
 
@@ -166,7 +165,6 @@ const EditModal = (props) => {
     const { show, heading, confirmText, onConfirm, onClose, id, fetchedServices, fetchedEmployees } = props;
     const { t } = useTranslation();
     const themeCtx = useContext(ThemeContext)
-    const { lang } = themeCtx;
 
     const selectedServiceIndex = fetchedServices.data.findIndex(service => service.id === id);
 

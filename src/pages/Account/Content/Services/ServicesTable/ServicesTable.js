@@ -123,7 +123,7 @@ function ServicesTable(props) {
         setEditModalOpened(false);
         setSelectedServiceId(null);
         updateServiceHandler(data);
-    }, [])
+    }, [updateServiceHandler])
 
 
     const handleChangePage = useCallback((event, newPage) => {
