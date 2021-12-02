@@ -158,14 +158,16 @@ const EditModal = (props) => {
     const [locationName, setLocationName] = useState(location.id);
 
     const [productPrice, setProductPrice] = useState(price);
-
+    
     const [productDiscount, setProductDiscount] = useState(discount);
-
+    
     const [discountType, setDiscountType] = useState(discount_type);
-
+    
     const [priceAfterDiscount, setPriceAfterDiscount] = useState(discount_price);
-
+    
     const [productStatus, setProductStatus] = useState(status);
+    
+    const [productQuantity, setProductQuantity] = useState(quantity);
 
     const [uploadedImages, setUploadedImages] = useState([ { data_url: image} ]);
     console.log(uploadedImages);
@@ -230,6 +232,11 @@ const EditModal = (props) => {
     const productStatusChangeHandler = (event) => {
         setProductStatus(event.target.value);
     }
+    const productQuantityChangeHandler = (event) => {
+        if (event.target.value >= 0) {
+            setProductQuantity(event.target.value);
+        }
+    }
 
     const closeModalHandler = useCallback(() => {
         onClose();
@@ -283,7 +290,7 @@ const EditModal = (props) => {
                     />
                 </EditorWrapper>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6} >
                 <FormControl sx={{ width: '100%' }}>
                     <InputLabel id="location-label">{t('location')}</InputLabel>
                     <Select
@@ -301,6 +308,9 @@ const EditModal = (props) => {
                         ))}
                     </Select>
                 </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+                <CustomTextField id="product-quantity" type='number' label={t('quantity')} variant="outlined" value={productQuantity} onChange={productQuantityChangeHandler} />
             </Grid>
             <Grid item xs={12} sm={6}>
                 <CustomTextField id="product-price" type='number' label={t('price')} variant="outlined" value={productPrice} onChange={productPriceChangeHandler} />
