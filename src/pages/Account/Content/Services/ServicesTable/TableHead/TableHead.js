@@ -93,8 +93,8 @@ function EnhancedTableHead(props) {
                         >
                             <TableHeading>
                                 {t(headCell.label)}
-                                {loading && orderBy === headCell.id &&<CircularProgress sx={{ ml: 1 }} size={14} />}
                             </TableHeading>
+                            {loading && orderBy === headCell.id &&<CircularProgress sx={{ ml: 1 }} size={14} />}
                             {orderBy === headCell.id ? (
                                 <Box component="span" sx={visuallyHidden}>
                                     {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
