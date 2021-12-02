@@ -4,7 +4,6 @@ const Wrapper = styled.div`
     max-width: 100%;
 `
 const Main = styled.main`
-    overflow-x: hidden;
     text-align: left;
 `
 

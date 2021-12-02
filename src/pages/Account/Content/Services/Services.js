@@ -19,6 +19,7 @@ const CreateBtn = styled(CustomButton)`
         padding: 0 20px;
         height: 64px;
         flex-shrink: 0;
+        box-shadow: rgb(90 114 123 / 11%) 0px 7px 30px 0px;
         @media screen and (max-width: 600px) {
             height: 50px;
         }

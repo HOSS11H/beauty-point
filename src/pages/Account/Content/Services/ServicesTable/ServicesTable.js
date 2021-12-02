@@ -5,7 +5,6 @@ import Paper from '@mui/material/Paper';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import ThemeContext from '../../../../../store/theme-context';
-import AuthContext from '../../../../../store/auth-context';
 import EnhancedTableHead from './TableHead/TableHead';
 import { fetchServices, deleteService, updateService } from '../../../../../store/actions/index';
 import EnhancedTableBody from './TableBody/TableBody';
