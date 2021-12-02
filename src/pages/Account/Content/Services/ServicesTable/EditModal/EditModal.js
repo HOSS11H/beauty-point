@@ -198,7 +198,7 @@ const EditModal = (props) => {
 
     const [serviceStatus, setServiceStatus] = useState(status);
 
-    const [uploadedImages, setUploadedImages] = useState(images);
+    const [uploadedImages, setUploadedImages] = useState([ { data_url: image } ]);
 
     const [defaultImage, setDefaultImage] = useState(image);
 

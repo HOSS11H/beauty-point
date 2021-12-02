@@ -145,7 +145,7 @@ const EditModal = (props) => {
 
     let productData = fetchedProducts.data[selectedProductIndex];
 
-    const { name, description, price, discount, discount_type, discount_price, location, status, image } = productData;
+    const { name, description, price, discount, discount_type, discount_price, location, status, image, quantity } = productData;
 
     const [productName, setProductName] = useState(name);
 
