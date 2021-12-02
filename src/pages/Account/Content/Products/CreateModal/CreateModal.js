@@ -148,35 +148,32 @@ const CreateModal = (props) => {
     const themeCtx = useContext(ThemeContext)
     const { lang } = themeCtx;
 
-    const [serviceName, setServiceName] = useState('');
-    const [serviceNameError, setServiceNameError] = useState(false);
+    const [productName, setProductName] = useState('');
+    const [productNameError, setProductNameError] = useState(false);
     
     
     
     const [editorState, setEditorState] = useState(
         EditorState.createEmpty()
     )
-    const [serviceDescriptionError, setServiceDescriptionError] = useState(false);
+    const [productDescriptionError, setProductDescriptionError] = useState(false);
         
-    const [servicePrice, setServicePrice] = useState(0);
-    const [servicePriceError, setServicePriceError] = useState(false);
-
-    const [serviceDiscount, setServiceDiscount] = useState(0);
-
+    const [productPrice, setProductPrice] = useState(0);
+    const [productPriceError, setProductPriceError] = useState(false);
+    
+    const [productDiscount, setProductDiscount] = useState(0);
+    
     const [discountType, setDiscountType] = useState('percent');
-
+    
     const [priceAfterDiscount, setPriceAfterDiscount] = useState(0);
+    
+    const [productQuantity, setProductQuantity] = useState(0);
+    const [productQuantityError, setProductQuantityError] = useState(false);
 
     const [locationName, setLocationName] = useState('');
-    const [serviceLocationError, setServiceLocationError] = useState(false);
+    const [productLocationError, setProductLocationError] = useState(false);
 
-
-    const [timeRequired, setTimeRequired] = useState(0);
-    const [serviceTimeError, setServiceTimeError] = useState(false);
-
-    const [timeType, setTimeType] = useState('minutes');
-
-    const [serviceStatus, setServiceStatus] = useState('active');
+    const [productStatus, setProductStatus] = useState('active');
 
     const [uploadedImages, setUploadedImages] = useState([]);
 
@@ -188,27 +185,27 @@ const CreateModal = (props) => {
     useEffect(() => {
         let netPrice;
         if (discountType === 'percent') {
-            netPrice = (servicePrice - (servicePrice * (serviceDiscount / 100))).toFixed(2);
+            netPrice = (productPrice - (productPrice * (productDiscount / 100))).toFixed(2);
             setPriceAfterDiscount(netPrice)
         } else if (discountType === 'fixed') {
-            netPrice = (servicePrice - serviceDiscount).toFixed(2);
-            setPriceAfterDiscount(netPrice)
+            netPrice = (productPrice - productDiscount).toFixed(2);
+            setPriceAfterDiscount(netPrice > 0 ? netPrice : 0)
         }
-    }, [discountType, serviceDiscount, servicePrice])
+    }, [discountType, productDiscount, productPrice])
 
     useEffect(() => {
         fetchLocationsHandler(lang);
     }, [fetchLocationsHandler, lang])
 
 
-    const serviceNameChangeHandler = (event) => {
-        setServiceName(event.target.value);
-        setServiceNameError(false);
+    const productNameChangeHandler = (event) => {
+        setProductName(event.target.value);
+        setProductNameError(false);
     }
 
     const onEditorChange = newState => {
         setEditorState(newState);
-        setServiceDescriptionError(false);
+        setProductDescriptionError(false);
     }
 
     const onImageChangeHandler = (imageList, addUpdateIndex) => {
@@ -226,22 +223,28 @@ const CreateModal = (props) => {
         setDefaultImageError(false);
     };
 
-    const servicePriceChangeHandler = (event) => {
+    const productPriceChangeHandler = (event) => {
         if (event.target.value >= 0) {
-            setServicePrice(event.target.value);
-            setServicePriceError(false);
+            setProductPrice(event.target.value);
+            setProductPriceError(false);
         }
     }
-    const serviceDiscountChangeHandler = (event) => {
-        if (event.target.value >= 0 && event.target.value <= servicePrice) {
-            setServiceDiscount(event.target.value);
+    const productDiscountChangeHandler = (event) => {
+        if (event.target.value >= 0 ) {
+            setProductDiscount(event.target.value);
         }
     }
     const discountTypeChangeHandler = (event) => {
         setDiscountType(event.target.value);
     }
-    const serviceStatusChangeHandler = (event) => {
-        setServiceStatus(event.target.value);
+    const productQuantityChangeHandler = (event) => {
+        if (event.target.value >= 0) {
+            setProductQuantity(event.target.value);
+            setProductQuantityError(false);
+        }
+    }
+    const productStatusChangeHandler = (event) => {
+        setProductStatus(event.target.value);
     }
 
     const handleLocationChange = (event) => {
@@ -252,41 +255,32 @@ const CreateModal = (props) => {
             // On autofill we get a the stringified value.
             typeof value === 'string' ? value.split(',') : value,
         );
-        setServiceLocationError(false);
+        setProductLocationError(false);
     };
-    const serviceTimeChangeHandler = (event) => {
-        if (event.target.value >= 0 ) {
-            setTimeRequired(event.target.value);
-            setServiceTimeError(false);
-        }
-    }
-    const timeTypeChangeHandler = (event) => {
-        setTimeType(event.target.value);
-    }
     const closeModalHandler = useCallback(() => {
         onClose();
     }, [onClose])
 
     const confirmCreateHandler = useCallback(() => {
-        if ( serviceName === '') {
-            setServiceNameError(true);
+        if ( productName === '') {
+            setProductNameError(true);
             return;
         }
         if (editorState.getCurrentContent().hasText() === false) {
-            setServiceDescriptionError(true);
+            setProductDescriptionError(true);
             return;
         }
-        if (+servicePrice === 0) { 
-            setServicePriceError(true);
+        if (+productPrice === 0) { 
+            setProductPriceError(true);
             return; 
         }
         if (locationName === '') {
-            setServiceLocationError(true);
+            setProductLocationError(true);
             return;
         }
-        if (+timeRequired === 0) {
-            setServiceTimeError(true);
-            return;
+        if (+productQuantity === 0) { 
+            setProductQuantityError(true);
+            return; 
         }
         if (defaultImage === '') {
             setDefaultImageError(true);
@@ -296,46 +290,43 @@ const CreateModal = (props) => {
         const selectedLocation = fetchedLocations.find(location => location.id === locationName);
 
         const data = {
-            name: serviceName,
+            name: productName,
             description: draftToHtml(convertToRaw(editorState.getCurrentContent())),
-            price: +servicePrice,
-            discount: +serviceDiscount,
+            price: +productPrice,
+            discount: +productDiscount,
             discount_type: discountType,
-            price_after_discount: +priceAfterDiscount,
-            time: +timeRequired,
-            time_type: timeType,
+            discount_price: +priceAfterDiscount,
             location_id: locationName,
-            status: serviceStatus,
+            status: productStatus,
             images: uploadedImages,
             image: defaultImage,
             location: selectedLocation,
         }
         onConfirm(data);
-        setServiceName('');
+        setProductName('');
         setEditorState(EditorState.createEmpty());
-        setServicePrice(0);
-        setServiceDiscount(0);
+        setProductPrice(0);
+        setProductDiscount(0);
         setDiscountType('percent');
         setPriceAfterDiscount(0);
         setLocationName('');
-        setTimeRequired(0);
-        setTimeType('minutes');
-        setServiceStatus('active');
+        setProductQuantity(0);
+        setProductStatus('active');
         setUploadedImages([]);
         setDefaultImage('');
-    }, [defaultImage, discountType, editorState, fetchedLocations, locationName, onConfirm, priceAfterDiscount, serviceDiscount, serviceName, servicePrice, serviceStatus, timeRequired, timeType, uploadedImages])
+    }, [defaultImage, discountType, editorState, fetchedLocations, locationName, onConfirm, priceAfterDiscount, productQuantity, productDiscount, productName, productPrice, productStatus, uploadedImages])
 
     let content = (
         <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
-                <CustomTextField id="service-name" label={t('name')} variant="outlined" value={serviceName} onChange={serviceNameChangeHandler} />
-                {serviceNameError && <ValidationMessage notExist>{t(`Please add name`)}</ValidationMessage>}
+                <CustomTextField id="product-name" label={t('name')} variant="outlined" value={productName} onChange={productNameChangeHandler} />
+                {productNameError && <ValidationMessage notExist>{t(`Please add name`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6}>
                 <FormControl sx={{ width: '100%' }}>
                     <Select
-                        value={serviceStatus}
-                        onChange={serviceStatusChangeHandler}
+                        value={productStatus}
+                        onChange={productStatusChangeHandler}
                         inputProps={{ 'aria-label': 'Without label' }}
                     >
                         <MenuItem value='active'>{t('active')}</MenuItem>
@@ -353,15 +344,15 @@ const CreateModal = (props) => {
                         textAlignment={themeCtx.direction === 'rtl' ? 'right' : 'left'}
                     />
                 </EditorWrapper>
-                {serviceDescriptionError && <ValidationMessage notExist>{t(`Please add Description`)}</ValidationMessage>}
+                {productDescriptionError && <ValidationMessage notExist>{t(`Please add Description`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6}>
-                <CustomTextField id="service-price" type='number' label={t('price')} variant="outlined" value={servicePrice} onChange={servicePriceChangeHandler} />
-                {servicePriceError && <ValidationMessage notExist>{t(`Please add Price`)}</ValidationMessage>}
+                <CustomTextField id="product-price" type='number' label={t('price')} variant="outlined" value={productPrice} onChange={productPriceChangeHandler} />
+                {productPriceError && <ValidationMessage notExist>{t(`Please add Price`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6}>
                 <CustomFormGroup>
-                    <CustomTextField id="service-discount" type='number' label={t('discount')} variant="outlined" value={serviceDiscount} onChange={serviceDiscountChangeHandler} />
+                    <CustomTextField id="product-discount" type='number' label={t('discount')} variant="outlined" value={productDiscount} onChange={productDiscountChangeHandler} />
                     <FormControl sx={{ minWidth: 120, ml: 1 }}>
                         <Select
                             value={discountType}
@@ -398,24 +389,11 @@ const CreateModal = (props) => {
                         ))}
                     </Select>
                 </FormControl>
-                {serviceLocationError && <ValidationMessage notExist>{t(`Please add Location`)}</ValidationMessage>}
+                {productLocationError && <ValidationMessage notExist>{t(`Please add Location`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6}>
-                <CustomFormGroup>
-                    <CustomTextField id="service-time" type='number' label={t('time')} variant="outlined" value={timeRequired} onChange={serviceTimeChangeHandler} />
-                    <FormControl sx={{ minWidth: 120, ml: 1 }}>
-                        <Select
-                            value={timeType}
-                            onChange={timeTypeChangeHandler}
-                            inputProps={{ 'aria-label': 'Without label' }}
-                        >
-                            <MenuItem value='minutes'>{t('minutes')}</MenuItem>
-                            <MenuItem value='hours'>{t('hours')}</MenuItem>
-                            <MenuItem value='days'>{t('days')}</MenuItem>
-                        </Select>
-                    </FormControl>
-                </CustomFormGroup>
-                {serviceTimeError && <ValidationMessage notExist>{t(`Please add Time`)}</ValidationMessage>}
+                <CustomTextField id="product-quantity" type='number' label={t('quantity')} variant="outlined" value={productQuantity} onChange={productQuantityChangeHandler} />
+                {productQuantityError && <ValidationMessage notExist>{t(`Please add Quantity`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12}>
                 <ImageUploading

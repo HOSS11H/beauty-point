@@ -58,7 +58,7 @@ function Products(props) {
                 <CreateBtn onClick={createModalOpenHandler} >{t('Create Product')}</CreateBtn>
                 <CreateModal show={createModalOpened}
                     onClose={createModalCloseHandler} onConfirm={createModalConfirmHandler}
-                    heading='create new service' confirmText='create' />
+                    heading='create new product' confirmText='create' />
             </ActionsWrapper>
             <ProductsTable />
         </Fragment>

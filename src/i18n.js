@@ -89,6 +89,8 @@ const resources = {
             'Please add default Image': 'يرجى إضافة صورة إفتراضية',
             'Default': 'افتراضي',
             'edit product details': 'تعديل تفاصيل المنتج',
+            'Create Product': 'إنشاء منتج',
+            'create new product': 'إنشاء منتج جديد',
         }
     }
 };
