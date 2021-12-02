@@ -67,6 +67,39 @@ export const deleteProduct = (token , id ) => {
         }
 }
 
+export const updateProductStart = (  ) => {
+    return {
+        type: actionTypes.UPDATE_PRODUCT_START,
+    }
+}
+export const updateProductSuccess = ( message, updatedProductData ) => {
+    return {
+        type: actionTypes.UPDATE_PRODUCT_SUCCESS,
+        message: message,
+        productData: updatedProductData,
+    }
+}
+export const updateProductFailed = ( message ) => {
+    return {
+        type: actionTypes.UPDATE_PRODUCT_FAILED,
+        message: message,
+    }
+}
+
+export const updateProduct = ( data ) => {
+    return dispatch => {
+        dispatch( updateProductStart( ) )
+        console.log(data)
+        axios.put(`/vendors/products/${data.id}`, data)
+            .then( response => {
+                dispatch( updateProductSuccess( response.data, data ) );
+            })
+            .catch( err => {
+                dispatch( updateProductFailed( err.message  ) )
+            } )
+        }
+}
+
 export const searchProductsStart = (  ) => {
     return {
         type: actionTypes.SEARCH_PRODUCTS_START,

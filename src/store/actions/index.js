@@ -13,6 +13,7 @@ export {
 export {
     fetchProducts,
     deleteProduct,
+    updateProduct,
     searchProducts,
     filterProducts,
 } from './products'

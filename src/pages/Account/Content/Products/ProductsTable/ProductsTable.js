@@ -4,7 +4,7 @@ import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { fetchProducts } from '../../../../../store/actions/index';
+import { fetchProducts, updateProduct, deleteProduct } from '../../../../../store/actions/index';
 import ThemeContext from '../../../../../store/theme-context';
 import AuthContext from '../../../../../store/auth-context';
 import EnhancedTableHead from './TableHead/TableHead';
@@ -12,7 +12,6 @@ import TablePaginationActions from '../../../../../components/UI/Dashboard/Table
 import DeleteModal from './DeleteModal/DeleteModal';
 import ViewModal from './ViewModal/ViewModal';
 import EditModal from './EditModal/EditModal';
-import { deleteProduct } from '../../../../../store/actions/index';
 import EnhancedTableBody from './TableBody/TableBody';
 import SearchMessage from "../../../../../components/Search/SearchMessage/SearchMessage";
 import { useTranslation } from 'react-i18next';
@@ -43,7 +42,7 @@ function ProductsTable(props) {
 
     const { t } = useTranslation()
 
-    const { fetchedProducts, fetchProductsHandler, loadingProducts, deleteProductHandler, searchingProducts, searchingProductsSuccess } = props;
+    const { fetchedProducts, fetchProductsHandler, loadingProducts, deleteProductHandler, searchingProducts, searchingProductsSuccess, updateProductHandler } = props;
 
     console.log(fetchedProducts)
 
@@ -124,10 +123,11 @@ function ProductsTable(props) {
         setSelectedProductId(null);
     }, [])
 
-    const editModalConfirmHandler = useCallback((id) => {
+    const editModalConfirmHandler = useCallback((data) => {
         setEditModalOpened(false);
         setSelectedProductId(null);
-    }, [])
+        updateProductHandler(data);
+    }, [updateProductHandler])
 
 
     const handleChangePage = useCallback((event, newPage) => {
@@ -192,7 +192,7 @@ function ProductsTable(props) {
                     editModalOpened && (
                         <EditModal show={editModalOpened} id={selectedProductId} fetchedProducts={fetchedProducts}
                             onClose={editModalCloseHandler} onConfirm={editModalConfirmHandler}
-                            heading='edit service details' confirmText='edit' />
+                            heading='edit product details' confirmText='edit' />
                     )
                 }
             </Fragment>
@@ -219,6 +219,7 @@ const mapDispatchToProps = dispatch => {
     return {
         fetchProductsHandler: (language, page, perPage, orderBy, order) => dispatch(fetchProducts(language, page, perPage, orderBy, order)),
         deleteProductHandler: (token, id) => dispatch(deleteProduct(token, id)),
+        updateProductHandler: (data) => dispatch(updateProduct(data)),
     }
 }
 

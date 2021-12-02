@@ -170,7 +170,7 @@ const EditModal = (props) => {
 
     let serviceData = fetchedServices.data[selectedServiceIndex];
 
-    const { name, description, price, discount, discount_type, discount_price, users = [], status, images, image } = serviceData;
+    const { name, description, price, discount, discount_type, discount_price, users = [], status, image } = serviceData;
 
     let employeesIds = [];
     users.map(employee => {
@@ -211,7 +211,7 @@ const EditModal = (props) => {
             setPriceAfterDiscount(netPrice)
         } else if (discountType === 'fixed'  ) {
             netPrice = (servicePrice - serviceDiscount).toFixed(2);
-            setPriceAfterDiscount(netPrice)
+            setPriceAfterDiscount(netPrice > 0 ? netPrice : 0)
         }
     }, [discountType, serviceDiscount, servicePrice])
 
@@ -242,7 +242,7 @@ const EditModal = (props) => {
         }
     }
     const serviceDiscountChangeHandler = (event) => {
-        if (event.target.value >= 0 && event.target.value <= servicePrice) {
+        if (event.target.value >= 0 ) {
             setServiceDiscount(event.target.value);
         }
     }

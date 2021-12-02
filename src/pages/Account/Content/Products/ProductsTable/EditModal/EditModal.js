@@ -170,7 +170,7 @@ const EditModal = (props) => {
     const [productQuantity, setProductQuantity] = useState(quantity);
 
     const [uploadedImages, setUploadedImages] = useState([ { data_url: image} ]);
-    console.log(uploadedImages);
+
     const [defaultImage, setDefaultImage] = useState(image);
 
     const maxNumber = 69;
@@ -182,7 +182,7 @@ const EditModal = (props) => {
             setPriceAfterDiscount(netPrice)
         } else if (discountType === 'fixed'  ) {
             netPrice = (productPrice - productDiscount).toFixed(2);
-            setPriceAfterDiscount(netPrice)
+            setPriceAfterDiscount(netPrice > 0 ? netPrice : 0)
         }
     }, [discountType, productDiscount, productPrice])
 
@@ -222,7 +222,7 @@ const EditModal = (props) => {
         }
     }
     const productDiscountChangeHandler = (event) => {
-        if (event.target.value >= 0 && event.target.value <= productPrice) {
+        if (event.target.value >= 0 ) {
             setProductDiscount(event.target.value);
         }
     }
@@ -243,24 +243,24 @@ const EditModal = (props) => {
     }, [onClose])
 
     const confirmEditHandler = useCallback(() => {
-
+        const selectedLocation = fetchedLocations.find(location => location.id === locationName);
         const data = {
             id: id,
             name: productName,
             description: draftToHtml(convertToRaw(editorState.getCurrentContent())),
             price: +productPrice,
-            price_after_discount: +priceAfterDiscount,
+            discount_price: +priceAfterDiscount,
             discount: +productDiscount,
             discount_type: discountType,
-            time: productData.time,
-            time_type: productData.time_type,
-            location_id: productData.location.id,
+            location_id: locationName,
             status: productStatus,
-            images: uploadedImages,
             image: defaultImage,
+            quantity: +productQuantity,
+            location: selectedLocation,
         }
         onConfirm(data);
-    }, [defaultImage, discountType, editorState, id, onConfirm, priceAfterDiscount, productData.location.id, productData.time, productData.time_type, productDiscount, productName, productPrice, productStatus, uploadedImages])
+
+    }, [defaultImage, discountType, editorState, fetchedLocations, id, locationName, onConfirm, priceAfterDiscount, productDiscount, productName, productPrice, productQuantity, productStatus])
 
     let content = (
         <Grid container spacing={2}>
