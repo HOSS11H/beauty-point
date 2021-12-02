@@ -14,6 +14,7 @@ export {
     fetchProducts,
     deleteProduct,
     updateProduct,
+    createProduct,
     searchProducts,
     filterProducts,
 } from './products'

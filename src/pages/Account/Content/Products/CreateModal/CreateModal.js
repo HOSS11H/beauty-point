@@ -10,11 +10,8 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import OutlinedInput from '@mui/material/OutlinedInput';
 import IconButton from '@mui/material/IconButton';
-import Chip from '@mui/material/Chip';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -28,7 +25,7 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { EditorState, convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import { connect } from 'react-redux';
-import { fetchEmployees, fetchLocations, fetchCategories } from '../../../../../store/actions/index';
+import { fetchLocations } from '../../../../../store/actions/index';
 import { formatCurrency } from '../../../../../shared/utility';
 import ValidationMessage from '../../../../../components/UI/ValidationMessage/ValidationMessage';
 
@@ -297,6 +294,7 @@ const CreateModal = (props) => {
             discount_type: discountType,
             discount_price: +priceAfterDiscount,
             location_id: locationName,
+            quantity: +productQuantity,
             status: productStatus,
             images: uploadedImages,
             image: defaultImage,

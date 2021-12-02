@@ -1,152 +1,183 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../utils/axios-instance';
 
-export const fetchProductsStart = (  ) => {
+export const fetchProductsStart = () => {
     return {
         type: actionTypes.FETCH_PRODUCTS_START,
     }
 }
-export const fetchProductsSuccess = ( productsData ) => {
+export const fetchProductsSuccess = (productsData) => {
     return {
         type: actionTypes.FETCH_PRODUCTS_SUCCESS,
         products: productsData
     }
 }
-export const fetchProductsFailed = ( errorMessage ) => {
+export const fetchProductsFailed = (errorMessage) => {
     return {
         type: actionTypes.FETCH_PRODUCTS_FAILED,
         error: errorMessage,
     }
 }
-export const fetchProducts = ( language, page, perPage, orderBy, orderDir ) => {
+export const fetchProducts = (language, page, perPage, orderBy, orderDir) => {
     return dispatch => {
-        dispatch( fetchProductsStart( ) )
-        axios.get(`/vendors/products?page=${page + 1}&per_page=${perPage}&order_by=${orderBy}&order_dir=${orderDir}&include[]=location`, { 
+        dispatch(fetchProductsStart())
+        axios.get(`/vendors/products?page=${page + 1}&per_page=${perPage}&order_by=${orderBy}&order_dir=${orderDir}&include[]=location`, {
             headers: {
                 'Accept-Language': language
             }
-        }).then( response => {
-                dispatch( fetchProductsSuccess( response.data  ) );
-            })
-            .catch( err => {
+        }).then(response => {
+            dispatch(fetchProductsSuccess(response.data));
+        })
+            .catch(err => {
                 console.log(err)
-                dispatch( fetchProductsFailed( err.message  ) )
-            } )
-        }
+                dispatch(fetchProductsFailed(err.message))
+            })
+    }
 }
 
-export const deleteProductStart = (  ) => {
+export const deleteProductStart = () => {
     return {
         type: actionTypes.DELETE_PRODUCT_START,
     }
 }
-export const deleteProductSuccess = ( message, deletedProductId ) => {
+export const deleteProductSuccess = (message, deletedProductId) => {
     return {
         type: actionTypes.DELETE_PRODUCT_SUCCESS,
         message: message,
         productId: deletedProductId,
     }
 }
-export const deleteProductFailed = ( message ) => {
+export const deleteProductFailed = (message) => {
     return {
         type: actionTypes.DELETE_PRODUCT_FAILED,
         message: message,
     }
 }
 
-export const deleteProduct = (token , id ) => {
+export const deleteProduct = (token, id) => {
     return dispatch => {
-        dispatch( deleteProductStart( ) )
+        dispatch(deleteProductStart())
         axios.delete(`/vendors/products/${id}`)
-            .then( response => {
-                dispatch( deleteProductSuccess( response.data , id  ) );
+            .then(response => {
+                dispatch(deleteProductSuccess(response.data, id));
             })
-            .catch( err => {
-                dispatch( deleteProductFailed( err.message  ) )
-            } )
-        }
+            .catch(err => {
+                dispatch(deleteProductFailed(err.message))
+            })
+    }
 }
 
-export const updateProductStart = (  ) => {
+export const updateProductStart = () => {
     return {
         type: actionTypes.UPDATE_PRODUCT_START,
     }
 }
-export const updateProductSuccess = ( message, updatedProductData ) => {
+export const updateProductSuccess = (message, updatedProductData) => {
     return {
         type: actionTypes.UPDATE_PRODUCT_SUCCESS,
         message: message,
         productData: updatedProductData,
     }
 }
-export const updateProductFailed = ( message ) => {
+export const updateProductFailed = (message) => {
     return {
         type: actionTypes.UPDATE_PRODUCT_FAILED,
         message: message,
     }
 }
 
-export const updateProduct = ( data ) => {
+export const updateProduct = (data) => {
     return dispatch => {
-        dispatch( updateProductStart( ) )
+        dispatch(updateProductStart())
         console.log(data)
         axios.put(`/vendors/products/${data.id}`, data)
-            .then( response => {
-                dispatch( updateProductSuccess( response.data, data ) );
+            .then(response => {
+                dispatch(updateProductSuccess(response.data, data));
             })
-            .catch( err => {
-                dispatch( updateProductFailed( err.message  ) )
-            } )
-        }
+            .catch(err => {
+                dispatch(updateProductFailed(err.message))
+            })
+    }
+}
+export const createProductStart = () => {
+    return {
+        type: actionTypes.CREATE_PRODUCT_START,
+    }
+}
+export const createProductSuccess = (message, createdProductData) => {
+    return {
+        type: actionTypes.CREATE_PRODUCT_SUCCESS,
+        message: message,
+        productData: createdProductData,
+    }
+}
+export const createProductFailed = (message) => {
+    return {
+        type: actionTypes.CREATE_PRODUCT_FAILED,
+        message: message,
+    }
 }
 
-export const searchProductsStart = (  ) => {
+export const createProduct = (data) => {
+    return dispatch => {
+        dispatch(createProductStart())
+        axios.post(`/vendors/products`, data)
+            .then(response => {
+                dispatch(createProductSuccess(null, { ...data, ...response.data }));
+            })
+            .catch(err => {
+                dispatch(createProductFailed(err.message))
+            })
+    }
+}
+
+export const searchProductsStart = () => {
     return {
         type: actionTypes.SEARCH_PRODUCTS_START,
     }
 }
-export const searchProductsSuccess = ( productsData ) => {
+export const searchProductsSuccess = (productsData) => {
     return {
         type: actionTypes.SEARCH_PRODUCTS_SUCCESS,
         products: productsData
     }
 }
-export const searchProductsFailed = ( errorMessage ) => {
+export const searchProductsFailed = (errorMessage) => {
     return {
         type: actionTypes.SEARCH_PRODUCTS_FAILED,
         error: errorMessage,
     }
 }
-export const searchProducts = ( language , word ) => {
+export const searchProducts = (language, word) => {
     return dispatch => {
-        dispatch( searchProductsStart( ) )
-        axios.get(`/vendors/products?term=${word}&per_page=15&include[]=location`, { 
+        dispatch(searchProductsStart())
+        axios.get(`/vendors/products?term=${word}&per_page=15&include[]=location`, {
             headers: {
                 'Accept-Language': language
             }
-        }).then( response => {
-                dispatch( searchProductsSuccess( response.data  ) );
-            })
-            .catch( err => {
+        }).then(response => {
+            dispatch(searchProductsSuccess(response.data));
+        })
+            .catch(err => {
                 console.log(err)
-                dispatch( searchProductsFailed( err.message  ) )
-            } )
-        }
+                dispatch(searchProductsFailed(err.message))
+            })
+    }
 }
 
-export const filterProducts = ( language, page , type, category , location, search ) => {
+export const filterProducts = (language, page, type, category, location, search) => {
     return dispatch => {
-        dispatch( fetchProductsStart( ) )
-        axios.get(`/vendors/${type}?page=${page + 1}term=${search}&location=${location}&category=${category}`, { 
+        dispatch(fetchProductsStart())
+        axios.get(`/vendors/${type}?page=${page + 1}term=${search}&location=${location}&category=${category}`, {
             headers: {
                 'Accept-Language': language
             }
-        }).then( response => {
-                dispatch( fetchProductsSuccess( response.data  ) );
-            })
-            .catch( err => {
+        }).then(response => {
+            dispatch(fetchProductsSuccess(response.data));
+        })
+            .catch(err => {
                 console.log(err)
-                dispatch( fetchProductsFailed( err.message  ) )
-            } )
-        }
+                dispatch(fetchProductsFailed(err.message))
+            })
+    }
 }

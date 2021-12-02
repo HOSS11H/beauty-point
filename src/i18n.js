@@ -91,6 +91,7 @@ const resources = {
             'edit product details': 'تعديل تفاصيل المنتج',
             'Create Product': 'إنشاء منتج',
             'create new product': 'إنشاء منتج جديد',
+            'Please add Quantity': 'يرجى إضافة كمية',
         }
     }
 };

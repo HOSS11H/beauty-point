@@ -14,6 +14,9 @@ const intialState = {
     updatingProductMessage: null,
     searchingProducts: false,
     searchingProductsSuccess: false,
+    creatingProduct: false,
+    creatingProductSuccess: false,
+    creatingProductMessage: null,
 };
 
 const reducer = (state = intialState, action) => {
@@ -95,6 +98,34 @@ const reducer = (state = intialState, action) => {
                 updatingProduct: false,
                 updatingProductSuccess: false,
                 updatingProductMessage: action.message,
+            })
+        case (actionTypes.CREATE_PRODUCT_START):
+            return updateObject(state, {
+                creatingProduct: true,
+                creatingProductSuccess: false,
+                creatingProductMessage: null,
+            })
+        case (actionTypes.CREATE_PRODUCT_SUCCESS):
+            const upgradedProducts = [...state.products.data]
+            upgradedProducts.push(action.productData);
+            return updateObject(state, {
+                products: {
+                    ...state.products,
+                    data: upgradedProducts,
+                    meta: {
+                        ...state.products.meta,
+                        total: state.products.meta.total + 1,
+                    }
+                },
+                creatingProduct: false,
+                creatingProductSuccess: true,
+                creatingProductMessage: action.message,
+            })
+        case (actionTypes.CREATE_PRODUCT_FAILED):
+            return updateObject(state, {
+                creatingProduct: false,
+                creatingProductSuccess: false,
+                creatingProductMessage: action.message,
             })
         case (actionTypes.SEARCH_PRODUCTS_START):
             return updateObject(state, {

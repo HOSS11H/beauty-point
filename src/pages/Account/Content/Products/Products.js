@@ -1,6 +1,6 @@
 import { Fragment, useCallback, useState } from "react";
 import { connect } from "react-redux";
-import { searchProducts } from '../../../../store/actions/index';
+import { searchProducts, createProduct } from '../../../../store/actions/index';
 import SearchBar from "../../../../components/Search/SearchBar/SearchBar";
 
 import ProductsTable from './ProductsTable/ProductsTable';
@@ -68,7 +68,7 @@ function Products(props) {
 const mapDispatchToProps = dispatch => {
     return {
         searchProductsHandler: ( language, word ) => dispatch(searchProducts( language, word )),
-        /* createProductHandler: (data) => dispatch(createProduct( data )) */
+        createProductHandler: (data) => dispatch(createProduct( data ))
     }
 }
 
