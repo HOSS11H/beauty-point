@@ -19,7 +19,7 @@ export const fetchBookingsFailed = ( errorMessage ) => {
         error: errorMessage,
     }
 }
-export const fetchBookings = ( language, perPage, orderBy, orderDir  ) => {
+export const fetchBookings = ( language, perPage  ) => {
     return dispatch => {
         dispatch( fetchBookingsStart( ) )
         axios.get(`/vendors/bookings?per_page=${perPage}&include[]=user&include[]=users&include[]=items&include[]=payment`, { 
