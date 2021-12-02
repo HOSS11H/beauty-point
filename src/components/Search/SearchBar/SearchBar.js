@@ -1,4 +1,4 @@
-import {useEffect, useState, useContext} from 'react';
+import {useEffect, useState, useContext, useRef} from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -70,6 +70,8 @@ function SearchBar(props) {
 
     const { t } = useTranslation()
 
+    const notIntialRender = useRef(false);
+
     const [searchVal, setSearchVal] = useState('');
 
     const searchChangeHandler = (e) => {
@@ -77,10 +79,14 @@ function SearchBar(props) {
     }
 
     useEffect(() => {
-        const searchTimeout = setTimeout(() => {
-            searchHandler(lang, searchVal);
-        }, 500)
-        return () => clearTimeout(searchTimeout);
+        if ( notIntialRender.current ) {
+            const searchTimeout = setTimeout(() => {
+                searchHandler(lang, searchVal);
+            }, 500)
+            return () => clearTimeout(searchTimeout);
+        } else {
+            notIntialRender.current = true;
+        }
     }, [searchVal, lang, searchHandler])
 
 

@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useState , Fragment } from 'react';
+import { useCallback, useContext, useEffect, useState, Fragment } from 'react';
 import Table from '@mui/material/Table';
 import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
@@ -40,15 +40,17 @@ function ServicesTable(props) {
 
     const { t } = useTranslation()
 
+
     const { fetchedServices, fetchServicesHandler, loadingServices, deleteServiceHandler, updateServiceHandler, searchingServices, searchingServicesSuccess } = props;
 
     const themeCtx = useContext(ThemeContext)
-    const authCtx = useContext(AuthContext)
 
     const { lang } = themeCtx
-    const { token } = authCtx
 
     const [page, setPage] = useState(0);
+
+    const [order, setOrder] = useState('desc');
+    const [orderBy, setOrderBy] = useState('name');
 
     const [rowsPerPage, setRowsPerPage] = useState(intialRowsPerPage);
 
@@ -61,14 +63,20 @@ function ServicesTable(props) {
     const [selectedServiceId, setSelectedServiceId] = useState(null);
 
     useEffect(() => {
-        fetchServicesHandler(lang, page, rowsPerPage );
-    }, [fetchServicesHandler, lang, token, page, rowsPerPage]);
+        fetchServicesHandler(lang, page, rowsPerPage, orderBy, order);
+    }, [fetchServicesHandler, lang, order, orderBy, page, rowsPerPage]);
 
     useEffect(() => {
         if (fetchedServices.per_page) {
             setRowsPerPage(fetchedServices.per_page)
         }
     }, [fetchedServices])
+
+    const handleRequestSort = (event, property) => {
+        const isAsc = orderBy === property && order === 'asc';
+        setOrder(isAsc ? 'desc' : 'asc');
+        setOrderBy(property);
+    };
 
     // Delete Modal
     const deleteModalOpenHandler = useCallback((id) => {
@@ -81,7 +89,7 @@ function ServicesTable(props) {
     }, [])
 
     const deleteModalConfirmHandler = useCallback((id) => {
-        deleteServiceHandler( id);
+        deleteServiceHandler(id);
         setDeleteModalOpened(false);
         setSelectedServiceId(null);
     }, [deleteServiceHandler])
@@ -147,20 +155,23 @@ function ServicesTable(props) {
                         >
                             <EnhancedTableHead
                                 rowCount={fetchedServices.data.length}
+                                order={order}
+                                orderBy={orderBy}
+                                onRequestSort={handleRequestSort}
                             />
                             <EnhancedTableBody
                                 fetchedServices={fetchedServices}
                                 emptyRows={emptyRows}
                                 deleteModalOpenHandler={deleteModalOpenHandler}
-                                viewModalOpenHandler= {viewModalOpenHandler}
-                                editModalOpenHandler= {editModalOpenHandler}
+                                viewModalOpenHandler={viewModalOpenHandler}
+                                editModalOpenHandler={editModalOpenHandler}
                             />
                         </Table>
                     </TableContainer>
                     <TablePaginationActions
                         component="div"
                         count={fetchedServices.data.length}
-                        total={fetchedServices.meta &&  fetchedServices.meta.total}
+                        total={fetchedServices.meta && fetchedServices.meta.total}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onPageChange={handleChangePage}
@@ -201,8 +212,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchServicesHandler: (language, page, perPage) => dispatch(fetchServices(language, page, perPage)),
-        deleteServiceHandler: ( id) => dispatch(deleteService( id)),
+        fetchServicesHandler: (language, page, perPage, orderBy, order) => dispatch(fetchServices(language, page, perPage, orderBy, order)),
+        deleteServiceHandler: (id) => dispatch(deleteService(id)),
         updateServiceHandler: (data) => dispatch(updateService(data)),
     }
 }

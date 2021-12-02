@@ -39,7 +39,7 @@ const headCells = [
         label: 'price',
     },
     {
-        id: 'discountPrice',
+        id: 'net_price',
         numeric: false,
         disablePadding: false,
         label: 'price after discount',
