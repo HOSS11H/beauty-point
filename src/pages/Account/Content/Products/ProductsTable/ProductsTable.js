@@ -157,6 +157,9 @@ function ProductsTable(props) {
                         <EnhancedTableHead
                             rowCount={fetchedProducts.data.length}
                             onRequestSort={handleRequestSort}
+                            order={order}
+                            orderBy={orderBy}
+                            loading={loadingProducts}
                         />
                         <EnhancedTableBody 
                             fetchedProducts={fetchedProducts}

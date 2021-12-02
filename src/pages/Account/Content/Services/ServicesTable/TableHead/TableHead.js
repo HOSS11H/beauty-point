@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import { visuallyHidden } from '@mui/utils';
 import { useTranslation } from 'react-i18next';
 import { TableHeading } from '../../../../../../components/UI/Dashboard/Table/Table';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const headCells = [
     {
@@ -70,7 +71,7 @@ function EnhancedTableHead(props) {
 
     const { t } = useTranslation()
 
-    const { order, orderBy, onRequestSort } = props;
+    const { order, orderBy, onRequestSort, loading } = props;
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
@@ -92,6 +93,7 @@ function EnhancedTableHead(props) {
                         >
                             <TableHeading>
                                 {t(headCell.label)}
+                                {loading && orderBy === headCell.id &&<CircularProgress sx={{ ml: 1 }} size={14} />}
                             </TableHeading>
                             {orderBy === headCell.id ? (
                                 <Box component="span" sx={visuallyHidden}>

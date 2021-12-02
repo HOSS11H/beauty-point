@@ -157,6 +157,7 @@ function ServicesTable(props) {
                                 order={order}
                                 orderBy={orderBy}
                                 onRequestSort={handleRequestSort}
+                                loading={loadingServices}
                             />
                             <EnhancedTableBody
                                 fetchedServices={fetchedServices}
