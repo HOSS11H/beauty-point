@@ -19,14 +19,12 @@ export const fetchBookingsFailed = ( errorMessage ) => {
         error: errorMessage,
     }
 }
-export const fetchBookings = ( language, token  ) => {
+export const fetchBookings = ( language, perPage, orderBy, orderDir  ) => {
     return dispatch => {
-        console.log(language, token)
         dispatch( fetchBookingsStart( ) )
-        axios.get('/vendors/bookings', { 
+        axios.get(`/vendors/bookings?per_page=${perPage}&include[]=user&include[]=users&include[]=items&include[]=payment`, { 
             headers: {
                 'Accept-Language': language,
-                'Authorization': `Bearer ${token}`,
             }
         })
             .then( response => {

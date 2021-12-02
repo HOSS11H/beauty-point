@@ -131,32 +131,34 @@ const BookingStatus = styled.div`
     font-size: 14px;
     text-transform: capitalize;
     font-weight: 500;
-    &.pending {
+    &.in.progress {
         background-color: ${({ theme }) => theme.palette.warning.light};
     }
     &.canceled {
-        background-color: ${({ theme }) => theme.palette.warning.dark};
+        background-color: ${({ theme }) => theme.palette.error.main};
     }
     &.approved {
         background-color: ${({ theme }) => theme.palette.primary.main};
     }
+    &.completed {
+        background-color: ${({ theme }) => theme.palette.success.main};
+    }
 `
 
 
+const perPage = 10;
 
 const RecentBookings = props => {
 
     const themeCtx = useContext(ThemeContext)
-    const authCtx = useContext(AuthContext)
 
     const { lang } = themeCtx
-    const { token } = authCtx
 
     const { fetchedBookings, fetchBookingsHandler, loadingBookings } = props;
 
     useEffect(() => {
-        fetchBookingsHandler(lang, token);
-    }, [fetchBookingsHandler, lang, token]);
+        fetchBookingsHandler(lang, perPage);
+    }, [fetchBookingsHandler, lang]);
 
     let loadedBookings = []
 
@@ -174,10 +176,10 @@ const RecentBookings = props => {
                                 <PersonIcon />
                             </ClientImg>
                             <BookingContent>
-                                <ClientName>{booking.user_name}</ClientName>
+                                <ClientName>{booking.user.name}</ClientName>
                                 <ClientInfo>
-                                    <li><MailIcon sx={{ mr: 1 }} />{booking.user_email}</li>
-                                    <li><PhoneAndroidIcon sx={{ mr: 1 }} />{booking.mobile}</li>
+                                    <li><MailIcon sx={{ mr: 1 }} />{booking.user.email}</li>
+                                    <li><PhoneAndroidIcon sx={{ mr: 1 }} />{booking.user.mobile}</li>
                                 </ClientInfo>
                             </BookingContent>
                         </Booking>
@@ -187,13 +189,13 @@ const RecentBookings = props => {
                             {
                                 booking.items.map( ( item , index) => {
                                     let loadedItems ;
-                                    if ( item.business_service ) {
+                                    if ( item ) {
                                         loadedItems =  (
-                                            <li key={index} >
+                                            <li key={item.id} >
                                                 <FiberManualRecordIcon sx={{ mr: 1 }} />
                                                 <span>{item.quantity}</span>
                                                 <span className='divider'>x</span>
-                                                <span>{item.business_service.name}</span>
+                                                <span>{item.item.name}</span>
                                             </li>
                                         )
                                     }
@@ -240,7 +242,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchBookingsHandler: (language, token) => dispatch(fetchBookings(language, token))
+        fetchBookingsHandler: (language, perPage) => dispatch(fetchBookings(language, perPage))
     }
 }
 
