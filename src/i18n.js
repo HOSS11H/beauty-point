@@ -87,6 +87,8 @@ const resources = {
             'Please add Category': 'يرجى إضافة فئة',
             'Please add Location': 'يرجى إضافة موقع',
             'Please add default Image': 'يرجى إضافة صورة إفتراضية',
+            'Default': 'افتراضي',
+            'edit product details': 'تعديل تفاصيل المنتج',
         }
     }
 };
