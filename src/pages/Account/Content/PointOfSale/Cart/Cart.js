@@ -17,7 +17,7 @@ import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 
 import DateAdapter from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import SharedTableHead from './SharedTableHead/SharedTableHead';
 import CartItem from './CartItem/CartItem';
@@ -27,6 +27,7 @@ import ValidationMessage from '../../../../../components/UI/ValidationMessage/Va
 import { connect } from 'react-redux';
 import { fetchCoupons, fetchCustomers } from '../../../../../store/actions/index';
 import ThemeContext from '../../../../../store/theme-context';
+import AddCustomerModal from './AddCustomerModal/AddCustomerModal';
 
 
 const CustomerCard = styled.div`
@@ -139,7 +140,7 @@ const AddCustomer = styled(CustomButton)`
 
 const Cart = props => {
 
-    const { cartData, removeFromCart, increaseItem, decreaseItem, resetCart, purchase, fetchedCoupons, fetchedCustomers, fetchCouponsHandler, fetchCustomersHandler } = props;
+    const { cartData, removeFromCart, increaseItem, decreaseItem, resetCart, purchase, fetchedCoupons, fetchedCustomers, fetchCouponsHandler, fetchCustomersHandler, addCustomerHandler } = props;
 
     const { t } = useTranslation()
 
@@ -165,6 +166,8 @@ const Cart = props => {
 
     const [discount, setDiscount] = useState(0)
 
+    const [addCustomerModalOpened, setAddCustomerModalOpened] = useState(false);
+
     useEffect(() => {
         fetchCouponsHandler(lang);
         fetchCustomersHandler(lang);
@@ -186,6 +189,21 @@ const Cart = props => {
             return;
         }
     }, [cartData, couponData, discount])
+
+
+    // Add Customer Modal
+    const addCustomerModalOpenHandler = useCallback((id) => {
+        setAddCustomerModalOpened(true);
+    }, [])
+    const addCustomerModalCloseHandler = useCallback(() => {
+        setAddCustomerModalOpened(false);
+    }, [])
+
+    const addCustomerModalConfirmHandler = useCallback((data) => {
+        setAddCustomerModalOpened(false);
+        addCustomerHandler(data);
+    }, [addCustomerHandler])
+
 
     const handleDateChange = (newValue) => {
         setDateTime(newValue);
@@ -298,7 +316,7 @@ const Cart = props => {
                                     ))}
                                 </Select>
                             </FormControl>
-                            <AddCustomer>{t('add')}</AddCustomer>
+                            <AddCustomer onClick={addCustomerModalOpenHandler} >{t('add')}</AddCustomer>
                         </ActionsWrapper>
                         {customerDataError && <ValidationMessage notExist>{t(`Please Choose Customer`)}</ValidationMessage>}
                     </Grid>
@@ -420,6 +438,9 @@ const Cart = props => {
                         </CardActions>
                     </Grid>
                 </Grid>
+                <AddCustomerModal show={addCustomerModalOpened}
+                    onClose={addCustomerModalCloseHandler} onConfirm={addCustomerModalConfirmHandler}
+                    heading='add new customer' confirmText='add' />
             </form>
         </CustomCard>
     )
