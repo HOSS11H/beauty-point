@@ -71,6 +71,7 @@ const ListView = ( props ) => {
         type === 'deals' && (addedItem.name = addedItem.title);
         const addedItemData = {
             id: addedItem.id,
+            name: addedItem.name,
             price: addedItem.price_after_discount,
             quantity: 1,
             type: type,

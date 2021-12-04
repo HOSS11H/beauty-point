@@ -17,6 +17,7 @@ const ActionButton = styled.button`
     display: flex;
     align-items: center;
     justify-content: center;
+    border: 0;
     border-left: 1px solid;
     border-right: 1px solid;
     border-color: ${props => props.theme.palette.divider};
