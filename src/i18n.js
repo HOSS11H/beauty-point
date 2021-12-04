@@ -93,6 +93,14 @@ const resources = {
             'create new product': 'إنشاء منتج جديد',
             'Please add Quantity': 'يرجى إضافة كمية',
             'create new service': 'إنشاء خدمة جديدة',
+            'service': 'خدمة',
+            'title': 'عنوان',
+            'uses limit': 'حد استخدام',
+            'used time': 'مرات الاستخدام',
+            'applied days': 'أيام التطبيق',
+            'deal items': 'عناصر العرض',
+            'price including taxes': 'السعر شامل الضرائب',
+            'total': 'المجموع',
         }
     }
 };

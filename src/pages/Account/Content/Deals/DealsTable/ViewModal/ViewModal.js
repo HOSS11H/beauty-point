@@ -81,14 +81,15 @@ const ViewModal = (props) => {
 
     if (dealData) {
 
-        const formattedApplyTime = dealData.applied_between_time.split(' - ')
+        /* const formattedApplyTime = dealData.applied_between_time.split(' - ') */
 
-        const formattedApplyDays = JSON.parse(dealData.days)
+        /* const formattedApplyDays = JSON.parse(dealData.days)
+        console.log(formattedApplyDays) */
 
         const transformedDealData = {
             ...dealData,
-            applied_between_time: formattedApplyTime,
-            days: formattedApplyDays,
+            /* applied_between_time: formattedApplyTime, */
+            /* days: formattedApplyDays, */
         }
 
         const mySafeHTML = DOMPurify.sanitize(dealData.description);
@@ -97,7 +98,7 @@ const ViewModal = (props) => {
             <Grid container spacing={3}>
                 <Grid item xs={12} md={6}>
                     <DealImg>
-                        <img src={transformedDealData.deal_image_url} alt="deal" />
+                        <img src={transformedDealData.image} alt="deal" />
                     </DealImg>
                 </Grid>
                 <Grid item xs={12} md={6}>
@@ -142,8 +143,8 @@ const ViewModal = (props) => {
                             <DealData>
                                 <DealDataHeading>{t('applies between')}</DealDataHeading>
                                 <TableDate>
-                                    <li><WatchLaterIcon sx={{ mr: 1 }} />{transformedDealData.applied_between_time[0]}</li>
-                                    <li><WatchLaterIcon sx={{ mr: 1 }} />{transformedDealData.applied_between_time[1]}</li>
+                                    {/* <li><WatchLaterIcon sx={{ mr: 1 }} />{transformedDealData.applied_between_time[0]}</li> */}
+                                    {/* <li><WatchLaterIcon sx={{ mr: 1 }} />{transformedDealData.applied_between_time[1]}</li> */}
                                 </TableDate>
                             </DealData>
                         </Grid>
@@ -177,41 +178,46 @@ const ViewModal = (props) => {
                         <DealDesc dangerouslySetInnerHTML={{ __html: mySafeHTML }} />
                     </DealData>
                 </Grid>
-                <Grid item xs={12}>
-                    <DealData>
-                        <DealDataHeading>{t('deal items')}</DealDataHeading>
-                        <TableContainer component={Paper} sx={{ my: 2 }}>
-                            <Table aria-label="simple table">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell>service</TableCell>
-                                        <TableCell align="right">price</TableCell>
-                                        <TableCell align="right">quantity</TableCell>
-                                        <TableCell align="right">price including taxes</TableCell>
-                                        <TableCell align="right">discount</TableCell>
-                                        <TableCell align="right">total</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {/* {rows.map((row) => (
-                                        <TableRow
-                                            key={row.name}
-                                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                        >
-                                            <TableCell component="th" scope="row">
-                                                {row.name}
-                                            </TableCell>
-                                            <TableCell align="right">{row.calories}</TableCell>
-                                            <TableCell align="right">{row.fat}</TableCell>
-                                            <TableCell align="right">{row.carbs}</TableCell>
-                                            <TableCell align="right">{row.protein}</TableCell>
-                                        </TableRow>
-                                    ))} */}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </DealData>
-                </Grid>
+                {
+                    ( transformedDealData.services.length > 0) && (
+                        <Grid item xs={12}>
+                            <DealData>
+                                <DealDataHeading>{t('deal items')}</DealDataHeading>
+                                <TableContainer component={Paper} sx={{ my: 2 }}>
+                                    <Table aria-label="simple table">
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell>{t('service')}</TableCell>
+                                                <TableCell align="center">{t('price')}</TableCell>
+                                                <TableCell align="center">{t('quantity')}</TableCell>
+                                                <TableCell align="center">{t('price including taxes')}</TableCell>
+                                                <TableCell align="center">{t('discount')}</TableCell>
+                                                <TableCell align="center">{t('total')}</TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {transformedDealData.services.map((item) => (
+                                                <TableRow
+                                                    key={item.id}
+                                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                                >
+                                                    <TableCell component="th" scope="row">
+                                                        {item.service.name}
+                                                    </TableCell>
+                                                    <TableCell align="center">{item.price}</TableCell>
+                                                    <TableCell align="center">{item.quantity}</TableCell>
+                                                    <TableCell align="center">{item.total_amount}</TableCell>
+                                                    <TableCell align="center">{item.discount_amount}</TableCell>
+                                                    <TableCell align="center">{item.total_amount}</TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                            </DealData>
+                        </Grid>
+                    )
+                }
             </Grid>
         )
     }
