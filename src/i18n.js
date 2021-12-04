@@ -101,6 +101,10 @@ const resources = {
             'deal items': 'عناصر العرض',
             'price including taxes': 'السعر شامل الضرائب',
             'total': 'المجموع',
+            'Please add email': 'يرجى إضافة بريد الكتروني',
+            'email': 'الايميل',
+            'Please add number': 'يرجى إضافة رقم',
+            'number': 'رقم',
         }
     }
 };
