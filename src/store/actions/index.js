@@ -31,5 +31,11 @@ export {
     fetchCategories,
 } from './categories'
 export {
+    fetchCustomers,
+} from './customers'
+export {
+    fetchCoupons,
+} from './coupons'
+export {
     fetchEmployees,
 } from './employees'

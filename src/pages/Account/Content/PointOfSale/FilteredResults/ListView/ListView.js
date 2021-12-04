@@ -60,8 +60,6 @@ const ResultDiscount = styled.h4`
 
 const ListView = ( props ) => {
 
-    const { t } = useTranslation()
-
     const { data, type, loading, action } = props;
 
     const addItemHandler = ( id ) => {
