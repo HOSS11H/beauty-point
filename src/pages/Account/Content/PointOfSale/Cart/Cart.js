@@ -17,15 +17,16 @@ import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 
 import DateAdapter from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import SharedTableHead from './SharedTableHead/SharedTableHead';
 import CartItem from './CartItem/CartItem';
 import InputAdornment from '@mui/material/InputAdornment';
-import { ButtonText, ButtonConfirm } from '../../../../../components/UI/Button/Button';
+import { ButtonText, ButtonConfirm, CustomButton } from '../../../../../components/UI/Button/Button';
 import ValidationMessage from '../../../../../components/UI/ValidationMessage/ValidationMessage';
 import { connect } from 'react-redux';
 import { fetchCoupons, fetchCustomers } from '../../../../../store/actions/index';
+import ThemeContext from '../../../../../store/theme-context';
 
 
 const CustomerCard = styled.div`
@@ -68,7 +69,7 @@ const CustomerInfo = styled.ul`
             }
         }
     }
-    `
+`
 
 const CustomMessage = styled.div`
     display: flex;
@@ -122,65 +123,28 @@ const CardActions = styled.div`
         }
     }
 `
-
-const customers = [
-    { id: 0, name: 'ahmed', email: 'mail.com', phone: '0123456789' },
-    { id: 1, name: 'ali', email: 'mail.com', phone: '0123456789' },
-    { id: 2, name: 'mahmoud', email: 'mail.com', phone: '0123456789' },
-]
-const coupons = [
-    {
-        "id": 1,
-        "title": "SAVE $20",
-        "code": "SAVE20",
-        "startDateTime": "2021-10-28T14:15:09.000000Z",
-        "usesLimit": 0,
-        "amount": 20,
-        "discountType": "percentage",
-        "minimumPurchaseAmount": 20,
-        "days": [
-            "Sunday",
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday"
-        ],
-        "description": "Limited Time Coupon !! HURRY UP.",
-        "status": "active",
-        "endDateTime": "2021-12-27T14:15:09.000000Z"
-    },
-    {
-        "id": 7,
-        "title": "SAVE $10",
-        "code": "SAVE10",
-        "startDateTime": "2021-10-28T14:15:09.000000Z",
-        "usesLimit": 0,
-        "amount": 10,
-        "discountType": "percentage",
-        "minimumPurchaseAmount": 20,
-        "days": [
-            "Sunday",
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday"
-        ],
-        "description": "Limited Time Coupon !! HURRY UP.",
-        "status": "active",
-        "endDateTime": "2021-12-27T14:15:09.000000Z"
+const ActionsWrapper = styled.div`
+    display: flex;
+    align-items: center;
+`
+const AddCustomer = styled(CustomButton)`
+    &.MuiButton-root {
+        margin-left: 20px;
+        width: auto;
+        padding: 0 10px;
+        height: 56px;
+        flex-shrink: 0;
     }
-]
-
+`
 
 const Cart = props => {
 
-    const { cartData, removeFromCart, increaseItem, decreaseItem, resetCart, purchase } = props;
+    const { cartData, removeFromCart, increaseItem, decreaseItem, resetCart, purchase, fetchedCoupons, fetchedCustomers, fetchCouponsHandler, fetchCustomersHandler } = props;
 
     const { t } = useTranslation()
+
+    const themeCtx = useContext(ThemeContext);
+    const { lang } = themeCtx;
 
     const [customer, setCustomer] = useState('');
     const [customerData, setCustomerData] = useState(null);
@@ -200,6 +164,11 @@ const Cart = props => {
     const [couponData, setCouponData] = useState({ amount: 0 })
 
     const [discount, setDiscount] = useState(0)
+
+    useEffect(() => {
+        fetchCouponsHandler(lang);
+        fetchCustomersHandler(lang);
+    }, [fetchCouponsHandler, fetchCustomersHandler, lang])
 
     useEffect(() => {
         let total = 0;
@@ -223,8 +192,8 @@ const Cart = props => {
     };
 
     const handleCustomerChange = (event) => {
-        const customerIndex = customers.findIndex(customer => customer.id === event.target.value);
-        const updatedCustomerData = customers[customerIndex];
+        const customerIndex = fetchedCustomers.findIndex(customer => customer.id === event.target.value);
+        const updatedCustomerData = fetchedCustomers[customerIndex];
         setCustomerDataError(false)
         setCustomer(event.target.value);
         setCustomerData(updatedCustomerData);
@@ -233,7 +202,7 @@ const Cart = props => {
 
     const couponChangeHandler = (event) => {
         setCoupon(event.target.value)
-        const enteredCoupon = coupons.filter(coupon => coupon.code === event.target.value)
+        const enteredCoupon = fetchedCoupons.filter(coupon => coupon.code === event.target.value)
         if (enteredCoupon.length > 0) {
             setCouponExists(true)
             setCouponData(enteredCoupon[0])
@@ -248,7 +217,7 @@ const Cart = props => {
         }
     }
 
-    const resetCartHandler = (  ) => {
+    const resetCartHandler = () => {
         setCustomer('');
         setCustomerData(null);
         setCustomerDataError(false)
@@ -309,22 +278,28 @@ const Cart = props => {
                         </LocalizationProvider>
                     </Grid>
                     <Grid item xs={12} md={6}>
-                        <FormControl fullWidth>
-                            <InputLabel id="item-customer">{t('Customer')}</InputLabel>
-                            <Select
-                                labelId="item-customer"
-                                id="item-customer-select"
-                                value={customer}
-                                label="Customer"
-                                onChange={handleCustomerChange}
-                            >
-                                {
-                                    customers.map(customer => {
-                                        return <MenuItem key={customer.id} value={customer.id}>{customer.name}</MenuItem>
-                                    })
-                                }
-                            </Select>
-                        </FormControl>
+                        <ActionsWrapper>
+                            <FormControl fullWidth sx={{minWidth: '200px' }} >
+                                <InputLabel id="item-customer">{t('Customer')}</InputLabel>
+                                <Select
+                                    labelId="item-customer"
+                                    id="item-customer-select"
+                                    value={customer}
+                                    label="Customer"
+                                    onChange={handleCustomerChange}
+                                >
+                                    {fetchedCustomers.map((customer) => (
+                                        <MenuItem
+                                            key={customer.id}
+                                            value={customer.id}
+                                        >
+                                            {customer.name}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                            <AddCustomer>{t('add')}</AddCustomer>
+                        </ActionsWrapper>
                         {customerDataError && <ValidationMessage notExist>{t(`Please Choose Customer`)}</ValidationMessage>}
                     </Grid>
                     {

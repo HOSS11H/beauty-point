@@ -22,7 +22,7 @@ export const fetchCustomersFailed = (errorMessage) => {
 export const fetchCustomers = (language) => {
     return dispatch => {
         dispatch(fetchCustomersStart())
-        axios.get(`/customers`, {
+        axios.get(`vendors/customers`, {
             headers: {
                 'Accept-Language': language
             }
