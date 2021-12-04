@@ -18,10 +18,10 @@ export const fetchDealsFailed = ( errorMessage ) => {
         error: errorMessage,
     }
 }
-export const fetchDeals = ( language, token , page ) => {
+export const fetchDeals = ( language, page, perPage, orderBy, orderDir ) => {
     return dispatch => {
         dispatch( fetchDealsStart( ) )
-        axios.get(`/vendors/deals?page=${page + 1}`, { 
+        axios.get(`/vendors/deals?page=${page + 1}&per_page=${perPage}&order_by=${orderBy}&order_dir=${orderDir}&include[]=services`, { 
             headers: {
                 'Accept-Language': language
             }
@@ -72,7 +72,7 @@ export const deleteDealFailed = ( message ) => {
     }
 }
 
-export const deleteDeal = (token , id ) => {
+export const deleteDeal = ( id ) => {
     return dispatch => {
         dispatch( deleteDealStart( ) )
         axios.delete(`/vendors/deals/${id}`)
@@ -105,7 +105,7 @@ export const searchDealsFailed = ( errorMessage ) => {
 export const searchDeals = ( language , word ) => {
     return dispatch => {
         dispatch( searchDealsStart( ) )
-        axios.get(`/vendors/deals?term=${word}`, { 
+        axios.get(`/vendors/deals?term=${word}&per_page=15`, { 
             headers: {
                 'Accept-Language': language
             }

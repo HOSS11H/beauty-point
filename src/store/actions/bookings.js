@@ -64,13 +64,12 @@ export const fetchTotalBookingsFailed = ( errorMessage ) => {
         error: errorMessage,
     }
 }
-export const fetchTotalBookings = ( language, token ) => {
+export const fetchTotalBookings = ( language ) => {
     return dispatch => {
         dispatch( fetchTotalBookingsStart( ) )
         axios.get('/vendor/company-status', { 
             headers: {
                 'Accept-Language': language,
-                'Authorization': `Bearer ${token}`,
             }
         }).then( response => {
                 dispatch( fetchTotalBookingsSuccess( response.data.bookings_count ) );

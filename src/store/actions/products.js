@@ -54,7 +54,7 @@ export const deleteProductFailed = (message) => {
     }
 }
 
-export const deleteProduct = (token, id) => {
+export const deleteProduct = ( id ) => {
     return dispatch => {
         dispatch(deleteProductStart())
         axios.delete(`/vendors/products/${id}`)

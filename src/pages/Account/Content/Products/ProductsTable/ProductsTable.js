@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { fetchProducts, updateProduct, deleteProduct } from '../../../../../store/actions/index';
 import ThemeContext from '../../../../../store/theme-context';
-import AuthContext from '../../../../../store/auth-context';
 import EnhancedTableHead from './TableHead/TableHead';
 import TablePaginationActions from '../../../../../components/UI/Dashboard/Table/TablePagination/TablePagination';
 import DeleteModal from './DeleteModal/DeleteModal';
@@ -47,10 +46,8 @@ function ProductsTable(props) {
     console.log(fetchedProducts)
 
     const themeCtx = useContext(ThemeContext)
-    const authCtx = useContext(AuthContext)
 
     const { lang } = themeCtx
-    const { token } = authCtx
 
     const [page, setPage] = useState(0);
 
@@ -69,7 +66,7 @@ function ProductsTable(props) {
 
     useEffect(() => {
         fetchProductsHandler(lang, page, rowsPerPage, orderBy, order);
-    }, [fetchProductsHandler, lang, token, page, rowsPerPage, orderBy, order]);
+    }, [fetchProductsHandler, lang, page, rowsPerPage, orderBy, order]);
 
     useEffect(() => {
         if (fetchedProducts.meta.per_page) {
@@ -94,10 +91,10 @@ function ProductsTable(props) {
     }, [])
 
     const deleteModalConfirmHandler = useCallback((id) => {
-        deleteProductHandler(token, id);
+        deleteProductHandler( id);
         setDeleteModalOpened(false);
         setSelectedProductId(null);
-    }, [token, deleteProductHandler])
+    }, [deleteProductHandler])
     // View Modal
     const viewModalOpenHandler = useCallback((id) => {
         setViewModalOpened(true);
@@ -218,7 +215,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         fetchProductsHandler: (language, page, perPage, orderBy, order) => dispatch(fetchProducts(language, page, perPage, orderBy, order)),
-        deleteProductHandler: (token, id) => dispatch(deleteProduct(token, id)),
+        deleteProductHandler: ( id) => dispatch(deleteProduct(id)),
         updateProductHandler: (data) => dispatch(updateProduct(data)),
     }
 }

@@ -7,22 +7,19 @@ import EventIcon from '@mui/icons-material/Event';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import { fetchTotalBookings } from '../../../../../store/actions/index';
 import ThemeContext from '../../../../../store/theme-context';
-import AuthContext from '../../../../../store/auth-context';
 
 
 const TotalBookings = props => {
 
     const themeCtx = useContext(ThemeContext)
-    const authCtx = useContext(AuthContext)
 
     const { lang } = themeCtx
-    const { token } = authCtx
 
     const { fetchedTotalBookings, fetchTotalBookingsHandler, loadingTotalBookings } = props;
 
     useEffect(() => {
-        fetchTotalBookingsHandler( lang , token ) ;
-    }, [ fetchTotalBookingsHandler, lang , token ]);
+        fetchTotalBookingsHandler( lang  ) ;
+    }, [ fetchTotalBookingsHandler, lang  ]);
 
     let loadedTotalBookings ;
     
@@ -67,7 +64,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchTotalBookingsHandler: ( language , token ) => dispatch( fetchTotalBookings( language , token ) )
+        fetchTotalBookingsHandler: ( language  ) => dispatch( fetchTotalBookings( language  ) )
     }
 }
 
