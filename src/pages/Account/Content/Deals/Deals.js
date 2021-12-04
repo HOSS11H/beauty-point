@@ -11,7 +11,7 @@ function Deals(props) {
 
     return (
         <Fragment>
-            <SearchBar searchHandler={searchDealsHandler}/>
+            {/* <SearchBar searchHandler={searchDealsHandler}/> */}
             <DealsTable />
         </Fragment>
     );

@@ -6,6 +6,7 @@ import TableRow from '@mui/material/TableRow';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
 import { TableData, TableDate, TableImg, TableStatus } from '../../../../../../components/UI/Dashboard/Table/Table';
+import { formatCurrency } from '../../../../../../shared/utility';
 
 
 const EnhancedTableBody = props => {
@@ -29,7 +30,7 @@ const EnhancedTableBody = props => {
                             scope="row"
                         >
                             <TableImg>
-                                <img src={row.deal_image_url} alt="" />
+                                <img src={row.image} alt="" />
                             </TableImg>
                         </TableCell>
                         <TableCell align="center">
@@ -51,7 +52,7 @@ const EnhancedTableBody = props => {
                         </TableCell>
                         <TableCell align="center">
                             <TableData>
-                                {row.formated_original_amount}
+                                {formatCurrency(row.price)}
                             </TableData>
                         </TableCell>
                         <TableCell align="center">
@@ -60,7 +61,7 @@ const EnhancedTableBody = props => {
                             </TableData>
                         </TableCell>
                         <TableCell align="center">
-                            <TableData>{row.quantity}</TableData>
+                            <TableData>{row.uses_limit}</TableData>
                         </TableCell>
                         <TableCell align="center">
                             <TableData>

@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { fetchDeals } from '../../../../../store/actions/index';
 import ThemeContext from '../../../../../store/theme-context';
-import AuthContext from '../../../../../store/auth-context';
 import EnhancedTableHead from './TableHead/TableHead';
 import TablePaginationActions from '../../../../../components/UI/Dashboard/Table/TablePagination/TablePagination';
 import DeleteModal from './DeleteModal/DeleteModal';
@@ -46,14 +45,15 @@ function DealsTable(props) {
     const { fetchedDeals, fetchDealsHandler, loadingDeals, deleteDealHandler, searchingDeals, searchingDealsSuccess } = props;
 
     const themeCtx = useContext(ThemeContext)
-    const authCtx = useContext(AuthContext)
 
     const { lang } = themeCtx
-    const { token } = authCtx
 
     const [page, setPage] = useState(0);
 
     const [rowsPerPage, setRowsPerPage] = useState(intialRowsPerPage);
+
+    const [order, setOrder] = useState('desc');
+    const [orderBy, setOrderBy] = useState('name');
 
     const [deleteModalOpened, setDeleteModalOpened] = useState(false);
 
@@ -64,14 +64,20 @@ function DealsTable(props) {
     const [selectedDealId, setSelectedDealId] = useState(null);
 
     useEffect(() => {
-        fetchDealsHandler(lang, token, page);
-    }, [fetchDealsHandler, lang, token, page]);
+        fetchDealsHandler(lang, page, rowsPerPage, orderBy, order);
+    }, [fetchDealsHandler, lang, order, orderBy, page, rowsPerPage]);
 
     useEffect(() => {
         if (fetchedDeals.per_page) {
             setRowsPerPage(fetchedDeals.per_page)
         }
     }, [fetchedDeals])
+
+    const handleRequestSort = (event, property) => {
+        const isAsc = orderBy === property && order === 'asc';
+        setOrder(isAsc ? 'desc' : 'asc');
+        setOrderBy(property);
+    };
 
 
     // Delete Modal
@@ -85,10 +91,10 @@ function DealsTable(props) {
     }, [])
 
     const deleteModalConfirmHandler = useCallback((id) => {
-        deleteDealHandler(token, id);
+        deleteDealHandler( id);
         setDeleteModalOpened(false);
         setSelectedDealId(null);
-    }, [deleteDealHandler, token])
+    }, [deleteDealHandler])
 
     // View Modal
     const viewModalOpenHandler = useCallback((id) => {
@@ -148,6 +154,10 @@ function DealsTable(props) {
                         >
                             <EnhancedTableHead
                                 rowCount={fetchedDeals.data.length}
+                                onRequestSort={handleRequestSort}
+                                order={order}
+                                orderBy={orderBy}
+                                loading={loadingDeals}
                             />
                             <EnhancedTableBody
                                 fetchedDeals={fetchedDeals}
@@ -161,7 +171,7 @@ function DealsTable(props) {
                     <TablePaginationActions
                         component="div"
                         count={fetchedDeals.data.length}
-                        total={fetchedDeals.total}
+                        total={fetchedDeals.meta.total}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onPageChange={handleChangePage}
@@ -199,7 +209,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchDealsHandler: (language, token, page) => dispatch(fetchDeals(language, token, page)),
+        fetchDealsHandler: (language, page, perPage, orderBy, orderDir) => dispatch(fetchDeals(language, page, perPage, orderBy, orderDir)),
         deleteDealHandler: (token, id) => dispatch(deleteDeal(token, id)),
     }
 }

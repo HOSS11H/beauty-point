@@ -181,13 +181,13 @@ const CreateModal = (props) => {
     const [serviceDescriptionError, setServiceDescriptionError] = useState(false);
         
     const [servicePrice, setServicePrice] = useState(0);
-    const [servicePriceError, setServicePriceError] = useState(false);
 
     const [serviceDiscount, setServiceDiscount] = useState(0);
 
     const [discountType, setDiscountType] = useState('percent');
 
     const [priceAfterDiscount, setPriceAfterDiscount] = useState(0);
+    const [servicePriceError, setServicePriceError] = useState(false);
 
     const [employeeName, setEmployeeName] = useState([]);
 
@@ -215,10 +215,12 @@ const CreateModal = (props) => {
         let netPrice;
         if (discountType === 'percent') {
             netPrice = (servicePrice - (servicePrice * (serviceDiscount / 100))).toFixed(2);
-            setPriceAfterDiscount(netPrice)
+            setPriceAfterDiscount(netPrice > 0 ? netPrice : 0);
+            netPrice > 0 ? setServicePriceError(false) : setServicePriceError(true);
         } else if (discountType === 'fixed') {
             netPrice = (servicePrice - serviceDiscount).toFixed(2);
-            setPriceAfterDiscount(netPrice)
+            setPriceAfterDiscount(netPrice > 0 ? netPrice : 0)
+            netPrice > 0 ? setServicePriceError(false) : setServicePriceError(true);
         }
     }, [discountType, serviceDiscount, servicePrice])
 
@@ -261,7 +263,7 @@ const CreateModal = (props) => {
         }
     }
     const serviceDiscountChangeHandler = (event) => {
-        if (event.target.value >= 0 && event.target.value <= servicePrice) {
+        if (event.target.value >= 0 ) {
             setServiceDiscount(event.target.value);
         }
     }
@@ -323,7 +325,7 @@ const CreateModal = (props) => {
             setServiceDescriptionError(true);
             return;
         }
-        if (+servicePrice === 0) { 
+        if ( priceAfterDiscount === 0)   { 
             setServicePriceError(true);
             return; 
         }

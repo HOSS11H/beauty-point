@@ -156,13 +156,13 @@ const CreateModal = (props) => {
     const [productDescriptionError, setProductDescriptionError] = useState(false);
         
     const [productPrice, setProductPrice] = useState(0);
-    const [productPriceError, setProductPriceError] = useState(false);
     
     const [productDiscount, setProductDiscount] = useState(0);
     
     const [discountType, setDiscountType] = useState('percent');
     
     const [priceAfterDiscount, setPriceAfterDiscount] = useState(0);
+    const [productPriceError, setProductPriceError] = useState(false);
     
     const [productQuantity, setProductQuantity] = useState(0);
     const [productQuantityError, setProductQuantityError] = useState(false);
@@ -183,10 +183,12 @@ const CreateModal = (props) => {
         let netPrice;
         if (discountType === 'percent') {
             netPrice = (productPrice - (productPrice * (productDiscount / 100))).toFixed(2);
-            setPriceAfterDiscount(netPrice)
+            setPriceAfterDiscount(netPrice > 0 ? netPrice : 0);
+            netPrice > 0 ? setProductPriceError(false) : setProductPriceError(true);
         } else if (discountType === 'fixed') {
             netPrice = (productPrice - productDiscount).toFixed(2);
             setPriceAfterDiscount(netPrice > 0 ? netPrice : 0)
+            netPrice > 0 ? setProductPriceError(false) : setProductPriceError(true);
         }
     }, [discountType, productDiscount, productPrice])
 
@@ -223,7 +225,6 @@ const CreateModal = (props) => {
     const productPriceChangeHandler = (event) => {
         if (event.target.value >= 0) {
             setProductPrice(event.target.value);
-            setProductPriceError(false);
         }
     }
     const productDiscountChangeHandler = (event) => {
@@ -267,7 +268,7 @@ const CreateModal = (props) => {
             setProductDescriptionError(true);
             return;
         }
-        if (+productPrice === 0) { 
+        if ( priceAfterDiscount === 0)   { 
             setProductPriceError(true);
             return; 
         }

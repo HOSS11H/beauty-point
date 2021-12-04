@@ -92,6 +92,7 @@ const resources = {
             'Create Product': 'إنشاء منتج',
             'create new product': 'إنشاء منتج جديد',
             'Please add Quantity': 'يرجى إضافة كمية',
+            'create new service': 'إنشاء خدمة جديدة',
         }
     }
 };

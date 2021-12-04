@@ -21,7 +21,7 @@ export const fetchDealsFailed = ( errorMessage ) => {
 export const fetchDeals = ( language, page, perPage, orderBy, orderDir ) => {
     return dispatch => {
         dispatch( fetchDealsStart( ) )
-        axios.get(`/vendors/deals?page=${page + 1}&per_page=${perPage}&order_by=${orderBy}&order_dir=${orderDir}&include[]=services`, { 
+        axios.get(`/vendors/deals?page=${page + 1}&per_page=${perPage}&order_by=${orderBy}&order_dir=${orderDir}&include[]=services&include[]=location`, { 
             headers: {
                 'Accept-Language': language
             }
@@ -48,6 +48,7 @@ export const fetchDeals = ( language, page, perPage, orderBy, orderDir ) => {
                 dispatch( fetchDealsSuccess( { ...response.data , data: editedData } ) );
             })
             .catch( err => {
+                console.log(err)
                 dispatch( fetchDealsFailed( err.message  ) )
             } )
         }
@@ -105,7 +106,7 @@ export const searchDealsFailed = ( errorMessage ) => {
 export const searchDeals = ( language , word ) => {
     return dispatch => {
         dispatch( searchDealsStart( ) )
-        axios.get(`/vendors/deals?term=${word}&per_page=15`, { 
+        axios.get(`/vendors/deals?term=${word}&per_page=15&include[]=services&include[]=location`, { 
             headers: {
                 'Accept-Language': language
             }

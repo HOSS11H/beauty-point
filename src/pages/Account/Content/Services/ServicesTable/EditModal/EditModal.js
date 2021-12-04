@@ -20,6 +20,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import DeleteIcon from '@mui/icons-material/Delete';
+import ValidationMessage from '../../../../../../components/UI/ValidationMessage/ValidationMessage';
 
 import ImageUploading from 'react-images-uploading';
 
@@ -193,6 +194,7 @@ const EditModal = (props) => {
     const [discountType, setDiscountType] = useState(discount_type);
 
     const [priceAfterDiscount, setPriceAfterDiscount] = useState(discount_price);
+    const [servicePriceError, setServicePriceError] = useState(false);
 
     const [employeeName, setEmployeeName] = useState(employeesIds);
 
@@ -208,10 +210,12 @@ const EditModal = (props) => {
         let netPrice;
         if (discountType === 'percent') {
             netPrice = (servicePrice - (servicePrice * (serviceDiscount / 100))).toFixed(2);
-            setPriceAfterDiscount(netPrice)
-        } else if (discountType === 'fixed'  ) {
+            setPriceAfterDiscount(netPrice > 0 ? netPrice : 0);
+            netPrice > 0 ? setServicePriceError(false) : setServicePriceError(true);
+        } else if (discountType === 'fixed') {
             netPrice = (servicePrice - serviceDiscount).toFixed(2);
             setPriceAfterDiscount(netPrice > 0 ? netPrice : 0)
+            netPrice > 0 ? setServicePriceError(false) : setServicePriceError(true);
         }
     }, [discountType, serviceDiscount, servicePrice])
 
@@ -267,6 +271,10 @@ const EditModal = (props) => {
     }, [onClose])
 
     const confirmEditHandler = useCallback(() => {
+        if ( priceAfterDiscount === 0)   { 
+            setServicePriceError(true);
+            return; 
+        }
         const employeesData = [];
         employeeName.map(employeeId => {
             const employeeIndex = fetchedEmployees.findIndex(employee => employee.id === employeeId);
@@ -324,6 +332,7 @@ const EditModal = (props) => {
             </Grid>
             <Grid item xs={12} sm={6}>
                 <CustomTextField id="service-price" type='number' label={t('price')} variant="outlined" value={servicePrice} onChange={servicePriceChangeHandler} />
+                {servicePriceError && <ValidationMessage notExist>{t(`Please add Price`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6}>
                 <CustomFormGroup>
