@@ -58,7 +58,7 @@ const cartReducer = (state, action) => {
             if (productIndex === -1) { 
                 updatedProducts.push(action.payload)
             } else {
-                const updatedItem = updatedProducts[productIndex]
+                const updatedItem = {...updatedProducts[productIndex]}
                 updatedItem.quantity = updatedItem.quantity + 1
                 updatedProducts[productIndex] = updatedItem
             }

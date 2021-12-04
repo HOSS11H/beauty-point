@@ -68,7 +68,7 @@ const ListView = ( props ) => {
         const addedItem = data[addedItemIndex];
         const addedItemData = {
             id: addedItem.id,
-            price: addedItem.discounted_price,
+            price: addedItem.price_after_discount,
             quantity: 1,
             type: type,
         }
@@ -76,6 +76,9 @@ const ListView = ( props ) => {
     }
 
     let content = data.map( (item, index) => {
+        type === 'products' && (item.price_after_discount = item.discount_price);
+        type === 'deals' && (item.price_after_discount = item.price);
+        type === 'deals' && (item.name = item.title);
         return (
             <Grid item xs={6} sm={3} md={4} lg={3} key={item.id}>
                 <ResultCard onClick={ ( id ) => addItemHandler( item.id) } >

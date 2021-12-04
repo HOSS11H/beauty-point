@@ -107,10 +107,13 @@ const GridView = ( props ) => {
     const addItemHandler = ( id ) => {
         const addedItemIndex = data.findIndex( item  => item.id === id );
         const addedItem = data[addedItemIndex];
+        type === 'products' && (addedItem.price_after_discount = addedItem.discount_price);
+        type === 'deals' && (addedItem.price_after_discount = addedItem.price);
+        type === 'deals' && (addedItem.name = addedItem.title);
         const addedItemData = {
             id: addedItem.id,
             name: addedItem.name,
-            price: addedItem.price,
+            price: addedItem.price_after_discount,
             quantity: 1,
             type: type,
         }
@@ -118,6 +121,9 @@ const GridView = ( props ) => {
     }
 
     let content = data.map( (item, index) => {
+        type === 'products' && (item.price_after_discount = item.discount_price);
+        type === 'deals' && (item.price_after_discount = item.price);
+        type === 'deals' && (item.name = item.title);
         return (
             <Grid item xs={12} sm={6} key={item.id} >
                 <ResultCard>
