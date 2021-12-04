@@ -260,7 +260,7 @@ const CreateModal = (props) => {
     }, [onClose])
 
     const confirmCreateHandler = useCallback(() => {
-        if ( productName === '') {
+        if ( productName.trim().length === 0 ) {
             setProductNameError(true);
             return;
         }

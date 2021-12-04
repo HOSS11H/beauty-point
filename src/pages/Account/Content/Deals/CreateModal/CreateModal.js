@@ -260,7 +260,7 @@ const CreateModal = (props) => {
     }, [onClose])
 
     const confirmCreateHandler = useCallback(() => {
-        if ( dealName === '') {
+        if ( dealName.trim().length === 0) {
             setDealNameError(true);
             return;
         }

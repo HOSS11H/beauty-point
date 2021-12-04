@@ -317,7 +317,7 @@ const CreateModal = (props) => {
     }, [onClose])
 
     const confirmCreateHandler = useCallback(() => {
-        if ( serviceName === '') {
+        if ( serviceName.trim().length === 0) {
             setServiceNameError(true);
             return;
         }

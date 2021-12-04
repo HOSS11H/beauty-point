@@ -34,16 +34,18 @@ const AddCustomerModal = (props) => {
     }, [onClose])
 
     const confirmAddHandler = useCallback(() => {
-        if ( customerName === '') {
+        if ( customerName.trim().length === 0) {
             setCustomerNameError(true);
             return;
         }
-
         const data = {
             name: customerName,
         }
+
         onConfirm(data);
+
         setCustomerName('');
+        
     }, [customerName, onConfirm])
     
     return (
