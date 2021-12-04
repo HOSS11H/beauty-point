@@ -192,7 +192,7 @@ export const searchServices = ( language , word ) => {
 export const filterServices = ( language, type, category , location, search ) => {
     return dispatch => {
         dispatch( fetchServicesStart( ) )
-        axios.get(`/vendors/${type}?per_page=all&term=${search}&location=${location}&category=${category}&include[]=users`, { 
+        axios.get(`/vendors/${type}?per_page=all&term=${search}&location=${location}&category=${category}&include[]=category&include[]=location&include[]=users&include[]=bookingItems&include[]=company`, { 
             headers: {
                 'Accept-Language': language
             }

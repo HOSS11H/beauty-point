@@ -168,7 +168,7 @@ export const searchProducts = (language, word) => {
 export const filterProducts = (language, type, category, location, search) => {
     return dispatch => {
         dispatch(fetchProductsStart())
-        axios.get(`/vendors/${type}?per_page=all&term=${search}&location=${location}&category=${category}`, {
+        axios.get(`/vendors/${type}?per_page=all&term=${search}&location=${location}&category=${category}&include[]=location`, {
             headers: {
                 'Accept-Language': language
             }
