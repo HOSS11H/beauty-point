@@ -278,7 +278,7 @@ const Cart = props => {
                         <Grid container spacing={2}>
                             <Grid item xs={12} md={6}>
                                 <DesktopDatePicker
-                                    label="Date desktop"
+                                    label={t("Date desktop")}
                                     inputFormat="MM/dd/yyyy"
                                     value={dateTime}
                                     onChange={handleDateChange}
@@ -287,7 +287,7 @@ const Cart = props => {
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <TimePicker
-                                    label="Time"
+                                    label={t("Time")}
                                     value={dateTime}
                                     onChange={handleDateChange}
                                     renderInput={(params) => <TextField sx={{ width: '100%' }}  {...params} />}

@@ -289,7 +289,7 @@ const PointOfSale = ( props ) => {
     return (
         <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
-                <CustomCard heading='view services' >
+                <CustomCard heading='view items' >
                     <SearchFilters resultsHandler= {handleResultsChange}  />
                     <FilteredResults results={shownType} addToCart={addToCartHandler} />
                 </CustomCard>
