@@ -17,7 +17,7 @@ const headCells = [
         label: 'image',
     },
     {
-        id: 'name',
+        id: 'title',
         numeric: false,
         disablePadding: false,
         label: 'name',

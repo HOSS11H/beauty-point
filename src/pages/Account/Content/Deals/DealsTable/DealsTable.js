@@ -53,7 +53,7 @@ function DealsTable(props) {
     const [rowsPerPage, setRowsPerPage] = useState(intialRowsPerPage);
 
     const [order, setOrder] = useState('desc');
-    const [orderBy, setOrderBy] = useState('name');
+    const [orderBy, setOrderBy] = useState('title');
 
     const [deleteModalOpened, setDeleteModalOpened] = useState(false);
 

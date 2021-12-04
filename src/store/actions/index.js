@@ -32,6 +32,7 @@ export {
 } from './categories'
 export {
     fetchCustomers,
+    addCustomer,
 } from './customers'
 export {
     fetchCoupons,

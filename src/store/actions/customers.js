@@ -35,3 +35,36 @@ export const fetchCustomers = (language) => {
         })
     }
 }
+
+export const addCustomerStart = (  ) => {
+    return {
+        type: actionTypes.ADD_CUSTOMER_START,
+    }
+}
+export const addCustomerSuccess = ( message, addedCustomerData ) => {
+    return {
+        type: actionTypes.ADD_CUSTOMER_SUCCESS,
+        message: message,
+        customerData: addedCustomerData,
+    }
+}
+export const addCustomerFailed = ( message ) => {
+    return {
+        type: actionTypes.ADD_CUSTOMER_FAILED,
+        message: message,
+    }
+}
+
+export const addCustomer = ( data ) => {
+    return dispatch => {
+        dispatch( addCustomerStart( ) )
+        axios.post(`/vendors/customers`, data)
+        .then( response => {
+            console.log(response)
+            dispatch( addCustomerSuccess( null , {...data,  ...response.data } ) );
+            })
+            .catch( err => {
+                dispatch( addCustomerFailed( err.message  ) )
+            } )
+        }
+}

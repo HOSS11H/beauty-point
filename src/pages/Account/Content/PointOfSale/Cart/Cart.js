@@ -25,7 +25,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { ButtonText, ButtonConfirm, CustomButton } from '../../../../../components/UI/Button/Button';
 import ValidationMessage from '../../../../../components/UI/ValidationMessage/ValidationMessage';
 import { connect } from 'react-redux';
-import { fetchCoupons, fetchCustomers } from '../../../../../store/actions/index';
+import { fetchCoupons, fetchCustomers, addCustomer } from '../../../../../store/actions/index';
 import ThemeContext from '../../../../../store/theme-context';
 import AddCustomerModal from './AddCustomerModal/AddCustomerModal';
 
@@ -457,6 +457,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         fetchCustomersHandler: (lang) => dispatch(fetchCustomers(lang)),
         fetchCouponsHandler: (lang) => dispatch(fetchCoupons(lang)),
+        addCustomerHandler: (data) => dispatch(addCustomer(data)),
     }
 }
 
