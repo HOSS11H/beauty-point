@@ -18,7 +18,7 @@ const cartReducer = (state, action) => {
             if (serviceIndex === -1) { 
                 updatedServices.push(action.payload)
             } else {
-                const updatedItem = updatedServices[serviceIndex]
+                const updatedItem = {...updatedServices[serviceIndex]}
                 updatedItem.quantity = updatedItem.quantity + 1
                 updatedServices[serviceIndex] = updatedItem
             }
@@ -98,7 +98,7 @@ const cartReducer = (state, action) => {
             if (dealIndex === -1) { 
                 updatedDeals.push(action.payload)
             } else {
-                const updatedItem = updatedDeals[dealIndex]
+                const updatedItem = {...updatedDeals[dealIndex]}
                 updatedItem.quantity = updatedItem.quantity + 1
                 updatedDeals[dealIndex] = updatedItem
             }

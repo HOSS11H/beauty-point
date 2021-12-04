@@ -1,17 +1,23 @@
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import { useTranslation } from 'react-i18next';
 
 const SharedTableHead = props => {
+
+    const { name } = props
+    
+    const { t } = useTranslation()
+    
     return (
         <TableHead>
             <TableRow>
-                <TableCell align="center" >services</TableCell>
-                <TableCell align="center">price</TableCell>
-                <TableCell align="center">quantity</TableCell>
-                <TableCell align="center">price including taxes</TableCell>
-                <TableCell align="center">employees</TableCell>
-                <TableCell align="center">action</TableCell>
+                <TableCell align="center" >{t(name)}</TableCell>
+                <TableCell align="center">{t('price')}</TableCell>
+                <TableCell align="center">{t('quantity')}</TableCell>
+                <TableCell align="center">{t('price including taxes')}</TableCell>
+                <TableCell align="center">{t('employees')}</TableCell>
+                <TableCell align="center">{t('action')}</TableCell>
             </TableRow>
         </TableHead>
     )

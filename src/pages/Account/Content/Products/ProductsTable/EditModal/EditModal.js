@@ -266,7 +266,7 @@ const EditModal = (props) => {
         }
         onConfirm(data);
 
-    }, [defaultImage, discountType, editorState, fetchedLocations, id, locationName, onConfirm, priceAfterDiscount, productDiscount, productName, productPrice, productQuantity, productStatus])
+    }, [defaultImage, discountType, editorState, fetchedLocations, id, locationName, onConfirm, priceAfterDiscount, productDiscount, productName, productPrice, productPriceError, productQuantity, productStatus])
 
     let content = (
         <Grid container spacing={2}>

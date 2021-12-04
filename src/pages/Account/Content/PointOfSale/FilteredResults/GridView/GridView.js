@@ -109,7 +109,8 @@ const GridView = ( props ) => {
         const addedItem = data[addedItemIndex];
         const addedItemData = {
             id: addedItem.id,
-            price: addedItem.discounted_price,
+            name: addedItem.name,
+            price: addedItem.price,
             quantity: 1,
             type: type,
         }

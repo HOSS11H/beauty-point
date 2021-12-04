@@ -297,7 +297,7 @@ const EditModal = (props) => {
             users: employeesData,
         }
         onConfirm(data);
-    }, [defaultImage, discountType, editorState, employeeName, fetchedEmployees, id, onConfirm, priceAfterDiscount, serviceData.category.id, serviceData.location.id, serviceData.time, serviceData.time_type, serviceDiscount, serviceName, servicePrice, serviceStatus, uploadedImages])
+    }, [defaultImage, discountType, editorState, employeeName, fetchedEmployees, id, onConfirm, priceAfterDiscount, serviceData.category.id, serviceData.location.id, serviceData.time, serviceData.time_type, serviceDiscount, serviceName, servicePrice, servicePriceError, serviceStatus, uploadedImages])
 
     let content = (
         <Grid container spacing={2}>

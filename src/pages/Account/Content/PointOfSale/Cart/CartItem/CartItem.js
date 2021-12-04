@@ -13,6 +13,8 @@ import Increment from './Increment/Increment';
 import { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ThemeContext from '../../../../../../store/theme-context';
+import { connect } from 'react-redux';
+import { formatCurrency } from '../../../../../../shared/utility';
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -46,6 +48,8 @@ function getStyles(name, employeeName, theme) {
 
 const CartItem = props => {
 
+    const { fetchedEmployees } = props;
+
     const { t } = useTranslation()
 
     const themeCtx = useContext(ThemeContext)
@@ -73,16 +77,16 @@ const CartItem = props => {
                 <TableData>{row.name}</TableData>
             </TableCell>
             <TableCell align="center">
-                <TableData>{row.price}</TableData>
-            </TableCell>
-            <TableCell align="center">
-                <TableData>{row.quantity}</TableData>
+                <TableData>{formatCurrency(row.price)}</TableData>
             </TableCell>
             <TableCell align="center">
                 <Increment id={row.id} type={type} increment={increase} decrement={decrease} value={row.quantity} />
             </TableCell>
             <TableCell align="center">
-                <FormControl sx={{ minWidth: '90px' }}>
+                <TableData>{formatCurrency(row.quantity * row.price)}</TableData>
+            </TableCell>
+            <TableCell align="center">
+                <FormControl sx={{ width: '100%', minWidth: '90px'}}>
                     <InputLabel id="employee-label">{t('employee')}</InputLabel>
                     <Select
                         labelId="employee-label"
@@ -93,20 +97,23 @@ const CartItem = props => {
                         input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
                         renderValue={(selected) => (
                             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                {selected.map((value) => (
-                                    <Chip key={value} label={value}  />
-                                ))}
+                                {fetchedEmployees.length > 0 && selected.map((value) => {
+                                    const selected = fetchedEmployees.find(user => user.id === value);
+                                    return (
+                                        <Chip key={selected.id} label={selected.name} />
+                                    )
+                                })}
                             </Box>
                         )}
                         MenuProps={MenuProps}
                     >
-                        {names.map((name) => (
+                        {fetchedEmployees.map((employee) => (
                             <MenuItem
-                                key={name}
-                                value={name}
-                                style={getStyles(name, employeeName, themeCtx.theme)}
+                                key={employee.id}
+                                value={employee.id}
+                                style={getStyles(employee, employeeName, themeCtx.theme)}
                             >
-                                {name}
+                                {employee.name}
                             </MenuItem>
                         ))}
                     </Select>
@@ -121,4 +128,10 @@ const CartItem = props => {
     )
 }
 
-export default CartItem;
+const mapStateToProps = (state) => {
+    return {
+        fetchedEmployees: state.employees.employees,
+    }
+}
+
+export default connect(mapStateToProps, null)(CartItem);
