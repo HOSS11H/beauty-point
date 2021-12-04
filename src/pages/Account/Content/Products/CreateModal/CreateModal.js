@@ -268,10 +268,9 @@ const CreateModal = (props) => {
             setProductDescriptionError(true);
             return;
         }
-        if ( priceAfterDiscount === 0)   { 
-            setProductPriceError(true);
-            return; 
-        }
+
+        if ( productPriceError)   { return; }
+        
         if (locationName === '') {
             setProductLocationError(true);
             return;

@@ -247,10 +247,8 @@ const EditModal = (props) => {
     }, [onClose])
 
     const confirmEditHandler = useCallback(() => {
-        if ( priceAfterDiscount === 0)   { 
-            setProductPriceError(true);
-            return; 
-        }
+        if ( productPriceError)   { return; }
+
         const selectedLocation = fetchedLocations.find(location => location.id === locationName);
         const data = {
             id: id,

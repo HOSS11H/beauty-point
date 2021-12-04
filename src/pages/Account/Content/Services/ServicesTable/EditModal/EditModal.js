@@ -271,10 +271,7 @@ const EditModal = (props) => {
     }, [onClose])
 
     const confirmEditHandler = useCallback(() => {
-        if ( priceAfterDiscount === 0)   { 
-            setServicePriceError(true);
-            return; 
-        }
+        if ( servicePriceError )   { return; }
         const employeesData = [];
         employeeName.map(employeeId => {
             const employeeIndex = fetchedEmployees.findIndex(employee => employee.id === employeeId);

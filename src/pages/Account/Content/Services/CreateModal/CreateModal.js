@@ -325,10 +325,9 @@ const CreateModal = (props) => {
             setServiceDescriptionError(true);
             return;
         }
-        if ( priceAfterDiscount === 0)   { 
-            setServicePriceError(true);
-            return; 
-        }
+        
+        if ( servicePriceError )   { return; }
+
         if (locationName === '') {
             setServiceLocationError(true);
             return;
