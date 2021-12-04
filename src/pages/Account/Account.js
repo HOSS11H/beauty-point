@@ -95,7 +95,7 @@ export default function Account( props ) {
     );
 
 	const [mobileOpen, setMobileOpen] = useState(false);
-	const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
+	const isLgUp = useMediaQuery(theme.breakpoints.up('lg'));
 
 
 	const handleDrawerToggle = useCallback( () => {
@@ -108,9 +108,9 @@ export default function Account( props ) {
 					<CssBaseline />
 					<Box
 						component="nav"
-						sx={{ width: { md: drawerWidth }, flexShrink: { sm: 0 },  }}
+						sx={{ width: { lg: drawerWidth }, flexShrink: { sm: 0 },  }}
 					>
-						{isMdUp ? null : (
+						{isLgUp ? null : (
 							<Navigator
 								PaperProps={{ style: { width: drawerWidth } }}
 								variant="temporary"
@@ -121,10 +121,10 @@ export default function Account( props ) {
 
 						<Navigator
 							PaperProps={{ style: { width: drawerWidth } }}
-							sx={{ display: { md: 'block', xs: 'none' } }}
+							sx={{ display: { lg: 'block', xs: 'none' } }}
 						/>
 					</Box>
-					<Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', maxWidth: isMdUp ? `calc( 100% - ${drawerWidth}px)` : '100%'  }}>
+					<Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', maxWidth: isLgUp ? `calc( 100% - ${drawerWidth}px)` : '100%'  }}>
 						<Header onDrawerToggle={handleDrawerToggle} />
 						<Box component="main" sx={{ flex: 1, py: 4, px: 3, bgcolor: theme.palette.background.default }}>
 							<Outlet />

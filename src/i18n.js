@@ -123,6 +123,14 @@ const resources = {
             'Date desktop': 'التاريخ',
             'view items': 'عرض العناصر',
             'Add To Cart': 'إضافة إلى السلة',
+            'Type': 'نوع',
+            'Services': 'خدمات',
+            'Products': 'منتجات',
+            'Deals': 'عروض',
+            'Location': 'موقع',
+            'ALL': 'الكل',
+            'Category': 'الفئة',
+            'No Items': 'لا توجد عناصر',
         }
     }
 };

@@ -72,7 +72,7 @@ const SearchFilters = (props) => {
                             labelId="item-type"
                             id="item-type-select"
                             value={type}
-                            label="Type"
+                            label={t("Type")}
                             onChange={handleTypeChange}
                         >
                             <MenuItem value='services'>{t('Services')}</MenuItem>
@@ -83,15 +83,15 @@ const SearchFilters = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <FormControl fullWidth>
-                        <InputLabel id="item-location">location</InputLabel>
+                        <InputLabel id="item-location">{t('location')}</InputLabel>
                         <Select
                             labelId="item-location"
                             id="item-location-select"
                             value={location}
-                            label="Location"
+                            label={t("Location")}
                             onChange={handleLocationChange}
                         >
-                            <MenuItem value='*'>ALL</MenuItem>
+                            <MenuItem value='all'>{t('ALL')}</MenuItem>
                             {
                                 fetchedLocations.map(location => {
                                     return <MenuItem key={location.id} value={location.id}>{location.name}</MenuItem>
@@ -107,10 +107,10 @@ const SearchFilters = (props) => {
                             labelId="item-category"
                             id="item-category-select"
                             value={category}
-                            label="Category"
+                            label={t('"Category"')}
                             onChange={handleCategoryChange}
                         >
-                            <MenuItem value='*'>ALL</MenuItem>
+                            <MenuItem value='all'>{t('ALL')}</MenuItem>
                             {
                                 fetchedCategories.map(category => {
                                     return <MenuItem key={category.id} value={category.id}>{category.name}</MenuItem>
@@ -119,7 +119,7 @@ const SearchFilters = (props) => {
                         </Select>
                     </FormControl>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} sm={6}>
                     <CustomTextField id="item-search" label={t('search')} variant="outlined" value={search} onChange={handleSearchChange} />
                 </Grid>
             </Grid>
