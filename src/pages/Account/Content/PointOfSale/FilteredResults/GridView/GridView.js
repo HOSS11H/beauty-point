@@ -5,6 +5,7 @@ import { Grid } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import AddIcon from '@mui/icons-material/Add';
 import Skeleton from '@mui/material/Skeleton';
+import { formatCurrency } from '../../../../../../shared/utility';
 
 const SkeletonsWrapper = styled.div`
     flex-grow: 1;
@@ -120,13 +121,13 @@ const GridView = ( props ) => {
             <Grid item xs={12} sm={6} key={item.id} >
                 <ResultCard>
                     <ResultImg>
-                        <img  src={item.item_image_url}  alt="Result" />
+                        <img  src={item.image}  alt="Result" />
                     </ResultImg>
                     <ResultContent>
                         <ResultName>{item.name}</ResultName>
                         <PriceHolder>
-                            <ResultPrice>{item.formated_discounted_price}</ResultPrice>
-                            {item.converted_price !== item.converted_discounted_price ? <ResultDiscount>{item.formated_price}</ResultDiscount> : null}
+                            <ResultPrice>{formatCurrency(item.price_after_discount)}</ResultPrice>
+                            {item.price !== item.price_after_discount ? <ResultDiscount>{formatCurrency(item.price)}</ResultDiscount> : null}
                         </PriceHolder>
                         <AddResult onClick={ ( id ) =>addItemHandler(item.id) } >{t('add')}<AddIcon sx={{ml: 1}} /></AddResult>
                     </ResultContent>

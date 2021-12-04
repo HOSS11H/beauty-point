@@ -3,6 +3,7 @@ import Card from '@mui/material/Card';
 import { Grid } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import Skeleton from '@mui/material/Skeleton';
+import { formatCurrency } from '../../../../../../shared/utility';
 
 const SkeletonsWrapper = styled.div`
     flex-grow: 1;
@@ -83,8 +84,8 @@ const ListView = ( props ) => {
                     <ResultContent>
                         <ResultName>{item.name}</ResultName>
                         <PriceHolder>
-                            <ResultPrice>{item.discounted_price.toFixed(2)}</ResultPrice>
-                            {item.converted_price !== item.converted_discounted_price ? <ResultDiscount>{item.price.toFixed(2)}</ResultDiscount> : null}
+                            <ResultPrice>{formatCurrency(item.price_after_discount)}</ResultPrice>
+                            {item.price !== item.price_after_discount ? <ResultDiscount>{formatCurrency(item.price)}</ResultDiscount> : null}
                         </PriceHolder>
                     </ResultContent>
                 </ResultCard>

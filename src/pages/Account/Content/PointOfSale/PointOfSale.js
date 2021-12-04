@@ -154,7 +154,6 @@ const PointOfSale = ( props ) => {
 
     const { lang } = themeCtx
     const { token } = authCtx
-    const page = 0;
 
     const [ cart , dispatch ] = useReducer(cartReducer, {
         services: [],
@@ -171,11 +170,11 @@ const PointOfSale = ( props ) => {
 
     useEffect(() => {
         if(shownType === 'services') {
-            filterServicesHandler(lang, page, shownType, shownCategory , shownLocation, searchWord);
+            filterServicesHandler(lang,  shownType, shownCategory , shownLocation, searchWord);
         } else if(shownType === 'products') {
-            filterProductsHandler(lang, page, shownType, shownCategory , shownLocation, searchWord);
+            filterProductsHandler(lang, shownType, shownCategory , shownLocation, searchWord);
         } else if(shownType === 'deals') {
-            filterDealsHandler(lang, page, shownType, shownCategory , shownLocation, searchWord);
+            filterDealsHandler(lang, shownType, shownCategory , shownLocation, searchWord);
         }
     }, [filterDealsHandler, filterProductsHandler, filterServicesHandler, lang, searchWord, shownCategory, shownLocation, shownType, token]);
 
@@ -184,12 +183,13 @@ const PointOfSale = ( props ) => {
         setShownCategory(category);
         setShownLocation(location);
         setSearchWord(search);
+        console.log(type, category, location, search)
         if(type === 'services') {
-            filterServicesHandler(lang, page, type, category , location, search);
+            filterServicesHandler(lang, type, category , location, search);
         } else if (type === 'products') {
-            filterProductsHandler(lang, page, type, category , location, search);
+            filterProductsHandler(lang,  type, category , location, search);
         } else if (type === 'deals') {
-            filterDealsHandler(lang, page, type, category , location, search);
+            filterDealsHandler(lang, type, category , location, search);
         }
     }, [filterDealsHandler, filterProductsHandler, filterServicesHandler, lang])
 
@@ -303,9 +303,9 @@ const PointOfSale = ( props ) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        filterServicesHandler: (language, page, type, category , location, search) => dispatch(filterServices(language, page, type, category , location, search)),
-        filterProductsHandler: (language, token, page) => dispatch(filterProducts(language, token, page)),
-        filterDealsHandler: (language, token, page) => dispatch(filterDeals(language, token, page)),
+        filterServicesHandler: (language,  type, category , location, search) => dispatch(filterServices(language, type, category , location, search)),
+        filterProductsHandler: (language, type, category , location, search) => dispatch(filterProducts(language, type, category , location, search)),
+        filterDealsHandler: (language, type, category , location, search) => dispatch(filterDeals(language, type, category , location, search)),
     }
 }
 

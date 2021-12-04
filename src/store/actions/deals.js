@@ -138,10 +138,10 @@ export const searchDeals = ( language , word ) => {
         }
 }
 
-export const filterDeals = ( language, page , type, category , location, search ) => {
+export const filterDeals = ( language, type, category , location, search ) => {
     return dispatch => {
         dispatch( fetchDealsStart( ) )
-        axios.get(`/vendors/${type}?page=${page + 1}term=${search}&location=${location}&category=${category}`, { 
+        axios.get(`/vendors/${type}?per_page=all&term=${search}&location=${location}&category=${category}`, { 
             headers: {
                 'Accept-Language': language
             }
