@@ -14,6 +14,8 @@ import dealsReducer from './store/reducers/deals'
 import locationsReducer from './store/reducers/locations'
 import categoriesReducer from './store/reducers/categories'
 import employeesReducer from './store/reducers/employees'
+import couponsReducer from './store/reducers/coupons'
+import customersReducer from './store/reducers/customers'
 
 import { BrowserRouter } from 'react-router-dom';
 
@@ -30,7 +32,9 @@ const rootReducer = combineReducers({
 	deals: dealsReducer,
 	locations: locationsReducer,
 	categories: categoriesReducer,
-	employees: employeesReducer
+	employees: employeesReducer,
+	coupons: couponsReducer,
+	customers: customersReducer,
 });
 
 

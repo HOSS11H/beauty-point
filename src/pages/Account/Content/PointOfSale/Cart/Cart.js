@@ -24,6 +24,8 @@ import CartItem from './CartItem/CartItem';
 import InputAdornment from '@mui/material/InputAdornment';
 import { ButtonText, ButtonConfirm } from '../../../../../components/UI/Button/Button';
 import ValidationMessage from '../../../../../components/UI/ValidationMessage/ValidationMessage';
+import { connect } from 'react-redux';
+import { fetchCoupons, fetchCustomers } from '../../../../../store/actions/index';
 
 
 const CustomerCard = styled.div`
@@ -448,4 +450,18 @@ const Cart = props => {
     )
 }
 
-export default Cart;
+const mapStateToProps = (state) => {
+    return {
+        fetchedCustomers: state.customers.customers,
+        fetchedCoupons: state.coupons.coupons,
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchCustomersHandler: (lang) => dispatch(fetchCustomers(lang)),
+        fetchCouponsHandler: (lang) => dispatch(fetchCoupons(lang)),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Cart);
