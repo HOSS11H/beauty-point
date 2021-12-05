@@ -47,6 +47,38 @@ export const fetchBookings = ( language, perPage  ) => {
             }
 }
 
+export const deleteBookingStart = (  ) => {
+    return {
+        type: actionTypes.DELETE_BOOKING_START,
+    }
+}
+export const deleteBookingSuccess = ( message, deletedBookingId ) => {
+    return {
+        type: actionTypes.DELETE_BOOKING_SUCCESS,
+        message: message,
+        bookingId: deletedBookingId,
+    }
+}
+export const deleteBookingFailed = ( message ) => {
+    return {
+        type: actionTypes.DELETE_BOOKING_FAILED,
+        message: message,
+    }
+}
+
+export const deleteBooking = (id ) => {
+    return dispatch => {
+        dispatch( deleteBookingStart( ) )
+        axios.delete(`/vendors/bookings/${id}`)
+            .then( response => {
+                dispatch( deleteBookingSuccess( response.data , id  ) );
+            })
+            .catch( err => {
+                dispatch( deleteBookingFailed( err.message  ) )
+            } )
+        }
+}
+
 export const fetchTotalBookingsStart = (  ) => {
     return {
         type: actionTypes.FETCH_TOTAL_BOOKINGS_START,

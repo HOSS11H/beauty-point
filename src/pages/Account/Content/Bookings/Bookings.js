@@ -3,14 +3,15 @@ import { useState, useContext, useEffect, useCallback } from "react";
 import { useTranslation } from 'react-i18next';
 import { connect } from "react-redux";
 import BookingView from "../../../../components/UI/Dashboard/BookingView/BookingView";
-import { fetchBookings } from "../../../../store/actions/index";
+import { fetchBookings, deleteBooking } from "../../../../store/actions/index";
 import ThemeContext from "../../../../store/theme-context";
 import ViewModal from "./ViewModal/ViewModal";
+import EditModal from "./EditModal/EditModal";
 
 
 function Services(props) {
 
-    const { fetchedBookings, fetchBookingsHandler, fetchingBookings } = props;
+    const { fetchedBookings, fetchBookingsHandler, fetchingBookings, deleteBookingHandler } = props;
 
     const { t } = useTranslation()
 
@@ -29,6 +30,22 @@ function Services(props) {
         fetchBookingsHandler(lang, 'all');
     }, [fetchBookingsHandler, lang]);
 
+    
+    // Edit Modal
+    const editModalOpenHandler = useCallback((id) => {
+        setEditModalOpened(true);
+        setSelectedBookingId(id);
+    }, [])
+    const editModalCloseHandler = useCallback(() => {
+        setEditModalOpened(false);
+        setSelectedBookingId(null);
+    }, [])
+
+    const editModalConfirmHandler = useCallback((data) => {
+        setEditModalOpened(false);
+        setSelectedBookingId(null);
+        //updateServiceHandler(data);
+    }, [])
 
     // View Modal
     const viewModalOpenHandler = useCallback((id) => {
@@ -39,11 +56,18 @@ function Services(props) {
         setViewModalOpened(false);
         setSelectedBookingId(null);
     }, [])
+    const viewModalDeleteHandler = useCallback((id) => {
+        setViewModalOpened(false);
+        setSelectedBookingId(null);
+        deleteBookingHandler(id);
+        console.log(id)
+    }, [deleteBookingHandler])
 
     const viewModalConfirmHandler = useCallback((id) => {
         setViewModalOpened(false);
         setEditModalOpened(true);
-    }, [])
+        editModalOpenHandler(id);
+    }, [editModalOpenHandler])
 
     let content = fetchedBookings.data.map((booking, index) => {
         return (
@@ -58,7 +82,14 @@ function Services(props) {
             {content}
             <ViewModal show={viewModalOpened} id={selectedBookingId} fetchedBookings={fetchedBookings}
                 onClose={viewModalCloseHandler} onConfirm={viewModalConfirmHandler.bind(null, selectedBookingId)}
-                heading='view booking details' confirmText='edit' />
+                heading='view booking details' confirmText='edit'  onDelete={viewModalDeleteHandler} />
+            {
+                editModalOpened && (
+                    <EditModal show={editModalOpened} id={selectedBookingId} fetchedBookings={fetchedBookings}
+                        onClose={editModalCloseHandler} onConfirm={editModalConfirmHandler}
+                        heading='edit booking details' confirmText='confirm edit' />
+                )
+            }
         </Grid>
     );
 }
@@ -72,7 +103,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchBookingsHandler: (language, perPage) => dispatch(fetchBookings(language, perPage))
+        fetchBookingsHandler: (language, perPage) => dispatch(fetchBookings(language, perPage)),
+        deleteBookingHandler: (id) => dispatch(deleteBooking(id)),
     }
 }
 

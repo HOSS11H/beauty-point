@@ -1,6 +1,7 @@
 export {
     fetchBookings,
     fetchTotalBookings,
+    deleteBooking,
 } from './bookings'
 export {
     fetchServices,

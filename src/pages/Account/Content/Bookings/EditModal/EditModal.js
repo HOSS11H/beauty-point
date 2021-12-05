@@ -159,7 +159,7 @@ const DeleteButton = styled(CustomButton)`
 
 const ViewModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, id, fetchedBookings, onDelete } = props;
+    const { show, heading, confirmText, onConfirm, onClose, id, fetchedBookings } = props;
 
     const { t } = useTranslation();
 
@@ -252,7 +252,7 @@ const ViewModal = (props) => {
                         </Grid>
                     )
                 }
-                {/* <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={6}>
                     <BookingData>
                         <BookingDataHeading>{t('payment method')}</BookingDataHeading>
                         <BookingList>
@@ -267,7 +267,7 @@ const ViewModal = (props) => {
                             <li>{bookingData.payment.status === 'completed' ? <CheckCircleIcon sx={{ mr: 1, color: '#568d00' }} /> : <CloseIcon sx={{ mr: 1, color: '#f00' }} /> }{bookingData.payment.status}</li>
                         </BookingList>
                     </BookingData>
-                </Grid> */}
+                </Grid>
                 <Grid item xs={12} md={6}>
                     <BookingData>
                         <BookingDataHeading>{t('taxes ( 15% )')}</BookingDataHeading>
@@ -289,7 +289,7 @@ const ViewModal = (props) => {
                 </Grid>
                 <Grid item xs={12}>
                     <BookingActions>
-                        <DeleteButton onClick={(id) => onDelete(bookingData.id)} >{t('Delete')}</DeleteButton>
+                        <DeleteButton>{t('Delete')}</DeleteButton>
                     </BookingActions>
                 </Grid>
             </Grid>

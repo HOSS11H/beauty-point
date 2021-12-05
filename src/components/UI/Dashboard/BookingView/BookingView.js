@@ -9,7 +9,6 @@ import WatchLaterIcon from '@mui/icons-material/WatchLater';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import Skeleton from '@mui/material/Skeleton';
 import { Fragment } from 'react';
-import { Grid } from "@mui/material";
 
 const CustomCardMui = styled(Card)`
     &.MuiPaper-root {
