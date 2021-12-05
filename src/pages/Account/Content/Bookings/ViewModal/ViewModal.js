@@ -19,6 +19,10 @@ import PersonIcon from '@mui/icons-material/Person';
 import MoneyIcon from '@mui/icons-material/Money';
 import CloseIcon from '@mui/icons-material/Close';
 import { formatCurrency } from '../../../../../shared/utility';
+import { CustomButton } from '../../../../../components/UI/Button/Button';
+import PrintIcon from '@mui/icons-material/Print';
+import DownloadIcon from '@mui/icons-material/Download';
+import FindInPageIcon from '@mui/icons-material/FindInPage';
 
 const ClientDetails = styled.div`
     display: flex;
@@ -114,6 +118,31 @@ const ItemType = styled.div`
     }
     &.deal {
         background-color: ${({ theme }) => theme.palette.success.main};
+    }
+`
+const BookingActions = styled.div`
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+`
+const ActionButton = styled(CustomButton)`
+    &.MuiButton-root {
+        margin-right: 20px;
+        margin-bottom: 15px;
+        width: auto;
+        padding: 0 10px;
+        height: 30px;
+        flex-shrink: 0;
+        background: ${({ theme }) => theme.palette.success.main};
+        font-size: 14px;
+        &:last-child {
+            margin-bottom: 15px;
+        }
+        svg {
+            width: 14px;
+            height: 14px;
+            margin-right: 10px;
+        }
     }
 `
 
@@ -240,6 +269,13 @@ const ViewModal = (props) => {
                         <BookingDataHeading>{t('total')}</BookingDataHeading>
                         <BookingDataInfo>{formatCurrency(bookingData.price)}</BookingDataInfo>
                     </BookingData>
+                </Grid>
+                <Grid item xs={12}>
+                    <BookingActions>
+                        <ActionButton><PrintIcon/>{t('print')}</ActionButton>
+                        <ActionButton><FindInPageIcon/>{t('show receipt')}</ActionButton>
+                        <ActionButton><DownloadIcon/>{t('download receipt')}</ActionButton>
+                    </BookingActions>
                 </Grid>
             </Grid>
         )
