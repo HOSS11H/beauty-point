@@ -131,6 +131,14 @@ const resources = {
             'ALL': 'الكل',
             'Category': 'الفئة',
             'No Items': 'لا توجد عناصر',
+            'view booking details': 'عرض تفاصيل الحجز',
+            'booking items': 'عناصر الحجز',
+            'booking time': 'وقت الحجز',
+            'booking date': 'تاريخ الحجز',
+            'phone': 'الهاتف',
+            'items': 'العناصر',
+            'item': 'عنصر',
+            'taxes ( 15% )': 'ضريبة القيمة المضافة %15',
         }
     }
 };

@@ -173,12 +173,12 @@ const BookingItems = styled.ul`
 
 const BookingView = props => {
 
-    const { booking, loading } = props;
+    const { booking, loading, onClick } = props;
 
     let content = (
         <CustomCardMui>
             <BookingButton>
-                <IconButton aria-label="delete" size="large" onClick={() => { }}>
+                <IconButton aria-label="delete" size="large" onClick={onClick}>
                     <RemoveRedEyeIcon />
                 </IconButton>
             </BookingButton>
