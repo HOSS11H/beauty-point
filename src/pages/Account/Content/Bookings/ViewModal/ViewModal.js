@@ -145,6 +145,16 @@ const ActionButton = styled(CustomButton)`
         }
     }
 `
+const DeleteButton = styled(CustomButton)`
+    &.MuiButton-root {
+        width: auto;
+        padding: 0 20px;
+        height: 40px;
+        flex-shrink: 0;
+        background: ${({ theme }) => theme.palette.error.main};
+        font-size: 16px;
+    }
+`
 
 
 const ViewModal = (props) => {
@@ -275,6 +285,11 @@ const ViewModal = (props) => {
                         <ActionButton><PrintIcon/>{t('print')}</ActionButton>
                         <ActionButton><FindInPageIcon/>{t('show receipt')}</ActionButton>
                         <ActionButton><DownloadIcon/>{t('download receipt')}</ActionButton>
+                    </BookingActions>
+                </Grid>
+                <Grid item xs={12}>
+                    <BookingActions>
+                        <DeleteButton>{t('Delete')}</DeleteButton>
                     </BookingActions>
                 </Grid>
             </Grid>

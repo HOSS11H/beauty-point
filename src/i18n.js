@@ -139,6 +139,10 @@ const resources = {
             'items': 'العناصر',
             'item': 'عنصر',
             'taxes ( 15% )': 'ضريبة القيمة المضافة %15',
+            'print': 'طباعة',
+            'show receipt': 'عرض الفاتورة',
+            'download receipt': 'تحميل الفاتورة',
+            'Delete': 'حذف',
         }
     }
 };
