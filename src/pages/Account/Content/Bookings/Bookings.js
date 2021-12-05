@@ -19,20 +19,16 @@ function Services(props) {
 
 
     useEffect(() => {
-        fetchBookingsHandler(lang, 'all' );
+        fetchBookingsHandler(lang, 'all');
     }, [fetchBookingsHandler, lang]);
 
-    let content = [];
-    if (fetchedBookings.data.length > 0) {
-        console.log(fetchedBookings)
-        content = fetchedBookings.data.map( (booking, index) => {
-            return (
-                <Grid item xs={12} sm={6} key={booking.id} >
-                    <BookingView  booking={booking} />
-                </Grid>
-            )
-        })
-    }
+    let content = fetchedBookings.data.map((booking, index) => {
+        return (
+            <Grid item xs={12} sm={6} key={booking.id} >
+                <BookingView booking={booking} loading={fetchingBookings} />
+            </Grid>
+        )
+    })
 
     return (
         <Grid container spacing={2}>

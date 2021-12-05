@@ -7,6 +7,9 @@ import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import Skeleton from '@mui/material/Skeleton';
+import { Fragment } from 'react';
+import { Grid } from "@mui/material";
 
 const CustomCardMui = styled(Card)`
     &.MuiPaper-root {
@@ -167,14 +170,15 @@ const BookingItems = styled.ul`
     }
 `
 
+
 const BookingView = props => {
 
-    const { booking } = props;
+    const { booking, loading } = props;
 
-    return (
+    let content = (
         <CustomCardMui>
             <BookingButton>
-                <IconButton aria-label="delete" size="large" onClick={() =>{} }>
+                <IconButton aria-label="delete" size="large" onClick={() => { }}>
                     <RemoveRedEyeIcon />
                 </IconButton>
             </BookingButton>
@@ -215,6 +219,25 @@ const BookingView = props => {
                 </BookingItems>
             </BookingContent>
         </CustomCardMui>
+    );
+    if (loading) {
+        content = (
+            <CustomCardMui>
+                <BookingInfos>
+                    <Skeleton variant="rectangular" width={130} height={130} sx={{ borderRadius: '8px' }}   />
+                </BookingInfos>
+                <BookingContent>
+                    <Skeleton variant="text" />
+                    <Skeleton variant="text" />
+                    <Skeleton variant="text" />
+                </BookingContent>
+            </CustomCardMui>
+        )
+    }
+    return (
+        <Fragment>
+            {content}
+        </Fragment>
     )
 }
 export default BookingView;
