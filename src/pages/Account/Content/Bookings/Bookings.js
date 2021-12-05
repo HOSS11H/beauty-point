@@ -40,6 +40,11 @@ function Services(props) {
         setEditModalOpened(false);
         setSelectedBookingId(null);
     }, [])
+    const editModalDeleteHandler = useCallback((id) => {
+        setEditModalOpened(false);
+        setSelectedBookingId(null);
+        deleteBookingHandler(id);
+    }, [deleteBookingHandler])
 
     const editModalConfirmHandler = useCallback((data) => {
         setEditModalOpened(false);
@@ -60,7 +65,6 @@ function Services(props) {
         setViewModalOpened(false);
         setSelectedBookingId(null);
         deleteBookingHandler(id);
-        console.log(id)
     }, [deleteBookingHandler])
 
     const viewModalConfirmHandler = useCallback((id) => {
@@ -87,7 +91,7 @@ function Services(props) {
                 editModalOpened && (
                     <EditModal show={editModalOpened} id={selectedBookingId} fetchedBookings={fetchedBookings}
                         onClose={editModalCloseHandler} onConfirm={editModalConfirmHandler}
-                        heading='edit booking details' confirmText='confirm edit' />
+                        heading='edit booking details' confirmText='confirm edit' onDelete={editModalDeleteHandler} />
                 )
             }
         </Grid>

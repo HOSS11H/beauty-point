@@ -91,7 +91,7 @@ const CustomMessage = styled.div`
         font-weight: 500;
         color: ${({ theme }) => theme.palette.text.disabled};
     }
-    `
+`
 
 const CouponWrapper = styled.div`
     display: flex;
@@ -184,7 +184,7 @@ const Cart = props => {
         }
         total = total - ((total * discount / 100) + (total * couponData.amount / 100));
         setTotalTaxes(total - (total / 1.15))
-        setTotalPrice(total - (total - (total / 1.15)));
+        setTotalPrice(total);
 
         if (cartData.services.length !== 0 || cartData.products.length !== 0 || cartData.deals.length !== 0) {
             setCartDataError(false)

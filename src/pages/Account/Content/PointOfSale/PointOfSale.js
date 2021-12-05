@@ -183,7 +183,6 @@ const PointOfSale = ( props ) => {
         setShownCategory(category);
         setShownLocation(location);
         setSearchWord(search);
-        console.log(type, category, location, search)
         if(type === 'services') {
             filterServicesHandler(lang, type, category , location, search);
         } else if (type === 'products') {

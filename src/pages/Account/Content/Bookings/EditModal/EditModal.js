@@ -3,26 +3,36 @@ import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { Grid } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import EventNoteIcon from '@mui/icons-material/EventNote';
+import TimePicker from '@mui/lab/TimePicker';
+import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
 import MailIcon from '@mui/icons-material/Mail';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
-import WatchLaterIcon from '@mui/icons-material/WatchLater';
+import DateAdapter from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import TextField from '@mui/material/TextField';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
+import CartItem from './CartItem/CartItem';
+import SharedTableHead from './SharedTableHead/SharedTableHead';
 import Paper from '@mui/material/Paper';
 import Avatar from '@mui/material/Avatar';
 import PersonIcon from '@mui/icons-material/Person';
 import MoneyIcon from '@mui/icons-material/Money';
 import CloseIcon from '@mui/icons-material/Close';
-import { formatCurrency } from '../../../../../shared/utility';
+import { formatCurrency, updateObject } from '../../../../../shared/utility';
 import { CustomButton } from '../../../../../components/UI/Button/Button';
-import PrintIcon from '@mui/icons-material/Print';
-import DownloadIcon from '@mui/icons-material/Download';
-import FindInPageIcon from '@mui/icons-material/FindInPage';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import Box from '@mui/material/Box';
+import Chip from '@mui/material/Chip';
+import { useCallback, useEffect, useReducer, useState } from 'react';
+import { connect } from 'react-redux';
+import { fetchEmployees } from '../../../../../store/actions/index';
+import InputAdornment from '@mui/material/InputAdornment';
 
 const ClientDetails = styled.div`
     display: flex;
@@ -125,24 +135,23 @@ const BookingActions = styled.div`
     align-items: center;
     flex-wrap: wrap;
 `
-const ActionButton = styled(CustomButton)`
-    &.MuiButton-root {
-        margin-right: 20px;
-        margin-bottom: 15px;
-        width: auto;
-        padding: 0 10px;
-        height: 30px;
-        flex-shrink: 0;
-        background: ${({ theme }) => theme.palette.success.main};
-        font-size: 14px;
-        &:last-child {
-            margin-bottom: 15px;
-        }
-        svg {
-            width: 14px;
-            height: 14px;
-            margin-right: 10px;
-        }
+const CustomMessage = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 70px;
+    flex-grow: 1;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid;
+    border-color: ${({ theme }) => theme.palette.divider};
+    p {
+        font-size: 24px;
+        line-height:1.5;
+        text-transform: capitalize;
+        font-weight: 500;
+        color: ${({ theme }) => theme.palette.text.disabled};
     }
 `
 const DeleteButton = styled(CustomButton)`
@@ -155,17 +164,255 @@ const DeleteButton = styled(CustomButton)`
         font-size: 16px;
     }
 `
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        },
+    },
+};
+
+const cartReducer = (state, action) => {
+    switch(action.type) {
+        case 'ADD_TO_SERVICES':
+            const serviceIndex = state.services.findIndex(service => service.id === action.payload.id);
+            const updatedServices = [...state.services]
+            if (serviceIndex === -1) { 
+                updatedServices.push(action.payload)
+            } else {
+                const updatedItem = {...updatedServices[serviceIndex]}
+                updatedItem.quantity = updatedItem.quantity + 1
+                updatedServices[serviceIndex] = updatedItem
+            }
+            return updateObject(state, {
+                services: updatedServices,
+            })
+        case 'REMOVE_SERVICE':
+            const filteredServices = state.services.filter(service => service.id !== action.payload)
+            return updateObject(state, {
+                services: filteredServices,
+            })
+        case 'INCREASE_SERVICE' :
+            const increasedServiceIndex = state.services.findIndex(service => service.id === action.payload);
+            const increasedService = {...state.services[increasedServiceIndex]}
+            increasedService.quantity = increasedService.quantity + 1;
+            const increasedServices = [...state.services]
+            increasedServices[increasedServiceIndex] = increasedService
+            return updateObject(state, {
+                services: increasedServices,
+            })
+        case 'DECREASE_SERVICE' :
+            const decreasedServiceIndex = state.services.findIndex(service => service.id === action.payload);
+            const decreasedService = {...state.services[decreasedServiceIndex]}
+            const decreasedServices = [...state.services]
+            if (decreasedService.quantity === 1) {
+                decreasedServices.splice(decreasedServiceIndex, 1)
+            } else { 
+                decreasedService.quantity = decreasedService.quantity - 1
+                decreasedServices[decreasedServiceIndex] = decreasedService
+            }
+            return updateObject(state, {
+                services: decreasedServices,
+            })
+        case 'ADD_TO_PRODUCTS':
+            const productIndex = state.products.findIndex(product => product.id === action.payload.id);
+            const updatedProducts = [...state.products]
+            if (productIndex === -1) { 
+                updatedProducts.push(action.payload)
+            } else {
+                const updatedItem = {...updatedProducts[productIndex]}
+                updatedItem.quantity = updatedItem.quantity + 1
+                updatedProducts[productIndex] = updatedItem
+            }
+            return updateObject(state, {
+                products: updatedProducts,
+            })
+        case 'REMOVE_PRODUCT':
+            const filteredProducts = state.products.filter(product => product.id !== action.payload)
+            return updateObject(state, {
+                products: filteredProducts,
+            })
+        case 'INCREASE_PRODUCT' :
+            const increasedProductIndex = state.products.findIndex(product => product.id === action.payload);
+            const increasedProduct = {...state.products[increasedProductIndex]}
+            increasedProduct.quantity = increasedProduct.quantity + 1
+            const increasedProducts = [...state.products]
+            increasedProducts[increasedProductIndex] = increasedProduct
+            return updateObject(state, {
+                products: increasedProducts,
+            })
+        case 'DECREASE_PRODUCT' :
+            const decreasedProductIndex = state.products.findIndex(product => product.id === action.payload);
+            const decreasedProduct = {...state.products[decreasedProductIndex]}
+            const decreasedProducts = [...state.products]
+            if (decreasedProduct.quantity === 1) {
+                decreasedProducts.splice(decreasedProductIndex, 1)
+            } else {
+                decreasedProduct.quantity = decreasedProduct.quantity - 1
+                decreasedProducts[decreasedProductIndex] = decreasedProduct
+            }
+            return updateObject(state, {
+                products: decreasedProducts,
+            })
+        default:
+            return state;
+    }
+}
 
 
-const ViewModal = (props) => {
+const EditModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, id, fetchedBookings } = props;
+    const { show, heading, confirmText, onConfirm, onClose, id, fetchedBookings, onDelete, fetchedEmployees, fetchEmployeesHandler } = props;
 
     const { t } = useTranslation();
 
     const bookingIndex = fetchedBookings.data.findIndex(booking => booking.id === id);
 
     let bookingData = fetchedBookings.data[bookingIndex];
+
+    const { status, date_time, users, payment } = bookingData;
+
+    let employeesIds = [];
+    users.map(employee => {
+        employeesIds.push(employee.id)
+        return employeesIds;
+    })
+    
+    let bookingDataServices = [];
+    let bookingDataProducts = [];
+    const splittedItems = bookingData.items.map(item => {
+        if (item.item.type === 'service') {
+            bookingDataServices.push(item)
+        } if (item.item.type === 'product') {
+            bookingDataProducts.push(item)
+        }
+        return bookingDataServices;
+    })
+    console.log(splittedItems)
+    
+    const [ cartData , dispatch ] = useReducer(cartReducer, {
+        services: bookingDataServices,
+        products: bookingDataProducts,
+    });
+    const [dateTime, setDateTime] = useState(new Date(date_time));
+
+    const [bookingStatus, setBookingStatus] = useState(status);
+    
+    const [employeeName, setEmployeeName] = useState(employeesIds);
+    
+    const [totalPrice, setTotalPrice] = useState(0)
+    
+    const [totalTaxes, setTotalTaxes] = useState(0)
+    
+    const [discount, setDiscount] = useState(0)
+    
+    const [paymentStatus, setPaymentStatus] = useState(payment.status);
+
+    useEffect(() => {
+        fetchEmployeesHandler();
+    }, [fetchEmployeesHandler])
+
+    useEffect(() => {
+        let total = 0;
+        for (let section in cartData) {
+            for (let item of cartData[section]) {
+                total += item.price * item.quantity;
+            }
+        }
+        total = total - ((total * discount / 100));
+        setTotalTaxes(total - (total / 1.15))
+        setTotalPrice(total );
+
+    }, [cartData, discount])
+
+
+    const handleDateChange = (newValue) => {
+        setDateTime(newValue);
+    };
+    const bookingStatusChangeHandler = (event) => {
+        setBookingStatus(event.target.value);
+    }
+    const handleEmployeesChange = (event) => {
+        const {
+            target: { value },
+        } = event;
+        setEmployeeName(
+            // On autofill we get a the stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+            );
+        };
+    const discountChangeHandler = (event) => {
+        if (event.target.value >= 0) {
+            setDiscount(event.target.value)
+        }
+    }
+    const paymentStatusChangeHandler = (event) => {
+        setPaymentStatus(event.target.value);
+    }
+
+    const removeFromCartHandler = useCallback(( type, itemId ) => {
+        if (type === 'services') {
+            dispatch({
+                type: 'REMOVE_SERVICE',
+                payload: itemId
+            })
+        }
+        if (type === 'products') {
+            dispatch({
+                type: 'REMOVE_PRODUCT',
+                payload: itemId
+            })
+        }
+        if (type === 'deals') {
+            dispatch({
+                type: 'REMOVE_DEAL',
+                payload: itemId
+            })
+        }
+    } , [])
+
+    const increaseItemHandler = useCallback(( type, itemId ) => {
+        if (type === 'services') {
+            dispatch({
+                type: 'INCREASE_SERVICE',
+                payload: itemId
+            })
+        }
+        if (type === 'products') {
+            dispatch({
+                type: 'INCREASE_PRODUCT',
+                payload: itemId
+            })
+        }
+        if (type === 'deals') {
+            dispatch({
+                type: 'INCREASE_DEAL',
+                payload: itemId
+            })
+        }
+    } , [])
+    const decreaseItemHandler = useCallback(( type, itemId ) => {
+        if (type === 'services') {
+            dispatch({
+                type: 'DECREASE_SERVICE',
+                payload: itemId
+            })
+        }
+        if (type === 'products') {
+            dispatch({
+                type: 'DECREASE_PRODUCT',
+                payload: itemId
+            })
+        }
+        if (type === 'deals') {
+            dispatch({
+                type: 'DECREASE_DEAL',
+                payload: itemId
+            })
+        }
+    } , [])
 
     let content;
 
@@ -197,61 +444,114 @@ const ViewModal = (props) => {
                         </BookingList>
                     </BookingData>
                 </Grid>
-                <Grid item xs={12} md={6}>
-                    <BookingData>
-                        <BookingDataHeading>{t('booking date')}</BookingDataHeading>
-                        <BookingList>
-                            <li><EventNoteIcon sx={{ mr: 1 }} />{bookingData.date}</li>
-                        </BookingList>
-                    </BookingData>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <BookingData>
-                        <BookingDataHeading>{t('booking time')}</BookingDataHeading>
-                        <BookingList>
-                            <li><WatchLaterIcon sx={{ mr: 1 }} />{bookingData.time}</li>
-                        </BookingList>
-                    </BookingData>
-                </Grid>
-                {
-                    ( bookingData.items.length > 0) && (
-                        <Grid item xs={12}>
-                            <BookingData>
-                                <BookingDataHeading>{t('booking items')}</BookingDataHeading>
-                                <TableContainer component={Paper} sx={{ my: 2 }}>
-                                    <Table aria-label="simple table">
-                                        <TableHead>
-                                            <TableRow>
-                                                <TableCell>{t('item')}</TableCell>
-                                                <TableCell align="center">{t('price')}</TableCell>
-                                                <TableCell align="center">{t('quantity')}</TableCell>
-                                                <TableCell align="center">{t('total')}</TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {bookingData.items.map((item) => (
-                                                <TableRow
-                                                    key={item.id}
-                                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                                >
-                                                    <TableCell component="th" scope="row">
-                                                        <ItemInfo>
-                                                            {item.item.name}    
-                                                            <ItemType className={item.item.type}>{item.item.type}</ItemType>
-                                                        </ItemInfo>
-                                                    </TableCell>
-                                                    <TableCell align="center">{item.price}</TableCell>
-                                                    <TableCell align="center">{item.quantity}</TableCell>
-                                                    <TableCell align="center">{item.amount}</TableCell>
-                                                </TableRow>
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                </TableContainer>
-                            </BookingData>
+                <Grid item xs={12} >
+                    <LocalizationProvider dateAdapter={DateAdapter}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} md={6}>
+                                <DesktopDatePicker
+                                    label={t("Date desktop")}
+                                    inputFormat="MM/dd/yyyy"
+                                    value={dateTime}
+                                    onChange={handleDateChange}
+                                    renderInput={(params) => <TextField sx={{ width: '100%' }} {...params} />}
+                                />
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <TimePicker
+                                    label={t("Time")}
+                                    value={dateTime}
+                                    onChange={handleDateChange}
+                                    renderInput={(params) => <TextField sx={{ width: '100%' }}  {...params} />}
+                                />
+                            </Grid>
                         </Grid>
-                    )
-                }
+                    </LocalizationProvider>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <FormControl sx={{ width: '100%' }}>
+                        <Select
+                            value={bookingStatus}
+                            onChange={bookingStatusChangeHandler}
+                            inputProps={{ 'aria-label': 'Without label' }}
+                        >
+                            <MenuItem value='approved'>{t('approved')}</MenuItem>
+                            <MenuItem value='completed'>{t('completed')}</MenuItem>
+                            <MenuItem value='canceled'>{t('canceled')}</MenuItem>
+                            <MenuItem value='in progress'>{t('canceled')}</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12}>
+                    <FormControl sx={{ width: '100%' }}>
+                        <InputLabel id="employee-label">{t('employee')}</InputLabel>
+                        <Select
+                            labelId="employee-label"
+                            id="select-multiple-employees"
+                            multiple
+                            value={employeeName}
+                            onChange={handleEmployeesChange}
+                            input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+                            renderValue={(selected) => (
+                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                    {fetchedEmployees.length > 0 && selected.map((value) => {
+                                        const selected = fetchedEmployees.find(user => user.id === value);
+                                        return (
+                                            <Chip key={selected.id} label={selected.name} />
+                                        )
+                                    })}
+                                </Box>
+                            )}
+                            MenuProps={MenuProps}
+                        >
+                            {fetchedEmployees.map((employee) => (
+                                <MenuItem
+                                    key={employee.id}
+                                    value={employee.id}
+                                >
+                                    {employee.name}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12}>
+                    {cartData.services.length === 0 && (
+                        <CustomMessage>
+                            <p>{t('No Services')}</p>
+                        </CustomMessage>
+                    )}
+                    {cartData.services.length > 0 && (
+                        <TableContainer component={Paper} sx={{ my: 2 }}>
+                            <Table aria-label="services table">
+                                <SharedTableHead name= 'services' />
+                                <TableBody>
+                                    {cartData.services.map((row) => (
+                                        <CartItem type='services' key={row.id} row={row} remove={removeFromCartHandler} increase={increaseItemHandler} decrease={decreaseItemHandler} />
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    )}
+                </Grid>
+                <Grid item xs={12}>
+                    {cartData.products.length === 0 && (
+                        <CustomMessage>
+                            <p>{t('No Products')}</p>
+                        </CustomMessage>
+                    )}
+                    {cartData.products.length > 0 && (
+                        <TableContainer component={Paper} sx={{ my: 2 }}>
+                            <Table aria-label="products table">
+                                <SharedTableHead name= 'products' />
+                                <TableBody>
+                                    {cartData.products.map((row) => (
+                                        <CartItem type='products' key={row.id} row={row} remove={removeFromCartHandler} increase={increaseItemHandler} decrease={decreaseItemHandler} />
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    )}
+                </Grid>
                 <Grid item xs={12} md={6}>
                     <BookingData>
                         <BookingDataHeading>{t('payment method')}</BookingDataHeading>
@@ -264,32 +564,50 @@ const ViewModal = (props) => {
                     <BookingData>
                         <BookingDataHeading>{t('payment status')}</BookingDataHeading>
                         <BookingList>
-                            <li>{bookingData.payment.status === 'completed' ? <CheckCircleIcon sx={{ mr: 1, color: '#568d00' }} /> : <CloseIcon sx={{ mr: 1, color: '#f00' }} /> }{bookingData.payment.status}</li>
+                            <li>{bookingData.payment.status === 'completed' ? <CheckCircleIcon sx={{ mr: 1, color: '#568d00' }} /> : <CloseIcon sx={{ mr: 1, color: '#f00' }} />}{bookingData.payment.status}</li>
                         </BookingList>
                     </BookingData>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <TextField
+                        type="number"
+                        label={t('Discount')}
+                        id="discount-value"
+                        sx={{ width: '100%' }}
+                        value={discount}
+                        onChange={discountChangeHandler}
+                        InputProps={{
+                            startAdornment: <InputAdornment position="start">%</InputAdornment>,
+                        }}
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <FormControl sx={{ width: '100%' }}>
+                        <Select
+                            value={paymentStatus}
+                            onChange={paymentStatusChangeHandler}
+                            inputProps={{ 'aria-label': 'Without label' }}
+                        >
+                            <MenuItem value='completed'>{t('completed')}</MenuItem>
+                            <MenuItem value='pending'>{t('pending')}</MenuItem>
+                        </Select>
+                    </FormControl>
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <BookingData>
                         <BookingDataHeading>{t('taxes ( 15% )')}</BookingDataHeading>
-                        <BookingDataInfo>{formatCurrency(bookingData.vat)}</BookingDataInfo>
+                        <BookingDataInfo>{formatCurrency(totalTaxes)}</BookingDataInfo>
                     </BookingData>
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <BookingData>
                         <BookingDataHeading>{t('total')}</BookingDataHeading>
-                        <BookingDataInfo>{formatCurrency(bookingData.price)}</BookingDataInfo>
+                        <BookingDataInfo>{formatCurrency(totalPrice)}</BookingDataInfo>
                     </BookingData>
                 </Grid>
                 <Grid item xs={12}>
                     <BookingActions>
-                        <ActionButton><PrintIcon/>{t('print')}</ActionButton>
-                        <ActionButton><FindInPageIcon/>{t('show receipt')}</ActionButton>
-                        <ActionButton><DownloadIcon/>{t('download receipt')}</ActionButton>
-                    </BookingActions>
-                </Grid>
-                <Grid item xs={12}>
-                    <BookingActions>
-                        <DeleteButton>{t('Delete')}</DeleteButton>
+                        <DeleteButton onClick={(id) => onDelete(bookingData.id)} >{t('Delete')}</DeleteButton>
                     </BookingActions>
                 </Grid>
             </Grid>
@@ -303,4 +621,16 @@ const ViewModal = (props) => {
     )
 }
 
-export default ViewModal;
+const mapStateToProps = (state) => {
+    return {
+        fetchedEmployees: state.employees.employees,
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchEmployeesHandler: () => dispatch(fetchEmployees()),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditModal);
