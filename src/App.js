@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import { StyleSheetManager } from "styled-components";
 import rtlPlugin from "stylis-plugin-rtl";
 import { Route, Routes } from 'react-router-dom'
@@ -13,7 +14,7 @@ import Dashboard from './pages/Account/Content/Dashboard/Dashboard';
 import Services from './pages/Account/Content/Services/Services';
 import Products from './pages/Account/Content/Products/Products';
 import Deals from './pages/Account/Content/Deals/Deals';
-import { useContext } from "react";
+import Bookings from './pages/Account/Content/Bookings/Bookings'
 import PointOfSale from "./pages/Account/Content/PointOfSale/PointOfSale";
 
 
@@ -31,6 +32,7 @@ function App() {
                 <Route path="products" element={<Products />} />
                 <Route path="deals" element={<Deals />} />
                 <Route path='point-of-sale' element={ <PointOfSale/> } />
+                <Route path='bookings' element={ <Bookings/> } />
             </ Route>
             <Route path="/" element={<Landing />} />
             <Route path='*' element={<NotFound />} />
