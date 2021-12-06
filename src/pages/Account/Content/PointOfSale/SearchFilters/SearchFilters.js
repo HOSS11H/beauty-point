@@ -30,8 +30,8 @@ const SearchFilters = (props) => {
     const { lang } = themeCtx
 
     const [type, setType] = useState('services');
-    const [category, setCategory] = useState('*');
-    const [location, setLocation] = useState('*');
+    const [category, setCategory] = useState('all');
+    const [location, setLocation] = useState('all');
     const [search, setSearch] = useState('');
 
     useEffect(() => {
