@@ -1,5 +1,5 @@
 import { Grid } from "@mui/material";
-import { useState, useContext, useEffect, useCallback } from "react";
+import { useState, useContext, useEffect, useCallback, Fragment } from "react";
 import { useTranslation } from 'react-i18next';
 import { connect } from "react-redux";
 import BookingView from "../../../../components/UI/Dashboard/BookingView/BookingView";
@@ -80,6 +80,24 @@ function Services(props) {
             </Grid>
         )
     })
+    if (fetchingBookings) {
+        content = (
+            <Fragment>
+                <Grid item xs={12} sm={6}  >
+                    <BookingView loading={fetchingBookings}  />
+                </Grid>
+                <Grid item xs={12} sm={6}  >
+                    <BookingView loading={fetchingBookings} />
+                </Grid>
+                <Grid item xs={12} sm={6}  >
+                    <BookingView loading={fetchingBookings}  />
+                </Grid>
+                <Grid item xs={12} sm={6}  >
+                    <BookingView loading={fetchingBookings}  />
+                </Grid>
+            </Fragment>
+        )
+    }
 
     return (
         <Grid container spacing={2}>
