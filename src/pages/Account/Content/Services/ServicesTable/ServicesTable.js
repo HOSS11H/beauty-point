@@ -65,11 +65,6 @@ function ServicesTable(props) {
         fetchServicesHandler(lang, page, rowsPerPage, orderBy, order);
     }, [fetchServicesHandler, lang, order, orderBy, page, rowsPerPage]);
 
-    useEffect(() => {
-        if (fetchedServices.meta) {
-            setRowsPerPage(+fetchedServices.meta.per_page)
-        }
-    }, [fetchedServices])
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';

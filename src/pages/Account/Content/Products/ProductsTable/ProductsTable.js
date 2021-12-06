@@ -68,11 +68,6 @@ function ProductsTable(props) {
         fetchProductsHandler(lang, page, rowsPerPage, orderBy, order);
     }, [fetchProductsHandler, lang, page, rowsPerPage, orderBy, order]);
 
-    useEffect(() => {
-        if (fetchedProducts.meta) {
-            setRowsPerPage(+fetchedProducts.meta.per_page)
-        }
-    }, [fetchedProducts])
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';

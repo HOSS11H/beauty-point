@@ -67,12 +67,6 @@ function DealsTable(props) {
         fetchDealsHandler(lang, page, rowsPerPage, orderBy, order);
     }, [fetchDealsHandler, lang, order, orderBy, page, rowsPerPage]);
 
-    useEffect(() => {
-        if (fetchedDeals.per_page) {
-            setRowsPerPage(fetchedDeals.per_page)
-        }
-    }, [fetchedDeals])
-    console.log(rowsPerPage)
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
