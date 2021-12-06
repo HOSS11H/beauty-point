@@ -236,7 +236,7 @@ const ViewModal = (props) => {
                                                 >
                                                     <TableCell component="th" scope="row">
                                                         <ItemInfo>
-                                                            {item.item.name}    
+                                                            {item.item.name}
                                                             <ItemType className={item.item.type}>{item.item.type}</ItemType>
                                                         </ItemInfo>
                                                     </TableCell>
@@ -256,7 +256,7 @@ const ViewModal = (props) => {
                     <BookingData>
                         <BookingDataHeading>{t('payment method')}</BookingDataHeading>
                         <BookingList>
-                            <li><MoneyIcon sx={{ mr: 1 }} />{bookingData.payment.gateway}</li>
+                            <li><MoneyIcon sx={{ mr: 1 }} />{bookingData.payment?.gateway}</li>
                         </BookingList>
                     </BookingData>
                 </Grid>
@@ -264,7 +264,7 @@ const ViewModal = (props) => {
                     <BookingData>
                         <BookingDataHeading>{t('payment status')}</BookingDataHeading>
                         <BookingList>
-                            <li>{bookingData.payment.status === 'completed' ? <CheckCircleIcon sx={{ mr: 1, color: '#568d00' }} /> : <CloseIcon sx={{ mr: 1, color: 'rgb(187 163 46)' }} /> }{bookingData.payment.status}</li>
+                            <li>{bookingData.payment?.status === 'completed' ? <CheckCircleIcon sx={{ mr: 1, color: '#568d00' }} /> : <CloseIcon sx={{ mr: 1, color: 'rgb(187 163 46)' }} /> }{bookingData.payment?.status}</li>
                         </BookingList>
                     </BookingData>
                 </Grid>
