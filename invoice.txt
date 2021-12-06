@@ -1,0 +1,195 @@
+<div class="row d-none">
+			<div id="invoice">
+				<!-- Logo -->
+				<img style="max-height: 150px; width: auto;" src="{{ $settings->logo_url }}"
+					class="img img-responsive mx-auto d-block">
+				<!-- Header text -->
+
+				<!-- business information here -->
+				<div class="row">
+					<div class="col-12 text-center">
+						<h2 class="text-center" style="font-size: 6rem">
+							<!-- Shop & Location Name  -->
+							{{ ucwords($settings->company_name) }}
+						</h2>
+
+						<!-- Address -->
+						<h4 style="font-size: 4rem">
+							@if(!empty($settings->address))
+							<div class="text-center">
+								{!! $settings->address !!}
+							</div>
+							@endif
+							@if(!empty($settings->company_phone))
+							<br />
+							{!! $settings->company_phone !!}
+							@endif
+							<br />
+							الرقم الضريبي
+							<br />
+							{!! $settings->tax_record !!}
+							<br />
+						</h4>
+
+						<!-- Title of receipt -->
+						<h2 class="text-center" style="font-size: 6rem">
+							@lang('app.invoice')
+						</h2>
+
+						<!-- Invoice  number, Date  -->
+						<p style="width: 100% !important" class="word-wrap">
+							<span class="pull-left text-left word-wrap">
+								<b style="font-size: 4rem"> #{{ $booking->id < 10 ? '0' . $booking->id : $booking->id }}</b>
+								<!-- Table information-->
+
+								<!-- customer info -->
+								<br />
+								<b style="font-size: 4rem">@lang("modules.booking.billedTo"):</b> <span style="font-size: 4rem">{{ ucwords($booking->user->name) }}</span>
+								<br>
+								<b style="font-size: 4rem">@lang('app.booking_status') :</b><span style="font-size: 4rem">{{ __('app.'.$booking->status) }}</span>
+								<br>
+							</span>
+
+							<span class="pull-right text-left" style="font-size: 3.6rem">
+								<b>تاريخ الحجز</b>
+								{{ $booking->date_time->format($settings->date_format) }}
+							</span>
+						</p>
+					</div>
+				</div>
+
+				<br>
+				<div class="row">
+					<div class="col-12">
+						<br />
+						<table class="table table-responsive w-100 d-print-block d-print-table">
+							<thead>
+								<tr>
+									<th width="25%"  style="font-size: 4rem">@lang("app.item")</th>
+									<th class="text-right" width="25%" style="font-size: 4rem">@lang("app.quantity")</th>
+									<th class="text-right" width="25%" style="font-size: 4rem">@lang("app.unitPrice")</th>
+									<th class="text-right" width="25%" style="font-size: 4rem">الإجمالي</th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach ($booking->items as $key => $item)
+								@php
+								$item_name = '';
+								if(!is_null($item->deal_id) &&
+								is_null($item->business_service_id) &&
+								is_null($item->product_id)) {
+								$item_name = ucwords($item->deal->title);
+								}
+								else if(is_null($item->deal_id) &&
+								is_null($item->business_service_id) &&
+								!is_null($item->product_id)) {
+								$item_name = ucwords($item->product->name);
+								}
+								else if(is_null($item->deal_id) &&
+								!is_null($item->business_service_id) &&
+								is_null($item->product_id)) {
+								$item_name = ucwords($item->businessService->name);
+								}
+								@endphp
+								<tr>
+									<td  style="font-size: 3rem">
+										{{ $item_name }}
+									</td>
+									<td class="text-right"  style="font-size: 4rem">{{ $item->quantity }} </td>
+									<td class="text-right" style="font-size: 4rem">{{ $user->hasRole('customer')?
+												$item->formated_unit_price :
+												number_format((float)($item->unit_price), 2, '.',
+												''), my_currency_symbol() }}</td>
+									@if (!is_null($booking->deal_id))
+									<td class="text-right" style="font-size: 4rem">
+										{{ $user->hasRole('customer')?
+								$item->formated_unit_price :
+								number_format((float)($item->unit_price), 2, '.', ''),
+								my_currency_symbol() }}
+									</td>
+									@else
+									<td class="text-right" style="font-size: 4rem">
+										{{ $user->hasRole('customer')?
+							$item->formated_unit_price :
+							number_format((float)($item->unit_price), 2, '.', ''),
+							my_currency_symbol() }}
+									</td>
+									@endif
+
+								</tr>
+								@endforeach
+							</tbody>
+						</table>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-12">
+						<hr />
+					</div>
+					<div class="col-6 offset-6">
+
+						<table class="table table-slim">
+
+							@if ($booking->tax_amount > 0)
+
+							<tr>
+								<td style="font-size: 4rem">ضريبة القيمة المضافة %15</td>
+								<td class="text-right"  style="font-size: 4rem">{{ number_format((float)($booking->amount_to_pay -
+                                                                $booking->amount_to_pay/1.15), 2, '.', ''),
+                                                                my_currency_symbol() }}</td>
+							</tr>
+							@endif
+
+							<!-- Total Paid-->
+							<tr>
+								<th style="font-size: 4rem">
+									@lang("app.e_total")
+								</th>
+								<td class="text-right" style="font-size: 4rem">
+									{{ number_format((float) $booking->amount_to_pay, 2,
+                                                                '.', ''),my_currency_symbol() }}
+								</td>
+							</tr>
+						</table>
+					</div>
+					<div class="col-12 text-center" style="font-size: 4rem">
+						<p style="font-size: 2rem">{!! $settings->invoice_notes !!}</p>
+					</div>
+				</div>
+				{{-- QRcode --}}
+				<br>
+				<div class="row">
+					<div class="col-12 text-center">
+						{!! QrCode::size(250)->generate($url); !!}
+					</div>
+				</div>
+				<div class="row">
+				    .
+				   <br />
+				   .
+				   <br />
+				   .
+				   <br />
+				   .
+				   <br />
+				   .
+				   <br />
+				   .
+				   <br />
+				   .
+				   <br />
+				   .
+				   <br />
+				   .
+				   <br />
+				   .
+				   <br />
+				   .
+				   <br />
+				   .
+				   <br />
+				   ....................
+				</div>
+			</div>
+		</div>
