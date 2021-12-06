@@ -144,6 +144,13 @@ const resources = {
             'download receipt': 'تحميل الفاتورة',
             'Delete': 'حذف',
             'add services': 'إضافة خدمات',
+            'completed': 'مكتمل',
+            'pending': 'قيد الانتظار',
+            'edit booking details': 'تعديل تفاصيل الحجز',
+            'confirm edit': 'تأكيد التعديل',
+            'approved': 'موافق',
+            'canceled': 'ملغي',
+            'in progress': 'قيد التنفيذ',
         }
     }
 };
