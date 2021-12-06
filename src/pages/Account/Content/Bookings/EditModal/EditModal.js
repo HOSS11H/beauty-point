@@ -309,6 +309,8 @@ const EditModal = (props) => {
 
     const [selectedServices, setSelectedServices] = useState('');
 
+    const [selectedProducts, setSelectedProducts] = useState('');
+
     const [totalPrice, setTotalPrice] = useState(0)
 
     const [totalTaxes, setTotalTaxes] = useState(0)
@@ -430,6 +432,24 @@ const EditModal = (props) => {
         }
         addToCartHandler('services', serviceData)
     }
+    const selectedProductsChangeHandler = (event) => {
+        setSelectedProducts('');
+        const selectedProductIndex = fetchedProducts.data.findIndex(product => product.id === event.target.value);
+        const selectedProductData = { ...fetchedProducts.data[selectedProductIndex] }
+        const productData = {
+            id: selectedProductData.id,
+            quantity: 1,
+            price: selectedProductData.price,
+            total: selectedProductData.price,
+            item: {
+                id: selectedProductData.id,
+                name: selectedProductData.name,
+                type: 'product',
+                price: selectedProductData.price,
+            }
+        }
+        addToCartHandler('products', productData)
+    }
 
     const discountChangeHandler = (event) => {
         if (event.target.value >= 0) {
@@ -439,6 +459,23 @@ const EditModal = (props) => {
     const paymentStatusChangeHandler = (event) => {
         setPaymentStatus(event.target.value);
     }
+
+    const EditBookingConfirmHandler = useCallback(() => {
+        const booking = {
+            id: id,
+            status: bookingStatus,
+            date_time: dateTime,
+            users: employeeName,
+            items: cartData.services.concat(cartData.products),
+            payment: {
+                status: paymentStatus,
+                total: totalPrice,
+                taxes: totalTaxes,
+                discount: discount,
+            }
+        }
+        onConfirm(booking);
+    }, [bookingStatus, cartData.products, cartData.services, dateTime, discount, employeeName, id, onConfirm, paymentStatus, totalPrice, totalTaxes])
 
 
     let content;
@@ -579,6 +616,26 @@ const EditModal = (props) => {
                             </Table>
                         </TableContainer>
                     )}
+                </Grid>
+                <Grid item xs={12}>
+                    <FormControl sx={{ width: '100%' }}>
+                        <InputLabel id="products-label">{t('add products')}</InputLabel>
+                        <Select
+                            labelId="products-label"
+                            id="select-products"
+                            value={selectedProducts}
+                            onChange={selectedProductsChangeHandler}
+                        >
+                            {fetchedProducts.data.map((product) => (
+                                <MenuItem
+                                    key={product.id}
+                                    value={product.id}
+                                >
+                                    {product.name}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
                 </Grid>
                 <Grid item xs={12}>
                     {cartData.products.length === 0 && (
