@@ -157,7 +157,7 @@ const AddCustomer = styled(CustomButton)`
 
 const Cart = props => {
 
-    const { cartData, removeFromCart, increaseItem, decreaseItem, resetCart, purchase, fetchedCoupons, fetchedCustomers, fetchCouponsHandler, fetchCustomersHandler, addCustomerHandler, fetchedEmployeesHandler } = props;
+    const { cartData, removeFromCart, increaseItem, decreaseItem, resetCart, purchase,creatingBookingSuccess,  fetchedCoupons, fetchedCustomers, fetchCouponsHandler, fetchCustomersHandler, addCustomerHandler, fetchedEmployeesHandler } = props;
 
     const { t } = useTranslation()
 
@@ -214,7 +214,6 @@ const Cart = props => {
             return;
         }
     }, [cartData, couponData, discount])
-
 
     // Add Customer Modal
     const addCustomerModalOpenHandler = useCallback((id) => {
@@ -277,7 +276,7 @@ const Cart = props => {
         }
     }
 
-    const resetCartHandler = () => {
+    const resetCartHandler = useCallback(() => {
         setCustomer('');
         setCustomerData(null);
         setCustomerDataError(false)
@@ -290,7 +289,8 @@ const Cart = props => {
         setCashToReturn(0)
         setCashRemainig(0)
         resetCart();
-    }
+    }, [resetCart])
+
     const purchaseCartHandler = (e) => {
         e.preventDefault();
         if (cartData.services.length === 0 && cartData.products.length === 0 && cartData.deals.length === 0) {
@@ -311,6 +311,7 @@ const Cart = props => {
             totalTaxes: totalTaxes,
             couponId: couponData.id,
             discount: discount,
+            payment_gateway: paymentGateway,
         }
         purchase(data);
         resetCartHandler();
@@ -536,6 +537,7 @@ const mapStateToProps = (state) => {
     return {
         fetchedCustomers: state.customers.customers,
         fetchedCoupons: state.coupons.coupons,
+        creatingBookingSuccess: state.bookings.creatingBookingSuccess,
     }
 }
 

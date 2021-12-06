@@ -31,7 +31,7 @@ const SearchFilters = (props) => {
 
     const [type, setType] = useState('services');
     const [category, setCategory] = useState('all');
-    const [location, setLocation] = useState('all');
+    const [location, setLocation] = useState('');
     const [search, setSearch] = useState('');
 
     useEffect(() => {
@@ -89,7 +89,6 @@ const SearchFilters = (props) => {
                             label={t("Location")}
                             onChange={handleLocationChange}
                         >
-                            <MenuItem value='all'>{t('ALL')}</MenuItem>
                             {
                                 fetchedLocations.map(location => {
                                     return <MenuItem key={location.id} value={location.id}>{location.name}</MenuItem>

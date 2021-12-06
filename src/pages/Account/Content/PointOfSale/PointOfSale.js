@@ -163,7 +163,7 @@ const PointOfSale = ( props ) => {
 
     const [ shownType, setShownType ] = useState('services');
     const [ shownCategory, setShownCategory ] = useState('all');
-    const [ shownLocation, setShownLocation ] = useState('all');
+    const [ shownLocation, setShownLocation ] = useState('');
     const [ searchWord, setSearchWord ] = useState('');
 
 
