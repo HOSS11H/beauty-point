@@ -43,8 +43,6 @@ const SearchFilters = (props) => {
         }
     }, [fetchedLocations, fetchedCategories, fetchCategoriesHandler, fetchLocationsHandler, lang])
 
-    console.log(type, category, location, search)
-
     const handleTypeChange = (event) => {
         setType(event.target.value);
         resultsHandler(event.target.value, category, location, search);

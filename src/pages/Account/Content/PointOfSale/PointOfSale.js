@@ -4,7 +4,7 @@ import CustomCard from '../../../../components/UI/Card/Card';
 import FilteredResults from './FilteredResults/FilteredResults';
 import SearchFilters from './SearchFilters/SearchFilters';
 import { connect } from 'react-redux';
-import { filterServices, filterProducts, filterDeals } from '../../../../store/actions/index';
+import { filterServices, filterProducts, filterDeals, createBooking } from '../../../../store/actions/index';
 import AuthContext from '../../../../store/auth-context';
 import ThemeContext from '../../../../store/theme-context';
 import Cart from './Cart/Cart';
@@ -147,7 +147,7 @@ const cartReducer = (state, action) => {
 
 const PointOfSale = ( props ) => {
 
-    const {filterServicesHandler, filterProductsHandler, filterDealsHandler} = props
+    const {filterServicesHandler, filterProductsHandler, filterDealsHandler, createBookingHandler } = props
     
     const themeCtx = useContext(ThemeContext)
     const authCtx = useContext(AuthContext)
@@ -282,8 +282,11 @@ const PointOfSale = ( props ) => {
     }, [])
 
     const purchaseCartHandler = useCallback(( purchasedData ) => {
-        console.log(purchasedData)
-    }, [])
+        createBookingHandler({
+            ...purchasedData,
+            location_id: shownLocation,
+        })
+    }, [createBookingHandler, shownLocation])
 
     return (
         <Grid container spacing={2}>
@@ -305,6 +308,7 @@ const mapDispatchToProps = dispatch => {
         filterServicesHandler: (language,  type, category , location, search) => dispatch(filterServices(language, type, category , location, search)),
         filterProductsHandler: (language, type,  location, search) => dispatch(filterProducts(language, type, location, search)),
         filterDealsHandler: (language, type,  location, search) => dispatch(filterDeals(language, type,  location, search)),
+        createBookingHandler: (data) => dispatch(createBooking(data)),
     }
 }
 
