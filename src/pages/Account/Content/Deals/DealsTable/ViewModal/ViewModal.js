@@ -191,7 +191,6 @@ const ViewModal = (props) => {
                                                 <TableCell align="center">{t('price')}</TableCell>
                                                 <TableCell align="center">{t('quantity')}</TableCell>
                                                 <TableCell align="center">{t('price including taxes')}</TableCell>
-                                                <TableCell align="center">{t('discount')}</TableCell>
                                                 <TableCell align="center">{t('total')}</TableCell>
                                             </TableRow>
                                         </TableHead>
@@ -207,7 +206,6 @@ const ViewModal = (props) => {
                                                     <TableCell align="center">{item.price}</TableCell>
                                                     <TableCell align="center">{item.quantity}</TableCell>
                                                     <TableCell align="center">{item.total_amount}</TableCell>
-                                                    <TableCell align="center">{item.discount_amount}</TableCell>
                                                     <TableCell align="center">{item.total_amount}</TableCell>
                                                 </TableRow>
                                             ))}
