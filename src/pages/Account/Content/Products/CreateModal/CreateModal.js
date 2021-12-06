@@ -312,7 +312,7 @@ const CreateModal = (props) => {
         setProductStatus('active');
         setUploadedImages([]);
         setDefaultImage('');
-    }, [defaultImage, discountType, editorState, fetchedLocations, locationName, onConfirm, priceAfterDiscount, productQuantity, productDiscount, productName, productPrice, productStatus, uploadedImages])
+    }, [productName, editorState, productPriceError, locationName, productQuantity, defaultImage, fetchedLocations, productPrice, productDiscount, discountType, priceAfterDiscount, productStatus, uploadedImages, onConfirm])
 
     let content = (
         <Grid container spacing={2}>

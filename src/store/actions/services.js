@@ -142,11 +142,12 @@ export const createServiceFailed = ( message ) => {
 
 export const createService = ( data ) => {
     return dispatch => {
+        console.log(data)
         dispatch( createServiceStart( ) )
         axios.post(`/vendors/services`, data)
-        .then( response => {
-            console.log(response)
-            dispatch( createServiceSuccess( null , {...data,  ...response.data } ) );
+            .then( response => {
+                console.log(response)
+                dispatch( createServiceSuccess( null , {...data,  ...response.data } ) );
             })
             .catch( err => {
                 dispatch( createServiceFailed( err.message  ) )
