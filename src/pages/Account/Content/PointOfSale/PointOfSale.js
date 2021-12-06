@@ -162,8 +162,8 @@ const PointOfSale = ( props ) => {
     });
 
     const [ shownType, setShownType ] = useState('services');
-    const [ shownCategory, setShownCategory ] = useState('*');
-    const [ shownLocation, setShownLocation ] = useState('*');
+    const [ shownCategory, setShownCategory ] = useState('all');
+    const [ shownLocation, setShownLocation ] = useState('all');
     const [ searchWord, setSearchWord ] = useState('');
 
 
@@ -172,9 +172,9 @@ const PointOfSale = ( props ) => {
         if(shownType === 'services') {
             filterServicesHandler(lang,  shownType, shownCategory , shownLocation, searchWord);
         } else if(shownType === 'products') {
-            filterProductsHandler(lang, shownType, shownCategory , shownLocation, searchWord);
+            filterProductsHandler(lang, shownType,  shownLocation, searchWord);
         } else if(shownType === 'deals') {
-            filterDealsHandler(lang, shownType, shownCategory , shownLocation, searchWord);
+            filterDealsHandler(lang, shownType, shownLocation, searchWord);
         }
     }, [filterDealsHandler, filterProductsHandler, filterServicesHandler, lang, searchWord, shownCategory, shownLocation, shownType, token]);
 
@@ -186,9 +186,9 @@ const PointOfSale = ( props ) => {
         if(type === 'services') {
             filterServicesHandler(lang, type, category , location, search);
         } else if (type === 'products') {
-            filterProductsHandler(lang,  type, category , location, search);
+            filterProductsHandler(lang,  type, location, search);
         } else if (type === 'deals') {
-            filterDealsHandler(lang, type, category , location, search);
+            filterDealsHandler(lang, type, location, search);
         }
     }, [filterDealsHandler, filterProductsHandler, filterServicesHandler, lang])
 
@@ -303,8 +303,8 @@ const PointOfSale = ( props ) => {
 const mapDispatchToProps = dispatch => {
     return {
         filterServicesHandler: (language,  type, category , location, search) => dispatch(filterServices(language, type, category , location, search)),
-        filterProductsHandler: (language, type, category , location, search) => dispatch(filterProducts(language, type, category , location, search)),
-        filterDealsHandler: (language, type, category , location, search) => dispatch(filterDeals(language, type, category , location, search)),
+        filterProductsHandler: (language, type,  location, search) => dispatch(filterProducts(language, type, location, search)),
+        filterDealsHandler: (language, type,  location, search) => dispatch(filterDeals(language, type,  location, search)),
     }
 }
 
