@@ -157,7 +157,7 @@ const AddCustomer = styled(CustomButton)`
 
 const Cart = props => {
 
-    const { cartData, removeFromCart, increaseItem, decreaseItem, resetCart, purchase,creatingBookingSuccess,  fetchedCoupons, fetchedCustomers, fetchCouponsHandler, fetchCustomersHandler, addCustomerHandler, fetchedEmployeesHandler } = props;
+    const { cartData, removeFromCart, increaseItem, decreaseItem, resetCart, purchase, fetchedCoupons, fetchedCustomers, fetchCouponsHandler, fetchCustomersHandler, addCustomerHandler, fetchedEmployeesHandler } = props;
 
     const { t } = useTranslation()
 

@@ -50,7 +50,7 @@ function Services(props) {
         setEditModalOpened(false);
         setSelectedBookingId(null);
         updateBookingHandler(data);
-    }, [])
+    }, [updateBookingHandler])
 
     // View Modal
     const viewModalOpenHandler = useCallback((id) => {
