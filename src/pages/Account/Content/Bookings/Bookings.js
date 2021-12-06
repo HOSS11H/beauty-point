@@ -49,7 +49,7 @@ function Services(props) {
     const editModalConfirmHandler = useCallback((data) => {
         setEditModalOpened(false);
         setSelectedBookingId(null);
-        //updateServiceHandler(data);
+        //updateBookingHandler(data);
     }, [])
 
     // View Modal

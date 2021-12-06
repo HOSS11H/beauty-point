@@ -725,7 +725,7 @@ const EditModal = (props) => {
     }
 
     return (
-        <CustomModal show={show} heading={heading} confirmText={confirmText} onConfirm={onConfirm} onClose={onClose} >
+        <CustomModal show={show} heading={heading} confirmText={confirmText} onConfirm={EditBookingConfirmHandler} onClose={onClose} >
             {content}
         </CustomModal>
     )
