@@ -80,6 +80,38 @@ export const deleteBooking = (id ) => {
         }
 }
 
+export const updateBookingStart = (  ) => {
+    return {
+        type: actionTypes.UPDATE_BOOKING_START,
+    }
+}
+export const updateBookingSuccess = ( message, updatedBookingData ) => {
+    return {
+        type: actionTypes.UPDATE_BOOKING_SUCCESS,
+        message: message,
+        bookingData: updatedBookingData,
+    }
+}
+export const updateBookingFailed = ( message ) => {
+    return {
+        type: actionTypes.UPDATE_BOOKING_FAILED,
+        message: message,
+    }
+}
+
+export const updateBooking = ( data ) => {
+    return dispatch => {
+        dispatch( updateBookingStart( ) )
+        axios.put(`/vendors/bookings/${data.id}`, data)
+            .then( response => {
+                dispatch( updateBookingSuccess( response.data, data ) );
+            })
+            .catch( err => {
+                dispatch( updateBookingFailed( err.message  ) )
+            } )
+        }
+}
+
 export const fetchTotalBookingsStart = (  ) => {
     return {
         type: actionTypes.FETCH_TOTAL_BOOKINGS_START,
