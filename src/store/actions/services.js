@@ -28,7 +28,6 @@ export const fetchServices = ( language, page, perPage, orderBy, orderDir ) => {
             }
         }).then( response => {
                 const servicesData = response.data.data;
-                console.log( servicesData );
                 const convertedServicesData = servicesData.map((service) => {
                     let formattedImages = []
                     if (typeof service.images !== 'string') {
@@ -53,7 +52,6 @@ export const fetchServices = ( language, page, perPage, orderBy, orderDir ) => {
                 dispatch( fetchServicesSuccess( {...response.data, data: convertedServicesData}  ) );
             })
             .catch( err => {
-                console.log(err)
                 dispatch( fetchServicesFailed( err.message  ) )
             } )
         }
@@ -142,11 +140,9 @@ export const createServiceFailed = ( message ) => {
 
 export const createService = ( data ) => {
     return dispatch => {
-        console.log(data)
         dispatch( createServiceStart( ) )
         axios.post(`/vendors/services`, data)
             .then( response => {
-                console.log(response)
                 dispatch( createServiceSuccess( null , {...data,  ...response.data } ) );
             })
             .catch( err => {
@@ -184,7 +180,6 @@ export const searchServices = ( language , word ) => {
                 dispatch( searchServicesSuccess( response.data  ) );
             })
             .catch( err => {
-                console.log(err)
                 dispatch( searchServicesFailed( err.message  ) )
             } )
         }
@@ -201,7 +196,6 @@ export const filterServices = ( language, type, category , location, search ) =>
                 dispatch( fetchServicesSuccess( response.data  ) );
             })
             .catch( err => {
-                console.log(err)
                 dispatch( fetchServicesFailed( err.message  ) )
             } )
         }

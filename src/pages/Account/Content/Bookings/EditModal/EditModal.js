@@ -105,32 +105,6 @@ const BookingList = styled.ul`
         }
     }
 `
-const ItemInfo = styled.div`
-    display: flex;
-    align-items: center;
-`
-const ItemType = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 20px;
-    padding: 0 10px;
-    border-radius: 6px;
-    font-size: 12px;
-    text-transform: capitalize;
-    font-weight: 500;
-    margin-left: 10px;
-    color: ${({ theme }) => theme.palette.common.white};
-    &.service {
-        background-color: ${({ theme }) => theme.palette.info.main};
-    }
-    &.product {
-        background-color: ${({ theme }) => theme.palette.secondary.main};
-    }
-    &.deal {
-        background-color: ${({ theme }) => theme.palette.success.main};
-    }
-`
 const BookingActions = styled.div`
     display: flex;
     align-items: center;
@@ -295,7 +269,6 @@ const EditModal = (props) => {
         }
         return bookingDataServices;
     })
-    console.log(splittedItems)
 
     const [cartData, dispatch] = useReducer(cartReducer, {
         services: bookingDataServices,
@@ -459,7 +432,6 @@ const EditModal = (props) => {
     const paymentStatusChangeHandler = (event) => {
         setPaymentStatus(event.target.value);
     }
-    console.log(bookingData)
     const EditBookingConfirmHandler = useCallback(() => {
 
         const employeesData = [];
