@@ -1,5 +1,6 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../utils/axios-instance';
+import v1 from '../../utils/axios-instance-v1'
 
 
 export const fetchBookingsStart = (  ) => {
@@ -22,7 +23,7 @@ export const fetchBookingsFailed = ( errorMessage ) => {
 export const fetchBookings = ( language, perPage  ) => {
     return dispatch => {
         dispatch( fetchBookingsStart( ) )
-        axios.get(`/vendors/bookings?per_page=${perPage}&include[]=user&include[]=users&include[]=items&include[]=payment`, { 
+        axios.get(`/vendors/bookings?per_page=${perPage}&include[]=user&include[]=users&include[]=items&include[]=payment`, {
             headers: {
                 'Accept-Language': language,
             }
@@ -38,7 +39,7 @@ export const fetchBookings = ( language, perPage  ) => {
                             date: date,
                             time: time,
                         }
-                    }) 
+                    })
                     dispatch( fetchBookingsSuccess( { ...response.data , data: editedData } ) );
                 })
                 .catch( err => {
@@ -99,7 +100,7 @@ export const fetchTotalBookingsFailed = ( errorMessage ) => {
 export const fetchTotalBookings = ( language ) => {
     return dispatch => {
         dispatch( fetchTotalBookingsStart( ) )
-        axios.get('/vendor/company-status', { 
+        v1.get('/vendor/company-status', {
             headers: {
                 'Accept-Language': language,
             }
