@@ -23,7 +23,7 @@ import Paper from '@mui/material/Paper';
 import Avatar from '@mui/material/Avatar';
 import PersonIcon from '@mui/icons-material/Person';
 import MoneyIcon from '@mui/icons-material/Money';
-import CloseIcon from '@mui/icons-material/Close';
+import PendingIcon from '@mui/icons-material/Pending';
 import { formatCurrency, updateObject } from '../../../../../shared/utility';
 import { CustomButton } from '../../../../../components/UI/Button/Button';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -459,23 +459,29 @@ const EditModal = (props) => {
     const paymentStatusChangeHandler = (event) => {
         setPaymentStatus(event.target.value);
     }
-
+    console.log(bookingData)
     const EditBookingConfirmHandler = useCallback(() => {
+
+        const employeesData = [];
+        employeeName.map(employeeId => {
+            const employeeIndex = fetchedEmployees.findIndex(employee => employee.id === employeeId);
+            employeesData.push(fetchedEmployees[employeeIndex]);
+            return employeesData;
+        })
+
         const booking = {
+            ...bookingData,
             id: id,
-            status: bookingStatus,
             date_time: dateTime,
-            users: employeeName,
-            items: cartData.services.concat(cartData.products),
-            payment: {
-                status: paymentStatus,
-                total: totalPrice,
-                taxes: totalTaxes,
-                discount: discount,
-            }
+            status: bookingStatus,
+            users: employeesData,
+            items: [
+                cartData.services,
+                cartData.products,
+            ]
         }
         onConfirm(booking);
-    }, [bookingStatus, cartData.products, cartData.services, dateTime, discount, employeeName, id, onConfirm, paymentStatus, totalPrice, totalTaxes])
+    }, [bookingData, bookingStatus, cartData.products, cartData.services, dateTime, employeeName, fetchedEmployees, id, onConfirm])
 
 
     let content;
@@ -668,7 +674,7 @@ const EditModal = (props) => {
                     <BookingData>
                         <BookingDataHeading>{t('payment status')}</BookingDataHeading>
                         <BookingList>
-                            <li>{bookingData.payment.status === 'completed' ? <CheckCircleIcon sx={{ mr: 1, color: '#568d00' }} /> : <CloseIcon sx={{ mr: 1, color: '#f00' }} />}{bookingData.payment.status}</li>
+                            <li>{paymentStatus === 'completed' ? <CheckCircleIcon sx={{ mr: 1, color: '#568d00' }} /> : <PendingIcon sx={{ mr: 1, color: '#f9b904' }} />}{t(paymentStatus)}</li>
                         </BookingList>
                     </BookingData>
                 </Grid>
