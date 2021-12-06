@@ -283,7 +283,7 @@ const EditModal = (props) => {
             name: serviceName,
             description: draftToHtml(convertToRaw(editorState.getCurrentContent())),
             price: +servicePrice,
-            price_after_discount: +priceAfterDiscount,
+            discount_price: +priceAfterDiscount,
             discount: +serviceDiscount,
             discount_type: discountType,
             time: serviceData.time,

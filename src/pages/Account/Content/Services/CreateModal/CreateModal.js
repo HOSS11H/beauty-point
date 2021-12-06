@@ -172,14 +172,14 @@ const CreateModal = (props) => {
 
     const [serviceName, setServiceName] = useState('');
     const [serviceNameError, setServiceNameError] = useState(false);
-    
-    
-    
+
+
+
     const [editorState, setEditorState] = useState(
         EditorState.createEmpty()
     )
     const [serviceDescriptionError, setServiceDescriptionError] = useState(false);
-        
+
     const [servicePrice, setServicePrice] = useState(0);
 
     const [serviceDiscount, setServiceDiscount] = useState(0);
@@ -325,7 +325,7 @@ const CreateModal = (props) => {
             setServiceDescriptionError(true);
             return;
         }
-        
+
         if ( servicePriceError )   { return; }
 
         if (locationName === '') {
@@ -362,7 +362,7 @@ const CreateModal = (props) => {
             price: +servicePrice,
             discount: +serviceDiscount,
             discount_type: discountType,
-            price_after_discount: +priceAfterDiscount,
+            discount_price: +priceAfterDiscount,
             time: +timeRequired,
             time_type: timeType,
             category_id: categoryName,
@@ -390,7 +390,7 @@ const CreateModal = (props) => {
         setServiceStatus('active');
         setUploadedImages([]);
         setDefaultImage('');
-    }, [categoryName, defaultImage, discountType, editorState, employeeName, fetchedCategories, fetchedEmployees, fetchedLocations, locationName, onConfirm, priceAfterDiscount, serviceDiscount, serviceName, servicePrice, serviceStatus, timeRequired, timeType, uploadedImages])
+    }, [categoryName, defaultImage, discountType, editorState, employeeName, fetchedCategories, fetchedEmployees, fetchedLocations, locationName, onConfirm, priceAfterDiscount, serviceDiscount, serviceName, servicePrice, servicePriceError, serviceStatus, timeRequired, timeType, uploadedImages])
 
     let content = (
         <Grid container spacing={2}>

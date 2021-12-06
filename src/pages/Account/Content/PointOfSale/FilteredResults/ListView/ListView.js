@@ -66,13 +66,13 @@ const ListView = ( props ) => {
         console.log(id, data);
         const addedItemIndex = data.findIndex( item  => item.id === id );
         const addedItem = data[addedItemIndex];
-        type === 'products' && (addedItem.price_after_discount = addedItem.discount_price);
-        type === 'deals' && (addedItem.price_after_discount = addedItem.price);
+        // type === 'products' && (addedItem.price_after_discount = addedItem.discount_price);
+        // type === 'deals' && (addedItem.price_after_discount = addedItem.price);
         type === 'deals' && (addedItem.name = addedItem.title);
         const addedItemData = {
             id: addedItem.id,
             name: addedItem.name,
-            price: addedItem.price_after_discount,
+            price: addedItem.discount_price,
             quantity: 1,
             type: type,
         }
@@ -80,8 +80,8 @@ const ListView = ( props ) => {
     }
 
     let content = data.map( (item, index) => {
-        type === 'products' && (item.price_after_discount = item.discount_price);
-        type === 'deals' && (item.price_after_discount = item.price);
+        // type === 'products' && (item.price_after_discount = item.discount_price);
+        // type === 'deals' && (item.price_after_discount = item.price);
         type === 'deals' && (item.name = item.title);
         return (
             <Grid item xs={6} sm={3} md={4} lg={3} key={item.id}>
@@ -89,8 +89,8 @@ const ListView = ( props ) => {
                     <ResultContent>
                         <ResultName>{item.name}</ResultName>
                         <PriceHolder>
-                            <ResultPrice>{formatCurrency(item.price_after_discount)}</ResultPrice>
-                            {item.price !== item.price_after_discount ? <ResultDiscount>{formatCurrency(item.price)}</ResultDiscount> : null}
+                            <ResultPrice>{formatCurrency(item.discount_price)}</ResultPrice>
+                            {item.price !== item.discount_price ? <ResultDiscount>{formatCurrency(item.price)}</ResultDiscount> : null}
                         </PriceHolder>
                     </ResultContent>
                 </ResultCard>

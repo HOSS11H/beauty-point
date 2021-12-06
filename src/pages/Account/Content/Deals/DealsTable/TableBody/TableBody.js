@@ -57,7 +57,7 @@ const EnhancedTableBody = props => {
                         </TableCell>
                         <TableCell align="center">
                             <TableData>
-                                {row.formated_deal_amount}
+                                {formatCurrency(row.discount_price)}
                             </TableData>
                         </TableCell>
                         <TableCell align="center">

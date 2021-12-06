@@ -78,7 +78,7 @@ const reducer = ( state = intialState , action ) => {
                 name: action.serviceData.name,
                 description: action.serviceData.description,
                 price: action.serviceData.price,
-                price_after_discount: action.serviceData.price_after_discount,
+                discount_price: action.serviceData.discount_price,
                 discount: action.serviceData.discount,
                 discount_type: action.serviceData.discount_type,
                 users: action.serviceData.users,

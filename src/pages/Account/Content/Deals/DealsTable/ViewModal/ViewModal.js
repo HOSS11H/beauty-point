@@ -81,14 +81,14 @@ const ViewModal = (props) => {
 
     if (dealData) {
 
-        /* const formattedApplyTime = dealData.applied_between_time.split(' - ') */
+         const formattedApplyTime = dealData.applied_between_time.split(' - ')
 
         /* const formattedApplyDays = JSON.parse(dealData.days)
         console.log(formattedApplyDays) */
 
         const transformedDealData = {
             ...dealData,
-            /* applied_between_time: formattedApplyTime, */
+             applied_between_time: formattedApplyTime,
             /* days: formattedApplyDays, */
         }
 
@@ -118,7 +118,7 @@ const ViewModal = (props) => {
                         <Grid item xs={6}>
                             <DealData>
                                 <DealDataHeading>{t('discount value')}</DealDataHeading>
-                                <DealDataInfo>{transformedDealData.percentage}</DealDataInfo>
+                                <DealDataInfo>{transformedDealData.discount_value}</DealDataInfo>
                             </DealData>
                         </Grid>
                         <Grid item xs={6}>
@@ -143,8 +143,8 @@ const ViewModal = (props) => {
                             <DealData>
                                 <DealDataHeading>{t('applies between')}</DealDataHeading>
                                 <TableDate>
-                                    {/* <li><WatchLaterIcon sx={{ mr: 1 }} />{transformedDealData.applied_between_time[0]}</li> */}
-                                    {/* <li><WatchLaterIcon sx={{ mr: 1 }} />{transformedDealData.applied_between_time[1]}</li> */}
+                                    <li><WatchLaterIcon sx={{ mr: 1 }} />{transformedDealData.applied_between_time[0]}</li>
+                                    <li><WatchLaterIcon sx={{ mr: 1 }} />{transformedDealData.applied_between_time[1]}</li>
                                 </TableDate>
                             </DealData>
                         </Grid>
