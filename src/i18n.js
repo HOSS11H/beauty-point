@@ -143,6 +143,7 @@ const resources = {
             'show receipt': 'عرض الفاتورة',
             'download receipt': 'تحميل الفاتورة',
             'Delete': 'حذف',
+            'add services': 'إضافة خدمات',
         }
     }
 };

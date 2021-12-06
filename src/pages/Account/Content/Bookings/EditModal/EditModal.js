@@ -29,10 +29,11 @@ import { CustomButton } from '../../../../../components/UI/Button/Button';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
-import { useCallback, useEffect, useReducer, useState } from 'react';
+import { useCallback, useContext, useEffect, useReducer, useState } from 'react';
 import { connect } from 'react-redux';
-import { fetchEmployees } from '../../../../../store/actions/index';
+import { fetchEmployees, fetchProducts, fetchServices } from '../../../../../store/actions/index';
 import InputAdornment from '@mui/material/InputAdornment';
+import ThemeContext from '../../../../../store/theme-context';
 
 const ClientDetails = styled.div`
     display: flex;
@@ -175,14 +176,14 @@ const MenuProps = {
 };
 
 const cartReducer = (state, action) => {
-    switch(action.type) {
+    switch (action.type) {
         case 'ADD_TO_SERVICES':
             const serviceIndex = state.services.findIndex(service => service.id === action.payload.id);
             const updatedServices = [...state.services]
-            if (serviceIndex === -1) { 
+            if (serviceIndex === -1) {
                 updatedServices.push(action.payload)
             } else {
-                const updatedItem = {...updatedServices[serviceIndex]}
+                const updatedItem = { ...updatedServices[serviceIndex] }
                 updatedItem.quantity = updatedItem.quantity + 1
                 updatedServices[serviceIndex] = updatedItem
             }
@@ -194,22 +195,22 @@ const cartReducer = (state, action) => {
             return updateObject(state, {
                 services: filteredServices,
             })
-        case 'INCREASE_SERVICE' :
+        case 'INCREASE_SERVICE':
             const increasedServiceIndex = state.services.findIndex(service => service.id === action.payload);
-            const increasedService = {...state.services[increasedServiceIndex]}
+            const increasedService = { ...state.services[increasedServiceIndex] }
             increasedService.quantity = increasedService.quantity + 1;
             const increasedServices = [...state.services]
             increasedServices[increasedServiceIndex] = increasedService
             return updateObject(state, {
                 services: increasedServices,
             })
-        case 'DECREASE_SERVICE' :
+        case 'DECREASE_SERVICE':
             const decreasedServiceIndex = state.services.findIndex(service => service.id === action.payload);
-            const decreasedService = {...state.services[decreasedServiceIndex]}
+            const decreasedService = { ...state.services[decreasedServiceIndex] }
             const decreasedServices = [...state.services]
             if (decreasedService.quantity === 1) {
                 decreasedServices.splice(decreasedServiceIndex, 1)
-            } else { 
+            } else {
                 decreasedService.quantity = decreasedService.quantity - 1
                 decreasedServices[decreasedServiceIndex] = decreasedService
             }
@@ -219,10 +220,10 @@ const cartReducer = (state, action) => {
         case 'ADD_TO_PRODUCTS':
             const productIndex = state.products.findIndex(product => product.id === action.payload.id);
             const updatedProducts = [...state.products]
-            if (productIndex === -1) { 
+            if (productIndex === -1) {
                 updatedProducts.push(action.payload)
             } else {
-                const updatedItem = {...updatedProducts[productIndex]}
+                const updatedItem = { ...updatedProducts[productIndex] }
                 updatedItem.quantity = updatedItem.quantity + 1
                 updatedProducts[productIndex] = updatedItem
             }
@@ -234,18 +235,18 @@ const cartReducer = (state, action) => {
             return updateObject(state, {
                 products: filteredProducts,
             })
-        case 'INCREASE_PRODUCT' :
+        case 'INCREASE_PRODUCT':
             const increasedProductIndex = state.products.findIndex(product => product.id === action.payload);
-            const increasedProduct = {...state.products[increasedProductIndex]}
+            const increasedProduct = { ...state.products[increasedProductIndex] }
             increasedProduct.quantity = increasedProduct.quantity + 1
             const increasedProducts = [...state.products]
             increasedProducts[increasedProductIndex] = increasedProduct
             return updateObject(state, {
                 products: increasedProducts,
             })
-        case 'DECREASE_PRODUCT' :
+        case 'DECREASE_PRODUCT':
             const decreasedProductIndex = state.products.findIndex(product => product.id === action.payload);
-            const decreasedProduct = {...state.products[decreasedProductIndex]}
+            const decreasedProduct = { ...state.products[decreasedProductIndex] }
             const decreasedProducts = [...state.products]
             if (decreasedProduct.quantity === 1) {
                 decreasedProducts.splice(decreasedProductIndex, 1)
@@ -264,9 +265,13 @@ const cartReducer = (state, action) => {
 
 const EditModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, id, fetchedBookings, onDelete, fetchedEmployees, fetchEmployeesHandler } = props;
+    const { show, heading, confirmText, onConfirm, onClose, id, fetchedBookings, onDelete, fetchedEmployees, fetchEmployeesHandler, fetchedProducts, fetchProductsHandler, fetchedServices, fetchServicesHandler } = props;
 
     const { t } = useTranslation();
+
+    const themeCtx = useContext(ThemeContext)
+
+    const { lang } = themeCtx;
 
     const bookingIndex = fetchedBookings.data.findIndex(booking => booking.id === id);
 
@@ -279,7 +284,7 @@ const EditModal = (props) => {
         employeesIds.push(employee.id)
         return employeesIds;
     })
-    
+
     let bookingDataServices = [];
     let bookingDataProducts = [];
     const splittedItems = bookingData.items.map(item => {
@@ -291,28 +296,32 @@ const EditModal = (props) => {
         return bookingDataServices;
     })
     console.log(splittedItems)
-    
-    const [ cartData , dispatch ] = useReducer(cartReducer, {
+
+    const [cartData, dispatch] = useReducer(cartReducer, {
         services: bookingDataServices,
         products: bookingDataProducts,
     });
     const [dateTime, setDateTime] = useState(new Date(date_time));
 
     const [bookingStatus, setBookingStatus] = useState(status);
-    
+
     const [employeeName, setEmployeeName] = useState(employeesIds);
-    
+
+    const [selectedServices, setSelectedServices] = useState('');
+
     const [totalPrice, setTotalPrice] = useState(0)
-    
+
     const [totalTaxes, setTotalTaxes] = useState(0)
-    
+
     const [discount, setDiscount] = useState(0)
-    
+
     const [paymentStatus, setPaymentStatus] = useState(payment.status);
 
     useEffect(() => {
-        fetchEmployeesHandler();
-    }, [fetchEmployeesHandler])
+        fetchEmployeesHandler(lang);
+        fetchProductsHandler(lang, 1, 'all', 'name', 'desc');
+        fetchServicesHandler(lang, 1, 'all', 'name', 'desc');
+    }, [fetchEmployeesHandler, fetchProductsHandler, fetchServicesHandler, lang])
 
     useEffect(() => {
         let total = 0;
@@ -323,9 +332,68 @@ const EditModal = (props) => {
         }
         total = total - ((total * discount / 100));
         setTotalTaxes(total - (total / 1.15))
-        setTotalPrice(total );
+        setTotalPrice(total);
 
     }, [cartData, discount])
+
+    const addToCartHandler = useCallback(( type, itemData ) => {
+        if ( type === 'services' ) {
+            dispatch({
+                type: 'ADD_TO_SERVICES',
+                payload: itemData
+            })
+        }
+        if ( type === 'products' ) {
+            dispatch({
+                type: 'ADD_TO_PRODUCTS',
+                payload: itemData
+            })
+        }
+    }, [])
+
+    const removeFromCartHandler = useCallback((type, itemId) => {
+        if (type === 'services') {
+            dispatch({
+                type: 'REMOVE_SERVICE',
+                payload: itemId
+            })
+        }
+        if (type === 'products') {
+            dispatch({
+                type: 'REMOVE_PRODUCT',
+                payload: itemId
+            })
+        }
+    }, [])
+
+    const increaseItemHandler = useCallback((type, itemId) => {
+        if (type === 'services') {
+            dispatch({
+                type: 'INCREASE_SERVICE',
+                payload: itemId
+            })
+        }
+        if (type === 'products') {
+            dispatch({
+                type: 'INCREASE_PRODUCT',
+                payload: itemId
+            })
+        }
+    }, [])
+    const decreaseItemHandler = useCallback((type, itemId) => {
+        if (type === 'services') {
+            dispatch({
+                type: 'DECREASE_SERVICE',
+                payload: itemId
+            })
+        }
+        if (type === 'products') {
+            dispatch({
+                type: 'DECREASE_PRODUCT',
+                payload: itemId
+            })
+        }
+    }, [])
 
 
     const handleDateChange = (newValue) => {
@@ -341,8 +409,28 @@ const EditModal = (props) => {
         setEmployeeName(
             // On autofill we get a the stringified value.
             typeof value === 'string' ? value.split(',') : value,
-            );
-        };
+        );
+    };
+
+    const selectedServicesChangeHandler = (event) => {
+        setSelectedServices('');
+        const selectedServiceIndex = fetchedServices.data.findIndex(service => service.id === event.target.value);
+        const selectedServiceData = { ...fetchedServices.data[selectedServiceIndex] }
+        const serviceData = {
+            id: selectedServiceData.id,
+            quantity: 1,
+            price: selectedServiceData.price,
+            total: selectedServiceData.price,
+            item: {
+                id: selectedServiceData.id,
+                name: selectedServiceData.name,
+                type: 'service',
+                price: selectedServiceData.price,
+            }
+        }
+        addToCartHandler('services', serviceData)
+    }
+
     const discountChangeHandler = (event) => {
         if (event.target.value >= 0) {
             setDiscount(event.target.value)
@@ -352,67 +440,6 @@ const EditModal = (props) => {
         setPaymentStatus(event.target.value);
     }
 
-    const removeFromCartHandler = useCallback(( type, itemId ) => {
-        if (type === 'services') {
-            dispatch({
-                type: 'REMOVE_SERVICE',
-                payload: itemId
-            })
-        }
-        if (type === 'products') {
-            dispatch({
-                type: 'REMOVE_PRODUCT',
-                payload: itemId
-            })
-        }
-        if (type === 'deals') {
-            dispatch({
-                type: 'REMOVE_DEAL',
-                payload: itemId
-            })
-        }
-    } , [])
-
-    const increaseItemHandler = useCallback(( type, itemId ) => {
-        if (type === 'services') {
-            dispatch({
-                type: 'INCREASE_SERVICE',
-                payload: itemId
-            })
-        }
-        if (type === 'products') {
-            dispatch({
-                type: 'INCREASE_PRODUCT',
-                payload: itemId
-            })
-        }
-        if (type === 'deals') {
-            dispatch({
-                type: 'INCREASE_DEAL',
-                payload: itemId
-            })
-        }
-    } , [])
-    const decreaseItemHandler = useCallback(( type, itemId ) => {
-        if (type === 'services') {
-            dispatch({
-                type: 'DECREASE_SERVICE',
-                payload: itemId
-            })
-        }
-        if (type === 'products') {
-            dispatch({
-                type: 'DECREASE_PRODUCT',
-                payload: itemId
-            })
-        }
-        if (type === 'deals') {
-            dispatch({
-                type: 'DECREASE_DEAL',
-                payload: itemId
-            })
-        }
-    } , [])
 
     let content;
 
@@ -481,7 +508,7 @@ const EditModal = (props) => {
                         </Select>
                     </FormControl>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} sm={6} >
                     <FormControl sx={{ width: '100%' }}>
                         <InputLabel id="employee-label">{t('employee')}</InputLabel>
                         <Select
@@ -515,6 +542,26 @@ const EditModal = (props) => {
                     </FormControl>
                 </Grid>
                 <Grid item xs={12}>
+                    <FormControl sx={{ width: '100%' }}>
+                        <InputLabel id="services-label">{t('add services')}</InputLabel>
+                        <Select
+                            labelId="services-label"
+                            id="select-services"
+                            value={selectedServices}
+                            onChange={selectedServicesChangeHandler}
+                        >
+                            {fetchedServices.data.map((service) => (
+                                <MenuItem
+                                    key={service.id}
+                                    value={service.id}
+                                >
+                                    {service.name}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12}>
                     {cartData.services.length === 0 && (
                         <CustomMessage>
                             <p>{t('No Services')}</p>
@@ -523,7 +570,7 @@ const EditModal = (props) => {
                     {cartData.services.length > 0 && (
                         <TableContainer component={Paper} sx={{ my: 2 }}>
                             <Table aria-label="services table">
-                                <SharedTableHead name= 'services' />
+                                <SharedTableHead name='services' />
                                 <TableBody>
                                     {cartData.services.map((row) => (
                                         <CartItem type='services' key={row.id} row={row} remove={removeFromCartHandler} increase={increaseItemHandler} decrease={decreaseItemHandler} />
@@ -542,7 +589,7 @@ const EditModal = (props) => {
                     {cartData.products.length > 0 && (
                         <TableContainer component={Paper} sx={{ my: 2 }}>
                             <Table aria-label="products table">
-                                <SharedTableHead name= 'products' />
+                                <SharedTableHead name='products' />
                                 <TableBody>
                                     {cartData.products.map((row) => (
                                         <CartItem type='products' key={row.id} row={row} remove={removeFromCartHandler} increase={increaseItemHandler} decrease={decreaseItemHandler} />
@@ -624,12 +671,16 @@ const EditModal = (props) => {
 const mapStateToProps = (state) => {
     return {
         fetchedEmployees: state.employees.employees,
+        fetchedServices: state.services.services,
+        fetchedProducts: state.products.products,
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchEmployeesHandler: () => dispatch(fetchEmployees()),
+        fetchEmployeesHandler: (language) => dispatch(fetchEmployees(language)),
+        fetchProductsHandler: (language, page, perPage, orderBy, orderDir) => dispatch(fetchProducts(language, page, perPage, orderBy, orderDir)),
+        fetchServicesHandler: (language, page, perPage, orderBy, orderDir) => dispatch(fetchServices(language, page, perPage, orderBy, orderDir)),
     }
 }
 
