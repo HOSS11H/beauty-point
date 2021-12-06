@@ -66,7 +66,7 @@ function ServicesTable(props) {
     }, [fetchServicesHandler, lang, order, orderBy, page, rowsPerPage]);
 
     useEffect(() => {
-        if (fetchedServices.meta.per_page) {
+        if (fetchedServices.meta) {
             setRowsPerPage(+fetchedServices.meta.per_page)
         }
     }, [fetchedServices])
@@ -171,7 +171,7 @@ function ServicesTable(props) {
                     <TablePaginationActions
                         component="div"
                         count={fetchedServices.data.length}
-                        total={fetchedServices.meta && fetchedServices.meta.total}
+                        total={fetchedServices.meta ? fetchedServices.meta.total : null}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onPageChange={handleChangePage}

@@ -72,6 +72,7 @@ function DealsTable(props) {
             setRowsPerPage(fetchedDeals.per_page)
         }
     }, [fetchedDeals])
+    console.log(rowsPerPage)
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -171,7 +172,7 @@ function DealsTable(props) {
                     <TablePaginationActions
                         component="div"
                         count={fetchedDeals.data.length}
-                        total={fetchedDeals.meta.total}
+                        total={fetchedDeals.meta ? fetchedDeals.meta.total : 0}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onPageChange={handleChangePage}

@@ -59,6 +59,7 @@ export const addCustomerFailed = ( message ) => {
 export const addCustomer = ( data ) => {
     return dispatch => {
         dispatch( addCustomerStart( ) )
+        console.log( data )
         axios.post(`/vendors/customers`, data)
         .then( response => {
             console.log(response)

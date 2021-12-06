@@ -62,7 +62,7 @@ const AddCustomerModal = (props) => {
         const data = {
             name: customerName,
             email: customerEmail,
-            phone: customerNumber
+            mobile: customerNumber
         }
 
         onConfirm(data);

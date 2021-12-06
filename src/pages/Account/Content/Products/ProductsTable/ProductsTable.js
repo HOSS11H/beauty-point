@@ -69,7 +69,7 @@ function ProductsTable(props) {
     }, [fetchProductsHandler, lang, page, rowsPerPage, orderBy, order]);
 
     useEffect(() => {
-        if (fetchedProducts.meta.per_page) {
+        if (fetchedProducts.meta) {
             setRowsPerPage(+fetchedProducts.meta.per_page)
         }
     }, [fetchedProducts])
@@ -172,7 +172,7 @@ function ProductsTable(props) {
                     <TablePaginationActions
                         component="div"
                         count={fetchedProducts.data.length}
-                        total={fetchedProducts.meta.total}
+                        total={fetchedProducts.meta ? fetchedProducts.meta.total : 0}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onPageChange={handleChangePage}
