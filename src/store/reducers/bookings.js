@@ -12,6 +12,9 @@ const intialState = {
     deletingBooking: false,
     deletingBookingSuccess: false,
     deletingBookingMessage: null,
+    updatingBooking: false,
+    updatingBookingSuccess: false,
+    updatingBookingMessage: null,
 };
 
 const reducer = (state = intialState, action) => {
@@ -54,6 +57,36 @@ const reducer = (state = intialState, action) => {
                 deletingBooking: false,
                 deletingBookingSuccess: false,
                 deletingBookingMessage: action.message,
+            })
+        case (actionTypes.UPDATE_BOOKING_START):
+            return updateObject(state, {
+                updatingBooking: true,
+                updatingBookingSuccess: false,
+                updatingBookingMessage: null,
+            })
+        case (actionTypes.UPDATE_BOOKING_SUCCESS):
+            const editedBookingIndex = state.bookings.data.findIndex(booking => booking.id === action.bookingData.id);
+            let editedBooking = { ...state.bookings.data[editedBookingIndex] }
+            const updatedEditedBooking = updateObject(editedBooking, {
+                ...action.bookingData,
+            })
+            console.log(updatedEditedBooking);
+            const editedBookings = [...state.bookings.data]
+            editedBookings[editedBookingIndex] = updatedEditedBooking
+            return updateObject(state, {
+                bookings: {
+                    ...state.bookings,
+                    data: editedBookings,
+                },
+                updatingBooking: false,
+                updatingBookingSuccess: true,
+                updatingBookingMessage: action.message,
+            })
+        case (actionTypes.UPDATE_BOOKING_FAILED):
+            return updateObject(state, {
+                updatingBooking: false,
+                updatingBookingSuccess: false,
+                updatingBookingMessage: action.message,
             })
         case (actionTypes.FETCH_TOTAL_BOOKINGS_START):
             return updateObject(state, {

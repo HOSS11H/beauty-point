@@ -73,7 +73,7 @@ const EnhancedTableBody = props => {
                             </TableEmployees>
                         </TableCell>
                         <TableCell align="center">
-                            <TableStatus style={{ backgroundColor: row.status !== 'active' ? 'red' : ''}}>{row.status}</TableStatus>
+                            <TableStatus className={row.status}>{row.status}</TableStatus>
                         </TableCell>
                         <TableCell align="center">
                             <Actions edit remove view

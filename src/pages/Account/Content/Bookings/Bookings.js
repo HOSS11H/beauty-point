@@ -3,7 +3,7 @@ import { useState, useContext, useEffect, useCallback, Fragment } from "react";
 import { useTranslation } from 'react-i18next';
 import { connect } from "react-redux";
 import BookingView from "../../../../components/UI/Dashboard/BookingView/BookingView";
-import { fetchBookings, deleteBooking } from "../../../../store/actions/index";
+import { fetchBookings, deleteBooking, updateBooking } from "../../../../store/actions/index";
 import ThemeContext from "../../../../store/theme-context";
 import ViewModal from "./ViewModal/ViewModal";
 import EditModal from "./EditModal/EditModal";
@@ -11,7 +11,7 @@ import EditModal from "./EditModal/EditModal";
 
 function Services(props) {
 
-    const { fetchedBookings, fetchBookingsHandler, fetchingBookings, deleteBookingHandler } = props;
+    const { fetchedBookings, fetchBookingsHandler, fetchingBookings, deleteBookingHandler, updateBookingHandler } = props;
 
     const { t } = useTranslation()
 
@@ -49,7 +49,7 @@ function Services(props) {
     const editModalConfirmHandler = useCallback((data) => {
         setEditModalOpened(false);
         setSelectedBookingId(null);
-        //updateServiceHandler(data);
+        updateBookingHandler(data);
     }, [])
 
     // View Modal
@@ -127,6 +127,7 @@ const mapDispatchToProps = dispatch => {
     return {
         fetchBookingsHandler: (language, perPage) => dispatch(fetchBookings(language, perPage)),
         deleteBookingHandler: (id) => dispatch(deleteBooking(id)),
+        updateBookingHandler: (data) => dispatch(updateBooking(data)),
     }
 }
 

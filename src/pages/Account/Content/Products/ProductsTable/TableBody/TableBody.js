@@ -52,7 +52,7 @@ const EnhancedTableBody = props => {
                             </TableData>
                         </TableCell>
                         <TableCell align="center">
-                            <TableStatus>{row.status}</TableStatus>
+                            <TableStatus className={row.status}>{row.status}</TableStatus>
                         </TableCell>
                         <TableCell align="center">
                             <TableData>{row.quantity}</TableData>

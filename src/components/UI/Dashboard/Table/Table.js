@@ -84,5 +84,8 @@ export const TableStatus = styled.div`
     font-size: 14px;
     text-transform: capitalize;
     font-weight: 500;
-    background-color: ${({ theme }) => theme.palette.success.main};
+    background-color: ${({ theme }) => theme.palette.error.main};
+    &.active {
+        background-color: ${({ theme }) => theme.palette.success.main};
+    }
 `
