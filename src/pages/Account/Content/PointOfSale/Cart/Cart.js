@@ -167,6 +167,9 @@ const Cart = props => {
 
     const [discount, setDiscount] = useState(0)
 
+    const [paymentGateway, setPaymentGateway] = useState('')
+    const [paymentGatewayError, setPaymentGatewayError] = useState(false)
+
     const [addCustomerModalOpened, setAddCustomerModalOpened] = useState(false);
 
     useEffect(() => {
@@ -219,6 +222,11 @@ const Cart = props => {
         setCustomerData(updatedCustomerData);
     };
 
+    const paymentGatewayChangeHandler = (event) => {
+        setPaymentGateway(event.target.value);
+        setPaymentGatewayError(false)
+    }
+
 
     const couponChangeHandler = (event) => {
         setCoupon(event.target.value)
@@ -255,6 +263,9 @@ const Cart = props => {
         } else if (!customerData) {
             setCustomerDataError(true)
             return;
+        } else if (!paymentGateway) {
+            setPaymentGatewayError(true)
+            return;
         }
         const data = {
             customerId: customerData.id,
@@ -266,7 +277,6 @@ const Cart = props => {
             discount: discount,
         }
         purchase(data);
-        console.log(data)
         resetCartHandler();
     }
 
@@ -394,7 +404,7 @@ const Cart = props => {
                         <ValidationMessage notExist>{t('Please Add Something')}</ValidationMessage>
                     )}
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} sm={6} >
                     <TextField
                         type="number"
                         label={t('Discount')}
@@ -406,6 +416,23 @@ const Cart = props => {
                             startAdornment: <InputAdornment position="start">%</InputAdornment>,
                         }}
                     />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <FormControl sx={{ width: '100%' }}>
+                        <InputLabel id="payment-label">{t('payment method')}</InputLabel>
+                        <Select
+                            labelId="payment-label"
+                            value={paymentGateway}
+                            onChange={paymentGatewayChangeHandler}
+                            inputProps={{ 'aria-label': 'Without label' }}
+                        >
+                            <MenuItem value='cash'>{t('cash')}</MenuItem>
+                            <MenuItem value='card'>{t('card')}</MenuItem>
+                        </Select>
+                    </FormControl>
+                    {paymentGatewayError && (
+                        <ValidationMessage notExist>{t('Please choose method')}</ValidationMessage>
+                    )}
                 </Grid>
                 <Grid item xs={12}>
                     <CouponWrapper>

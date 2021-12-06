@@ -151,6 +151,8 @@ const resources = {
             'approved': 'موافق',
             'canceled': 'ملغي',
             'in progress': 'قيد التنفيذ',
+            'payment method': 'طريقة الدفع',
+            'Please choose method': 'يرجى اختيار طريقة',
         }
     }
 };
