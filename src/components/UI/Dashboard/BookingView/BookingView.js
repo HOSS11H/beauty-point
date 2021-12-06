@@ -176,59 +176,59 @@ const BookingView = props => {
 
     let content = (
         <CustomCardMui>
-            <BookingButton>
-                <IconButton aria-label="delete" size="large" onClick={onClick}>
-                    <RemoveRedEyeIcon />
-                </IconButton>
-            </BookingButton>
             <BookingInfos>
-                <BookingAppointment className={booking.status} >
-                    <ul>
-                        <li><EventNoteIcon sx={{ mr: 1 }} />{booking.date}</li>
-                        <li><WatchLaterIcon sx={{ mr: 1 }} />{booking.time}</li>
-                    </ul>
-                </BookingAppointment>
-                <BookingStatus className={booking.status}>
-                    {booking.status}
-                </BookingStatus>
+                <Skeleton variant="rectangular" width={130} height={130} sx={{ borderRadius: '8px' }} />
             </BookingInfos>
             <BookingContent>
-                <ClientName>{booking.user.name}</ClientName>
-                <ClientInfo>
-                    <li><MailIcon sx={{ mr: 1 }} />{booking.user.email}</li>
-                    <li><PhoneAndroidIcon sx={{ mr: 1 }} />{booking.user.mobile}</li>
-                </ClientInfo>
-                <BookingItems>
-                    {
-                        booking.items.map((item, index) => {
-                            let loadedItems;
-                            if (item) {
-                                loadedItems = (
-                                    <li key={item.id} >
-                                        <FiberManualRecordIcon sx={{ mr: 1 }} />
-                                        <span>{item.quantity}</span>
-                                        <span className='divider'>x</span>
-                                        <span>{item.item.name}</span>
-                                    </li>
-                                )
-                            }
-                            return loadedItems
-                        })
-                    }
-                </BookingItems>
+                <Skeleton variant="text" />
+                <Skeleton variant="text" />
+                <Skeleton variant="text" />
             </BookingContent>
         </CustomCardMui>
     );
-    if (loading) {
+    if (booking) {
         content = (
             <CustomCardMui>
+                <BookingButton>
+                    <IconButton aria-label="delete" size="large" onClick={onClick}>
+                        <RemoveRedEyeIcon />
+                    </IconButton>
+                </BookingButton>
                 <BookingInfos>
-                    <Skeleton variant="rectangular" width={130} height={130} sx={{ borderRadius: '8px' }}   />
+                    <BookingAppointment className={booking.status} >
+                        <ul>
+                            <li><EventNoteIcon sx={{ mr: 1 }} />{booking.date}</li>
+                            <li><WatchLaterIcon sx={{ mr: 1 }} />{booking.time}</li>
+                        </ul>
+                    </BookingAppointment>
+                    <BookingStatus className={booking.status}>
+                        {booking.status}
+                    </BookingStatus>
                 </BookingInfos>
                 <BookingContent>
-                    <Skeleton variant="text" />
-                    <Skeleton variant="text" />
-                    <Skeleton variant="text" />
+                    <ClientName>{booking.user.name}</ClientName>
+                    <ClientInfo>
+                        <li><MailIcon sx={{ mr: 1 }} />{booking.user.email}</li>
+                        <li><PhoneAndroidIcon sx={{ mr: 1 }} />{booking.user.mobile}</li>
+                    </ClientInfo>
+                    <BookingItems>
+                        {
+                            booking.items.map((item, index) => {
+                                let loadedItems;
+                                if (item) {
+                                    loadedItems = (
+                                        <li key={item.id} >
+                                            <FiberManualRecordIcon sx={{ mr: 1 }} />
+                                            <span>{item.quantity}</span>
+                                            <span className='divider'>x</span>
+                                            <span>{item.item.name}</span>
+                                        </li>
+                                    )
+                                }
+                                return loadedItems
+                            })
+                        }
+                    </BookingItems>
                 </BookingContent>
             </CustomCardMui>
         )
