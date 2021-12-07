@@ -16,7 +16,7 @@ import ThemeContext from '../../../../../../../store/theme-context';
 import { CustomButton } from '../../../../../../../components/UI/Button/Button';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import { format } from 'date-fns'
+import { format } from 'date-fns';
 
 const FiltersWrapper = styled.div`
     margin-bottom: 30px;

@@ -17,7 +17,8 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import DeleteIcon from '@mui/icons-material/Delete';
-
+import DateAdapter from '@mui/lab/AdapterDateFns';
+import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import ImageUploading from 'react-images-uploading';
 
 import { Editor } from "react-draft-wysiwyg";
@@ -37,6 +38,13 @@ import TableContainer from '@mui/material/TableContainer';
 import CartItem from './CartItem/CartItem';
 import SharedTableHead from './SharedTableHead/SharedTableHead';
 import Paper from '@mui/material/Paper';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import TimePicker from '@mui/lab/TimePicker';
+import FormLabel from '@mui/material/FormLabel';
+import FormGroup from '@mui/material/FormGroup';
+import Checkbox from '@mui/material/Checkbox';
+import { format } from 'date-fns';
 
 
 const CustomTextField = styled(TextField)`
@@ -221,7 +229,6 @@ const CreateModal = (props) => {
     )
     const [dealDescriptionError, setDealDescriptionError] = useState(false);
 
-    const [dealPrice, setDealPrice] = useState(0);
 
     const [dealDiscount, setDealDiscount] = useState(0);
 
@@ -243,7 +250,33 @@ const CreateModal = (props) => {
     const [defaultImage, setDefaultImage] = useState('');
     const [defaultImageError, setDefaultImageError] = useState(false);
 
+    const [usesTime, setUsesTime] = useState(0);
+
+    const [userLimit, setUserLimit] = useState(0);
+
+    const [openTime, setOpenTime] = useState(new Date());
+    const [closeTime, setCloseTime] = useState(new Date());
+
     const maxNumber = 69;
+
+    const dealPrice = cartData.services.reduce((sum, curr) => {
+        return sum + curr.price * curr.quantity
+    }, 0);
+
+    const [dateFrom, setDateFrom] = useState(new Date());
+    const [dateTo, setDateTo] = useState(new Date());
+
+    const [appliedDays, setAppliedDays] = useState({
+        saturday: false,
+        sunday: false,
+        monday: false,
+        tuesday: false,
+        wednesday: false,
+        thursday: false,
+        friday: false,
+    });
+
+    const { saturday, sunday, monday, tuesday, wednesday, thursday, friday} = appliedDays;
 
     useEffect(() => {
         let netPrice;
@@ -293,7 +326,7 @@ const CreateModal = (props) => {
             payload: itemId
         })
     }, [cartData.services, selectedServices])
-    const resetCartHandler = useCallback((  ) => {
+    const resetCartHandler = useCallback(() => {
         dispatch({
             type: 'RESET_CART',
         })
@@ -324,12 +357,6 @@ const CreateModal = (props) => {
         setDefaultImage(event.target.value);
         setDefaultImageError(false);
     };
-
-    const dealPriceChangeHandler = (event) => {
-        if (event.target.value >= 0) {
-            setDealPrice(event.target.value);
-        }
-    }
     const dealDiscountChangeHandler = (event) => {
         if (event.target.value >= 0) {
             setDealDiscount(event.target.value);
@@ -343,6 +370,38 @@ const CreateModal = (props) => {
             setDealQuantity(event.target.value);
             setDealQuantityError(false);
         }
+    }
+    const usesTimeChangeHandler = (event) => {
+        if (event.target.value >= 0) {
+            setUsesTime(event.target.value);
+        }
+    }
+    const userLimitChangeHandler = (event) => {
+        if (event.target.value >= 0) {
+            setUserLimit(event.target.value);
+        }
+    }
+
+    const openTimeChangeHandler = (newValue) => {
+        setOpenTime(newValue);
+    }
+    const closeTimeChangeHandler = (newValue) => {
+        setCloseTime(newValue);
+    }
+
+    const handleDaysChange = (event) => {
+        setAppliedDays({
+            ...appliedDays,
+            [event.target.name]: event.target.checked,
+        });
+    };
+    const handleDateFromChange = (val) => {
+        const formattedVal = format(val, 'yyyy-MM-dd')
+        setDateFrom(formattedVal);
+    }
+    const handleDateToChange = (val) => {
+        const formattedVal = format(val, 'yyyy-MM-dd')
+        setDateTo(formattedVal);
     }
     const dealStatusChangeHandler = (event) => {
         setDealStatus(event.target.value);
@@ -392,8 +451,9 @@ const CreateModal = (props) => {
         fetchServicesHandler(lang, value);
     };
     const closeModalHandler = useCallback(() => {
+        resetCartHandler();
         onClose();
-    }, [onClose])
+    }, [onClose, resetCartHandler])
 
     const confirmCreateHandler = useCallback(() => {
         if (dealName.trim().length === 0) {
@@ -439,7 +499,6 @@ const CreateModal = (props) => {
         onConfirm(data);
         setDealName('');
         setEditorState(EditorState.createEmpty());
-        setDealPrice(0);
         setDealDiscount(0);
         setDiscountType('percent');
         setPriceAfterDiscount(0);
@@ -537,39 +596,13 @@ const CreateModal = (props) => {
                     </TableContainer>
                 )}
             </Grid>
-
-
-
-
-            <Grid item xs={12} sm={6}>
-                <FormControl sx={{ width: '100%' }}>
-                    <Select
-                        value={dealStatus}
-                        onChange={dealStatusChangeHandler}
-                        inputProps={{ 'aria-label': 'Without label' }}
-                    >
-                        <MenuItem value='active'>{t('active')}</MenuItem>
-                        <MenuItem value='inactive'>{t('inactive')}</MenuItem>
-                    </Select>
-                </FormControl>
+            <Grid item xs={12}>
+                <PriceCalculation>
+                    <p>{t('total services price')}</p>
+                    <p>{formatCurrency(dealPrice)}</p>
+                </PriceCalculation>
             </Grid>
             <Grid item xs={12}>
-                <EditorWrapper>
-                    <Editor
-                        editorState={editorState}
-                        wrapperClassName="demo-wrapper"
-                        editorClassName="demo-editor"
-                        onEditorStateChange={onEditorChange}
-                        textAlignment={themeCtx.direction === 'rtl' ? 'right' : 'left'}
-                    />
-                </EditorWrapper>
-                {dealDescriptionError && <ValidationMessage notExist>{t(`Please add Description`)}</ValidationMessage>}
-            </Grid>
-            <Grid item xs={12} sm={6}>
-                <CustomTextField id="deal-price" type='number' label={t('price')} variant="outlined" value={dealPrice} onChange={dealPriceChangeHandler} />
-                {dealPriceError && <ValidationMessage notExist>{t(`Please add Price`)}</ValidationMessage>}
-            </Grid>
-            <Grid item xs={12} sm={6}>
                 <CustomFormGroup>
                     <CustomTextField id="deal-discount" type='number' label={t('discount')} variant="outlined" value={dealDiscount} onChange={dealDiscountChangeHandler} />
                     <FormControl sx={{ minWidth: 120, ml: 1 }}>
@@ -592,28 +625,126 @@ const CreateModal = (props) => {
             </Grid>
             <Grid item xs={12} sm={6}>
                 <FormControl sx={{ width: '100%' }}>
-                    <InputLabel id="location-label">{t('location')}</InputLabel>
                     <Select
-                        value={locationName}
-                        onChange={handleLocationChange}
+                        value={dealStatus}
+                        onChange={dealStatusChangeHandler}
                         inputProps={{ 'aria-label': 'Without label' }}
-                        label={t('location')}
                     >
-                        {fetchedLocations.map((location) => (
-                            <MenuItem
-                                key={location.id}
-                                value={location.id}
-                            >
-                                {location.name}
-                            </MenuItem>
-                        ))}
+                        <MenuItem value='active'>{t('active')}</MenuItem>
+                        <MenuItem value='inactive'>{t('inactive')}</MenuItem>
                     </Select>
                 </FormControl>
-                {dealLocationError && <ValidationMessage notExist>{t(`Please add Location`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6}>
-                <CustomTextField id="deal-quantity" type='number' label={t('quantity')} variant="outlined" value={dealQuantity} onChange={dealQuantityChangeHandler} />
-                {dealQuantityError && <ValidationMessage notExist>{t(`Please add Quantity`)}</ValidationMessage>}
+                <CustomTextField id="uses-time" type='number' label={t('uses time')} variant="outlined" value={usesTime} onChange={usesTimeChangeHandler} />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+                <CustomTextField id="user-limit" type='number' label={t('user limit')} variant="outlined" value={userLimit} onChange={userLimitChangeHandler} />
+            </Grid>
+            <Grid item xs={12}>
+            </Grid>
+            <Grid item xs={12} sm={6} >
+                    <LocalizationProvider dateAdapter={DateAdapter}>
+                        <DesktopDatePicker
+                            label={t("Date from")}
+                            inputFormat="MM/dd/yyyy"
+                            value={dateFrom}
+                            onChange={handleDateFromChange}
+                            renderInput={(params) => <TextField sx={{ width: '100%' }} {...params} />}
+                        />
+                    </LocalizationProvider>
+                </Grid>
+                <Grid item xs={12} sm={6} >
+                    <LocalizationProvider dateAdapter={DateAdapter}>
+                        <DesktopDatePicker
+                            label={t("Date to")}
+                            inputFormat="MM/dd/yyyy"
+                            value={dateTo}
+                            onChange={handleDateToChange}
+                            renderInput={(params) => <TextField sx={{ width: '100%' }} {...params} />}
+                        />
+                    </LocalizationProvider>
+                </Grid>
+            <Grid item xs={12} sm={6}>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <TimePicker
+                        label={t('open time')}
+                        value={openTime}
+                        onChange={openTimeChangeHandler}
+                        renderInput={(params) => <TextField {...params} />}
+                    />
+                </LocalizationProvider>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <TimePicker
+                        label={t('close time')}
+                        value={closeTime}
+                        onChange={closeTimeChangeHandler}
+                        renderInput={(params) => <TextField {...params} />}
+                    />
+                </LocalizationProvider>
+            </Grid>
+            <Grid item xs={12}>
+                <FormControl sx={{ width: '100%' }} component="fieldset" variant="standard">
+                    <FormLabel component="legend">{t('applied days')}</FormLabel>
+                    <FormGroup sx={{ flexDirection: 'row', textTransform: 'capitalize' } }>
+                        <FormControlLabel
+                            control={
+                                <Checkbox checked={saturday} onChange={handleDaysChange} name="saturday" />
+                            }
+                            label={t("saturday")}
+                        />
+                        <FormControlLabel
+                            control={
+                                <Checkbox checked={sunday} onChange={handleDaysChange} name="sunday" />
+                            }
+                            label={t("sunday")}
+                        />
+                        <FormControlLabel
+                            control={
+                                <Checkbox checked={monday} onChange={handleDaysChange} name="monday" />
+                            }
+                            label={t("monday")}
+                        />
+                        <FormControlLabel
+                            control={
+                                <Checkbox checked={tuesday} onChange={handleDaysChange} name="tuesday" />
+                            }
+                            label={t("tuesday")}
+                        />
+                        <FormControlLabel
+                            control={
+                                <Checkbox checked={wednesday} onChange={handleDaysChange} name="wednesday" />
+                            }
+                            label={t("wednesday")}
+                        />
+                        <FormControlLabel
+                            control={
+                                <Checkbox checked={thursday} onChange={handleDaysChange} name="thursday" />
+                            }
+                            label={t('thursday')}
+                        />
+                        <FormControlLabel
+                            control={
+                                <Checkbox checked={friday} onChange={handleDaysChange} name="friday" />
+                            }
+                            label={t("friday")}
+                        />
+                    </FormGroup>
+                </FormControl>
+            </Grid>
+            <Grid item xs={12}>
+                <EditorWrapper>
+                    <Editor
+                        editorState={editorState}
+                        wrapperClassName="demo-wrapper"
+                        editorClassName="demo-editor"
+                        onEditorStateChange={onEditorChange}
+                        textAlignment={themeCtx.direction === 'rtl' ? 'right' : 'left'}
+                    />
+                </EditorWrapper>
+                {dealDescriptionError && <ValidationMessage notExist>{t(`Please add Description`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12}>
                 <ImageUploading
