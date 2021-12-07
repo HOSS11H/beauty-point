@@ -31,7 +31,7 @@ const SearchFilters = (props) => {
 
     const [type, setType] = useState('services');
     const [category, setCategory] = useState('all');
-    const [location, setLocation] = useState('all');
+    const [location, setLocation] = useState('');
     const [search, setSearch] = useState('');
 
     useEffect(() => {
@@ -42,8 +42,6 @@ const SearchFilters = (props) => {
             fetchCategoriesHandler(lang);
         }
     }, [fetchedLocations, fetchedCategories, fetchCategoriesHandler, fetchLocationsHandler, lang])
-
-    console.log(type, category, location, search)
 
     const handleTypeChange = (event) => {
         setType(event.target.value);
@@ -91,7 +89,6 @@ const SearchFilters = (props) => {
                             label={t("Location")}
                             onChange={handleLocationChange}
                         >
-                            <MenuItem value='all'>{t('ALL')}</MenuItem>
                             {
                                 fetchedLocations.map(location => {
                                     return <MenuItem key={location.id} value={location.id}>{location.name}</MenuItem>
@@ -100,25 +97,29 @@ const SearchFilters = (props) => {
                         </Select>
                     </FormControl>
                 </Grid>
-                <Grid item xs={12} sm={6}>
-                    <FormControl fullWidth>
-                        <InputLabel id="item-category">{t('Category')}</InputLabel>
-                        <Select
-                            labelId="item-category"
-                            id="item-category-select"
-                            value={category}
-                            label={t('"Category"')}
-                            onChange={handleCategoryChange}
-                        >
-                            <MenuItem value='all'>{t('ALL')}</MenuItem>
-                            {
-                                fetchedCategories.map(category => {
-                                    return <MenuItem key={category.id} value={category.id}>{category.name}</MenuItem>
-                                })
-                            }
-                        </Select>
-                    </FormControl>
-                </Grid>
+                {
+                    type === 'services' && (
+                        <Grid item xs={12} sm={6}>
+                            <FormControl fullWidth>
+                                <InputLabel id="item-category">{t('Category')}</InputLabel>
+                                <Select
+                                    labelId="item-category"
+                                    id="item-category-select"
+                                    value={category}
+                                    label={t('"Category"')}
+                                    onChange={handleCategoryChange}
+                                >
+                                    <MenuItem value='all'>{t('ALL')}</MenuItem>
+                                    {
+                                        fetchedCategories.map(category => {
+                                            return <MenuItem key={category.id} value={category.id}>{category.name}</MenuItem>
+                                        })
+                                    }
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                    )
+                }
                 <Grid item xs={12} sm={6}>
                     <CustomTextField id="item-search" label={t('search')} variant="outlined" value={search} onChange={handleSearchChange} />
                 </Grid>

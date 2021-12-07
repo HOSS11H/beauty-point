@@ -3,6 +3,7 @@ export {
     fetchTotalBookings,
     deleteBooking,
     updateBooking,
+    createBooking,
 } from './bookings'
 export {
     fetchServices,

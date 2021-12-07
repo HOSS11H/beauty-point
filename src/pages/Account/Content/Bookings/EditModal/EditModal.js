@@ -152,7 +152,7 @@ const MenuProps = {
 const cartReducer = (state, action) => {
     switch (action.type) {
         case 'ADD_TO_SERVICES':
-            const serviceIndex = state.services.findIndex(service => service.id === action.payload.id);
+            const serviceIndex = state.services.findIndex(service => service.item.id === action.payload.id);
             const updatedServices = [...state.services]
             if (serviceIndex === -1) {
                 updatedServices.push(action.payload)
@@ -192,7 +192,7 @@ const cartReducer = (state, action) => {
                 services: decreasedServices,
             })
         case 'ADD_TO_PRODUCTS':
-            const productIndex = state.products.findIndex(product => product.id === action.payload.id);
+            const productIndex = state.products.findIndex(product => product.item.id === action.payload.id);
             const updatedProducts = [...state.products]
             if (productIndex === -1) {
                 updatedProducts.push(action.payload)
@@ -269,6 +269,7 @@ const EditModal = (props) => {
         }
         return bookingDataServices;
     })
+    console.log(splittedItems)
 
     const [cartData, dispatch] = useReducer(cartReducer, {
         services: bookingDataServices,

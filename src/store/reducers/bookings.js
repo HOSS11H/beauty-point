@@ -15,6 +15,9 @@ const intialState = {
     updatingBooking: false,
     updatingBookingSuccess: false,
     updatingBookingMessage: null,
+    creatingBooking: false,
+    creatingBookingSuccess: false,
+    creatingBookingMessage: null,
 };
 
 const reducer = (state = intialState, action) => {
@@ -87,6 +90,24 @@ const reducer = (state = intialState, action) => {
                 updatingBooking: false,
                 updatingBookingSuccess: false,
                 updatingBookingMessage: action.message,
+            })
+        case (actionTypes.CREATE_BOOKING_START):
+            return updateObject(state, {
+                creatingBooking: true,
+                creatingBookingSuccess: false,
+                creatingBookingMessage: null,
+            })
+        case (actionTypes.CREATE_BOOKING_SUCCESS):
+            return updateObject(state, {
+                creatingBooking: false,
+                creatingBookingSuccess: true,
+                creatingBookingMessage: action.message,
+            })
+        case (actionTypes.CREATE_BOOKING_FAILED):
+            return updateObject(state, {
+                creatingBooking: false,
+                creatingBookingSuccess: false,
+                creatingBookingMessage: action.message,
             })
         case (actionTypes.FETCH_TOTAL_BOOKINGS_START):
             return updateObject(state, {

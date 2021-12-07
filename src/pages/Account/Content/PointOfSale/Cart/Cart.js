@@ -113,6 +113,22 @@ const PriceCalculation = styled.div`
         color: ${({ theme }) => theme.palette.text.primary};
     }
 `
+const AmountCalculator = styled.div`
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+    p {
+        font-size: 16px;
+        line-height:1.5;
+        text-transform: uppercase;
+        font-weight: 600;
+        margin-bottom: 10px;
+        color: ${({ theme }) => theme.palette.text.primary};
+        &:last-child {
+            margin-bottom: 0px;
+        }
+    }
+`
 const CardActions = styled.div`
     width: 100%;
     display: flex;
@@ -164,8 +180,15 @@ const Cart = props => {
     const [coupon, setCoupon] = useState('')
     const [couponExists, setCouponExists] = useState(false)
     const [couponData, setCouponData] = useState({ amount: 0 })
-
+    
     const [discount, setDiscount] = useState(0)
+    
+    const [paymentGateway, setPaymentGateway] = useState('')
+    const [paymentGatewayError, setPaymentGatewayError] = useState(false)
+
+    const [paidAmount, setPaidAmount] = useState(0)
+    const [cashToReturn, setCashToReturn] = useState(0)
+    const [cashRemainig, setCashRemainig] = useState(0)
 
     const [addCustomerModalOpened, setAddCustomerModalOpened] = useState(false);
 
@@ -191,7 +214,6 @@ const Cart = props => {
             return;
         }
     }, [cartData, couponData, discount])
-
 
     // Add Customer Modal
     const addCustomerModalOpenHandler = useCallback((id) => {
@@ -219,6 +241,11 @@ const Cart = props => {
         setCustomerData(updatedCustomerData);
     };
 
+    const paymentGatewayChangeHandler = (event) => {
+        setPaymentGateway(event.target.value);
+        setPaymentGatewayError(false)
+    }
+
 
     const couponChangeHandler = (event) => {
         setCoupon(event.target.value)
@@ -231,13 +258,25 @@ const Cart = props => {
             setCouponExists(false)
         }
     }
+
+    const paidAmountChangeHandler = (event) => {
+        setPaidAmount(event.target.value)
+        if ( event.target.value > totalPrice) {
+            setCashToReturn(event.target.value - totalPrice)
+            setCashRemainig(0)
+        } else if ( event.target.value < totalPrice) {
+            setCashToReturn(0)
+            setCashRemainig(totalPrice - event.target.value)
+        }
+    }
+
     const discountChangeHandler = (event) => {
         if (event.target.value >= 0) {
             setDiscount(event.target.value)
         }
     }
 
-    const resetCartHandler = () => {
+    const resetCartHandler = useCallback(() => {
         setCustomer('');
         setCustomerData(null);
         setCustomerDataError(false)
@@ -245,8 +284,13 @@ const Cart = props => {
         setCoupon('')
         setCouponData({ amount: 0 })
         setCouponExists(false)
+        setPaymentGateway('')
+        setPaidAmount(0)
+        setCashToReturn(0)
+        setCashRemainig(0)
         resetCart();
-    }
+    }, [resetCart])
+
     const purchaseCartHandler = (e) => {
         e.preventDefault();
         if (cartData.services.length === 0 && cartData.products.length === 0 && cartData.deals.length === 0) {
@@ -254,6 +298,9 @@ const Cart = props => {
             return;
         } else if (!customerData) {
             setCustomerDataError(true)
+            return;
+        } else if (!paymentGateway) {
+            setPaymentGatewayError(true)
             return;
         }
         const data = {
@@ -264,9 +311,9 @@ const Cart = props => {
             totalTaxes: totalTaxes,
             couponId: couponData.id,
             discount: discount,
+            payment_gateway: paymentGateway,
         }
         purchase(data);
-        console.log(data)
         resetCartHandler();
     }
 
@@ -298,7 +345,7 @@ const Cart = props => {
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <ActionsWrapper>
-                        <FormControl fullWidth sx={{minWidth: '200px' }} >
+                        <FormControl fullWidth sx={{ minWidth: '200px' }} >
                             <InputLabel id="item-customer">{t('Customer')}</InputLabel>
                             <Select
                                 labelId="item-customer"
@@ -343,7 +390,7 @@ const Cart = props => {
                     {cartData.services.length > 0 && (
                         <TableContainer component={Paper} sx={{ my: 2 }}>
                             <Table aria-label="services table">
-                                <SharedTableHead name= 'services' />
+                                <SharedTableHead name='services' />
                                 <TableBody>
                                     {cartData.services.map((row) => (
                                         <CartItem type='services' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} />
@@ -362,7 +409,7 @@ const Cart = props => {
                     {cartData.products.length > 0 && (
                         <TableContainer component={Paper} sx={{ my: 2 }}>
                             <Table aria-label="products table">
-                                <SharedTableHead name= 'products' />
+                                <SharedTableHead name='products' />
                                 <TableBody>
                                     {cartData.products.map((row) => (
                                         <CartItem type='products' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} />
@@ -381,7 +428,7 @@ const Cart = props => {
                     {cartData.deals.length > 0 && (
                         <TableContainer component={Paper} sx={{ my: 2 }}>
                             <Table aria-label="deals table">
-                                <SharedTableHead name= 'deals' />
+                                <SharedTableHead name='deals' />
                                 <TableBody>
                                     {cartData.deals.map((row) => (
                                         <CartItem type='deals' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} />
@@ -394,7 +441,7 @@ const Cart = props => {
                         <ValidationMessage notExist>{t('Please Add Something')}</ValidationMessage>
                     )}
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} sm={6} >
                     <TextField
                         type="number"
                         label={t('Discount')}
@@ -406,6 +453,23 @@ const Cart = props => {
                             startAdornment: <InputAdornment position="start">%</InputAdornment>,
                         }}
                     />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <FormControl sx={{ width: '100%' }}>
+                        <InputLabel id="payment-label">{t('payment method')}</InputLabel>
+                        <Select
+                            labelId="payment-label"
+                            value={paymentGateway}
+                            onChange={paymentGatewayChangeHandler}
+                            inputProps={{ 'aria-label': 'Without label' }}
+                        >
+                            <MenuItem value='cash'>{t('cash')}</MenuItem>
+                            <MenuItem value='card'>{t('card')}</MenuItem>
+                        </Select>
+                    </FormControl>
+                    {paymentGatewayError && (
+                        <ValidationMessage notExist>{t('Please choose method')}</ValidationMessage>
+                    )}
                 </Grid>
                 <Grid item xs={12}>
                     <CouponWrapper>
@@ -433,6 +497,29 @@ const Cart = props => {
                     </PriceCalculation>
                 </Grid>
                 <Grid item xs={12}>
+                    <TextField
+                        fullWidth
+                        type="number"
+                        label={t('paid amount')}
+                        id="paid-amount"
+                        sx={{ flexGrow: '1' }}
+                        value={paidAmount}
+                        onChange={paidAmountChangeHandler}
+                    />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <AmountCalculator>
+                        <p>{t('cash remaing')}</p>
+                        <p>{formatCurrency(cashRemainig)}</p>
+                    </AmountCalculator>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <AmountCalculator>
+                        <p>{t('cash to return')}</p>
+                        <p>{formatCurrency(cashToReturn)}</p>
+                    </AmountCalculator>
+                </Grid>
+                <Grid item xs={12}>
                     <CardActions>
                         <ButtonText variant='text' onClick={resetCartHandler}>{t('reset cart')}</ButtonText>
                         <ButtonConfirm variant='contained' onClick={purchaseCartHandler}>{t('purchase')}</ButtonConfirm>
@@ -450,6 +537,7 @@ const mapStateToProps = (state) => {
     return {
         fetchedCustomers: state.customers.customers,
         fetchedCoupons: state.coupons.coupons,
+        creatingBookingSuccess: state.bookings.creatingBookingSuccess,
     }
 }
 

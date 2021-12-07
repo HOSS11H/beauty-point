@@ -112,6 +112,37 @@ export const updateBooking = ( data ) => {
         }
 }
 
+export const createBookingStart = (  ) => {
+    return {
+        type: actionTypes.CREATE_BOOKING_START,
+    }
+}
+export const createBookingSuccess = ( message ) => {
+    return {
+        type: actionTypes.CREATE_BOOKING_SUCCESS,
+        message: message,
+    }
+}
+export const createBookingFailed = ( message ) => {
+    return {
+        type: actionTypes.CREATE_BOOKING_FAILED,
+        message: message,
+    }
+}
+
+export const createBooking = ( data ) => {
+    return dispatch => {
+        dispatch( createBookingStart( ) )
+        axios.post(`/vendors/bookings`, data)
+            .then( response => {
+                dispatch( createBookingSuccess( response.data  ) );
+            })
+            .catch( err => {
+                dispatch( createBookingFailed( err.message  ) )
+            } )
+        }
+}
+
 export const fetchTotalBookingsStart = (  ) => {
     return {
         type: actionTypes.FETCH_TOTAL_BOOKINGS_START,

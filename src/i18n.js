@@ -151,6 +151,11 @@ const resources = {
             'approved': 'موافق',
             'canceled': 'ملغي',
             'in progress': 'قيد التنفيذ',
+           'payment method': 'طريقة الدفع',
+            'Please choose method': 'يرجى اختيار طريقة',
+            'cash remaing': 'النقدية المتبقية',
+            'cash to return': 'النقدية للإرجاع',
+            'paid amount': 'المبلغ المدفوع',
             'settings': 'الأعدادات'
         }
     }

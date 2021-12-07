@@ -1,6 +1,5 @@
 import { Grid } from "@mui/material";
 import { useState, useContext, useEffect, useCallback, Fragment } from "react";
-import { useTranslation } from 'react-i18next';
 import { connect } from "react-redux";
 import BookingView from "../../../../components/UI/Dashboard/BookingView/BookingView";
 import { fetchBookings, deleteBooking, updateBooking } from "../../../../store/actions/index";
@@ -9,11 +8,9 @@ import ViewModal from "./ViewModal/ViewModal";
 import EditModal from "./EditModal/EditModal";
 
 
-function Services(props) {
+function Bookings(props) {
 
     const { fetchedBookings, fetchBookingsHandler, fetchingBookings, deleteBookingHandler, updateBookingHandler } = props;
-
-    const { t } = useTranslation()
 
     const themeCtx = useContext(ThemeContext)
 
@@ -50,7 +47,7 @@ function Services(props) {
         setEditModalOpened(false);
         setSelectedBookingId(null);
         updateBookingHandler(data);
-    }, [])
+    }, [updateBookingHandler])
 
     // View Modal
     const viewModalOpenHandler = useCallback((id) => {
@@ -132,4 +129,4 @@ const mapDispatchToProps = dispatch => {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Services);
+export default connect(mapStateToProps, mapDispatchToProps)(Bookings);
