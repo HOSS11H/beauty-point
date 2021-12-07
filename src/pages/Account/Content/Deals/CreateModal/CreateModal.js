@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useContext } from 'react';
+import { useState, useEffect, useCallback, useContext, useReducer } from 'react';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import ThemeContext from '../../../../../store/theme-context'
@@ -26,11 +26,17 @@ import { EditorState, convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import { connect } from 'react-redux';
 import { fetchLocations, fetchServicesByLocation } from '../../../../../store/actions/index';
-import { formatCurrency } from '../../../../../shared/utility';
+import { formatCurrency, updateObject } from '../../../../../shared/utility';
 import ValidationMessage from '../../../../../components/UI/ValidationMessage/ValidationMessage';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableContainer from '@mui/material/TableContainer';
+import CartItem from './CartItem/CartItem';
+import SharedTableHead from './SharedTableHead/SharedTableHead';
+import Paper from '@mui/material/Paper';
 
 
 const CustomTextField = styled(TextField)`
@@ -147,6 +153,49 @@ const MenuProps = {
     },
 };
 
+const cartReducer = (state, action) => {
+    switch (action.type) {
+        case 'ADD_TO_SERVICES':
+            return updateObject(state, {
+                services: action.payload,
+            })
+        case 'REMOVE_SERVICE':
+            const filteredServices = state.services.filter(service => service.id !== action.payload)
+            return updateObject(state, {
+                services: filteredServices,
+            })
+        case 'INCREASE_SERVICE':
+            const increasedServiceIndex = state.services.findIndex(service => service.id === action.payload);
+            const increasedService = { ...state.services[increasedServiceIndex] }
+            increasedService.quantity = increasedService.quantity + 1;
+            const increasedServices = [...state.services]
+            increasedServices[increasedServiceIndex] = increasedService
+            return updateObject(state, {
+                services: increasedServices,
+            })
+        case 'DECREASE_SERVICE':
+            const decreasedServiceIndex = state.services.findIndex(service => service.id === action.payload);
+            const decreasedService = { ...state.services[decreasedServiceIndex] }
+            const decreasedServices = [...state.services]
+            if (decreasedService.quantity === 1) {
+                decreasedServices.splice(decreasedServiceIndex, 1)
+            } else {
+                decreasedService.quantity = decreasedService.quantity - 1
+                decreasedServices[decreasedServiceIndex] = decreasedService
+            }
+            return updateObject(state, {
+                services: decreasedServices,
+            })
+        case 'RESET_CART':
+            const intialState = {
+                services: [],
+            }
+            return updateObject(state, intialState)
+        default:
+            return state;
+    }
+}
+
 const CreateModal = (props) => {
 
     const { show, heading, confirmText, onConfirm, onClose, fetchedLocations, fetchLocationsHandler, fetchedServices, fetchServicesHandler } = props;
@@ -155,6 +204,10 @@ const CreateModal = (props) => {
 
     const themeCtx = useContext(ThemeContext)
     const { lang } = themeCtx;
+
+    const [cartData, dispatch] = useReducer(cartReducer, {
+        services: [],
+    });
 
     const [dealName, setDealName] = useState('');
     const [dealNameError, setDealNameError] = useState(false);
@@ -208,6 +261,43 @@ const CreateModal = (props) => {
     useEffect(() => {
         fetchLocationsHandler(lang);
     }, [fetchLocationsHandler, lang])
+
+    const addToCartHandler = useCallback((type, itemData) => {
+        dispatch({
+            type: 'ADD_TO_SERVICES',
+            payload: itemData
+        })
+    }, [])
+
+    const removeFromCartHandler = useCallback((itemId) => {
+        setSelectedServices(selectedServices.filter(service => service !== itemId))
+        dispatch({
+            type: 'REMOVE_SERVICE',
+            payload: itemId
+        })
+    }, [selectedServices])
+
+    const increaseItemHandler = useCallback((itemId) => {
+        dispatch({
+            type: 'INCREASE_SERVICE',
+            payload: itemId
+        })
+    }, [])
+    const decreaseItemHandler = useCallback((itemId) => {
+        const decreasedServiceIndex = cartData.services.findIndex(service => service.id === itemId);
+        if (cartData.services[decreasedServiceIndex].quantity === 1) {
+            setSelectedServices(selectedServices.filter(service => service !== itemId))
+        }
+        dispatch({
+            type: 'DECREASE_SERVICE',
+            payload: itemId
+        })
+    }, [cartData.services, selectedServices])
+    const resetCartHandler = useCallback((  ) => {
+        dispatch({
+            type: 'RESET_CART',
+        })
+    }, [])
 
 
     const dealNameChangeHandler = (event) => {
@@ -268,6 +358,26 @@ const CreateModal = (props) => {
             // On autofill we get a the stringified value.
             typeof value === 'string' ? value.split(',') : value,
         );
+        let chosenServices = [];
+        value.forEach(serviceId => {
+            const selectedServiceIndex = fetchedServices.data.findIndex(service => service.id === serviceId);
+            const selectedServiceData = { ...fetchedServices.data[selectedServiceIndex] }
+            let discountVal;
+            if (selectedServiceData.discount_type === 'percent') {
+                discountVal = (selectedServiceData.price * (selectedServiceData.discount / 100));
+            } else if (selectedServiceData.discount_type === 'fixed') {
+                discountVal = selectedServiceData.discount;
+            }
+            const serviceData = {
+                id: selectedServiceData.id,
+                quantity: 1,
+                name: selectedServiceData.name,
+                price: selectedServiceData.price,
+                discount: discountVal,
+            }
+            chosenServices.push(serviceData);
+        })
+        addToCartHandler('services', chosenServices)
     };
 
     const handleLocationChange = (event) => {
@@ -412,6 +522,20 @@ const CreateModal = (props) => {
                         ))}
                     </Select>
                 </FormControl>
+            </Grid>
+            <Grid item xs={12} >
+                {cartData.services.length > 0 && (
+                    <TableContainer component={Paper} sx={{ my: 2 }}>
+                        <Table aria-label="services table">
+                            <SharedTableHead name='services' />
+                            <TableBody>
+                                {cartData.services.map((row) => (
+                                    <CartItem type='services' key={row.id} row={row} remove={removeFromCartHandler} increase={increaseItemHandler} decrease={decreaseItemHandler} />
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                )}
             </Grid>
 
 
