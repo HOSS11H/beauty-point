@@ -162,6 +162,14 @@ const resources = {
             'Tabular Report': 'تقرير جدولي',
             'total amount': 'المبلغ الإجمالي',
             'all': 'الكل',
+            'Business Name': 'اسم الشركة',
+            'Business Email': 'البريد الالكتروني',
+            'Business Phone': 'رقم الهاتف',
+            'Tax Record': 'الرقم الضريبي',
+            'Address': 'العنوان',
+            'Invoice Notes': 'ملاحظات الفاتورة',
+            'Save': 'حفظ',
+            'Saved Successfuly': 'تم الحفظ بنجاح'
         }
     }
 };
