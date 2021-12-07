@@ -151,6 +151,7 @@ const resources = {
             'approved': 'موافق',
             'canceled': 'ملغي',
             'in progress': 'قيد التنفيذ',
+            'settings': 'الأعدادات'
         }
     }
 };

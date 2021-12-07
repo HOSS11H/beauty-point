@@ -13,6 +13,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import PersonIcon from '@mui/icons-material/Person';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import BookIcon from '@mui/icons-material/Book';
+import SettingsIcon from '@mui/icons-material/Settings'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import ThemeContext from '../../../store/theme-context';
@@ -37,6 +38,7 @@ const categories = [
             { id: 'deals', name: 'deals', icon: <LocalOfferIcon /> },
             { id: 'point-of-sale', name: 'points of sales', icon: <AddShoppingCartIcon /> },
             { id: 'bookings', name: 'bookings', icon: <BookIcon /> },
+            { id: 'settings', name: 'settings', icon: <SettingsIcon /> },
         ],
     },
 ];
