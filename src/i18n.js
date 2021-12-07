@@ -156,7 +156,15 @@ const resources = {
             'cash remaing': 'النقدية المتبقية',
             'cash to return': 'النقدية للإرجاع',
             'paid amount': 'المبلغ المدفوع',
-            'settings': 'الأعدادات'
+            'settings': 'الأعدادات',
+            'Business Name': 'اسم الشركة',
+            'Business Email': 'البريد الالكتروني',
+            'Business Phone': 'رقم الهاتف',
+            'Tax Record': 'الرقم الضريبي',
+            'Address': 'العنوان',
+            'Invoice Notes': 'ملاحظات الفاتورة',
+            'Save': 'حفظ',
+            'Saved Successfuly': 'تم الحفظ بنجاح'
         }
     }
 };
