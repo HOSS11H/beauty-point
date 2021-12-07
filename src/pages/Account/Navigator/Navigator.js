@@ -19,6 +19,8 @@ import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import ThemeContext from '../../../store/theme-context';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
+import EventIcon from '@mui/icons-material/Event';
+import InsertChartIcon from '@mui/icons-material/InsertChart';
 
 import { useTranslation } from 'react-i18next';
 
@@ -38,6 +40,8 @@ const categories = [
             { id: 'deals', name: 'deals', icon: <LocalOfferIcon /> },
             { id: 'point-of-sale', name: 'points of sales', icon: <AddShoppingCartIcon /> },
             { id: 'bookings', name: 'bookings', icon: <BookIcon /> },
+            { id: 'booking-calendar', name: 'booking calendar', icon: <EventIcon /> },
+            { id: 'reports', name: 'reports', icon: <InsertChartIcon /> },
             { id: 'settings', name: 'settings', icon: <SettingsIcon /> },
         ],
     },

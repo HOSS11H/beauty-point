@@ -12,6 +12,7 @@ export {
     filterServices,
     updateService,
     createService,
+    fetchServicesByLocation
 } from './services'
 export {
     fetchProducts,
@@ -43,3 +44,7 @@ export {
 export {
     fetchEmployees,
 } from './employees'
+export {
+    fetchTabularReport,
+    filterTabularReport,
+} from './reports'
