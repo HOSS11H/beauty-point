@@ -12,6 +12,7 @@ export {
     filterServices,
     updateService,
     createService,
+    fetchServicesByLocation
 } from './services'
 export {
     fetchProducts,

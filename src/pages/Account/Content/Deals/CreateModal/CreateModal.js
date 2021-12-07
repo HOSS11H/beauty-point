@@ -25,9 +25,12 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { EditorState, convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import { connect } from 'react-redux';
-import { fetchLocations } from '../../../../../store/actions/index';
+import { fetchLocations, fetchServicesByLocation } from '../../../../../store/actions/index';
 import { formatCurrency } from '../../../../../shared/utility';
 import ValidationMessage from '../../../../../components/UI/ValidationMessage/ValidationMessage';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import Box from '@mui/material/Box';
+import Chip from '@mui/material/Chip';
 
 
 const CustomTextField = styled(TextField)`
@@ -134,11 +137,19 @@ const EditorWrapper = styled.div`
         left: 0%;
     }
 `
-
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+    PaperProps: {
+        style: {
+            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+        },
+    },
+};
 
 const CreateModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, fetchedLocations, fetchLocationsHandler,  } = props;
+    const { show, heading, confirmText, onConfirm, onClose, fetchedLocations, fetchLocationsHandler, fetchedServices, fetchServicesHandler } = props;
 
     const { t } = useTranslation();
 
@@ -147,23 +158,25 @@ const CreateModal = (props) => {
 
     const [dealName, setDealName] = useState('');
     const [dealNameError, setDealNameError] = useState(false);
-    
-    
-    
+
+    const [dealAppliedOn, setDealAppliedOn] = useState('location');
+
+    const [selectedServices, setSelectedServices] = useState([]);
+
     const [editorState, setEditorState] = useState(
         EditorState.createEmpty()
     )
     const [dealDescriptionError, setDealDescriptionError] = useState(false);
-        
+
     const [dealPrice, setDealPrice] = useState(0);
-    
+
     const [dealDiscount, setDealDiscount] = useState(0);
-    
+
     const [discountType, setDiscountType] = useState('percent');
-    
+
     const [priceAfterDiscount, setPriceAfterDiscount] = useState(0);
     const [dealPriceError, setDealPriceError] = useState(false);
-    
+
     const [dealQuantity, setDealQuantity] = useState(0);
     const [dealQuantityError, setDealQuantityError] = useState(false);
 
@@ -228,7 +241,7 @@ const CreateModal = (props) => {
         }
     }
     const dealDiscountChangeHandler = (event) => {
-        if (event.target.value >= 0 ) {
+        if (event.target.value >= 0) {
             setDealDiscount(event.target.value);
         }
     }
@@ -244,6 +257,18 @@ const CreateModal = (props) => {
     const dealStatusChangeHandler = (event) => {
         setDealStatus(event.target.value);
     }
+    const dealAppliedOnChangeHandler = (event) => {
+        setDealAppliedOn(event.target.value);
+    }
+    const handleServicesChange = (event) => {
+        const {
+            target: { value },
+        } = event;
+        setSelectedServices(
+            // On autofill we get a the stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+        );
+    };
 
     const handleLocationChange = (event) => {
         const {
@@ -254,13 +279,14 @@ const CreateModal = (props) => {
             typeof value === 'string' ? value.split(',') : value,
         );
         setDealLocationError(false);
+        fetchServicesHandler(lang, value);
     };
     const closeModalHandler = useCallback(() => {
         onClose();
     }, [onClose])
 
     const confirmCreateHandler = useCallback(() => {
-        if ( dealName.trim().length === 0) {
+        if (dealName.trim().length === 0) {
             setDealNameError(true);
             return;
         }
@@ -269,15 +295,15 @@ const CreateModal = (props) => {
             return;
         }
 
-        if ( dealPriceError)   { return; }
-        
+        if (dealPriceError) { return; }
+
         if (locationName === '') {
             setDealLocationError(true);
             return;
         }
-        if (+dealQuantity === 0) { 
+        if (+dealQuantity === 0) {
             setDealQuantityError(true);
-            return; 
+            return;
         }
         if (defaultImage === '') {
             setDefaultImageError(true);
@@ -320,6 +346,77 @@ const CreateModal = (props) => {
                 <CustomTextField id="deal-name" label={t('name')} variant="outlined" value={dealName} onChange={dealNameChangeHandler} />
                 {dealNameError && <ValidationMessage notExist>{t(`Please add name`)}</ValidationMessage>}
             </Grid>
+            <Grid item xs={12} sm={6}>
+                <FormControl sx={{ width: '100%' }}>
+                    <InputLabel id="applied-on-label">{t('applied on')}</InputLabel>
+                    <Select
+                        value={dealAppliedOn}
+                        onChange={dealAppliedOnChangeHandler}
+                        inputProps={{ 'aria-label': 'Without label' }}
+                        label={t('applied on')}
+                    >
+                        <MenuItem value='location'>{t('location')}</MenuItem>
+                    </Select>
+                </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+                <FormControl sx={{ width: '100%' }}>
+                    <InputLabel id="location-label">{t('your location')}</InputLabel>
+                    <Select
+                        value={locationName}
+                        onChange={handleLocationChange}
+                        inputProps={{ 'aria-label': 'Without label' }}
+                        label={t('your location')}
+                    >
+                        {fetchedLocations.map((location) => (
+                            <MenuItem
+                                key={location.id}
+                                value={location.id}
+                            >
+                                {location.name}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+                {dealLocationError && <ValidationMessage notExist>{t(`Please add Location`)}</ValidationMessage>}
+            </Grid>
+            <Grid item xs={12} sm={6} >
+                <FormControl sx={{ width: '100%' }}>
+                    <InputLabel id="services-label">{t('services')}</InputLabel>
+                    <Select
+                        labelId="services-label"
+                        id="select-multiple-services"
+                        multiple
+                        value={selectedServices}
+                        onChange={handleServicesChange}
+                        input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+                        renderValue={(selected) => (
+                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                {fetchedServices.data.length > 0 && selected.map((value) => {
+                                    const selected = fetchedServices.data.find(service => service.id === value);
+                                    return (
+                                        <Chip key={selected.id} label={selected.name} />
+                                    )
+                                })}
+                            </Box>
+                        )}
+                        MenuProps={MenuProps}
+                    >
+                        {fetchedServices.data.map((service) => (
+                            <MenuItem
+                                key={service.id}
+                                value={service.id}
+                            >
+                                {service.name}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+            </Grid>
+
+
+
+
             <Grid item xs={12} sm={6}>
                 <FormControl sx={{ width: '100%' }}>
                     <Select
@@ -376,6 +473,7 @@ const CreateModal = (props) => {
                         value={locationName}
                         onChange={handleLocationChange}
                         inputProps={{ 'aria-label': 'Without label' }}
+                        label={t('location')}
                     >
                         {fetchedLocations.map((location) => (
                             <MenuItem
@@ -465,12 +563,14 @@ const CreateModal = (props) => {
 const mapStateToProps = (state) => {
     return {
         fetchedLocations: state.locations.locations,
+        fetchedServices: state.services.services,
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
         fetchLocationsHandler: (lang) => dispatch(fetchLocations(lang)),
+        fetchServicesHandler: (lang, location) => dispatch(fetchServicesByLocation(lang, location)),
     }
 }
 

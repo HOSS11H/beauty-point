@@ -2,201 +2,217 @@ import * as actionTypes from './actionTypes';
 import axios from '../../utils/axios-instance';
 
 
-export const fetchServicesStart = (  ) => {
+export const fetchServicesStart = () => {
     return {
         type: actionTypes.FETCH_SERVICES_START,
     }
 }
-export const fetchServicesSuccess = ( servicesData ) => {
+export const fetchServicesSuccess = (servicesData) => {
     return {
         type: actionTypes.FETCH_SERVICES_SUCCESS,
         services: servicesData
     }
 }
-export const fetchServicesFailed = ( errorMessage ) => {
+export const fetchServicesFailed = (errorMessage) => {
     return {
         type: actionTypes.FETCH_SERVICES_FAILED,
         error: errorMessage,
     }
 }
-export const fetchServices = ( language, page, perPage, orderBy, orderDir ) => {
+export const fetchServices = (language, page, perPage, orderBy, orderDir) => {
     return dispatch => {
-        dispatch( fetchServicesStart( ) )
-        axios.get(`/vendors/services?page=${page + 1}&per_page=${perPage}&order_by=${orderBy}&order_dir=${orderDir}&include[]=category&include[]=location&include[]=users&include[]=bookingItems&include[]=company`, { 
+        dispatch(fetchServicesStart())
+        axios.get(`/vendors/services?page=${page + 1}&per_page=${perPage}&order_by=${orderBy}&order_dir=${orderDir}&include[]=category&include[]=location&include[]=users&include[]=bookingItems&include[]=company`, {
             headers: {
                 'Accept-Language': language
             }
-        }).then( response => {
-                const servicesData = response.data.data;
-                const convertedServicesData = servicesData.map((service) => {
-                    let formattedImages = []
-                    if (typeof service.images !== 'string') {
-                        service.images.map( (image, index) => {
-                            let imageUrl = {
-                                'data_url' : `https://testbeauty.beautypoint.sa/user-uploads/service/${service.id}/${image}`,
-                            }
-                            formattedImages.push(imageUrl)
-                            return formattedImages;
-                        })
-                    } else if ( typeof service.images === 'string' ) {
+        }).then(response => {
+            const servicesData = response.data.data;
+            const convertedServicesData = servicesData.map((service) => {
+                let formattedImages = []
+                if (typeof service.images !== 'string') {
+                    service.images.map((image, index) => {
                         let imageUrl = {
-                            'data_url' : `${service.images}`,
+                            'data_url': `https://testbeauty.beautypoint.sa/user-uploads/service/${service.id}/${image}`,
                         }
                         formattedImages.push(imageUrl)
+                        return formattedImages;
+                    })
+                } else if (typeof service.images === 'string') {
+                    let imageUrl = {
+                        'data_url': `${service.images}`,
                     }
-                    return {
-                        ...service,
-                        images: formattedImages
-                    };
-                })
-                dispatch( fetchServicesSuccess( {...response.data, data: convertedServicesData}  ) );
+                    formattedImages.push(imageUrl)
+                }
+                return {
+                    ...service,
+                    images: formattedImages
+                };
             })
-            .catch( err => {
-                dispatch( fetchServicesFailed( err.message  ) )
-            } )
-        }
+            dispatch(fetchServicesSuccess({ ...response.data, data: convertedServicesData }));
+        })
+            .catch(err => {
+                dispatch(fetchServicesFailed(err.message))
+            })
+    }
 }
 
-export const deleteServiceStart = (  ) => {
+export const deleteServiceStart = () => {
     return {
         type: actionTypes.DELETE_SERVICE_START,
     }
 }
-export const deleteServiceSuccess = ( message, deletedServiceId ) => {
+export const deleteServiceSuccess = (message, deletedServiceId) => {
     return {
         type: actionTypes.DELETE_SERVICE_SUCCESS,
         message: message,
         serviceId: deletedServiceId,
     }
 }
-export const deleteServiceFailed = ( message ) => {
+export const deleteServiceFailed = (message) => {
     return {
         type: actionTypes.DELETE_SERVICE_FAILED,
         message: message,
     }
 }
 
-export const deleteService = (id ) => {
+export const deleteService = (id) => {
     return dispatch => {
-        dispatch( deleteServiceStart( ) )
+        dispatch(deleteServiceStart())
         axios.delete(`/vendors/services/${id}`)
-            .then( response => {
-                dispatch( deleteServiceSuccess( response.data , id  ) );
+            .then(response => {
+                dispatch(deleteServiceSuccess(response.data, id));
             })
-            .catch( err => {
-                dispatch( deleteServiceFailed( err.message  ) )
-            } )
-        }
+            .catch(err => {
+                dispatch(deleteServiceFailed(err.message))
+            })
+    }
 }
-export const updateServiceStart = (  ) => {
+export const updateServiceStart = () => {
     return {
         type: actionTypes.UPDATE_SERVICE_START,
     }
 }
-export const updateServiceSuccess = ( message, updatedServiceData ) => {
+export const updateServiceSuccess = (message, updatedServiceData) => {
     return {
         type: actionTypes.UPDATE_SERVICE_SUCCESS,
         message: message,
         serviceData: updatedServiceData,
     }
 }
-export const updateServiceFailed = ( message ) => {
+export const updateServiceFailed = (message) => {
     return {
         type: actionTypes.UPDATE_SERVICE_FAILED,
         message: message,
     }
 }
 
-export const updateService = ( data ) => {
+export const updateService = (data) => {
     return dispatch => {
-        dispatch( updateServiceStart( ) )
+        dispatch(updateServiceStart())
         axios.put(`/vendors/services/${data.id}`, data)
-            .then( response => {
-                dispatch( updateServiceSuccess( response.data, data ) );
+            .then(response => {
+                dispatch(updateServiceSuccess(response.data, data));
             })
-            .catch( err => {
-                dispatch( updateServiceFailed( err.message  ) )
-            } )
-        }
+            .catch(err => {
+                dispatch(updateServiceFailed(err.message))
+            })
+    }
 }
-export const createServiceStart = (  ) => {
+export const createServiceStart = () => {
     return {
         type: actionTypes.CREATE_SERVICE_START,
     }
 }
-export const createServiceSuccess = ( message, createdServiceData ) => {
+export const createServiceSuccess = (message, createdServiceData) => {
     return {
         type: actionTypes.CREATE_SERVICE_SUCCESS,
         message: message,
         serviceData: createdServiceData,
     }
 }
-export const createServiceFailed = ( message ) => {
+export const createServiceFailed = (message) => {
     return {
         type: actionTypes.CREATE_SERVICE_FAILED,
         message: message,
     }
 }
 
-export const createService = ( data ) => {
+export const createService = (data) => {
     return dispatch => {
-        dispatch( createServiceStart( ) )
+        dispatch(createServiceStart())
         axios.post(`/vendors/services`, data)
-            .then( response => {
-                dispatch( createServiceSuccess( null , {...data,  ...response.data } ) );
+            .then(response => {
+                dispatch(createServiceSuccess(null, { ...data, ...response.data }));
             })
-            .catch( err => {
-                dispatch( createServiceFailed( err.message  ) )
-            } )
-        }
+            .catch(err => {
+                dispatch(createServiceFailed(err.message))
+            })
+    }
 }
 
 
-export const searchServicesStart = (  ) => {
+export const searchServicesStart = () => {
     return {
         type: actionTypes.SEARCH_SERVICES_START,
     }
 }
-export const searchServicesSuccess = ( servicesData ) => {
+export const searchServicesSuccess = (servicesData) => {
     return {
         type: actionTypes.SEARCH_SERVICES_SUCCESS,
         services: servicesData
     }
 }
-export const searchServicesFailed = ( errorMessage ) => {
+export const searchServicesFailed = (errorMessage) => {
     return {
         type: actionTypes.SEARCH_SERVICES_FAILED,
         error: errorMessage,
     }
 }
-export const searchServices = ( language , word ) => {
+export const searchServices = (language, word) => {
     return dispatch => {
-        dispatch( searchServicesStart( ) )
-        axios.get(`/vendors/services?term=${word}&per_page=15&include[]=category&include[]=location&include[]=users&include[]=bookingItems&include[]=company`, { 
+        dispatch(searchServicesStart())
+        axios.get(`/vendors/services?term=${word}&per_page=15&include[]=category&include[]=location&include[]=users&include[]=bookingItems&include[]=company`, {
             headers: {
                 'Accept-Language': language
             }
-        }).then( response => {
-                dispatch( searchServicesSuccess( response.data  ) );
+        }).then(response => {
+            dispatch(searchServicesSuccess(response.data));
+        })
+            .catch(err => {
+                dispatch(searchServicesFailed(err.message))
             })
-            .catch( err => {
-                dispatch( searchServicesFailed( err.message  ) )
-            } )
-        }
+    }
 }
 
-export const filterServices = ( language, type, category , location, search ) => {
+export const filterServices = (language, type, category, location, search) => {
     return dispatch => {
-        dispatch( fetchServicesStart( ) )
-        axios.get(`/vendors/${type}?per_page=all&term=${search}&location_id=${location}&category_id=${category}&include[]=category&include[]=location&include[]=users&include[]=bookingItems&include[]=company`, { 
+        dispatch(fetchServicesStart())
+        axios.get(`/vendors/${type}?per_page=all&term=${search}&location_id=${location}&category_id=${category}&include[]=category&include[]=location&include[]=users&include[]=bookingItems&include[]=company`, {
             headers: {
                 'Accept-Language': language
             }
-        }).then( response => {
-                dispatch( fetchServicesSuccess( response.data  ) );
+        }).then(response => {
+            dispatch(fetchServicesSuccess(response.data));
+        })
+            .catch(err => {
+                dispatch(fetchServicesFailed(err.message))
             })
-            .catch( err => {
-                dispatch( fetchServicesFailed( err.message  ) )
-            } )
-        }
+    }
+}
+
+export const fetchServicesByLocation = (language, location) => {
+    return dispatch => {
+        dispatch(fetchServicesStart())
+        axios.get(`/vendors/services?location_id=${location}`, {
+            headers: {
+                'Accept-Language': language
+            }
+        }).then(response => {
+            dispatch(fetchServicesSuccess(response.data));
+        })
+            .catch(err => {
+                dispatch(fetchServicesFailed(err.message))
+            })
+    }
 }
