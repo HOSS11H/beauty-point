@@ -11,34 +11,34 @@ import { TableHeading } from '../../../../../../../components/UI/Dashboard/Table
 
 const headCells = [
     {
-        id: 'image',
-        numeric: false,
-        disablePadding: false,
-        label: 'image',
-    },
-    {
         id: 'name',
         numeric: false,
         disablePadding: false,
         label: 'name',
     },
     {
-        id: 'location',
+        id: 'date',
         numeric: false,
         disablePadding: false,
-        label: 'location',
+        label: 'booking date',
     },
     {
-        id: 'price',
+        id: 'time',
         numeric: false,
         disablePadding: false,
-        label: 'price',
+        label: 'booking time',
     },
     {
-        id: 'discountPrice',
+        id: 'item',
         numeric: false,
         disablePadding: false,
-        label: 'price after discount',
+        label: 'item',
+    },
+    {
+        id: 'employee',
+        numeric: false,
+        disablePadding: false,
+        label: 'employee',
     },
     {
         id: 'status',
@@ -47,10 +47,16 @@ const headCells = [
         label: 'status',
     },
     {
-        id: 'quantity',
+        id: 'taxes',
         numeric: false,
         disablePadding: false,
-        label: 'quantity',
+        label: 'total taxes',
+    },
+    {
+        id: 'total',
+        numeric: false,
+        disablePadding: false,
+        label: 'total amount',
     },
 ];
 

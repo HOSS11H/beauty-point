@@ -21,7 +21,7 @@ const reducer = ( state = intialState, action ) => {
             return updateObject( state, {
                 reports:{
                     ...state.reports,
-                    tabularReport: action.reports,
+                    tabularReport: action.tabularReport,
                 },
                 fetchingReports: false,
             });

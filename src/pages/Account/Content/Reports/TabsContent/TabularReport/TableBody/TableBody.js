@@ -3,72 +3,132 @@
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
-import { TableData, TableImg, TableStatus } from '../../../../../../../components/UI/Dashboard/Table/Table';
-import { formatCurrency } from '../../../../../../../shared/utility';
+import { TableData } from '../../../../../../../components/UI/Dashboard/Table/Table';
+import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import PendingIcon from '@mui/icons-material/Pending';
+
+import styled from 'styled-components';
+
+const TableStatus = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+    padding: 0 10px;
+    border-radius: 12px;
+    color: ${({ theme }) => theme.palette.common.white};
+    font-size: 14px;
+    text-transform: capitalize;
+    font-weight: 500;
+    background-color: ${({ theme }) => theme.palette.error.main};
+    &.in.progress {
+        background-color: ${({ theme }) => theme.palette.warning.light};
+    }
+    &.canceled {
+        background-color: ${({ theme }) => theme.palette.error.main};
+    }
+    &.approved {
+        background-color: ${({ theme }) => theme.palette.primary.main};
+    }
+    &.completed {
+        background-color: ${({ theme }) => theme.palette.success.main};
+    }
+`
+
+const Items = styled.ul`
+    margin: 0;
+    padding: 0;
+    li {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        line-height:1.5;
+        text-transform: capitalize;
+        font-weight: 500;
+        color: ${({ theme }) => theme.palette.text.disabled};
+        margin-bottom: 5px;
+        &:last-child {
+            margin-bottom: 0px;
+        }
+        svg {
+            width: 14px;
+            height: 14px;
+            color: ${({ theme }) => theme.vars.primary};
+        }
+        .divider {
+            margin: 0 5px;
+        }
+    }
+`
 
 
 const EnhancedTableBody = props => {
 
-    const {fetchedTabularReport, emptyRows} = props;
+    const { fetchedTabularReport } = props;
 
 
     return (
         <TableBody>
             {fetchedTabularReport.map((row, index) => {
-                const labelId = `enhanced-table-Image-${index}`;
                 return (
                     <TableRow
                         hover
                         tabIndex={-1}
-                        key={row.id}
+                        key={index}
                     >
-                        <TableCell
-                            component="th"
-                            id={labelId}
-                            scope="row"
-                        >
-                            <TableImg>
-                                <img src={row.image} alt="" />
-                            </TableImg>
-                        </TableCell>
                         <TableCell align="center">
                             <TableData>
-                                {row.name}
+                                {row.customer_name}
                             </TableData>
                         </TableCell>
                         <TableCell align="center">
                             <TableData>
-                                {row.location.name}
+                                {row.booking_date}
                             </TableData>
                         </TableCell>
                         <TableCell align="center">
                             <TableData>
-                                {formatCurrency(row.price)}
+                                {row.booking_time}
                             </TableData>
                         </TableCell>
                         <TableCell align="center">
-                            <TableData>
-                                {formatCurrency(row.discount_price)}
-                            </TableData>
+                            <Items>
+                                { 
+                                    row.items && (
+                                        row.items.map((item, index) => {
+                                            let loadedItems;
+                                            if (item) {
+                                                loadedItems = (
+                                                    <li key={item.id} >
+                                                        <FiberManualRecordIcon sx={{ mr: 1 }} />
+                                                        <span>{item.quantity}</span>
+                                                        <span className='divider'>x</span>
+                                                        <span>{item.item.name}</span>
+                                                    </li>
+                                                )
+                                            }
+                                            return loadedItems
+                                        })
+                                    )
+                                }
+                            </Items>
                         </TableCell>
                         <TableCell align="center">
-                            <TableStatus className={row.status}>{row.status}</TableStatus>
+                            <TableData>{row.employee_name}</TableData>
                         </TableCell>
                         <TableCell align="center">
-                            <TableData>{row.quantity}</TableData>
+                            <TableStatus className={row.booking_status}>{row.booking_status}</TableStatus>
+                        </TableCell>
+                        <TableCell align="center">
+                            <TableData>{row.tax}</TableData>
+                        </TableCell>
+                        <TableCell align="center">
+                            <TableData style= { {display: 'flex'} } >{row.booking_status === 'completed' ? <CheckCircleIcon sx={{ mr: 1, color: '#568d00' }} /> : <PendingIcon sx={{ mr: 1, color: '#f9b904' }} />}{row.amount}</TableData>
                         </TableCell>
                     </TableRow>
                 );
             })}
-            {emptyRows > 0 && (
-                <TableRow
-                    style={{
-                        height: (133) * emptyRows,
-                    }}
-                >
-                    <TableCell colSpan={9} />
-                </TableRow>
-            )}
         </TableBody>
     )
 }
