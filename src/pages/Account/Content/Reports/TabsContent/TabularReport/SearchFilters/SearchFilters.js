@@ -66,8 +66,8 @@ const SearchFilters = (props) => {
 
     const [location, setLocation] = useState('');
 
-    const [dateFrom, setDateFrom] = useState(new Date());
-    const [dateTo, setDateTo] = useState(new Date());
+    const [dateFrom, setDateFrom] = useState('');
+    const [dateTo, setDateTo] = useState('');
 
     const [selectedServices, setSelectedServices] = useState('');
 
@@ -132,8 +132,8 @@ const SearchFilters = (props) => {
 
     const resetFilteringHandler = ( ) => {
         setLocation('');
-        setDateFrom(new Date());
-        setDateTo(new Date());
+        setDateFrom('');
+        setDateTo('');
         setSelectedServices('');
         setSelectedProducts('');
         setCustomer('');
@@ -295,7 +295,7 @@ const SearchFilters = (props) => {
                             label="booking status"
                             onChange={handleBookingStatusChange}
                         >
-                            <MenuItem value='services'>{t('completed')}</MenuItem>
+                            <MenuItem value='completed'>{t('completed')}</MenuItem>
                             <MenuItem value='pending'>{t('pending')}</MenuItem>
                             <MenuItem value='approved'>{t('approved')}</MenuItem>
                             <MenuItem value='in progress'>{t('in progress')}</MenuItem>
