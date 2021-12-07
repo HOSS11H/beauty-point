@@ -20,6 +20,9 @@ import BookingCalendar from './pages/Account/Content/BookingCalendar/BookingCale
 import Reports from './pages/Account/Content/Reports/Reports';
 
 
+import General from './pages/Account/Content/Settings/General'
+import VendorPage from './pages/Account/Content/Settings/VendorPage'
+import Settings from "./pages/Account/Content/Settings/Settings";
 
 function App() {
 
@@ -37,6 +40,11 @@ function App() {
                 <Route path='bookings' element={ <Bookings/> } />
                 <Route path='booking-calendar' element={ <BookingCalendar/> } />
                 <Route path='reports' element={ <Reports/> } />
+                <Route path='booking-calendar' element={<BookingCalendar />} />
+                <Route path="settings/*" element={<Settings />}>
+                    <Route path='' element={<General />} />
+                    <Route path='vendor-page' element={<VendorPage />} />
+                </Route>
             </ Route>
             <Route path="/" element={<Landing />} />
             <Route path='*' element={<NotFound />} />

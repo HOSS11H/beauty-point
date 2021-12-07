@@ -158,6 +158,7 @@ const resources = {
             'paid amount': 'المبلغ المدفوع',
             'booking calendar': 'تقويم الحجوزات',
             'reports': 'تقارير العمليات',
+            'settings': 'الأعدادات'
         }
     }
 };
