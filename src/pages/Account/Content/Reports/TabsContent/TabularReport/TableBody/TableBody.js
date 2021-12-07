@@ -1,20 +1,20 @@
-import Actions from '../../../../../../components/UI/Dashboard/Actions/Actions';
+
 
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
-import { TableData, TableImg, TableStatus } from '../../../../../../components/UI/Dashboard/Table/Table';
-import { formatCurrency } from '../../../../../../shared/utility';
+import { TableData, TableImg, TableStatus } from '../../../../../../../components/UI/Dashboard/Table/Table';
+import { formatCurrency } from '../../../../../../../shared/utility';
 
 
 const EnhancedTableBody = props => {
 
-    const {fetchedProducts, emptyRows, deleteModalOpenHandler, viewModalOpenHandler, editModalOpenHandler} = props;
+    const {fetchedTabularReport, emptyRows} = props;
 
 
     return (
         <TableBody>
-            {fetchedProducts.data.map((row, index) => {
+            {fetchedTabularReport.map((row, index) => {
                 const labelId = `enhanced-table-Image-${index}`;
                 return (
                     <TableRow
@@ -56,13 +56,6 @@ const EnhancedTableBody = props => {
                         </TableCell>
                         <TableCell align="center">
                             <TableData>{row.quantity}</TableData>
-                        </TableCell>
-                        <TableCell align="center">
-                            <Actions edit remove view
-                                editHandler={editModalOpenHandler.bind(null, row.id)}
-                                removeHandler={deleteModalOpenHandler.bind(null, row.id)}
-                                viewHandler={viewModalOpenHandler.bind(null, row.id)}
-                            />
                         </TableCell>
                     </TableRow>
                 );

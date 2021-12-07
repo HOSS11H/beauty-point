@@ -43,3 +43,6 @@ export {
 export {
     fetchEmployees,
 } from './employees'
+export {
+    fetchTabularReport,
+} from './reports'

@@ -7,7 +7,7 @@ import { visuallyHidden } from '@mui/utils';
 import { useTranslation } from 'react-i18next';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import { TableHeading } from '../../../../../../components/UI/Dashboard/Table/Table';
+import { TableHeading } from '../../../../../../../components/UI/Dashboard/Table/Table';
 
 const headCells = [
     {
@@ -51,12 +51,6 @@ const headCells = [
         numeric: false,
         disablePadding: false,
         label: 'quantity',
-    },
-    {
-        id: 'actions',
-        numeric: false,
-        disablePadding: false,
-        label: 'actions',
     },
 ];
 

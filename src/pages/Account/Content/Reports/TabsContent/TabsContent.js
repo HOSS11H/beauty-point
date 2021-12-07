@@ -1,8 +1,8 @@
 import { Fragment } from 'react'
 import TabPanel from './TabPanel/TabPanel';
-import TabularReport from './ProductsTable/TabularReport';
+import TabularReport from './TabularReport/TabularReport';
 
-const TabsBody = props => {
+const TabsContent = props => {
 
     const { current } = props
 
@@ -14,4 +14,4 @@ const TabsBody = props => {
         </Fragment>
     )
 }
-export default TabsBody;
+export default TabsContent;

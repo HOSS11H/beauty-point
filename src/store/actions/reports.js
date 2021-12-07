@@ -19,10 +19,10 @@ export const fetchTabularReportFailed = ( errorMessage ) => {
         error: errorMessage,
     }
 }
-export const fetchTabularReport = ( language ) => {
+export const fetchTabularReport = ( language, page, perPage, orderBy, orderDir ) => {
     return dispatch => {
         dispatch( fetchTabularReportStart( ) )
-        v1.get(`/vendors/reports/tabular-table`, { 
+        v1.get(`/vendors/reports/tabular-table?page=${page + 1}&per_page=${perPage}&order_by=${orderBy}&order_dir=${orderDir}`, { 
             headers: {
                 'Accept-Language': language
             }

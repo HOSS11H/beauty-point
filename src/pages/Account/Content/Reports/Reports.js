@@ -1,11 +1,7 @@
 import * as React from 'react';
-import PropTypes from 'prop-types';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import TabsHead from './TabsHead/TabsHead';
-import TabsBody from './TabsBody/TabsBody';
+import TabsContent from './TabsContent/TabsContent';
 
 
 
@@ -19,7 +15,7 @@ const Reports = (props) => {
     return (
         <Box sx={{ width: '100%' }}>
             <TabsHead current={current} onChange={handleChange} />
-            <TabsBody current={current} />
+            <TabsContent current={current} />
         </Box>
     );
 }
