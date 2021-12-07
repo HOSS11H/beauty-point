@@ -156,6 +156,8 @@ const resources = {
             'cash remaing': 'النقدية المتبقية',
             'cash to return': 'النقدية للإرجاع',
             'paid amount': 'المبلغ المدفوع',
+            'booking calendar': 'تقويم الحجوزات',
+            'reports': 'تقارير العمليات',
         }
     }
 };

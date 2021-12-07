@@ -17,6 +17,7 @@ import Deals from './pages/Account/Content/Deals/Deals';
 import Bookings from './pages/Account/Content/Bookings/Bookings'
 import PointOfSale from "./pages/Account/Content/PointOfSale/PointOfSale";
 import BookingCalendar from './pages/Account/Content/BookingCalendar/BookingCalendar';
+import Reports from './pages/Account/Content/Reports/Reports';
 
 
 
@@ -35,6 +36,7 @@ function App() {
                 <Route path='point-of-sale' element={ <PointOfSale/> } />
                 <Route path='bookings' element={ <Bookings/> } />
                 <Route path='booking-calendar' element={ <BookingCalendar/> } />
+                <Route path='reports' element={ <Reports/> } />
             </ Route>
             <Route path="/" element={<Landing />} />
             <Route path='*' element={<NotFound />} />
