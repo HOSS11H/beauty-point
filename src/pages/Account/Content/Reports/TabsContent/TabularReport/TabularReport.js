@@ -12,8 +12,9 @@ import EnhancedTableBody from './TableBody/TableBody';
 import { useTranslation } from 'react-i18next';
 import { formatCurrency } from '../../../../../../shared/utility';
 import SearchFilters from './SearchFilters/SearchFilters';
+import Card from '@mui/material/Card';
 
-const TabularReportWrapper = styled.div`
+const TabularReportWrapper = styled(Card)`
     display: flex;
     max-width: 100%;
     min-height: 100px;
