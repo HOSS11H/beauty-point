@@ -11,6 +11,7 @@ import TablePaginationActions from '../../../../../../components/UI/Dashboard/Ta
 import EnhancedTableBody from './TableBody/TableBody';
 import { useTranslation } from 'react-i18next';
 import { formatCurrency } from '../../../../../../shared/utility';
+import SearchFilters from './SearchFilters/SearchFilters';
 
 const TabularReportWrapper = styled.div`
     display: flex;
@@ -22,6 +23,7 @@ const TabularReportWrapper = styled.div`
     border-radius:20px;
     flex-direction: column;
     padding-bottom: 20px;
+    padding: 30px 20px;
     &:last-child{
         margin-bottom:0;
     }
@@ -35,7 +37,10 @@ const PriceCalculation = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 25px;
+    padding: 10px 0;
+    &:last-child{
+        padding-bottom:0;
+    }
     p {
         font-size: 20px;
         line-height:1.5;
@@ -68,28 +73,10 @@ function TabularReport(props) {
 
     const [rowsPerPage, setRowsPerPage] = useState(intialRowsPerPage);
 
-    const [totalPrice, setTotalPrice] = useState(0)
-    const [totalTaxes, setTotalTaxes] = useState(0)
-
-
-
-
     useEffect(() => {
         fetchTabularReportHandler(lang, page, rowsPerPage, order, orderBy);
     }, [lang, page, rowsPerPage, orderBy, order, fetchTabularReportHandler]);
 
-    useEffect(() => {
-        if (fetchedTabularReport) {
-            const amount = fetchedTabularReport.reduce( (sum, item) => {
-                return sum + (parseInt(item.amount))
-            } , 0)
-            const taxes = fetchedTabularReport.reduce( (sum, item) => {
-                return sum + (parseInt(item.tax))
-            } , 0)
-            setTotalPrice(amount)
-            setTotalTaxes(taxes)
-        }
-    }, [fetchedTabularReport])
 
 
     const handleRequestSort = (event, property) => {
@@ -106,7 +93,7 @@ function TabularReport(props) {
 
     let content = (
         <Fragment>
-            <Paper sx={{ width: '100%', boxShadow: 'none' }}>
+            <Paper sx={{ width: '100%', boxShadow: 'none', marginBottom: '20px', }}>
                 <TableContainer>
                     <Table
                         sx={{ minWidth: 750 }}
@@ -114,7 +101,7 @@ function TabularReport(props) {
                         size='medium'
                     >
                         <EnhancedTableHead
-                            rowCount={fetchedTabularReport.length}
+                            rowCount={fetchedTabularReport.data.length}
                             onRequestSort={handleRequestSort}
                             order={order}
                             orderBy={orderBy}
@@ -127,8 +114,8 @@ function TabularReport(props) {
                 </TableContainer>
                 <TablePaginationActions
                     component="div"
-                    count={fetchedTabularReport.length}
-                    total={fetchedTabularReport ? fetchedTabularReport.length : 0}
+                    count={fetchedTabularReport.data.length}
+                    total={fetchedTabularReport.data ? fetchedTabularReport.data.length : 0}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}
@@ -140,14 +127,15 @@ function TabularReport(props) {
 
     return (
         <TabularReportWrapper>
+            <SearchFilters />
             {content}
             <PriceCalculation>
-                <p>{t('price after discount')}</p>
-                <p>{formatCurrency(totalPrice)}</p>
+                <p>{t('total taxes')}</p>
+                <p>{formatCurrency(fetchedTabularReport.total_tax || 0)}</p>
             </PriceCalculation>
             <PriceCalculation>
-                <p>{t('price after discount')}</p>
-                <p>{formatCurrency(totalTaxes)}</p>
+                <p>{t('total amount')}</p>
+                <p>{formatCurrency(fetchedTabularReport.total || 0)}</p>
             </PriceCalculation>
         </TabularReportWrapper>
     );

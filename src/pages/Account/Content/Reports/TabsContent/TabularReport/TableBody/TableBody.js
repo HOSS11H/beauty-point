@@ -70,7 +70,7 @@ const EnhancedTableBody = props => {
 
     return (
         <TableBody>
-            {fetchedTabularReport.map((row, index) => {
+            {fetchedTabularReport.data.map((row, index) => {
                 return (
                     <TableRow
                         hover

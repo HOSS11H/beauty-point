@@ -160,6 +160,8 @@ const resources = {
             'reports': 'تقارير العمليات',
             'settings': 'الأعدادات',
             'Tabular Report': 'تقرير جدولي',
+            'total amount': 'المبلغ الإجمالي',
+            'all': 'الكل',
         }
     }
 };

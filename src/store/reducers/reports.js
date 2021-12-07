@@ -4,7 +4,9 @@ import {updateObject} from '../../shared/utility'
 
 const intialState = {
     reports: {
-        tabularReport: [],
+        tabularReport: {
+            data: [],
+        }
     },
     fetchingReports: false,
     errorFetchingReports: false,
