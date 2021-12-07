@@ -45,4 +45,5 @@ export {
 } from './employees'
 export {
     fetchTabularReport,
+    filterTabularReport,
 } from './reports'

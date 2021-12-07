@@ -7,7 +7,7 @@ import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import { useTranslation } from 'react-i18next';
 import { useContext, useEffect, useState, } from 'react';
-import { fetchServices, fetchLocations, fetchProducts, fetchCustomers, fetchEmployees } from '../../../../../../../store/actions/index';
+import { fetchServices, fetchLocations, fetchProducts, fetchCustomers, fetchEmployees, filterTabularReport } from '../../../../../../../store/actions/index';
 import { connect } from 'react-redux';
 import DateAdapter from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -16,6 +16,7 @@ import ThemeContext from '../../../../../../../store/theme-context';
 import { CustomButton } from '../../../../../../../components/UI/Button/Button';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import { format } from 'date-fns'
 
 const FiltersWrapper = styled.div`
     margin-bottom: 30px;
@@ -55,7 +56,7 @@ const ResetButton = styled(CustomButton)`
 
 const SearchFilters = (props) => {
 
-    const { fetchedLocations, fetchLocationsHandler, fetchedProducts, fetchProductsHandler, fetchedServices, fetchServicesHandler, fetchedCustomers, fetchCustomersHandler, fetchedEmployees, fetchEmployeesHandler } = props;
+    const { fetchedLocations, fetchLocationsHandler, fetchedProducts, fetchProductsHandler, fetchedServices, fetchServicesHandler, fetchedCustomers, fetchCustomersHandler, fetchedEmployees, fetchEmployeesHandler, filterTabularReportHandler } = props;
 
     const { t } = useTranslation()
 
@@ -94,10 +95,12 @@ const SearchFilters = (props) => {
         setLocation(event.target.value);
     };
     const handleDateFromChange = (val) => {
-        setDateFrom(val);
+        const formattedVal = format(val, 'yyyy-MM-dd')
+        setDateFrom(formattedVal);
     }
     const handleDateToChange = (val) => {
-        setDateTo(val);
+        const formattedVal = format(val, 'yyyy-MM-dd')
+        setDateTo(formattedVal);
     }
     const selectedServicesChangeHandler = (event) => {
         setSelectedServices(event.target.value);
@@ -123,7 +126,8 @@ const SearchFilters = (props) => {
     }
 
     const ConfirmFilteringHandler = ( ) => {
-
+        console.log(location, dateFrom, dateTo, selectedServices, selectedProducts, customer, employee, bookingType, bookingStatus, paymentStatus)
+        filterTabularReportHandler(dateFrom, dateTo, location, selectedServices, selectedProducts, customer, employee, bookingType, bookingStatus, paymentStatus);
     }
 
     const resetFilteringHandler = ( ) => {
@@ -137,6 +141,7 @@ const SearchFilters = (props) => {
         setBookingType('');
         setBookingStatus('');
         setPaymentStatus('');
+        filterTabularReportHandler('', '', '', '', '', '', '', '', '', '');
     }
 
 
@@ -275,7 +280,6 @@ const SearchFilters = (props) => {
                             label="booking type"
                             onChange={handleBookingTypeChange}
                         >
-                            <MenuItem value='all'>{t('all')}</MenuItem>
                             <MenuItem value='services'>{t('services')}</MenuItem>
                             <MenuItem value='deals'>{t('deals')}</MenuItem>
                         </Select>
@@ -291,7 +295,6 @@ const SearchFilters = (props) => {
                             label="booking status"
                             onChange={handleBookingStatusChange}
                         >
-                            <MenuItem value='all'>{t('all')}</MenuItem>
                             <MenuItem value='services'>{t('completed')}</MenuItem>
                             <MenuItem value='pending'>{t('pending')}</MenuItem>
                             <MenuItem value='approved'>{t('approved')}</MenuItem>
@@ -310,7 +313,6 @@ const SearchFilters = (props) => {
                             label="payment status"
                             onChange={handlePaymentStatusChange}
                         >
-                            <MenuItem value='all'>{t('all')}</MenuItem>
                             <MenuItem value='completed'>{t('completed')}</MenuItem>
                             <MenuItem value='pending'>{t('pending')}</MenuItem>
                         </Select>
@@ -318,7 +320,7 @@ const SearchFilters = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={4}>
                     <ActionsWrapper>
-                        <FilterButton endIcon={<FilterAltIcon />} >{t('filter')}</FilterButton>
+                        <FilterButton onClick={ConfirmFilteringHandler} endIcon={<FilterAltIcon />} >{t('filter')}</FilterButton>
                         <ResetButton onClick={resetFilteringHandler}  endIcon={<RestartAltIcon />} >{t('reset')}</ResetButton>
                     </ActionsWrapper>
                 </Grid>
@@ -344,6 +346,7 @@ const mapDispatchToProps = (dispatch) => {
         fetchProductsHandler: (lang, page, sortBy, sortDirection, search) => dispatch(fetchProducts(lang, page, sortBy, sortDirection, search)),
         fetchCustomersHandler: (lang) => dispatch(fetchCustomers(lang)),
         fetchEmployeesHandler: (language) => dispatch(fetchEmployees(language)),
+        filterTabularReportHandler: (dateFrom, dateTo, location, selectedServices, selectedProducts, customer, employee, bookingType, bookingStatus, paymentStatus) => dispatch(filterTabularReport(dateFrom, dateTo, location, selectedServices, selectedProducts, customer, employee, bookingType, bookingStatus, paymentStatus)),
     }
 }
 
