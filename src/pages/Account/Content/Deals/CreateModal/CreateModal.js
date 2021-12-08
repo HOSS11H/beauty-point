@@ -230,7 +230,7 @@ const CreateModal = (props) => {
 
     const [dealDiscount, setDealDiscount] = useState(0);
 
-    const [discountType, setDiscountType] = useState('percent');
+    const [discountType, setDiscountType] = useState('percentage');
     
     const [priceAfterDiscount, setPriceAfterDiscount] = useState(0);
     const [dealPriceError, setDealPriceError] = useState(false);
@@ -288,7 +288,7 @@ const CreateModal = (props) => {
 
     useEffect(() => {
         let netPrice;
-        if (discountType === 'percent') {
+        if (discountType === 'percentage') {
             netPrice = (dealPrice - (dealPrice * (dealDiscount / 100))).toFixed(2);
             setPriceAfterDiscount(netPrice > 0 ? netPrice : 0);
             netPrice > 0 ? setDealPriceError(false) : setDealPriceError(true);
@@ -374,7 +374,7 @@ const CreateModal = (props) => {
             const selectedServiceIndex = fetchedServices.data.findIndex(service => service.id === serviceId);
             const selectedServiceData = { ...fetchedServices.data[selectedServiceIndex] }
             let discountVal;
-            if (selectedServiceData.discount_type === 'percent') {
+            if (selectedServiceData.discount_type === 'percentage') {
                 discountVal = (selectedServiceData.price * (selectedServiceData.discount / 100));
             } else if (selectedServiceData.discount_type === 'fixed') {
                 discountVal = selectedServiceData.discount;
@@ -466,7 +466,7 @@ const CreateModal = (props) => {
         setSelectedServices([]);
         setSelectedServicesError(false);
         setDealDiscount(0);
-        setDiscountType('percent');
+        setDiscountType('percentage');
         setPriceAfterDiscount(0);
         setDealPriceError(false);
         setDealStatus('active');
@@ -688,7 +688,7 @@ const CreateModal = (props) => {
                             onChange={discountTypeChangeHandler}
                             inputProps={{ 'aria-label': 'Without label' }}
                         >
-                            <MenuItem value='percent'>{t('Percent')}</MenuItem>
+                            <MenuItem value='percentage'>{t('percentage')}</MenuItem>
                             <MenuItem value='fixed'>{t('Fixed')}</MenuItem>
                         </Select>
                     </FormControl>

@@ -108,7 +108,7 @@ const ViewModal = (props) => {
                         <Grid item xs={6}>
                             <ServiceData>
                                 <ServiceDataHeading>{t('discount price')}</ServiceDataHeading>
-                                <ServiceDataInfo>{serviceData.discount} {serviceData.discount_type === 'percent' ? '%' : 'ريال' }</ServiceDataInfo>
+                                <ServiceDataInfo>{serviceData.discount} {serviceData.discount_type === 'percentage' ? '%' : 'ريال' }</ServiceDataInfo>
                             </ServiceData>
                         </Grid>
                     </Grid>

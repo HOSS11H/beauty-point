@@ -162,6 +162,7 @@ const resources = {
             'Tabular Report': 'تقرير جدولي',
             'total amount': 'المبلغ الإجمالي',
             'all': 'الكل',
+            'percentage': 'نسبة مئوية',
             'Business Name': 'اسم الشركة',
             'Business Email': 'البريد الالكتروني',
             'Business Phone': 'رقم الهاتف',

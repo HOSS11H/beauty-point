@@ -109,7 +109,7 @@ const ViewModal = (props) => {
                         <Grid item xs={6}>
                             <ProductData>
                                 <ProductDataHeading>{t('discount type')}</ProductDataHeading>
-                                <ProductDataInfo>{productData.discount_type}</ProductDataInfo>
+                                <ProductDataInfo>{t(productData.discount_type)}</ProductDataInfo>
                             </ProductData>
                         </Grid>
                         <Grid item xs={6}>

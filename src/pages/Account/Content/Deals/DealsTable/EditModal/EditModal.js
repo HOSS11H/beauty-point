@@ -23,8 +23,9 @@ import ImageUploading from 'react-images-uploading';
 
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { EditorState, convertToRaw } from 'draft-js';
+import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
+import htmlToDraft from 'html-to-draftjs';
 import { connect } from 'react-redux';
 import { fetchLocations, fetchServicesByLocation } from '../../../../../../store/actions/index';
 import { formatCurrency, updateObject } from '../../../../../../shared/utility';
@@ -206,18 +207,25 @@ const cartReducer = (state, action) => {
 
 const EditModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, fetchedLocations, fetchLocationsHandler, fetchedServices, fetchServicesHandler, creatingDealSuccess } = props;
+    const { show, heading, id, fetchedDeals, confirmText, onConfirm, onClose, fetchedLocations, fetchLocationsHandler, fetchedServices, fetchServicesHandler, creatingDealSuccess } = props;
 
     const { t } = useTranslation();
 
     const themeCtx = useContext(ThemeContext)
     const { lang } = themeCtx;
 
+    const selectedDealIndex = fetchedDeals.data.findIndex(deal => deal.id === id);
+
+    let dealData = fetchedDeals.data[selectedDealIndex];
+
+    const { title, description,  } = dealData;
+
+
     const [cartData, dispatch] = useReducer(cartReducer, {
         services: [],
     });
 
-    const [dealName, setDealName] = useState('');
+    const [dealName, setDealName] = useState(title);
     const [dealNameError, setDealNameError] = useState(false);
 
     const [dealAppliedOn, setDealAppliedOn] = useState('location');
@@ -230,7 +238,7 @@ const EditModal = (props) => {
 
     const [dealDiscount, setDealDiscount] = useState(0);
 
-    const [discountType, setDiscountType] = useState('percent');
+    const [discountType, setDiscountType] = useState('percentage');
     
     const [priceAfterDiscount, setPriceAfterDiscount] = useState(0);
     const [dealPriceError, setDealPriceError] = useState(false);
@@ -265,10 +273,11 @@ const EditModal = (props) => {
     const [appliedDaysError, setAppliedDaysError] = useState(false);
 
     
-    
-    const [editorState, setEditorState] = useState(
-        EditorState.createEmpty()
-    )
+    const html = description;
+    const contentBlock = htmlToDraft(html);
+    const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+    const [editorState, setEditorState] = useState(EditorState.createWithContent(contentState))
+
     const [dealDescriptionError, setDealDescriptionError] = useState(false);
 
     const [uploadedImages, setUploadedImages] = useState([]);
@@ -288,7 +297,7 @@ const EditModal = (props) => {
 
     useEffect(() => {
         let netPrice;
-        if (discountType === 'percent') {
+        if (discountType === 'percentage') {
             netPrice = (dealPrice - (dealPrice * (dealDiscount / 100))).toFixed(2);
             setPriceAfterDiscount(netPrice > 0 ? netPrice : 0);
             netPrice > 0 ? setDealPriceError(false) : setDealPriceError(true);
@@ -374,7 +383,7 @@ const EditModal = (props) => {
             const selectedServiceIndex = fetchedServices.data.findIndex(service => service.id === serviceId);
             const selectedServiceData = { ...fetchedServices.data[selectedServiceIndex] }
             let discountVal;
-            if (selectedServiceData.discount_type === 'percent') {
+            if (selectedServiceData.discount_type === 'percentage') {
                 discountVal = (selectedServiceData.price * (selectedServiceData.discount / 100));
             } else if (selectedServiceData.discount_type === 'fixed') {
                 discountVal = selectedServiceData.discount;
@@ -466,7 +475,7 @@ const EditModal = (props) => {
         setSelectedServices([]);
         setSelectedServicesError(false);
         setDealDiscount(0);
-        setDiscountType('percent');
+        setDiscountType('percentage');
         setPriceAfterDiscount(0);
         setDealPriceError(false);
         setDealStatus('active');
@@ -688,7 +697,7 @@ const EditModal = (props) => {
                             onChange={discountTypeChangeHandler}
                             inputProps={{ 'aria-label': 'Without label' }}
                         >
-                            <MenuItem value='percent'>{t('Percent')}</MenuItem>
+                            <MenuItem value='percentage'>{t('percentage')}</MenuItem>
                             <MenuItem value='fixed'>{t('Fixed')}</MenuItem>
                         </Select>
                     </FormControl>
