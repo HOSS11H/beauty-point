@@ -55,7 +55,8 @@ export default function General(props) {
     }
     return (
         <>
-            {show ?
+            {
+                show ?
                 <SkeletonForm/>
                 :
                 <Fragment >
@@ -113,13 +114,13 @@ function SkeletonForm() {
             <Stack spacing={2}>
                 <Grid container spacing={2}>
                     <Grid item xs={6} md={4}>
-                        <Skeleton variant="rectangular" />
+                        <Skeleton variant="rectangular" height={50}/>
                     </Grid>
                     <Grid item xs={6} md={4}>
-                        <Skeleton variant="rectangular" />
+                        <Skeleton variant="rectangular" height={50}/>
                     </Grid>
                     <Grid item xs={6} md={4}>
-                        <Skeleton variant="rectangular" />
+                        <Skeleton variant="rectangular" height={50}/>
                     </Grid>
                     <Grid item xs={12} md={6}>
                         <Skeleton variant="rectangular" height={150}/>
@@ -128,10 +129,10 @@ function SkeletonForm() {
                         <Skeleton variant="rectangular" height={150}/>
                     </Grid>
                     <Grid item xs={12} md={6}>
-                        <Skeleton variant="rectangular" />
+                        <Skeleton variant="rectangular" height={50}/>
                     </Grid>
                     <Grid item xs={12} md={6}>
-                        <Skeleton variant="rectangular" />
+                        <Skeleton variant="rectangular" height={50}/>
                     </Grid>
                 </Grid>
             </Stack>
