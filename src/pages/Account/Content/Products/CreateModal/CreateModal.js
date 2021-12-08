@@ -138,7 +138,7 @@ const EditorWrapper = styled.div`
 
 const CreateModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, fetchedLocations, fetchLocationsHandler,  } = props;
+    const { show, heading, confirmText, onConfirm, onClose, fetchedLocations, fetchLocationsHandler,  creatingProductSuccess} = props;
 
     const { t } = useTranslation();
 
@@ -259,6 +259,30 @@ const CreateModal = (props) => {
         onClose();
     }, [onClose])
 
+    const resetModalData = useCallback(() => {
+        setProductName('');
+        setProductNameError(false);
+        setEditorState(EditorState.createEmpty());
+        setProductDescriptionError(false);
+        setProductPrice(0);
+        setProductPriceError(false);
+        setProductDiscount(0);
+        setPriceAfterDiscount(0);
+        setDiscountType('percent');
+        setLocationName('');
+        setProductLocationError(false);
+        setProductQuantity(0);
+        setProductQuantityError(false);
+        setProductStatus('active');
+        setUploadedImages([]);
+        setDefaultImage('');
+        setDefaultImageError(false);
+    }, [])
+
+    useEffect(() => {
+        creatingProductSuccess && resetModalData();
+    }, [creatingProductSuccess, resetModalData])
+
     const confirmCreateHandler = useCallback(() => {
         if ( productName.trim().length === 0 ) {
             setProductNameError(true);
@@ -301,17 +325,6 @@ const CreateModal = (props) => {
             location: selectedLocation,
         }
         onConfirm(data);
-        setProductName('');
-        setEditorState(EditorState.createEmpty());
-        setProductPrice(0);
-        setProductDiscount(0);
-        setDiscountType('percent');
-        setPriceAfterDiscount(0);
-        setLocationName('');
-        setProductQuantity(0);
-        setProductStatus('active');
-        setUploadedImages([]);
-        setDefaultImage('');
     }, [productName, editorState, productPriceError, locationName, productQuantity, defaultImage, fetchedLocations, productPrice, productDiscount, discountType, priceAfterDiscount, productStatus, uploadedImages, onConfirm])
 
     let content = (
@@ -465,6 +478,7 @@ const CreateModal = (props) => {
 const mapStateToProps = (state) => {
     return {
         fetchedLocations: state.locations.locations,
+        creatingProductSuccess: state.products.creatingProductSuccess,
     }
 }
 

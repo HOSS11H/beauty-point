@@ -173,7 +173,7 @@ const PointOfSale = ( props ) => {
     const [ messageShown, setMessageShown ] = useState(bookingCreated);
 
     useEffect(() => {
-        setMessageShown( prevState => (prevState !== bookingCreated) && bookingCreated )
+        setMessageShown(bookingCreated )
     }, [bookingCreated])
 
     useEffect(() => {

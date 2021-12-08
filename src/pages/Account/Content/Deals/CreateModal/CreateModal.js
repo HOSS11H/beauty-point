@@ -206,7 +206,7 @@ const cartReducer = (state, action) => {
 
 const CreateModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, fetchedLocations, fetchLocationsHandler, fetchedServices, fetchServicesHandler } = props;
+    const { show, heading, confirmText, onConfirm, onClose, fetchedLocations, fetchLocationsHandler, fetchedServices, fetchServicesHandler, creatingDealSuccess } = props;
 
     const { t } = useTranslation();
 
@@ -460,6 +460,22 @@ const CreateModal = (props) => {
     }, [onClose, resetCartHandler])
 
 
+    const resetModalData = useCallback(() => {
+        setDealName('');
+        setEditorState(EditorState.createEmpty());
+        setDealDiscount(0);
+        setDiscountType('percent');
+        setPriceAfterDiscount(0);
+        setDealLocation('');
+        setDealStatus('active');
+        setUploadedImages([]);
+        setDefaultImage('');
+    }, [])
+
+    useEffect(() => {
+        creatingDealSuccess && resetModalData();
+    }, [creatingDealSuccess, resetModalData])
+
     const confirmCreateHandler = useCallback(() => {
         console.log(appliedDays);
         if (dealName.trim().length === 0) {
@@ -514,15 +530,6 @@ const CreateModal = (props) => {
             location: selectedLocation,
         }
         onConfirm(data);
-        setDealName('');
-        setEditorState(EditorState.createEmpty());
-        setDealDiscount(0);
-        setDiscountType('percent');
-        setPriceAfterDiscount(0);
-        setDealLocation('');
-        setDealStatus('active');
-        setUploadedImages([]);
-        setDefaultImage('');
     }, [appliedDays, dealName, dealLocation, selectedServices.length, closeTime, openTime, editorState, dealPriceError, defaultImage, fetchedLocations, dealPrice, dealDiscount, discountType, priceAfterDiscount, dealStatus, uploadedImages, onConfirm])
 
     let content = (
@@ -838,6 +845,7 @@ const mapStateToProps = (state) => {
     return {
         fetchedLocations: state.locations.locations,
         fetchedServices: state.services.services,
+        creatingDealSuccess: state.deals.creatingDealSuccess,
     }
 }
 
