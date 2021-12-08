@@ -6,6 +6,7 @@ import { fetchBookings, deleteBooking, updateBooking } from "../../../../store/a
 import ThemeContext from "../../../../store/theme-context";
 import ViewModal from "./ViewModal/ViewModal";
 import EditModal from "./EditModal/EditModal";
+import SearchFilters from "./SearchFilters/SearchFilters";
 
 
 function Bookings(props) {
@@ -98,6 +99,7 @@ function Bookings(props) {
 
     return (
         <Grid container spacing={2}>
+            <SearchFilters />
             {content}
             <ViewModal show={viewModalOpened} id={selectedBookingId} fetchedBookings={fetchedBookings}
                 onClose={viewModalCloseHandler} onConfirm={viewModalConfirmHandler.bind(null, selectedBookingId)}
