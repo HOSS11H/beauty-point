@@ -27,6 +27,7 @@ export {
     deleteDeal,
     searchDeals,
     filterDeals,
+    createDeal,
 } from './deals'
 export {
     fetchLocations,

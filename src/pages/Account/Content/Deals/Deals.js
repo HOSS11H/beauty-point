@@ -1,4 +1,4 @@
-import { Fragment, useState, useCallback} from "react";
+import { Fragment, useState, useCallback, useEffect} from "react";
 import { connect } from "react-redux";
 import { searchDeals, createDeal } from '../../../../store/actions/index';
 import SearchBar from "../../../../components/Search/SearchBar/SearchBar";
@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 
 import { CustomButton } from '../../../../components/UI/Button/Button';
 import CreateModal from "./CreateModal/CreateModal";
+import CustomizedSnackbars from "../../../../components/UI/SnackBar/SnackBar";
 
 
 const ActionsWrapper = styled.div`
@@ -33,9 +34,18 @@ const CreateBtn = styled(CustomButton)`
 function Deals(props) {
     const { t } = useTranslation()
 
-    const { searchDealsHandler, createDealHandler } = props
+    const { searchDealsHandler, createDealHandler, creatingDealSuccess } = props
 
     const [createModalOpened, setCreateModalOpened] = useState(false);
+
+    const [ messageShown, setMessageShown ] = useState(creatingDealSuccess);
+
+    useEffect(() => {
+        setMessageShown(creatingDealSuccess )
+    }, [creatingDealSuccess])
+    const closeMessageHandler = useCallback(( ) => {
+        setMessageShown(false)
+    }, [])
 
     // Create Modal
     const createModalOpenHandler = useCallback((id) => {
@@ -60,15 +70,22 @@ function Deals(props) {
                     heading='create new deal' confirmText='create' />
             </ActionsWrapper>
             <DealsTable />
+            <CustomizedSnackbars show={messageShown} message={t('Deal Created')} type='success' onClose={closeMessageHandler} />
         </Fragment>
     );
+}
+
+const mapStateToProps = (state) => {
+    return {
+        creatingDealSuccess: state.deals.creatingDealSuccess,
+    }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
         searchDealsHandler: ( language, word ) => dispatch(searchDeals( language, word )),
-        /* createDealHandler: (data) => dispatch(createDeal( data )) */
+        createDealHandler: (data) => dispatch(createDeal( data ))
     }
 }
 
-export default connect(null, mapDispatchToProps)(Deals);
+export default connect(mapStateToProps, mapDispatchToProps)(Deals);

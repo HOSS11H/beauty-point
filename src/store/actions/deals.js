@@ -85,6 +85,57 @@ export const deleteDeal = (id) => {
             })
     }
 }
+export const createDealStart = () => {
+    return {
+        type: actionTypes.CREATE_DEAL_START,
+    }
+}
+export const createDealSuccess = (message, createdDealData) => {
+    return {
+        type: actionTypes.CREATE_DEAL_SUCCESS,
+        message: message,
+        dealData: createdDealData,
+    }
+}
+export const createDealFailed = (message) => {
+    return {
+        type: actionTypes.CREATE_DEAL_FAILED,
+        message: message,
+    }
+}
+
+export const createDeal = (data) => {
+    return dispatch => {
+        dispatch(createDealStart())
+        axios.post(`/vendors/deals`, data)
+            .then(response => {
+                const formattedStartDate = response.data.start_date_time.split(" ");
+                const formattedEndDate = response.data.end_date_time.split(" ");
+                let startDate = formattedStartDate[0]
+                let startTime = formattedStartDate[1]
+                let endDate = formattedEndDate[0]
+                let endTime = formattedEndDate[1]
+                let editedData = {
+                    ...response.data,
+                    location: {
+                        ...data.locationData,
+                    },
+                    formattedDate: {
+                        startDate: startDate,
+                        endDate: endDate,
+                    },
+                    formattedTime: {
+                        startTime: startTime,
+                        endTime: endTime,
+                    }
+                }
+                dispatch(createDealSuccess(null, editedData));
+            })
+            .catch(err => {
+                dispatch(createDealFailed(err.message))
+            })
+    }
+}
 
 export const searchDealsStart = () => {
     return {

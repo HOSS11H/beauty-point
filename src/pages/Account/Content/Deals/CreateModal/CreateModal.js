@@ -245,6 +245,7 @@ const CreateModal = (props) => {
     const [dateFrom, setDateFrom] = useState(new Date());
     
     const [dateTo, setDateTo] = useState(new Date());
+    const [dateToError, setDateToError] = useState(false);
     
     const [openTime, setOpenTime] = useState(new Date());
 
@@ -412,20 +413,16 @@ const CreateModal = (props) => {
         }
     }
     const handleDateFromChange = (val) => {
-        const formattedVal = format(val, 'Y-mm-dd hh:ii a')
         setDateFrom(val);
     }
     const handleDateToChange = (val) => {
-        const formattedVal = format(val, 'Y-mm-dd hh:ii a')
         setDateTo(val);
+        setDateToError(false);
     }
-    console.log(dateFrom, dateTo)
     const openTimeChangeHandler = (newValue) => {
-        const formattedVal = format(newValue, 'hh:ii a')
         setOpenTime(newValue);
     }
     const closeTimeChangeHandler = (newValue) => {
-        const formattedVal = format(newValue, 'hh:ii a')
         setCloseTime(newValue);
         setCloseTimeError(false);
     }
@@ -462,14 +459,40 @@ const CreateModal = (props) => {
 
     const resetModalData = useCallback(() => {
         setDealName('');
-        setEditorState(EditorState.createEmpty());
+        setDealNameError(false);
+        setDealAppliedOn('');
+        setDealLocation('');
+        setDealLocationError(false);
+        setSelectedServices([]);
+        setSelectedServicesError(false);
         setDealDiscount(0);
         setDiscountType('percent');
         setPriceAfterDiscount(0);
-        setDealLocation('');
+        setDealPriceError(false);
         setDealStatus('active');
+        setUsesTime(0);
+        setUserLimit(0);
+        setDateFrom(new Date());
+        setDateTo(new Date());
+        setDateToError(false);
+        setOpenTime(new Date());
+        setCloseTime(new Date());
+        setCloseTimeError(false);
+        setAppliedDays({
+            monday: false,
+            tuesday: false,
+            wednesday: false,
+            thursday: false,
+            friday: false,
+            saturday: false,
+            sunday: false,
+        });
+        setAppliedDaysError(false);
+        setEditorState(EditorState.createEmpty());
+        setDealDescriptionError(false);
         setUploadedImages([]);
         setDefaultImage('');
+        setDefaultImageError(false);
     }, [])
 
     useEffect(() => {
@@ -477,7 +500,6 @@ const CreateModal = (props) => {
     }, [creatingDealSuccess, resetModalData])
 
     const confirmCreateHandler = useCallback(() => {
-        console.log(appliedDays);
         if (dealName.trim().length === 0) {
             setDealNameError(true);
             return;
@@ -490,6 +512,10 @@ const CreateModal = (props) => {
             setSelectedServicesError(true);
             return;
         }
+        if ( dateTo < dateFrom) {
+            setDateToError(true);
+            return;
+        }
         if ( closeTime < openTime) {
             setCloseTimeError(true);
             return;
@@ -500,37 +526,64 @@ const CreateModal = (props) => {
             setAppliedDaysError(true);
             return;
         }
-
-
         if (editorState.getCurrentContent().hasText() === false) {
             setDealDescriptionError(true);
             return;
         }
-
         if (dealPriceError) { return; }
-
         if (defaultImage === '') {
             setDefaultImageError(true);
             return;
         }
 
+        const selectedServicesQuantity = [];
+        cartData.services.forEach(service => {
+            selectedServicesQuantity.push(service.quantity);
+        })
+        const selectedServicesPrice = [];
+        cartData.services.forEach(service => {
+            selectedServicesPrice.push(service.price);
+        })
+        const selectedServicesDiscount = [];
+        cartData.services.forEach(service => {
+            selectedServicesDiscount.push(service.discount);
+        })
+        
+        const selectedAppliedDays = [];
+        Object.keys(appliedDays).forEach(day => {
+            if (appliedDays[day]) { 
+                selectedAppliedDays.push(day);
+            }
+        })
         const selectedLocation = fetchedLocations.find(location => location.id === dealLocation);
 
         const data = {
-            name: dealName,
-            description: draftToHtml(convertToRaw(editorState.getCurrentContent())),
-            price: +dealPrice,
-            discount: +dealDiscount,
+            title: dealName,
+            location: dealLocation,
+            deal_services: selectedServices,
+            deal_quantity: selectedServicesQuantity,
+            deal_unit_price: selectedServicesPrice,
+            deal_discount: selectedServicesDiscount,
             discount_type: discountType,
-            discount_price: +priceAfterDiscount,
-            location_id: dealLocation,
+            discount: +dealDiscount,
+            discount_amount: +priceAfterDiscount,
+            choice : dealAppliedOn,
+            uses_time: +usesTime,
+            customer_uses_time: +userLimit,
+            days : selectedAppliedDays,
+            description: draftToHtml(convertToRaw(editorState.getCurrentContent())),
             status: dealStatus,
-            images: uploadedImages,
-            image: defaultImage,
-            location: selectedLocation,
+            deal_startDate: `${format(dateFrom, 'Y-M-dd hh:ii a')}`,
+            deal_endDate: `${format(dateTo, 'Y-M-dd hh:ii a')}`,
+            applied_between_dates : `${format(dateFrom, 'Y-M-dd hh:ii a')}  ${format(dateTo, 'Y-M-dd hh:ii a')}`,
+            open_time : `${format(openTime, 'hh:ii a')}`,
+            close_time : `${format(closeTime, 'hh:ii a')}`,
+            deal_startTime: `${format(openTime, 'hh:ii a')}`,
+            deal_endTime: `${format(closeTime, 'hh:ii a')}`,
+            locationData: selectedLocation,
         }
         onConfirm(data);
-    }, [appliedDays, dealName, dealLocation, selectedServices.length, closeTime, openTime, editorState, dealPriceError, defaultImage, fetchedLocations, dealPrice, dealDiscount, discountType, priceAfterDiscount, dealStatus, uploadedImages, onConfirm])
+    }, [dealName, dealLocation, selectedServices, dateTo, dateFrom, closeTime, openTime, appliedDays, editorState, dealPriceError, defaultImage, cartData.services, fetchedLocations, discountType, dealDiscount, priceAfterDiscount, dealAppliedOn, usesTime, userLimit, dealStatus, onConfirm])
 
     let content = (
         <Grid container spacing={2}>
@@ -688,6 +741,7 @@ const CreateModal = (props) => {
                             renderInput={(params) => <TextField sx={{ width: '100%' }} {...params} />}
                         />
                     </LocalizationProvider>
+                    {dateToError &&  <ValidationMessage notExist>{t('date to must be after date from')}</ValidationMessage> }
                 </Grid>
             <Grid item xs={12} sm={6}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
