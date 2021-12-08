@@ -4,6 +4,7 @@ import { updateObject } from '../../shared/utility';
 
 const intialState = {
     services: { data: [ ], meta: {  } },
+    servicesByLocation: { data: [ ], },
     fetchingServices: false,
     errorFetchingServices: false,
     deletingService: false,
@@ -153,6 +154,21 @@ const reducer = ( state = intialState , action ) => {
                 errorFetchingServices: true,
                 searchingServices: false,
                 searchingServicesSuccess: false,
+            })
+        case ( actionTypes.FETCH_SERVICES_BY_LOCATION_START ) :
+            return updateObject( state , {
+                fetchingServices: true,
+                errorFetchingServices: false,
+            })
+        case ( actionTypes.FETCH_SERVICES_BY_LOCATION_SUCCESS ) :
+            return updateObject( state , {
+                fetchingServices: false,
+                servicesByLocation: action.services,
+            })
+        case ( actionTypes.FETCH_SERVICES_BY_LOCATION_FAILED ) :
+            return updateObject( state , {
+                fetchingServices: false,
+                errorFetchingServices: true,
             })
         default :
             return state;

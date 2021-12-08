@@ -201,18 +201,36 @@ export const filterServices = (language, type, category, location, search) => {
     }
 }
 
+export const fetchServicesByLocationStart = () => {
+    return {
+        type: actionTypes.FETCH_SERVICES_BY_LOCATION_START,
+    }
+}
+export const fetchServicesByLocationSuccess = (servicesData) => {
+    return {
+        type: actionTypes.FETCH_SERVICES_BY_LOCATION_SUCCESS,
+        services: servicesData
+    }
+}
+export const fetchServicesByLocationFailed = (errorMessage) => {
+    return {
+        type: actionTypes.FETCH_SERVICES_BY_LOCATION_FAILED,
+        error: errorMessage,
+    }
+}
+
 export const fetchServicesByLocation = (language, location) => {
     return dispatch => {
-        dispatch(fetchServicesStart())
+        dispatch(fetchServicesByLocationStart())
         axios.get(`/vendors/services?location_id=${location}`, {
             headers: {
                 'Accept-Language': language
             }
         }).then(response => {
-            dispatch(fetchServicesSuccess(response.data));
+            dispatch(fetchServicesByLocationSuccess(response.data));
         })
             .catch(err => {
-                dispatch(fetchServicesFailed(err.message))
+                dispatch(fetchServicesByLocationFailed(err.message))
             })
     }
 }
