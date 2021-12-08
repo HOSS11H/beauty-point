@@ -1,4 +1,4 @@
-import { Fragment, useState, useCallback } from "react";
+import { Fragment, useState, useCallback, useEffect } from "react";
 import { connect } from "react-redux";
 import { searchServices, createService } from '../../../../store/actions/index';
 import SearchBar from "../../../../components/Search/SearchBar/SearchBar";
@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import ServicesTable from './ServicesTable/ServicesTable';
 import { CustomButton } from '../../../../components/UI/Button/Button';
 import CreateModal from "./CreateModal/CreateModal";
+import CustomizedSnackbars from "../../../../components/UI/SnackBar/SnackBar";
 
 const ActionsWrapper = styled.div`
     display: flex;
@@ -30,9 +31,18 @@ function Services(props) {
 
     const { t } = useTranslation()
 
-    const { searchServicesHandler, createServiceHandler } = props;
+    const { searchServicesHandler, createServiceHandler, creatingServiceSuccess } = props;
 
     const [createModalOpened, setCreateModalOpened] = useState(false);
+
+    const [ messageShown, setMessageShown ] = useState(creatingServiceSuccess);
+
+    useEffect(() => {
+        setMessageShown(creatingServiceSuccess )
+    }, [creatingServiceSuccess])
+    const closeMessageHandler = useCallback(( ) => {
+        setMessageShown(false)
+    }, [])
 
     // Create Modal
     const createModalOpenHandler = useCallback((id) => {
@@ -57,8 +67,15 @@ function Services(props) {
                     heading='create new service' confirmText='create' />
             </ActionsWrapper>
             <ServicesTable />
+            <CustomizedSnackbars show={messageShown} message={t('Product Added')} type='success' onClose={closeMessageHandler} />
         </Fragment>
     );
+}
+
+const mapStateToProps = (state) => {
+    return {
+        creatingServiceSuccess: state.services.creatingServiceSuccess,
+    }
 }
 
 const mapDispatchToProps = dispatch => {
@@ -68,4 +85,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(Services);
+export default connect(mapStateToProps, mapDispatchToProps)(Services);
