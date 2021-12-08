@@ -143,9 +143,27 @@ export const createBooking = (data) => {
     }
 }
 
+export const filterBookingsStart = () => {
+    return {
+        type: actionTypes.FILTER_BOOKINGS_START,
+    }
+}
+export const filterBookingsSuccess = (bookingsData) => {
+    return {
+        type: actionTypes.FILTER_BOOKINGS_SUCCESS,
+        bookings: bookingsData
+    }
+}
+export const filterBookingsFailed = (errorMessage) => {
+    return {
+        type: actionTypes.FILTER_BOOKINGS_FAILED,
+        error: errorMessage,
+    }
+}
+
 export const filterBookings = ( date, location, customer, bookingStatus ) => {
     return dispatch => {
-        dispatch(fetchBookingsStart())
+        dispatch(filterBookingsStart())
         axios.get(`/vendors/bookings?term=${date}&location_id=${location}&status=${bookingStatus}&customer_id=${customer}&include[]=user&include[]=users&include[]=items&include[]=payment`,)
             .then(response => {
                 let editedData = response.data.data.map(item => {
@@ -159,10 +177,10 @@ export const filterBookings = ( date, location, customer, bookingStatus ) => {
                         time: time,
                     }
                 })
-                dispatch(fetchBookingsSuccess({ ...response.data, data: editedData }));
+                dispatch(filterBookingsSuccess({ ...response.data, data: editedData }));
             })
             .catch(err => {
-                dispatch(fetchBookingsFailed(err.message))
+                dispatch(filterBookingsFailed(err.message))
             })
     }
 }
