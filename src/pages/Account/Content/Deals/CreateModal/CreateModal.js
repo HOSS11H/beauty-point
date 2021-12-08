@@ -221,48 +221,36 @@ const CreateModal = (props) => {
     const [dealNameError, setDealNameError] = useState(false);
 
     const [dealAppliedOn, setDealAppliedOn] = useState('location');
+    
+    const [dealLocation, setDealLocation] = useState('');
+    const [dealLocationError, setDealLocationError] = useState(false);
 
     const [selectedServices, setSelectedServices] = useState([]);
-
-    const [editorState, setEditorState] = useState(
-        EditorState.createEmpty()
-    )
-    const [dealDescriptionError, setDealDescriptionError] = useState(false);
-
+    const [selectedServicesError, setSelectedServicesError] = useState(false);
 
     const [dealDiscount, setDealDiscount] = useState(0);
 
     const [discountType, setDiscountType] = useState('percent');
-
+    
     const [priceAfterDiscount, setPriceAfterDiscount] = useState(0);
     const [dealPriceError, setDealPriceError] = useState(false);
 
-    const [locationName, setLocationName] = useState('');
-    const [dealLocationError, setDealLocationError] = useState(false);
-
     const [dealStatus, setDealStatus] = useState('active');
-
-    const [uploadedImages, setUploadedImages] = useState([]);
-
-    const [defaultImage, setDefaultImage] = useState('');
-    const [defaultImageError, setDefaultImageError] = useState(false);
 
     const [usesTime, setUsesTime] = useState(0);
 
     const [userLimit, setUserLimit] = useState(0);
 
-    const [openTime, setOpenTime] = useState(new Date());
-    const [closeTime, setCloseTime] = useState(new Date());
-
-    const maxNumber = 69;
-
-    const dealPrice = cartData.services.reduce((sum, curr) => {
-        return sum + curr.price * curr.quantity
-    }, 0);
-
+    
     const [dateFrom, setDateFrom] = useState(new Date());
+    
     const [dateTo, setDateTo] = useState(new Date());
+    
+    const [openTime, setOpenTime] = useState(new Date());
 
+    const [closeTime, setCloseTime] = useState(new Date());
+    const [closeTimeError, setCloseTimeError] = useState(false);
+    
     const [appliedDays, setAppliedDays] = useState({
         saturday: false,
         sunday: false,
@@ -272,8 +260,30 @@ const CreateModal = (props) => {
         thursday: false,
         friday: false,
     });
-
     const { saturday, sunday, monday, tuesday, wednesday, thursday, friday} = appliedDays;
+    const [appliedDaysError, setAppliedDaysError] = useState(false);
+
+    
+    
+    const [editorState, setEditorState] = useState(
+        EditorState.createEmpty()
+    )
+    const [dealDescriptionError, setDealDescriptionError] = useState(false);
+
+    const [uploadedImages, setUploadedImages] = useState([]);
+
+    const [defaultImage, setDefaultImage] = useState('');
+    const [defaultImageError, setDefaultImageError] = useState(false);
+
+
+
+    const maxNumber = 69;
+
+    const dealPrice = cartData.services.reduce((sum, curr) => {
+        return sum + curr.price * curr.quantity
+    }, 0);
+
+
 
     useEffect(() => {
         let netPrice;
@@ -334,72 +344,22 @@ const CreateModal = (props) => {
         setDealName(event.target.value);
         setDealNameError(false);
     }
-
-    const onEditorChange = newState => {
-        setEditorState(newState);
-        setDealDescriptionError(false);
-    }
-
-    const onImageChangeHandler = (imageList, addUpdateIndex) => {
-        // data for submit
-        setUploadedImages(imageList);
-        if (imageList.length === 1) {
-            setDefaultImage(imageList[0].data_url);
-            setDefaultImageError(false);
-        } else {
-            setDefaultImage('');
-        }
-    };
-    const defaultImageHandler = (event) => {
-        setDefaultImage(event.target.value);
-        setDefaultImageError(false);
-    };
-    const dealDiscountChangeHandler = (event) => {
-        if (event.target.value >= 0) {
-            setDealDiscount(event.target.value);
-        }
-    }
-    const discountTypeChangeHandler = (event) => {
-        setDiscountType(event.target.value);
-    }
-    const usesTimeChangeHandler = (event) => {
-        if (event.target.value >= 0) {
-            setUsesTime(event.target.value);
-        }
-    }
-    const userLimitChangeHandler = (event) => {
-        if (event.target.value >= 0) {
-            setUserLimit(event.target.value);
-        }
-    }
-
-    const openTimeChangeHandler = (newValue) => {
-        setOpenTime(newValue);
-    }
-    const closeTimeChangeHandler = (newValue) => {
-        setCloseTime(newValue);
-    }
-
-    const handleDaysChange = (event) => {
-        setAppliedDays({
-            ...appliedDays,
-            [event.target.name]: event.target.checked,
-        });
-    };
-    const handleDateFromChange = (val) => {
-        const formattedVal = format(val, 'yyyy-MM-dd')
-        setDateFrom(formattedVal);
-    }
-    const handleDateToChange = (val) => {
-        const formattedVal = format(val, 'yyyy-MM-dd')
-        setDateTo(formattedVal);
-    }
-    const dealStatusChangeHandler = (event) => {
-        setDealStatus(event.target.value);
-    }
     const dealAppliedOnChangeHandler = (event) => {
         setDealAppliedOn(event.target.value);
     }
+    const handleLocationChange = (event) => {
+        const {
+            target: { value },
+        } = event;
+        setDealLocation(
+            // On autofill we get a the stringified value.
+            typeof value === 'string' ? value.split(',') : value,
+        );
+        setDealLocationError(false);
+        fetchServicesHandler(lang, value);
+        resetCartHandler();
+        setSelectedServices([]);
+    };
     const handleServicesChange = (event) => {
         const {
             target: { value },
@@ -428,31 +388,104 @@ const CreateModal = (props) => {
             chosenServices.push(serviceData);
         })
         addToCartHandler('services', chosenServices)
+        setSelectedServicesError(false);
     };
-
-    const handleLocationChange = (event) => {
-        const {
-            target: { value },
-        } = event;
-        setLocationName(
-            // On autofill we get a the stringified value.
-            typeof value === 'string' ? value.split(',') : value,
-        );
-        setDealLocationError(false);
-        fetchServicesHandler(lang, value);
-        resetCartHandler();
-        setSelectedServices([]);
+    const dealDiscountChangeHandler = (event) => {
+        if (event.target.value >= 0) {
+            setDealDiscount(event.target.value);
+        }
+    }
+    const discountTypeChangeHandler = (event) => {
+        setDiscountType(event.target.value);
+    }
+    const dealStatusChangeHandler = (event) => {
+        setDealStatus(event.target.value);
+    }
+    const usesTimeChangeHandler = (event) => {
+        if (event.target.value >= 0) {
+            setUsesTime(event.target.value);
+        }
+    }
+    const userLimitChangeHandler = (event) => {
+        if (event.target.value >= 0) {
+            setUserLimit(event.target.value);
+        }
+    }
+    const handleDateFromChange = (val) => {
+        const formattedVal = format(val, 'Y-mm-dd hh:ii a')
+        setDateFrom(val);
+    }
+    const handleDateToChange = (val) => {
+        const formattedVal = format(val, 'Y-mm-dd hh:ii a')
+        setDateTo(val);
+    }
+    console.log(dateFrom, dateTo)
+    const openTimeChangeHandler = (newValue) => {
+        const formattedVal = format(newValue, 'hh:ii a')
+        setOpenTime(newValue);
+    }
+    const closeTimeChangeHandler = (newValue) => {
+        const formattedVal = format(newValue, 'hh:ii a')
+        setCloseTime(newValue);
+        setCloseTimeError(false);
+    }
+    const handleDaysChange = (event) => {
+        setAppliedDays({
+            ...appliedDays,
+            [event.target.name]: event.target.checked,
+        });
+        setAppliedDaysError(false);
+    };
+    const onEditorChange = newState => {
+        setEditorState(newState);
+        setDealDescriptionError(false);
+    }
+    const onImageChangeHandler = (imageList, addUpdateIndex) => {
+        // data for submit
+        setUploadedImages(imageList);
+        if (imageList.length === 1) {
+            setDefaultImage(imageList[0].data_url);
+            setDefaultImageError(false);
+        } else {
+            setDefaultImage('');
+        }
+    };
+    const defaultImageHandler = (event) => {
+        setDefaultImage(event.target.value);
+        setDefaultImageError(false);
     };
     const closeModalHandler = useCallback(() => {
         resetCartHandler();
         onClose();
     }, [onClose, resetCartHandler])
 
+
     const confirmCreateHandler = useCallback(() => {
+        console.log(appliedDays);
         if (dealName.trim().length === 0) {
             setDealNameError(true);
             return;
         }
+        if (dealLocation === '') {
+            setDealLocationError(true);
+            return;
+        }
+        if ( selectedServices.length === 0) {
+            setSelectedServicesError(true);
+            return;
+        }
+        if ( closeTime < openTime) {
+            setCloseTimeError(true);
+            return;
+        }
+        if ( Object.values(appliedDays).includes(true) ) {
+            setAppliedDaysError(false);
+        } else {
+            setAppliedDaysError(true);
+            return;
+        }
+
+
         if (editorState.getCurrentContent().hasText() === false) {
             setDealDescriptionError(true);
             return;
@@ -460,16 +493,12 @@ const CreateModal = (props) => {
 
         if (dealPriceError) { return; }
 
-        if (locationName === '') {
-            setDealLocationError(true);
-            return;
-        }
         if (defaultImage === '') {
             setDefaultImageError(true);
             return;
         }
 
-        const selectedLocation = fetchedLocations.find(location => location.id === locationName);
+        const selectedLocation = fetchedLocations.find(location => location.id === dealLocation);
 
         const data = {
             name: dealName,
@@ -478,7 +507,7 @@ const CreateModal = (props) => {
             discount: +dealDiscount,
             discount_type: discountType,
             discount_price: +priceAfterDiscount,
-            location_id: locationName,
+            location_id: dealLocation,
             status: dealStatus,
             images: uploadedImages,
             image: defaultImage,
@@ -490,11 +519,11 @@ const CreateModal = (props) => {
         setDealDiscount(0);
         setDiscountType('percent');
         setPriceAfterDiscount(0);
-        setLocationName('');
+        setDealLocation('');
         setDealStatus('active');
         setUploadedImages([]);
         setDefaultImage('');
-    }, [dealName, editorState, dealPriceError, locationName, defaultImage, fetchedLocations, dealPrice, dealDiscount, discountType, priceAfterDiscount, dealStatus, uploadedImages, onConfirm])
+    }, [appliedDays, dealName, dealLocation, selectedServices.length, closeTime, openTime, editorState, dealPriceError, defaultImage, fetchedLocations, dealPrice, dealDiscount, discountType, priceAfterDiscount, dealStatus, uploadedImages, onConfirm])
 
     let content = (
         <Grid container spacing={2}>
@@ -519,7 +548,7 @@ const CreateModal = (props) => {
                 <FormControl sx={{ width: '100%' }}>
                     <InputLabel id="location-label">{t('your location')}</InputLabel>
                     <Select
-                        value={locationName}
+                        value={dealLocation}
                         onChange={handleLocationChange}
                         inputProps={{ 'aria-label': 'Without label' }}
                         label={t('your location')}
@@ -568,6 +597,7 @@ const CreateModal = (props) => {
                         ))}
                     </Select>
                 </FormControl>
+                {selectedServicesError && <ValidationMessage notExist>{t(`Please add at least one service`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} >
                 {cartData.services.length > 0 && (
@@ -671,6 +701,7 @@ const CreateModal = (props) => {
                         renderInput={(params) => <TextField  sx={{ width: '100%' }} {...params} />}
                     />
                 </LocalizationProvider>
+                { closeTimeError && <ValidationMessage notExist>{t('close time must be after open time')}</ValidationMessage>}
             </Grid>
             <Grid item xs={12}>
                 <FormControl sx={{ width: '100%' }} component="fieldset" variant="standard">
@@ -720,6 +751,7 @@ const CreateModal = (props) => {
                         />
                     </FormGroup>
                 </FormControl>
+                { appliedDaysError && <ValidationMessage notExist>{t('applied days must be selected')}</ValidationMessage>}
             </Grid>
             <Grid item xs={12}>
                 <EditorWrapper>

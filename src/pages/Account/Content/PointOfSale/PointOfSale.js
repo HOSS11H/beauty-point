@@ -9,6 +9,8 @@ import AuthContext from '../../../../store/auth-context';
 import ThemeContext from '../../../../store/theme-context';
 import Cart from './Cart/Cart';
 import { updateObject } from '../../../../shared/utility';
+import CustomizedSnackbars from '../../../../components/UI/SnackBar/SnackBar';
+import { useTranslation } from 'react-i18next';
 
 const cartReducer = (state, action) => {
     switch(action.type) {
@@ -147,7 +149,9 @@ const cartReducer = (state, action) => {
 
 const PointOfSale = ( props ) => {
 
-    const {filterServicesHandler, filterProductsHandler, filterDealsHandler, createBookingHandler } = props
+    const { t } = useTranslation()
+
+    const {filterServicesHandler, filterProductsHandler, filterDealsHandler, createBookingHandler, fetchedLocations, bookingCreated } = props
     
     const themeCtx = useContext(ThemeContext)
     const authCtx = useContext(AuthContext)
@@ -166,7 +170,11 @@ const PointOfSale = ( props ) => {
     const [ shownLocation, setShownLocation ] = useState('');
     const [ searchWord, setSearchWord ] = useState('');
 
+    const [ messageShown, setMessageShown ] = useState(bookingCreated);
 
+    useEffect(() => {
+        setMessageShown( prevState => (prevState !== bookingCreated) && bookingCreated )
+    }, [bookingCreated])
 
     useEffect(() => {
         if(shownType === 'services') {
@@ -281,12 +289,16 @@ const PointOfSale = ( props ) => {
         })
     }, [])
 
+    const closeMessageHandler = useCallback(( ) => {
+        setMessageShown(false)
+    }, [])
+
     const purchaseCartHandler = useCallback(( purchasedData ) => {
         createBookingHandler({
             ...purchasedData,
-            location_id: shownLocation,
+            location_id: shownLocation === '' ? fetchedLocations[0].id : shownLocation,
         })
-    }, [createBookingHandler, shownLocation])
+    }, [createBookingHandler, fetchedLocations, shownLocation])
 
     return (
         <Grid container spacing={2}>
@@ -298,9 +310,17 @@ const PointOfSale = ( props ) => {
             </Grid>
             <Grid item xs={12} md={6}>
                 <Cart cartData={cart} removeFromCart={removeFromCartHandler} increaseItem={increaseItemHandler} decreaseItem={decreaseItemHandler} resetCart={resetCartHandler} purchase={purchaseCartHandler} />
+                <CustomizedSnackbars show={messageShown} message={t('Booking Created')} type='success' onClose={closeMessageHandler} />
             </Grid>
         </Grid>
     )
+}
+
+const mapStateToProps = (state) => {
+    return {
+        fetchedLocations: state.locations.locations,
+        bookingCreated: state.bookings.bookingCreated,
+    }
 }
 
 const mapDispatchToProps = dispatch => {
@@ -313,4 +333,4 @@ const mapDispatchToProps = dispatch => {
 }
 
 
-export default connect(null, mapDispatchToProps)(PointOfSale);
+export default connect(mapStateToProps, mapDispatchToProps)(PointOfSale);

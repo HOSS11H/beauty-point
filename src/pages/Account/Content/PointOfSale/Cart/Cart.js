@@ -157,7 +157,7 @@ const AddCustomer = styled(CustomButton)`
 
 const Cart = props => {
 
-    const { cartData, removeFromCart, increaseItem, decreaseItem, resetCart, purchase, fetchedCoupons, fetchedCustomers, fetchCouponsHandler, fetchCustomersHandler, addCustomerHandler, fetchedEmployeesHandler } = props;
+    const { cartData, removeFromCart, increaseItem, decreaseItem, resetCart, purchase, fetchedCoupons, fetchedCustomers, fetchCouponsHandler, fetchCustomersHandler, addCustomerHandler, fetchedEmployeesHandler, bookingCreated } = props;
 
     const { t } = useTranslation()
 
@@ -215,6 +215,7 @@ const Cart = props => {
         }
     }, [cartData, couponData, discount])
 
+
     // Add Customer Modal
     const addCustomerModalOpenHandler = useCallback((id) => {
         setAddCustomerModalOpened(true);
@@ -260,13 +261,15 @@ const Cart = props => {
     }
 
     const paidAmountChangeHandler = (event) => {
-        setPaidAmount(event.target.value)
-        if ( event.target.value > totalPrice) {
-            setCashToReturn(event.target.value - totalPrice)
-            setCashRemainig(0)
-        } else if ( event.target.value < totalPrice) {
-            setCashToReturn(0)
-            setCashRemainig(totalPrice - event.target.value)
+        if (event.target.value >= 0) {
+            setPaidAmount(event.target.value)
+            if ( event.target.value > totalPrice ) {
+                setCashToReturn( parseFloat(event.target.value) - totalPrice)
+                setCashRemainig(0)
+            } else if ( event.target.value < totalPrice ) {
+                setCashToReturn(0)
+                setCashRemainig(totalPrice - parseFloat(event.target.value))
+            }
         }
     }
 
@@ -291,6 +294,10 @@ const Cart = props => {
         resetCart();
     }, [resetCart])
 
+    useEffect(() => {
+        bookingCreated && resetCartHandler();
+    }, [bookingCreated, resetCartHandler])
+
     const purchaseCartHandler = (e) => {
         e.preventDefault();
         if (cartData.services.length === 0 && cartData.products.length === 0 && cartData.deals.length === 0) {
@@ -302,6 +309,8 @@ const Cart = props => {
         } else if (!paymentGateway) {
             setPaymentGatewayError(true)
             return;
+        } else if ( !couponExists && coupon ) {
+            return;
         }
         const data = {
             customerId: customerData.id,
@@ -309,12 +318,11 @@ const Cart = props => {
             cart: cartData,
             totalPrice: totalPrice,
             totalTaxes: totalTaxes,
-            couponId: couponData.id,
+            couponId: couponData.id ? couponData.id : null,
             discount: discount,
             payment_gateway: paymentGateway,
         }
         purchase(data);
-        resetCartHandler();
     }
 
     return (
@@ -538,6 +546,7 @@ const mapStateToProps = (state) => {
         fetchedCustomers: state.customers.customers,
         fetchedCoupons: state.coupons.coupons,
         creatingBookingSuccess: state.bookings.creatingBookingSuccess,
+        bookingCreated: state.bookings.bookingCreated,
     }
 }
 

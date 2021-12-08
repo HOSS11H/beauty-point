@@ -18,6 +18,7 @@ const intialState = {
     creatingBooking: false,
     creatingBookingSuccess: false,
     creatingBookingMessage: null,
+    bookingCreated: false,
 };
 
 const reducer = (state = intialState, action) => {
@@ -96,12 +97,14 @@ const reducer = (state = intialState, action) => {
                 creatingBooking: true,
                 creatingBookingSuccess: false,
                 creatingBookingMessage: null,
+                bookingCreated: false,
             })
         case (actionTypes.CREATE_BOOKING_SUCCESS):
             return updateObject(state, {
                 creatingBooking: false,
                 creatingBookingSuccess: true,
                 creatingBookingMessage: action.message,
+                bookingCreated: true,
             })
         case (actionTypes.CREATE_BOOKING_FAILED):
             return updateObject(state, {
