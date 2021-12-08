@@ -237,9 +237,6 @@ const CreateModal = (props) => {
     const [priceAfterDiscount, setPriceAfterDiscount] = useState(0);
     const [dealPriceError, setDealPriceError] = useState(false);
 
-    const [dealQuantity, setDealQuantity] = useState(0);
-    const [dealQuantityError, setDealQuantityError] = useState(false);
-
     const [locationName, setLocationName] = useState('');
     const [dealLocationError, setDealLocationError] = useState(false);
 
@@ -365,12 +362,6 @@ const CreateModal = (props) => {
     const discountTypeChangeHandler = (event) => {
         setDiscountType(event.target.value);
     }
-    const dealQuantityChangeHandler = (event) => {
-        if (event.target.value >= 0) {
-            setDealQuantity(event.target.value);
-            setDealQuantityError(false);
-        }
-    }
     const usesTimeChangeHandler = (event) => {
         if (event.target.value >= 0) {
             setUsesTime(event.target.value);
@@ -449,6 +440,8 @@ const CreateModal = (props) => {
         );
         setDealLocationError(false);
         fetchServicesHandler(lang, value);
+        resetCartHandler();
+        setSelectedServices([]);
     };
     const closeModalHandler = useCallback(() => {
         resetCartHandler();
@@ -471,10 +464,6 @@ const CreateModal = (props) => {
             setDealLocationError(true);
             return;
         }
-        if (+dealQuantity === 0) {
-            setDealQuantityError(true);
-            return;
-        }
         if (defaultImage === '') {
             setDefaultImageError(true);
             return;
@@ -490,7 +479,6 @@ const CreateModal = (props) => {
             discount_type: discountType,
             discount_price: +priceAfterDiscount,
             location_id: locationName,
-            quantity: +dealQuantity,
             status: dealStatus,
             images: uploadedImages,
             image: defaultImage,
@@ -503,11 +491,10 @@ const CreateModal = (props) => {
         setDiscountType('percent');
         setPriceAfterDiscount(0);
         setLocationName('');
-        setDealQuantity(0);
         setDealStatus('active');
         setUploadedImages([]);
         setDefaultImage('');
-    }, [dealName, editorState, dealPriceError, locationName, dealQuantity, defaultImage, fetchedLocations, dealPrice, dealDiscount, discountType, priceAfterDiscount, dealStatus, uploadedImages, onConfirm])
+    }, [dealName, editorState, dealPriceError, locationName, defaultImage, fetchedLocations, dealPrice, dealDiscount, discountType, priceAfterDiscount, dealStatus, uploadedImages, onConfirm])
 
     let content = (
         <Grid container spacing={2}>
@@ -671,7 +658,7 @@ const CreateModal = (props) => {
                         label={t('open time')}
                         value={openTime}
                         onChange={openTimeChangeHandler}
-                        renderInput={(params) => <TextField {...params} />}
+                        renderInput={(params) => <TextField sx={{ width: '100%' }} {...params} />}
                     />
                 </LocalizationProvider>
             </Grid>
@@ -681,7 +668,7 @@ const CreateModal = (props) => {
                         label={t('close time')}
                         value={closeTime}
                         onChange={closeTimeChangeHandler}
-                        renderInput={(params) => <TextField {...params} />}
+                        renderInput={(params) => <TextField  sx={{ width: '100%' }} {...params} />}
                     />
                 </LocalizationProvider>
             </Grid>
