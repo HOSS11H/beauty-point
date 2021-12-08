@@ -218,32 +218,51 @@ const EditModal = (props) => {
 
     let dealData = fetchedDeals.data[selectedDealIndex];
 
-    const { title, description,  } = dealData;
+    const { title, description, services, location, discount_value, discount_type, deal_applied_on, discount_price, status } = dealData;
+
+    let intialSelectedServices = [];
+
+    services.map( service => {
+        intialSelectedServices.push(service.id)
+        return intialSelectedServices
+    })
+    let chosenServices = [];
+    services.map(service => {
+        const serviceData = {
+            id: service.service.id,
+            quantity: service.quantity,
+            name: service.service.name,
+            price: service.price,
+            discount: service.discount_amount,
+        }
+        chosenServices.push(serviceData);
+        return chosenServices;
+    })
 
 
     const [cartData, dispatch] = useReducer(cartReducer, {
-        services: [],
+        services: chosenServices,
     });
 
     const [dealName, setDealName] = useState(title);
     const [dealNameError, setDealNameError] = useState(false);
 
-    const [dealAppliedOn, setDealAppliedOn] = useState('location');
+    const [dealAppliedOn, setDealAppliedOn] = useState(deal_applied_on);
     
-    const [dealLocation, setDealLocation] = useState('');
+    const [dealLocation, setDealLocation] = useState(location.id);
     const [dealLocationError, setDealLocationError] = useState(false);
 
-    const [selectedServices, setSelectedServices] = useState([]);
+    const [selectedServices, setSelectedServices] = useState(intialSelectedServices);
     const [selectedServicesError, setSelectedServicesError] = useState(false);
 
-    const [dealDiscount, setDealDiscount] = useState(0);
+    const [dealDiscount, setDealDiscount] = useState(discount_value);
 
-    const [discountType, setDiscountType] = useState('percentage');
+    const [discountType, setDiscountType] = useState(discount_type);
     
-    const [priceAfterDiscount, setPriceAfterDiscount] = useState(0);
+    const [priceAfterDiscount, setPriceAfterDiscount] = useState(discount_price);
     const [dealPriceError, setDealPriceError] = useState(false);
 
-    const [dealStatus, setDealStatus] = useState('active');
+    const [dealStatus, setDealStatus] = useState(status);
 
     const [usesTime, setUsesTime] = useState(0);
 
@@ -310,7 +329,8 @@ const EditModal = (props) => {
 
     useEffect(() => {
         fetchLocationsHandler(lang);
-    }, [fetchLocationsHandler, lang])
+        fetchServicesHandler(lang, dealLocation);
+    }, [dealLocation, fetchLocationsHandler, fetchServicesHandler, lang])
 
     const addToCartHandler = useCallback((type, itemData) => {
         dispatch({
@@ -383,7 +403,7 @@ const EditModal = (props) => {
             const selectedServiceIndex = fetchedServices.data.findIndex(service => service.id === serviceId);
             const selectedServiceData = { ...fetchedServices.data[selectedServiceIndex] }
             let discountVal;
-            if (selectedServiceData.discount_type === 'percentage') {
+            if (selectedServiceData.discount_type === 'percent') {
                 discountVal = (selectedServiceData.price * (selectedServiceData.discount / 100));
             } else if (selectedServiceData.discount_type === 'fixed') {
                 discountVal = selectedServiceData.discount;
@@ -647,6 +667,7 @@ const EditModal = (props) => {
                         renderValue={(selected) => (
                             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                                 {fetchedServices.data.length > 0 && selected.map((value) => {
+                                    console.log(fetchedServices.data.map(item => item.id), selectedServices);
                                     const selected = fetchedServices.data.find(service => service.id === value);
                                     return (
                                         <Chip key={selected.id} label={selected.name} />

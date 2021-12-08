@@ -374,7 +374,7 @@ const CreateModal = (props) => {
             const selectedServiceIndex = fetchedServices.data.findIndex(service => service.id === serviceId);
             const selectedServiceData = { ...fetchedServices.data[selectedServiceIndex] }
             let discountVal;
-            if (selectedServiceData.discount_type === 'percentage') {
+            if (selectedServiceData.discount_type === 'percent' ) {
                 discountVal = (selectedServiceData.price * (selectedServiceData.discount / 100));
             } else if (selectedServiceData.discount_type === 'fixed') {
                 discountVal = selectedServiceData.discount;

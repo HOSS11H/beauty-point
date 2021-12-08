@@ -184,7 +184,7 @@ const CreateModal = (props) => {
 
     const [serviceDiscount, setServiceDiscount] = useState(0);
 
-    const [discountType, setDiscountType] = useState('percentage');
+    const [discountType, setDiscountType] = useState('percent');
 
     const [priceAfterDiscount, setPriceAfterDiscount] = useState(0);
     const [servicePriceError, setServicePriceError] = useState(false);
@@ -213,7 +213,7 @@ const CreateModal = (props) => {
 
     useEffect(() => {
         let netPrice;
-        if (discountType === 'percentage') {
+        if (discountType === 'percent') {
             netPrice = (servicePrice - (servicePrice * (serviceDiscount / 100))).toFixed(2);
             setPriceAfterDiscount(netPrice > 0 ? netPrice : 0);
             netPrice > 0 ? setServicePriceError(false) : setServicePriceError(true);
@@ -324,7 +324,7 @@ const CreateModal = (props) => {
         setServicePrice(0);
         setServicePriceError(false);
         setServiceDiscount(0);
-        setDiscountType('percentage');
+        setDiscountType('percent');
         setPriceAfterDiscount(0);
         setEmployeeName([]);
         setLocationName('');
@@ -449,7 +449,7 @@ const CreateModal = (props) => {
                             onChange={discountTypeChangeHandler}
                             inputProps={{ 'aria-label': 'Without label' }}
                         >
-                            <MenuItem value='percentage'>{t('percentage')}</MenuItem>
+                            <MenuItem value='percent'>{t('percent')}</MenuItem>
                             <MenuItem value='fixed'>{t('Fixed')}</MenuItem>
                         </Select>
                     </FormControl>

@@ -179,7 +179,7 @@ const EditModal = (props) => {
 
     useEffect(() => {
         let netPrice;
-        if (discountType === 'percentage') {
+        if (discountType === 'percent') {
             netPrice = (productPrice - (productPrice * (productDiscount / 100))).toFixed(2);
             setPriceAfterDiscount(netPrice > 0 ? netPrice : 0);
             netPrice > 0 ? setProductPriceError(false) : setProductPriceError(true);
@@ -331,7 +331,7 @@ const EditModal = (props) => {
                             onChange={discountTypeChangeHandler}
                             inputProps={{ 'aria-label': 'Without label' }}
                         >
-                            <MenuItem value='percentage'>{t('percentage')}</MenuItem>
+                            <MenuItem value='percent'>{t('percent')}</MenuItem>
                             <MenuItem value='fixed'>{t('Fixed')}</MenuItem>
                         </Select>
                     </FormControl>
