@@ -7,11 +7,15 @@ import ThemeContext from "../../../../store/theme-context";
 import ViewModal from "./ViewModal/ViewModal";
 import EditModal from "./EditModal/EditModal";
 import SearchFilters from "./SearchFilters/SearchFilters";
+import SearchMessage from "../../../../components/Search/SearchMessage/SearchMessage";
+import { useTranslation } from "react-i18next";
 
 
 function Bookings(props) {
 
-    const { fetchedBookings, fetchBookingsHandler, fetchingBookings, deleteBookingHandler, updateBookingHandler } = props;
+    const {t} = useTranslation()
+
+    const { fetchedBookings, fetchBookingsHandler, fetchingBookings, deleteBookingHandler, updateBookingHandler, filteringBookingsSuccess } = props;
 
     const themeCtx = useContext(ThemeContext)
 
@@ -95,6 +99,12 @@ function Bookings(props) {
                 </Grid>
             </Fragment>
         )
+    } else if (fetchedBookings.data.length === 0 && filteringBookingsSuccess) {
+        content = (
+            <SearchMessage>
+                {t('No Bookings Found')}
+            </SearchMessage>
+        );
     }
 
     return (
@@ -119,6 +129,7 @@ const mapStateToProps = state => {
     return {
         fetchedBookings: state.bookings.bookings,
         fetchingBookings: state.bookings.fetchingBookings,
+        filteringBookingsSuccess: state.bookings.filteringBookingsSuccess
     }
 }
 
