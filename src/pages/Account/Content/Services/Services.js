@@ -67,7 +67,7 @@ function Services(props) {
                     heading='create new service' confirmText='create' />
             </ActionsWrapper>
             <ServicesTable />
-            <CustomizedSnackbars show={messageShown} message={t('Product Added')} type='success' onClose={closeMessageHandler} />
+            <CustomizedSnackbars show={messageShown} message={t('Service Added')} type='success' onClose={closeMessageHandler} />
         </Fragment>
     );
 }
