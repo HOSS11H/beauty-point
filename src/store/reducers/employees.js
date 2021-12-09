@@ -100,6 +100,34 @@ const reducer = ( state = intialState, action ) => {
                 fetchingRoles: true,
                 errorFetchingRoles: false,
             });
+        case ( actionTypes.ADD_EMPLOYEE_DATA_START ) :
+            return updateObject( state, {
+                employeesData: {
+                    ...state.employeesData,
+                    addingEmployee: true,
+                    addingEmployeeSuccess: false,
+                    addingEmployeeMessage: null,
+                }
+            });
+        case ( actionTypes.ADD_EMPLOYEE_DATA_SUCCESS ) :
+            const updatedEmployeesData = [...state.employeesData.employees.data];
+            updatedEmployeesData.push(action.employeeData);
+            return updateObject( state, {
+                employeesData: {
+                    ...state.employeesData,
+                    employees: {
+                        ...state.employeesData.employees,
+                        data: updatedEmployeesData,
+                        meta: {
+                            ...state.employeesData.employees.meta,
+                            total: state.employeesData.employees.meta.total + 1,
+                        }
+                    },
+                },
+                addingEmployee: false,
+                addingEmployeeSuccess: true,
+                addingEmployeeMessage: action.message,
+            });
         case (actionTypes.FETCH_ROLES_SUCCESS) :
             return updateObject( state, {
                 roles: action.roles,

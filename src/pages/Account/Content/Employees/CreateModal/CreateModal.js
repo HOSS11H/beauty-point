@@ -87,6 +87,8 @@ const CreateModal = (props) => {
         setEmployeeEmailError(false);
         setEmployeePassword('');
         setEmployeePasswordError(false);
+        setEmployeeRole('');
+        setEmployeeRoleError(false);
     }, [])
 
     useEffect(() => {
@@ -107,18 +109,20 @@ const CreateModal = (props) => {
             setEmployeePasswordError(true);
             return;
         }
-        if (employeeNumber.trim().length === 0) {
-            setEmployeeNumberError(true);
-            return;
-        }
         if (employeeRole === '') {
             setEmployeeRoleError(true);
             return;
         }   
-
+        if (employeeNumber.trim().length === 0) {
+            setEmployeeNumberError(true);
+            return;
+        }
         const data = {
             name: employeeName,
-            quantity: +employeeNumber,
+            email: employeeEmail,
+            mobile: employeeNumber,
+            role_id: employeeRole,
+            calling_code: '5555',
         }
         onConfirm(data);
     }, [employeeEmail, employeeName, employeeNumber, employeePassword, employeeRole, onConfirm])

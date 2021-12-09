@@ -158,7 +158,7 @@ export const addEmployeeData = (data) => {
         dispatch(addEmployeeDataStart())
         axios.post(`/vendors/employees`, data)
             .then(response => {
-                dispatch(addEmployeeDataSuccess(null, { ...data, ...response.data }));
+                dispatch(addEmployeeDataSuccess(null, {...response.data }));
             })
             .catch(err => {
                 dispatch(addEmployeeDataFailed(err.message))
