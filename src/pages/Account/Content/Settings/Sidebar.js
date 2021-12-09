@@ -25,8 +25,7 @@ export default function Sidebar() {
                 <Tabs value={value} onChange={handleChange} scrollButtons="auto" variant="scrollable" indicatorColor="secondary" textColor="secondary">
                     <Tab value="" label="General" />
                     <Tab value="vendor-page" label="Vendor page Settings" />
-                    <Tab label="Email Settings" />
-                    <Tab label="Booking Settings" />
+                    <Tab value="booking-settings" label="Booking Settings" />
                     <Tab label="Module Settings" />
                     <Tab label="Roles and Permissions" />
                 </Tabs>
