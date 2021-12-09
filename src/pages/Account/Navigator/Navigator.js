@@ -35,7 +35,6 @@ const categories = [
             },
             { id: 'services', name: 'services', icon: <FormatListBulletedIcon /> },
             { id: 'products', name: 'products', icon: <ShoppingCartIcon /> },
-            { id: 'customers', name: 'customers', icon: <PeopleAltIcon /> },
             { id: 'employees', name: 'employees', icon: <PersonIcon /> },
             { id: 'deals', name: 'deals', icon: <LocalOfferIcon /> },
             { id: 'point-of-sale', name: 'points of sales', icon: <AddShoppingCartIcon /> },
