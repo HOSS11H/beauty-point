@@ -174,6 +174,11 @@ const resources = {
             'Do you want To delete this employee?': 'هل تريد حذف هذا الموظف؟',
             'view employee details': 'عرض تفاصيل الموظف',
             'edit employee details': 'تعديل تفاصيل الموظف',
+            'Primary Phone': 'الهاتف الرئيسي',
+            'Secondary Phone': 'الهاتف الثانوي',
+            'Description': 'الوصف',
+            'SEO Description': 'وصف محركات البحث',
+            'Keywords':'الكلمات الافتتاحية'
         }
     }
 };

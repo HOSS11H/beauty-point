@@ -79,7 +79,7 @@ export default function VendorPage(props) {
                             <TextField value={description} onChange={(e) => setDescription(e.target.value)} multiline minRows={4} fullWidth label={t('Description')} variant="outlined" />
                         </Grid>
                         <Grid item xs={12}>
-                                <TagsInput value={tags} onChange={handleTagChange} placeholder="Seo Keywords"/>
+                                <TagsInput value={tags} onChange={handleTagChange} inputProps={{ placeholder: t("Keywords")}}/>
                         </Grid>
                         <Grid item xs={12}>
                             <TextField value={seo_description} onChange={(e) => setSeoDescription(e.target.value)} multiline minRows={4} fullWidth label={t('SEO Description')} variant="outlined" />

@@ -24,6 +24,7 @@ import Employees from './pages/Account/Content/Employees/Employees';
 import General from './pages/Account/Content/Settings/General'
 import VendorPage from './pages/Account/Content/Settings/VendorPage'
 import Settings from "./pages/Account/Content/Settings/Settings";
+import BookingSettings from "./pages/Account/Content/Settings/BookingSettings";
 
 function App() {
 
@@ -45,6 +46,7 @@ function App() {
                 <Route path="settings/*" element={<Settings />}>
                     <Route path='' element={<General />} />
                     <Route path='vendor-page' element={<VendorPage />} />
+                    <Route path="booking-settings" element={<BookingSettings/>} />
                 </Route>
             </ Route>
             <Route path="/" element={<Landing />} />
