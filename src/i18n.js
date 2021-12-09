@@ -169,7 +169,12 @@ const resources = {
             'Address': 'العنوان',
             'Invoice Notes': 'ملاحظات الفاتورة',
             'Save': 'حفظ',
-            'Saved Successfuly': 'تم الحفظ بنجاح'
+            'Saved Successfuly': 'تم الحفظ بنجاح',
+            'Primary Phone': 'الهاتف الرئيسي',
+            'Secondary Phone': 'الهاتف الثانوي',
+            'Description': 'الوصف',
+            'SEO Description': 'وصف محركات البحث',
+            'Keywords':'الكلمات الافتتاحية'
         }
     }
 };
