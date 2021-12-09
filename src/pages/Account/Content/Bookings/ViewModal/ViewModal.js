@@ -23,7 +23,8 @@ import { CustomButton } from '../../../../../components/UI/Button/Button';
 import PrintIcon from '@mui/icons-material/Print';
 import Invoice from './Invoice/Invoice';
 import { useReactToPrint } from 'react-to-print';
-import { useRef } from 'react';
+import { useEffect, useRef , useState} from 'react';
+import axios from '../../../../../utils/axios-instance';
 
 const ClientDetails = styled.div`
     display: flex;
@@ -170,6 +171,17 @@ const ViewModal = (props) => {
 
     let content;
 
+    const [ qrCode, setQrCode ] = useState(null);
+
+    useEffect(() => {
+        console.log(id);
+        axios.get(`/vendors/bookings/${id}/qr`)
+            .then(res => {
+                setQrCode(res.data.data);
+            }
+        )
+    }, [id]);
+
     const invoiceRef = useRef();
 
     const printBookingHandler = useReactToPrint({
@@ -292,7 +304,7 @@ const ViewModal = (props) => {
                         <ActionButton onClick={printBookingHandler}  ><PrintIcon/>{t('print')}</ActionButton>
                     </BookingActions>
                 </Grid>
-                <Invoice userData={userData} ref={invoiceRef} bookingData={bookingData} />
+                <Invoice userData={userData} ref={invoiceRef} bookingData={bookingData} qrCode={qrCode} />
                 <Grid item xs={12}>
                     <BookingActions>
                         <DeleteButton onClick={(id) => onDelete(bookingData.id)} >{t('Delete')}</DeleteButton>

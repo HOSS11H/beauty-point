@@ -125,9 +125,13 @@ function Bookings(props) {
         <Grid container spacing={2}>
             <SearchFilters />
             {content}
-            <ViewModal show={viewModalOpened} id={selectedBookingId} fetchedBookings={fetchedBookings}
-                onClose={viewModalCloseHandler} onConfirm={viewModalConfirmHandler.bind(null, selectedBookingId)}
-                heading='view booking details' confirmText='edit'  onDelete={viewModalDeleteHandler} userData={userData} />
+            {
+                viewModalOpened && (
+                    <ViewModal show={viewModalOpened} id={selectedBookingId} fetchedBookings={fetchedBookings}
+                        onClose={viewModalCloseHandler} onConfirm={viewModalConfirmHandler.bind(null, selectedBookingId)}
+                        heading='view booking details' confirmText='edit'  onDelete={viewModalDeleteHandler} userData={userData} />
+                )
+            }
             {
                 editModalOpened && (
                     <EditModal show={editModalOpened} id={selectedBookingId} fetchedBookings={fetchedBookings}

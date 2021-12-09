@@ -26,6 +26,7 @@ const ClientImg = styled.img`
     flex-shrink: 0;
     margin-bottom: 10px;
     cursor: pointer;
+	object-fit: cover;
 `
 const ClientName = styled.p`
     display: block;
@@ -96,6 +97,10 @@ const BillTotal = styled.p`
     transition: 0.3s ease-in-out;
     margin: 10px 0;
     cursor: pointer;
+	i {
+		font-style: normal;
+		font-size: 13px;
+	}
 `
 
 
@@ -124,7 +129,7 @@ const QrWrapper = styled.div`
 const Invoice = React.forwardRef((props, ref) => {
 	const { t } = useTranslation();
 
-	const { bookingData, userData } = props
+	const { bookingData, userData, qrCode } = props
 
 
 	return (
@@ -133,7 +138,7 @@ const Invoice = React.forwardRef((props, ref) => {
 				<Grid container spacing={3}>
 					<Grid item xs={12}>
 						<ClientDetails>
-							<ClientImg />
+							<ClientImg src={userData.user.company.logo_url} />
 							<ClientName>{userData.user.company.companyName}</ClientName>
 							<ClientAddress>{userData.user.company.address}</ClientAddress>
 							<ClientBill>رقم الفاتورة : {bookingData.id}</ClientBill>
@@ -162,6 +167,7 @@ const Invoice = React.forwardRef((props, ref) => {
 											bookingData.items && bookingData.items.map( (item, index) => {
 												return (
 													<TableRow
+														key={index}
 														sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
 													>
 														<TableCell component="th" scope="row">
@@ -179,14 +185,14 @@ const Invoice = React.forwardRef((props, ref) => {
 							</TableContainer>
 							<BillTotal>
 								<span>{formatCurrency(bookingData.vat)}</span>
-								<span>:ضريبة القيمة المضافة %15</span>
+								<i>:ضريبة القيمة المضافة %15</i>
 							</BillTotal>
 							<BillTotal>
 								<span>{formatCurrency(bookingData.price)}</span>
 								<span>:المجموع الكلي</span>
 							</BillTotal>
 							<QrWrapper>
-								<QRCode value="http://facebook.github.io/react/" />
+								{qrCode && <QRCode value={qrCode} />}
 							</QrWrapper>
 						</ClientDetails>
 					</Grid>
