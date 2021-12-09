@@ -27,7 +27,7 @@ const SwitchBtn = styled(ButtonSmall)`
 `
 const LogoutBtn = styled(ButtonText)`
     &.MuiButton-root {
-        font-weright: bold;
+        font-weight: bold;
     }
 `
 

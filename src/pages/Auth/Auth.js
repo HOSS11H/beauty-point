@@ -119,7 +119,6 @@ const Auth = props => {
             .then(res => {
                 console.log('success', res.data.token);
                 authCtx.login(res.data.token);
-                navigate('/account/dashboard', { replace: true });
             })
             .catch( err => {
                 console.log(err.message)
