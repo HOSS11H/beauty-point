@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { searchProducts, createProduct } from '../../../../store/actions/index';
 import SearchBar from "../../../../components/Search/SearchBar/SearchBar";
@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 import { CustomButton } from '../../../../components/UI/Button/Button';
 import CreateModal from "./CreateModal/CreateModal";
+import CustomizedSnackbars from "../../../../components/UI/SnackBar/SnackBar";
 
 
 const ActionsWrapper = styled.div`
@@ -33,9 +34,18 @@ function Products(props) {
 
     const { t } = useTranslation()
 
-    const { searchProductsHandler, createProductHandler } = props;
+    const { searchProductsHandler, createProductHandler, creatingProductSuccess } = props;
 
     const [createModalOpened, setCreateModalOpened] = useState(false);
+
+    const [ messageShown, setMessageShown ] = useState(creatingProductSuccess);
+
+    useEffect(() => {
+        setMessageShown(creatingProductSuccess )
+    }, [creatingProductSuccess])
+    const closeMessageHandler = useCallback(( ) => {
+        setMessageShown(false)
+    }, [])
 
     // Create Modal
     const createModalOpenHandler = useCallback((id) => {
@@ -61,8 +71,15 @@ function Products(props) {
                     heading='create new product' confirmText='create' />
             </ActionsWrapper>
             <ProductsTable />
+            <CustomizedSnackbars show={messageShown} message={t('Product Added')} type='success' onClose={closeMessageHandler} />
         </Fragment>
     );
+}
+
+const mapStateToProps = (state) => {
+    return {
+        creatingProductSuccess: state.products.creatingProductSuccess,
+    }
 }
 
 const mapDispatchToProps = dispatch => {
@@ -72,4 +89,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(Products);
+export default connect(mapStateToProps, mapDispatchToProps)(Products);

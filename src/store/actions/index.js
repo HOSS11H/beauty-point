@@ -4,6 +4,7 @@ export {
     deleteBooking,
     updateBooking,
     createBooking,
+    filterBookings,
 } from './bookings'
 export {
     fetchServices,
@@ -27,6 +28,7 @@ export {
     deleteDeal,
     searchDeals,
     filterDeals,
+    createDeal,
 } from './deals'
 export {
     fetchLocations,

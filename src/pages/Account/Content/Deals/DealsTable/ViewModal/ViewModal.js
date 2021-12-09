@@ -13,6 +13,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { formatCurrency } from '../../../../../../shared/utility';
 
 const DealImg = styled.div`
     width: 100%;
@@ -118,7 +119,7 @@ const ViewModal = (props) => {
                         <Grid item xs={6}>
                             <DealData>
                                 <DealDataHeading>{t('discount value')}</DealDataHeading>
-                                <DealDataInfo>{transformedDealData.discount_value}</DealDataInfo>
+                                <DealDataInfo>{ transformedDealData.discount_type === 'percentage' ? `${transformedDealData.discount_value} %` : formatCurrency(transformedDealData.discount_value)  }</DealDataInfo>
                             </DealData>
                         </Grid>
                         <Grid item xs={6}>

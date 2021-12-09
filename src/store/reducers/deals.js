@@ -11,6 +11,9 @@ const intialState = {
     deletingDealMessage: null,
     searchingDeals: false,
     searchingDealsSuccess: false,
+    creatingDeal: false,
+    creatingDealSuccess: false,
+    creatingDealMessage: null,
 } ;
 
 const reducer = ( state = intialState , action ) => {
@@ -55,27 +58,55 @@ const reducer = ( state = intialState , action ) => {
                 deletingDealSuccess: false,
                 deletingDealMessage: action.message,
             })
-            case ( actionTypes.SEARCH_DEALS_START ) :
-                return updateObject( state , {
-                    fetchingDeals: true,
-                    errorFetchingDeals: false,
-                    searchingDeals: true,
-                    searchingDealsSuccess: false,
-                })
-            case ( actionTypes.SEARCH_DEALS_SUCCESS ) :
-                return updateObject( state , {
-                    fetchingDeals: false,
-                    deals: action.deals,
-                    searchingDeals: false,
-                    searchingDealsSuccess: true,
-                })
-            case ( actionTypes.SEARCH_DEALS_FAILED ) :
-                return updateObject( state , {
-                    fetchingDeals: false,
-                    errorFetchingDeals: true,
-                    searchingDeals: false,
-                    searchingDealsSuccess: false,
-                })
+        case (actionTypes.CREATE_DEAL_START):
+            return updateObject(state, {
+                creatingDeal: true,
+                creatingDealSuccess: false,
+                creatingDealMessage: null,
+            })
+        case (actionTypes.CREATE_DEAL_SUCCESS):
+            const upgradedProducts = [...state.deals.data]
+            upgradedProducts.push(action.dealData);
+            return updateObject(state, {
+                deals: {
+                    ...state.deals,
+                    data: upgradedProducts,
+                    meta: {
+                        ...state.deals.meta,
+                        total: state.deals.meta.total + 1,
+                    }
+                },
+                creatingDeal: false,
+                creatingDealSuccess: true,
+                creatingDealMessage: action.message,
+            })
+        case (actionTypes.CREATE_DEAL_FAILED):
+            return updateObject(state, {
+                creatingDeal: false,
+                creatingDealSuccess: false,
+                creatingDealMessage: action.message,
+            })
+        case ( actionTypes.SEARCH_DEALS_START ) :
+            return updateObject( state , {
+                fetchingDeals: true,
+                errorFetchingDeals: false,
+                searchingDeals: true,
+                searchingDealsSuccess: false,
+            })
+        case ( actionTypes.SEARCH_DEALS_SUCCESS ) :
+            return updateObject( state , {
+                fetchingDeals: false,
+                deals: action.deals,
+                searchingDeals: false,
+                searchingDealsSuccess: true,
+            })
+        case ( actionTypes.SEARCH_DEALS_FAILED ) :
+            return updateObject( state , {
+                fetchingDeals: false,
+                errorFetchingDeals: true,
+                searchingDeals: false,
+                searchingDealsSuccess: false,
+            })
         default :
             return state;
     }

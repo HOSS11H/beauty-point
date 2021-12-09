@@ -179,9 +179,13 @@ function DealsTable(props) {
                 <ViewModal show={viewModalOpened} id={selectedDealId} fetchedDeals={fetchedDeals}
                     onClose={viewModalCloseHandler} onConfirm={viewModalConfirmHandler.bind(null, selectedDealId)}
                     heading='view deal details' confirmText='edit' />
-                <EditModal show={editModalOpened} id={selectedDealId} fetchedDeals={fetchedDeals}
-                    onClose={editModalCloseHandler} onConfirm={editModalConfirmHandler.bind(null, selectedDealId)}
-                    heading='view deal details' confirmText='edit' />
+                {
+                    editModalOpened && (
+                        <EditModal show={editModalOpened} id={selectedDealId} fetchedDeals={fetchedDeals}
+                            onClose={editModalCloseHandler} onConfirm={editModalConfirmHandler.bind(null, selectedDealId)}
+                            heading='view deal details' confirmText='edit' />
+                    )
+                }
             </Fragment>
         )
     }

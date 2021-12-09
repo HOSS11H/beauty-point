@@ -163,7 +163,7 @@ function getStyles(selected, items, theme) {
 
 const CreateModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, fetchedEmployees, fetchedLocations, fetchedCategories, fetchEmployeesHandler, fetchLocationsHandler, fetchCategoriesHandler } = props;
+    const { show, heading, confirmText, onConfirm, onClose, fetchedEmployees, fetchedLocations, fetchedCategories, fetchEmployeesHandler, fetchLocationsHandler, fetchCategoriesHandler, creatingServiceSuccess } = props;
 
     const { t } = useTranslation();
 
@@ -316,6 +316,34 @@ const CreateModal = (props) => {
         onClose();
     }, [onClose])
 
+    const resetModalData = useCallback(() => {
+        setServiceName('');
+        setServiceNameError(false);
+        setEditorState(EditorState.createEmpty());
+        setServiceDescriptionError(false);
+        setServicePrice(0);
+        setServicePriceError(false);
+        setServiceDiscount(0);
+        setDiscountType('percent');
+        setPriceAfterDiscount(0);
+        setEmployeeName([]);
+        setLocationName('');
+        setServiceLocationError(false);
+        setCategoryName('');
+        setServiceCategoryError(false);
+        setTimeRequired(0);
+        setServiceTimeError(false);
+        setTimeType('minutes');
+        setServiceStatus('active');
+        setUploadedImages([]);
+        setDefaultImage('');
+        setDefaultImageError(false);
+    }, [])
+
+    useEffect(() => {
+        creatingServiceSuccess && resetModalData();
+    }, [creatingServiceSuccess, resetModalData])
+
     const confirmCreateHandler = useCallback(() => {
         if ( serviceName.trim().length === 0) {
             setServiceNameError(true);
@@ -376,20 +404,6 @@ const CreateModal = (props) => {
             location: selectedLocation,
         }
         onConfirm(data);
-        setServiceName('');
-        setEditorState(EditorState.createEmpty());
-        setServicePrice(0);
-        setServiceDiscount(0);
-        setDiscountType('percent');
-        setPriceAfterDiscount(0);
-        setEmployeeName([]);
-        setLocationName('');
-        setCategoryName('');
-        setTimeRequired(0);
-        setTimeType('minutes');
-        setServiceStatus('active');
-        setUploadedImages([]);
-        setDefaultImage('');
     }, [categoryName, defaultImage, discountType, editorState, employeeName, fetchedCategories, fetchedEmployees, fetchedLocations, locationName, onConfirm, priceAfterDiscount, serviceDiscount, serviceName, servicePrice, servicePriceError, serviceStatus, timeRequired, timeType, uploadedImages])
 
     let content = (
@@ -435,7 +449,7 @@ const CreateModal = (props) => {
                             onChange={discountTypeChangeHandler}
                             inputProps={{ 'aria-label': 'Without label' }}
                         >
-                            <MenuItem value='percent'>{t('Percent')}</MenuItem>
+                            <MenuItem value='percent'>{t('percent')}</MenuItem>
                             <MenuItem value='fixed'>{t('Fixed')}</MenuItem>
                         </Select>
                     </FormControl>
@@ -612,6 +626,7 @@ const mapStateToProps = (state) => {
         fetchedEmployees: state.employees.employees,
         fetchedLocations: state.locations.locations,
         fetchedCategories: state.categories.categories,
+        creatingServiceSuccess: state.services.creatingServiceSuccess,
     }
 }
 
