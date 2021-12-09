@@ -72,9 +72,9 @@ const EnhancedTableBody = props => {
                             <TableStatus className={row.status} >{row.status}</TableStatus>
                         </TableCell>
                         <TableCell align="center">
-                            <Actions edit remove view
+                            <Actions remove view
                                 removeHandler={deleteModalOpenHandler.bind(null, row.id)}
-                                editHandler={editModalOpenHandler.bind(null, row.id)}
+                                /* editHandler={editModalOpenHandler.bind(null, row.id)} */
                                 viewHandler={viewModalOpenHandler.bind(null, row.id)}
                             />
                         </TableCell>
