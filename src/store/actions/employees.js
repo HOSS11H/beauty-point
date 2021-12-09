@@ -124,7 +124,6 @@ export const updateEmployeeDataFailed = (message) => {
 export const updateEmployeeData = (data) => {
     return dispatch => {
         dispatch(updateEmployeeDataStart())
-        console.log(data)
         axios.put(`/vendors/employees/${data.id}`, data)
             .then(response => {
                 dispatch(updateEmployeeDataSuccess(response.data, data));

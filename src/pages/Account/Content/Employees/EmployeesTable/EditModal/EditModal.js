@@ -122,6 +122,7 @@ const CreateModal = (props) => {
             return;
         }
         const data = {
+            id: id,
             name: employeeName,
             email: employeeEmail,
             mobile: employeeNumber,
@@ -130,7 +131,7 @@ const CreateModal = (props) => {
         }
         onConfirm(data);
         resetModalData();
-    }, [employeeEmail, employeeName, employeeNumber, employeePassword, employeeRole, onConfirm, resetModalData])
+    }, [employeeEmail, employeeName, employeeNumber, employeePassword, employeeRole, id, onConfirm, resetModalData])
 
     let content = (
         <Grid container spacing={2}>

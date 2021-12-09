@@ -128,6 +128,49 @@ const reducer = ( state = intialState, action ) => {
                 addingEmployeeSuccess: true,
                 addingEmployeeMessage: action.message,
             });
+        case ( actionTypes.ADD_EMPLOYEE_DATA_FAILED ) :
+            return updateObject( state, {
+                employeesData: {
+                    ...state.employeesData,
+                    addingEmployee: false,
+                    addingEmployeeSuccess: false,
+                    addingEmployeeMessage: action.message,
+                }
+            });
+        case ( actionTypes.UPDATE_EMPLOYEE_DATA_START) :
+            return updateObject( state, {
+                employeesData: {
+                    ...state.employeesData,
+                    updatingEmployee: true,
+                    updatingEmployeeSuccess: false,
+                    updatingEmployeeMessage: null,
+                }
+            });
+        case (actionTypes.UPDATE_EMPLOYEE_DATA_SUCCESS) :
+            const updatedEmployeesInfos = [...state.employeesData.employees.data];
+            const updatedEmployeeIndex = updatedEmployeesInfos.findIndex(employee => employee.id === action.employeeData.id);
+            updatedEmployeesInfos[updatedEmployeeIndex] = action.employeeData;
+            return updateObject( state, {       
+                employeesData: {
+                    ...state.employeesData,
+                    employees: {
+                        ...state.employeesData.employees,
+                        data: updatedEmployeesInfos,
+                    },
+                    updatingEmployee: false,
+                    updatingEmployeeSuccess: true,
+                    updatingEmployeeMessage: action.message,
+                }
+            });
+        case (actionTypes.UPDATE_EMPLOYEE_DATA_FAILED) :
+            return updateObject( state, {
+                employeesData: {
+                    ...state.employeesData,
+                    updatingEmployee: false,
+                    updatingEmployeeSuccess: false,
+                    updatingEmployeeMessage: action.message,
+                }
+            });
         case (actionTypes.FETCH_ROLES_SUCCESS) :
             return updateObject( state, {
                 roles: action.roles,
