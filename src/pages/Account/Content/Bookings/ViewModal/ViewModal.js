@@ -292,8 +292,6 @@ const ViewModal = (props) => {
                 <Grid item xs={12}>
                     <BookingActions>
                         <ActionButton onClick={printBookingHandler}  ><PrintIcon/>{t('print')}</ActionButton>
-                        <ActionButton><FindInPageIcon/>{t('show receipt')}</ActionButton>
-                        <ActionButton><DownloadIcon/>{t('download receipt')}</ActionButton>
                     </BookingActions>
                 </Grid>
                 <Invoice ref={invoiceRef} />

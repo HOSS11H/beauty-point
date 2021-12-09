@@ -4,6 +4,7 @@ import rtlPlugin from "stylis-plugin-rtl";
 import { Route, Routes } from 'react-router-dom'
 
 import ThemeContext from './store/theme-context';
+import AuthContext from './store/auth-context';
 
 import Layout from './components/Layout/Layout';
 import Auth from './pages/Auth/Auth';
@@ -30,29 +31,43 @@ function App() {
 
     const themeCtx = useContext(ThemeContext)
 
-    const routes = (
+    const authCtx = useContext(AuthContext);
+
+    const { isLoggedIn } = authCtx;
+
+
+    let routes = (
         <Routes>
             <Route path="/auth" element={<Auth />} />
-            <Route path="/account/*" element={<Account />} >
-                <Route path="dashboard" element={<Dashboard />} />
-                <Route path="services" element={<Services />} />
-                <Route path="products" element={<Products />} />
-                <Route path="deals" element={<Deals />} />
-                <Route path='point-of-sale' element={ <PointOfSale/> } />
-                <Route path='bookings' element={ <Bookings/> } />
-                <Route path='booking-calendar' element={ <BookingCalendar/> } />
-                <Route path='reports' element={ <Reports/> } />
-                <Route path='employees' element={<Employees />} />
-                <Route path="settings/*" element={<Settings />}>
-                    <Route path='' element={<General />} />
-                    <Route path='vendor-page' element={<VendorPage />} />
-                    <Route path="booking-settings" element={<BookingSettings/>} />
-                </Route>
-            </ Route>
             <Route path="/" element={<Landing />} />
             <Route path='*' element={<NotFound />} />
         </Routes>
     )
+    if (isLoggedIn) {
+        routes = (
+            <Routes>
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/account/*" element={<Account />} >
+                    <Route path="dashboard" element={<Dashboard />} />
+                    <Route path="services" element={<Services />} />
+                    <Route path="products" element={<Products />} />
+                    <Route path="deals" element={<Deals />} />
+                    <Route path='point-of-sale' element={<PointOfSale />} />
+                    <Route path='bookings' element={<Bookings />} />
+                    <Route path='booking-calendar' element={<BookingCalendar />} />
+                    <Route path='reports' element={<Reports />} />
+                    <Route path='employees' element={<Employees />} />
+                    <Route path="settings/*" element={<Settings />}>
+                        <Route path='' element={<General />} />
+                        <Route path='vendor-page' element={<VendorPage />} />
+                        <Route path="booking-settings" element={<BookingSettings />} />
+                    </Route>
+                </ Route>
+                <Route path="/" element={<Landing />} />
+                <Route path='*' element={<NotFound />} />
+            </Routes>
+        )
+    }
 
     return (
         <StyleSheetManager stylisPlugins={themeCtx.direction === 'rtl' && [rtlPlugin]}>
