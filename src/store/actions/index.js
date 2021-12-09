@@ -50,6 +50,7 @@ export {
     updateEmployeeData,
     addEmployeeData,
     searchEmployeesData,
+    fetchRoles,
 } from './employees'
 export {
     fetchTabularReport,

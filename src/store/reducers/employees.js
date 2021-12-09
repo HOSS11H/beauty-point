@@ -21,7 +21,10 @@ const intialState = {
         addingEmployee: false,
         addingEmployeeSuccess: false,
         addingEmployeeMessage: null,
-    }
+    },
+    roles: [],
+    fetchingRoles: false,
+    errorFetchingRoles: false,
 }
 
 const reducer = ( state = intialState, action ) => {
@@ -91,6 +94,21 @@ const reducer = ( state = intialState, action ) => {
                     deletingEmployeeSuccess: true,
                     deletingEmployeeMessage: action.message,
                 }
+            });
+        case (actionTypes.FETCH_ROLES_START) :
+            return updateObject( state, {
+                fetchingRoles: true,
+                errorFetchingRoles: false,
+            });
+        case (actionTypes.FETCH_ROLES_SUCCESS) :
+            return updateObject( state, {
+                roles: action.roles,
+                fetchingRoles: false,
+            });
+        case (actionTypes.FETCH_ROLES_FAILED) :
+            return updateObject( state, {
+                fetchingRoles: false,
+                errorFetchingRoles: true,
             });
         default:
             return state;

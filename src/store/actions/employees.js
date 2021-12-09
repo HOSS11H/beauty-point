@@ -1,5 +1,6 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../utils/axios-instance';
+import v1 from '../../utils/axios-instance-v1'
 
 
 export const fetchEmployeesStart = (  ) => {
@@ -196,4 +197,37 @@ export const searchEmployeesData = (language, word) => {
                 dispatch(searchEmployeesDataFailed(err.message))
             })
     }
+}
+export const fetchRolesStart = (  ) => {
+    return {
+        type: actionTypes.FETCH_ROLES_START,
+    }
+}
+export const fetchRolesSuccess = ( rolesData ) => {
+    return {
+        type: actionTypes.FETCH_ROLES_SUCCESS,
+        roles: rolesData
+    }
+}
+export const fetchRolesFailed = ( errorMessage ) => {
+    return {
+        type: actionTypes.FETCH_ROLES_FAILED,
+        error: errorMessage,
+    }
+}
+export const fetchRoles = ( language ) => {
+    return dispatch => {
+        dispatch( fetchRolesStart( ) )
+        v1.get(`/vendors/settings/roles`, { 
+            headers: {
+                'Accept-Language': language
+            }
+        }).then( response => {
+                dispatch( fetchRolesSuccess( response.data  ) );
+            })
+            .catch( err => {
+                console.log(err)
+                dispatch( fetchRolesFailed( err.message  ) )
+            } )
+        }
 }
