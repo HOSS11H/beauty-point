@@ -21,8 +21,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import { formatCurrency } from '../../../../../shared/utility';
 import { CustomButton } from '../../../../../components/UI/Button/Button';
 import PrintIcon from '@mui/icons-material/Print';
-import DownloadIcon from '@mui/icons-material/Download';
-import FindInPageIcon from '@mui/icons-material/FindInPage';
 import Invoice from './Invoice/Invoice';
 import { useReactToPrint } from 'react-to-print';
 import { useRef } from 'react';
