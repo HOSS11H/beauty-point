@@ -24,6 +24,8 @@ import PrintIcon from '@mui/icons-material/Print';
 import DownloadIcon from '@mui/icons-material/Download';
 import FindInPageIcon from '@mui/icons-material/FindInPage';
 import Invoice from './Invoice/Invoice';
+import { useReactToPrint } from 'react-to-print';
+import { useRef } from 'react';
 
 const ClientDetails = styled.div`
     display: flex;
@@ -170,6 +172,12 @@ const ViewModal = (props) => {
 
     let content;
 
+    const invoiceRef = useRef();
+
+    const printBookingHandler = useReactToPrint({
+        content: () => invoiceRef.current,
+    });
+
     if (bookingData) {
 
         content = (
@@ -283,12 +291,12 @@ const ViewModal = (props) => {
                 </Grid>
                 <Grid item xs={12}>
                     <BookingActions>
-                        <ActionButton><PrintIcon/>{t('print')}</ActionButton>
+                        <ActionButton onClick={printBookingHandler}  ><PrintIcon/>{t('print')}</ActionButton>
                         <ActionButton><FindInPageIcon/>{t('show receipt')}</ActionButton>
                         <ActionButton><DownloadIcon/>{t('download receipt')}</ActionButton>
                     </BookingActions>
                 </Grid>
-                <Invoice />
+                <Invoice ref={invoiceRef} />
                 <Grid item xs={12}>
                     <BookingActions>
                         <DeleteButton onClick={(id) => onDelete(bookingData.id)} >{t('Delete')}</DeleteButton>

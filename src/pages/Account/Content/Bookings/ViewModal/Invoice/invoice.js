@@ -1,8 +1,10 @@
+
+import React from 'react';
 import QRCode from 'qrcode.react';
 import  './Invoice.css';
-const Invoice = props => {
+const Invoice = React.forwardRef((props, ref) => {
 	return (
-		<div className="row">
+		<div className="container"  ref={ref}>
 			<div id="invoice">
 				{/* Logo */}
 				<img style={{maxHeight: '150px', width: 'auto'}} alt='logo' src={props.log} className="img img-responsive mx-auto d-block" />
@@ -146,5 +148,5 @@ const Invoice = props => {
 			</div>
 		</div>
 	)
-}
+})
 export default Invoice;
