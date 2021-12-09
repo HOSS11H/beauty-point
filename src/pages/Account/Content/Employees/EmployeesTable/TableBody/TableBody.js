@@ -52,8 +52,8 @@ const EnhancedTableBody = props => {
                             <TableData>
                                 {
                                     row.employeeGroup && (
-                                        <TableInfos>
-                                            {row.employeeGroup}
+                                        <TableInfos >
+                                            {row.employeeGroup.name}
                                         </TableInfos>
                                     )
                                 }
