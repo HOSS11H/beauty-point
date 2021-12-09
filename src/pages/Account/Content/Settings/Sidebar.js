@@ -26,8 +26,6 @@ export default function Sidebar() {
                     <Tab value="" label="General" />
                     <Tab value="vendor-page" label="Vendor page Settings" />
                     <Tab value="booking-settings" label="Booking Settings" />
-                    <Tab label="Module Settings" />
-                    <Tab label="Roles and Permissions" />
                 </Tabs>
             </Box>
         </Card>

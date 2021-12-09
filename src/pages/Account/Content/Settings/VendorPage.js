@@ -29,7 +29,7 @@ export default function VendorPage(props) {
                 if (res.data.seo_keywords !== null) {
                     setTags(res.data.seo_keywords.split(','))
                 }
-                setSeoDescription(res.data.seo_description)
+                setSeoDescription(res.data.seo_description ?? '')
                 setShow(false)
             })
     }, [])

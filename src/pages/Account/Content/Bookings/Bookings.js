@@ -85,9 +85,10 @@ function Bookings(props) {
 
     const viewModalConfirmHandler = useCallback((id) => {
         setViewModalOpened(false);
-        setEditModalOpened(true);
-        editModalOpenHandler(id);
-    }, [editModalOpenHandler])
+        setSelectedBookingId(null);
+        /* setEditModalOpened(true);
+        editModalOpenHandler(id); */
+    }, [])
 
     let content = fetchedBookings.data.map((booking, index) => {
         return (
@@ -129,16 +130,16 @@ function Bookings(props) {
                 viewModalOpened && (
                     <ViewModal show={viewModalOpened} id={selectedBookingId} fetchedBookings={fetchedBookings}
                         onClose={viewModalCloseHandler} onConfirm={viewModalConfirmHandler.bind(null, selectedBookingId)}
-                        heading='view booking details' confirmText='edit'  onDelete={viewModalDeleteHandler} userData={userData} />
+                        heading='view booking details' confirmText='save'  onDelete={viewModalDeleteHandler} userData={userData} />
                 )
             }
-            {
+            {/* {
                 editModalOpened && (
                     <EditModal show={editModalOpened} id={selectedBookingId} fetchedBookings={fetchedBookings}
                         onClose={editModalCloseHandler} onConfirm={editModalConfirmHandler}
                         heading='edit booking details' confirmText='confirm edit' onDelete={editModalDeleteHandler} />
                 )
-            }
+            } */}
         </Grid>
     );
 }

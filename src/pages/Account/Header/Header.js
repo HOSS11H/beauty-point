@@ -13,7 +13,9 @@ import ThemeContext from '../../../store/theme-context';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import Brightness2Icon from '@mui/icons-material/Brightness2';
 
-import { ButtonSmall } from '../../../components/UI/Button/Button';
+import { ButtonSmall, ButtonText } from '../../../components/UI/Button/Button';
+import AuthContext from '../../../store/auth-context';
+import { useTranslation } from 'react-i18next';
 
 const SwitchBtn = styled(ButtonSmall)`
     &.MuiButton-root {
@@ -23,11 +25,24 @@ const SwitchBtn = styled(ButtonSmall)`
         font-family: ${ ( { theme } ) => theme.direction === "ltr" ? "'Cairo', sans-serif " : "'Poppins', sans-serif " };
     }
 `
+const LogoutBtn = styled(ButtonText)`
+    &.MuiButton-root {
+        font-weright: bold;
+    }
+`
 
 function Header(props) {
+
+    const {t} = useTranslation();
+
     const { onDrawerToggle } = props;
 
     const themeCtx = useContext(ThemeContext)
+
+    const authCtx = useContext(AuthContext);
+
+    const {logout} = authCtx;
+
 
 
     return (
@@ -53,16 +68,7 @@ function Header(props) {
                         </Grid>
                         <Grid item xs />
                         <Grid item>
-                            <Tooltip title="Alerts • No alerts">
-                                <IconButton color="inherit">
-                                    <NotificationsIcon />
-                                </IconButton>
-                            </Tooltip>
-                        </Grid>
-                        <Grid item>
-                            <IconButton color="inherit" sx={{ p: 0.5 }}>
-                                <Avatar src="/static/images/avatar/1.jpg" alt="My Avatar" />
-                            </IconButton>
+                            <LogoutBtn variant='text' onClick={logout}>{t('log out')}</LogoutBtn>
                         </Grid>
                     </Grid>
                 </Toolbar>

@@ -178,7 +178,8 @@ const resources = {
             'Secondary Phone': 'الهاتف الثانوي',
             'Description': 'الوصف',
             'SEO Description': 'وصف محركات البحث',
-            'Keywords':'الكلمات الافتتاحية'
+            'Keywords':'الكلمات الافتتاحية',
+            'save': 'حفظ',
         }
     }
 };
