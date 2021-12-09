@@ -65,6 +65,33 @@ const reducer = ( state = intialState, action ) => {
                     errorFetchingEmployees: true,
                 }
             });
+        case(actionTypes.DELETE_EMPLOYEE_DATA_START) :
+            return updateObject( state, {
+                employeesData: {
+                    ...state.employeesData,
+                    deletingEmployee: true,
+                    deletingEmployeeSuccess: false,
+                    deletingEmployeeMessage: null,
+                }
+            });
+        case(actionTypes.DELETE_EMPLOYEE_DATA_SUCCESS) :
+            const updatedEmployees = state.employeesData.employees.data.filter(employee => employee.id !== action.employeeId);
+            return updateObject( state, {
+                employeesData: {
+                    ...state.employeesData,
+                    employees: {
+                        ...state.employeesData.employees,
+                        data: updatedEmployees,
+                        meta: {
+                            ...state.employeesData.employees.meta,
+                            total: state.employeesData.employees.meta.total - 1,
+                        }
+                    },
+                    deletingEmployee: false,
+                    deletingEmployeeSuccess: true,
+                    deletingEmployeeMessage: action.message,
+                }
+            });
         default:
             return state;
     }

@@ -29,7 +29,7 @@ const headCells = [
         label: 'group',
     },
     {
-        id: 'role',
+        id: 'roles',
         numeric: false,
         disablePadding: false,
         label: 'role',

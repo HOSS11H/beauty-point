@@ -65,10 +65,10 @@ function Employees(props) {
         <Fragment>
             <ActionsWrapper>
                 <SearchBar searchHandler={searchEmployeesHandler}/>
-                <CreateBtn onClick={createModalOpenHandler} >{t('add Product')}</CreateBtn>
+                <CreateBtn onClick={createModalOpenHandler} >{t('add employee')}</CreateBtn>
                 <CreateModal show={createModalOpened}
                     onClose={createModalCloseHandler} onConfirm={createModalConfirmHandler}
-                    heading='add new product' confirmText='add' />
+                    heading='add new employee' confirmText='add' />
             </ActionsWrapper>
             <ProductsTable />
             <CustomizedSnackbars show={messageShown} message={t('Employee Added')} type='success' onClose={closeMessageHandler} />

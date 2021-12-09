@@ -170,7 +170,10 @@ const resources = {
             'Address': 'العنوان',
             'Invoice Notes': 'ملاحظات الفاتورة',
             'Save': 'حفظ',
-            'Saved Successfuly': 'تم الحفظ بنجاح'
+            'Saved Successfuly': 'تم الحفظ بنجاح',
+            'Do you want To delete this employee?': 'هل تريد حذف هذا الموظف؟',
+            'view employee details': 'عرض تفاصيل الموظف',
+            'edit employee details': 'تعديل تفاصيل الموظف',
         }
     }
 };
