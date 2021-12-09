@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import axios from '../../utils/axios-instance-v1';
 import useForm from '../../hooks/useForm';
 import { loginForm, subscribeForm } from '../../utils/formConfig';
@@ -74,6 +74,8 @@ const Auth = props => {
 
     const [ errorMessage , setErrorMessage ] = useState(null);
 
+    const { isLoggedIn } = authCtx;
+
     const { renderFormInputs: loginInputs, isFormValid: isLoginDataValid, form: loginData } = useForm(loginForm);
     const { renderFormInputs: subscribeInputs, isFormValid: isSubscribeDataValid, form: subscribeData } = useForm(subscribeForm);
 
@@ -84,6 +86,10 @@ const Auth = props => {
     } else {
         authIsValid = isSubscribeDataValid()
     }
+
+    useEffect(() => {
+        isLoggedIn && navigate('/account/dashboard', { replace: true })
+    }, [isLoggedIn, navigate])
 
     const switchAuthModeHandler = ( ) => {
         setIsLogin(prevState => !prevState);

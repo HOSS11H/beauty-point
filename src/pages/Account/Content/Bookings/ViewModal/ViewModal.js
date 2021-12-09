@@ -160,7 +160,7 @@ const DeleteButton = styled(CustomButton)`
 
 const ViewModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, id, fetchedBookings, onDelete } = props;
+    const { show, heading, confirmText, onConfirm, onClose, id, fetchedBookings, onDelete, userData } = props;
 
     const { t } = useTranslation();
 
@@ -292,7 +292,7 @@ const ViewModal = (props) => {
                         <ActionButton onClick={printBookingHandler}  ><PrintIcon/>{t('print')}</ActionButton>
                     </BookingActions>
                 </Grid>
-                <Invoice ref={invoiceRef} />
+                <Invoice userData={userData} ref={invoiceRef} bookingData={bookingData} />
                 <Grid item xs={12}>
                     <BookingActions>
                         <DeleteButton onClick={(id) => onDelete(bookingData.id)} >{t('Delete')}</DeleteButton>

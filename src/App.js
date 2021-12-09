@@ -40,7 +40,7 @@ function App() {
         <Routes>
             <Route path="/auth" element={<Auth />} />
             <Route path="/" element={<Landing />} />
-            <Route path='*' element={<NotFound />} />
+            <Route path='*' element={<Landing />} />
         </Routes>
     )
     if (isLoggedIn) {
@@ -64,7 +64,7 @@ function App() {
                     </Route>
                 </ Route>
                 <Route path="/" element={<Landing />} />
-                <Route path='*' element={<NotFound />} />
+                <Route path='*' element={<Landing />} />
             </Routes>
         )
     }

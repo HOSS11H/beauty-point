@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { NavLink } from 'react-router-dom';
+import { useNavigate, NavLink } from 'react-router-dom';
 
 import  '../../assets/css/all.min.css';
 //import '../../assets/css/bootstrap.min.css';
@@ -23,8 +23,10 @@ import {appendScript} from '../../assets/load';
 
 const Landing = props => {
 
+    const navigate = useNavigate()
 
     useEffect( () => {
+        navigate('/auth', { replace: true })
         const fPath = '/assests/'
 
         const scripts = [

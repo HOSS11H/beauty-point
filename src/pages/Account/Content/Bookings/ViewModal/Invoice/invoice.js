@@ -11,8 +11,10 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useTranslation } from 'react-i18next';
+import { formatCurrency } from '../../../../../../shared/utility';
 
 const ClientDetails = styled.div`
+	padding-top: 100px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -65,16 +67,6 @@ const ClientDate = styled.p`
     transition: 0.3s ease-in-out;
     margin-bottom: 5px;
 `
-const ClientBooking = styled.p`
-    display: block;
-    font-size: 13px;
-    line-height:1.5;
-    text-transform: capitalize;
-    font-weight: 700;
-    color: ${({ theme }) => theme.palette.primary.main};
-    transition: 0.3s ease-in-out;
-    margin-bottom: 5px;
-`
 const ClientInfos = styled.p`
 	width: 90%;
     display: flex;
@@ -114,10 +106,11 @@ const BookingDataHeading = styled.p`
     font-weight: 600;
     color: ${({ theme }) => theme.palette.text.primary};
     margin-bottom: 5px;
+	margin-top: 10px;
 	text-align: center;
 `
 const BookingDataBody = styled.p`
-    font-size: 13px;
+    font-size: 12px;
     line-height:1.5;
     text-transform: capitalize;
     font-weight: 600;
@@ -130,6 +123,10 @@ const QrWrapper = styled.div`
 
 const Invoice = React.forwardRef((props, ref) => {
 	const { t } = useTranslation();
+
+	const { bookingData, userData } = props
+
+
 	return (
 		<div style={{ display: 'none' }} >
 			<div ref={ref} > 
@@ -137,17 +134,16 @@ const Invoice = React.forwardRef((props, ref) => {
 					<Grid item xs={12}>
 						<ClientDetails>
 							<ClientImg />
-							<ClientName>اسم المحل</ClientName>
-							<ClientAddress>العنوان كاملا </ClientAddress>
-							<ClientBill>رقم الفاتورة : #123456789</ClientBill>
-							<ClientDate>تاريخ الفاتورة : 12/12/2020</ClientDate>
-							<ClientBooking>رقم الحجز : #37</ClientBooking>
+							<ClientName>{userData.user.company.companyName}</ClientName>
+							<ClientAddress>{userData.user.company.address}</ClientAddress>
+							<ClientBill>رقم الفاتورة : {bookingData.id}</ClientBill>
+							<ClientDate>تاريخ الفاتورة : {bookingData.date}</ClientDate>
 							<ClientInfos>
-								<span>العميل</span>
+								<span>{t(bookingData.user.name)}</span>
 								<span>: دفع الي</span>
 							</ClientInfos>
 							<ClientInfos>
-								<span>موافقة</span>
+								<span>{t(bookingData.status)}</span>
 								<span>: حالة الحجز</span>
 							</ClientInfos>
 							<BookingDataHeading>{t('booking items')}</BookingDataHeading>
@@ -162,32 +158,32 @@ const Invoice = React.forwardRef((props, ref) => {
 										</TableRow>
 									</TableHead>
 									<TableBody>
-										<TableRow
-											sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-										>
-											<TableCell component="th" scope="row">
-												{<BookingDataBody>العنصر</BookingDataBody>}
-											</TableCell>
-											<TableCell>{<BookingDataBody>5</BookingDataBody>}</TableCell>
-											<TableCell>{<BookingDataBody>50 ريال</BookingDataBody>}</TableCell>
-											<TableCell>{<BookingDataBody>1000 ريال</BookingDataBody>}</TableCell>
-										</TableRow>
-										{/* {
-											props.items && props.items.map( (item, index) => {
+										{
+											bookingData.items && bookingData.items.map( (item, index) => {
 												return (
+													<TableRow
+														sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+													>
+														<TableCell component="th" scope="row">
+															{<BookingDataBody>{item.item.name}</BookingDataBody>}
+														</TableCell>
+														<TableCell>{<BookingDataBody>{item.quantity}</BookingDataBody>}</TableCell>
+														<TableCell>{<BookingDataBody>{item.price}</BookingDataBody>}</TableCell>
+														<TableCell>{<BookingDataBody>{item.amount}</BookingDataBody>}</TableCell>
+													</TableRow>
 												)
 											})
-										} */}
+										}
 									</TableBody>
 								</Table>
 							</TableContainer>
 							<BillTotal>
-								<span>ضريبة القيمة المضافة %15</span>
-								<span>10 ريال</span>
+								<span>{formatCurrency(bookingData.vat)}</span>
+								<span>:ضريبة القيمة المضافة %15</span>
 							</BillTotal>
 							<BillTotal>
-								<span>المجموع الكلي</span>
-								<span>500 ريال</span>
+								<span>{formatCurrency(bookingData.price)}</span>
+								<span>:المجموع الكلي</span>
 							</BillTotal>
 							<QrWrapper>
 								<QRCode value="http://facebook.github.io/react/" />

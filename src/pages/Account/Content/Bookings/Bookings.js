@@ -4,11 +4,13 @@ import { connect } from "react-redux";
 import BookingView from "../../../../components/UI/Dashboard/BookingView/BookingView";
 import { fetchBookings, deleteBooking, updateBooking } from "../../../../store/actions/index";
 import ThemeContext from "../../../../store/theme-context";
+import AuthContext from "../../../../store/auth-context";
 import ViewModal from "./ViewModal/ViewModal";
 import EditModal from "./EditModal/EditModal";
 import SearchFilters from "./SearchFilters/SearchFilters";
 import SearchMessage from "../../../../components/Search/SearchMessage/SearchMessage";
 import { useTranslation } from "react-i18next";
+import v1 from '../../../../utils/axios-instance-v1'
 
 
 function Bookings(props) {
@@ -18,8 +20,10 @@ function Bookings(props) {
     const { fetchedBookings, fetchBookingsHandler, fetchingBookings, deleteBookingHandler, updateBookingHandler, filteringBookingsSuccess } = props;
 
     const themeCtx = useContext(ThemeContext)
+    const authCtx = useContext(AuthContext)
 
     const { lang } = themeCtx
+    const { token } = authCtx
 
     const [viewModalOpened, setViewModalOpened] = useState(false);
 
@@ -27,9 +31,19 @@ function Bookings(props) {
 
     const [selectedBookingId, setSelectedBookingId] = useState(null);
 
+    const [userData, setUserData] = useState(null);
 
     useEffect(() => {
         fetchBookingsHandler(lang, 'all');
+        v1.get('/auth/me')
+            .then(res => {
+                console.log(res)
+                setUserData(res.data)
+            }
+            )
+            .catch(err => {
+                console.log(err)
+            })
     }, [fetchBookingsHandler, lang]);
 
     
@@ -113,7 +127,7 @@ function Bookings(props) {
             {content}
             <ViewModal show={viewModalOpened} id={selectedBookingId} fetchedBookings={fetchedBookings}
                 onClose={viewModalCloseHandler} onConfirm={viewModalConfirmHandler.bind(null, selectedBookingId)}
-                heading='view booking details' confirmText='edit'  onDelete={viewModalDeleteHandler} />
+                heading='view booking details' confirmText='edit'  onDelete={viewModalDeleteHandler} userData={userData} />
             {
                 editModalOpened && (
                     <EditModal show={editModalOpened} id={selectedBookingId} fetchedBookings={fetchedBookings}
