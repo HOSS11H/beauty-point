@@ -45,6 +45,11 @@ export {
 } from './coupons'
 export {
     fetchEmployees,
+    fetchEmployeesData,
+    deleteEmployeeData,
+    updateEmployeeData,
+    addEmployeeData,
+    searchEmployeesData,
 } from './employees'
 export {
     fetchTabularReport,

@@ -18,6 +18,7 @@ import Bookings from './pages/Account/Content/Bookings/Bookings'
 import PointOfSale from "./pages/Account/Content/PointOfSale/PointOfSale";
 import BookingCalendar from './pages/Account/Content/BookingCalendar/BookingCalendar';
 import Reports from './pages/Account/Content/Reports/Reports';
+import Employees from './pages/Account/Content/Employees/Employees';
 
 
 import General from './pages/Account/Content/Settings/General'
@@ -40,7 +41,7 @@ function App() {
                 <Route path='bookings' element={ <Bookings/> } />
                 <Route path='booking-calendar' element={ <BookingCalendar/> } />
                 <Route path='reports' element={ <Reports/> } />
-                <Route path='booking-calendar' element={<BookingCalendar />} />
+                <Route path='employees' element={<Employees />} />
                 <Route path="settings/*" element={<Settings />}>
                     <Route path='' element={<General />} />
                     <Route path='vendor-page' element={<VendorPage />} />
