@@ -4,7 +4,7 @@ export const updateObject = ( oldObject , updatedObject ) => {
         ...updatedObject,
     }
 }
-const formatter = new Intl.NumberFormat('ar-SA', {
+const formatter = new Intl.NumberFormat('en-IN', {
     style: "currency",
     currency: "SAR",
 })
