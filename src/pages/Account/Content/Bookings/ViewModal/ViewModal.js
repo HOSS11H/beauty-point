@@ -23,6 +23,7 @@ import { CustomButton } from '../../../../../components/UI/Button/Button';
 import PrintIcon from '@mui/icons-material/Print';
 import DownloadIcon from '@mui/icons-material/Download';
 import FindInPageIcon from '@mui/icons-material/FindInPage';
+import Invoice from './Invoice/Invoice';
 
 const ClientDetails = styled.div`
     display: flex;
@@ -287,6 +288,7 @@ const ViewModal = (props) => {
                         <ActionButton><DownloadIcon/>{t('download receipt')}</ActionButton>
                     </BookingActions>
                 </Grid>
+                <Invoice />
                 <Grid item xs={12}>
                     <BookingActions>
                         <DeleteButton onClick={(id) => onDelete(bookingData.id)} >{t('Delete')}</DeleteButton>

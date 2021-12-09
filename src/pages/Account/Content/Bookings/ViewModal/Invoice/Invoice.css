@@ -1,0 +1,151 @@
+.row {
+    --bs-gutter-x: 1.5rem;
+    --bs-gutter-y: 0;
+    display      : flex;
+    flex-wrap    : wrap;
+    margin-top   : calc(var(--bs-gutter-y) * -1);
+    margin-right : calc(var(--bs-gutter-x) * -.5);
+    margin-left  : calc(var(--bs-gutter-x) * -.5);
+}
+
+.row>* {
+    box-sizing   : border-box;
+    flex-shrink  : 0;
+    width        : 100%;
+    max-width    : 100%;
+    padding-right: calc(var(--bs-gutter-x) * .5);
+    padding-left : calc(var(--bs-gutter-x) * .5);
+    margin-top   : var(--bs-gutter-y);
+}
+
+.text-center {
+    text-align: center;
+}
+
+.word-wrap {
+    word-wrap: break-word;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.img-responsive {
+    display  : block;
+    max-width: 100%;
+    height   : auto;
+}
+
+.mx-auto {
+    margin-left : auto;
+    margin-right: auto;
+}
+
+.col-12 {
+    flex : 0 0 auto;
+    width: 100%;
+}
+
+.col-md-12 {
+    flex : 0 0 auto;
+    width: 100%;
+}
+
+.col-6 {
+    flex : 0 0 auto;
+    width: 50%;
+}
+
+.offset-6 {
+    margin-left: 50%;
+}
+
+.table-responsive {
+    display                   : block;
+    width                     : 100%;
+    overflow-x                : auto;
+    -webkit-overflow-scrolling: touch;
+    -ms-overflow-style        : -ms-autohiding-scrollbar;
+}
+
+.table {
+    width           : 100%;
+    margin-bottom   : 1rem;
+    background-color: transparent;
+}
+
+.table thead th {
+    border-bottom: none;
+    font-weight  : 500;
+    padding      : 1.1rem .45rem;
+}
+
+.table thead th {
+    vertical-align: bottom;
+    border-bottom : 2px solid #dee2e6;
+}
+
+.table th,
+.table td {
+    padding       : 0.75rem;
+    vertical-align: top;
+    border-top    : 1px solid #dee2e6;
+}
+
+th {
+    text-align: inherit;
+}
+
+.table td {
+    padding     : 1rem .45rem;
+    border-color: #f3f1f1;
+}
+
+.table th,
+.table td {
+    padding         : 0.75rem;
+    vertical-align  : top;
+    border-top      : 1px solid #dee2e6;
+    border-top-color: rgb(222, 226, 230);
+}
+
+.pull-left {
+    float: left;
+}
+
+.pull-right {
+    float: right;
+}
+#invoice {
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.5;
+    color: #212529;
+}
+b, strong {
+    font-weight: bolder;
+}
+p {
+	line-height: 1.8em;
+	font-size: 15px;
+	text-transform: capitalize;
+    line-height: 1.5;
+    color: #212529;
+}
+p {
+	color: #000;
+}
+#invoice h1, #invoice h2, #invoice h3, #invoice h4, #invoice h5, #invoice h6  {
+    margin-bottom: 0.5rem;
+    font-family: inherit;
+    font-weight: 500;
+    line-height: 1.2;
+    color: inherit;
+}
+#invoice h1, #invoice h2, #invoice h3, #invoice h4, #invoice h5, #invoice h6 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+}
