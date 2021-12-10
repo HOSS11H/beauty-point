@@ -26,7 +26,7 @@ const ClientImg = styled.img`
     flex-shrink: 0;
     margin-bottom: 10px;
     cursor: pointer;
-	object-fit: cover;
+	object-fit: contain;
 `
 const ClientName = styled.p`
     display: block;
@@ -147,7 +147,7 @@ const Invoice = React.forwardRef((props, ref) => {
 				<Grid container spacing={3}>
 					<Grid item xs={12}>
 						<ClientDetails>
-							<ClientImg src={userData.user.company.logo_url} />
+							<ClientImg src="https://beautypoint.sa/user-uploads/front-logo/4a9e78fbfa8114184790b9c9702744d4.png" />
 							<ClientName>{userData.user.company.companyName}</ClientName>
 							<ClientAddress>{userData.user.company.address}</ClientAddress>
 							<ClientAddress>رقم التليفون : {userData.user.company.companyPhone}</ClientAddress>
