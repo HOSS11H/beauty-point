@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { formatCurrency } from '../../../../../../shared/utility';
 
 const ClientDetails = styled.div`
-	padding-top: 100px;
+	padding-top: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -69,17 +69,17 @@ const ClientDate = styled.p`
     margin-bottom: 5px;
 `
 const ClientInfos = styled.p`
-	width: 90%;
+	width: 95%;
     display: flex;
 	align-items: center;
 	justify-content: space-between;
-    font-size: 13px;
+    font-size: 12px;
     line-height:1.5;
     text-transform: capitalize;
     font-weight: 700;
     color: ${({ theme }) => theme.palette.primary.main};
     transition: 0.3s ease-in-out;
-    margin: 10px 0;
+    margin: 10px auto;
     cursor: pointer;
 `
 const BillTotal = styled.p`
@@ -125,6 +125,15 @@ const BookingDataBody = styled.p`
 const QrWrapper = styled.div`
 	margin-top: 40px;
 `
+const BookingCopyright = styled.p`
+	font-size: 11px;
+	line-height:1.5;
+	text-transform: capitalize;
+	font-weight: 600;
+	color: ${({ theme }) => theme.palette.text.primary};
+	text-align: center;
+	margin-top: 10px;
+`
 
 const Invoice = React.forwardRef((props, ref) => {
 	const { t } = useTranslation();
@@ -141,25 +150,36 @@ const Invoice = React.forwardRef((props, ref) => {
 							<ClientImg src={userData.user.company.logo_url} />
 							<ClientName>{userData.user.company.companyName}</ClientName>
 							<ClientAddress>{userData.user.company.address}</ClientAddress>
-							<ClientBill>رقم الفاتورة : {bookingData.id}</ClientBill>
+							<ClientAddress>رقم التليفون : {userData.user.company.companyPhone}</ClientAddress>
+							<ClientAddress><span>{userData.user.company.tax_record}</span> : الرقم الضريبي</ClientAddress>
+							<ClientBill>رقم الحجز : {bookingData.id}</ClientBill>
 							<ClientDate>تاريخ الفاتورة : {bookingData.date}</ClientDate>
-							<ClientInfos>
-								<span>{t(bookingData.user.name)}</span>
-								<span>: دفع الي</span>
-							</ClientInfos>
-							<ClientInfos>
-								<span>{t(bookingData.status)}</span>
-								<span>: حالة الحجز</span>
-							</ClientInfos>
+							<Grid container spacing={2}>
+								<Grid item xs={6}>
+									<ClientInfos>
+										<span>{t(userData.user.name)}</span>
+										<span>: دفع الي</span>
+									</ClientInfos>
+								</Grid>
+								<Grid item xs={6}>
+									<ClientInfos>
+										<span>{t(bookingData.user.name)}</span>
+										<span>: العميل</span>
+									</ClientInfos>
+									<ClientInfos>
+										<span>{t(bookingData.status)}</span>
+										<span>: حالة الحجز</span>
+									</ClientInfos>
+								</Grid>
+							</Grid>
 							<BookingDataHeading>{t('booking items')}</BookingDataHeading>
 							<TableContainer component={Paper} sx={{ my: 2 }}>
 								<Table aria-label="simple table">
 									<TableHead>
 										<TableRow>
-											<TableCell>{<BookingDataBody>{t('item')}</BookingDataBody>}</TableCell>
-											<TableCell>{<BookingDataBody>{t('quantity')}</BookingDataBody>}</TableCell>
-											<TableCell>{<BookingDataBody>{t('price')}</BookingDataBody>}</TableCell>
-											<TableCell>{<BookingDataBody>{t('amount')}</BookingDataBody>}</TableCell>
+											<TableCell align="left">{<BookingDataBody>{t('item')}</BookingDataBody>}</TableCell>
+											<TableCell align="left">{<BookingDataBody>{t('price')}</BookingDataBody>}</TableCell>
+											<TableCell align="left">{<BookingDataBody>{t('amount')}</BookingDataBody>}</TableCell>
 										</TableRow>
 									</TableHead>
 									<TableBody>
@@ -170,12 +190,11 @@ const Invoice = React.forwardRef((props, ref) => {
 														key={index}
 														sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
 													>
-														<TableCell component="th" scope="row">
+														<TableCell component="th" scope="row" align="left">
 															{<BookingDataBody>{item.item.name}</BookingDataBody>}
 														</TableCell>
-														<TableCell>{<BookingDataBody>{item.quantity}</BookingDataBody>}</TableCell>
-														<TableCell>{<BookingDataBody>{item.price}</BookingDataBody>}</TableCell>
-														<TableCell>{<BookingDataBody>{item.amount}</BookingDataBody>}</TableCell>
+														<TableCell align="left">{<BookingDataBody>{`${item.quantity} x ${item.price}`}</BookingDataBody>}</TableCell>
+														<TableCell align="left">{<BookingDataBody>{item.amount}</BookingDataBody>}</TableCell>
 													</TableRow>
 												)
 											})
@@ -184,16 +203,17 @@ const Invoice = React.forwardRef((props, ref) => {
 								</Table>
 							</TableContainer>
 							<BillTotal>
-								<span>{formatCurrency(bookingData.vat)}</span>
 								<i>:ضريبة القيمة المضافة %15</i>
+								<span>{formatCurrency(bookingData.vat)}</span>
 							</BillTotal>
 							<BillTotal>
+								<span>المجموع الكلي : </span>
 								<span>{formatCurrency(bookingData.price)}</span>
-								<span>:المجموع الكلي</span>
 							</BillTotal>
 							<QrWrapper>
 								{qrCode && <QRCode value={qrCode} />}
 							</QrWrapper>
+							<BookingCopyright>Powered By Beauty Point</BookingCopyright>
 						</ClientDetails>
 					</Grid>
 				</Grid>
