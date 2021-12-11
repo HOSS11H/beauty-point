@@ -2,10 +2,13 @@ import FullCalendar from '@fullcalendar/react' // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import interactionPlugin from "@fullcalendar/interaction" // needed for dayClick
 import { connect } from 'react-redux'
-import { fetchBookings } from "../../../../store/actions/index";
-import { useContext, useEffect, useState } from 'react';
+import { fetchBookings, deleteBooking } from "../../../../store/actions/index";
+import { useContext, useEffect, useState, useCallback, Fragment } from 'react';
 import ThemeContext from '../../../../store/theme-context';
 import styled from 'styled-components';
+import v1 from '../../../../utils/axios-instance-v1';
+import { useTranslation } from "react-i18next";
+import ViewModal from './ViewModal/ViewModal';
 
 const BookingCustomer = styled.div`
     display: flex;
@@ -27,7 +30,6 @@ const BookingCustomer = styled.div`
 `
 
 function renderEventContent(eventInfo) {
-    console.log(eventInfo)
     return (
         <BookingCustomer>
             <p>{eventInfo.event.title}</p>
@@ -39,18 +41,23 @@ function renderEventContent(eventInfo) {
 
 const BookingCalendar = props => {
 
-    const { fetchedBookings, fetchBookingsHandler } = props;
+    const { fetchedBookings, fetchBookingsHandler, deleteBookingHandler } = props;
 
     const themeCtx = useContext(ThemeContext)
 
     const { lang } = themeCtx;
 
+    const {t} = useTranslation()
+
+    const [viewModalOpened, setViewModalOpened] = useState(false);
+
+    const [selectedBookingId, setSelectedBookingId] = useState(null);
+
+    const [userData, setUserData] = useState(null);
+
     useEffect( ( ) => {
         fetchBookingsHandler(lang, 'all');
     } , [fetchBookingsHandler, lang])
-
-    const [viewModalOpened, setViewModalOpened] = useState(false);
-    const [editModalOpened, setEditModalOpened] = useState(false);
 
     const formattedBookingsData = fetchedBookings.data.map(booking => {
         const formattedTime = booking.date_time.split('T')
@@ -64,12 +71,46 @@ const BookingCalendar = props => {
         }
     })
 
+    useEffect(() => {
+        fetchBookingsHandler(lang, 'all');
+        v1.get('/auth/me')
+            .then(res => {
+                setUserData(res.data)
+            }
+            )
+            .catch(err => {
+                console.log(err)
+            })
+    }, [fetchBookingsHandler, lang]);
+
+
+    // View Modal
+    const viewModalOpenHandler = useCallback((id) => {
+        setViewModalOpened(true);
+        setSelectedBookingId(id);
+    }, [])
+    const viewModalCloseHandler = useCallback(() => {
+        setViewModalOpened(false);
+        setSelectedBookingId(null);
+    }, [])
+    const viewModalDeleteHandler = useCallback((id) => {
+        setViewModalOpened(false);
+        setSelectedBookingId(null);
+        deleteBookingHandler(id);
+    }, [deleteBookingHandler])
+    const viewModalConfirmHandler = useCallback((id) => {
+        setViewModalOpened(false);
+        setSelectedBookingId(null);
+        /* setEditModalOpened(true);
+        editModalOpenHandler(id); */
+    }, [])
+
     const dateClickHandler = (info) => {
-        console.log(info.event)
+        viewModalOpenHandler(info.event.extendedProps.bookingId);
     }
 
     return (
-        <div>
+        <Fragment>
             <FullCalendar
                 plugins={[dayGridPlugin, interactionPlugin]}
                 initialView="dayGridMonth"
@@ -77,7 +118,14 @@ const BookingCalendar = props => {
                 eventContent={renderEventContent}
                 eventClick={dateClickHandler}
             />
-        </div>
+            {
+                viewModalOpened && (
+                    <ViewModal show={viewModalOpened} id={selectedBookingId} fetchedBookings={fetchedBookings}
+                        onClose={viewModalCloseHandler} onConfirm={viewModalConfirmHandler.bind(null, selectedBookingId)}
+                        heading='view booking details' confirmText='save'  onDelete={viewModalDeleteHandler} userData={userData} />
+                )
+            }
+        </Fragment>
     )
 }
 
@@ -90,6 +138,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         fetchBookingsHandler: (language, perPage) => dispatch(fetchBookings(language, perPage)),
+        deleteBookingHandler: (id) => dispatch(deleteBooking(id)),
     }
 }
 

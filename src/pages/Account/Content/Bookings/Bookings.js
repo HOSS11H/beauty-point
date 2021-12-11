@@ -37,7 +37,6 @@ function Bookings(props) {
         fetchBookingsHandler(lang, 'all');
         v1.get('/auth/me')
             .then(res => {
-                console.log(res)
                 setUserData(res.data)
             }
             )
