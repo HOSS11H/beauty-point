@@ -6,9 +6,10 @@ import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import Skeleton from '@mui/material/Skeleton';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { Fragment } from 'react';
+import { useTranslation } from "react-i18next";
 
 const CustomCardMui = styled(Card)`
     &.MuiPaper-root {
@@ -21,6 +22,7 @@ const CustomCardMui = styled(Card)`
         background-color: ${({ theme }) => theme.palette.background.default};
         display: flex;
         position: relative;
+        cursor: pointer;
     }
 `
 const BookingButton = styled.div`
@@ -52,6 +54,11 @@ const BookingAppointment = styled.div`
             margin-bottom: 5px;
             &:last-child {
                 margin-bottom: 0px;
+            }
+            &.id {
+                justify-content: center;
+                font-size: 16px;
+                font-weight: 600;
             }
             svg {
                 width: 20px;
@@ -172,6 +179,8 @@ const BookingItems = styled.ul`
 
 const BookingView = props => {
 
+    const { t } = useTranslation()
+
     const { booking, loading, onClick } = props;
 
     let content = (
@@ -188,21 +197,22 @@ const BookingView = props => {
     );
     if (booking) {
         content = (
-            <CustomCardMui>
+            <CustomCardMui onClick={onClick} >
                 <BookingButton>
-                    <IconButton aria-label="delete" size="large" onClick={onClick}>
-                        <RemoveRedEyeIcon />
+                    <IconButton  size="medium" >
+                        <ArrowBackIosNewIcon />
                     </IconButton>
                 </BookingButton>
                 <BookingInfos>
                     <BookingAppointment className={booking.status} >
                         <ul>
+                            <li className="id" >{`# ${booking.id}`}</li>
                             <li><EventNoteIcon sx={{ mr: 1 }} />{booking.date}</li>
                             <li><WatchLaterIcon sx={{ mr: 1 }} />{booking.time}</li>
                         </ul>
                     </BookingAppointment>
                     <BookingStatus className={booking.status}>
-                        {booking.status}
+                        {t(booking.status)}
                     </BookingStatus>
                 </BookingInfos>
                 <BookingContent>

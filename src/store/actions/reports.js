@@ -35,16 +35,34 @@ export const fetchTabularReport = ( language, page, perPage, orderBy, orderDir )
             } )
         }
 }
+export const filterTabularReportStart = (  ) => {
+    return {
+        type: actionTypes.FILTER_TABULAR_REPORT_START,
+    }
+}
+export const filterTabularReportSuccess = ( tabularReportData ) => {
+    return {
+        type: actionTypes.FILTER_TABULAR_REPORT_SUCCESS,
+        tabularReport: tabularReportData
+    }
+}
+export const filterTabularReportFailed = ( errorMessage ) => {
+    return {
+        type: actionTypes.FILTER_TABULAR_REPORT_FAILED,
+        error: errorMessage,
+    }
+}
+
 export const filterTabularReport = ( dateFrom, dateTo, location, selectedServices, selectedProducts, customer, employee, bookingType, bookingStatus, paymentStatus ) => {
     return dispatch => {
-        dispatch( fetchTabularReportStart( ) )
+        dispatch( filterTabularReportStart( ) )
         v1.get(`/vendors/reports/tabular-table?from_date=${dateFrom}&to_date=${dateTo}&customer_name=${customer}&service_name=${selectedServices}&product_name=${selectedProducts}&employee_id=${employee}&booking_status=${bookingStatus}&booking_type=${bookingType}&location=${location}&payment=${paymentStatus}` )
             .then( response => {
-                dispatch( fetchTabularReportSuccess( response.data  ) );
+                dispatch( filterTabularReportSuccess( response.data  ) );
             })
             .catch( err => {
                 console.log(err)
-                dispatch( fetchTabularReportFailed( err.message  ) )
+                dispatch( filterTabularReportFailed( err.message  ) )
             } )
         }
 }

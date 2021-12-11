@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { formatCurrency } from '../../../../../../shared/utility';
 import SearchFilters from './SearchFilters/SearchFilters';
 import Card from '@mui/material/Card';
+import { Grid } from '@mui/material';
 
 const TabularReportWrapper = styled(Card)`
     display: flex;
@@ -59,9 +60,7 @@ function TabularReport(props) {
 
     const { t } = useTranslation()
 
-    const { fetchedTabularReport, fetchTabularReportHandler, fetchingReports, } = props;
-
-    console.log(fetchedTabularReport)
+    const { fetchedTabularReport, fetchTabularReportHandler, fetchingTabularReports, } = props;
 
     const themeCtx = useContext(ThemeContext)
 
@@ -106,7 +105,7 @@ function TabularReport(props) {
                             onRequestSort={handleRequestSort}
                             order={order}
                             orderBy={orderBy}
-                            loading={fetchingReports}
+                            loading={fetchingTabularReports}
                         />
                         <EnhancedTableBody
                             fetchedTabularReport={fetchedTabularReport}
@@ -120,32 +119,36 @@ function TabularReport(props) {
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}
-                    loading={fetchingReports}
+                    loading={fetchingTabularReports}
                 />
             </Paper>
+            <Grid   container   spacing={2}>
+                <Grid item xs={12} md={6}>
+                    <PriceCalculation>
+                        <p>{t('total taxes')}</p>
+                        <p>{formatCurrency(fetchedTabularReport.total_tax || 0)}</p>
+                    </PriceCalculation>
+                    <PriceCalculation>
+                        <p>{t('total amount')}</p>
+                        <p>{formatCurrency(fetchedTabularReport.total || 0)}</p>
+                    </PriceCalculation>
+                </Grid>
+            </Grid>
         </Fragment>
-    )
+    ) 
 
     return (
         <TabularReportWrapper>
             <SearchFilters />
             {content}
-            <PriceCalculation>
-                <p>{t('total taxes')}</p>
-                <p>{formatCurrency(fetchedTabularReport.total_tax || 0)}</p>
-            </PriceCalculation>
-            <PriceCalculation>
-                <p>{t('total amount')}</p>
-                <p>{formatCurrency(fetchedTabularReport.total || 0)}</p>
-            </PriceCalculation>
         </TabularReportWrapper>
     );
 }
 
 const mapStateToProps = state => {
     return {
-        fetchedTabularReport: state.reports.reports.tabularReport,
-        fetchingReports: state.reports.fetchingReports,
+        fetchedTabularReport: state.reports.reports.tabularReport.content,
+        fetchingTabularReports: state.reports.reports.tabularReport.fetchingTabularReports,
     }
 }
 

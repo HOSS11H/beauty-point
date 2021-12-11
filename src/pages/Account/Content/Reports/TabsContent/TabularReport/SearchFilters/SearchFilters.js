@@ -126,8 +126,8 @@ const SearchFilters = (props) => {
     }
 
     const ConfirmFilteringHandler = ( ) => {
-        console.log(location, dateFrom, dateTo, selectedServices, selectedProducts, customer, employee, bookingType, bookingStatus, paymentStatus)
-        filterTabularReportHandler(dateFrom, dateTo, location, selectedServices, selectedProducts, customer, employee, bookingType, bookingStatus, paymentStatus);
+        const selectedCustomer = customer && fetchedCustomers.find(customerObj => customerObj.id === customer);
+        filterTabularReportHandler(dateFrom, dateTo, location, selectedServices, selectedProducts, selectedCustomer.name, employee, bookingType, bookingStatus, paymentStatus);
     }
 
     const resetFilteringHandler = ( ) => {

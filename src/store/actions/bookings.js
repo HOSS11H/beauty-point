@@ -161,10 +161,10 @@ export const filterBookingsFailed = (errorMessage) => {
     }
 }
 
-export const filterBookings = ( date, location, customer, bookingStatus ) => {
+export const filterBookings = ( bookingId, date, location, customer, bookingStatus ) => {
     return dispatch => {
         dispatch(filterBookingsStart())
-        axios.get(`/vendors/bookings?term=${date}&location_id=${location}&status=${bookingStatus}&customer_id=${customer}&include[]=user&include[]=users&include[]=items&include[]=payment`,)
+        axios.get(`/vendors/bookings?term=${date || bookingId}&location_id=${location}&status=${bookingStatus}&customer_id=${customer}&include[]=user&include[]=users&include[]=items&include[]=payment`,)
             .then(response => {
                 let editedData = response.data.data.map(item => {
                     const formattedTime = new Date(item.date_time).toLocaleString()

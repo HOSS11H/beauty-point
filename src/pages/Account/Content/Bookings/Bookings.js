@@ -112,6 +112,12 @@ function Bookings(props) {
                 <Grid item xs={12} sm={6}  >
                     <BookingView loading={fetchingBookings}  />
                 </Grid>
+                <Grid item xs={12} sm={6}  >
+                    <BookingView loading={fetchingBookings}  />
+                </Grid>
+                <Grid item xs={12} sm={6}  >
+                    <BookingView loading={fetchingBookings}  />
+                </Grid>
             </Fragment>
         )
     } else if (fetchedBookings.data.length === 0 && filteringBookingsSuccess) {

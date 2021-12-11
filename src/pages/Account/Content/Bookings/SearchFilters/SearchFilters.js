@@ -7,7 +7,7 @@ import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import { useTranslation } from 'react-i18next';
 import { useContext, useEffect, useState, } from 'react';
-import {  fetchLocations, fetchCustomers, filterBookings } from '../../../../../store/actions/index';
+import { fetchLocations, fetchCustomers, filterBookings } from '../../../../../store/actions/index';
 import { connect } from 'react-redux';
 import DateAdapter from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -75,6 +75,8 @@ const SearchFilters = (props) => {
     const themeCtx = useContext(ThemeContext)
 
     const { lang } = themeCtx;
+    
+    const [bookingId, setBookingId] = useState('');
 
     const [location, setLocation] = useState('');
 
@@ -85,11 +87,15 @@ const SearchFilters = (props) => {
     const [bookingStatus, setBookingStatus] = useState('');
 
 
+
     useEffect(() => {
         fetchLocationsHandler(lang);
         fetchCustomersHandler(lang);
     }, [fetchCustomersHandler, fetchLocationsHandler, lang])
-
+    
+    const handleBookingIdChange = (event) => {
+        setBookingId(event.target.value);
+    }
     const handleLocationChange = (event) => {
         setLocation(event.target.value);
     };
@@ -105,11 +111,12 @@ const SearchFilters = (props) => {
         setBookingStatus(event.target.value);
     }
 
-    const ConfirmFilteringHandler = ( ) => {
-        filterBookingsHandler(date, location,  customer,  bookingStatus);
+    const ConfirmFilteringHandler = () => {
+        filterBookingsHandler(bookingId, date, location, customer, bookingStatus);
     }
 
-    const resetFilteringHandler = ( ) => {
+    const resetFilteringHandler = () => {
+        setBookingId('');
         setLocation('');
         setDate('');
         setCustomer('');
@@ -121,6 +128,16 @@ const SearchFilters = (props) => {
     return (
         <CustomCardMui>
             <Grid container spacing={2}>
+                <Grid item xs={12} sm={6} md={4}>
+                    <TextField
+                        fullWidth
+                        label={t('Booking Number')}
+                        id="booking-id"
+                        sx={{ flexGrow: '1' }}
+                        value={bookingId}
+                        onChange={handleBookingIdChange}
+                    />
+                </Grid>
                 <Grid item xs={12} sm={6} md={4}>
                     <LocalizationProvider dateAdapter={DateAdapter}>
                         <DesktopDatePicker
@@ -157,7 +174,7 @@ const SearchFilters = (props) => {
                             labelId="item-customer"
                             id="item-customer-select"
                             value={customer}
-                            label="Customer"
+                            label={t('Customer')}
                             onChange={handleCustomerChange}
                         >
                             {fetchedCustomers.map((customer) => (
@@ -178,7 +195,7 @@ const SearchFilters = (props) => {
                             labelId="booking-status"
                             id="item-status-select"
                             value={bookingStatus}
-                            label="booking status"
+                            label={t('booking status')}
                             onChange={handleBookingStatusChange}
                         >
                             <MenuItem value='completed'>{t('completed')}</MenuItem>
@@ -192,7 +209,7 @@ const SearchFilters = (props) => {
                 <Grid item xs={12} sm={6} md={4}>
                     <ActionsWrapper>
                         <FilterButton onClick={ConfirmFilteringHandler} endIcon={<FilterAltIcon />} >{t('filter')}</FilterButton>
-                        <ResetButton onClick={resetFilteringHandler}  endIcon={<RestartAltIcon />} >{t('reset')}</ResetButton>
+                        <ResetButton onClick={resetFilteringHandler} endIcon={<RestartAltIcon />} >{t('reset')}</ResetButton>
                     </ActionsWrapper>
                 </Grid>
             </Grid>
@@ -211,7 +228,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         fetchLocationsHandler: (lang) => dispatch(fetchLocations(lang)),
         fetchCustomersHandler: (lang) => dispatch(fetchCustomers(lang)),
-        filterBookingsHandler: ( date, location, customer, bookingStatus ) => dispatch(filterBookings( date, location, customer, bookingStatus )),
+        filterBookingsHandler: (bookingId, date, location, customer, bookingStatus) => dispatch(filterBookings(bookingId, date, location, customer, bookingStatus)),
     }
 }
 

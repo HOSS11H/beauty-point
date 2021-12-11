@@ -180,6 +180,14 @@ const resources = {
             'SEO Description': 'وصف محركات البحث',
             'Keywords':'الكلمات الافتتاحية',
             'save': 'حفظ',
+            'Date': 'التاريخ',
+            'booking status': 'حالة الحجز',
+            'filter': 'فلتر',
+            'reset': 'إعادة تعيين',
+            'product': 'منتج',
+            'deal': 'عرض',
+            'payment status': 'حالة الدفع',
+            'Booking Number': 'رقم الحجز',
         }
     }
 };
