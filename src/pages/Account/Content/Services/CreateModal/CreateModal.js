@@ -571,14 +571,6 @@ const CreateModal = (props) => {
                     }) => (
                         // write your building UI
                         <div className="upload__image-wrapper">
-                            <UploadImageTopBar>
-                                <Button size="medium" sx={{ mr: 2, color: isDragging && 'red' }} variant="contained" startIcon={<PhotoCamera />} {...dragProps} onClick={onImageUpload} >
-                                    {t('upload')}
-                                </Button>
-                                <Button size="medium" variant="outlined" startIcon={<DeleteIcon />} onClick={onImageRemoveAll}>
-                                    {t('Remove all')}
-                                </Button>
-                            </UploadImageTopBar>
                             <UploadImageBody>
                                 <RadioGroup
                                     aria-label="gender"
@@ -607,6 +599,14 @@ const CreateModal = (props) => {
                                     </Grid>
                                 </RadioGroup>
                             </UploadImageBody>
+                            <UploadImageTopBar>
+                                <Button size="medium" sx={{ mr: 2, color: isDragging && 'red' }} variant="contained" startIcon={<PhotoCamera />} {...dragProps} onClick={onImageUpload} >
+                                    {t('upload')}
+                                </Button>
+                                <Button size="medium" variant="outlined" startIcon={<DeleteIcon />} onClick={onImageRemoveAll}>
+                                    {t('Remove all')}
+                                </Button>
+                            </UploadImageTopBar>
                         </div>
                     )}
                 </ImageUploading>

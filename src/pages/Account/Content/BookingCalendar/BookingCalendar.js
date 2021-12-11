@@ -15,6 +15,7 @@ const BookingCustomer = styled.div`
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
+    cursor: pointer;
     p {
         font-size: 10px;
         font-weight: 500;

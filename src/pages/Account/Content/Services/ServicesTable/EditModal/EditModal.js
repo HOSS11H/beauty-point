@@ -187,6 +187,8 @@ const EditModal = (props) => {
 
     const [editorState, setEditorState] = useState(EditorState.createWithContent(contentState))
 
+    const [employeeName, setEmployeeName] = useState(employeesIds);
+
     const [servicePrice, setServicePrice] = useState(price);
 
     const [serviceDiscount, setServiceDiscount] = useState(discount);
@@ -196,7 +198,6 @@ const EditModal = (props) => {
     const [priceAfterDiscount, setPriceAfterDiscount] = useState(discount_price);
     const [servicePriceError, setServicePriceError] = useState(false);
 
-    const [employeeName, setEmployeeName] = useState(employeesIds);
 
     const [serviceStatus, setServiceStatus] = useState(status);
 
@@ -327,31 +328,6 @@ const EditModal = (props) => {
                     />
                 </EditorWrapper>
             </Grid>
-            <Grid item xs={12} sm={6}>
-                <CustomTextField id="service-price" type='number' label={t('price')} variant="outlined" value={servicePrice} onChange={servicePriceChangeHandler} />
-                {servicePriceError && <ValidationMessage notExist>{t(`Please add Price`)}</ValidationMessage>}
-            </Grid>
-            <Grid item xs={12} sm={6}>
-                <CustomFormGroup>
-                    <CustomTextField id="service-discount" type='number' label={t('discount')} variant="outlined" value={serviceDiscount} onChange={serviceDiscountChangeHandler} />
-                    <FormControl sx={{ minWidth: 120, ml: 1 }}>
-                        <Select
-                            value={discountType}
-                            onChange={discountTypeChangeHandler}
-                            inputProps={{ 'aria-label': 'Without label' }}
-                        >
-                            <MenuItem value='percent'>{t('percent')}</MenuItem>
-                            <MenuItem value='fixed'>{t('Fixed')}</MenuItem>
-                        </Select>
-                    </FormControl>
-                </CustomFormGroup>
-            </Grid>
-            <Grid item xs={12}>
-                <PriceCalculation>
-                    <p>{t('price after discount')}</p>
-                    <p>{formatCurrency(priceAfterDiscount)}</p>
-                </PriceCalculation>
-            </Grid>
             <Grid item xs={12}>
                 <FormControl sx={{ width: '100%' }}>
                     <InputLabel id="employee-label">{t('employee')}</InputLabel>
@@ -386,6 +362,31 @@ const EditModal = (props) => {
                     </Select>
                 </FormControl>
             </Grid>
+            <Grid item xs={12} sm={6}>
+                <CustomTextField id="service-price" type='number' label={t('price')} variant="outlined" value={servicePrice} onChange={servicePriceChangeHandler} />
+                {servicePriceError && <ValidationMessage notExist>{t(`Please add Price`)}</ValidationMessage>}
+            </Grid>
+            <Grid item xs={12} sm={6}>
+                <CustomFormGroup>
+                    <CustomTextField id="service-discount" type='number' label={t('discount')} variant="outlined" value={serviceDiscount} onChange={serviceDiscountChangeHandler} />
+                    <FormControl sx={{ minWidth: 120, ml: 1 }}>
+                        <Select
+                            value={discountType}
+                            onChange={discountTypeChangeHandler}
+                            inputProps={{ 'aria-label': 'Without label' }}
+                        >
+                            <MenuItem value='percent'>{t('percent')}</MenuItem>
+                            <MenuItem value='fixed'>{t('Fixed')}</MenuItem>
+                        </Select>
+                    </FormControl>
+                </CustomFormGroup>
+            </Grid>
+            <Grid item xs={12}>
+                <PriceCalculation>
+                    <p>{t('price after discount')}</p>
+                    <p>{formatCurrency(priceAfterDiscount)}</p>
+                </PriceCalculation>
+            </Grid>
             <Grid item xs={12}>
                 <ImageUploading
                     multiple
@@ -405,14 +406,6 @@ const EditModal = (props) => {
                     }) => (
                         // write your building UI
                         <div className="upload__image-wrapper">
-                            <UploadImageTopBar>
-                                <Button size="medium" sx={{ mr: 2, color: isDragging && 'red' }} variant="contained" startIcon={<PhotoCamera />} {...dragProps} onClick={onImageUpload} >
-                                    {t('upload')}
-                                </Button>
-                                <Button size="medium" variant="outlined" startIcon={<DeleteIcon />} onClick={onImageRemoveAll}>
-                                    {t('Remove all')}
-                                </Button>
-                            </UploadImageTopBar>
                             <UploadImageBody>
                                 <RadioGroup
                                     aria-label="gender"
@@ -441,6 +434,14 @@ const EditModal = (props) => {
                                     </Grid>
                                 </RadioGroup>
                             </UploadImageBody>
+                            <UploadImageTopBar>
+                                <Button size="medium" sx={{ mr: 2, color: isDragging && 'red' }} variant="contained" startIcon={<PhotoCamera />} {...dragProps} onClick={onImageUpload} >
+                                    {t('upload')}
+                                </Button>
+                                <Button size="medium" variant="outlined" startIcon={<DeleteIcon />} onClick={onImageRemoveAll}>
+                                    {t('Remove all')}
+                                </Button>
+                            </UploadImageTopBar>
                         </div>
                     )}
                 </ImageUploading>
