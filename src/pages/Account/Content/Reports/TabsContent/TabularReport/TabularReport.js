@@ -11,6 +11,7 @@ import TablePaginationActions from '../../../../../../components/UI/Dashboard/Ta
 import EnhancedTableBody from './TableBody/TableBody';
 import { useTranslation } from 'react-i18next';
 import { formatCurrency } from '../../../../../../shared/utility';
+import SearchMessage from "../../../../../../components/Search/SearchMessage/SearchMessage";
 import SearchFilters from './SearchFilters/SearchFilters';
 import Card from '@mui/material/Card';
 import { Grid } from '@mui/material';
@@ -60,7 +61,7 @@ function TabularReport(props) {
 
     const { t } = useTranslation()
 
-    const { fetchedTabularReport, fetchTabularReportHandler, fetchingTabularReports, } = props;
+    const { fetchedTabularReport, fetchTabularReportHandler, fetchingTabularReports, filteringTabularReportsSuccess } = props;
 
     const themeCtx = useContext(ThemeContext)
 
@@ -136,6 +137,13 @@ function TabularReport(props) {
             </Grid>
         </Fragment>
     ) 
+    if ( fetchedTabularReport.data.length === 0 && filteringTabularReportsSuccess) {
+        content = (
+            <SearchMessage>
+                {t('no results')}
+            </SearchMessage>
+        )
+    }
 
     return (
         <TabularReportWrapper>
@@ -149,6 +157,7 @@ const mapStateToProps = state => {
     return {
         fetchedTabularReport: state.reports.reports.tabularReport.content,
         fetchingTabularReports: state.reports.reports.tabularReport.fetchingTabularReports,
+        filteringTabularReportsSuccess: state.reports.reports.tabularReport.filteringTabularReportsSuccess,
     }
 }
 

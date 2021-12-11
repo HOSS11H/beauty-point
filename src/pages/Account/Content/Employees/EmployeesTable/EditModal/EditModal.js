@@ -176,7 +176,7 @@ const CreateModal = (props) => {
                 {employeeRoleError && <ValidationMessage notExist>{t(`Please add a role`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6}>
-                <CustomTextField id="employee-number" label={t('number')} variant="outlined" value={employeeNumber} onChange={employeeNumberChangeHandler} />
+                <CustomTextField id="employee-number"label={t('mobile number')} variant="outlined" value={employeeNumber} onChange={employeeNumberChangeHandler} />
                 {employeeNumberError && <ValidationMessage notExist>{t(`Please add Number`)}</ValidationMessage>}
             </Grid>
         </Grid>

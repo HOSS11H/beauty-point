@@ -85,7 +85,7 @@ const AddCustomerModal = (props) => {
                     {customerEmailError && <ValidationMessage notExist>{t(`Please add email`)}</ValidationMessage>}
                 </Grid>
                 <Grid item xs={12} sm={6} >
-                    <CustomTextField id="customer-number" label={t('number')} variant="outlined" value={customerNumber} onChange={customerNumberChangeHandler} />
+                    <CustomTextField id="customer-number" label={t('mobile number')} variant="outlined" value={customerNumber} onChange={customerNumberChangeHandler} />
                     {customerNumberError && <ValidationMessage notExist>{t(`Please add number`)}</ValidationMessage>}
                 </Grid>
             </Grid>

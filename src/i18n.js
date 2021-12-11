@@ -156,7 +156,7 @@ const resources = {
             'cash remaing': 'النقدية المتبقية',
             'cash to return': 'النقدية للإرجاع',
             'paid amount': 'المبلغ المدفوع',
-            'booking calendar': 'تقويم الحجوزات',
+            'booking calendar': 'التقويم',
             'reports': 'تقارير العمليات',
             'settings': 'الأعدادات',
             'Tabular Report': 'تقرير جدولي',
@@ -188,6 +188,8 @@ const resources = {
             'deal': 'عرض',
             'payment status': 'حالة الدفع',
             'Booking Number': 'رقم الحجز',
+            'no results': 'لا توجد نتائج',
+            'mobile number': 'رقم الجوال',
         }
     }
 };
