@@ -3,7 +3,8 @@ import Actions from '../../../../../../components/UI/Dashboard/Actions/Actions';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
-import { TableData, TableStatus } from '../../../../../../components/UI/Dashboard/Table/Table';
+import { TableData } from '../../../../../../components/UI/Dashboard/Table/Table';
+import { useTranslation } from 'react-i18next';
 
 import styled from 'styled-components';
 
@@ -25,6 +26,8 @@ const TableInfos = styled.div`
 `
 
 const EnhancedTableBody = props => {
+
+    const { t } = useTranslation()
 
     const {fetchedEmployees, emptyRows, deleteModalOpenHandler, editModalOpenHandler} = props;
 
@@ -64,7 +67,7 @@ const EnhancedTableBody = props => {
                                 row.roles && (
                                     row.roles.map((role, index) => {
                                         return (
-                                            <TableInfos key={role.id} className='active'>{role.name}</TableInfos>
+                                            <TableInfos key={role.id} className='active'>{t(role.name)}</TableInfos>
                                         )
                                     })
                                 )

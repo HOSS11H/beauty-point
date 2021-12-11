@@ -168,7 +168,7 @@ const CreateModal = (props) => {
                     >
                         {
                             fetchedRoles.map(role => {
-                                return <MenuItem key={role.id} value={role.id}>{role.name}</MenuItem>
+                                return <MenuItem key={role.id} value={role.id}>{t(role.name)}</MenuItem>
                             })
                         }
                     </Select>

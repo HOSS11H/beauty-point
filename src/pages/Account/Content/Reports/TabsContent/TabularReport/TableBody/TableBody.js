@@ -79,6 +79,11 @@ const EnhancedTableBody = props => {
                     >
                         <TableCell align="center">
                             <TableData>
+                                {index + 1}
+                            </TableData>
+                        </TableCell>
+                        <TableCell align="center">
+                            <TableData>
                                 {row.customer_name}
                             </TableData>
                         </TableCell>

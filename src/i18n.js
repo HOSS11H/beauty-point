@@ -190,6 +190,15 @@ const resources = {
             'Booking Number': 'رقم الحجز',
             'no results': 'لا توجد نتائج',
             'mobile number': 'رقم الجوال',
+            'reception': 'موظف الاستقبال',
+            'administrator': 'مدير',
+            'role': 'دور',
+            'Please add password': 'يرجى إضافة كلمة المرور',
+            'Please add a role': 'يرجى إضافة دور',
+            'Please add Number': 'يرجى إضافة رقم الجوال', 
+            'Employee Added': 'تمت إضافة الموظف',
+            'add new employee': 'إضافة موظف جديد',
+            'add employee': 'إضافة موظف',
         }
     }
 };
