@@ -1,12 +1,15 @@
-import { useEffect, useState, Fragment } from "react";
+import { useEffect, useState, Fragment, useCallback } from "react";
 import v1 from '../../../../../utils/axios-instance-v1'
 import { useTranslation } from 'react-i18next';
 import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, Switch, Button, Backdrop, CircularProgress, Snackbar, Alert } from "@mui/material";
+import EditModal from "./EditModal/EditModal";
 export default function BookingSettings(props) {
     const { t } = useTranslation();
     const [bookingTimes, setBookingTimes] = useState([]);
     const [open, setOpen] = useState(false);
     const [success, setSuccess] = useState(false)
+    const [ editModalOpened, setEditModalOpened ] = useState(false);
+    const [ selectedBookingTimeId , setSelectedBookingTimeId ] = useState(null);
     useEffect(() => {
         v1.get('/vendors/settings/booking_times')
             .then(res => {
@@ -39,8 +42,18 @@ export default function BookingSettings(props) {
     function handleClose() {
         setSuccess(false)
     }
-    function editTime(id) {
 
+    const editModalOpenHandler =(id) => {
+        setEditModalOpened(true)
+        setSelectedBookingTimeId(id)
+    }
+    const editModalCloseHandler =(id) => {
+        setEditModalOpened(false)
+        setSelectedBookingTimeId(null)
+    }
+    const editModalConfirmHandler =(id) => {
+        setEditModalOpened(false)
+        setSelectedBookingTimeId(null)
     }
     return (
         <Fragment>
@@ -73,11 +86,18 @@ export default function BookingSettings(props) {
                                     onChange={(e) => allowBookingChanged(row.id)}
                                     inputProps={{ 'aria-label': 'controlled' }}
                                 /></TableCell>
-                                <TableCell align="right"><Button onClick={(e) => editTime(row.id) }>{ t('Edit') }</Button></TableCell>
+                                <TableCell align="right"><Button onClick={(e) => editModalOpenHandler(row.id) }>{ t('Edit') }</Button></TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
                 </Table>
+                {
+                    editModalOpened && (
+                        <EditModal show={editModalOpened} id={selectedBookingTimeId} bookingTimes={bookingTimes}
+                            onClose={editModalCloseHandler} onConfirm={editModalConfirmHandler}
+                            heading='edit booking times' confirmText='edit' />
+                    )
+                }
             </TableContainer>
             <Backdrop
                 sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}

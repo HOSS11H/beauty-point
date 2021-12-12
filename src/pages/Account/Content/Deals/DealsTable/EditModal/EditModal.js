@@ -705,7 +705,7 @@ const EditModal = (props) => {
             </Grid>
             <Grid item xs={12}>
                 <PriceCalculation>
-                    <p>{t('total services price')}</p>
+                    <p>{t('total deal price')}</p>
                     <p>{formatCurrency(dealPrice)}</p>
                 </PriceCalculation>
             </Grid>

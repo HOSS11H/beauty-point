@@ -207,6 +207,22 @@ const resources = {
             'booking type': 'نوع الحجز',
             'Employee': 'الموظف',
             'log out': 'تسجيل الخروج',
+            'create new deal': 'إنشاء عرض جديد',
+            'Create Deal': 'إنشاء عرض',
+            'uses time': 'حد الاستخدام',
+            'user limit': "استخدام العميل",
+            'total deal price': 'السعر الإجمالي للعرض',
+            'Open time': 'وقت الفتح',
+            'Close time': 'وقت الإغلاق',
+            'saturday': 'السبت',
+            'sunday': 'الأحد',
+            'monday': 'الأثنين',
+            'tuesday': 'الثلاثاء',
+            'wednesday': 'الأربعاء',
+            'thursday': 'الخميس',
+            'friday': 'الجمعة',
+            'Please add at least one service': 'يرجى إضافة خدمة واحدة على الأقل',
+            'applied days must be selected': 'يجب تحديد أيام التطبيق',
         }
     }
 };

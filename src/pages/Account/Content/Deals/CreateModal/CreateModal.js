@@ -675,7 +675,7 @@ const CreateModal = (props) => {
             </Grid>
             <Grid item xs={12}>
                 <PriceCalculation>
-                    <p>{t('total services price')}</p>
+                    <p>{t('total deal price')}</p>
                     <p>{formatCurrency(dealPrice)}</p>
                 </PriceCalculation>
             </Grid>
@@ -746,7 +746,7 @@ const CreateModal = (props) => {
             <Grid item xs={12} sm={6}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <TimePicker
-                        label={t('open time')}
+                        label={t('Open time')}
                         value={openTime}
                         onChange={openTimeChangeHandler}
                         renderInput={(params) => <TextField sx={{ width: '100%' }} {...params} />}
@@ -756,7 +756,7 @@ const CreateModal = (props) => {
             <Grid item xs={12} sm={6}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <TimePicker
-                        label={t('close time')}
+                        label={t('Close time')}
                         value={closeTime}
                         onChange={closeTimeChangeHandler}
                         renderInput={(params) => <TextField  sx={{ width: '100%' }} {...params} />}
