@@ -22,10 +22,10 @@ import Reports from './pages/Account/Content/Reports/Reports';
 import Employees from './pages/Account/Content/Employees/Employees';
 
 
-import General from './pages/Account/Content/Settings/General'
-import VendorPage from './pages/Account/Content/Settings/VendorPage'
 import Settings from "./pages/Account/Content/Settings/Settings";
-import BookingSettings from "./pages/Account/Content/Settings/BookingSettings";
+import GeneralSettings from './pages/Account/Content/Settings/GeneralSettings/GeneralSettings'
+import VendorPage from './pages/Account/Content/Settings/VendorPage/VendorPage'
+import BookingSettings from "./pages/Account/Content/Settings/BookingSettings/BookingSettings";
 
 function App() {
 
@@ -58,7 +58,7 @@ function App() {
                     <Route path='reports' element={<Reports />} />
                     <Route path='employees' element={<Employees />} />
                     <Route path="settings/*" element={<Settings />}>
-                        <Route path='' element={<General />} />
+                        <Route path='' element={<GeneralSettings />} />
                         <Route path='vendor-page' element={<VendorPage />} />
                         <Route path="booking-settings" element={<BookingSettings />} />
                     </Route>

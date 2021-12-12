@@ -4,7 +4,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { Alert, Backdrop, Button, CircularProgress, Grid, Skeleton, Snackbar, TextField } from "@mui/material";
 import TagsInput from 'react-tagsinput'
 import 'react-tagsinput/react-tagsinput.css'
-import v1 from '../../../../utils/axios-instance-v1'
+import v1 from '../../../../../utils/axios-instance-v1'
 
 export default function VendorPage(props) {
     const { t } = useTranslation()

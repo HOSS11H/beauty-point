@@ -1,5 +1,5 @@
 import { useEffect, useState, Fragment } from "react";
-import v1 from '../../../../utils/axios-instance-v1'
+import v1 from '../../../../../utils/axios-instance-v1'
 import { useTranslation } from 'react-i18next';
 import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, Switch, Button, Backdrop, CircularProgress, Snackbar, Alert } from "@mui/material";
 export default function BookingSettings(props) {
