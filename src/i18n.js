@@ -200,6 +200,12 @@ const resources = {
             'add new employee': 'إضافة موظف جديد',
             'add employee': 'إضافة موظف',
             'categories': 'الفئات',
+            'Date from': 'التاريخ من',
+            'Date to': 'التاريخ إلى',
+            'choose products': 'اختر المنتجات',
+            'choose services': 'اختر الخدمات',
+            'booking type': 'نوع الحجز',
+            'Employee': 'الموظف',
         }
     }
 };

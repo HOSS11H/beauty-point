@@ -127,7 +127,19 @@ const SearchFilters = (props) => {
 
     const ConfirmFilteringHandler = ( ) => {
         const selectedCustomer = customer && fetchedCustomers.find(customerObj => customerObj.id === customer);
-        filterTabularReportHandler(dateFrom, dateTo, location, selectedServices, selectedProducts, selectedCustomer.name, employee, bookingType, bookingStatus, paymentStatus);
+        const selectedSearchParams = {
+            from_date: dateFrom,
+            to_date: dateTo,
+            customer_name: selectedCustomer ? selectedCustomer.name : '',
+            service_name: selectedServices,
+            product_name: selectedProducts,
+            employee_id: employee,
+            booking_status: bookingStatus,
+            booking_type: bookingType,
+            location: location,
+            payment: paymentStatus,
+        }
+        filterTabularReportHandler(selectedSearchParams);
     }
 
     const resetFilteringHandler = ( ) => {
@@ -177,7 +189,7 @@ const SearchFilters = (props) => {
                             labelId="item-location"
                             id="item-location-select"
                             value={location}
-                            label={t("Location")}
+                            label={t("location")}
                             onChange={handleLocationChange}
                         >
                             {
@@ -192,6 +204,7 @@ const SearchFilters = (props) => {
                     <FormControl sx={{ width: '100%' }}>
                         <InputLabel id="products-label">{t('choose products')}</InputLabel>
                         <Select
+                            label={t('choose products')}
                             labelId="products-label"
                             id="select-products"
                             value={selectedProducts}
@@ -212,6 +225,7 @@ const SearchFilters = (props) => {
                     <FormControl sx={{ width: '100%' }}>
                         <InputLabel id="services-label">{t('choose services')}</InputLabel>
                         <Select
+                            label={t('choose services')}
                             labelId="services-label"
                             id="select-services"
                             value={selectedServices}
@@ -235,7 +249,7 @@ const SearchFilters = (props) => {
                             labelId="item-customer"
                             id="item-customer-select"
                             value={customer}
-                            label="Customer"
+                            label={t('Customer')}
                             onChange={handleCustomerChange}
                         >
                             {fetchedCustomers.map((customer) => (
@@ -256,7 +270,7 @@ const SearchFilters = (props) => {
                             labelId="item-employee"
                             id="item-employee-select"
                             value={employee}
-                            label="Employee"
+                            label={t('Employee')}
                             onChange={handleEmplloyeeChange}
                         >
                             {fetchedEmployees.map((employee) => (
@@ -277,7 +291,7 @@ const SearchFilters = (props) => {
                             labelId="booking-type"
                             id="item-employee-select"
                             value={bookingType}
-                            label="booking type"
+                            label={t('booking type')}
                             onChange={handleBookingTypeChange}
                         >
                             <MenuItem value='services'>{t('services')}</MenuItem>
@@ -292,7 +306,7 @@ const SearchFilters = (props) => {
                             labelId="booking-status"
                             id="item-status-select"
                             value={bookingStatus}
-                            label="booking status"
+                            label={t('booking status')}
                             onChange={handleBookingStatusChange}
                         >
                             <MenuItem value='completed'>{t('completed')}</MenuItem>
@@ -310,7 +324,7 @@ const SearchFilters = (props) => {
                             labelId="payment-status"
                             id="payment-status-select"
                             value={paymentStatus}
-                            label="payment status"
+                            label={t('payment status')}
                             onChange={handlePaymentStatusChange}
                         >
                             <MenuItem value='completed'>{t('completed')}</MenuItem>

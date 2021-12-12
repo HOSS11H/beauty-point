@@ -9,6 +9,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PendingIcon from '@mui/icons-material/Pending';
 
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
 const TableStatus = styled.div`
     display: flex;
@@ -67,6 +68,8 @@ const EnhancedTableBody = props => {
 
     const { fetchedTabularReport } = props;
 
+    const { t } = useTranslation();
+
 
     return (
         <TableBody>
@@ -123,7 +126,7 @@ const EnhancedTableBody = props => {
                             <TableData>{row.employee_name}</TableData>
                         </TableCell>
                         <TableCell align="center">
-                            <TableStatus className={row.booking_status}>{row.booking_status}</TableStatus>
+                            <TableStatus className={row.booking_status}>{t(row.booking_status)}</TableStatus>
                         </TableCell>
                         <TableCell align="center">
                             <TableData>{row.tax}</TableData>

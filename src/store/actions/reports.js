@@ -53,11 +53,19 @@ export const filterTabularReportFailed = ( errorMessage ) => {
     }
 }
 
-export const filterTabularReport = ( dateFrom, dateTo, location, selectedServices, selectedProducts, customer, employee, bookingType, bookingStatus, paymentStatus ) => {
+export const filterTabularReport = ( searchParams ) => {
     return dispatch => {
+        const notEmptySearchParams = {};
+        for ( let key in searchParams ) {
+            if ( searchParams[key] !== ''  ) {
+                notEmptySearchParams[key] = searchParams[key]
+            }
+        }
+        console.log(notEmptySearchParams)
         dispatch( filterTabularReportStart( ) )
-        v1.get(`/vendors/reports/tabular-table?from_date=${dateFrom}&to_date=${dateTo}&customer_name=${customer}&service_name=${selectedServices}&product_name=${selectedProducts}&employee_id=${employee}&booking_status=${bookingStatus}&booking_type=${bookingType}&location=${location}&payment=${paymentStatus}` )
+        v1.get(`/vendors/reports/tabular-table`, { params: { ...notEmptySearchParams } } )
             .then( response => {
+                console.log(response.args)
                 dispatch( filterTabularReportSuccess( response.data  ) );
             })
             .catch( err => {
