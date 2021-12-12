@@ -51,9 +51,20 @@ export default function BookingSettings(props) {
         setEditModalOpened(false)
         setSelectedBookingTimeId(null)
     }
-    const editModalConfirmHandler =(id) => {
+    const editModalConfirmHandler =(data) => {
         setEditModalOpened(false)
         setSelectedBookingTimeId(null)
+        setOpen(true)
+        v1.put(`/vendors/settings/booking_times/${data.id}`, {...data})
+        .then(res => {
+            let times = [...bookingTimes];
+            let idx = times.findIndex(t => t.id === data.id)
+            let time = { ...data }
+            times[idx] = time;
+            setBookingTimes(times)
+            setOpen(false)
+            setSuccess(true)
+        })
     }
     return (
         <Fragment>

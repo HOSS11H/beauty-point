@@ -35,17 +35,17 @@ const EditModal = (props) => {
     const [closeTime, setCloseTime] = useState(new Date());
     const [closeTimeError, setCloseTimeError] = useState(false);
 
-    const [timeRequired, setTimeRequired] = useState(0);
+    const [slotDuration, setSlotDuration] = useState(bookingTimesData.slot_duration);
     
-    const [multipleBookings, setmMultipleBookings] = useState('yes');
+    const [multipleBookings, setmMultipleBookings] = useState(bookingTimesData.multiple_booking);
 
-    const [maximumBookings, setMaximumBookings] = useState(0);
+    const [maximumBookings, setMaximumBookings] = useState(bookingTimesData.max_booking);
 
-    const [maximumBookingsPerDay, setMaximumBookingsPerDay] = useState(0);
+    const [maximumBookingsPerDay, setMaximumBookingsPerDay] = useState(bookingTimesData.per_day_max_booking);
 
-    const [maximumBookingsPerSlot, setMaximumBookingsPerSlot] = useState(0);
+    const [maximumBookingsPerSlot, setMaximumBookingsPerSlot] = useState(bookingTimesData.per_slot_max_booking);
 
-    const [bookingStatus, setServiceStatus] = useState('active');
+    const [bookingStatus, setServiceStatus] = useState(bookingTimesData.status);
 
 
     const openTimeChangeHandler = (newValue) => {
@@ -55,9 +55,9 @@ const EditModal = (props) => {
         setCloseTime(newValue);
         setCloseTimeError(false);
     }
-    const bookingTimeChangeHandler = (event) => {
+    const slotDurationChangeHandler = (event) => {
         if (event.target.value >= 0 ) {
-            setTimeRequired(event.target.value);
+            setSlotDuration(event.target.value);
         }
     }
     const multipleBookingsChangeHandler = (event) => {
@@ -87,7 +87,7 @@ const EditModal = (props) => {
     }, [onClose])
 
     const resetModalData = useCallback(() => {
-        setTimeRequired(0);
+        setSlotDuration(0);
         setServiceStatus('active');
     }, [])
 
@@ -96,9 +96,19 @@ const EditModal = (props) => {
     }, [editingBookingSettingsSuccess, resetModalData])
 
     const confirmCreateHandler = useCallback(() => {
-        const data= {}
+        const data= {
+            id,
+            start_time: format(openTime, 'HH:mm'),
+            end_time: format(closeTime, 'HH:mm'),
+            multiple_booking: multipleBookings,
+            max_booking: +maximumBookings,
+            per_day_max_booking: +maximumBookingsPerDay,
+            per_slot_max_booking: +maximumBookingsPerSlot,
+            status: bookingStatus,
+            slot_duration: +slotDuration,
+        }
         onConfirm(data);
-    }, [onConfirm])
+    }, [bookingStatus, closeTime, id, maximumBookings, maximumBookingsPerDay, maximumBookingsPerSlot, multipleBookings, onConfirm, openTime, slotDuration])
 
     let content = (
         <Grid container spacing={3}>
@@ -125,7 +135,7 @@ const EditModal = (props) => {
             </Grid>
             <Grid item xs={12} sm={6}>
                 <CustomTextField id="booking-time" type='number' label={t('Slot Duration')} variant="outlined" 
-                    value={timeRequired} onChange={bookingTimeChangeHandler} 
+                    value={slotDuration} onChange={slotDurationChangeHandler} 
                     InputProps={{
                         startAdornment: <InputAdornment position="start">{t('minutes')}</InputAdornment>,
                     }}
@@ -171,8 +181,8 @@ const EditModal = (props) => {
                         onChange={bookingStatusChangeHandler}
                         inputProps={{ 'aria-label': 'Without label' }}
                     >
-                        <MenuItem value='active'>{t('active')}</MenuItem>
-                        <MenuItem value='inactive'>{t('inactive')}</MenuItem>
+                        <MenuItem value='enabled'>{t('Enabled')}</MenuItem>
+                        <MenuItem value='disabled'>{t('Disabled')}</MenuItem>
                     </Select>
                 </FormControl>
             </Grid>
