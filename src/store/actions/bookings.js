@@ -161,10 +161,16 @@ export const filterBookingsFailed = (errorMessage) => {
     }
 }
 
-export const filterBookings = ( bookingId, date, location, customer, bookingStatus ) => {
+export const filterBookings = ( searchParams ) => {
     return dispatch => {
         dispatch(filterBookingsStart())
-        axios.get(`/vendors/bookings?term=${date || bookingId}&location_id=${location}&status=${bookingStatus}&customer_id=${customer}&include[]=user&include[]=users&include[]=items&include[]=payment`,)
+        const notEmptySearchParams = {}
+        for (let key in searchParams) {
+            if (searchParams[key] !== '') {
+                notEmptySearchParams[key] = searchParams[key]
+            }
+        }
+        axios.get(`/vendors/bookings?include[]=user&include[]=users&include[]=items&include[]=payment`, { params: { ...notEmptySearchParams } } )
             .then(response => {
                 let editedData = response.data.data.map(item => {
                     const formattedTime = new Date(item.date_time).toLocaleString()

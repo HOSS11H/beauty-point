@@ -206,6 +206,7 @@ const resources = {
             'choose services': 'اختر الخدمات',
             'booking type': 'نوع الحجز',
             'Employee': 'الموظف',
+            'log out': 'تسجيل الخروج',
         }
     }
 };

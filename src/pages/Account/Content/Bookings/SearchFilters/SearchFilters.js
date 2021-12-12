@@ -112,7 +112,13 @@ const SearchFilters = (props) => {
     }
 
     const ConfirmFilteringHandler = () => {
-        filterBookingsHandler(bookingId, date, location, customer, bookingStatus);
+        const searchParams = {
+            term: date || bookingId,
+            location_id: location,
+            customer_id: customer,
+            status: bookingStatus,
+        }
+        filterBookingsHandler(searchParams);
     }
 
     const resetFilteringHandler = () => {
