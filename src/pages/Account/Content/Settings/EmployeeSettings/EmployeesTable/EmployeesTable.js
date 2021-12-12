@@ -33,7 +33,7 @@ const EmployeesTableWrapper = styled.div`
 
 
 
-const intialRowsPerPage = 5;
+const intialRowsPerPage = 10;
 
 function EmployeesTable(props) {
 

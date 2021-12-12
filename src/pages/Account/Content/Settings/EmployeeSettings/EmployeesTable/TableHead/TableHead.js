@@ -11,28 +11,16 @@ import { TableHeading } from '../.././../../../../../components/UI/Dashboard/Tab
 
 const headCells = [
     {
+        id: 'index',
+        numeric: false,
+        disablePadding: false,
+        label: '#',
+    },
+    {
         id: 'name',
         numeric: false,
         disablePadding: false,
         label: 'name',
-    },
-    {
-        id: 'mobile',
-        numeric: false,
-        disablePadding: false,
-        label: 'mobile',
-    },
-    {
-        id: 'group',
-        numeric: false,
-        disablePadding: false,
-        label: 'group',
-    },
-    {
-        id: 'roles',
-        numeric: false,
-        disablePadding: false,
-        label: 'role',
     },
     {
         id: 'actions',

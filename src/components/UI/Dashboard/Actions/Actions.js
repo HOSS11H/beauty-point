@@ -8,6 +8,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 const ActionsWrapper = styled.div`
     display: flex;
     align-items: center;
+    justify-content: center;
 `
 const ActionButton = styled.button`
     display: flex;

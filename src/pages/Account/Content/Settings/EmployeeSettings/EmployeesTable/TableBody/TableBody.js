@@ -43,40 +43,17 @@ const EnhancedTableBody = props => {
                     >
                         <TableCell align="center">
                             <TableData>
+                                {index + 1}
+                            </TableData>
+                        </TableCell>
+                        <TableCell align="center">
+                            <TableData>
                                 {row.name}
                             </TableData>
                         </TableCell>
                         <TableCell align="center">
-                            <TableData>
-                                {row.mobile}
-                            </TableData>
-                        </TableCell>
-                        <TableCell align="center">
-                            <TableData>
-                                {
-                                    row.employeeGroup && (
-                                        <TableInfos >
-                                            {row.employeeGroup.name}
-                                        </TableInfos>
-                                    )
-                                }
-                            </TableData>
-                        </TableCell>
-                        <TableCell align="center">
-                            { 
-                                row.roles && (
-                                    row.roles.map((role, index) => {
-                                        return (
-                                            <TableInfos key={role.id} className='active'>{t(role.name)}</TableInfos>
-                                        )
-                                    })
-                                )
-                            }
-                        </TableCell>
-                        <TableCell align="center">
-                            <Actions edit remove
+                            <Actions edit
                                 editHandler={editModalOpenHandler.bind(null, row.id)}
-                                removeHandler={deleteModalOpenHandler.bind(null, row.id)}
                             />
                         </TableCell>
                     </TableRow>
