@@ -173,13 +173,18 @@ const ViewModal = (props) => {
 
     const [ qrCode, setQrCode ] = useState(null);
 
+    console.log(id);
     useEffect(() => {
-        console.log(id);
-        axios.get(`/vendors/bookings/${id}/qr`)
-            .then(res => {
-                setQrCode(res.data.data);
-            }
-        )
+        if ( id ) {
+            console.log('excuted')
+            axios.get(`/vendors/bookings/${id}/qr`)
+                .then(res => {
+                    setQrCode(res.data.data);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
     }, [id]);
 
     const invoiceRef = useRef();

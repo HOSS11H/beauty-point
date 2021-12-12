@@ -25,11 +25,12 @@ function Bookings(props) {
     const { lang } = themeCtx
     const { token } = authCtx
 
+    const [selectedBookingId, setSelectedBookingId] = useState(null);
+    
     const [viewModalOpened, setViewModalOpened] = useState(false);
 
     const [editModalOpened, setEditModalOpened] = useState(false);
 
-    const [selectedBookingId, setSelectedBookingId] = useState(null);
 
     const [userData, setUserData] = useState(null);
 
@@ -69,8 +70,8 @@ function Bookings(props) {
 
     // View Modal
     const viewModalOpenHandler = useCallback((id) => {
-        setViewModalOpened(true);
         setSelectedBookingId(id);
+        setViewModalOpened(true);
     }, [])
     const viewModalCloseHandler = useCallback(() => {
         setViewModalOpened(false);
