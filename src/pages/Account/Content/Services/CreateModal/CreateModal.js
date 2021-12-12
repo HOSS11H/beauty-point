@@ -64,7 +64,7 @@ const UploadImageBody = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 15px;
+    margin-bottom: 15px;
     max-width: 100%;
     width: 100%;
     img {
@@ -468,6 +468,7 @@ const CreateModal = (props) => {
                         value={locationName}
                         onChange={handleLocationChange}
                         inputProps={{ 'aria-label': 'Without label' }}
+                        label={t('location')}
                     >
                         {fetchedLocations.map((location) => (
                             <MenuItem
@@ -485,6 +486,7 @@ const CreateModal = (props) => {
                 <FormControl sx={{ width: '100%' }}>
                     <InputLabel id="categories-label">{t('categories')}</InputLabel>
                     <Select
+                        label={t('categories')}
                         value={categoryName}
                         onChange={handleCategoryChange}
                         inputProps={{ 'aria-label': 'Without label' }}
@@ -522,6 +524,7 @@ const CreateModal = (props) => {
                 <FormControl sx={{ width: '100%' }}>
                     <InputLabel id="employee-label">{t('employee')}</InputLabel>
                     <Select
+                        label={t('employee')}
                         labelId="employee-label"
                         id="select-multiple-employees"
                         multiple

@@ -64,7 +64,7 @@ const UploadImageBody = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 15px;
+    margin-bottom: 15px;
     max-width: 100%;
     width: 100%;
     img {
@@ -332,6 +332,7 @@ const EditModal = (props) => {
                 <FormControl sx={{ width: '100%' }}>
                     <InputLabel id="employee-label">{t('employee')}</InputLabel>
                     <Select
+                        label={t('employee')}
                         labelId="employee-label"
                         id="select-multiple-employees"
                         multiple

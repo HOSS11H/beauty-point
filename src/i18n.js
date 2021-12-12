@@ -199,6 +199,7 @@ const resources = {
             'Employee Added': 'تمت إضافة الموظف',
             'add new employee': 'إضافة موظف جديد',
             'add employee': 'إضافة موظف',
+            'categories': 'الفئات',
         }
     }
 };

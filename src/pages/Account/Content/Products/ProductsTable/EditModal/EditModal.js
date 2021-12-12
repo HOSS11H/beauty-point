@@ -61,7 +61,7 @@ const UploadImageBody = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 15px;
+    margin-bottom: 15px;
     max-width: 100%;
     width: 100%;
     img {
