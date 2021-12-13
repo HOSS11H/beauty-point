@@ -4,7 +4,7 @@ import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { fetchDeals, deleteDeal, fetchServicesByLocation } from '../../../../../store/actions/index';
+import { fetchDeals, deleteDeal, fetchServicesByLocation, updateDeal } from '../../../../../store/actions/index';
 import ThemeContext from '../../../../../store/theme-context';
 import EnhancedTableHead from './TableHead/TableHead';
 import TablePaginationActions from '../../../../../components/UI/Dashboard/Table/TablePagination/TablePagination';
@@ -41,7 +41,7 @@ function DealsTable(props) {
 
     const { t } = useTranslation()
 
-    const { fetchedDeals, fetchDealsHandler, loadingDeals, deleteDealHandler, searchingDeals, searchingDealsSuccess, fetchServicesHandler } = props;
+    const { fetchedDeals, fetchDealsHandler, loadingDeals, deleteDealHandler, editDealHandler, searchingDeals, searchingDealsSuccess, fetchServicesHandler } = props;
 
     const themeCtx = useContext(ThemeContext)
 
@@ -116,10 +116,11 @@ function DealsTable(props) {
         setSelectedDealId(null);
     }, [])
 
-    const editModalConfirmHandler = useCallback((id) => {
+    const editModalConfirmHandler = useCallback((data) => {
         setEditModalOpened(false);
         setSelectedDealId(null);
-    }, [])
+        editDealHandler(data);
+    }, [editDealHandler])
 
     const handleChangePage = useCallback((event, newPage) => {
         setPage(newPage);
@@ -209,7 +210,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         fetchDealsHandler: (language, page, perPage, orderBy, orderDir) => dispatch(fetchDeals(language, page, perPage, orderBy, orderDir)),
-        deleteDealHandler: (token, id) => dispatch(deleteDeal(token, id)),
+        deleteDealHandler: ( id ) => dispatch(deleteDeal( id )),
+        editDealHandler: ( data ) => dispatch(updateDeal(data)),
         fetchServicesHandler: (lang, location) => dispatch(fetchServicesByLocation(lang, location)),
     }
 }

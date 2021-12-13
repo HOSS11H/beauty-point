@@ -551,7 +551,7 @@ const EditModal = (props) => {
             }
         })
         const selectedLocation = fetchedLocations.find(location => location.id === dealLocation);
-
+        console.log(closeTime, format(openTime,  'hh:ii a'))
         const data = {
             title: dealName,
             location: dealLocation,
