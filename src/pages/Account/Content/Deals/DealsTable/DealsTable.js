@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next';
 const DealsTableWrapper = styled.div`
     display: flex;
     min-height: 100vh;
-    max-width: 100%;
+    width: 100%;
     box-shadow: rgb(90 114 123 / 11%) 0px 7px 30px 0px;
     margin-bottom: 40px;
     background-color: ${({ theme }) => theme.palette.background.default};
@@ -30,6 +30,7 @@ const DealsTableWrapper = styled.div`
         border-radius: 0;
         border-radius:20px;
         padding: 20px;
+        max-width: 100%;
     }
 `
 
@@ -141,10 +142,9 @@ function DealsTable(props) {
     } else {
         content = (
             <Fragment>
-                <Paper sx={{ width: '100%', boxShadow: 'none' }}>
-                    <TableContainer>
+                <Paper sx={{ boxShadow: 'none' }}>
+                    <TableContainer sx={{ maxWidth: '100%'}}>
                         <Table
-                            sx={{ minWidth: 750 }}
                             aria-labelledby="tableTitle"
                             size='medium'
                         >

@@ -1,8 +1,8 @@
 import { useContext } from 'react';
-import { NavLink , useParams } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Divider from '@mui/material/Divider';
-import Drawer from '@mui/material/Drawer';
+import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import Box from '@mui/material/Box';
 import ListItem from '@mui/material/ListItem';
@@ -45,8 +45,43 @@ const categories = [
         ],
     },
 ];
+const drawerWidth = 256;
+const openedMixin = (theme) => ({
+    width: drawerWidth,
+    transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen,
+    }),
+    overflowX: 'hidden',
+});
 
-
+const closedMixin = (theme) => ({
+    transition: theme.transitions.create('width', {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen,
+    }),
+    overflowX: 'hidden',
+    width: `calc(${theme.spacing(7)} + 1px)`,
+    [theme.breakpoints.up('sm')]: {
+        width: `calc(${theme.spacing(7)} + 1px)`,
+    },
+});
+const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
+    ({ theme, open }) => ({
+        width: drawerWidth,
+        flexShrink: 0,
+        whiteSpace: 'nowrap',
+        boxSizing: 'border-box',
+        ...(open && {
+            ...openedMixin(theme),
+            '& .MuiDrawer-paper': openedMixin(theme),
+        }),
+        ...(!open && {
+            ...closedMixin(theme),
+            '& .MuiDrawer-paper': closedMixin(theme),
+        }),
+    }),
+);
 
 
 
@@ -61,10 +96,17 @@ const CustomListItemButton = styled(ListItemButton)`
         height: 48px;
         border-radius: 9px;
         margin-bottom: 8px;
-        padding: 0px 15px;
+        padding: ${ ({ open }) => open ? '0 15px' : '0 8px' };
         color: ${({ theme }) => theme.palette.text.primary};
         transition: 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
         text-transform: capitalize;
+        justify-content: ${ ({ open }) => open ? 'flex-start' : 'center' };
+        .MuiListItemText-root {
+            display: ${ ({ open }) => open ? 'block' : 'none' };
+        }
+        .MuiListItemIcon-root {
+            margin-right:${ ({ open }) => open ? '16px' : '0' };
+        }
     }
 `
 const CustomNavLink = styled(NavLink)`
@@ -84,31 +126,31 @@ const CustomListItemIcon = styled(ListItemIcon)`
 
 export default function Navigator(props) {
 
-    const { ...other } = props;
+    const { open, ...other } = props;
 
     const themeCtx = useContext(ThemeContext)
 
-    const  params  = useParams();
+    const params = useParams();
     const { t } = useTranslation();
 
 
     return (
-        <Drawer variant="permanent" {...other} anchor='left'  >
-            <List disablePadding sx={{ px: '16px', py: '16px', }} >
+        <Drawer open={open}  {...other} anchor='left'  >
+            <List disablePadding sx={{ px: open ? '16px' : '0px' , py: '16px', }} >
                 <Logo>
                     Beauty Point
                 </Logo>
                 {categories.map(({ id, children }) => (
                     <Box key={id}>
-                        <ListItem sx={{ pt: '32px', pb: '16px', px: 0, textTransform: 'capitalize'}}>
+                        <ListItem sx={{ pt: '32px', pb: '16px', px: 0, textTransform: 'capitalize' }}>
                             <ListItemText sx={{ color: themeCtx.theme.palette.grey[500], fontSize: '16px' }}>{id}</ListItemText>
                         </ListItem>
-                        {children.map(({ id: childId, name ,icon, active }) => (
+                        {children.map(({ id: childId, name, icon, active }) => (
                             <ListItem disablePadding key={childId}>
                                 <CustomNavLink
                                     to={`${childId}`}
                                 >
-                                    <CustomListItemButton selected={params === childId }>
+                                    <CustomListItemButton open={open} selected={params === childId}>
                                         <CustomListItemIcon>{icon}</CustomListItemIcon>
                                         <ListItemText >{t(name)}</ListItemText>
                                     </CustomListItemButton>

@@ -1,6 +1,5 @@
 import React ,  { useState, useCallback, useContext, Fragment } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Navigator from './Navigator/Navigator';
@@ -8,9 +7,6 @@ import Header from './Header/Header';
 import { Outlet } from 'react-router';
 import ThemeContext from '../../store/theme-context';
 
-
-
-const drawerWidth = 256;
 
 export default function Account( props ) {
 
@@ -95,7 +91,6 @@ export default function Account( props ) {
     );
 
 	const [mobileOpen, setMobileOpen] = useState(false);
-	const isLgUp = useMediaQuery(theme.breakpoints.up('lg'));
 
 
 	const handleDrawerToggle = useCallback( () => {
@@ -104,29 +99,28 @@ export default function Account( props ) {
 	return (
 		<Fragment>
 			<ThemeProvider theme={customTheme}>
-				<Box sx={{ display: 'flex', minHeight: '100vh', maxWidth: '100%' }}>
+				<Box sx={{ display: 'flex', minHeight: '100vh', }}>
 					<CssBaseline />
 					<Box
 						component="nav"
-						sx={{ width: { lg: drawerWidth }, flexShrink: { sm: 0 },  }}
+						sx={{ flexShrink: { sm: 0 },  }}
 					>
-						{isLgUp ? null : (
+						{/* {isLgUp ? null : (
 							<Navigator
 								PaperProps={{ style: { width: drawerWidth } }}
 								variant="temporary"
 								open={mobileOpen}
 								onClose={handleDrawerToggle}
 							/>
-						)}
-
+						)} */}
 						<Navigator
-							PaperProps={{ style: { width: drawerWidth } }}
-							sx={{ display: { lg: 'block', xs: 'none' } }}
+							open={mobileOpen}
+							variant="permanent"
 						/>
 					</Box>
-					<Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', maxWidth: isLgUp ? `calc( 100% - ${drawerWidth}px)` : '100%'  }}>
+					<Box sx={{ flexGrow: 1,  }}>
 						<Header onDrawerToggle={handleDrawerToggle} />
-						<Box component="main" sx={{ flex: 1, py: 4, px: 3, bgcolor: theme.palette.background.default }}>
+						<Box component="main" sx={{ py: 4, px: 3, bgcolor: theme.palette.background.default }}>
 							<Outlet />
 						</Box>
 					</Box>

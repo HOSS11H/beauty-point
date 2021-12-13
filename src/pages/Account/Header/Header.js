@@ -50,7 +50,7 @@ function Header(props) {
             <AppBar sx={{ boxShadow: 'rgb(113 122 131 / 11%) 0px 7px 30px 0px', }} position="sticky" elevation={0}>
                 <Toolbar>
                     <Grid container spacing={1} alignItems="center">
-                        <Grid sx={{ display: { lg: 'none', xs: 'block' } }} item>
+                        <Grid sx={{ display: { lg: 'block', xs: 'block' } }} item>
                             <IconButton
                                 color="inherit"
                                 aria-label="open drawer"
