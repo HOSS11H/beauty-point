@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { searchEmployeesData, addEmployeeData } from '../../../../store/actions/index';
 import SearchBar from "../../../../components/Search/SearchBar/SearchBar";
 
-import ProductsTable from './EmployeesTable/EmployeesTable';
+import EmployeesTable from './EmployeesTable/EmployeesTable';
 
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
@@ -70,7 +70,7 @@ function Employees(props) {
                     onClose={createModalCloseHandler} onConfirm={createModalConfirmHandler}
                     heading='add new employee' confirmText='add' />
             </ActionsWrapper>
-            <ProductsTable />
+            <EmployeesTable />
             <CustomizedSnackbars show={messageShown} message={t('Employee Added')} type='success' onClose={closeMessageHandler} />
         </Fragment>
     );
