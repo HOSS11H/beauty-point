@@ -26,6 +26,7 @@ export {
 export {
     fetchDeals,
     deleteDeal,
+    updateDeal,
     searchDeals,
     filterDeals,
     createDeal,

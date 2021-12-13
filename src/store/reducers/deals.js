@@ -9,11 +9,14 @@ const intialState = {
     deletingDeal: false,
     deletingDealSuccess: false,
     deletingDealMessage: null,
-    searchingDeals: false,
-    searchingDealsSuccess: false,
+    updatingDeal: false,
+    updatingDealSuccess: false,
+    updatingDealMessage: null,
     creatingDeal: false,
     creatingDealSuccess: false,
     creatingDealMessage: null,
+    searchingDeals: false,
+    searchingDealsSuccess: false,
     posDeals: {
         deals: { data: [ ], meta: {} } ,
         fetchingDeals: false,
@@ -63,6 +66,35 @@ const reducer = ( state = intialState , action ) => {
                 deletingDealSuccess: false,
                 deletingDealMessage: action.message,
             })
+        case (actionTypes.UPDATE_DEAL_START):
+            return updateObject(state, {
+                updatingDeal: true,
+                updatingDealSuccess: false,
+                updatingDealMessage: null,
+            })
+        case (actionTypes.UPDATE_DEAL_SUCCESS):
+            const editedDealIndex = state.deals.data.findIndex(deal => deal.id === action.dealData.id);
+            let editedDeal = { ...state.deals.data[editedDealIndex] }
+            const updatedEditedDeal = updateObject(editedDeal, {
+                
+            })
+            const editedDeals = [...state.deals.data]
+            editedDeals[editedDealIndex] = updatedEditedDeal
+            return updateObject(state, {
+                deals: {
+                    ...state.deals,
+                    data: editedDeals,
+                },
+                updatingDeal: false,
+                updatingDealSuccess: true,
+                updatingDealMessage: action.message,
+            })
+        case (actionTypes.UPDATE_DEAL_FAILED):
+            return updateObject(state, {
+                updatingDeal: false,
+                updatingDealSuccess: false,
+                updatingDealMessage: action.message,
+            })
         case (actionTypes.CREATE_DEAL_START):
             return updateObject(state, {
                 creatingDeal: true,
@@ -70,12 +102,12 @@ const reducer = ( state = intialState , action ) => {
                 creatingDealMessage: null,
             })
         case (actionTypes.CREATE_DEAL_SUCCESS):
-            const upgradedProducts = [...state.deals.data]
-            upgradedProducts.push(action.dealData);
+            const upgradedDeals = [...state.deals.data]
+            upgradedDeals.push(action.dealData);
             return updateObject(state, {
                 deals: {
                     ...state.deals,
-                    data: upgradedProducts,
+                    data: upgradedDeals,
                     meta: {
                         ...state.deals.meta,
                         total: state.deals.meta.total + 1,

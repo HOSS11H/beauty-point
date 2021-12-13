@@ -85,6 +85,37 @@ export const deleteDeal = (id) => {
             })
     }
 }
+export const updateDealStart = () => {
+    return {
+        type: actionTypes.UPDATE_DEAL_START,
+    }
+}
+export const updateDealSuccess = (message, updatedDealData) => {
+    return {
+        type: actionTypes.UPDATE_DEAL_SUCCESS,
+        message: message,
+        dealData: updatedDealData,
+    }
+}
+export const updateDealFailed = (message) => {
+    return {
+        type: actionTypes.UPDATE_DEAL_FAILED,
+        message: message,
+    }
+}
+export const updateDeal = (data) => {
+    return dispatch => {
+        dispatch(updateDealStart())
+        console.log(data)
+        axios.put(`/vendors/deals/${data.id}`, data)
+            .then(response => {
+                dispatch(updateDealSuccess(response.data, data));
+            })
+            .catch(err => {
+                dispatch(updateDealFailed(err.message))
+            })
+    }
+}
 export const createDealStart = () => {
     return {
         type: actionTypes.CREATE_DEAL_START,

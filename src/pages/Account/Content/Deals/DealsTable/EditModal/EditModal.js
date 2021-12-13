@@ -494,49 +494,6 @@ const EditModal = (props) => {
         onClose();
     }, [onClose, resetCartHandler])
 
-
-    const resetModalData = useCallback(() => {
-        setDealName('');
-        setDealNameError(false);
-        setDealAppliedOn('');
-        setDealLocation('');
-        setDealLocationError(false);
-        setSelectedServices([]);
-        setSelectedServicesError(false);
-        setDealDiscount(0);
-        setDiscountType('percentage');
-        setPriceAfterDiscount(0);
-        setDealPriceError(false);
-        setDealStatus('active');
-        setUsesTime(0);
-        setUserLimit(0);
-        setDateFrom(new Date());
-        setDateTo(new Date());
-        setDateToError(false);
-        setOpenTime(new Date());
-        setCloseTime(new Date());
-        setCloseTimeError(false);
-        setAppliedDays({
-            monday: false,
-            tuesday: false,
-            wednesday: false,
-            thursday: false,
-            friday: false,
-            saturday: false,
-            sunday: false,
-        });
-        setAppliedDaysError(false);
-        setEditorState(EditorState.createEmpty());
-        setDealDescriptionError(false);
-        setUploadedImages([]);
-        setDefaultImage('');
-        setDefaultImageError(false);
-    }, [])
-
-    useEffect(() => {
-        creatingDealSuccess && resetModalData();
-    }, [creatingDealSuccess, resetModalData])
-
     const confirmCreateHandler = useCallback(() => {
         if (dealName.trim().length === 0) {
             setDealNameError(true);
