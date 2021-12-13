@@ -27,7 +27,7 @@ import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 import { connect } from 'react-redux';
-import { fetchLocations, fetchServicesByLocation } from '../../../../../../store/actions/index';
+import { fetchServicesByLocation } from '../../../../../../store/actions/index';
 import { formatCurrency, updateObject } from '../../../../../../shared/utility';
 import ValidationMessage from '../../../../../../components/UI/ValidationMessage/ValidationMessage';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -207,7 +207,7 @@ const cartReducer = (state, action) => {
 
 const EditModal = (props) => {
 
-    const { show, heading, id, fetchedDeals, confirmText, onConfirm, onClose, fetchedLocations, fetchLocationsHandler, fetchedServices, fetchServicesHandler, creatingDealSuccess } = props;
+    const { show, heading, id, fetchedDeals, confirmText, onConfirm, onClose, fetchedLocations, fetchedServices, fetchingServices, fetchServicesHandler, creatingDealSuccess } = props;
 
     const { t } = useTranslation();
 
@@ -223,7 +223,7 @@ const EditModal = (props) => {
     let intialSelectedServices = [];
 
     services.map( service => {
-        intialSelectedServices.push(service.id)
+        intialSelectedServices.push(service.service.id)
         return intialSelectedServices
     })
     let chosenServices = [];
@@ -326,11 +326,6 @@ const EditModal = (props) => {
             netPrice > 0 ? setDealPriceError(false) : setDealPriceError(true);
         }
     }, [discountType, dealDiscount, dealPrice])
-
-    useEffect(() => {
-        fetchLocationsHandler(lang);
-        fetchServicesHandler(lang, dealLocation);
-    }, [dealLocation, fetchLocationsHandler, fetchServicesHandler, lang])
 
     const addToCartHandler = useCallback((type, itemData) => {
         dispatch({
@@ -666,11 +661,10 @@ const EditModal = (props) => {
                         input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
                         renderValue={(selected) => (
                             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                {fetchedServices.data.length > 0 && selected.map((value) => {
-                                    console.log(fetchedServices.data.map(item => item.id), selectedServices);
-                                    const selected = fetchedServices.data.find(service => service.id === value);
+                                { !fetchingServices&& selected.map((value) => {
+                                    const item = fetchedServices.data.find(service => service.id === value);
                                     return (
-                                        <Chip key={selected.id} label={selected.name} />
+                                        <Chip key={item.id} label={item.name} />
                                     )
                                 })}
                             </Box>
@@ -929,13 +923,13 @@ const mapStateToProps = (state) => {
     return {
         fetchedLocations: state.locations.locations,
         fetchedServices: state.services.servicesByLocation.services,
+        fetchingServices: state.services.servicesByLocation.fetchingServices,
         creatingDealSuccess: state.deals.creatingDealSuccess,
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchLocationsHandler: (lang) => dispatch(fetchLocations(lang)),
         fetchServicesHandler: (lang, location) => dispatch(fetchServicesByLocation(lang, location)),
     }
 }

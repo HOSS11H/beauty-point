@@ -4,14 +4,13 @@ import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { fetchDeals } from '../../../../../store/actions/index';
+import { fetchDeals, deleteDeal, fetchServicesByLocation } from '../../../../../store/actions/index';
 import ThemeContext from '../../../../../store/theme-context';
 import EnhancedTableHead from './TableHead/TableHead';
 import TablePaginationActions from '../../../../../components/UI/Dashboard/Table/TablePagination/TablePagination';
 import DeleteModal from './DeleteModal/DeleteModal';
 import ViewModal from './ViewModal/ViewModal';
 import EditModal from './EditModal/EditModal';
-import { deleteDeal } from '../../../../../store/actions/index';
 import EnhancedTableBody from './TableBody/TableBody';
 import SearchMessage from "../../../../../components/Search/SearchMessage/SearchMessage";
 import { useTranslation } from 'react-i18next';
@@ -42,7 +41,7 @@ function DealsTable(props) {
 
     const { t } = useTranslation()
 
-    const { fetchedDeals, fetchDealsHandler, loadingDeals, deleteDealHandler, searchingDeals, searchingDealsSuccess } = props;
+    const { fetchedDeals, fetchDealsHandler, loadingDeals, deleteDealHandler, searchingDeals, searchingDealsSuccess, fetchServicesHandler } = props;
 
     const themeCtx = useContext(ThemeContext)
 
@@ -84,7 +83,6 @@ function DealsTable(props) {
         setDeleteModalOpened(false);
         setSelectedDealId(null);
     }, [])
-
     const deleteModalConfirmHandler = useCallback((id) => {
         deleteDealHandler( id);
         setDeleteModalOpened(false);
@@ -100,7 +98,6 @@ function DealsTable(props) {
         setViewModalOpened(false);
         setSelectedDealId(null);
     }, [])
-
     const viewModalConfirmHandler = useCallback((id) => {
         setViewModalOpened(false);
         setEditModalOpened(true);
@@ -108,9 +105,12 @@ function DealsTable(props) {
 
     // Edit Modal
     const editModalOpenHandler = useCallback((id) => {
+        const selectedDealIndex = fetchedDeals.data.findIndex(deal => deal.id === id);
+        let dealData = fetchedDeals.data[selectedDealIndex];
+        fetchServicesHandler(lang, dealData.location.id);
         setEditModalOpened(true);
         setSelectedDealId(id);
-    }, [])
+    }, [fetchServicesHandler, fetchedDeals.data, lang])
     const editModalCloseHandler = useCallback(() => {
         setEditModalOpened(false);
         setSelectedDealId(null);
@@ -158,7 +158,7 @@ function DealsTable(props) {
                                 fetchedDeals={fetchedDeals}
                                 emptyRows={emptyRows}
                                 deleteModalOpenHandler={deleteModalOpenHandler}
-                                /* editModalOpenHandler={editModalOpenHandler} */
+                                editModalOpenHandler={editModalOpenHandler}
                                 viewModalOpenHandler={viewModalOpenHandler}
                             />
                         </Table>
@@ -179,13 +179,13 @@ function DealsTable(props) {
                 <ViewModal show={viewModalOpened} id={selectedDealId} fetchedDeals={fetchedDeals}
                     onClose={viewModalCloseHandler} onConfirm={viewModalConfirmHandler.bind(null, selectedDealId)}
                     heading='view deal details' confirmText='edit' />
-                {/* {
+                {
                     editModalOpened && (
                         <EditModal show={editModalOpened} id={selectedDealId} fetchedDeals={fetchedDeals}
                             onClose={editModalCloseHandler} onConfirm={editModalConfirmHandler.bind(null, selectedDealId)}
-                            heading='view deal details' confirmText='edit' />
+                            heading='edit deal details' confirmText='edit' />
                     )
-                } */}
+                }
             </Fragment>
         )
     }
@@ -210,6 +210,7 @@ const mapDispatchToProps = dispatch => {
     return {
         fetchDealsHandler: (language, page, perPage, orderBy, orderDir) => dispatch(fetchDeals(language, page, perPage, orderBy, orderDir)),
         deleteDealHandler: (token, id) => dispatch(deleteDeal(token, id)),
+        fetchServicesHandler: (lang, location) => dispatch(fetchServicesByLocation(lang, location)),
     }
 }
 
