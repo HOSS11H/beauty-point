@@ -170,10 +170,10 @@ const PointOfSale = ( props ) => {
     const [ shownLocation, setShownLocation ] = useState('');
     const [ searchWord, setSearchWord ] = useState('');
 
-    const [ messageShown, setMessageShown ] = useState(bookingCreated);
+    const [ messageShown, setMessageShown ] = useState( bookingCreated );
 
     useEffect(() => {
-        setMessageShown(bookingCreated )
+        setMessageShown( bookingCreated )
     }, [bookingCreated])
 
     useEffect(() => {

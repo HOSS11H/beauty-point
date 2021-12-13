@@ -898,7 +898,7 @@ const CreateModal = (props) => {
 const mapStateToProps = (state) => {
     return {
         fetchedLocations: state.locations.locations,
-        fetchedServices: state.services.servicesByLocation,
+        fetchedServices: state.services.servicesByLocation.services,
         creatingDealSuccess: state.deals.creatingDealSuccess,
     }
 }

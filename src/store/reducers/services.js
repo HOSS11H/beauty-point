@@ -4,7 +4,6 @@ import { updateObject } from '../../shared/utility';
 
 const intialState = {
     services: { data: [ ], meta: {  } },
-    servicesByLocation: { data: [ ], },
     fetchingServices: false,
     errorFetchingServices: false,
     deletingService: false,
@@ -18,6 +17,13 @@ const intialState = {
     creatingServiceMessage: null,
     searchingServices: false,
     searchingServicesSuccess: false,
+    servicesByLocation: { 
+        services: {
+            data: [ ]
+        }, 
+        fetchingServices: false,
+        errorFetchingServices: false,
+    },
 } ;
 
 const reducer = ( state = intialState , action ) => {
@@ -157,18 +163,31 @@ const reducer = ( state = intialState , action ) => {
             })
         case ( actionTypes.FETCH_SERVICES_BY_LOCATION_START ) :
             return updateObject( state , {
-                fetchingServices: true,
-                errorFetchingServices: false,
+                ...state,
+                servicesByLocation: {
+                    ...state.servicesByLocation,
+                    fetchingServices: true,
+                    errorFetchingServices: false,
+                }
             })
         case ( actionTypes.FETCH_SERVICES_BY_LOCATION_SUCCESS ) :
             return updateObject( state , {
-                fetchingServices: false,
-                servicesByLocation: action.services,
+                ...state,
+                servicesByLocation: {
+                    ...state.servicesByLocation,
+                    services: action.services,
+                    fetchingServices: false,
+                    errorFetchingServices: false,
+                }
             })
         case ( actionTypes.FETCH_SERVICES_BY_LOCATION_FAILED ) :
             return updateObject( state , {
-                fetchingServices: false,
-                errorFetchingServices: true,
+                ...state,
+                servicesByLocation: {
+                    ...state.servicesByLocation,
+                    fetchingServices: false,
+                    errorFetchingServices: true,
+                },
             })
         default :
             return state;

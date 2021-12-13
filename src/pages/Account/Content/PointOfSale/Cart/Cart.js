@@ -183,7 +183,7 @@ const Cart = props => {
     
     const [discount, setDiscount] = useState(0)
     
-    const [paymentGateway, setPaymentGateway] = useState('')
+    const [paymentGateway, setPaymentGateway] = useState('card')
     const [paymentGatewayError, setPaymentGatewayError] = useState(false)
 
     const [paidAmount, setPaidAmount] = useState(0)
@@ -532,7 +532,7 @@ const Cart = props => {
                 <Grid item xs={12}>
                     <CardActions>
                         <ButtonText variant='text' onClick={resetCartHandler}>{t('reset cart')}</ButtonText>
-                        <ButtonConfirm variant='contained' onClick={purchaseCartHandler}>{t('purchase')}</ButtonConfirm>
+                        <ButtonConfirm variant='contained' onClick={purchaseCartHandler}>{t('book')}</ButtonConfirm>
                     </CardActions>
                 </Grid>
             </Grid>

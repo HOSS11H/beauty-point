@@ -223,6 +223,7 @@ const resources = {
             'friday': 'الجمعة',
             'Please add at least one service': 'يرجى إضافة خدمة واحدة على الأقل',
             'applied days must be selected': 'يجب تحديد أيام التطبيق',
+            'book': 'حجز',
         }
     }
 };
