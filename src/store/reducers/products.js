@@ -17,6 +17,11 @@ const intialState = {
     creatingProduct: false,
     creatingProductSuccess: false,
     creatingProductMessage: null,
+    posProducts: {
+        products: { data: [], meta: {} },
+        fetchingProducts: false,
+        errorFetchingProducts: false,
+    }
 };
 
 const reducer = (state = intialState, action) => {
@@ -147,6 +152,30 @@ const reducer = (state = intialState, action) => {
                 errorFetchingProducts: true,
                 searchingProducts: false,
                 searchingProductsSuccess: false,
+            })
+        case (actionTypes.FILTER_PRODUCTS_START):
+            return updateObject(state, {
+                posProducts: {
+                    ...state.posProducts,
+                    fetchingProducts: true,
+                    errorFetchingProducts: false,
+                }
+            })
+        case (actionTypes.FILTER_PRODUCTS_SUCCESS):
+            return updateObject(state, {
+                posProducts: {
+                    ...state.posProducts,
+                    fetchingProducts: false,
+                    products: action.products,
+                }
+            })
+        case (actionTypes.FILTER_PRODUCTS_FAILED):
+            return updateObject(state, {
+                posProducts: {
+                    ...state.posProducts,
+                    fetchingProducts: false,
+                    errorFetchingProducts: true,
+                }
             })
         default:
             return state;

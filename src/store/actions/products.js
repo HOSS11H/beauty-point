@@ -164,20 +164,37 @@ export const searchProducts = (language, word) => {
             })
     }
 }
+export const filterProductsStart = () => {
+    return {
+        type: actionTypes.FILTER_PRODUCTS_START,
+    }
+}
+export const filterProductsSuccess = (productsData) => {
+    return {
+        type: actionTypes.FILTER_PRODUCTS_SUCCESS,
+        products: productsData
+    }
+}
+export const filterProductsFailed = (errorMessage) => {
+    return {
+        type: actionTypes.FILTER_PRODUCTS_FAILED,
+        error: errorMessage,
+    }
+}
 
 export const filterProducts = (language, type, location, search) => {
     return dispatch => {
-        dispatch(fetchProductsStart())
+        dispatch(filterProductsStart())
         axios.get(`/vendors/${type}?per_page=all&term=${search}&location_id=${location}&include[]=location`, {
             headers: {
                 'Accept-Language': language
             }
         }).then(response => {
-            dispatch(fetchProductsSuccess(response.data));
+            dispatch(filterProductsSuccess(response.data));
         })
             .catch(err => {
                 console.log(err)
-                dispatch(fetchProductsFailed(err.message))
+                dispatch(filterProductsFailed(err.message))
             })
     }
 }
