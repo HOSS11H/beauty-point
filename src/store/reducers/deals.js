@@ -14,6 +14,11 @@ const intialState = {
     creatingDeal: false,
     creatingDealSuccess: false,
     creatingDealMessage: null,
+    posDeals: {
+        deals: { data: [ ], meta: {} } ,
+        fetchingDeals: false,
+        errorFetchingDeals: false,
+    }
 } ;
 
 const reducer = ( state = intialState , action ) => {
@@ -106,6 +111,30 @@ const reducer = ( state = intialState , action ) => {
                 errorFetchingDeals: true,
                 searchingDeals: false,
                 searchingDealsSuccess: false,
+            })
+        case ( actionTypes.FILTER_DEALS_START ) :
+            return updateObject( state , {
+                posDeals: {
+                    ...state.posDeals,
+                    fetchingDeals: true,
+                    errorFetchingDeals: false,
+                }
+            })
+        case ( actionTypes.FILTER_DEALS_SUCCESS ) :
+            return updateObject( state , {
+                posDeals: {
+                    ...state.posDeals,
+                    fetchingDeals: false,
+                    deals: action.deals,
+                }
+            })
+        case ( actionTypes.FILTER_DEALS_FAILED ) :
+            return updateObject( state , {
+                posDeals: {
+                    ...state.posDeals,
+                    fetchingDeals: false,
+                    errorFetchingDeals: true,
+                }
             })
         default :
             return state;

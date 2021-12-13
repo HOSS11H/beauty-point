@@ -188,10 +188,27 @@ export const searchDeals = (language, word) => {
             })
     }
 }
+export const filterDealsStart = () => {
+    return {
+        type: actionTypes.FILTER_DEALS_START,
+    }
+}
+export const filterDealsSuccess = (dealsData) => {
+    return {
+        type: actionTypes.FILTER_DEALS_SUCCESS,
+        deals: dealsData
+    }
+}
+export const filterDealsFailed = (errorMessage) => {
+    return {
+        type: actionTypes.FILTER_DEALS_FAILED,
+        error: errorMessage,
+    }
+}
 
 export const filterDeals = (language, type, location, search) => {
     return dispatch => {
-        dispatch(fetchDealsStart())
+        dispatch(filterDealsStart())
         axios.get(`/vendors/${type}?per_page=all&term=${search}&location_id=${location}&include[]=services&include[]=location`, {
             headers: {
                 'Accept-Language': language
@@ -216,11 +233,11 @@ export const filterDeals = (language, type, location, search) => {
                     }
                 }
             })
-            dispatch(fetchDealsSuccess({ ...response.data, data: editedData }));
+            dispatch(filterDealsSuccess({ ...response.data, data: editedData }));
         })
             .catch(err => {
                 console.log(err)
-                dispatch(fetchDealsFailed(err.message))
+                dispatch(filterDealsFailed(err.message))
             })
     }
 }

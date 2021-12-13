@@ -95,8 +95,8 @@ const mapStateToProps = (state) => {
         fetchingServices: state.services.posServices.fetchingServices,
         fetchedProducts: state.products.posProducts.products,
         fetchingProducts: state.products.posProducts.fetchingProducts,
-        fetchedDeals: state.deals.deals,
-        fetchingDeals: state.deals.fetchingDeals,
+        fetchedDeals: state.deals.posDeals.deals,
+        fetchingDeals: state.deals.posDeals.fetchingDeals,
     }
 }
 
