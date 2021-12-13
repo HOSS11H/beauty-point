@@ -83,7 +83,6 @@ const ClientInfos = styled.p`
     cursor: pointer;
 `
 const BillTotal = styled.p`
-	width: 85%;
     display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -95,11 +94,16 @@ const BillTotal = styled.p`
     font-weight: 700;
     color: ${({ theme }) => theme.palette.primary.main};
     transition: 0.3s ease-in-out;
-    margin: 10px 0;
     cursor: pointer;
 	i {
 		font-style: normal;
 		font-size: 13px;
+	}
+	span {
+		&:last-child {
+			display: inline-block;
+			margin-right: 10px;
+		}
 	}
 `
 
@@ -154,11 +158,15 @@ const Invoice = React.forwardRef((props, ref) => {
 							<ClientAddress><span>{userData.user.company.tax_record}</span> : الرقم الضريبي</ClientAddress>
 							<ClientBill>رقم الحجز : {bookingData.id}</ClientBill>
 							<ClientDate>تاريخ الفاتورة : {bookingData.date}</ClientDate>
-							<Grid container spacing={2}>
+							<Grid sx={{ width: '100%'}}  container spacing={2}>
 								<Grid item xs={6}>
 									<ClientInfos>
 										<span>{t(userData.user.name)}</span>
 										<span>: دفع الي</span>
+									</ClientInfos>
+									<ClientInfos>
+										<span>{t(bookingData.payment.status)}</span>
+										<span>: حالة الدفع</span>
 									</ClientInfos>
 								</Grid>
 								<Grid item xs={6}>
@@ -202,14 +210,26 @@ const Invoice = React.forwardRef((props, ref) => {
 									</TableBody>
 								</Table>
 							</TableContainer>
-							<BillTotal>
-								<i>:ضريبة القيمة المضافة %15</i>
-								<span>{formatCurrency(bookingData.vat)}</span>
-							</BillTotal>
-							<BillTotal>
-								<span>المجموع الكلي : </span>
-								<span>{formatCurrency(bookingData.price)}</span>
-							</BillTotal>
+							<Grid sx={{ width: '100%'}}  container spacing={2}>
+								<Grid item xs={12} md={6} >
+									<BillTotal>
+										<i>ضريبة القيمة المضافة %15 : </i>
+										<span>{formatCurrency(bookingData.vat)}</span>
+									</BillTotal>
+								</Grid>
+								<Grid item xs={12} md={6} >
+									<BillTotal>
+										<span>المجموع الكلي : </span>
+										<span>{formatCurrency(bookingData.price)}</span>
+									</BillTotal>
+								</Grid>
+								<Grid item xs={12} md={6} >
+									<BillTotal>
+										<span>طريقة الدفع : </span>
+										<span>{bookingData.payment.gateway}</span>
+									</BillTotal>
+								</Grid>
+							</Grid>
 							<QrWrapper>
 								{qrCode && <QRCode value={qrCode} />}
 							</QrWrapper>
