@@ -547,7 +547,6 @@ const mapStateToProps = (state) => {
     return {
         fetchedCustomers: state.customers.customers,
         fetchedCoupons: state.coupons.coupons,
-        creatingBookingSuccess: state.bookings.creatingBookingSuccess,
         bookingCreated: state.bookings.bookingCreated,
     }
 }

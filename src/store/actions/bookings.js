@@ -123,6 +123,11 @@ export const createBookingSuccess = (message) => {
         message: message,
     }
 }
+export const resetCreateBookingSuccess = () => {
+    return {
+        type: actionTypes.RESET_CREATE_BOOKING_SUCCESS,
+    }
+}
 export const createBookingFailed = (message) => {
     return {
         type: actionTypes.CREATE_BOOKING_FAILED,
@@ -136,6 +141,9 @@ export const createBooking = (data) => {
         axios.post(`/vendors/bookings`, data)
             .then(response => {
                 dispatch(createBookingSuccess(response.data));
+                setTimeout(() => {
+                    dispatch(resetCreateBookingSuccess())
+                }, 4000)
             })
             .catch(err => {
                 dispatch(createBookingFailed(err.message))
