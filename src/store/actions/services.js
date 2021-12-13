@@ -184,19 +184,35 @@ export const searchServices = (language, word) => {
             })
     }
 }
-
+export const filterServicesStart = () => {
+    return {
+        type: actionTypes.FILTER_SERVICES_START,
+    }
+}
+export const filterServicesSuccess = (servicesData) => {
+    return {
+        type: actionTypes.FILTER_SERVICES_SUCCESS,
+        services: servicesData
+    }
+}
+export const filterServicesFailed = (errorMessage) => {
+    return {
+        type: actionTypes.FILTER_SERVICES_FAILED,
+        error: errorMessage,
+    }
+}
 export const filterServices = (language, type, category, location, search) => {
     return dispatch => {
-        dispatch(fetchServicesStart())
+        dispatch(filterServicesStart())
         axios.get(`/vendors/${type}?per_page=all&term=${search}&location_id=${location}&category_id=${category}&include[]=category&include[]=location&include[]=users&include[]=bookingItems&include[]=company`, {
             headers: {
                 'Accept-Language': language
             }
         }).then(response => {
-            dispatch(fetchServicesSuccess(response.data));
+            dispatch(filterServicesSuccess(response.data));
         })
             .catch(err => {
-                dispatch(fetchServicesFailed(err.message))
+                dispatch(filterServicesFailed(err.message))
             })
     }
 }

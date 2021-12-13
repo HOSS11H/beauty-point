@@ -24,6 +24,11 @@ const intialState = {
         fetchingServices: false,
         errorFetchingServices: false,
     },
+    posServices: {
+        services: { data: [ ], meta: {  } },
+        fetchingServices: false,
+        errorFetchingServices: false,
+    }
 } ;
 
 const reducer = ( state = intialState , action ) => {
@@ -161,9 +166,32 @@ const reducer = ( state = intialState , action ) => {
                 searchingServices: false,
                 searchingServicesSuccess: false,
             })
+        case ( actionTypes.FILTER_SERVICES_START ) :
+            return updateObject( state , {
+                posServices: {
+                    ...state.posServices,
+                    fetchingServices: true,
+                    errorFetchingServices: false,
+                }
+            })
+        case ( actionTypes.FILTER_SERVICES_SUCCESS ) :
+            return updateObject( state , {
+                posServices: {
+                    ...state.posServices,
+                    fetchingServices: false,
+                    services: action.services,
+                }
+            })
+        case ( actionTypes.FILTER_SERVICES_FAILED ) :
+            return updateObject( state , {
+                posServices: {
+                    ...state.posServices,
+                    fetchingServices: false,
+                    errorFetchingServices: true,
+                },
+            })
         case ( actionTypes.FETCH_SERVICES_BY_LOCATION_START ) :
             return updateObject( state , {
-                ...state,
                 servicesByLocation: {
                     ...state.servicesByLocation,
                     fetchingServices: true,
@@ -172,7 +200,6 @@ const reducer = ( state = intialState , action ) => {
             })
         case ( actionTypes.FETCH_SERVICES_BY_LOCATION_SUCCESS ) :
             return updateObject( state , {
-                ...state,
                 servicesByLocation: {
                     ...state.servicesByLocation,
                     services: action.services,
@@ -182,7 +209,6 @@ const reducer = ( state = intialState , action ) => {
             })
         case ( actionTypes.FETCH_SERVICES_BY_LOCATION_FAILED ) :
             return updateObject( state , {
-                ...state,
                 servicesByLocation: {
                     ...state.servicesByLocation,
                     fetchingServices: false,

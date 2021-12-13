@@ -11,6 +11,7 @@ import Cart from './Cart/Cart';
 import { updateObject } from '../../../../shared/utility';
 import CustomizedSnackbars from '../../../../components/UI/SnackBar/SnackBar';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 const cartReducer = (state, action) => {
     switch(action.type) {
@@ -156,6 +157,8 @@ const PointOfSale = ( props ) => {
     const themeCtx = useContext(ThemeContext)
     const authCtx = useContext(AuthContext)
 
+    const navigate = useNavigate()
+
     const { lang } = themeCtx
     const { token } = authCtx
 
@@ -174,7 +177,8 @@ const PointOfSale = ( props ) => {
 
     useEffect(() => {
         setMessageShown( bookingCreated )
-    }, [bookingCreated])
+        //bookingCreated && navigate('bookings')
+    }, [bookingCreated, navigate])
 
     useEffect(() => {
         if(shownType === 'services') {

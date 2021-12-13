@@ -91,8 +91,8 @@ const FilteredResults = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        fetchedServices: state.services.services,
-        fetchingServices: state.services.fetchingServices,
+        fetchedServices: state.services.posServices.services,
+        fetchingServices: state.services.posServices.fetchingServices,
         fetchedProducts: state.products.products,
         fetchingProducts: state.products.fetchingProducts,
         fetchedDeals: state.deals.deals,
