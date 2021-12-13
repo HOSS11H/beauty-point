@@ -61,35 +61,16 @@ function TabularReport(props) {
 
     const { t } = useTranslation()
 
-    const { fetchedTabularReport, fetchTabularReportHandler, fetchingTabularReports, filteringTabularReportsSuccess } = props;
+    const { fetchedTabularReport, fetchTabularReportHandler, filteringTabularReportsSuccess } = props;
 
     const themeCtx = useContext(ThemeContext)
 
     const { lang } = themeCtx
 
-    const [page, setPage] = useState(0);
-
-    const [order, setOrder] = useState('desc');
-    const [orderBy, setOrderBy] = useState('name');
-
-    const [rowsPerPage, setRowsPerPage] = useState(intialRowsPerPage);
-
     useEffect(() => {
-        fetchTabularReportHandler(lang, page, rowsPerPage, order, orderBy);
-    }, [lang, page, rowsPerPage, orderBy, order, fetchTabularReportHandler]);
+        fetchTabularReportHandler(lang, );
+    }, [lang, fetchTabularReportHandler]);
 
-
-
-    const handleRequestSort = (event, property) => {
-        const isAsc = orderBy === property && order === 'asc';
-        setOrder(isAsc ? 'desc' : 'asc');
-        setOrderBy(property);
-    };
-
-
-    const handleChangePage = useCallback((event, newPage) => {
-        setPage(newPage);
-    }, []);
 
 
     let content = (
@@ -103,25 +84,12 @@ function TabularReport(props) {
                     >
                         <EnhancedTableHead
                             rowCount={fetchedTabularReport.data.length}
-                            onRequestSort={handleRequestSort}
-                            order={order}
-                            orderBy={orderBy}
-                            loading={fetchingTabularReports}
                         />
                         <EnhancedTableBody
                             fetchedTabularReport={fetchedTabularReport}
                         />
                     </Table>
                 </TableContainer>
-                <TablePaginationActions
-                    component="div"
-                    count={fetchedTabularReport.data.length}
-                    total={fetchedTabularReport.data ? fetchedTabularReport.data.length : 0}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    loading={fetchingTabularReports}
-                />
             </Paper>
             <Grid   container   spacing={2}>
                 <Grid item xs={12} md={6}>
