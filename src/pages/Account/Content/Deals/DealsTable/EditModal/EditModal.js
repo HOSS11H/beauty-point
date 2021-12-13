@@ -218,7 +218,7 @@ const EditModal = (props) => {
 
     let dealData = fetchedDeals.data[selectedDealIndex];
 
-    const { title, description, services, location, discount_value, discount_type, deal_applied_on, discount_price, status } = dealData;
+    const { title, description, services, location, discount_value, discount_type, deal_applied_on, discount_price, status, used_time, uses_limit, image, days, start_date_time, end_date_time, open_time, close_time } = dealData;
 
     let intialSelectedServices = [];
 
@@ -238,6 +238,12 @@ const EditModal = (props) => {
         chosenServices.push(serviceData);
         return chosenServices;
     })
+    let obj = {};
+    const selectedAppliedDays = days.map( item => {
+        obj[item] = true;
+        return obj;
+    })
+    console.log(selectedAppliedDays)
 
 
     const [cartData, dispatch] = useReducer(cartReducer, {
@@ -264,19 +270,18 @@ const EditModal = (props) => {
 
     const [dealStatus, setDealStatus] = useState(status);
 
-    const [usesTime, setUsesTime] = useState(0);
+    const [usesTime, setUsesTime] = useState(used_time);
 
-    const [userLimit, setUserLimit] = useState(0);
+    const [userLimit, setUserLimit] = useState(uses_limit);
 
+    const [dateFrom, setDateFrom] = useState(start_date_time);
     
-    const [dateFrom, setDateFrom] = useState(new Date());
-    
-    const [dateTo, setDateTo] = useState(new Date());
+    const [dateTo, setDateTo] = useState(end_date_time);
     const [dateToError, setDateToError] = useState(false);
     
-    const [openTime, setOpenTime] = useState(new Date());
+    const [openTime, setOpenTime] = useState(`2021-02-03 ${open_time}`);
 
-    const [closeTime, setCloseTime] = useState(new Date());
+    const [closeTime, setCloseTime] = useState(`2021-02-03 ${close_time}`);
     const [closeTimeError, setCloseTimeError] = useState(false);
     
     const [appliedDays, setAppliedDays] = useState({
@@ -287,7 +292,18 @@ const EditModal = (props) => {
         wednesday: false,
         thursday: false,
         friday: false,
+        ...obj,
     });
+    console.log({
+        saturday: false,
+        sunday: false,
+        monday: false,
+        tuesday: false,
+        wednesday: false,
+        thursday: false,
+        friday: false,
+        ...obj,
+    })
     const { saturday, sunday, monday, tuesday, wednesday, thursday, friday} = appliedDays;
     const [appliedDaysError, setAppliedDaysError] = useState(false);
 
@@ -299,12 +315,10 @@ const EditModal = (props) => {
 
     const [dealDescriptionError, setDealDescriptionError] = useState(false);
 
-    const [uploadedImages, setUploadedImages] = useState([]);
+    const [uploadedImages, setUploadedImages] = useState([ { data_url: image } ]);
 
-    const [defaultImage, setDefaultImage] = useState('');
+    const [defaultImage, setDefaultImage] = useState(image);
     const [defaultImageError, setDefaultImageError] = useState(false);
-
-
 
     const maxNumber = 69;
 
