@@ -18,7 +18,7 @@ const TobBarWrapper = styled.div`
 const TopBar = props => {
     return (
         <TobBarWrapper>
-            <Container container maxWidth="lg">
+            <Container maxWidth="lg">
                 <div className="block-right">
                     <ModuleSocial />
                 </div>

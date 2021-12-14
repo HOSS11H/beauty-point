@@ -1,12 +1,21 @@
 import NavBar from "./NavBar/NavBar";
 import TopBar from "./TopBar/TopBar";
+import styled from 'styled-components';
+
+const HeaderWrapper = styled.header`
+    background-color: transparent;
+    position        : absolute;
+    top             : 0;
+    left            : 0;
+    width           : 100%;
+`
 
 const Header = () => {
     return (
-        <header>
+        <HeaderWrapper>
             <TopBar/>
             <NavBar />
-        </header>
+        </HeaderWrapper>
     )
 }
 export default Header;

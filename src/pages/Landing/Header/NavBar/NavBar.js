@@ -34,6 +34,7 @@ const NavbarCollapse = styled.div`
 const NavbarNav = styled.ul`
     margin:0;
     padding:0;
+    list-style: none;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -97,7 +98,7 @@ const NavBar = () => {
     const { t } = useTranslation()
     return (
         <Nav>
-            <Container container maxWidth="lg">
+            <Container maxWidth="lg">
                 <NavHolder>
                     <Logo>
                         <img src={logoSrc} alt="logo" />
