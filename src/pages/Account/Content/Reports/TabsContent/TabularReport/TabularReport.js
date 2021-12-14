@@ -35,7 +35,7 @@ const TabularReportWrapper = styled(Card)`
         border-radius:20px;
         padding: 20px;
     }
-    `
+`
 const PriceCalculation = styled.div`
     display: flex;
     align-items: center;

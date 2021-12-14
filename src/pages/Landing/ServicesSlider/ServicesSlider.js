@@ -5,6 +5,10 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import styled, {keyframes} from 'styled-components';
 import './beauty-icons.css'
+import { useState, useEffect } from 'react';
+import axios from '../../../utils/axios-instance';
+import CircularProgress from '@mui/material/CircularProgress';
+import { Fragment } from "react";
 
 const ServicesSliderWrapper = styled.section`
     background-color: #FAFAFA;
@@ -117,22 +121,16 @@ const ServicePanel = styled.div`
         }
     }
 `
-const services = [
-    { icon: 'icon-hair-care', title: 'hair cair', },
-    { icon: 'icon-makeover', title: 'makeover', },
-    { icon: 'icon-skin-care', title: 'skin care', },
-    { icon: 'icon-facial', title: 'facial', },
-    { icon: 'icon-nails', title: 'nails', },
-    { icon: 'icon-body-care', title: 'body care', },
-    { icon: 'icon-makeup', title: 'makeup', },
-    { icon: 'icon-hairstyle', title: 'hairstyle', },
-    { icon: 'icon-bride-makeup', title: 'bride makeup', },
-    { icon: 'icon-hair-cut', title: 'hair cut', },
-    { icon: 'icon-skin-smoothing', title: 'skin smoothing', },
-    { icon: 'icon-hair-dryer', title: 'hair dryer', },
-]
+const Loader = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 200px;
+`
 
 const ServicesSlider = props => {
+
     const settings = {
         dots: false,
         arrows: true,
@@ -158,28 +156,51 @@ const ServicesSlider = props => {
             },
         ]
     };
+
+    const [services, setServices ] = useState();
+
+    useEffect(() => {
+        axios.get('/categories')
+            .then(res => {
+                setServices(res.data.data);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }, [])
+
+    let content= (
+        <Loader>
+            <CircularProgress color="secondary" />
+        </Loader>
+    );
+    if (services) {
+        content = (
+            <Slider {...settings}>
+                {
+                    services.map((service, index) => (
+                        <ServicePanel key={index}>
+                            <div className="service-icon">
+                                {/* <i className={`beauty-icon ${service.icon}`}></i> */}
+                            </div>
+                            <div className="service-title">
+                                <a href="/">{service.name}</a>
+                            </div>
+                        </ServicePanel>
+                    ))
+                }
+            </Slider>
+        )
+    }
+
+    
     return (
         <ServicesSliderWrapper>
             <Container maxWidth="lg">
                 <Heading className='heading-2'>
                     <h2 className="heading-title" >select your services</h2>
                 </Heading>
-                <Slider {...settings} >
-                    {
-                        services.map((service, index) => {
-                            return (
-                                <ServicePanel key={index}>
-                                    <div className="service-icon">
-                                        <i className={service.icon}></i>
-                                    </div>
-                                    <h3 className="service-title">
-                                        <a href="/">{service.title}</a>
-                                    </h3>
-                                </ServicePanel>
-                            )
-                        })
-                    }
-                </Slider>
+                {content}
             </Container>
         </ServicesSliderWrapper>
     )

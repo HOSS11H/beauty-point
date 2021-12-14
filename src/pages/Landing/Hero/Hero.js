@@ -3,12 +3,9 @@ import styled from 'styled-components';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import { NavLink } from 'react-router-dom';
-import heroImgSrc from '../../../assets/images/hero/1.jpg';
 import { useState, useEffect } from 'react';
 import axios from '../../../utils/axios-instance';
 import CircularProgress from '@mui/material/CircularProgress';
-import htmlToDraft from 'html-to-draftjs';
-import { ContentState } from 'draft-js';
 
 const HeroWrapper = styled.div`
     display       : flex;
