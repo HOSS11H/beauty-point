@@ -1,6 +1,7 @@
 import NavBar from "./NavBar/NavBar";
 import TopBar from "./TopBar/TopBar";
 import styled from 'styled-components';
+import MobileBar from "./MobileBar/MobileBar";
 
 const HeaderWrapper = styled.header`
     background-color: transparent;
@@ -15,6 +16,7 @@ const Header = () => {
         <HeaderWrapper>
             <TopBar/>
             <NavBar />
+            <MobileBar />
         </HeaderWrapper>
     )
 }

@@ -37,7 +37,7 @@ const ModuleCartWrapper = styled.div`
 const ModuleCart = props => {
     return (
         <ModuleCartWrapper>
-            <div class="module-icon">
+            <div className="module-icon">
                 <ShoppingCartIcon />
             </div>
         </ModuleCartWrapper>

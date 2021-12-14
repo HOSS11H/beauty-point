@@ -110,9 +110,9 @@ const NavBar = () => {
                     <NavbarCollapse>
                         <NavbarNav>
                             { 
-                                navLinks.map( ( item ) => {
+                                navLinks.map( ( item, index ) => {
                                     return (
-                                        <li className="nav-item">
+                                        <li key={index} className="nav-item">
                                             <a className="nav-link" href={item.link}>
                                                 {t(item.name)}
                                             </a>

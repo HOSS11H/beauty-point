@@ -37,7 +37,7 @@ const ModuleSearchWrapper = styled.div`
 const ModuleSearch = props => {
     return (
         <ModuleSearchWrapper>
-            <div class="module-icon">
+            <div className="module-icon">
                 <SearchIcon />
             </div>
         </ModuleSearchWrapper>
