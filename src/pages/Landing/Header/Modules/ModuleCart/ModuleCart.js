@@ -16,7 +16,7 @@ const ModuleCartWrapper = styled.div`
         background: #fff;
         border-radius: 50%;
         transition: 0.3s ease-in-out;
-        @media screen and (min-width: 500px) {
+        @media screen and (max-width: 500px) {
             width: 40px;
             height: 40px;
         }

@@ -17,10 +17,16 @@ const Logo = styled.a`
     display: flex;
     align-items: center;
     margin-right: 40px;
+    @media screen and (max-width: 420px) {
+        margin-right: 30px;
+    }
     img {
         max-width: 100%;
         width    : 220px;
         height   : auto;
+        @media screen and (max-width: 420px) {
+            width: 150px;
+        }
     }
 ` 
 const ModulesHolderPhone = styled.div`
@@ -30,6 +36,9 @@ const NavbarCollapse = styled.div`
     display: flex;
     flex-basis: auto;
     flex-grow: 1;
+    @media screen and (max-width: 899.98px) {
+        justify-content: flex-end;
+    }
 `
 const NavbarNav = styled.ul`
     margin:0;
@@ -39,6 +48,9 @@ const NavbarNav = styled.ul`
     flex-direction: row;
     align-items: center;
     margin-right: auto;
+    @media screen and (max-width: 899.98px) {
+        display: none;
+    }
     .nav-item {
         position: relative;
         margin-right: 30px;
