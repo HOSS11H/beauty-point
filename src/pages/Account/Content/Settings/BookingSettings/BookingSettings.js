@@ -59,7 +59,10 @@ export default function BookingSettings(props) {
         .then(res => {
             let times = [...bookingTimes];
             let idx = times.findIndex(t => t.id === data.id)
-            let time = { ...data }
+            let time = { 
+                ...times[idx],
+                ...data 
+            }
             times[idx] = time;
             setBookingTimes(times)
             setOpen(false)

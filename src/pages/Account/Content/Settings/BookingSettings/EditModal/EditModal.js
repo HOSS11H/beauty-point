@@ -22,17 +22,17 @@ const CustomTextField = styled(TextField)`
 
 const EditModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, bookingTimes, id, editingBookingSettingsSuccess } = props;
+    const { show, heading, confirmText, onConfirm, onClose, bookingTimes, id, editingBookingSettingsSuccess, start_time, end_time } = props;
 
     const bookingTimesData = bookingTimes.find( item => item.id === id );
 
-    console.log( bookingTimesData)
+    console.log( bookingTimesData )
 
     const { t } = useTranslation();
 
-    const [openTime, setOpenTime] = useState(new Date());
+    const [openTime, setOpenTime] = useState(new Date(`2021-02-03 ${bookingTimesData.start_time}`));
 
-    const [closeTime, setCloseTime] = useState(new Date());
+    const [closeTime, setCloseTime] = useState(new Date(`2021-02-03 ${bookingTimesData.end_time}`));
     const [closeTimeError, setCloseTimeError] = useState(false);
 
     const [slotDuration, setSlotDuration] = useState(bookingTimesData.slot_duration);
@@ -98,8 +98,8 @@ const EditModal = (props) => {
     const confirmCreateHandler = useCallback(() => {
         const data= {
             id,
-            start_time: format(openTime, 'HH:mm'),
-            end_time: format(closeTime, 'HH:mm'),
+            start_time: format(openTime, 'HH:mm a'),
+            end_time: format(closeTime, 'HH:mm a'),
             multiple_booking: multipleBookings,
             max_booking: +maximumBookings,
             per_day_max_booking: +maximumBookingsPerDay,

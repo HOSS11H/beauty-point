@@ -27,10 +27,10 @@ export default function Sidebar() {
         <Card>
             <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
                 <Tabs value={value} onChange={handleChange} scrollButtons="auto" variant="scrollable" indicatorColor="secondary" textColor="secondary">
-                    <Tab value="" label="General" />
+                    <Tab value="" label={t("General")} />
                     <Tab value="vendor-page" label={t("Vendor page Settings")} />
                     <Tab value="booking-settings" label={t("Booking Settings")} />
-                    <Tab value="employee-settings" label={t("Employee Settings")} />
+                    {/* <Tab value="employee-settings" label={t("Employee Settings")} /> */}
                 </Tabs>
             </Box>
         </Card>

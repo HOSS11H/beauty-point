@@ -225,6 +225,9 @@ const resources = {
             'applied days must be selected': 'يجب تحديد أيام التطبيق',
             'book': 'حجز',
             'create': 'إنشاء',
+            'General': 'عام',
+            'Vendor page Settings': 'إعدادات صفحة المتجر',
+            'Booking Settings': 'إعدادات الحجز',
         }
     }
 };
