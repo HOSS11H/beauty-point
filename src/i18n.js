@@ -228,6 +228,23 @@ const resources = {
             'General': 'عام',
             'Vendor page Settings': 'إعدادات صفحة المتجر',
             'Booking Settings': 'إعدادات الحجز',
+            'SN': 'الرقم التسلسلي',
+            'Day': 'اليوم',
+            'Open Time': 'وقت الفتح',
+            'Close Time': 'وقت الإغلاق',
+            'Allow Booking': 'السماح بالحجز',
+            'Action': 'اجراء',
+            'Slot Duration': 'مدة الفترة',
+            'minutes': 'دقائق',
+            'Multiple Bookings': 'الحجوزات المتعددة',
+            'yes': 'نعم',
+            'no': 'لا',
+            'Maximum Bookings': 'الحجوزات الأقصى',
+            'Max Bookings Per Day': 'الحجوزات الأقصى لكل يوم',
+            'Max Bookings Per Slot': 'الحجوزات الأقصى لكل فترة',
+            'Bookings Status': 'حالة الحجوزات',
+            'Enabled': 'مفعل',
+            'Disabled': 'غير مفعل',
         }
     }
 };

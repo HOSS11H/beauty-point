@@ -92,7 +92,7 @@ export default function BookingSettings(props) {
                                 <TableCell component="th" scope="row">
                                     {row.id}
                                 </TableCell>
-                                <TableCell align="right">{row.day}</TableCell>
+                                <TableCell align="right">{t(row.day)}</TableCell>
                                 <TableCell align="right">{row.start_time}</TableCell>
                                 <TableCell align="right">{row.end_time}</TableCell>
                                 <TableCell align="right"><Switch
