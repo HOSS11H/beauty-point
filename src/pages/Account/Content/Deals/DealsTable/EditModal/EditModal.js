@@ -274,14 +274,14 @@ const EditModal = (props) => {
 
     const [userLimit, setUserLimit] = useState(uses_limit);
 
-    const [dateFrom, setDateFrom] = useState(start_date_time);
+    const [dateFrom, setDateFrom] = useState(new Date(start_date_time));
     
-    const [dateTo, setDateTo] = useState(end_date_time);
+    const [dateTo, setDateTo] = useState(new Date(end_date_time));
     const [dateToError, setDateToError] = useState(false);
     
-    const [openTime, setOpenTime] = useState(`2021-02-03 ${open_time}`);
+    const [openTime, setOpenTime] = useState(new Date(`2021-02-03 ${open_time}`));
 
-    const [closeTime, setCloseTime] = useState(`2021-02-03 ${close_time}`);
+    const [closeTime, setCloseTime] = useState(new Date(`2021-02-03 ${close_time}`));
     const [closeTimeError, setCloseTimeError] = useState(false);
     
     const [appliedDays, setAppliedDays] = useState({
@@ -551,8 +551,9 @@ const EditModal = (props) => {
             }
         })
         const selectedLocation = fetchedLocations.find(location => location.id === dealLocation);
-        console.log(closeTime, format(openTime,  'hh:ii a'))
+    
         const data = {
+            id: id,
             title: dealName,
             location: dealLocation,
             deal_services: selectedServices,
@@ -578,7 +579,7 @@ const EditModal = (props) => {
             locationData: selectedLocation,
         }
         onConfirm(data);
-    }, [dealName, dealLocation, selectedServices, dateTo, dateFrom, closeTime, openTime, appliedDays, editorState, dealPriceError, defaultImage, cartData.services, fetchedLocations, discountType, dealDiscount, priceAfterDiscount, dealAppliedOn, usesTime, userLimit, dealStatus, onConfirm])
+    }, [dealName, dealLocation, selectedServices, dateTo, dateFrom, closeTime, openTime, appliedDays, editorState, dealPriceError, defaultImage, cartData.services, fetchedLocations, id, discountType, dealDiscount, priceAfterDiscount, dealAppliedOn, usesTime, userLimit, dealStatus, onConfirm])
 
     let content = (
         <Grid container spacing={2}>
@@ -632,7 +633,8 @@ const EditModal = (props) => {
                         input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
                         renderValue={(selected) => (
                             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                { !fetchingServices&& selected.map((value) => {
+                                { !fetchingServices && selected.map((value) => {
+                                    console.log(fetchedServices.data);
                                     const item = fetchedServices.data.find(service => service.id === value);
                                     return (
                                         <Chip key={item.id} label={item.name} />

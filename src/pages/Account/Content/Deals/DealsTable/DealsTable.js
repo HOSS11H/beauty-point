@@ -183,7 +183,7 @@ function DealsTable(props) {
                 {
                     editModalOpened && (
                         <EditModal show={editModalOpened} id={selectedDealId} fetchedDeals={fetchedDeals}
-                            onClose={editModalCloseHandler} onConfirm={editModalConfirmHandler.bind(null, selectedDealId)}
+                            onClose={editModalCloseHandler} onConfirm={editModalConfirmHandler}
                             heading='edit deal details' confirmText='edit' />
                     )
                 }

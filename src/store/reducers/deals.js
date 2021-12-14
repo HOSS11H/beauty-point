@@ -75,8 +75,10 @@ const reducer = ( state = intialState , action ) => {
         case (actionTypes.UPDATE_DEAL_SUCCESS):
             const editedDealIndex = state.deals.data.findIndex(deal => deal.id === action.dealData.id);
             let editedDeal = { ...state.deals.data[editedDealIndex] }
+
             const updatedEditedDeal = updateObject(editedDeal, {
-                
+                ...action.dealData,
+                location: action.dealData.locationData,
             })
             const editedDeals = [...state.deals.data]
             editedDeals[editedDealIndex] = updatedEditedDeal
