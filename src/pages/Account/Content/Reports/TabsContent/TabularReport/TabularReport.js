@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState, useCallback, Fragment } from 'react';
+import { useContext, useEffect, Fragment } from 'react';
 import Table from '@mui/material/Table';
 import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import { fetchTabularReport } from '../../../../../../store/actions/index';
 import ThemeContext from '../../../../../../store/theme-context';
 import EnhancedTableHead from './TableHead/TableHead';
-import TablePaginationActions from '../../../../../../components/UI/Dashboard/Table/TablePagination/TablePagination';
 import EnhancedTableBody from './TableBody/TableBody';
 import { useTranslation } from 'react-i18next';
 import { formatCurrency } from '../../../../../../shared/utility';
@@ -15,6 +14,7 @@ import SearchMessage from "../../../../../../components/Search/SearchMessage/Sea
 import SearchFilters from './SearchFilters/SearchFilters';
 import Card from '@mui/material/Card';
 import { Grid } from '@mui/material';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const TabularReportWrapper = styled(Card)`
     display: flex;
@@ -52,16 +52,20 @@ const PriceCalculation = styled.div`
         color: ${({ theme }) => theme.palette.text.primary};
     }
 `
-
-
-
-const intialRowsPerPage = 15
+const Loader = styled(Card)`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 50vh;
+    flex-grow: 1;
+`
 
 function TabularReport(props) {
 
     const { t } = useTranslation()
 
-    const { fetchedTabularReport, fetchTabularReportHandler, filteringTabularReportsSuccess } = props;
+    const { fetchedTabularReport,fetchingTabularReports, fetchTabularReportHandler, filteringTabularReportsSuccess } = props;
 
     const themeCtx = useContext(ThemeContext)
 
@@ -110,6 +114,12 @@ function TabularReport(props) {
             <SearchMessage>
                 {t('no results')}
             </SearchMessage>
+        )
+    } else if (fetchingTabularReports) {
+        content = (
+            <Loader>
+                <CircularProgress color="secondary" />
+            </Loader>
         )
     }
 

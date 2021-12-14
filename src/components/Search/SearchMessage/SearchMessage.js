@@ -6,7 +6,7 @@ const CustomMessage = styled(Card)`
     align-items: center;
     justify-content: center;
     text-align: center;
-    min-height: 80vh;
+    min-height: 70vh;
     flex-grow: 1;
     p {
         font-size: 34px;
