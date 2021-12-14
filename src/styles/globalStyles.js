@@ -15,6 +15,7 @@ const GlobalStyle = createGlobalStyle`
         font-family: ${ ( {theme}  ) => theme.direction === 'rtl' ? theme.fonts.ar : theme.fonts.en };
         text-align: left;
         font-size: 16px;
+        overflow-x: hidden;
     }
     button {
         font-family: ${ ( {theme}  ) => theme.direction === 'rtl' ? theme.fonts.ar : theme.fonts.en };

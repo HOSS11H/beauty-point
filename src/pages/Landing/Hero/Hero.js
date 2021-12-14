@@ -54,6 +54,11 @@ const HeroDesc = styled.p`
     @media screen and (max-width: 599.98px) {
         font-size: 16px
     }
+    @media (min-width: 600px) and (max-width: 899.98px) {
+        max-width: 70%;
+        margin-left: auto;
+        margin-right: auto;
+    }
 `
 const HeroAction = styled.div`
     display: flex;
