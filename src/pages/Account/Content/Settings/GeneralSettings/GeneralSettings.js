@@ -109,7 +109,7 @@ export default function GeneralSettings(props) {
                             <Grid container spacing={3}>
                                 <Grid item xs={12} >
                                     <Grid container spacing={3}>
-                                        <Grid item xs={12}sm={6}>
+                                        <Grid item xs={12} sm={6}>
                                             <ImageUploading
                                                 multiple
                                                 value={uploadedLogo}
@@ -158,7 +158,7 @@ export default function GeneralSettings(props) {
                                                 )}
                                             </ImageUploading>
                                         </Grid>
-                                        <Grid item xs={12}sm={6}>
+                                        <Grid item xs={12} sm={6}>
                                             <Grid container spacing={3}>
                                                 <Grid item xs={12}>
                                                     <TextField value={name} onChange={(e) => setName(e.target.value)} fullWidth label={t('Business Name')} variant="outlined" required />
@@ -214,14 +214,21 @@ function SkeletonForm() {
         <Fragment>
             <Stack spacing={2}>
                 <Grid container spacing={2}>
-                    <Grid item xs={6} md={4}>
-                        <Skeleton variant="rectangular" height={50} />
+                    <Grid item xs={12} sm={6}>
+                        <Skeleton variant="rectangular" height={150} />
                     </Grid>
-                    <Grid item xs={6} md={4}>
-                        <Skeleton variant="rectangular" height={50} />
-                    </Grid>
-                    <Grid item xs={6} md={4}>
-                        <Skeleton variant="rectangular" height={50} />
+                    <Grid item xs={12} sm={6}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <Skeleton variant="rectangular" height={50} />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Skeleton variant="rectangular" height={50} />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Skeleton variant="rectangular" height={50} />
+                            </Grid>
+                        </Grid>
                     </Grid>
                     <Grid item xs={12} md={6}>
                         <Skeleton variant="rectangular" height={150} />
