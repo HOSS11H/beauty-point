@@ -8,7 +8,6 @@ import './beauty-icons.css'
 import { useState, useEffect } from 'react';
 import axios from '../../../utils/axios-instance';
 import CircularProgress from '@mui/material/CircularProgress';
-import { Fragment } from "react";
 
 const ServicesSliderWrapper = styled.section`
     background-color: #FAFAFA;
