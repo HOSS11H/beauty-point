@@ -4,6 +4,7 @@ import ModuleCart from '../Modules/ModuleCart/ModuleCart';
 import ModuleSearch from '../Modules/ModuleSearch/ModuleSearch';
 import logoSrc from '../../../../assets/images/logo/logo-light.png';
 import { useTranslation } from 'react-i18next';
+import ModuleContact from '../Modules/ModuleContact/ModuleContact';
 const Nav = styled.nav`
     
 `
@@ -31,6 +32,10 @@ const Logo = styled.a`
 ` 
 const ModulesHolderPhone = styled.div`
     display: none;
+`
+const ModulesHolder = styled.div`
+    display: flex;
+    align-items: center;
 `
 const NavbarCollapse = styled.div`
     display: flex;
@@ -72,13 +77,13 @@ const NavbarNav = styled.ul`
                 margin          : auto;
                 width           : 0%;
                 height          : 4px;
-                background      : ${ ( { theme } ) => theme.vars.primary  };
+                background      : #96248e;
                 transition      : 0.3s ease-in-out;
             }
         }
         &:hover {
             >a {
-                color: ${ ( { theme } ) => theme.vars.primary  };
+                color: #96248e;
                 &::before {
                     width : 100%;
                 }
@@ -133,10 +138,11 @@ const NavBar = () => {
                                 })
                             }
                         </NavbarNav>
-                        <div className="module-holder">
+                        <ModulesHolder>
                             <ModuleSearch />
                             <ModuleCart />
-                        </div>
+                            <ModuleContact />
+                        </ModulesHolder>
                     </NavbarCollapse>
                 </NavHolder>
             </Container>

@@ -85,6 +85,9 @@ const salons = [
 ]
 
 const Salons = props => {
+
+    
+
     const settings = {
         dots: false,
         arrows: false,

@@ -17,7 +17,7 @@ const ModuleSocialWrapper = styled.div`
             transition   : 300ms ease-in-out;
             &:hover {
                 transform: translateY(-5px);
-                color    : ${ ({ theme }) => theme.vars.primary };
+                color    : #96248e;
             }
         }
     }

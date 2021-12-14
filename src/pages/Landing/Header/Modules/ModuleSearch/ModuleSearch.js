@@ -21,7 +21,7 @@ const ModuleSearchWrapper = styled.div`
             height: 40px;
         }
         &:hover {
-            background-color:  ${ ({ theme }) => theme.vars.primary };
+            background-color:  #96248e;
             svg {
                 color: #fff;
             }
@@ -29,7 +29,7 @@ const ModuleSearchWrapper = styled.div`
         svg {
             transition: 0.3s ease-in-out;
             font-size: 18px;
-            color: ${ ({ theme }) => theme.vars.primary };
+            color: #96248e;
         }
     }
 `

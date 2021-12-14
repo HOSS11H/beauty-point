@@ -4,10 +4,16 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import { NavLink } from 'react-router-dom';
 import heroImgSrc from '../../../assets/images/hero/1.jpg';
+import { useState, useEffect } from 'react';
+import axios from '../../../utils/axios-instance';
+import CircularProgress from '@mui/material/CircularProgress';
+import htmlToDraft from 'html-to-draftjs';
+import { ContentState } from 'draft-js';
 
 const HeroWrapper = styled.div`
     display       : flex;
     align-items   : center;
+    justify-content: center;
     height        : 100vh;
     position: relative;
     @media screen and (max-width: 899.98px) {
@@ -44,20 +50,22 @@ const HeroTitle = styled.h1`
         font-size: 32px
     }
 `
-const HeroDesc = styled.p`
-    font-size: 20px;
-    line-height:27px;
-    font-weight: 300;
-    text-transform: capitalize;
-    margin-bottom: 32px;
-    color: ${ ( { theme } ) => theme.palette.common.white};
-    @media screen and (max-width: 599.98px) {
-        font-size: 16px
-    }
-    @media (min-width: 600px) and (max-width: 899.98px) {
-        max-width: 70%;
-        margin-left: auto;
-        margin-right: auto;
+const HeroDesc = styled.div`
+    p {
+        font-size: 20px;
+        line-height:27px;
+        font-weight: 300;
+        text-transform: capitalize;
+        margin-bottom: 32px;
+        color: ${ ( { theme } ) => theme.palette.common.white};
+        @media screen and (max-width: 599.98px) {
+            font-size: 16px
+        }
+        @media (min-width: 600px) and (max-width: 899.98px) {
+            max-width: 70%;
+            margin-left: auto;
+            margin-right: auto;
+        }
     }
 `
 const HeroAction = styled.div`
@@ -79,7 +87,7 @@ const HeroButton = styled(NavLink)`
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    background-color: ${ ( { theme } ) => theme.vars.primary };
+    background-color: #96248e;
     color: ${ ( { theme } ) => theme.palette.common.white};
     border:0;
     outline: none;
@@ -101,13 +109,13 @@ const HeroButton = styled(NavLink)`
     }
     &:hover {
         background-color: ${ ( { theme } ) => theme.palette.common.white};
-        color: ${ ( { theme } ) => theme.vars.primary };
+        color: #96248e;
     }
     &.inversed {
         background-color: ${ ( { theme } ) => theme.palette.common.white};
-        color: ${ ( { theme } ) => theme.vars.primary };
+        color:#96248e;
         &:hover {
-            background-color: ${ ( { theme } ) => theme.vars.primary };
+            background-color: #96248e;
             color: ${ ( { theme } ) => theme.palette.common.white};
         }
     }
@@ -148,26 +156,44 @@ const HeroImage = styled.div`
 
 
 const Hero = (  ) => {
-    return (
-        <HeroWrapper>
+
+    const [ data, setData ] = useState(null)
+
+    useEffect( () => {
+        axios.get(`/media`)
+            .then( res => {
+                setData(res.data.data)
+            })
+    }, [] )
+    let content = (
+        <CircularProgress color='secondary' />
+    )
+    if(data) {
+        content = (
             <Container maxWidth="lg">
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={6}>
                         <HeroContent>
-                            <HeroTitle>Put Your Text Here</HeroTitle>
-                            <HeroSubTitle>Put Your Text Here</HeroSubTitle>
-                            <HeroDesc>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam.</HeroDesc>
+                            <HeroTitle>{data[0].heading}</HeroTitle>
+                            <HeroSubTitle>{data[0].subheading}</HeroSubTitle>
+                            {/* <HeroDesc>{data[0].content}</HeroDesc> */}
                             <HeroAction>
-                                <HeroButton to='/' >click</HeroButton>
-                                <HeroButton to='/' className='inversed'>click</HeroButton>
+                                <HeroButton to='/auth' >login</HeroButton>
+                                {/* <HeroButton to='/' className='inversed'>click</HeroButton> */}
                             </HeroAction>
                         </HeroContent>
                         <HeroImage >
-                            <img src={heroImgSrc} alt="hero" />
+                            <img src={data[0].image_url} alt="hero" />
                         </HeroImage>
                     </Grid>
                 </Grid>
             </Container>
+        )
+    }
+
+    return (
+        <HeroWrapper>
+            {content}
         </HeroWrapper>
     )
 }
