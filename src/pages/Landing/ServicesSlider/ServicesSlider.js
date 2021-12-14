@@ -172,9 +172,9 @@ const ServicesSlider = props => {
                                     <div className="service-icon">
                                         <i className={service.icon}></i>
                                     </div>
-                                    <div className="service-title">
+                                    <h3 className="service-title">
                                         <a href="/">{service.title}</a>
-                                    </div>
+                                    </h3>
                                 </ServicePanel>
                             )
                         })
