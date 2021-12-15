@@ -11,7 +11,9 @@ import SearchFilters from "./SearchFilters/SearchFilters";
 import SearchMessage from "../../../../components/Search/SearchMessage/SearchMessage";
 import { useTranslation } from "react-i18next";
 import v1 from '../../../../utils/axios-instance-v1'
+import TablePaginationActions from '../../../../components/UI/Dashboard/Table/TablePagination/TablePagination';
 
+const intialPerPage = 15;
 
 function Bookings(props) {
 
@@ -31,11 +33,13 @@ function Bookings(props) {
 
     const [editModalOpened, setEditModalOpened] = useState(false);
 
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(intialPerPage);
 
     const [userData, setUserData] = useState(null);
 
     useEffect(() => {
-        fetchBookingsHandler(lang, 'all');
+        fetchBookingsHandler(lang, page, rowsPerPage);
         v1.get('/auth/me')
             .then(res => {
                 setUserData(res.data)
@@ -44,12 +48,15 @@ function Bookings(props) {
             .catch(err => {
                 console.log(err)
             })
-    }, [fetchBookingsHandler, lang]);
+    }, [fetchBookingsHandler, lang, page, rowsPerPage]);
 
     useEffect(() => {
         updatingBookingSuccess && fetchBookingsHandler(lang, 'all');
     }, [updatingBookingSuccess, fetchBookingsHandler, lang]);
 
+    const handleChangePage = useCallback((event, newPage) => {
+        setPage(newPage);
+    }, []);
     
     // Edit Modal
     const editModalOpenHandler = useCallback((id) => {
@@ -137,6 +144,20 @@ function Bookings(props) {
         <Grid container spacing={2}>
             <SearchFilters />
             {content}
+            <Grid item xs={12}>
+                { fetchedBookings.data.length !== 0 && (
+                    <TablePaginationActions
+                        sx= {{ width: '100%'}}
+                        component="div"
+                        count={fetchedBookings.data.length}
+                        total={fetchedBookings.meta ? fetchedBookings.meta.total : 0}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        loading={fetchingBookings}
+                    />
+                )}
+            </Grid>
             {
                 viewModalOpened && (
                     <ViewModal show={viewModalOpened} id={selectedBookingId} fetchedBookings={fetchedBookings}
@@ -166,7 +187,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchBookingsHandler: (language, perPage) => dispatch(fetchBookings(language, perPage)),
+        fetchBookingsHandler: (language, page, perPage) => dispatch(fetchBookings(language, page, perPage)),
         deleteBookingHandler: (id) => dispatch(deleteBooking(id)),
         updateBookingHandler: (data) => dispatch(updateBooking(data)),
     }
