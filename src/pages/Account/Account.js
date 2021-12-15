@@ -7,6 +7,7 @@ import Header from './Header/Header';
 import { Outlet } from 'react-router';
 import ThemeContext from '../../store/theme-context';
 
+const drawerWidth = 256;
 
 export default function Account( props ) {
 
@@ -118,7 +119,7 @@ export default function Account( props ) {
 							variant="permanent"
 						/>
 					</Box>
-					<Box sx={{ flexGrow: 1,  }}>
+					<Box sx={{ flexGrow: 1, maxWidth: mobileOpen ? `calc( 100% - ${drawerWidth}px)` : `calc( 100% - 57px)` }} >
 						<Header onDrawerToggle={handleDrawerToggle} />
 						<Box component="main" sx={{ py: 4, px: 3, bgcolor: theme.palette.background.default }}>
 							<Outlet />
