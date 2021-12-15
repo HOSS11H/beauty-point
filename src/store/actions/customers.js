@@ -36,6 +36,39 @@ export const fetchCustomers = (language) => {
         })
     }
 }
+export const searchCustomersStart = () => {
+    return {
+        type: actionTypes.SEARCH_CUSTOMERS_START,
+    }
+}
+export const searchCustomersSuccess = (customersData) => {
+    return {
+        type: actionTypes.SEARCH_CUSTOMERS_SUCCESS,
+        customers: customersData
+    }
+}
+export const searchCustomersFailed = (errorMessage) => {
+    return {
+        type: actionTypes.SEARCH_CUSTOMERS_FAILED,
+        error: errorMessage,
+    }
+}
+export const searchCustomers = (language, word) => {
+    return dispatch => {
+        dispatch(searchCustomersStart())
+        axios.get(`vendors/customers?term=${word}`, {
+            headers: {
+                'Accept-Language': language
+            }
+        }).then(response => {
+            dispatch(searchCustomersSuccess(response.data.data));
+        })
+        .catch(err => {
+            console.log(err)
+            dispatch(searchCustomersFailed(err.message))
+        })
+    }
+}
 
 export const addCustomerStart = (  ) => {
     return {
@@ -70,3 +103,4 @@ export const addCustomer = ( data ) => {
             } )
         }
 }
+

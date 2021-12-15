@@ -41,6 +41,7 @@ export {
 } from './categories'
 export {
     fetchCustomers,
+    searchCustomers,
     addCustomer,
 } from './customers'
 export {

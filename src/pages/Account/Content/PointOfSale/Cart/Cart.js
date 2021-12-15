@@ -14,6 +14,7 @@ import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 import MailIcon from '@mui/icons-material/Mail';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
+import ReactSelect from 'react-select';
 
 import DateAdapter from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -25,7 +26,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { ButtonText, ButtonConfirm, CustomButton } from '../../../../../components/UI/Button/Button';
 import ValidationMessage from '../../../../../components/UI/ValidationMessage/ValidationMessage';
 import { connect } from 'react-redux';
-import { fetchCoupons, fetchCustomers, addCustomer, fetchEmployees } from '../../../../../store/actions/index';
+import { fetchCoupons, searchCustomers, addCustomer, fetchEmployees } from '../../../../../store/actions/index';
 import ThemeContext from '../../../../../store/theme-context';
 import AddCustomerModal from './AddCustomerModal/AddCustomerModal';
 import { formatCurrency } from '../../../../../shared/utility';
@@ -157,16 +158,19 @@ const AddCustomer = styled(CustomButton)`
 
 const Cart = props => {
 
-    const { cartData, removeFromCart, increaseItem, decreaseItem, resetCart, purchase, fetchedCoupons, fetchedCustomers, fetchCouponsHandler, fetchCustomersHandler, addCustomerHandler, fetchedEmployeesHandler, bookingCreated } = props;
+    const { cartData, removeFromCart, increaseItem, decreaseItem, resetCart, purchase, fetchedCoupons, fetchedCustomers, fetchCouponsHandler, searchCustomersHandler, addCustomerHandler, fetchedEmployeesHandler, bookingCreated } = props;
 
     const { t } = useTranslation()
 
     const themeCtx = useContext(ThemeContext);
     const { lang } = themeCtx;
 
-    const [customer, setCustomer] = useState('');
+
+    const [customer, setCustomer] = useState([]);
     const [customerData, setCustomerData] = useState(null);
     const [customerDataError, setCustomerDataError] = useState(false)
+
+    const [ options , setOptions ] = useState([])
 
 
     const [dateTime, setDateTime] = useState(new Date());
@@ -194,9 +198,8 @@ const Cart = props => {
 
     useEffect(() => {
         fetchCouponsHandler(lang);
-        fetchCustomersHandler(lang);
         fetchedEmployeesHandler(lang);
-    }, [fetchCouponsHandler, fetchCustomersHandler, fetchedEmployeesHandler, lang])
+    }, [fetchCouponsHandler, fetchedEmployeesHandler, lang])
 
     useEffect(() => {
         let total = 0;
@@ -215,6 +218,16 @@ const Cart = props => {
         }
     }, [cartData, couponData, discount])
 
+    useEffect(() => {
+        if (fetchedCustomers) {
+            setOptions(fetchedCustomers.map(customer => {
+                return {
+                    value: customer.id,
+                    label: customer.name
+                }
+            }))
+        }
+    }, [fetchedCustomers])
 
     // Add Customer Modal
     const addCustomerModalOpenHandler = useCallback((id) => {
@@ -234,13 +247,24 @@ const Cart = props => {
         setDateTime(newValue);
     };
 
-    const handleCustomerChange = (event) => {
-        const customerIndex = fetchedCustomers.findIndex(customer => customer.id === event.target.value);
-        const updatedCustomerData = fetchedCustomers[customerIndex];
-        setCustomerDataError(false)
-        setCustomer(event.target.value);
-        setCustomerData(updatedCustomerData);
-    };
+    const handleSelectOptions = (value, actions) => {
+        if ( value.length !== 0 ) {
+            searchCustomersHandler(lang, value)
+        }
+    }
+    const handleSelectCustomer = (value, actions) => {
+        if (value) {
+            const customerIndex = fetchedCustomers.findIndex(customer => customer.id === value.value);
+            const updatedCustomerData = fetchedCustomers[customerIndex];
+            setCustomerDataError(false)
+            setCustomer(value.value);
+            setCustomerData(updatedCustomerData);
+        } else {
+            setCustomerDataError(true)
+            setCustomer([])
+            setCustomerData(null);
+        }
+    }
 
     const paymentGatewayChangeHandler = (event) => {
         setPaymentGateway(event.target.value);
@@ -356,23 +380,8 @@ const Cart = props => {
                 <Grid item xs={12} md={6}>
                     <ActionsWrapper>
                         <FormControl fullWidth sx={{ minWidth: '200px' }} >
-                            <InputLabel id="item-customer">{t('Customer')}</InputLabel>
-                            <Select
-                                labelId="item-customer"
-                                id="item-customer-select"
-                                value={customer}
-                                label="Customer"
-                                onChange={handleCustomerChange}
-                            >
-                                {fetchedCustomers.map((customer) => (
-                                    <MenuItem
-                                        key={customer.id}
-                                        value={customer.id}
-                                    >
-                                        {customer.name}
-                                    </MenuItem>
-                                ))}
-                            </Select>
+                            <ReactSelect options={options} isClearable isRtl={lang === 'ar'}
+                                onChange={handleSelectCustomer} onInputChange={handleSelectOptions}/>
                         </FormControl>
                         <AddCustomer onClick={addCustomerModalOpenHandler} >{t('add')}</AddCustomer>
                     </ActionsWrapper>
@@ -545,7 +554,7 @@ const Cart = props => {
 
 const mapStateToProps = (state) => {
     return {
-        fetchedCustomers: state.customers.customers,
+        fetchedCustomers: state.customers.posCustmers.customers,
         fetchedCoupons: state.coupons.coupons,
         bookingCreated: state.bookings.bookingCreated,
     }
@@ -553,7 +562,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchCustomersHandler: (lang) => dispatch(fetchCustomers(lang)),
+        searchCustomersHandler: (lang, word) => dispatch(searchCustomers(lang, word)),
         fetchCouponsHandler: (lang) => dispatch(fetchCoupons(lang)),
         fetchedEmployeesHandler: (lang) => dispatch(fetchEmployees(lang)),
         addCustomerHandler: (data) => dispatch(addCustomer(data)),
