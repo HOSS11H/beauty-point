@@ -186,36 +186,23 @@ const PointOfSale = ( props ) => {
     }, [bookingCreated, navigate])
 
 
-    const notIntialRender = useRef(false);
-
     useEffect(() => {
-        if ( notIntialRender.current ) {
-            return;
-        } else {
-            notIntialRender.current = true;
-            if(shownType === 'services' && fetchedServices.data.length === 0 ) {
-                filterServicesHandler(lang,  shownType, shownCategory , shownLocation, searchWord, 0, rowsPerPage);
-            } else if(shownType === 'products' && fetchedProducts.data.length === 0) {
-                filterProductsHandler(lang, shownType,  shownLocation, searchWord, 0, rowsPerPage);
-            } else if(shownType === 'deals' && fetchedDeals.data.length === 0) {
-                filterDealsHandler(lang, shownType, shownLocation, searchWord, 0, rowsPerPage);
-            }
+        if(shownType === 'services' ) {
+            filterServicesHandler(lang,  shownType, shownCategory , shownLocation, searchWord, page, rowsPerPage);
+        } else if(shownType === 'products' ) {
+            filterProductsHandler(lang, shownType,  shownLocation, searchWord, page, rowsPerPage);
+        } else if(shownType === 'deals' ) {
+            filterDealsHandler(lang, shownType, shownLocation, searchWord, page, rowsPerPage);
         }
-    }, [fetchedDeals.data.length, fetchedProducts.data.length, fetchedServices.data.length, filterDealsHandler, filterProductsHandler, filterServicesHandler, lang, rowsPerPage, searchWord, shownCategory, shownLocation, shownType, token]);
+    }, [filterDealsHandler, filterProductsHandler, filterServicesHandler, lang, page, rowsPerPage, searchWord, shownCategory, shownLocation, shownType]);
 
     const handleResultsChange = useCallback(( type, category , location, search ) => {
         setShownType(type);
         setShownCategory(category);
         setShownLocation(location);
         setSearchWord(search);
-        if(type === 'services') {
-            filterServicesHandler(lang, type, category , location, search, page, rowsPerPage);
-        } else if (type === 'products') {
-            filterProductsHandler(lang,  type, location, search, page, rowsPerPage);
-        } else if (type === 'deals') {
-            filterDealsHandler(lang, type, location, search, page, rowsPerPage);
-        }
-    }, [filterDealsHandler, filterProductsHandler, filterServicesHandler, lang, page, rowsPerPage])
+        setPage(0);
+    }, [])
 
     const addToCartHandler = useCallback(( itemData ) => {
         if ( shownType === 'services' ) {
