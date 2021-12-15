@@ -69,6 +69,9 @@ const BookingAppointment = styled.div`
     &.in.progress {
         background-color: ${({ theme }) => theme.palette.warning.light};
     }
+    &.pending {
+        background-color: ${({ theme }) => theme.palette.secondary.dark};
+    }
     &.canceled {
         background-color: ${({ theme }) => theme.palette.error.main};
     }
@@ -94,6 +97,10 @@ const BookingStatus = styled.div`
     &.in.progress {
         border-color: ${({ theme }) => theme.palette.warning.light};
         color: ${({ theme }) => theme.palette.warning.light};
+    }
+    &.pending {
+        border-color: ${({ theme }) => theme.palette.secondary.dark};
+        color: ${({ theme }) => theme.palette.secondary.dark};
     }
     &.canceled {
         border-color: ${({ theme }) => theme.palette.error.main};
