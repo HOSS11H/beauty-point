@@ -15,6 +15,9 @@ import SearchFilters from './SearchFilters/SearchFilters';
 import Card from '@mui/material/Card';
 import { Grid } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
+import { useState } from 'react';
+import { useCallback } from 'react';
+import TablePaginationActions from '../../../../../../components/UI/Dashboard/Table/TablePagination/TablePagination';
 
 const TabularReportWrapper = styled(Card)`
     display: flex;
@@ -61,20 +64,28 @@ const Loader = styled(Card)`
     flex-grow: 1;
 `
 
+const intialPerPage = 15;
+
 function TabularReport(props) {
 
     const { t } = useTranslation()
 
     const { fetchedTabularReport,fetchingTabularReports, fetchTabularReportHandler, filteringTabularReportsSuccess } = props;
 
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(intialPerPage);
+
     const themeCtx = useContext(ThemeContext)
 
     const { lang } = themeCtx
 
     useEffect(() => {
-        fetchTabularReportHandler(lang, );
-    }, [lang, fetchTabularReportHandler]);
+        fetchTabularReportHandler(lang, page, rowsPerPage );
+    }, [lang, fetchTabularReportHandler, page, rowsPerPage]);
 
+    const handleChangePage = useCallback((event, newPage) => {
+        setPage(newPage);
+    }, []);
 
 
     let content = (
@@ -93,6 +104,16 @@ function TabularReport(props) {
                             fetchedTabularReport={fetchedTabularReport}
                         />
                     </Table>
+                    <TablePaginationActions
+                        sx= {{ width: '100%'}}
+                        component="div"
+                        count={fetchedTabularReport.data.length}
+                        total={fetchedTabularReport.meta ? fetchedTabularReport.meta.total : 0}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        loading={fetchingTabularReports}
+                    />
                 </TableContainer>
             </Paper>
             <Grid   container   spacing={2}>
@@ -141,7 +162,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchTabularReportHandler: (lang, page, rowsPerPage, order, orderBy) => dispatch(fetchTabularReport(lang, page, rowsPerPage, order, orderBy)),
+        fetchTabularReportHandler: (lang, page, rowsPerPage ) => dispatch(fetchTabularReport(lang, page, rowsPerPage)),
     }
 }
 

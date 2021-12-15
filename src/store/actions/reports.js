@@ -19,10 +19,11 @@ export const fetchTabularReportFailed = ( errorMessage ) => {
         error: errorMessage,
     }
 }
-export const fetchTabularReport = ( language) => {
+export const fetchTabularReport = ( language, page, perPage) => {
     return dispatch => {
         dispatch( fetchTabularReportStart( ) )
-        v1.get(`/vendors/reports/tabular-table`, { 
+        console.log(page, perPage)
+        v1.get(`/vendors/reports/tabular-table?page=${page + 1}&per_page=${perPage}`, { 
             headers: {
                 'Accept-Language': language
             }
@@ -62,7 +63,7 @@ export const filterTabularReport = ( searchParams ) => {
             }
         }
         dispatch( filterTabularReportStart( ) )
-        v1.get(`/vendors/reports/tabular-table`, { params: { ...notEmptySearchParams } } )
+        v1.get(`/vendors/reports/tabular-table?page=1&per_page=15`, { params: { ...notEmptySearchParams } } )
             .then( response => {
                 dispatch( filterTabularReportSuccess( response.data  ) );
             })
