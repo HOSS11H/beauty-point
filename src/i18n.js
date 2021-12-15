@@ -256,6 +256,8 @@ const resources = {
             'help & support': 'المساعدة والدعم',
             'Contact us': 'اتصل بنا',
             'about us': 'عنا',
+            'add deals': 'إضافة عرض',
+            'add products': 'إضافة منتج',
         }
     }
 };

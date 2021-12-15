@@ -2513,7 +2513,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"title\": \"test-updated\",\r\n    \"slug\": \"test-updated\",\r\n    \"locations\" : 1,\r\n    \"deal_services\" : [8, 3],\r\n    \"discount_type\" : \"percentage\",\r\n    \"discount\" : 0,\r\n    \"deal_quantity\" : [1, 1],\r\n    \"choice\" : \"location\",\r\n    \"location\": 1,\r\n    \"uses_time\" : \"\",\r\n    \"customer_uses_time\" : 0,\r\n    \"deal_startDate\": \"2021-10-31 11:59 PM\",\r\n    \"deal_endDate\": \"2021-11-05 11:59 PM\",\r\n    \"deal_startTime\": \"02:00 AM\",\r\n    \"deal_endTime\":\"02:00 PM\",\r\n    \"days\" : [\"Sunday\", \"Monday\", \"Tuesday\"],\r\n\r\n    \"description\" : \"<p>asdada</p>\",\r\n \r\n    \"status\" : \"active\",\r\n    \r\n    \r\n    \"deal_unit_price\" : [15, 20],\r\n    \"deal_discount\" : [0, 0],\r\n    \"discount_amount\" : 0,\r\n \r\n    \"applied_between_dates\" : \"2021-10-31 11:59 PM 2021-11-05 11:59 PM\",\r\n    \"open_time\" : \"02:00 am\",\r\n    \"close_time\" : \"02:00 pm\"\r\n}",
+									"raw": "{\r\n    \r\n    \"title\": \"test-updated\",\r\n    \"slug\": \"test-updated\",\r\n    \"locations\" : 1,\r\n    \"deal_services\" : [8, 3],\r\n    \"discount_type\" : \"percentage\",\r\n    \"discount\" : 0,\r\n    \"deal_quantity\" : [1, 1],\r\n    \"choice\" : \"location\",\r\n    \"location\": 1,\r\n    \"uses_time\" : \"\",\r\n    \"customer_uses_time\" : 0,\r\n    \"deal_startDate\": \"2021-10-31 11:59 PM\",\r\n    \"deal_endDate\": \"2021-11-05 11:59 PM\",\r\n    \"deal_startTime\": \"02:00 AM\",\r\n    \"deal_endTime\":\"02:00 PM\",\r\n    \"days\" : [\"Sunday\", \"Monday\", \"Tuesday\"],\r\n\r\n    \"description\" : \"<p>asdada</p>\",\r\n \r\n    \"status\" : \"active\",\r\n    \r\n    \r\n    \"deal_unit_price\" : [15, 20],\r\n    \"deal_discount\" : [0, 0],\r\n    \"discount_amount\" : 0,\r\n \r\n    \"applied_between_dates\" : \"2021-10-31 11:59 PM 2021-11-05 11:59 PM\",\r\n    \"open_time\" : \"02:00 am\",\r\n    \"close_time\" : \"02:00 pm\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -2836,12 +2836,14 @@
 										{
 											"key": "date_format",
 											"value": "d-m-Y",
-											"type": "text"
+											"type": "text",
+											"disabled": true
 										},
 										{
 											"key": "time_format",
 											"value": "h:i a",
-											"type": "text"
+											"type": "text",
+											"disabled": true
 										},
 										{
 											"key": "website",
@@ -2851,16 +2853,24 @@
 										{
 											"key": "timezone",
 											"value": "6",
-											"type": "text"
+											"type": "text",
+											"disabled": true
 										},
 										{
 											"key": "locale",
 											"value": "en",
-											"type": "text"
+											"type": "text",
+											"disabled": true
 										},
 										{
 											"key": "currency_id",
 											"value": "2",
+											"type": "text",
+											"disabled": true
+										},
+										{
+											"key": "invoice_notes",
+											"value": "1231asdasda",
 											"type": "text"
 										}
 									]
@@ -3757,9 +3767,569 @@
 							"request": {
 								"method": "GET",
 								"header": [],
-								"url": null
+								"url": {
+									"raw": "{{base}}/vendors/settings/roles",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"vendors",
+										"settings",
+										"roles"
+									]
+								}
 							},
-							"response": []
+							"response": [
+								{
+									"name": "Roles",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base}}/vendors/settings/roles",
+											"host": [
+												"{{base}}"
+											],
+											"path": [
+												"vendors",
+												"settings",
+												"roles"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Tue, 14 Dec 2021 19:35:46 GMT"
+										},
+										{
+											"key": "Server",
+											"value": "Apache"
+										},
+										{
+											"key": "X-Powered-By",
+											"value": "PHP/8.0.13"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, private"
+										},
+										{
+											"key": "X-RateLimit-Limit",
+											"value": "60"
+										},
+										{
+											"key": "X-RateLimit-Remaining",
+											"value": "58"
+										},
+										{
+											"key": "Vary",
+											"value": "Authorization"
+										},
+										{
+											"key": "Upgrade",
+											"value": "h2,h2c"
+										},
+										{
+											"key": "Connection",
+											"value": "Upgrade, Keep-Alive"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "Access-Control-Allow-Headers",
+											"value": "*"
+										},
+										{
+											"key": "Access-Control-Allow-Methods",
+											"value": "*"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5, max=100"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "[\n    {\n        \"id\": 3,\n        \"company_id\": 1,\n        \"name\": \"administrator\",\n        \"display_name\": \"Administrator\",\n        \"description\": \"Administrator\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"users_count\": 2\n    },\n    {\n        \"id\": 4,\n        \"company_id\": 1,\n        \"name\": \"employee\",\n        \"display_name\": \"Employee\",\n        \"description\": \"Employee\",\n        \"created_at\": \"2021-11-29T01:53:23.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:23.000000Z\",\n        \"users_count\": 5\n    },\n    {\n        \"id\": 5,\n        \"company_id\": 1,\n        \"name\": \"reception\",\n        \"display_name\": \"Reception\",\n        \"description\": \"Reception\",\n        \"created_at\": \"2021-11-29T01:53:23.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:23.000000Z\",\n        \"users_count\": 2\n    }\n]"
+								}
+							]
+						},
+						{
+							"name": "Role permissions",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base}}/vendors/settings/roles/3/permissions",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"vendors",
+										"settings",
+										"roles",
+										"3",
+										"permissions"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Role permissions",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base}}/vendors/settings/roles/3/permissions",
+											"host": [
+												"{{base}}"
+											],
+											"path": [
+												"vendors",
+												"settings",
+												"roles",
+												"3",
+												"permissions"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Tue, 14 Dec 2021 19:25:04 GMT"
+										},
+										{
+											"key": "Server",
+											"value": "Apache"
+										},
+										{
+											"key": "X-Powered-By",
+											"value": "PHP/8.0.13"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, private"
+										},
+										{
+											"key": "X-RateLimit-Limit",
+											"value": "60"
+										},
+										{
+											"key": "X-RateLimit-Remaining",
+											"value": "59"
+										},
+										{
+											"key": "Vary",
+											"value": "Authorization"
+										},
+										{
+											"key": "Upgrade",
+											"value": "h2,h2c"
+										},
+										{
+											"key": "Connection",
+											"value": "Upgrade, Keep-Alive"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "Access-Control-Allow-Headers",
+											"value": "*"
+										},
+										{
+											"key": "Access-Control-Allow-Methods",
+											"value": "*"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5, max=100"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "[\n    {\n        \"id\": 17,\n        \"module_id\": 5,\n        \"name\": \"create_business_service\",\n        \"display_name\": \"Create Business Service\",\n        \"description\": \"Create Business Service\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 17\n        }\n    },\n    {\n        \"id\": 18,\n        \"module_id\": 5,\n        \"name\": \"read_business_service\",\n        \"display_name\": \"Read Business Service\",\n        \"description\": \"Read Business Service\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 18\n        }\n    },\n    {\n        \"id\": 19,\n        \"module_id\": 5,\n        \"name\": \"update_business_service\",\n        \"display_name\": \"Update Business Service\",\n        \"description\": \"Update Business Service\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 19\n        }\n    },\n    {\n        \"id\": 20,\n        \"module_id\": 5,\n        \"name\": \"delete_business_service\",\n        \"display_name\": \"Delete Business Service\",\n        \"description\": \"Delete Business Service\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 20\n        }\n    },\n    {\n        \"id\": 21,\n        \"module_id\": 6,\n        \"name\": \"create_customer\",\n        \"display_name\": \"Create Customer\",\n        \"description\": \"Create Customer\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 21\n        }\n    },\n    {\n        \"id\": 22,\n        \"module_id\": 6,\n        \"name\": \"read_customer\",\n        \"display_name\": \"Read Customer\",\n        \"description\": \"Read Customer\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 22\n        }\n    },\n    {\n        \"id\": 23,\n        \"module_id\": 6,\n        \"name\": \"update_customer\",\n        \"display_name\": \"Update Customer\",\n        \"description\": \"Update Customer\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 23\n        }\n    },\n    {\n        \"id\": 24,\n        \"module_id\": 6,\n        \"name\": \"delete_customer\",\n        \"display_name\": \"Delete Customer\",\n        \"description\": \"Delete Customer\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 24\n        }\n    },\n    {\n        \"id\": 25,\n        \"module_id\": 7,\n        \"name\": \"create_employee\",\n        \"display_name\": \"Create Employee\",\n        \"description\": \"Create Employee\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 25\n        }\n    },\n    {\n        \"id\": 26,\n        \"module_id\": 7,\n        \"name\": \"read_employee\",\n        \"display_name\": \"Read Employee\",\n        \"description\": \"Read Employee\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 26\n        }\n    },\n    {\n        \"id\": 27,\n        \"module_id\": 7,\n        \"name\": \"update_employee\",\n        \"display_name\": \"Update Employee\",\n        \"description\": \"Update Employee\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 27\n        }\n    },\n    {\n        \"id\": 28,\n        \"module_id\": 7,\n        \"name\": \"delete_employee\",\n        \"display_name\": \"Delete Employee\",\n        \"description\": \"Delete Employee\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 28\n        }\n    },\n    {\n        \"id\": 33,\n        \"module_id\": 9,\n        \"name\": \"create_deal\",\n        \"display_name\": \"Create Deal\",\n        \"description\": \"Create Deal\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 33\n        }\n    },\n    {\n        \"id\": 34,\n        \"module_id\": 9,\n        \"name\": \"read_deal\",\n        \"display_name\": \"Read Deal\",\n        \"description\": \"Read Deal\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 34\n        }\n    },\n    {\n        \"id\": 35,\n        \"module_id\": 9,\n        \"name\": \"update_deal\",\n        \"display_name\": \"Update Deal\",\n        \"description\": \"Update Deal\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 35\n        }\n    },\n    {\n        \"id\": 36,\n        \"module_id\": 9,\n        \"name\": \"delete_deal\",\n        \"display_name\": \"Delete Deal\",\n        \"description\": \"Delete Deal\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 36\n        }\n    },\n    {\n        \"id\": 37,\n        \"module_id\": 10,\n        \"name\": \"create_employee_group\",\n        \"display_name\": \"Create Employee Group\",\n        \"description\": \"Create Employee Group\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 37\n        }\n    },\n    {\n        \"id\": 38,\n        \"module_id\": 10,\n        \"name\": \"read_employee_group\",\n        \"display_name\": \"Read Employee Group\",\n        \"description\": \"Read Employee Group\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 38\n        }\n    },\n    {\n        \"id\": 39,\n        \"module_id\": 10,\n        \"name\": \"update_employee_group\",\n        \"display_name\": \"Update Employee Group\",\n        \"description\": \"Update Employee Group\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 39\n        }\n    },\n    {\n        \"id\": 40,\n        \"module_id\": 10,\n        \"name\": \"delete_employee_group\",\n        \"display_name\": \"Delete Employee Group\",\n        \"description\": \"Delete Employee Group\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 40\n        }\n    },\n    {\n        \"id\": 41,\n        \"module_id\": 11,\n        \"name\": \"create_booking\",\n        \"display_name\": \"Create Booking\",\n        \"description\": \"Create Booking\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 41\n        }\n    },\n    {\n        \"id\": 42,\n        \"module_id\": 11,\n        \"name\": \"read_booking\",\n        \"display_name\": \"Read Booking\",\n        \"description\": \"Read Booking\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 42\n        }\n    },\n    {\n        \"id\": 43,\n        \"module_id\": 11,\n        \"name\": \"update_booking\",\n        \"display_name\": \"Update Booking\",\n        \"description\": \"Update Booking\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 43\n        }\n    },\n    {\n        \"id\": 44,\n        \"module_id\": 11,\n        \"name\": \"delete_booking\",\n        \"display_name\": \"Delete Booking\",\n        \"description\": \"Delete Booking\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 44\n        }\n    },\n    {\n        \"id\": 45,\n        \"module_id\": 12,\n        \"name\": \"create_report\",\n        \"display_name\": \"Create Report\",\n        \"description\": \"Create Report\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 45\n        }\n    },\n    {\n        \"id\": 46,\n        \"module_id\": 12,\n        \"name\": \"read_report\",\n        \"display_name\": \"Read Report\",\n        \"description\": \"Read Report\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 46\n        }\n    },\n    {\n        \"id\": 47,\n        \"module_id\": 12,\n        \"name\": \"update_report\",\n        \"display_name\": \"Update Report\",\n        \"description\": \"Update Report\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 47\n        }\n    },\n    {\n        \"id\": 48,\n        \"module_id\": 12,\n        \"name\": \"delete_report\",\n        \"display_name\": \"Delete Report\",\n        \"description\": \"Delete Report\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 48\n        }\n    },\n    {\n        \"id\": 49,\n        \"module_id\": 13,\n        \"name\": \"create_employee_leave\",\n        \"display_name\": \"Create Employee Leave\",\n        \"description\": \"Create Employee Leave\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 49\n        }\n    },\n    {\n        \"id\": 50,\n        \"module_id\": 13,\n        \"name\": \"read_employee_leave\",\n        \"display_name\": \"Read Employee Leave\",\n        \"description\": \"Read Employee Leave\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 50\n        }\n    },\n    {\n        \"id\": 51,\n        \"module_id\": 13,\n        \"name\": \"update_employee_leave\",\n        \"display_name\": \"Update Employee Leave\",\n        \"description\": \"Update Employee Leave\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 51\n        }\n    },\n    {\n        \"id\": 52,\n        \"module_id\": 13,\n        \"name\": \"delete_employee_leave\",\n        \"display_name\": \"Delete Employee Leave\",\n        \"description\": \"Delete Employee Leave\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 52\n        }\n    },\n    {\n        \"id\": 53,\n        \"module_id\": 14,\n        \"name\": \"create_employee_schedule\",\n        \"display_name\": \"Create Employee Schedule\",\n        \"description\": \"Create Employee Schedule\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 53\n        }\n    },\n    {\n        \"id\": 54,\n        \"module_id\": 14,\n        \"name\": \"read_employee_schedule\",\n        \"display_name\": \"Read Employee Schedule\",\n        \"description\": \"Read Employee Schedule\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 54\n        }\n    },\n    {\n        \"id\": 55,\n        \"module_id\": 14,\n        \"name\": \"update_employee_schedule\",\n        \"display_name\": \"Update Employee Schedule\",\n        \"description\": \"Update Employee Schedule\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 55\n        }\n    },\n    {\n        \"id\": 56,\n        \"module_id\": 14,\n        \"name\": \"delete_employee_schedule\",\n        \"display_name\": \"Delete Employee Schedule\",\n        \"description\": \"Delete Employee Schedule\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 56\n        }\n    },\n    {\n        \"id\": 57,\n        \"module_id\": 15,\n        \"name\": \"manage_settings\",\n        \"display_name\": \"Manage Settings\",\n        \"description\": \"Manage Settings\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"pivot\": {\n            \"role_id\": 3,\n            \"permission_id\": 57\n        }\n    }\n]"
+								}
+							]
+						},
+						{
+							"name": "Module permissions",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base}}/vendors/settings/modules-permissions",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"vendors",
+										"settings",
+										"modules-permissions"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Module permissions",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base}}/vendors/settings/modules-permissions",
+											"host": [
+												"{{base}}"
+											],
+											"path": [
+												"vendors",
+												"settings",
+												"modules-permissions"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Tue, 14 Dec 2021 19:35:09 GMT"
+										},
+										{
+											"key": "Server",
+											"value": "Apache"
+										},
+										{
+											"key": "X-Powered-By",
+											"value": "PHP/8.0.13"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, private"
+										},
+										{
+											"key": "X-RateLimit-Limit",
+											"value": "60"
+										},
+										{
+											"key": "X-RateLimit-Remaining",
+											"value": "59"
+										},
+										{
+											"key": "Vary",
+											"value": "Authorization"
+										},
+										{
+											"key": "Upgrade",
+											"value": "h2,h2c"
+										},
+										{
+											"key": "Connection",
+											"value": "Upgrade, Keep-Alive"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "Access-Control-Allow-Headers",
+											"value": "*"
+										},
+										{
+											"key": "Access-Control-Allow-Methods",
+											"value": "*"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5, max=100"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "[\n    {\n        \"id\": 5,\n        \"name\": \"business_service\",\n        \"display_name\": \"Business Service\",\n        \"description\": \"modules.module.businessServiceDescription\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"permissions\": [\n            {\n                \"id\": 17,\n                \"module_id\": 5,\n                \"name\": \"create_business_service\",\n                \"display_name\": \"Create Business Service\",\n                \"description\": \"Create Business Service\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            },\n            {\n                \"id\": 18,\n                \"module_id\": 5,\n                \"name\": \"read_business_service\",\n                \"display_name\": \"Read Business Service\",\n                \"description\": \"Read Business Service\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            },\n            {\n                \"id\": 19,\n                \"module_id\": 5,\n                \"name\": \"update_business_service\",\n                \"display_name\": \"Update Business Service\",\n                \"description\": \"Update Business Service\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            },\n            {\n                \"id\": 20,\n                \"module_id\": 5,\n                \"name\": \"delete_business_service\",\n                \"display_name\": \"Delete Business Service\",\n                \"description\": \"Delete Business Service\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            }\n        ]\n    },\n    {\n        \"id\": 6,\n        \"name\": \"customer\",\n        \"display_name\": \"Customer\",\n        \"description\": \"modules.module.customerDescription\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"permissions\": [\n            {\n                \"id\": 21,\n                \"module_id\": 6,\n                \"name\": \"create_customer\",\n                \"display_name\": \"Create Customer\",\n                \"description\": \"Create Customer\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            },\n            {\n                \"id\": 22,\n                \"module_id\": 6,\n                \"name\": \"read_customer\",\n                \"display_name\": \"Read Customer\",\n                \"description\": \"Read Customer\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            },\n            {\n                \"id\": 23,\n                \"module_id\": 6,\n                \"name\": \"update_customer\",\n                \"display_name\": \"Update Customer\",\n                \"description\": \"Update Customer\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            },\n            {\n                \"id\": 24,\n                \"module_id\": 6,\n                \"name\": \"delete_customer\",\n                \"display_name\": \"Delete Customer\",\n                \"description\": \"Delete Customer\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            }\n        ]\n    },\n    {\n        \"id\": 7,\n        \"name\": \"employee\",\n        \"display_name\": \"Employee\",\n        \"description\": \"modules.module.employeeDescription\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"permissions\": [\n            {\n                \"id\": 25,\n                \"module_id\": 7,\n                \"name\": \"create_employee\",\n                \"display_name\": \"Create Employee\",\n                \"description\": \"Create Employee\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            },\n            {\n                \"id\": 26,\n                \"module_id\": 7,\n                \"name\": \"read_employee\",\n                \"display_name\": \"Read Employee\",\n                \"description\": \"Read Employee\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            },\n            {\n                \"id\": 27,\n                \"module_id\": 7,\n                \"name\": \"update_employee\",\n                \"display_name\": \"Update Employee\",\n                \"description\": \"Update Employee\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            },\n            {\n                \"id\": 28,\n                \"module_id\": 7,\n                \"name\": \"delete_employee\",\n                \"display_name\": \"Delete Employee\",\n                \"description\": \"Delete Employee\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            }\n        ]\n    },\n    {\n        \"id\": 9,\n        \"name\": \"deal\",\n        \"display_name\": \"Deal\",\n        \"description\": \"modules.module.dealDescription\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"permissions\": [\n            {\n                \"id\": 33,\n                \"module_id\": 9,\n                \"name\": \"create_deal\",\n                \"display_name\": \"Create Deal\",\n                \"description\": \"Create Deal\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            },\n            {\n                \"id\": 34,\n                \"module_id\": 9,\n                \"name\": \"read_deal\",\n                \"display_name\": \"Read Deal\",\n                \"description\": \"Read Deal\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            },\n            {\n                \"id\": 35,\n                \"module_id\": 9,\n                \"name\": \"update_deal\",\n                \"display_name\": \"Update Deal\",\n                \"description\": \"Update Deal\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            },\n            {\n                \"id\": 36,\n                \"module_id\": 9,\n                \"name\": \"delete_deal\",\n                \"display_name\": \"Delete Deal\",\n                \"description\": \"Delete Deal\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            }\n        ]\n    },\n    {\n        \"id\": 10,\n        \"name\": \"employee_group\",\n        \"display_name\": \"Employee Group\",\n        \"description\": \"modules.module.employeeGroupDescription\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"permissions\": [\n            {\n                \"id\": 37,\n                \"module_id\": 10,\n                \"name\": \"create_employee_group\",\n                \"display_name\": \"Create Employee Group\",\n                \"description\": \"Create Employee Group\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            },\n            {\n                \"id\": 38,\n                \"module_id\": 10,\n                \"name\": \"read_employee_group\",\n                \"display_name\": \"Read Employee Group\",\n                \"description\": \"Read Employee Group\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            },\n            {\n                \"id\": 39,\n                \"module_id\": 10,\n                \"name\": \"update_employee_group\",\n                \"display_name\": \"Update Employee Group\",\n                \"description\": \"Update Employee Group\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            },\n            {\n                \"id\": 40,\n                \"module_id\": 10,\n                \"name\": \"delete_employee_group\",\n                \"display_name\": \"Delete Employee Group\",\n                \"description\": \"Delete Employee Group\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            }\n        ]\n    },\n    {\n        \"id\": 11,\n        \"name\": \"booking\",\n        \"display_name\": \"Booking\",\n        \"description\": \"modules.module.bookingDescription\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"permissions\": [\n            {\n                \"id\": 41,\n                \"module_id\": 11,\n                \"name\": \"create_booking\",\n                \"display_name\": \"Create Booking\",\n                \"description\": \"Create Booking\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            },\n            {\n                \"id\": 42,\n                \"module_id\": 11,\n                \"name\": \"read_booking\",\n                \"display_name\": \"Read Booking\",\n                \"description\": \"Read Booking\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            },\n            {\n                \"id\": 43,\n                \"module_id\": 11,\n                \"name\": \"update_booking\",\n                \"display_name\": \"Update Booking\",\n                \"description\": \"Update Booking\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            },\n            {\n                \"id\": 44,\n                \"module_id\": 11,\n                \"name\": \"delete_booking\",\n                \"display_name\": \"Delete Booking\",\n                \"description\": \"Delete Booking\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            }\n        ]\n    },\n    {\n        \"id\": 12,\n        \"name\": \"report\",\n        \"display_name\": \"Report\",\n        \"description\": \"modules.module.reportDescription\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"permissions\": [\n            {\n                \"id\": 45,\n                \"module_id\": 12,\n                \"name\": \"create_report\",\n                \"display_name\": \"Create Report\",\n                \"description\": \"Create Report\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            },\n            {\n                \"id\": 46,\n                \"module_id\": 12,\n                \"name\": \"read_report\",\n                \"display_name\": \"Read Report\",\n                \"description\": \"Read Report\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            },\n            {\n                \"id\": 47,\n                \"module_id\": 12,\n                \"name\": \"update_report\",\n                \"display_name\": \"Update Report\",\n                \"description\": \"Update Report\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            },\n            {\n                \"id\": 48,\n                \"module_id\": 12,\n                \"name\": \"delete_report\",\n                \"display_name\": \"Delete Report\",\n                \"description\": \"Delete Report\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            }\n        ]\n    },\n    {\n        \"id\": 13,\n        \"name\": \"employee_leave\",\n        \"display_name\": \"Employee Leave\",\n        \"description\": \"modules.module.employeeLeaveDescription\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"permissions\": [\n            {\n                \"id\": 49,\n                \"module_id\": 13,\n                \"name\": \"create_employee_leave\",\n                \"display_name\": \"Create Employee Leave\",\n                \"description\": \"Create Employee Leave\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            },\n            {\n                \"id\": 50,\n                \"module_id\": 13,\n                \"name\": \"read_employee_leave\",\n                \"display_name\": \"Read Employee Leave\",\n                \"description\": \"Read Employee Leave\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            },\n            {\n                \"id\": 51,\n                \"module_id\": 13,\n                \"name\": \"update_employee_leave\",\n                \"display_name\": \"Update Employee Leave\",\n                \"description\": \"Update Employee Leave\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            },\n            {\n                \"id\": 52,\n                \"module_id\": 13,\n                \"name\": \"delete_employee_leave\",\n                \"display_name\": \"Delete Employee Leave\",\n                \"description\": \"Delete Employee Leave\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            }\n        ]\n    },\n    {\n        \"id\": 14,\n        \"name\": \"employee_schedule\",\n        \"display_name\": \"Employee Schedule\",\n        \"description\": \"modules.module.employeeScheduleDescription\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"permissions\": [\n            {\n                \"id\": 53,\n                \"module_id\": 14,\n                \"name\": \"create_employee_schedule\",\n                \"display_name\": \"Create Employee Schedule\",\n                \"description\": \"Create Employee Schedule\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            },\n            {\n                \"id\": 54,\n                \"module_id\": 14,\n                \"name\": \"read_employee_schedule\",\n                \"display_name\": \"Read Employee Schedule\",\n                \"description\": \"Read Employee Schedule\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            },\n            {\n                \"id\": 55,\n                \"module_id\": 14,\n                \"name\": \"update_employee_schedule\",\n                \"display_name\": \"Update Employee Schedule\",\n                \"description\": \"Update Employee Schedule\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            },\n            {\n                \"id\": 56,\n                \"module_id\": 14,\n                \"name\": \"delete_employee_schedule\",\n                \"display_name\": \"Delete Employee Schedule\",\n                \"description\": \"Delete Employee Schedule\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            }\n        ]\n    },\n    {\n        \"id\": 15,\n        \"name\": \"settings\",\n        \"display_name\": \"Settings\",\n        \"description\": \"modules.module.settingsDescription\",\n        \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"updated_at\": \"2021-11-29T01:53:22.000000Z\",\n        \"permissions\": [\n            {\n                \"id\": 57,\n                \"module_id\": 15,\n                \"name\": \"manage_settings\",\n                \"display_name\": \"Manage Settings\",\n                \"description\": \"Manage Settings\",\n                \"created_at\": \"2021-11-29T01:53:22.000000Z\",\n                \"updated_at\": \"2021-11-29T01:53:22.000000Z\"\n            }\n        ]\n    }\n]"
+								}
+							]
+						},
+						{
+							"name": "Toggle Permission for a role",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"roleId\": \"5\",\r\n    \"permissionId\": 18,\r\n    \"assignPermission\":1\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base}}/vendors/settings/permissions",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"vendors",
+										"settings",
+										"permissions"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "New Request",
+									"originalRequest": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json",
+												"type": "text"
+											},
+											{
+												"key": "Content-Type",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"roleId\": \"5\",\r\n    \"permissionId\": 18,\r\n    \"assignPermission\":1\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{base}}/vendors/settings/permissions",
+											"host": [
+												"{{base}}"
+											],
+											"path": [
+												"vendors",
+												"settings",
+												"permissions"
+											]
+										}
+									},
+									"status": "No Content",
+									"code": 204,
+									"_postman_previewlanguage": "plain",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Tue, 14 Dec 2021 19:42:49 GMT"
+										},
+										{
+											"key": "Server",
+											"value": "Apache"
+										},
+										{
+											"key": "X-Powered-By",
+											"value": "PHP/8.0.13"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, private"
+										},
+										{
+											"key": "X-RateLimit-Limit",
+											"value": "60"
+										},
+										{
+											"key": "X-RateLimit-Remaining",
+											"value": "53"
+										},
+										{
+											"key": "phpdebugbar-id",
+											"value": "Xd599effe21de9e01e56e2a4e9e87f3de"
+										},
+										{
+											"key": "Vary",
+											"value": "Authorization"
+										},
+										{
+											"key": "Upgrade",
+											"value": "h2,h2c"
+										},
+										{
+											"key": "Connection",
+											"value": "Upgrade, Keep-Alive"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "Access-Control-Allow-Headers",
+											"value": "*"
+										},
+										{
+											"key": "Access-Control-Allow-Methods",
+											"value": "*"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5, max=100"
+										}
+									],
+									"cookie": [],
+									"body": null
+								}
+							]
+						},
+						{
+							"name": "Role Users",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base}}/vendors/settings/roles/5/users",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"vendors",
+										"settings",
+										"roles",
+										"5",
+										"users"
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Role Users",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base}}/vendors/settings/roles/5/users",
+											"host": [
+												"{{base}}"
+											],
+											"path": [
+												"vendors",
+												"settings",
+												"roles",
+												"5",
+												"users"
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "json",
+									"header": [
+										{
+											"key": "Date",
+											"value": "Tue, 14 Dec 2021 19:48:44 GMT"
+										},
+										{
+											"key": "Server",
+											"value": "Apache"
+										},
+										{
+											"key": "X-Powered-By",
+											"value": "PHP/8.0.13"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "no-cache, private"
+										},
+										{
+											"key": "X-RateLimit-Limit",
+											"value": "60"
+										},
+										{
+											"key": "X-RateLimit-Remaining",
+											"value": "57"
+										},
+										{
+											"key": "Vary",
+											"value": "Authorization"
+										},
+										{
+											"key": "Upgrade",
+											"value": "h2,h2c"
+										},
+										{
+											"key": "Connection",
+											"value": "Upgrade, Keep-Alive"
+										},
+										{
+											"key": "Access-Control-Allow-Origin",
+											"value": "*"
+										},
+										{
+											"key": "Access-Control-Allow-Headers",
+											"value": "*"
+										},
+										{
+											"key": "Access-Control-Allow-Methods",
+											"value": "*"
+										},
+										{
+											"key": "Keep-Alive",
+											"value": "timeout=5, max=100"
+										},
+										{
+											"key": "Transfer-Encoding",
+											"value": "chunked"
+										},
+										{
+											"key": "Content-Type",
+											"value": "application/json"
+										}
+									],
+									"cookie": [],
+									"body": "[\n    {\n        \"id\": 24,\n        \"name\": \"employee\",\n        \"email\": \"admiemployeeemployeen@example.com\",\n        \"mobile\": \"01257789\",\n        \"calling_code\": \"+93\"\n    },\n    {\n        \"id\": 26,\n        \"name\": \"EFBEwf\",\n        \"email\": \"admindsds@example.com\",\n        \"mobile\": \"324324324\",\n        \"calling_code\": \"+93\"\n    }\n]"
+								}
+							]
 						}
 					]
 				},
@@ -4192,7 +4762,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{base}}/vendors/reports/tabular-table",
+									"raw": "{{base}}/vendors/reports/tabular-table?from_date=2021-12-09&to_date=2021-12-20&payment=completed",
 									"host": [
 										"{{base}}"
 									],
@@ -4200,6 +4770,55 @@
 										"vendors",
 										"reports",
 										"tabular-table"
+									],
+									"query": [
+										{
+											"key": "from_date",
+											"value": "2021-12-09"
+										},
+										{
+											"key": "to_date",
+											"value": "2021-12-20"
+										},
+										{
+											"key": "customer_name",
+											"value": "zed",
+											"disabled": true
+										},
+										{
+											"key": "service_name",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "product_name",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "employee_id",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "booking_status",
+											"value": "completed",
+											"disabled": true
+										},
+										{
+											"key": "booking_type",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "location",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "payment",
+											"value": "completed"
+										}
 									]
 								}
 							},
@@ -4210,7 +4829,7 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{base}}/vendors/reports/tabular-table",
+											"raw": "{{base}}/vendors/reports/tabular-table?from_date=2021-11-28&to_date=2021-12-06&customer_name=zed&booking_status=completed&location=1&payment=cash",
 											"host": [
 												"{{base}}"
 											],
@@ -4218,6 +4837,52 @@
 												"vendors",
 												"reports",
 												"tabular-table"
+											],
+											"query": [
+												{
+													"key": "from_date",
+													"value": "2021-11-28"
+												},
+												{
+													"key": "to_date",
+													"value": "2021-12-06"
+												},
+												{
+													"key": "customer_name",
+													"value": "zed"
+												},
+												{
+													"key": "service_name",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "product_name",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "employee_id",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "booking_status",
+													"value": "completed"
+												},
+												{
+													"key": "booking_type",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "location",
+													"value": "1"
+												},
+												{
+													"key": "payment",
+													"value": "cash"
+												}
 											]
 										}
 									},
@@ -6242,7 +6907,7 @@
 											}
 										],
 										"url": {
-											"raw": "{{v2}}/vendors/services?location_id=1&per_page=10",
+											"raw": "{{v2}}/vendors/services?location_id=1&per_page=all&include[]=location",
 											"host": [
 												"{{v2}}"
 											],
@@ -6257,7 +6922,7 @@
 												},
 												{
 													"key": "per_page",
-													"value": "10",
+													"value": "all",
 													"description": "can be any number < 100 or all for no pagination"
 												},
 												{
@@ -6267,8 +6932,7 @@
 												},
 												{
 													"key": "include[]",
-													"value": "location",
-													"disabled": true
+													"value": "location"
 												},
 												{
 													"key": "include[]",
@@ -7847,7 +8511,7 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{v2}}/vendors/bookings",
+											"raw": "{{v2}}/vendors/bookings?include[]=user&term=1",
 											"host": [
 												"{{v2}}"
 											],
@@ -7863,8 +8527,7 @@
 												},
 												{
 													"key": "include[]",
-													"value": "user",
-													"disabled": true
+													"value": "user"
 												},
 												{
 													"key": "include[]",
@@ -7883,8 +8546,7 @@
 												},
 												{
 													"key": "term",
-													"value": "2021-11",
-													"disabled": true
+													"value": "1"
 												}
 											]
 										}
@@ -8147,7 +8809,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n    \"customerId\": 1,\r\n    \"dateTime\": \"2021-11-28T21:55:14.560Z\",\r\n    \"payment_gateway\": \"cash\",\r\n    \"location_id\": 1,\r\n    \"cart\": {\r\n        \"services\": [\r\n            {\r\n                \"id\": 7,\r\n                \"price\": 15,\r\n                \"quantity\": 4\r\n            }\r\n        ],\r\n        \"products\": [\r\n            {\r\n                \"id\": 4,\r\n                \"price\": 100,\r\n                \"quantity\": 8\r\n            }\r\n        ],\r\n        \"deals\": []\r\n    },\r\n    \"couponId\": 1,\r\n    \"discount\": \"20\"\r\n}",
+											"raw": "{\r\n    \"customerId\": 1,\r\n    \"dateTime\": \"2021-11-28T21:55:14.560Z\",\r\n    \"payment_gateway\": \"cash\",\r\n    \"cart\": {\r\n        \"services\": [\r\n            {\r\n                \"id\": 7,\r\n                \"price\": 15,\r\n                \"quantity\": 4\r\n            }\r\n        ],\r\n        \"products\": [\r\n            {\r\n                \"id\": 4,\r\n                \"price\": 100,\r\n                \"quantity\": 8\r\n            }\r\n        ],\r\n        \"deals\": [{\r\n                \"id\": 10,\r\n                \"price\": 150,\r\n                \"quantity\": 8\r\n            }]\r\n    },\r\n    \"couponId\": 1,\r\n    \"discount\": \"20\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -8348,6 +9010,121 @@
 											"body": null
 										}
 									]
+								},
+								{
+									"name": "Update",
+									"request": {
+										"method": "PUT",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"customerId\": 1,\r\n    \"dateTime\": \"2021-11-28T21:55:14.560Z\",\r\n    \"payment_gateway\": \"cash\",\r\n    \"status\": \"pending\",\r\n    \"payment_status\": \"pending\",\r\n    \"booking\": {\r\n        \"services\": [\r\n            {\r\n                \"id\": 7,\r\n                \"price\": 15,\r\n                \"quantity\": 4\r\n            }\r\n        ],\r\n        \"products\": [\r\n            {\r\n                \"id\": 4,\r\n                \"price\": 100,\r\n                \"quantity\": 8\r\n            }\r\n        ],\r\n        \"deals\": [{\r\n                \"id\": 6,\r\n                \"price\": 150,\r\n                \"quantity\": 1\r\n            }]\r\n    },\r\n    \"couponId\": 1,\r\n    \"discount\": \"20\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{v2}}/vendors/bookings/48",
+											"host": [
+												"{{v2}}"
+											],
+											"path": [
+												"vendors",
+												"bookings",
+												"48"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Update",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"customerId\": 1,\r\n    \"dateTime\": \"2021-11-28T21:55:14.560Z\",\r\n    \"payment_gateway\": \"cash\",\r\n    \"status\": \"pending\",\r\n    \"payment_status\": \"pending\",\r\n    \"booking\": {\r\n        \"services\": [\r\n            {\r\n                \"id\": 7,\r\n                \"price\": 15,\r\n                \"quantity\": 4\r\n            }\r\n        ],\r\n        \"products\": [\r\n            {\r\n                \"id\": 4,\r\n                \"price\": 100,\r\n                \"quantity\": 8\r\n            }\r\n        ],\r\n        \"deals\": [{\r\n                \"id\": 6,\r\n                \"price\": 150,\r\n                \"quantity\": 1\r\n            }]\r\n    },\r\n    \"couponId\": 1,\r\n    \"discount\": \"20\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{v2}}/vendors/bookings/48",
+													"host": [
+														"{{v2}}"
+													],
+													"path": [
+														"vendors",
+														"bookings",
+														"48"
+													]
+												}
+											},
+											"status": "No Content",
+											"code": 204,
+											"_postman_previewlanguage": "plain",
+											"header": [
+												{
+													"key": "Date",
+													"value": "Tue, 14 Dec 2021 18:40:47 GMT"
+												},
+												{
+													"key": "Server",
+													"value": "Apache"
+												},
+												{
+													"key": "X-Powered-By",
+													"value": "PHP/8.0.13"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, private"
+												},
+												{
+													"key": "X-RateLimit-Limit",
+													"value": "60"
+												},
+												{
+													"key": "X-RateLimit-Remaining",
+													"value": "55"
+												},
+												{
+													"key": "Vary",
+													"value": "Authorization"
+												},
+												{
+													"key": "Upgrade",
+													"value": "h2,h2c"
+												},
+												{
+													"key": "Connection",
+													"value": "Upgrade, Keep-Alive"
+												},
+												{
+													"key": "Access-Control-Allow-Origin",
+													"value": "*"
+												},
+												{
+													"key": "Access-Control-Allow-Headers",
+													"value": "*"
+												},
+												{
+													"key": "Access-Control-Allow-Methods",
+													"value": "*"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=5, max=100"
+												}
+											],
+											"cookie": [],
+											"body": null
+										}
+									]
 								}
 							]
 						},
@@ -8409,7 +9186,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n    \"name\": \"hossam\",\r\n    \"email\": \"hossam2@hossam.com\",\r\n    \"mobile\": \"966512312\"\r\n}",
+											"raw": "{\r\n    \"name\": \"hossam\",\r\n    \"email\": \"hossam22@hossam.com\",\r\n    \"mobile\": \"966512312\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -8558,6 +9335,15 @@
 											"body": "{\n    \"id\": 3,\n    \"name\": \"Malik Griffith\",\n    \"email\": \"malik@example.com\",\n    \"mobile\": \"1111\",\n    \"calling_code\": null\n}"
 										}
 									]
+								},
+								{
+									"name": "PUT",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": null
+									},
+									"response": []
 								}
 							]
 						}

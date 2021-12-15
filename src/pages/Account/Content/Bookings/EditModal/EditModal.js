@@ -31,7 +31,7 @@ import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import { useCallback, useContext, useEffect, useReducer, useState } from 'react';
 import { connect } from 'react-redux';
-import { fetchEmployees, fetchProducts, fetchServices } from '../../../../../store/actions/index';
+import { fetchEmployees, fetchProducts, fetchServices, fetchDeals } from '../../../../../store/actions/index';
 import InputAdornment from '@mui/material/InputAdornment';
 import ThemeContext from '../../../../../store/theme-context';
 
@@ -231,6 +231,46 @@ const cartReducer = (state, action) => {
             return updateObject(state, {
                 products: decreasedProducts,
             })
+            case 'ADD_TO_DEALS':
+                const dealIndex = state.deals.findIndex(deal => deal.id === action.payload.id);
+                const updatedDeals = [...state.deals]
+                if (dealIndex === -1) { 
+                    updatedDeals.push(action.payload)
+                } else {
+                    const updatedItem = {...updatedDeals[dealIndex]}
+                    updatedItem.quantity = updatedItem.quantity + 1
+                    updatedDeals[dealIndex] = updatedItem
+                }
+                return updateObject(state, {
+                    deals: updatedDeals,
+                })
+            case 'REMOVE_DEAL':
+                const filteredDeals = state.deals.filter(deal => deal.id !== action.payload)
+                return updateObject(state, {
+                    deals: filteredDeals,
+                })
+            case 'INCREASE_DEAL' :
+                const increasedDealIndex = state.deals.findIndex(deal => deal.id === action.payload);
+                const increasedDeal = {...state.deals[increasedDealIndex]}
+                increasedDeal.quantity = increasedDeal.quantity + 1
+                const increasedDeals = [...state.deals]
+                increasedDeals[increasedDealIndex] = increasedDeal
+                return updateObject(state, {
+                    deals: increasedDeals,
+                })
+            case 'DECREASE_DEAL' :
+                const decreasedDealIndex = state.deals.findIndex(deal => deal.id === action.payload);
+                const decreasedDeal = {...state.deals[decreasedDealIndex]}
+                const decreasedDeals = [...state.deals]
+                if (decreasedDeal.quantity === 1) {
+                    decreasedDeals.splice(decreasedDealIndex, 1)
+                } else {
+                    decreasedDeal.quantity = decreasedDeal.quantity - 1
+                    decreasedDeals[decreasedDealIndex] = decreasedDeal
+                }
+                return updateObject(state, {
+                    deals: decreasedDeals,
+                })
         default:
             return state;
     }
@@ -239,7 +279,7 @@ const cartReducer = (state, action) => {
 
 const EditModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, id, fetchedBookings, onDelete, fetchedEmployees, fetchEmployeesHandler, fetchedProducts, fetchProductsHandler, fetchedServices, fetchServicesHandler } = props;
+    const { show, heading, confirmText, onConfirm, onClose, id, fetchedBookings, onDelete, fetchedEmployees, fetchEmployeesHandler, fetchedProducts, fetchProductsHandler, fetchedServices, fetchServicesHandler,fetchedDeals, fetchDealsHandler } = props;
 
     const { t } = useTranslation();
 
@@ -261,11 +301,14 @@ const EditModal = (props) => {
 
     let bookingDataServices = [];
     let bookingDataProducts = [];
+    let bookingDataDeals = [];
     const splittedItems = bookingData.items.map(item => {
         if (item.item.type === 'service') {
             bookingDataServices.push(item)
         } if (item.item.type === 'product') {
             bookingDataProducts.push(item)
+        } if (item.item.type === 'deal') {
+            bookingDataDeals.push(item)
         }
         return bookingDataServices;
     })
@@ -274,6 +317,7 @@ const EditModal = (props) => {
     const [cartData, dispatch] = useReducer(cartReducer, {
         services: bookingDataServices,
         products: bookingDataProducts,
+        deals: bookingDataDeals,
     });
     const [dateTime, setDateTime] = useState(new Date(date_time));
 
@@ -284,6 +328,8 @@ const EditModal = (props) => {
     const [selectedServices, setSelectedServices] = useState('');
 
     const [selectedProducts, setSelectedProducts] = useState('');
+
+    const [selectedDeals, setSelectedDeals] = useState('');
 
     const [totalPrice, setTotalPrice] = useState(0)
 
@@ -297,7 +343,8 @@ const EditModal = (props) => {
         fetchEmployeesHandler(lang);
         fetchProductsHandler(lang, 1, 'all', 'name', 'desc');
         fetchServicesHandler(lang, 1, 'all', 'name', 'desc');
-    }, [fetchEmployeesHandler, fetchProductsHandler, fetchServicesHandler, lang])
+        fetchDealsHandler(lang, 1, 'all', 'name', 'desc');
+    }, [fetchDealsHandler, fetchEmployeesHandler, fetchProductsHandler, fetchServicesHandler, lang])
 
     useEffect(() => {
         let total = 0;
@@ -325,6 +372,12 @@ const EditModal = (props) => {
                 payload: itemData
             })
         }
+        if ( type === 'deals' ) {
+            dispatch({
+                type: 'ADD_TO_DEALS',
+                payload: itemData
+            })
+        }
     }, [])
 
     const removeFromCartHandler = useCallback((type, itemId) => {
@@ -337,6 +390,12 @@ const EditModal = (props) => {
         if (type === 'products') {
             dispatch({
                 type: 'REMOVE_PRODUCT',
+                payload: itemId
+            })
+        }
+        if (type === 'deals') {
+            dispatch({
+                type: 'REMOVE_DEAL',
                 payload: itemId
             })
         }
@@ -355,6 +414,12 @@ const EditModal = (props) => {
                 payload: itemId
             })
         }
+        if (type === 'deals') {
+            dispatch({
+                type: 'INCREASE_DEAL',
+                payload: itemId
+            })
+        }
     }, [])
     const decreaseItemHandler = useCallback((type, itemId) => {
         if (type === 'services') {
@@ -366,6 +431,12 @@ const EditModal = (props) => {
         if (type === 'products') {
             dispatch({
                 type: 'DECREASE_PRODUCT',
+                payload: itemId
+            })
+        }
+        if (type === 'deals') {
+            dispatch({
+                type: 'DECREASE_DEAL',
                 payload: itemId
             })
         }
@@ -424,6 +495,24 @@ const EditModal = (props) => {
         }
         addToCartHandler('products', productData)
     }
+    const selectedDealsChangeHandler = (event) => {
+        setSelectedDeals('');
+        const selectedDealIndex = fetchedDeals.data.findIndex(deal => deal.id === event.target.value);
+        const selectedDealData = { ...fetchedDeals.data[selectedDealIndex] }
+        const dealData = {
+            id: selectedDealData.id,
+            quantity: 1,
+            price: selectedDealData.price,
+            total: selectedDealData.price,
+            item: {
+                id: selectedDealData.id,
+                name: selectedDealData.title,
+                type: 'deal',
+                price: selectedDealData.price,
+            }
+        }
+        addToCartHandler('deals', dealData)
+    }
 
     const discountChangeHandler = (event) => {
         if (event.target.value >= 0) {
@@ -443,18 +532,28 @@ const EditModal = (props) => {
         })
 
         const booking = {
-            ...bookingData,
-            id: id,
-            date_time: dateTime,
+            customerId: id,
+            dateTime: dateTime,
+            payment_gateway: bookingData.payment.gateway,
+            payment_status: paymentStatus,
             status: bookingStatus,
             users: employeesData,
-            items: [
-                cartData.services,
-                cartData.products,
-            ]
+            booking: {
+                services : [
+                    ...cartData.services,
+                ],
+                products : [
+                    ...cartData.products,
+                ],
+                deals : [
+                    ...cartData.deals,
+                ],
+            },
+            /* couponId: 1, */
+            discount: +discount,
         }
         onConfirm(booking);
-    }, [bookingData, bookingStatus, cartData.products, cartData.services, dateTime, employeeName, fetchedEmployees, id, onConfirm])
+    }, [bookingData, bookingStatus, cartData.deals, cartData.products, cartData.services, dateTime, discount, employeeName, fetchedEmployees, id, onConfirm, paymentStatus])
 
 
     let content;
@@ -635,6 +734,45 @@ const EditModal = (props) => {
                         </TableContainer>
                     )}
                 </Grid>
+                <Grid item xs={12}>
+                    <FormControl sx={{ width: '100%' }}>
+                        <InputLabel id="deals-label">{t('add deals')}</InputLabel>
+                        <Select
+                            labelId="deals-label"
+                            id="select-deals"
+                            value={selectedDeals}
+                            onChange={selectedDealsChangeHandler}
+                        >
+                            {fetchedDeals.data.map((deal) => (
+                                <MenuItem
+                                    key={deal.id}
+                                    value={deal.id}
+                                >
+                                    {deal.title}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12}>
+                    {cartData.deals.length === 0 && (
+                        <CustomMessage>
+                            <p>{t('No Deals')}</p>
+                        </CustomMessage>
+                    )}
+                    {cartData.deals.length > 0 && (
+                        <TableContainer component={Paper} sx={{ my: 2 }}>
+                            <Table aria-label="deals table">
+                                <SharedTableHead name='deals' />
+                                <TableBody>
+                                    {cartData.deals.map((row) => (
+                                        <CartItem type='deals' key={row.id} row={row} remove={removeFromCartHandler} increase={increaseItemHandler} decrease={decreaseItemHandler} />
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    )}
+                </Grid>
                 <Grid item xs={12} md={6}>
                     <BookingData>
                         <BookingDataHeading>{t('payment method')}</BookingDataHeading>
@@ -709,6 +847,7 @@ const mapStateToProps = (state) => {
         fetchedEmployees: state.employees.employees,
         fetchedServices: state.services.services,
         fetchedProducts: state.products.products,
+        fetchedDeals: state.deals.deals,
     }
 }
 
@@ -717,6 +856,7 @@ const mapDispatchToProps = (dispatch) => {
         fetchEmployeesHandler: (language) => dispatch(fetchEmployees(language)),
         fetchProductsHandler: (language, page, perPage, orderBy, orderDir) => dispatch(fetchProducts(language, page, perPage, orderBy, orderDir)),
         fetchServicesHandler: (language, page, perPage, orderBy, orderDir) => dispatch(fetchServices(language, page, perPage, orderBy, orderDir)),
+        fetchDealsHandler: (language, page, perPage, orderBy, orderDir) => dispatch(fetchDeals(language, page, perPage, orderBy, orderDir)),
     }
 }
 
