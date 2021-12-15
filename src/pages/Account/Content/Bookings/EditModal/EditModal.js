@@ -304,11 +304,20 @@ const EditModal = (props) => {
     let bookingDataDeals = [];
     const splittedItems = bookingData.items.map(item => {
         if (item.item.type === 'service') {
-            bookingDataServices.push(item)
+            bookingDataServices.push({
+                ...item,
+                id: item.item.id,
+            })
         } if (item.item.type === 'product') {
-            bookingDataProducts.push(item)
+            bookingDataProducts.push({
+                ...item,
+                id: item.item.id,
+            })
         } if (item.item.type === 'deal') {
-            bookingDataDeals.push(item)
+            bookingDataDeals.push({
+                ...item,
+                id: item.item.id,
+            })
         }
         return bookingDataServices;
     })
@@ -517,7 +526,7 @@ const EditModal = (props) => {
     const discountChangeHandler = (event) => {
         if (event.target.value >= 0) {
             setDiscount(event.target.value)
-        }
+        } 
     }
     const paymentStatusChangeHandler = (event) => {
         setPaymentStatus(event.target.value);

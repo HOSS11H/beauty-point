@@ -9,7 +9,6 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 import { useTranslation } from 'react-i18next';
 import { formatCurrency } from '../../../../../../shared/utility';
 
@@ -34,7 +33,7 @@ const ClientName = styled.p`
     line-height:1.5;
     text-transform: capitalize;
     font-weight: 600;
-    color: ${({ theme }) => theme.palette.primary.main};
+    color: #000;
     transition: 0.3s ease-in-out;
     margin-bottom: 5px;
 `
@@ -44,7 +43,7 @@ const ClientAddress = styled.p`
     line-height:1.5;
     text-transform: capitalize;
     font-weight: 600;
-    color: ${({ theme }) => theme.palette.primary.main};
+    color: #000;
     transition: 0.3s ease-in-out;
     margin-bottom: 5px;
 `
@@ -54,7 +53,7 @@ const ClientBill = styled.p`
     line-height:1.5;
     text-transform: capitalize;
     font-weight: 600;
-    color: ${({ theme }) => theme.palette.primary.main};
+    color: #000;
     transition: 0.3s ease-in-out;
     margin-bottom: 5px;
 `
@@ -64,7 +63,7 @@ const ClientDate = styled.p`
     line-height:1.5;
     text-transform: capitalize;
     font-weight: 600;
-    color: ${({ theme }) => theme.palette.primary.main};
+    color: #000;
     transition: 0.3s ease-in-out;
     margin-bottom: 5px;
 `
@@ -77,7 +76,7 @@ const ClientInfos = styled.p`
     line-height:1.5;
     text-transform: capitalize;
     font-weight: 700;
-    color: ${({ theme }) => theme.palette.primary.main};
+    color: #000;
     transition: 0.3s ease-in-out;
     margin: 10px auto;
     cursor: pointer;
@@ -92,7 +91,7 @@ const BillTotal = styled.p`
     line-height:1.5;
     text-transform: capitalize;
     font-weight: 700;
-    color: ${({ theme }) => theme.palette.primary.main};
+    color: #000;
     transition: 0.3s ease-in-out;
     cursor: pointer;
 	i {
@@ -113,7 +112,7 @@ const BookingDataHeading = styled.p`
     line-height:1.5;
     text-transform: capitalize;
     font-weight: 600;
-    color: ${({ theme }) => theme.palette.text.primary};
+    color: #000;
     margin-bottom: 5px;
 	margin-top: 10px;
 	text-align: center;
@@ -123,7 +122,7 @@ const BookingDataBody = styled.p`
     line-height:1.5;
     text-transform: capitalize;
     font-weight: 600;
-    color: ${({ theme }) => theme.palette.text.primary};
+    color: #000;
 	text-align: center;
 `
 const QrWrapper = styled.div`
@@ -134,7 +133,7 @@ const BookingCopyright = styled.p`
 	line-height:1.5;
 	text-transform: capitalize;
 	font-weight: 600;
-	color: ${({ theme }) => theme.palette.text.primary};
+	color: #000;
 	text-align: center;
 	margin-top: 10px;
 `
@@ -165,7 +164,7 @@ const Invoice = React.forwardRef((props, ref) => {
 										<span>: دفع الي</span>
 									</ClientInfos>
 									<ClientInfos>
-										<span>{t(bookingData.payment.status)}</span>
+										<span>{t(bookingData.payment_status)}</span>
 										<span>: حالة الدفع</span>
 									</ClientInfos>
 								</Grid>
@@ -181,7 +180,7 @@ const Invoice = React.forwardRef((props, ref) => {
 								</Grid>
 							</Grid>
 							<BookingDataHeading>{t('booking items')}</BookingDataHeading>
-							<TableContainer component={Paper} sx={{ my: 2 }}>
+							<TableContainer sx={{ my: 2, bakground: 'transparent' }}>
 								<Table aria-label="simple table">
 									<TableHead>
 										<TableRow>
@@ -226,7 +225,7 @@ const Invoice = React.forwardRef((props, ref) => {
 								<Grid item xs={12} md={6} >
 									<BillTotal>
 										<span>طريقة الدفع : </span>
-										<span>{bookingData.payment.gateway}</span>
+										<span>{bookingData.payment?.gateway}</span>
 									</BillTotal>
 								</Grid>
 							</Grid>

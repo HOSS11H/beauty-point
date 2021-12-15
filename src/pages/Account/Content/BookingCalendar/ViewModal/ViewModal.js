@@ -21,7 +21,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { formatCurrency } from '../../../../../shared/utility';
 import { CustomButton } from '../../../../../components/UI/Button/Button';
 import PrintIcon from '@mui/icons-material/Print';
-import Invoice from './Invoice/Invoice';
+import Invoice from '../../Bookings/ViewModal/Invoice/Invoice';
 import { useReactToPrint } from 'react-to-print';
 import { useEffect, useRef , useState} from 'react';
 import axios from '../../../../../utils/axios-instance';
@@ -287,7 +287,7 @@ const ViewModal = (props) => {
                     <BookingData>
                         <BookingDataHeading>{t('payment status')}</BookingDataHeading>
                         <BookingList>
-                            <li>{bookingData.payment?.status === 'completed' ? <CheckCircleIcon sx={{ mr: 1, color: '#568d00' }} /> : <CloseIcon sx={{ mr: 1, color: 'rgb(187 163 46)' }} /> }{t(bookingData.payment?.status)}</li>
+                            <li>{bookingData.payment_status === 'completed' ? <CheckCircleIcon sx={{ mr: 1, color: '#568d00' }} /> : <CloseIcon sx={{ mr: 1, color: 'rgb(187 163 46)' }} /> }{t(bookingData.payment_status)}</li>
                         </BookingList>
                     </BookingData>
                 </Grid>

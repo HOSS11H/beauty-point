@@ -280,7 +280,7 @@ const ViewModal = (props) => {
                     <BookingData>
                         <BookingDataHeading>{t('payment method')}</BookingDataHeading>
                         <BookingList>
-                            <li><MoneyIcon sx={{ mr: 1 }} />{t(bookingData.payment.gateway)}</li>
+                            <li><MoneyIcon sx={{ mr: 1 }} />{t(bookingData.payment?.gateway)}</li>
                         </BookingList>
                     </BookingData>
                 </Grid>
