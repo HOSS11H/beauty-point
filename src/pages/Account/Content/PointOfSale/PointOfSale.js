@@ -147,6 +147,7 @@ const cartReducer = (state, action) => {
     }
 }
 
+const intialRowsPerPage = 15;
 
 const PointOfSale = ( props ) => {
 
@@ -168,6 +169,9 @@ const PointOfSale = ( props ) => {
         deals: [],
     });
 
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(intialRowsPerPage);
+
     const [ shownType, setShownType ] = useState('services');
     const [ shownCategory, setShownCategory ] = useState('all');
     const [ shownLocation, setShownLocation ] = useState('');
@@ -182,13 +186,13 @@ const PointOfSale = ( props ) => {
 
     useEffect(() => {
         if(shownType === 'services') {
-            filterServicesHandler(lang,  shownType, shownCategory , shownLocation, searchWord);
+            filterServicesHandler(lang,  shownType, shownCategory , shownLocation, searchWord, page, rowsPerPage);
         } else if(shownType === 'products') {
-            filterProductsHandler(lang, shownType,  shownLocation, searchWord);
+            filterProductsHandler(lang, shownType,  shownLocation, searchWord, page, rowsPerPage);
         } else if(shownType === 'deals') {
-            filterDealsHandler(lang, shownType, shownLocation, searchWord);
+            filterDealsHandler(lang, shownType, shownLocation, searchWord, page, rowsPerPage);
         }
-    }, [filterDealsHandler, filterProductsHandler, filterServicesHandler, lang, searchWord, shownCategory, shownLocation, shownType, token]);
+    }, [filterDealsHandler, filterProductsHandler, filterServicesHandler, lang, page, rowsPerPage, searchWord, shownCategory, shownLocation, shownType, token]);
 
     const handleResultsChange = useCallback(( type, category , location, search ) => {
         setShownType(type);
@@ -293,6 +297,10 @@ const PointOfSale = ( props ) => {
         })
     }, [])
 
+    const handleChangePage = useCallback((event, newPage) => {
+        setPage(newPage);
+    }, []);
+
     const closeMessageHandler = useCallback(( ) => {
         setMessageShown(false)
     }, [])
@@ -309,7 +317,7 @@ const PointOfSale = ( props ) => {
             <Grid item xs={12} md={6}>
                 <CustomCard heading='view items' >
                     <SearchFilters resultsHandler= {handleResultsChange}  />
-                    <FilteredResults results={shownType} addToCart={addToCartHandler} />
+                    <FilteredResults rowsPerPage={rowsPerPage} page={page} onPageChange={handleChangePage} results={shownType} addToCart={addToCartHandler} />
                 </CustomCard>
             </Grid>
             <Grid item xs={12} md={6}>
@@ -329,9 +337,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        filterServicesHandler: (language,  type, category , location, search) => dispatch(filterServices(language, type, category , location, search)),
-        filterProductsHandler: (language, type,  location, search) => dispatch(filterProducts(language, type, location, search)),
-        filterDealsHandler: (language, type,  location, search) => dispatch(filterDeals(language, type,  location, search)),
+        filterServicesHandler: (language,  type, category , location, search, page, rowsPerPage ) => dispatch(filterServices(language, type, category , location, search, page, rowsPerPage )),
+        filterProductsHandler: (language, type,  location, search, page, rowsPerPage ) => dispatch(filterProducts(language, type, location, search, page, rowsPerPage )),
+        filterDealsHandler: (language, type,  location, search, page, rowsPerPage ) => dispatch(filterDeals(language, type,  location, search, page, rowsPerPage )),
         createBookingHandler: (data) => dispatch(createBooking(data)),
     }
 }

@@ -7,6 +7,7 @@ import ListView from './ListView/ListView';
 import IconButton from '@mui/material/IconButton';
 import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import TablePaginationActions from '../../../../../components/UI/Dashboard/Table/TablePagination/TablePagination';
 
 const ViewBar = styled.div`
     display: flex;
@@ -43,7 +44,7 @@ const CustomMessage = styled.div`
 
 const FilteredResults = (props) => {
 
-    const { results, fetchedServices, fetchedProducts, fetchedDeals, fetchingServices, fetchingProducts, fetchingDeals, addToCart } = props;
+    const { results, rowsPerPage, page, onPageChange, fetchedServices, fetchedProducts, fetchedDeals, fetchingServices, fetchingProducts, fetchingDeals, addToCart } = props;
 
     const { t } = useTranslation()
 
@@ -84,6 +85,15 @@ const FilteredResults = (props) => {
                         <p>{t('No Items')}</p>
                     </CustomMessage>
                 )}
+                <TablePaginationActions
+                        component="div"
+                        count={fetchedData.data.length}
+                        total={fetchedData.meta ? fetchedData.meta.total : 0}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onPageChange={onPageChange}
+                        loading={fetchingServices || fetchingProducts || fetchingDeals}
+                    />
             </Content>
         </Fragment>
     )
