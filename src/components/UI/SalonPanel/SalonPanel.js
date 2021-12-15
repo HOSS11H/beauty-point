@@ -3,7 +3,6 @@ import styled from "styled-components"
 export const SalonPanel = styled.div`
     background-color: #fff;
     border-radius: 25px;
-    margin-bottom: 30px;
     padding: 0 9px;
     @media screen and (max-width: 899.98px) {
         margin: 0 auto 30px;
@@ -68,7 +67,6 @@ export const SalonPanel = styled.div`
 export const DealPanel = styled.div`
     background-color: #fff;
     border-radius: 25px;
-    margin-bottom: 30px;
     padding: 0 9px;
     @media screen and (max-width: 899.98px) {
         margin: 0 auto 30px;
@@ -150,7 +148,7 @@ export const DealPanel = styled.div`
                         font-weight: 500;
                         color         : #96248e;
                         text-transform: uppercase;
-                        transform: translate(1px, -4px);
+                        transform: translate(-2px, -2px);
                         &.percentage {
                             font-size: 18px;
                             line-height: 21px;
