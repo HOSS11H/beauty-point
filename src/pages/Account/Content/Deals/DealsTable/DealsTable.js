@@ -42,7 +42,7 @@ function DealsTable(props) {
 
     const { t } = useTranslation()
 
-    const { fetchedDeals, fetchDealsHandler, loadingDeals, deleteDealHandler, editDealHandler, searchingDeals, searchingDealsSuccess, fetchServicesHandler } = props;
+    const { fetchedDeals, fetchDealsHandler, loadingDeals, deleteDealHandler, editDealHandler, searchingDeals, searchingDealsSuccess, fetchServicesHandler, updatingDealSuccess } = props;
 
     const themeCtx = useContext(ThemeContext)
 
@@ -66,6 +66,10 @@ function DealsTable(props) {
     useEffect(() => {
         fetchDealsHandler(lang, page, rowsPerPage, orderBy, order);
     }, [fetchDealsHandler, lang, order, orderBy, page, rowsPerPage]);
+
+    useEffect(() => {
+        updatingDealSuccess && fetchDealsHandler(lang, page, rowsPerPage, orderBy, order);
+    }, [fetchDealsHandler, lang, order, orderBy, page, rowsPerPage, updatingDealSuccess])
 
 
     const handleRequestSort = (event, property) => {
@@ -204,6 +208,7 @@ const mapStateToProps = state => {
         loadingDeals: state.deals.fetchingDeals,
         searchingDeals: state.deals.searchingDeals,
         searchingDealsSuccess: state.deals.searchingDealsSuccess,
+        updatingDealSuccess: state.deals.updatingDealSuccess,
     }
 }
 

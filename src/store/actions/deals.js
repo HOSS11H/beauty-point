@@ -97,6 +97,11 @@ export const updateDealSuccess = (message, updatedDealData) => {
         dealData: updatedDealData,
     }
 }
+export const resetUpdateDealSuccess = (message, updatedDealData) => {
+    return {
+        type: actionTypes.RESET_UPDATE_DEAL_SUCCESS,
+    }
+}
 export const updateDealFailed = (message) => {
     return {
         type: actionTypes.UPDATE_DEAL_FAILED,
@@ -110,6 +115,9 @@ export const updateDeal = (data) => {
         axios.put(`/vendors/deals/${data.id}`, data)
             .then(response => {
                 dispatch(updateDealSuccess(response.data, data));
+                setTimeout(() => {
+                    dispatch(resetUpdateDealSuccess())
+                }, 1000)
             })
             .catch(err => {
                 dispatch(updateDealFailed(err.message))

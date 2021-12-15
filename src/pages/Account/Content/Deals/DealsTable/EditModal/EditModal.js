@@ -207,7 +207,7 @@ const cartReducer = (state, action) => {
 
 const EditModal = (props) => {
 
-    const { show, heading, id, fetchedDeals, confirmText, onConfirm, onClose, fetchedLocations, fetchedServices, fetchingServices, fetchServicesHandler, creatingDealSuccess } = props;
+    const { show, heading, id, fetchedDeals, confirmText, onConfirm, onClose, fetchedLocations, fetchedServices, fetchingServices, fetchServicesHandler } = props;
 
     const { t } = useTranslation();
 
@@ -897,7 +897,6 @@ const mapStateToProps = (state) => {
         fetchedLocations: state.locations.locations,
         fetchedServices: state.services.servicesByLocation.services,
         fetchingServices: state.services.servicesByLocation.fetchingServices,
-        creatingDealSuccess: state.deals.creatingDealSuccess,
     }
 }
 

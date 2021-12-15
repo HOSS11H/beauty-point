@@ -61,7 +61,7 @@ const EnhancedTableBody = props => {
                             </TableData>
                         </TableCell>
                         <TableCell align="center">
-                            <TableData>{row.uses_limit}</TableData>
+                            <TableData>{row.used_time}</TableData>
                         </TableCell>
                         <TableCell align="center">
                             <TableData>
