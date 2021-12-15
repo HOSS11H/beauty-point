@@ -549,7 +549,7 @@ const EditModal = (props) => {
                     ...cartData.deals,
                 ],
             },
-            couponId: bookingData.coupon.id,
+            couponId:  bookingData.coupon && bookingData.coupon.id,
             discount: +discount,
         }
         onConfirm(booking);
