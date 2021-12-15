@@ -97,7 +97,7 @@ export const updateDealSuccess = (message, updatedDealData) => {
         dealData: updatedDealData,
     }
 }
-export const resetUpdateDealSuccess = (message, updatedDealData) => {
+export const resetUpdateDealSuccess = () => {
     return {
         type: actionTypes.RESET_UPDATE_DEAL_SUCCESS,
     }

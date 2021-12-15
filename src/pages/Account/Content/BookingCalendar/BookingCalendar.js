@@ -58,6 +58,14 @@ const BookingCalendar = props => {
 
     useEffect( ( ) => {
         fetchBookingsHandler(lang, 'all');
+        v1.get('/auth/me')
+            .then(res => {
+                setUserData(res.data)
+            }
+            )
+            .catch(err => {
+                console.log(err)
+            })
     } , [fetchBookingsHandler, lang])
 
     const formattedBookingsData = fetchedBookings.data.map(booking => {

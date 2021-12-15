@@ -92,6 +92,11 @@ export const updateBookingSuccess = (message, updatedBookingData) => {
         bookingData: updatedBookingData,
     }
 }
+export const resetUpdateBookingSuccess = (message, updatedDealData) => {
+    return {
+        type: actionTypes.RESET_UPDATE_BOOKING_SUCCESS,
+    }
+}
 export const updateBookingFailed = (message) => {
     return {
         type: actionTypes.UPDATE_BOOKING_FAILED,
@@ -105,6 +110,9 @@ export const updateBooking = (data) => {
         axios.put(`/vendors/bookings/${data.customerId}`, data)
             .then(response => {
                 dispatch(updateBookingSuccess(response.data, data));
+                setTimeout(() => {
+                    dispatch(resetUpdateBookingSuccess())
+                }, 1000)
             })
             .catch(err => {
                 dispatch(updateBookingFailed(err.message))

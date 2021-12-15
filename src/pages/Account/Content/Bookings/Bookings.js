@@ -17,7 +17,7 @@ function Bookings(props) {
 
     const {t} = useTranslation()
 
-    const { fetchedBookings, fetchBookingsHandler, fetchingBookings, deleteBookingHandler, updateBookingHandler, filteringBookingsSuccess } = props;
+    const { fetchedBookings, fetchBookingsHandler, fetchingBookings, deleteBookingHandler, updateBookingHandler, filteringBookingsSuccess, updatingBookingSuccess } = props;
 
     const themeCtx = useContext(ThemeContext)
     const authCtx = useContext(AuthContext)
@@ -45,6 +45,10 @@ function Bookings(props) {
                 console.log(err)
             })
     }, [fetchBookingsHandler, lang]);
+
+    useEffect(() => {
+        updatingBookingSuccess && fetchBookingsHandler(lang, 'all');
+    }, [updatingBookingSuccess, fetchBookingsHandler, lang]);
 
     
     // Edit Modal
@@ -155,7 +159,8 @@ const mapStateToProps = state => {
     return {
         fetchedBookings: state.bookings.bookings,
         fetchingBookings: state.bookings.fetchingBookings,
-        filteringBookingsSuccess: state.bookings.filteringBookingsSuccess
+        filteringBookingsSuccess: state.bookings.filteringBookingsSuccess,
+        updatingBookingSuccess: state.bookings.updatingBookingSuccess,
     }
 }
 

@@ -291,7 +291,7 @@ const EditModal = (props) => {
 
     let bookingData = fetchedBookings.data[bookingIndex];
 
-    const { status, date_time, users, payment } = bookingData;
+    const { status, date_time, users, payment_status } = bookingData;
 
     let employeesIds = [];
     users.map(employee => {
@@ -337,7 +337,7 @@ const EditModal = (props) => {
 
     const [discount, setDiscount] = useState(0)
 
-    const [paymentStatus, setPaymentStatus] = useState(payment.status);
+    const [paymentStatus, setPaymentStatus] = useState(payment_status);
 
     useEffect(() => {
         fetchEmployeesHandler(lang);

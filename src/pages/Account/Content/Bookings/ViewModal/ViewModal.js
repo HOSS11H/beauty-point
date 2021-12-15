@@ -194,7 +194,7 @@ const ViewModal = (props) => {
     });
 
     if (bookingData) {
-
+        console.log(bookingData);
         content = (
             <Grid container spacing={3}>
                 <Grid item xs={12}>
@@ -280,7 +280,7 @@ const ViewModal = (props) => {
                     <BookingData>
                         <BookingDataHeading>{t('payment method')}</BookingDataHeading>
                         <BookingList>
-                            <li><MoneyIcon sx={{ mr: 1 }} />{t(bookingData.payment?.gateway)}</li>
+                            <li><MoneyIcon sx={{ mr: 1 }} />{t(bookingData.payment.gateway)}</li>
                         </BookingList>
                     </BookingData>
                 </Grid>
@@ -288,7 +288,7 @@ const ViewModal = (props) => {
                     <BookingData>
                         <BookingDataHeading>{t('payment status')}</BookingDataHeading>
                         <BookingList>
-                            <li>{bookingData.payment?.status === 'completed' ? <CheckCircleIcon sx={{ mr: 1, color: '#568d00' }} /> : <CloseIcon sx={{ mr: 1, color: 'rgb(187 163 46)' }} /> }{t(bookingData.payment?.status)}</li>
+                            <li>{bookingData.payment_status === 'completed' ? <CheckCircleIcon sx={{ mr: 1, color: '#568d00' }} /> : <CloseIcon sx={{ mr: 1, color: 'rgb(187 163 46)' }} /> }{t(bookingData.payment_status)}</li>
                         </BookingList>
                     </BookingData>
                 </Grid>

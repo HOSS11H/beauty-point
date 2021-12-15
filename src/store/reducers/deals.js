@@ -93,7 +93,6 @@ const reducer = ( state = intialState , action ) => {
             })
         case (actionTypes.RESET_UPDATE_DEAL_SUCCESS):
             return updateObject(state, {
-                updatingDeal: false,
                 updatingDealSuccess: false,
                 updatingDealMessage: null,
             })

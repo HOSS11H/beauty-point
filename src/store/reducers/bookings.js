@@ -88,6 +88,11 @@ const reducer = (state = intialState, action) => {
                 updatingBookingSuccess: true,
                 updatingBookingMessage: action.message,
             })
+        case (actionTypes.RESET_UPDATE_BOOKING_SUCCESS):
+            return updateObject(state, {
+                updatingBookingSuccess: false,
+                updatingBookingMessage: null,
+            })
         case (actionTypes.UPDATE_BOOKING_FAILED):
             return updateObject(state, {
                 updatingBooking: false,

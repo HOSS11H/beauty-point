@@ -19,6 +19,10 @@ const ModuleWhatsappWrapper = styled.div`
         font-size       : 30px;
         box-shadow      : 2px 2px 3px rgba(0, 0, 0, 0.2);
         z-index         : 100;
+        @media screen and (max-width: 899.98px) {
+            bottom : 70px;
+            right  : 15px;
+        }
     }
 `
 

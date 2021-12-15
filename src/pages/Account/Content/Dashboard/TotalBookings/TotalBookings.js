@@ -42,7 +42,7 @@ const TotalBookings = props => {
                     <Booking icon={<EventIcon />} name='canceled bookings' num={fetchedTotalBookings.canceled} canceled />
                 </Grid>
                 <Grid item xs={6} md={4} >
-                    <Booking icon={<AttachMoneyIcon />} name='total earnings' num={fetchedTotalBookings.total} earnings />
+                    <Booking icon={<AttachMoneyIcon />} name='total' num={fetchedTotalBookings.total} earnings />
                 </Grid>
             </Grid>
         )
