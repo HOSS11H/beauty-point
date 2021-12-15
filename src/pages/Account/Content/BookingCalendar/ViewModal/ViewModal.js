@@ -173,7 +173,6 @@ const ViewModal = (props) => {
 
     const [ qrCode, setQrCode ] = useState(null);
 
-    console.log(id);
     useEffect(() => {
         if ( id ) {
             console.log('excuted')

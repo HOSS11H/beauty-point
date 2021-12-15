@@ -80,21 +80,10 @@ const BookingCalendar = props => {
         }
     })
 
-    useEffect(() => {
-        fetchBookingsHandler(lang, 'all');
-        v1.get('/auth/me')
-            .then(res => {
-                setUserData(res.data)
-            }
-            )
-            .catch(err => {
-                console.log(err)
-            })
-    }, [fetchBookingsHandler, lang]);
-
 
     // View Modal
     const viewModalOpenHandler = useCallback((id) => {
+        console.log(userData)
         setViewModalOpened(true);
         setSelectedBookingId(id);
     }, [])
@@ -128,7 +117,7 @@ const BookingCalendar = props => {
                 eventClick={dateClickHandler}
             />
             {
-                viewModalOpened && (
+                viewModalOpened && userData && (
                     <ViewModal show={viewModalOpened} id={selectedBookingId} fetchedBookings={fetchedBookings}
                         onClose={viewModalCloseHandler} onConfirm={viewModalConfirmHandler.bind(null, selectedBookingId)}
                         heading='view booking details' confirmText='save'  onDelete={viewModalDeleteHandler} userData={userData} />
