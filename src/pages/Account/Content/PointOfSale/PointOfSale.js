@@ -194,17 +194,14 @@ const PointOfSale = ( props ) => {
         } else {
             notIntialRender.current = true;
             if(shownType === 'services' && fetchedServices.data.length === 0 ) {
-                filterServicesHandler(lang,  shownType, shownCategory , shownLocation, searchWord, page, rowsPerPage);
-                console.log('excuted 1')
+                filterServicesHandler(lang,  shownType, shownCategory , shownLocation, searchWord, 0, rowsPerPage);
             } else if(shownType === 'products' && fetchedProducts.data.length === 0) {
-                filterProductsHandler(lang, shownType,  shownLocation, searchWord, page, rowsPerPage);
-                console.log('excuted 1')
+                filterProductsHandler(lang, shownType,  shownLocation, searchWord, 0, rowsPerPage);
             } else if(shownType === 'deals' && fetchedDeals.data.length === 0) {
-                filterDealsHandler(lang, shownType, shownLocation, searchWord, page, rowsPerPage);
-                console.log('excuted 1')
+                filterDealsHandler(lang, shownType, shownLocation, searchWord, 0, rowsPerPage);
             }
         }
-    }, [fetchedDeals.data.length, fetchedProducts.data.length, fetchedServices.data.length, filterDealsHandler, filterProductsHandler, filterServicesHandler, lang, page, rowsPerPage, searchWord, shownCategory, shownLocation, shownType, token]);
+    }, [fetchedDeals.data.length, fetchedProducts.data.length, fetchedServices.data.length, filterDealsHandler, filterProductsHandler, filterServicesHandler, lang, rowsPerPage, searchWord, shownCategory, shownLocation, shownType, token]);
 
     const handleResultsChange = useCallback(( type, category , location, search ) => {
         setShownType(type);
