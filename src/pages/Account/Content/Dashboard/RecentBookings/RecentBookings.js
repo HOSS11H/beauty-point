@@ -133,6 +133,9 @@ const BookingStatus = styled.div`
     &.in.progress {
         background-color: ${({ theme }) => theme.palette.warning.light};
     }
+    &.pending {
+        background-color: ${({ theme }) => theme.palette.secondary.dark};
+    }
     &.canceled {
         background-color: ${({ theme }) => theme.palette.error.main};
     }
@@ -146,6 +149,7 @@ const BookingStatus = styled.div`
 
 
 const perPage = 10;
+const page = 0;
 
 const RecentBookings = props => {
 
@@ -156,7 +160,7 @@ const RecentBookings = props => {
     const { fetchedBookings, fetchBookingsHandler, loadingBookings } = props;
 
     useEffect(() => {
-        fetchBookingsHandler(lang, perPage);
+        fetchBookingsHandler(lang, page, perPage);
     }, [fetchBookingsHandler, lang]);
 
     let loadedBookings = []
@@ -241,7 +245,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchBookingsHandler: (language, perPage) => dispatch(fetchBookings(language, perPage))
+        fetchBookingsHandler: (language, page, perPage) => dispatch(fetchBookings(language, page, perPage))
     }
 }
 
