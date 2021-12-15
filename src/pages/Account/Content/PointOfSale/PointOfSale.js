@@ -213,13 +213,10 @@ const PointOfSale = ( props ) => {
         setSearchWord(search);
         if(type === 'services') {
             filterServicesHandler(lang, type, category , location, search, page, rowsPerPage);
-            console.log('excuted 2')
         } else if (type === 'products') {
             filterProductsHandler(lang,  type, location, search, page, rowsPerPage);
-            console.log('excuted 2')
         } else if (type === 'deals') {
             filterDealsHandler(lang, type, location, search, page, rowsPerPage);
-            console.log('excuted 2')
         }
     }, [filterDealsHandler, filterProductsHandler, filterServicesHandler, lang, page, rowsPerPage])
 
@@ -331,7 +328,7 @@ const PointOfSale = ( props ) => {
         <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
                 <CustomCard heading='view items' >
-                    <SearchFilters resultsHandler= {handleResultsChange}  />
+                    <SearchFilters handleChangePage={handleChangePage} resultsHandler= {handleResultsChange}  />
                     <FilteredResults rowsPerPage={rowsPerPage} page={page} onPageChange={handleChangePage} results={shownType} addToCart={addToCartHandler} />
                 </CustomCard>
             </Grid>

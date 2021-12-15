@@ -241,4 +241,83 @@ export const fetchTotalBookings = (language) => {
     }
 }
 
+export const fetchCalendarBookingsStart = () => {
+    return {
+        type: actionTypes.FETCH_CALENDAR_BOOKINGS_START,
+    }
+}
+export const fetchCalendarBookingsSuccess = (bookingsData) => {
+    return {
+        type: actionTypes.FETCH_CALENDAR_BOOKINGS_SUCCESS,
+        bookings: bookingsData
+    }
+}
+export const fetchCalendarBookingsFailed = (errorMessage) => {
+    return {
+        type: actionTypes.FETCH_CALENDAR_BOOKINGS_FAILED,
+        error: errorMessage,
+    }
+}
+export const fetchCalendarBookings = (language, from, to) => {
+    return dispatch => {
+        dispatch(fetchCalendarBookingsStart())
+        axios.get(`/vendors/bookings?from=${from}&to=${to}&include[]=user&include[]=users&include[]=items&include[]=payment&include[]=coupon`, {
+            headers: {
+                'Accept-Language': language,
+            }
+        })
+            .then(response => {
+                let editedData = response.data.data.map(item => {
+                    const formattedTime = new Date(item.date_time).toLocaleString()
+                    const arr = formattedTime.replace(/:.. /, " ").split(", ");
+                    let date = arr[0]
+                    let time = arr[1]
+                    return {
+                        ...item,
+                        date: date,
+                        time: time,
+                    }
+                })
+                dispatch(fetchCalendarBookingsSuccess({ ...response.data, data: editedData }));
+            })
+            .catch(err => {
+                dispatch(fetchCalendarBookingsFailed(err.message))
+            })
+    }
+}
+
+export const deleteCalendarBookingStart = () => {
+    return {
+        type: actionTypes.DELETE_CALENDAR_BOOKING_START,
+    }
+}
+
+export const deleteCalendarBookingSuccess = (message, deletedCalendarBookingId) => {
+    return {
+        type: actionTypes.DELETE_CALENDAR_BOOKING_SUCCESS,
+        message: message,
+        bookingId: deletedCalendarBookingId,
+    }
+}
+
+export const deleteCalendarBookingFailed = (message) => {
+    return {
+        type: actionTypes.DELETE_CALENDAR_BOOKING_FAILED,
+        message: message,
+    }
+}
+
+export const deleteCalendarBooking = (id) => {
+    return dispatch => {
+        dispatch(deleteCalendarBookingStart())
+        axios.delete(`/vendors/bookings/${id}`)
+            .then(response => {
+                dispatch(deleteCalendarBookingSuccess(response.data, id));
+            })
+            .catch(err => {
+                dispatch(deleteCalendarBookingFailed(err.message))
+            })
+    }
+}
+
 

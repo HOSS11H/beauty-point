@@ -21,6 +21,14 @@ const intialState = {
     filteringBookings: false,
     filteringBookingsSuccess: false,
     filteringBookingsmessage: null,
+    calendarBookings : {
+        bookings: { data: [] },
+        fetchingBookings: false,
+        errorFetchingBookings: false,
+        deletingBooking: false,
+        deletingBookingSuccess: false,
+        deletingBookingMessage: null,
+    }
 };
 
 const reducer = (state = intialState, action) => {
@@ -140,6 +148,62 @@ const reducer = (state = intialState, action) => {
                 filteringBookings: false,
                 filteringBookingsSuccess: false,
                 filteringBookingsmessage: action.error,
+            })
+        case (actionTypes.FETCH_CALENDAR_BOOKINGS_START):
+            return updateObject(state, {
+                calendarBookings : {
+                    ...state.calendarBookings,
+                    fetchingBookings: true,
+                    errorFetchingBookings: false,
+                }
+            })
+        case (actionTypes.FETCH_CALENDAR_BOOKINGS_SUCCESS):
+            return updateObject(state, {
+                calendarBookings: {
+                    ...state.calendarBookings,
+                    fetchingBookings: false,
+                    bookings: action.bookings,
+                }
+            })
+        case (actionTypes.FETCH_CALENDAR_BOOKINGS_FAILED):
+            return updateObject(state, {
+                calendarBookings: {
+                    ...state.calendarBookings,
+                    fetchingBookings: false,
+                    errorFetchingBookings: action.error,
+                }
+            })
+        case (actionTypes.DELETE_CALENDAR_BOOKING_START):
+            return updateObject(state, {
+                calendarBookings: {
+                    ...state.calendarBookings,
+                    deletingBooking: true,
+                    deletingBookingSuccess: false,
+                    deletingBookingMessage: null,
+                }
+            })
+        case (actionTypes.DELETE_CALENDAR_BOOKING_SUCCESS):
+            const updatedCalendarBookings = state.calendarBookings.bookings.data.filter(booking => booking.id !== action.bookingId);
+            return updateObject(state, {
+                calendarBookings: {
+                    ...state.calendarBookings,
+                    bookings: {
+                        ...state.bookings,
+                        data: updatedCalendarBookings,
+                    },
+                    deletingBooking: false,
+                    deletingBookingSuccess: true,
+                    deletingBookingMessage: action.message,
+                }
+            })
+        case (actionTypes.DELETE_CALENDAR_BOOKING_FAILED):
+            return updateObject(state, {
+                calendarBookings: {
+                    ...state.calendarBookings,
+                    deletingBooking: false,
+                    deletingBookingSuccess: false,
+                    deletingBookingMessage: action.message,
+                }
             })
         case (actionTypes.FETCH_TOTAL_BOOKINGS_START):
             return updateObject(state, {

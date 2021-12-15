@@ -2,13 +2,14 @@ import FullCalendar from '@fullcalendar/react' // must go before plugins
 import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import interactionPlugin from "@fullcalendar/interaction" // needed for dayClick
 import { connect } from 'react-redux'
-import { fetchBookings, deleteBooking } from "../../../../store/actions/index";
+import { fetchCalendarBookings, deleteCalendarBooking } from "../../../../store/actions/index";
 import { useContext, useEffect, useState, useCallback, Fragment } from 'react';
 import ThemeContext from '../../../../store/theme-context';
 import styled from 'styled-components';
 import v1 from '../../../../utils/axios-instance-v1';
 import { useTranslation } from "react-i18next";
 import ViewModal from './ViewModal/ViewModal';
+import { format } from 'date-fns';
 
 const BookingCustomer = styled.div`
     display: flex;
@@ -33,7 +34,7 @@ const BookingCustomer = styled.div`
 function renderEventContent(eventInfo) {
     return (
         <BookingCustomer>
-            <p>{eventInfo.event.title}</p>
+            <p>{eventInfo.event.title} # {eventInfo.event.extendedProps.bookingId}</p>
             <span>{eventInfo.event.extendedProps.time}</span>
         </BookingCustomer>
     )
@@ -54,10 +55,13 @@ const BookingCalendar = props => {
 
     const [selectedBookingId, setSelectedBookingId] = useState(null);
 
+    const [ fromDate, setFromDate ] = useState(new Date());
+    const [ toDate, setToDate ] = useState(new Date());
+
     const [userData, setUserData] = useState(null);
 
     useEffect( ( ) => {
-        fetchBookingsHandler(lang, 'all');
+        fetchBookingsHandler(lang, fromDate , toDate);
         v1.get('/auth/me')
             .then(res => {
                 setUserData(res.data)
@@ -66,7 +70,7 @@ const BookingCalendar = props => {
             .catch(err => {
                 console.log(err)
             })
-    } , [fetchBookingsHandler, lang])
+    } , [fetchBookingsHandler, fromDate, lang, toDate])
 
     const formattedBookingsData = fetchedBookings.data.map(booking => {
         const formattedTime = booking.date_time.split('T')
@@ -111,10 +115,14 @@ const BookingCalendar = props => {
         <Fragment>
             <FullCalendar
                 plugins={[dayGridPlugin, interactionPlugin]}
-                initialView="dayGridMonth"
+                initialView="dayGridWeek"
                 events={formattedBookingsData}
                 eventContent={renderEventContent}
                 eventClick={dateClickHandler}
+                datesSet={(dateInfo) => {
+                    setFromDate(format(dateInfo.start, 'yyyy-MM-dd'));
+                    setToDate(format(dateInfo.end, 'yyyy-MM-dd'));
+                }}
             />
             {
                 viewModalOpened && userData && (
@@ -129,14 +137,14 @@ const BookingCalendar = props => {
 
 const mapStateToProps = state => {
     return {
-        fetchedBookings: state.bookings.bookings,
+        fetchedBookings: state.bookings.calendarBookings.bookings,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchBookingsHandler: (language, perPage) => dispatch(fetchBookings(language, perPage)),
-        deleteBookingHandler: (id) => dispatch(deleteBooking(id)),
+        fetchBookingsHandler: (language, from, to) => dispatch(fetchCalendarBookings(language, from, to)),
+        deleteBookingHandler: (id) => dispatch(deleteCalendarBooking(id)),
     }
 }
 
