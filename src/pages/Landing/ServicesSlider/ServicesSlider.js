@@ -102,6 +102,12 @@ const ServicePanel = styled.div`
                 font-size: 25px
             }
         }
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+        }
     }
     .service-title {
         font-size: 20px;
@@ -181,6 +187,7 @@ const ServicesSlider = props => {
                         <ServicePanel key={index}>
                             <div className="service-icon">
                                 {/* <i className={`beauty-icon ${service.icon}`}></i> */}
+                                <img src={service.image} alt="service" />
                             </div>
                             <div className="service-title">
                                 <a href="/">{service.name}</a>
