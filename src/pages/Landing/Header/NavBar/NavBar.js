@@ -6,6 +6,7 @@ import logoSrc from '../../../../assets/images/logo/logo-light.png';
 import { useTranslation } from 'react-i18next';
 import ModuleContact from '../Modules/ModuleContact/ModuleContact';
 import {NavLink} from 'react-router-dom';
+
 const Nav = styled.nav`
     
 `
@@ -15,7 +16,7 @@ const NavHolder = styled.div`
     height: 100px;
     width: 100%;
 `
-const Logo = styled.a`
+const Logo = styled(NavLink)`
     display: flex;
     align-items: center;
     margin-right: 40px;
@@ -118,7 +119,7 @@ const NavBar = () => {
         <Nav>
             <Container maxWidth="lg">
                 <NavHolder>
-                    <Logo>
+                    <Logo to='/'>
                         <img src={logoSrc} alt="logo" />
                     </Logo>
                     <ModulesHolderPhone>

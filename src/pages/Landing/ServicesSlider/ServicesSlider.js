@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react';
 import axios from '../../../utils/axios-instance';
 import CircularProgress from '@mui/material/CircularProgress';
 import {NavLink} from 'react-router-dom';
+import { useTranslation } from "react-i18next";
 
 
 const ServicesSliderWrapper = styled.section`
@@ -138,6 +139,8 @@ const Loader = styled.div`
 
 const ServicesSlider = props => {
 
+    const {t} = useTranslation();
+
     const settings = {
         dots: false,
         arrows: true,
@@ -206,7 +209,7 @@ const ServicesSlider = props => {
         <ServicesSliderWrapper>
             <Container maxWidth="lg">
                 <Heading className='heading-2'>
-                    <h2 className="heading-title" >select your services</h2>
+                    <h2 className="heading-title" >{t('select your services')}</h2>
                 </Heading>
                 {content}
             </Container>

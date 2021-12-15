@@ -4,6 +4,8 @@ import ServicesSlider from "./ServicesSlider/ServicesSlider";
 import Salons from "./Salons/Salons";
 import Spotlights from "./Spotlights/Spotlights";
 import Deals from "./Deals/Deals";
+import Footer from "./Footer/Footer";
+import ModuleWhatsapp from './Header/Modules/ModuleWhatsapp/ModuleWhatsapp';
 
 const Landing = props => {
     return (
@@ -14,6 +16,8 @@ const Landing = props => {
             <Salons />
             <Spotlights />
             <Deals />
+            <Footer />
+            <ModuleWhatsapp />
         </div>
     );
 }

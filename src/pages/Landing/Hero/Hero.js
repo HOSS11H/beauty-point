@@ -6,6 +6,7 @@ import { NavLink } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from '../../../utils/axios-instance';
 import CircularProgress from '@mui/material/CircularProgress';
+import { useTranslation } from 'react-i18next';
 
 const HeroWrapper = styled.div`
     display       : flex;
@@ -153,6 +154,7 @@ const HeroImage = styled.div`
 
 
 const Hero = (  ) => {
+    const {t} = useTranslation();
 
     const [ data, setData ] = useState(null)
 
@@ -175,7 +177,7 @@ const Hero = (  ) => {
                             <HeroSubTitle>{data[0].subheading}</HeroSubTitle>
                             {/* <HeroDesc>{data[0].content}</HeroDesc> */}
                             <HeroAction>
-                                <HeroButton to='/auth' >login</HeroButton>
+                                <HeroButton to='/auth' >{t('login')}</HeroButton>
                                 {/* <HeroButton to='/' className='inversed'>click</HeroButton> */}
                             </HeroAction>
                         </HeroContent>

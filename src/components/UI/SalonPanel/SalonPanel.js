@@ -5,7 +5,7 @@ export const SalonPanel = styled.div`
     border-radius: 25px;
     padding: 0 9px;
     @media screen and (max-width: 899.98px) {
-        margin: 0 auto 30px;
+        margin: 0 auto 0px;
         max-width: 370px
     }
     .salon-img  {
@@ -69,7 +69,7 @@ export const DealPanel = styled.div`
     border-radius: 25px;
     padding: 0 9px;
     @media screen and (max-width: 899.98px) {
-        margin: 0 auto 30px;
+        margin: 0 auto 0px;
         max-width: 370px
     }
     .deal-img  {
@@ -91,7 +91,6 @@ export const DealPanel = styled.div`
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 30px;
             flex-direction: ${ ( { theme }) => theme.direction === 'rtl' ? 'row-reverse' : 'row'  } ;
             .deal-title {
                 font-size: 22px;

@@ -245,6 +245,17 @@ const resources = {
             'Bookings Status': 'حالة الحجوزات',
             'Enabled': 'مفعل',
             'Disabled': 'غير مفعل',
+            'Home': 'الرئيسية',
+            'join us': 'انضم لنا',
+            'login': 'تسجيل الدخول',
+            'select your services': 'اختر خدماتك',
+            'popular saloons': 'الصالونات الشعبية',
+            'popular spotlights': 'المنشورات الشعبية',
+            'popular deals': 'العروض الشعبية',
+            'Quick Links': 'روابط سريعة',
+            'help & support': 'المساعدة والدعم',
+            'Contact us': 'اتصل بنا',
+            'about us': 'عنا',
         }
     }
 };

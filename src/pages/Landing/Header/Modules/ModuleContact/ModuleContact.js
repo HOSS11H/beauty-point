@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const ModuleContactWrapper = styled.div`
     display    : inline-flex;
@@ -32,9 +33,10 @@ const ModuleButton = styled(NavLink)`
 `
 
 const ModuleContact = props => {
+    const {t} = useTranslation();
     return (
         <ModuleContactWrapper>
-            <ModuleButton to='/auth' >login</ModuleButton>
+            <ModuleButton to='/auth' >{t('login')}</ModuleButton>
         </ModuleContactWrapper>
     )
 }

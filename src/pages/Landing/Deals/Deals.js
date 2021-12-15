@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react';
 import axios from '../../../utils/axios-instance';
 import CircularProgress from '@mui/material/CircularProgress';
 import {NavLink} from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const DealsWrapper = styled.section`
     margin: 100px 0;
@@ -25,6 +26,7 @@ const Loader = styled.div`
 `
 
 const Deals = props => {
+    const {t} = useTranslation();
     const [deals, setDeals] = useState(null);
 
     const settings = {
@@ -126,7 +128,7 @@ const Deals = props => {
         <DealsWrapper>
             <Container maxWidth="lg">
                 <Heading>
-                    <h2 className="heading-title" >popular deals</h2>
+                    <h2 className="heading-title" >{t('popular deals')}</h2>
                 </Heading>
                 {content}
             </Container>

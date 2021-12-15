@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react';
 import axios from '../../../utils/axios-instance';
 import CircularProgress from '@mui/material/CircularProgress';
 import {NavLink} from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const SalonsWrapper = styled.section`
     margin: 100px 0;
@@ -25,6 +26,8 @@ const Loader = styled.div`
 `
 
 const Salons = props => {
+
+    const {t} = useTranslation();
     const [salons, setSalons] = useState(null);
 
     const settings = {
@@ -116,7 +119,7 @@ const Salons = props => {
         <SalonsWrapper>
             <Container maxWidth="lg">
                 <Heading>
-                    <h2 className="heading-title" >popular saloons</h2>
+                    <h2 className="heading-title" >{t('popular saloons')}</h2>
                 </Heading>
                 {content}
             </Container>
