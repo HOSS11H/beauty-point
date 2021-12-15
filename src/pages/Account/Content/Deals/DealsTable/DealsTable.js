@@ -185,7 +185,7 @@ function DealsTable(props) {
                     onClose={viewModalCloseHandler} onConfirm={viewModalConfirmHandler.bind(null, selectedDealId)}
                     heading='view deal details' confirmText='edit' />
                 {
-                    editModalOpened && (
+                    editModalOpened && !loadingDeals && (
                         <EditModal show={editModalOpened} id={selectedDealId} fetchedDeals={fetchedDeals}
                             onClose={editModalCloseHandler} onConfirm={editModalConfirmHandler}
                             heading='edit deal details' confirmText='edit' />
