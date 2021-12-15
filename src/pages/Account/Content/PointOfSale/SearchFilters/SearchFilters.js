@@ -11,6 +11,7 @@ import { fetchCategories, fetchLocations } from '../../../../../store/actions/in
 import { connect } from 'react-redux';
 import ThemeContext from '../../../../../store/theme-context';
 import debounce from 'lodash.debounce';
+import { useRef } from 'react';
 
 const CustomTextField = styled(TextField)`
     width: 100%;
@@ -22,6 +23,8 @@ const FiltersWrapper = styled.div`
 const SearchFilters = (props) => {
 
     const { resultsHandler, fetchedLocations, fetchedCategories, fetchCategoriesHandler, fetchLocationsHandler } = props;
+
+    const notIntialRender = useRef(false);
 
     const { t } = useTranslation()
 
@@ -43,21 +46,28 @@ const SearchFilters = (props) => {
         }
     }, [fetchedLocations, fetchedCategories, fetchCategoriesHandler, fetchLocationsHandler, lang])
 
+    useEffect(() => {
+        if ( notIntialRender.current ) {
+            const searchTimeout = setTimeout(() => {
+                resultsHandler(type, category, location, search);
+            }, 500)
+            return () => clearTimeout(searchTimeout);
+        } else {
+            notIntialRender.current = true;
+        }
+    }, [resultsHandler, type, category, location, search])
+
     const handleTypeChange = (event) => {
         setType(event.target.value);
-        resultsHandler(event.target.value, category, location, search);
     };
     const handleCategoryChange = (event) => {
         setCategory(event.target.value);
-        resultsHandler(type, event.target.value, location, search);
     };
     const handleLocationChange = (event) => {
         setLocation(event.target.value);
-        resultsHandler(type, category, event.target.value, search);
     };
     const handleSearchChange = (event) => {
         setSearch(event.target.value);
-        resultsHandler(type, category, location, event.target.value);
     }
 
     return (

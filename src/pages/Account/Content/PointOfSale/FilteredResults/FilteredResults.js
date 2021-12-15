@@ -49,6 +49,7 @@ const FilteredResults = (props) => {
     const { t } = useTranslation()
 
     let fetchedData = { data: [], };
+    
 
     if (results === 'services') {
         fetchedData = fetchedServices;

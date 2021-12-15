@@ -12,6 +12,7 @@ import { updateObject } from '../../../../shared/utility';
 import CustomizedSnackbars from '../../../../components/UI/SnackBar/SnackBar';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { useRef } from 'react';
 
 const cartReducer = (state, action) => {
     switch(action.type) {
@@ -147,13 +148,13 @@ const cartReducer = (state, action) => {
     }
 }
 
-const intialRowsPerPage = 15;
+const intialPerPage = 15;
 
 const PointOfSale = ( props ) => {
 
     const { t } = useTranslation()
 
-    const {filterServicesHandler, filterProductsHandler, filterDealsHandler, createBookingHandler, fetchedLocations, bookingCreated } = props
+    const {filterServicesHandler, filterProductsHandler, filterDealsHandler, createBookingHandler, fetchedLocations, bookingCreated, fetchedServices, fetchedProducts, fetchedDeals } = props
     
     const themeCtx = useContext(ThemeContext)
     const authCtx = useContext(AuthContext)
@@ -170,7 +171,7 @@ const PointOfSale = ( props ) => {
     });
 
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(intialRowsPerPage);
+    const [rowsPerPage, setRowsPerPage] = useState(intialPerPage);
 
     const [ shownType, setShownType ] = useState('services');
     const [ shownCategory, setShownCategory ] = useState('all');
@@ -184,15 +185,26 @@ const PointOfSale = ( props ) => {
         //bookingCreated && navigate('bookings')
     }, [bookingCreated, navigate])
 
+
+    const notIntialRender = useRef(false);
+
     useEffect(() => {
-        if(shownType === 'services') {
-            filterServicesHandler(lang,  shownType, shownCategory , shownLocation, searchWord, page, rowsPerPage);
-        } else if(shownType === 'products') {
-            filterProductsHandler(lang, shownType,  shownLocation, searchWord, page, rowsPerPage);
-        } else if(shownType === 'deals') {
-            filterDealsHandler(lang, shownType, shownLocation, searchWord, page, rowsPerPage);
+        if ( notIntialRender.current ) {
+            return;
+        } else {
+            notIntialRender.current = true;
+            if(shownType === 'services' && fetchedServices.data.length === 0 ) {
+                filterServicesHandler(lang,  shownType, shownCategory , shownLocation, searchWord, page, rowsPerPage);
+                console.log('excuted 1')
+            } else if(shownType === 'products' && fetchedProducts.data.length === 0) {
+                filterProductsHandler(lang, shownType,  shownLocation, searchWord, page, rowsPerPage);
+                console.log('excuted 1')
+            } else if(shownType === 'deals' && fetchedDeals.data.length === 0) {
+                filterDealsHandler(lang, shownType, shownLocation, searchWord, page, rowsPerPage);
+                console.log('excuted 1')
+            }
         }
-    }, [filterDealsHandler, filterProductsHandler, filterServicesHandler, lang, page, rowsPerPage, searchWord, shownCategory, shownLocation, shownType, token]);
+    }, [fetchedDeals.data.length, fetchedProducts.data.length, fetchedServices.data.length, filterDealsHandler, filterProductsHandler, filterServicesHandler, lang, page, rowsPerPage, searchWord, shownCategory, shownLocation, shownType, token]);
 
     const handleResultsChange = useCallback(( type, category , location, search ) => {
         setShownType(type);
@@ -200,13 +212,16 @@ const PointOfSale = ( props ) => {
         setShownLocation(location);
         setSearchWord(search);
         if(type === 'services') {
-            filterServicesHandler(lang, type, category , location, search);
+            filterServicesHandler(lang, type, category , location, search, page, rowsPerPage);
+            console.log('excuted 2')
         } else if (type === 'products') {
-            filterProductsHandler(lang,  type, location, search);
+            filterProductsHandler(lang,  type, location, search, page, rowsPerPage);
+            console.log('excuted 2')
         } else if (type === 'deals') {
-            filterDealsHandler(lang, type, location, search);
+            filterDealsHandler(lang, type, location, search, page, rowsPerPage);
+            console.log('excuted 2')
         }
-    }, [filterDealsHandler, filterProductsHandler, filterServicesHandler, lang])
+    }, [filterDealsHandler, filterProductsHandler, filterServicesHandler, lang, page, rowsPerPage])
 
     const addToCartHandler = useCallback(( itemData ) => {
         if ( shownType === 'services' ) {
@@ -332,6 +347,9 @@ const mapStateToProps = (state) => {
     return {
         fetchedLocations: state.locations.locations,
         bookingCreated: state.bookings.bookingCreated,
+        fetchedServices: state.services.posServices.services,
+        fetchedProducts: state.products.posProducts.products,
+        fetchedDeals: state.deals.posDeals.deals,
     }
 }
 
