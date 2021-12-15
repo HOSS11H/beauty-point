@@ -8,6 +8,7 @@ import { SalonPanel } from '../../../components/UI/SalonPanel/SalonPanel';
 import { useState, useEffect } from 'react';
 import axios from '../../../utils/axios-instance';
 import CircularProgress from '@mui/material/CircularProgress';
+import {NavLink} from 'react-router-dom';
 
 const SalonsWrapper = styled.section`
     margin: 100px 0;
@@ -94,7 +95,7 @@ const Salons = props => {
                                 </div>
                                 <div className="salon-content">
                                     <h3 className="salon-title">
-                                        <a href="/">{salon.companyName}</a>
+                                        <NavLink to="/">{salon.companyName}</NavLink>
                                     </h3>
                                     <p className="salon-desc">
                                         {salon.address}

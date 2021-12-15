@@ -8,6 +8,7 @@ import { DealPanel } from '../../../components/UI/SalonPanel/SalonPanel';
 import { useState, useEffect } from 'react';
 import axios from '../../../utils/axios-instance';
 import CircularProgress from '@mui/material/CircularProgress';
+import {NavLink} from 'react-router-dom';
 
 const DealsWrapper = styled.section`
     margin: 100px 0;
@@ -95,7 +96,7 @@ const Deals = props => {
                                     <div className="deal-body" >
                                         <div>
                                             <h3 className="deal-title">
-                                                <a href="/">{deal.title}</a>
+                                                <NavLink to="/">{deal.title}</NavLink>
                                             </h3>
                                             <p className="deal-desc">
                                                 {deal.applied_between_time}

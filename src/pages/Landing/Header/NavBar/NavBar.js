@@ -5,6 +5,7 @@ import ModuleSearch from '../Modules/ModuleSearch/ModuleSearch';
 import logoSrc from '../../../../assets/images/logo/logo-light.png';
 import { useTranslation } from 'react-i18next';
 import ModuleContact from '../Modules/ModuleContact/ModuleContact';
+import {NavLink} from 'react-router-dom';
 const Nav = styled.nav`
     
 `
@@ -130,9 +131,9 @@ const NavBar = () => {
                                 navLinks.map( ( item, index ) => {
                                     return (
                                         <li key={index} className="nav-item">
-                                            <a className="nav-link" href={item.link}>
+                                            <NavLink to={item.link}>
                                                 {t(item.name)}
-                                            </a>
+                                            </NavLink>
                                         </li>
                                     )
                                 })

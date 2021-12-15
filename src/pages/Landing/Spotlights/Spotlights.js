@@ -8,6 +8,7 @@ import { DealPanel } from '../../../components/UI/SalonPanel/SalonPanel';
 import { useState, useEffect } from 'react';
 import axios from '../../../utils/axios-instance';
 import CircularProgress from '@mui/material/CircularProgress';
+import {NavLink} from 'react-router-dom';
 
 const SpotlightsWrapper = styled.section`
     margin: 100px 0;
@@ -95,7 +96,7 @@ const Spotlights = props => {
                                     <div className="deal-body" >
                                         <div>
                                             <h3 className="deal-title">
-                                                <a href="/">{spotlight.deal.title}</a>
+                                                <NavLink to="/">{spotlight.deal.title}</NavLink>
                                             </h3>
                                             <p className="deal-desc">
                                                 {spotlight.deal.applied_between_time}

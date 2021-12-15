@@ -4,6 +4,7 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import styled from 'styled-components';
+import {NavLink} from 'react-router-dom';
 
 const ModuleSocialWrapper = styled.div`
     a {
@@ -26,21 +27,21 @@ const ModuleSocialWrapper = styled.div`
 const ModuleSocial = props => {
     return (
         <ModuleSocialWrapper>
-            <a className="share-facebook" href="page-vendor.html">
+            <NavLink className="share-facebook" to="/">
                 <FacebookIcon />
-            </a>
-            <a className="share-twitter" href="page-vendor.html">
+            </NavLink>
+            <NavLink className="share-twitter" to="/">
                 <TwitterIcon />
-            </a>
-            <a className="share-instagram" href="page-vendor.html">
+            </NavLink>
+            <NavLink className="share-instagram" to="/">
                 <InstagramIcon />
-            </a>
-            <a className="share-youtube" href="page-vendor.html">
+            </NavLink>
+            <NavLink className="share-youtube" to="/">
                 <YouTubeIcon />
-            </a>
-            <a className="share-whatsapp" href="page-vendor.html">
+            </NavLink>
+            <NavLink className="share-whatsapp" to="/">
                 <WhatsAppIcon />
-            </a>
+            </NavLink>
         </ModuleSocialWrapper>
     )
 }

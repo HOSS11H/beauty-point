@@ -8,6 +8,8 @@ import './beauty-icons.css'
 import { useState, useEffect } from 'react';
 import axios from '../../../utils/axios-instance';
 import CircularProgress from '@mui/material/CircularProgress';
+import {NavLink} from 'react-router-dom';
+
 
 const ServicesSliderWrapper = styled.section`
     background-color: #FAFAFA;
@@ -190,7 +192,7 @@ const ServicesSlider = props => {
                                 <img src={service.image} alt="service" />
                             </div>
                             <div className="service-title">
-                                <a href="/">{service.name}</a>
+                                <NavLink to="/">{service.name}</NavLink>
                             </div>
                         </ServicePanel>
                     ))

@@ -3,6 +3,7 @@ import RoomIcon from '@mui/icons-material/Room';
 import GridOnIcon from '@mui/icons-material/GridOn';
 import PersonIcon from '@mui/icons-material/Person';
 import styled from 'styled-components';
+import {NavLink} from 'react-router-dom';
 
 const MobileBarWrapper = styled.div`
     position: fixed;
@@ -54,22 +55,22 @@ const MobileBarWrapper = styled.div`
 const MobileBar = props => {
     return (
         <MobileBarWrapper>
-            <a href="/" className="mobile-bar-link">
+            <NavLink to="/" className="mobile-bar-link">
                 <HomeIcon />
                 <span>home</span>
-            </a>
-            <a href="/" className="mobile-bar-link">
+            </NavLink>
+            <NavLink to="/" className="mobile-bar-link">
                 <RoomIcon />
                 <span>nearby</span>
-            </a>
-            <a href="/" className="mobile-bar-link">
+            </NavLink>
+            <NavLink to="/" className="mobile-bar-link">
                 <GridOnIcon />
                 <span>appointed</span>
-            </a>
-            <a href="/" className="mobile-bar-link">
+            </NavLink>
+            <NavLink to="/" className="mobile-bar-link">
                 <PersonIcon />
                 <span>profile</span>
-            </a>
+            </NavLink>
         </MobileBarWrapper>
     )
 }
