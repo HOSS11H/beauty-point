@@ -103,7 +103,6 @@ const CouponWrapper = styled.div`
 const PriceCalculation = styled.div`
     display: flex;
     align-items: center;
-    justify-content: space-between;
     margin-top: 10px;
     margin-bottom: 10px;
     p {
@@ -112,6 +111,10 @@ const PriceCalculation = styled.div`
         text-transform: uppercase;
         font-weight: 600;
         color: ${({ theme }) => theme.palette.text.primary};
+        margin-right: 20px;
+        &:last-child {
+            margin-right: 0;
+        }
     }
 `
 const AmountCalculator = styled.div`

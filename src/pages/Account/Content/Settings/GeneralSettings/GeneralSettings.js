@@ -149,7 +149,7 @@ export default function GeneralSettings(props) {
                                                             uploadedLogo.length !== 1 && (
                                                                 <UploadImageTopBar>
                                                                     <Button size="medium" sx={{ mr: 2, color: isDragging && 'red' }} variant="contained" startIcon={<PhotoCamera />} {...dragProps} onClick={onImageUpload} >
-                                                                        {t('upload')}
+                                                                        {t('photos')}
                                                                     </Button>
                                                                 </UploadImageTopBar>
                                                             )

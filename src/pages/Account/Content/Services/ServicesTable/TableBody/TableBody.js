@@ -6,10 +6,12 @@ import TableRow from '@mui/material/TableRow';
 import { TableData, TableEmployees, TableImg, TableStatus } from '../../../../../../components/UI/Dashboard/Table/Table';
 
 import { formatCurrency } from '../../../../../../shared/utility';
+import { useTranslation } from 'react-i18next';
 
 
 
 const EnhancedTableBody = props => {
+    const {t} = useTranslation()
 
     const { fetchedServices, emptyRows, deleteModalOpenHandler, viewModalOpenHandler, editModalOpenHandler } = props;
 
@@ -73,7 +75,7 @@ const EnhancedTableBody = props => {
                             </TableEmployees>
                         </TableCell>
                         <TableCell align="center">
-                            <TableStatus className={row.status}>{row.status}</TableStatus>
+                            <TableStatus className={row.status}>{t(row.status)}</TableStatus>
                         </TableCell>
                         <TableCell align="center">
                             <Actions edit remove view

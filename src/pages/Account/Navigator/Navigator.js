@@ -1,4 +1,3 @@
-import { useContext } from 'react';
 import { NavLink, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import Divider from '@mui/material/Divider';
@@ -16,7 +15,6 @@ import BookIcon from '@mui/icons-material/Book';
 import SettingsIcon from '@mui/icons-material/Settings'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
-import ThemeContext from '../../../store/theme-context';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import EventIcon from '@mui/icons-material/Event';
 import InsertChartIcon from '@mui/icons-material/InsertChart';
@@ -133,8 +131,6 @@ const CustomListItemIcon = styled(ListItemIcon)`
 export default function Navigator(props) {
 
     const { open, ...other } = props;
-
-    const themeCtx = useContext(ThemeContext)
 
     const params = useParams();
     const { t } = useTranslation();

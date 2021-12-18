@@ -42,7 +42,6 @@ const TabularReportWrapper = styled(Card)`
 const PriceCalculation = styled.div`
     display: flex;
     align-items: center;
-    justify-content: space-between;
     padding: 10px 0;
     &:last-child{
         padding-bottom:0;
@@ -53,6 +52,10 @@ const PriceCalculation = styled.div`
         text-transform: uppercase;
         font-weight: 600;
         color: ${({ theme }) => theme.palette.text.primary};
+        margin-right: 20px;
+        &:last-child {
+            margin-right: 0;
+        }
     }
 `
 const Loader = styled(Card)`

@@ -261,6 +261,11 @@ const resources = {
             'add new customer': 'إضافة عميل جديد',
             'total bookings : ': 'مجموع الحجوزات : ',
             'recent booking': 'أخر الحجوزات',
+            'percent': 'نسبة',
+            'time': 'الوقت',
+            'hours': 'ساعات',
+            'days': 'أيام',
+            'photos': 'صور',
         }
     }
 };

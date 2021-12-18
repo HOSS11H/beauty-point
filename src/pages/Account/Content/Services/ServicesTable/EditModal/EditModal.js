@@ -44,7 +44,6 @@ const CustomFormGroup = styled.div`
 const PriceCalculation = styled.div`
     display: flex;
     align-items: center;
-    justify-content: space-between;
     margin-top: 10px;
     margin-bottom: 10px;
     p {
@@ -53,6 +52,10 @@ const PriceCalculation = styled.div`
         text-transform: uppercase;
         font-weight: 600;
         color: ${({ theme }) => theme.palette.text.primary};
+        margin-right: 20px;
+        &:last-child {
+            margin-right: 0;
+        }
     }
 `
 const UploadImageTopBar = styled.div`
@@ -437,7 +440,7 @@ const EditModal = (props) => {
                             </UploadImageBody>
                             <UploadImageTopBar>
                                 <Button size="medium" sx={{ mr: 2, color: isDragging && 'red' }} variant="contained" startIcon={<PhotoCamera />} {...dragProps} onClick={onImageUpload} >
-                                    {t('upload')}
+                                    {t('photos')}
                                 </Button>
                                 <Button size="medium" variant="outlined" startIcon={<DeleteIcon />} onClick={onImageRemoveAll}>
                                     {t('Remove all')}
