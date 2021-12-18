@@ -40,6 +40,10 @@ const BookingAppointment = styled.div`
     min-width: 70px;
     border-radius: 8px;
     padding: 15px;
+    @media screen and (max-width: 899.98px) {
+        min-width: unset;
+        padding: 5px;
+    }
     ul {
         padding: 0;
         margin: 0;

@@ -16,6 +16,7 @@ import Brightness2Icon from '@mui/icons-material/Brightness2';
 import { ButtonSmall, ButtonText } from '../../../components/UI/Button/Button';
 import AuthContext from '../../../store/auth-context';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 const SwitchBtn = styled(ButtonSmall)`
     &.MuiButton-root {
@@ -25,6 +26,15 @@ const SwitchBtn = styled(ButtonSmall)`
         font-family: ${ ( { theme } ) => theme.direction === "ltr" ? "'Cairo', sans-serif " : "'Poppins', sans-serif " };
     }
 `
+const HomeBtn = styled(ButtonSmall)`
+    &.MuiButton-root {
+        margin-bottom: 0;
+        width: auto;
+        padding: 0 15px;
+        margin-right: 10px
+    }
+`
+
 const LogoutBtn = styled(ButtonText)`
     &.MuiButton-root {
         font-weight: bold;
@@ -32,6 +42,8 @@ const LogoutBtn = styled(ButtonText)`
 `
 
 function Header(props) {
+
+    const navigate = useNavigate();
 
     const {t} = useTranslation();
 
@@ -68,6 +80,7 @@ function Header(props) {
                         </Grid>
                         <Grid item xs />
                         <Grid item>
+                            <HomeBtn onClick={ ( ) => navigate('/')   }>{t('visit store')}</HomeBtn>
                             <LogoutBtn variant='text' onClick={logout}>{t('log out')}</LogoutBtn>
                         </Grid>
                     </Grid>

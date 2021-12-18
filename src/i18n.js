@@ -277,6 +277,7 @@ const resources = {
             'card': 'شبكة',
             'Discount Coupon': 'كوبون الخصم',
             'show': 'عرض',
+            'visit store': 'زيارة المتجر',
         }
     }
 };
