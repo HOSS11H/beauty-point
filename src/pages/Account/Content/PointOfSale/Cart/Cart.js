@@ -22,6 +22,7 @@ import { useState, useEffect, useContext, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import SharedTableHead from './SharedTableHead/SharedTableHead';
 import CartItem from './CartItem/CartItem';
+import FormLabel from '@mui/material/FormLabel';
 import InputAdornment from '@mui/material/InputAdornment';
 import { ButtonText, ButtonConfirm, CustomButton } from '../../../../../components/UI/Button/Button';
 import ValidationMessage from '../../../../../components/UI/ValidationMessage/ValidationMessage';
@@ -153,8 +154,8 @@ const AddCustomer = styled(CustomButton)`
     &.MuiButton-root {
         margin-left: 20px;
         width: auto;
-        padding: 0 10px;
-        height: 56px;
+        padding: 0 15px;
+        height: 38px;
         flex-shrink: 0;
     }
 `
@@ -381,6 +382,7 @@ const Cart = props => {
                     </LocalizationProvider>
                 </Grid>
                 <Grid item xs={12} md={6}>
+                    <FormLabel component="legend" sx={{ textAlign: 'left', textTransform: 'capitalize', marginBottom: '8px' } } >{t('select customer')}</FormLabel>
                     <ActionsWrapper>
                         <FormControl fullWidth sx={{ minWidth: '200px' }} >
                             <ReactSelect options={options} isClearable isRtl={lang === 'ar'}

@@ -65,10 +65,10 @@ function Products(props) {
         <Fragment>
             <ActionsWrapper>
                 <SearchBar searchHandler={searchProductsHandler}/>
-                <CreateBtn onClick={createModalOpenHandler} >{t('Create Product')}</CreateBtn>
+                <CreateBtn onClick={createModalOpenHandler} >{t('Add Product')}</CreateBtn>
                 <CreateModal show={createModalOpened}
                     onClose={createModalCloseHandler} onConfirm={createModalConfirmHandler}
-                    heading='create new product' confirmText='create' />
+                    heading='add new product' confirmText='add' />
             </ActionsWrapper>
             <ProductsTable />
             <CustomizedSnackbars show={messageShown} message={t('Product Added')} type='success' onClose={closeMessageHandler} />

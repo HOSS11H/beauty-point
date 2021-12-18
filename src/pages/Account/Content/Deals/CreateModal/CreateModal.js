@@ -209,7 +209,7 @@ const cartReducer = (state, action) => {
 
 const CreateModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, fetchedLocations, fetchLocationsHandler, fetchedServices, fetchServicesHandler, creatingDealSuccess } = props;
+    const { show, heading, confirmText, onConfirm, onClose, fetchedLocations, fetchLocationsHandler, fetchedServices, fetchingServices, fetchServicesHandler, creatingDealSuccess } = props;
 
     const { t } = useTranslation();
 
@@ -571,8 +571,8 @@ const CreateModal = (props) => {
             discount: +dealDiscount,
             discount_amount: +priceAfterDiscount,
             choice : dealAppliedOn,
-            uses_time: +usesTime,
-            customer_uses_time: +userLimit,
+            uses_time: +userLimit,
+            customer_uses_time: +usesTime,
             days : selectedAppliedDays,
             description: draftToHtml(convertToRaw(editorState.getCurrentContent())),
             status: dealStatus,
@@ -640,7 +640,7 @@ const CreateModal = (props) => {
                         input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
                         renderValue={(selected) => (
                             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                {fetchedServices.data.length > 0 && selected.map((value) => {
+                                {!fetchingServices && selected.map((value) => {
                                     const selected = fetchedServices.data.find(service => service.id === value);
                                     return (
                                         <Chip key={selected.id} label={selected.name} />
@@ -716,7 +716,7 @@ const CreateModal = (props) => {
                 </FormControl>
             </Grid>
             <Grid item xs={12} sm={6}>
-                <CustomTextField id="uses-time" type='number' label={t('uses time')} variant="outlined" value={usesTime} onChange={usesTimeChangeHandler} />
+                <CustomTextField id="uses-time" type='number' label={t('deal uses time')} variant="outlined" value={usesTime} onChange={usesTimeChangeHandler} />
             </Grid>
             <Grid item xs={12} sm={6}>
                 <CustomTextField id="user-limit" type='number' label={t('user limit')} variant="outlined" value={userLimit} onChange={userLimitChangeHandler} />
@@ -769,7 +769,7 @@ const CreateModal = (props) => {
             </Grid>
             <Grid item xs={12}>
                 <FormControl sx={{ width: '100%' }} component="fieldset" variant="standard">
-                    <FormLabel component="legend">{t('applied days')}</FormLabel>
+                    <FormLabel component="legend" sx={{ textAlign: 'left' }} >{t('applied days')}</FormLabel>
                     <FormGroup sx={{ flexDirection: 'row', textTransform: 'capitalize' } }>
                         <FormControlLabel
                             control={
@@ -902,6 +902,7 @@ const mapStateToProps = (state) => {
     return {
         fetchedLocations: state.locations.locations,
         fetchedServices: state.services.servicesByLocation.services,
+        fetchingServices: state.services.servicesByLocation.fetchingServices,
         creatingDealSuccess: state.deals.creatingDealSuccess,
     }
 }

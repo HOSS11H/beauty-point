@@ -7,9 +7,12 @@ import EventNoteIcon from '@mui/icons-material/EventNote';
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
 import { TableData, TableDate, TableImg, TableStatus } from '../../../../../../components/UI/Dashboard/Table/Table';
 import { formatCurrency } from '../../../../../../shared/utility';
+import { useTranslation } from 'react-i18next';
 
 
 const EnhancedTableBody = props => {
+
+    const {t} = useTranslation()
 
     const { fetchedDeals, emptyRows, deleteModalOpenHandler, editModalOpenHandler, viewModalOpenHandler } = props;
 
@@ -69,7 +72,7 @@ const EnhancedTableBody = props => {
                             </TableData>
                         </TableCell>
                         <TableCell align="center">
-                            <TableStatus className={row.status} >{row.status}</TableStatus>
+                            <TableStatus className={row.status} >{t(row.status)}</TableStatus>
                         </TableCell>
                         <TableCell align="center">
                             <Actions remove view edit

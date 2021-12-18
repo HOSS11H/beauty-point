@@ -196,7 +196,7 @@ export const searchDealsFailed = (errorMessage) => {
 export const searchDeals = (language, word) => {
     return dispatch => {
         dispatch(searchDealsStart())
-        axios.get(`/vendors/deals?term=${word}&per_page=15&include[]=services&include[]=location`, {
+        axios.get(`/vendors/deals?term=${word}&page=1&per_page=15&include[]=services&include[]=location`, {
             headers: {
                 'Accept-Language': language
             }

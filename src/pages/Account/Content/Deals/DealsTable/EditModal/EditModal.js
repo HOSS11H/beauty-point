@@ -273,9 +273,9 @@ const EditModal = (props) => {
 
     const [dealStatus, setDealStatus] = useState(status);
 
-    const [usesTime, setUsesTime] = useState(used_time);
+    const [usesTime, setUsesTime] = useState(uses_limit);
 
-    const [userLimit, setUserLimit] = useState(uses_limit);
+    const [userLimit, setUserLimit] = useState(used_time);
 
     const [dateFrom, setDateFrom] = useState(new Date(start_date_time));
     
@@ -567,8 +567,8 @@ const EditModal = (props) => {
             discount: +dealDiscount,
             discount_amount: +priceAfterDiscount,
             choice : dealAppliedOn,
-            uses_time: +usesTime,
-            customer_uses_time: +userLimit,
+            uses_time: +userLimit,
+            customer_uses_time: +usesTime,
             days : selectedAppliedDays,
             description: draftToHtml(convertToRaw(editorState.getCurrentContent())),
             status: dealStatus,
@@ -713,7 +713,7 @@ const EditModal = (props) => {
                 </FormControl>
             </Grid>
             <Grid item xs={12} sm={6}>
-                <CustomTextField id="uses-time" type='number' label={t('uses time')} variant="outlined" value={usesTime} onChange={usesTimeChangeHandler} />
+                <CustomTextField id="uses-time" type='number' label={t('deal uses time')} variant="outlined" value={usesTime} onChange={usesTimeChangeHandler} />
             </Grid>
             <Grid item xs={12} sm={6}>
                 <CustomTextField id="user-limit" type='number' label={t('user limit')} variant="outlined" value={userLimit} onChange={userLimitChangeHandler} />
@@ -766,7 +766,7 @@ const EditModal = (props) => {
             </Grid>
             <Grid item xs={12}>
                 <FormControl sx={{ width: '100%' }} component="fieldset" variant="standard">
-                    <FormLabel component="legend">{t('applied days')}</FormLabel>
+                    <FormLabel component="legend"  sx={{ textAlign: 'left' }} >{t('applied days')}</FormLabel>
                     <FormGroup sx={{ flexDirection: 'row', textTransform: 'capitalize' } }>
                         <FormControlLabel
                             control={

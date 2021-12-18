@@ -151,7 +151,7 @@ export const searchProductsFailed = (errorMessage) => {
 export const searchProducts = (language, word) => {
     return dispatch => {
         dispatch(searchProductsStart())
-        axios.get(`/vendors/products?term=${word}&per_page=15&include[]=location`, {
+        axios.get(`/vendors/products?term=${word}&page=1&per_page=15&include[]=location`, {
             headers: {
                 'Accept-Language': language
             }

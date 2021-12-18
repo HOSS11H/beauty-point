@@ -210,7 +210,7 @@ const resources = {
             'create new deal': 'إنشاء عرض جديد',
             'Create Deal': 'إنشاء عرض',
             'uses time': 'حد الاستخدام',
-            'user limit': "استخدام العميل",
+            'user limit': "حد استخدام العميل ",
             'total deal price': 'السعر الإجمالي للعرض',
             'Open time': 'وقت الفتح',
             'Close time': 'وقت الإغلاق',
@@ -266,6 +266,12 @@ const resources = {
             'hours': 'ساعات',
             'days': 'أيام',
             'photos': 'صور',
+            'Add Product': 'إضافة منتج',
+            'add new product': 'إضافة منتج جديد',
+            'fixed': 'ثابت',
+            'applied on': 'تطبق على',
+            'deal uses time': 'حد استخدام العرض',
+            'select customer': 'اختر العميل',
         }
     }
 };
