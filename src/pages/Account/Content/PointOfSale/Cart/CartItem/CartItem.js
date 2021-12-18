@@ -9,12 +9,12 @@ import InputLabel from '@mui/material/InputLabel';
 import Box from '@mui/material/Box';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Chip from '@mui/material/Chip';
-import Increment from './Increment/Increment';
 import { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ThemeContext from '../../../../../../store/theme-context';
 import { connect } from 'react-redux';
 import { formatCurrency } from '../../../../../../shared/utility';
+import Increment from '../../../../../../components/UI/Increment/Increment';
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {

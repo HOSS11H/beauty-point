@@ -10,7 +10,6 @@ import { useContext, useEffect, useState, } from 'react';
 import { fetchCategories, fetchLocations } from '../../../../../store/actions/index';
 import { connect } from 'react-redux';
 import ThemeContext from '../../../../../store/theme-context';
-import debounce from 'lodash.debounce';
 import { useRef } from 'react';
 
 const CustomTextField = styled(TextField)`

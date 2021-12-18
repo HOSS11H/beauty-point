@@ -2,10 +2,10 @@ import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import { TableData } from '../../../../../../../components/UI/Dashboard/Table/Table';
 import Actions from '../../../../../../../components/UI/Dashboard/Actions/Actions';
-import Increment from './Increment/Increment';
 import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { formatCurrency } from '../../../../../../../shared/utility';
+import Increment from '../../../../../../../components/UI/Increment/Increment';
 
 
 

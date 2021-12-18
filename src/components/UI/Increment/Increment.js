@@ -23,8 +23,8 @@ const ActionButton = styled.button`
     border-color: ${props => props.theme.palette.divider};
     color: ${({ theme }) => theme.palette.text.primary};
     margin: 0px;
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     text-align: center;
     vertical-align: middle;
     padding: 11px 0;
@@ -40,21 +40,21 @@ const DisplayValue = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     color: ${({ theme }) => theme.palette.text.primary};
 `
 
 
 const Increment = props => {
 
-    const { increment, decrement, value, id } = props
+    const { increment, decrement, value, id, type } = props
 
     return (
         <Wrapper>
-            <ActionButton onClick={ ( ) =>  decrement( id) }><RemoveIcon/></ActionButton>
+            <ActionButton onClick={ ( ) =>  decrement(type, id) }><RemoveIcon/></ActionButton>
             <DisplayValue>{value}</DisplayValue>
-            <ActionButton onClick={ ( ) =>  increment( id) }><AddIcon/></ActionButton>
+            <ActionButton onClick={ ( ) =>  increment(type, id) }><AddIcon/></ActionButton>
         </Wrapper>
     )
 }
