@@ -258,6 +258,9 @@ const resources = {
             'about us': 'عنا',
             'add deals': 'إضافة عرض',
             'add products': 'إضافة منتج',
+            'add new customer': 'إضافة عميل جديد',
+            'total bookings : ': 'مجموع الحجوزات : ',
+            'recent booking': 'أخر الحجوزات',
         }
     }
 };

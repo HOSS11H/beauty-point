@@ -17,10 +17,11 @@ import SettingsIcon from '@mui/icons-material/Settings'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import ThemeContext from '../../../store/theme-context';
-import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import EventIcon from '@mui/icons-material/Event';
 import InsertChartIcon from '@mui/icons-material/InsertChart';
+import openedLogo from '../../../images/logo/logo_dark.png'
+import closedLogo from '../../../images/logo/logo_mobile.png'
 
 import { useTranslation } from 'react-i18next';
 
@@ -90,6 +91,11 @@ const Logo = styled.li`
     padding-bottom: 8px;
     color: ${({ theme }) => theme.palette.text.primary};
 `
+const LogoImg = styled.img`
+    width: 100%;
+    height: 50px;
+    object-fit: cover;
+`
 
 const CustomListItemButton = styled(ListItemButton)`
     &.MuiListItemButton-root {
@@ -138,13 +144,14 @@ export default function Navigator(props) {
         <Drawer open={open}  {...other} anchor='left'  >
             <List disablePadding sx={{ px: open ? '16px' : '0px' , py: '16px', }} >
                 <Logo>
-                    Beauty Point
+                    <NavLink to='/' >
+                        {
+                            open ? <LogoImg src={openedLogo} alt='logo' /> : <LogoImg src={closedLogo} alt='logo' />
+                        }
+                    </NavLink>
                 </Logo>
                 {categories.map(({ id, children }) => (
                     <Box key={id}>
-                        <ListItem sx={{ pt: '32px', pb: '16px', px: 0, textTransform: 'capitalize' }}>
-                            <ListItemText sx={{ color: themeCtx.theme.palette.grey[500], fontSize: '16px' }}>{id}</ListItemText>
-                        </ListItem>
                         {children.map(({ id: childId, name, icon, active }) => (
                             <ListItem disablePadding key={childId}>
                                 <CustomNavLink

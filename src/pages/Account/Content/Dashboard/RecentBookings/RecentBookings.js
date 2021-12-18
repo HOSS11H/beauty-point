@@ -3,7 +3,7 @@ import { useContext, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { fetchBookings } from '../../../../../store/actions/index';
 import ThemeContext from '../../../../../store/theme-context';
-
+import { useTranslation } from 'react-i18next';
 import CustomCard from '../../../../../components/UI/Card/Card';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -153,6 +153,8 @@ const page = 0;
 
 const RecentBookings = props => {
 
+    const {t} = useTranslation()
+
     const themeCtx = useContext(ThemeContext)
 
     const { lang } = themeCtx
@@ -215,7 +217,7 @@ const RecentBookings = props => {
                     </TableCell>
                     <TableCell align="right">
                         <BookingStatus className={booking.status}>
-                            {booking.status}
+                            {t(booking.status)}
                         </BookingStatus>
                     </TableCell>
                 </TableRow>
