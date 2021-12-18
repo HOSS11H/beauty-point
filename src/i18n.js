@@ -107,7 +107,7 @@ const resources = {
             'number': 'رقم',
             'reset cart': 'إعادة تعيين السلة',
             'purchase': 'شراء',
-            'total taxes': 'إجمالي الضرائب',
+            'total taxes': 'إجمالي القيمة المضافة (15%)',
             'Coupon Doesn\'t Exist': 'الكوبون غير موجود',
             'Coupon Exists': 'الكوبون موجود',
             'Coupon': 'كوبون',
@@ -153,8 +153,8 @@ const resources = {
             'in progress': 'قيد التنفيذ',
             'payment method': 'طريقة الدفع',
             'Please choose method': 'يرجى اختيار طريقة',
-            'cash remaing': 'النقدية المتبقية',
-            'cash to return': 'النقدية للإرجاع',
+            'cash remaing': 'المبلغ المتبقي',
+            'cash to return': 'الباقي',
             'paid amount': 'المبلغ المدفوع',
             'booking calendar': 'التقويم',
             'reports': 'تقارير العمليات',
@@ -272,6 +272,10 @@ const resources = {
             'applied on': 'تطبق على',
             'deal uses time': 'حد استخدام العرض',
             'select customer': 'اختر العميل',
+            'action': 'اجراء',
+            'cash': 'كاش',
+            'card': 'شبكة',
+            'Discount Coupon': 'كوبون الخصم',
         }
     }
 };

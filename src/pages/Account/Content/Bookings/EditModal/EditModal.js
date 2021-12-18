@@ -620,7 +620,10 @@ const EditModal = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <FormControl sx={{ width: '100%' }}>
+                        <InputLabel id="booking-status">{t('status')}</InputLabel>
                         <Select
+                            label={t('status')}
+                            labelId='booking-status'
                             value={bookingStatus}
                             onChange={bookingStatusChangeHandler}
                             inputProps={{ 'aria-label': 'Without label' }}
@@ -636,6 +639,7 @@ const EditModal = (props) => {
                     <FormControl sx={{ width: '100%' }}>
                         <InputLabel id="employee-label">{t('employee')}</InputLabel>
                         <Select
+                            label={t('employee')}
                             labelId="employee-label"
                             id="select-multiple-employees"
                             multiple
@@ -686,11 +690,6 @@ const EditModal = (props) => {
                     </FormControl>
                 </Grid>
                 <Grid item xs={12}>
-                    {cartData.services.length === 0 && (
-                        <CustomMessage>
-                            <p>{t('No Services')}</p>
-                        </CustomMessage>
-                    )}
                     {cartData.services.length > 0 && (
                         <TableContainer component={Paper} sx={{ my: 2 }}>
                             <Table aria-label="services table">
@@ -725,11 +724,6 @@ const EditModal = (props) => {
                     </FormControl>
                 </Grid>
                 <Grid item xs={12}>
-                    {cartData.products.length === 0 && (
-                        <CustomMessage>
-                            <p>{t('No Products')}</p>
-                        </CustomMessage>
-                    )}
                     {cartData.products.length > 0 && (
                         <TableContainer component={Paper} sx={{ my: 2 }}>
                             <Table aria-label="products table">
@@ -764,11 +758,6 @@ const EditModal = (props) => {
                     </FormControl>
                 </Grid>
                 <Grid item xs={12}>
-                    {cartData.deals.length === 0 && (
-                        <CustomMessage>
-                            <p>{t('No Deals')}</p>
-                        </CustomMessage>
-                    )}
                     {cartData.deals.length > 0 && (
                         <TableContainer component={Paper} sx={{ my: 2 }}>
                             <Table aria-label="deals table">
@@ -813,7 +802,10 @@ const EditModal = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <FormControl sx={{ width: '100%' }}>
+                        <InputLabel id="payment-status">{t('payment status')}</InputLabel>
                         <Select
+                            labelId="payment-status"
+                            label={t('payment status')}
                             value={paymentStatus}
                             onChange={paymentStatusChangeHandler}
                             inputProps={{ 'aria-label': 'Without label' }}

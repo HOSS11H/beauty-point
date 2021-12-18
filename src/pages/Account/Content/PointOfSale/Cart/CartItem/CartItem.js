@@ -62,17 +62,17 @@ const CartItem = props => {
         <TableRow
             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
         >
-            <TableCell component="th" scope="row">
+            <TableCell component="th" sx={{ padding: '16px 8px' }} scope="row">
                 <TableData>{row.name}</TableData>
             </TableCell>
             <TableCell align="center">
-                <TableData>{formatCurrency(row.price)}</TableData>
+                <TableData>{(row.price)}</TableData>
             </TableCell>
             <TableCell align="center">
                 <Increment id={row.id} type={type} increment={increase} decrement={decrease} value={row.quantity} />
             </TableCell>
             <TableCell align="center">
-                <TableData>{formatCurrency(row.quantity * row.price)}</TableData>
+                <TableData>{(row.quantity * row.price)}</TableData>
             </TableCell>
             {
                 type === 'services' && (

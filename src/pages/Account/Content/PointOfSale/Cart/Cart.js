@@ -104,8 +104,6 @@ const CouponWrapper = styled.div`
 const PriceCalculation = styled.div`
     display: flex;
     align-items: center;
-    margin-top: 10px;
-    margin-bottom: 10px;
     p {
         font-size: 20px;
         line-height:1.5;
@@ -482,6 +480,7 @@ const Cart = props => {
                     <FormControl sx={{ width: '100%' }}>
                         <InputLabel id="payment-label">{t('payment method')}</InputLabel>
                         <Select
+                            label={t('payment method')}
                             labelId="payment-label"
                             value={paymentGateway}
                             onChange={paymentGatewayChangeHandler}
@@ -498,7 +497,7 @@ const Cart = props => {
                 <Grid item xs={12}>
                     <CouponWrapper>
                         <TextField
-                            label={t('Coupon')}
+                            label={t('Discount Coupon')}
                             id="coupon-value"
                             sx={{ flexGrow: '1' }}
                             value={coupon}
