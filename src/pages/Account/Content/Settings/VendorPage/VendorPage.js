@@ -92,7 +92,7 @@ export default function VendorPage(props) {
                         </Grid>
                         </Grid>
                         <Grid item xs={12}>
-                            <Map />
+                            {/* <Map /> */}
                         </Grid>
                         <Backdrop
                             sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
