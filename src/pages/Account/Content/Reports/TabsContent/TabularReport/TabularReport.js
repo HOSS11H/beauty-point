@@ -2,6 +2,10 @@ import { useContext, useEffect, Fragment } from 'react';
 import Table from '@mui/material/Table';
 import TableContainer from '@mui/material/TableContainer';
 import Paper from '@mui/material/Paper';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { fetchTabularReport } from '../../../../../../store/actions/index';
@@ -39,6 +43,11 @@ const TabularReportWrapper = styled(Card)`
         padding: 20px;
     }
 `
+const TablePaginationWrapper = styled.div`
+    display: flex;
+    justify-content: flex-end;
+`
+
 const PriceCalculation = styled.div`
     display: flex;
     align-items: center;
@@ -89,12 +98,45 @@ function TabularReport(props) {
     const handleChangePage = useCallback((event, newPage) => {
         setPage(newPage);
     }, []);
-
+    const handlePerPageChange = useCallback((event) => {
+        setRowsPerPage(event.target.value);
+        setPage(0);
+    }, []);
 
     let content = (
         <Fragment>
-            <Paper sx={{ width: '100%', boxShadow: 'none', marginBottom: '20px', }}>
+            <Paper sx={{ width: '100%', boxShadow: 'none',  }}>
                 <TableContainer>
+                    <TablePaginationWrapper>
+                        <FormControl sx={{ minWidth: '75px', }} variant="filled" >
+                            <InputLabel id="show-num">{t('show')}</InputLabel>
+                            <Select
+                                labelId="show-num"
+                                id="show-num-select"
+                                value={rowsPerPage}
+                                label={t('show')}
+                                onChange={handlePerPageChange}
+                            >
+                                <MenuItem value='all'>{t('all')}</MenuItem>
+                                <MenuItem value='5'>{t('5')}</MenuItem>
+                                <MenuItem value='10'>{t('10')}</MenuItem>
+                                <MenuItem value='15'>{t('15')}</MenuItem>
+                                <MenuItem value='20'>{t('20')}</MenuItem>
+                            </Select>
+                        </FormControl>
+                        {rowsPerPage !== 'all' && (
+                            <TablePaginationActions
+                                sx= {{ width: '100%'}}
+                                component="div"
+                                count={fetchedTabularReport.data.length}
+                                total={fetchedTabularReport.meta ? fetchedTabularReport.meta.total : 0}
+                                rowsPerPage={rowsPerPage}
+                                page={page}
+                                onPageChange={handleChangePage}
+                                loading={fetchingTabularReports}
+                            />
+                        )}
+                    </TablePaginationWrapper>
                     <Table
                         sx={{ minWidth: 750 }}
                         aria-labelledby="tableTitle"
@@ -107,16 +149,18 @@ function TabularReport(props) {
                             fetchedTabularReport={fetchedTabularReport}
                         />
                     </Table>
-                    <TablePaginationActions
-                        sx= {{ width: '100%'}}
-                        component="div"
-                        count={fetchedTabularReport.data.length}
-                        total={fetchedTabularReport.meta ? fetchedTabularReport.meta.total : 0}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onPageChange={handleChangePage}
-                        loading={fetchingTabularReports}
-                    />
+                    {rowsPerPage !== 'all' && (
+                        <TablePaginationActions
+                            sx= {{ width: '100%'}}
+                            component="div"
+                            count={fetchedTabularReport.data.length}
+                            total={fetchedTabularReport.meta ? fetchedTabularReport.meta.total : 0}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onPageChange={handleChangePage}
+                            loading={fetchingTabularReports}
+                        />
+                    )}
                 </TableContainer>
             </Paper>
             <Grid   container   spacing={2}>
@@ -149,7 +193,7 @@ function TabularReport(props) {
 
     return (
         <TabularReportWrapper>
-            <SearchFilters />
+            <SearchFilters perPage={rowsPerPage} />
             {content}
         </TabularReportWrapper>
     );

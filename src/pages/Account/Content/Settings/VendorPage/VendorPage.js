@@ -31,6 +31,7 @@ export default function VendorPage(props) {
                 }
                 setSeoDescription(res.data.seo_description ?? '')
                 setShow(false)
+                console.log(res.data)
             })
     }, [])
     function handleTagChange(input) {

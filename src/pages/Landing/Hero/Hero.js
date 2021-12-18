@@ -6,6 +6,7 @@ import { NavLink } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from '../../../utils/axios-instance';
 import CircularProgress from '@mui/material/CircularProgress';
+import heroImgSrc from '../../../assets/images/hero/1.jpg';
 import { useTranslation } from 'react-i18next';
 
 const HeroWrapper = styled.div`
@@ -182,7 +183,7 @@ const Hero = (  ) => {
                             </HeroAction>
                         </HeroContent>
                         <HeroImage >
-                            <img src={data[0].image_url} alt="hero" />
+                            <img src={heroImgSrc} alt="hero" />
                         </HeroImage>
                     </Grid>
                 </Grid>

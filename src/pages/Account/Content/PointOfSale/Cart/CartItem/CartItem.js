@@ -65,18 +65,18 @@ const CartItem = props => {
             <TableCell component="th" sx={{ padding: '16px 8px' }} scope="row">
                 <TableData>{row.name}</TableData>
             </TableCell>
-            <TableCell align="center">
+            <TableCell align="center" sx={{ padding: '16px 8px' }}>
                 <TableData>{(row.price)}</TableData>
             </TableCell>
-            <TableCell align="center">
+            <TableCell align="center" sx={{ padding: '16px 8px' }}>
                 <Increment id={row.id} type={type} increment={increase} decrement={decrease} value={row.quantity} />
             </TableCell>
-            <TableCell align="center">
+            <TableCell align="center" sx={{ padding: '16px 8px' }}>
                 <TableData>{(row.quantity * row.price)}</TableData>
             </TableCell>
             {
                 type === 'services' && (
-                    <TableCell align="center">
+                    <TableCell align="center" sx={{ padding: '16px 8px' }}>
                         <FormControl sx={{ width: '100%', minWidth: '90px'}}>
                             <InputLabel id="employee-label">{t('employee')}</InputLabel>
                             <Select
@@ -112,7 +112,7 @@ const CartItem = props => {
                     </TableCell>
                 )
             }
-            <TableCell align="center">
+            <TableCell align="center" sx={{ padding: '16px 8px' }}>
                 <Actions remove
                     removeHandler={(id) => remove(type, row.id)}
                 />

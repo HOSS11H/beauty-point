@@ -175,7 +175,6 @@ const ViewModal = (props) => {
 
     useEffect(() => {
         if ( id ) {
-            console.log('excuted')
             axios.get(`/vendors/bookings/${id}/qr`)
                 .then(res => {
                     setQrCode(res.data.data);

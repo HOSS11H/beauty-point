@@ -4,12 +4,23 @@ import interactionPlugin from "@fullcalendar/interaction" // needed for dayClick
 import { connect } from 'react-redux'
 import { fetchCalendarBookings, deleteCalendarBooking } from "../../../../store/actions/index";
 import { useContext, useEffect, useState, useCallback, Fragment } from 'react';
+import Card from '@mui/material/Card';
+import CircularProgress from '@mui/material/CircularProgress';
 import ThemeContext from '../../../../store/theme-context';
 import styled from 'styled-components';
 import v1 from '../../../../utils/axios-instance-v1';
 import { useTranslation } from "react-i18next";
 import ViewModal from './ViewModal/ViewModal';
 import { format } from 'date-fns';
+import { useRef } from 'react';
+
+const BookingCalendarWrapper = styled.div`
+    & .fc-h-event {
+        background:transparent;
+        border-color:transparent;
+        border:0;
+    }
+`
 
 const BookingCustomer = styled.div`
     display: flex;
@@ -17,6 +28,22 @@ const BookingCustomer = styled.div`
     justify-content: space-between;
     flex-wrap: wrap;
     cursor: pointer;
+    border-radius:3px;
+    &.in.progress {
+        background-color: ${({ theme }) => theme.palette.warning.dark};
+    }
+    &.pending {
+        background-color: ${({ theme }) => theme.palette.secondary.dark};
+    }
+    &.canceled {
+        background-color: ${({ theme }) => theme.palette.error.dark};
+    }
+    &.approved {
+        background-color: ${({ theme }) => theme.palette.primary.dark};
+    }
+    &.completed {
+        background-color: ${({ theme }) => theme.palette.success.dark};
+    }
     p {
         font-size: 10px;
         font-weight: 500;
@@ -31,9 +58,18 @@ const BookingCustomer = styled.div`
     }
 `
 
+const Loader = styled(Card)`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 100vh;
+    flex-grow: 1;
+`
+
 function renderEventContent(eventInfo) {
     return (
-        <BookingCustomer>
+        <BookingCustomer className={eventInfo.event.extendedProps.status}>
             <p>{eventInfo.event.title} # {eventInfo.event.extendedProps.bookingId}</p>
             <span>{eventInfo.event.extendedProps.time}</span>
         </BookingCustomer>
@@ -43,13 +79,15 @@ function renderEventContent(eventInfo) {
 
 const BookingCalendar = props => {
 
-    const { fetchedBookings, fetchBookingsHandler, deleteBookingHandler } = props;
+    const { fetchedBookings, fetchingBookings, fetchBookingsHandler, deleteBookingHandler } = props;
 
     const themeCtx = useContext(ThemeContext)
 
     const { lang } = themeCtx;
 
     const {t} = useTranslation()
+
+    const notIntialRender = useRef(false);
 
     const [viewModalOpened, setViewModalOpened] = useState(false);
 
@@ -59,18 +97,28 @@ const BookingCalendar = props => {
     const [ toDate, setToDate ] = useState(new Date());
 
     const [userData, setUserData] = useState(null);
-
+    
+    
     useEffect( ( ) => {
+        console.log(fromDate, toDate);
         fetchBookingsHandler(lang, fromDate , toDate);
-        v1.get('/auth/me')
-            .then(res => {
-                setUserData(res.data)
-            }
-            )
-            .catch(err => {
-                console.log(err)
-            })
     } , [fetchBookingsHandler, fromDate, lang, toDate])
+
+    useEffect( ( ) =>{
+        if ( notIntialRender.current ) {
+            return;
+        } else {
+            v1.get('/auth/me')
+                .then(res => {
+                    setUserData(res.data)
+                }
+                )
+                .catch(err => {
+                    console.log(err)
+                })
+            notIntialRender.current = true;
+        }
+    })
 
     const formattedBookingsData = fetchedBookings.data.map(booking => {
         const formattedTime = booking.date_time.split('T')
@@ -81,6 +129,7 @@ const BookingCalendar = props => {
             title: booking.user.name,
             date: date,
             time: time,
+            status: booking.status,
         }
     })
 
@@ -111,19 +160,31 @@ const BookingCalendar = props => {
         viewModalOpenHandler(info.event.extendedProps.bookingId);
     }
 
+    let content = (
+        <FullCalendar
+            plugins={[dayGridPlugin, interactionPlugin]}
+            initialView="dayGridWeek"
+            events={formattedBookingsData}
+            eventContent={renderEventContent}
+            eventClick={dateClickHandler}
+            datesSet={(dateInfo) => {
+                setFromDate(format(dateInfo.start, 'yyyy-MM-dd'));
+                setToDate(format(dateInfo.end, 'yyyy-MM-dd'));
+            }}
+        />
+    )
+
+    if(fetchingBookings) {
+        content = (
+            <Loader>
+                <CircularProgress color="secondary" />
+            </Loader>
+        )
+    }
+
     return (
-        <Fragment>
-            <FullCalendar
-                plugins={[dayGridPlugin, interactionPlugin]}
-                initialView="dayGridWeek"
-                events={formattedBookingsData}
-                eventContent={renderEventContent}
-                eventClick={dateClickHandler}
-                datesSet={(dateInfo) => {
-                    setFromDate(format(dateInfo.start, 'yyyy-MM-dd'));
-                    setToDate(format(dateInfo.end, 'yyyy-MM-dd'));
-                }}
-            />
+        <BookingCalendarWrapper>
+            {content}
             {
                 viewModalOpened && userData && (
                     <ViewModal show={viewModalOpened} id={selectedBookingId} fetchedBookings={fetchedBookings}
@@ -131,13 +192,14 @@ const BookingCalendar = props => {
                         heading='view booking details' confirmText='save'  onDelete={viewModalDeleteHandler} userData={userData} />
                 )
             }
-        </Fragment>
+        </BookingCalendarWrapper>
     )
 }
 
 const mapStateToProps = state => {
     return {
         fetchedBookings: state.bookings.calendarBookings.bookings,
+        fetchingBookings: state.bookings.calendarBookings.fetchingBookings,
     }
 }
 

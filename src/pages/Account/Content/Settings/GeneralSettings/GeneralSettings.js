@@ -167,7 +167,7 @@ export default function GeneralSettings(props) {
                                                     <TextField value={email} onChange={(e) => setEmail(e.target.value)} fullWidth label={t('Business Email')} variant="outlined" required />
                                                 </Grid>
                                                 <Grid item xs={12} >
-                                                    <TextField value={phone} onChange={(e) => setPhone(e.target.value)} fullWidth label={t("Business Phone")} variant="outlined" required />
+                                                <TextField value={tax} onChange={(e) => setTax(e.target.value)} fullWidth label={t("Tax Record")} variant="outlined" required />
                                                 </Grid>
                                             </Grid>
                                         </Grid>
@@ -183,7 +183,7 @@ export default function GeneralSettings(props) {
                                     <TextField value={website} onChange={(e) => setWebsite(e.target.value)} fullWidth label={t('Website')} variant="outlined" required />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
-                                    <TextField value={tax} onChange={(e) => setTax(e.target.value)} fullWidth label={t("Tax Record")} variant="outlined" required />
+                                    <TextField value={phone} onChange={(e) => setPhone(e.target.value)} fullWidth label={t("Business Phone")} variant="outlined" required />
                                 </Grid>
                                 <Grid item xs={12} md={12} sx={{ textAlign: 'center' }}>
                                     <Button variant="contained" color="secondary" sx={{ minWidth: '30%' }} size="large" onClick={submitForm}>{t('Save')}</Button>

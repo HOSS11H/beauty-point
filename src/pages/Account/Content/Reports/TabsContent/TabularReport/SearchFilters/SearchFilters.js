@@ -56,7 +56,7 @@ const ResetButton = styled(CustomButton)`
 
 const SearchFilters = (props) => {
 
-    const { fetchedLocations, fetchLocationsHandler, fetchedProducts, fetchProductsHandler, fetchedServices, fetchServicesHandler, fetchedCustomers, fetchCustomersHandler, fetchedEmployees, fetchEmployeesHandler, filterTabularReportHandler } = props;
+    const { fetchedLocations, fetchLocationsHandler, fetchedProducts, fetchProductsHandler, fetchedServices, fetchServicesHandler, fetchedCustomers, fetchCustomersHandler, fetchedEmployees, fetchEmployeesHandler, filterTabularReportHandler, perPage } = props;
 
     const { t } = useTranslation()
 
@@ -128,6 +128,7 @@ const SearchFilters = (props) => {
     const ConfirmFilteringHandler = ( ) => {
         const selectedCustomer = customer && fetchedCustomers.find(customerObj => customerObj.id === customer);
         const selectedSearchParams = {
+            per_page:perPage,
             from_date: dateFrom,
             to_date: dateTo,
             customer_name: selectedCustomer ? selectedCustomer.name : '',
@@ -143,6 +144,9 @@ const SearchFilters = (props) => {
     }
 
     const resetFilteringHandler = ( ) => {
+        const searchParams = {
+            per_page:perPage,
+        }
         setLocation('');
         setDateFrom('');
         setDateTo('');
@@ -153,7 +157,7 @@ const SearchFilters = (props) => {
         setBookingType('');
         setBookingStatus('');
         setPaymentStatus('');
-        filterTabularReportHandler('', '', '', '', '', '', '', '', '', '');
+        filterTabularReportHandler(searchParams);
     }
 
 
@@ -360,7 +364,7 @@ const mapDispatchToProps = (dispatch) => {
         fetchProductsHandler: (lang, page, sortBy, sortDirection, search) => dispatch(fetchProducts(lang, page, sortBy, sortDirection, search)),
         fetchCustomersHandler: (lang) => dispatch(fetchCustomers(lang)),
         fetchEmployeesHandler: (language) => dispatch(fetchEmployees(language)),
-        filterTabularReportHandler: (dateFrom, dateTo, location, selectedServices, selectedProducts, customer, employee, bookingType, bookingStatus, paymentStatus) => dispatch(filterTabularReport(dateFrom, dateTo, location, selectedServices, selectedProducts, customer, employee, bookingType, bookingStatus, paymentStatus)),
+        filterTabularReportHandler: (perPage, dateFrom, dateTo, location, selectedServices, selectedProducts, customer, employee, bookingType, bookingStatus, paymentStatus) => dispatch(filterTabularReport(perPage, dateFrom, dateTo, location, selectedServices, selectedProducts, customer, employee, bookingType, bookingStatus, paymentStatus)),
     }
 }
 

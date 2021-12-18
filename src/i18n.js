@@ -276,6 +276,7 @@ const resources = {
             'cash': 'كاش',
             'card': 'شبكة',
             'Discount Coupon': 'كوبون الخصم',
+            'show': 'عرض',
         }
     }
 };

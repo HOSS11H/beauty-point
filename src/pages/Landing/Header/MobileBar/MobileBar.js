@@ -67,7 +67,7 @@ const MobileBar = props => {
                 <GridOnIcon />
                 <span>appointed</span>
             </NavLink>
-            <NavLink to="/" className="mobile-bar-link">
+            <NavLink to="/auth" className="mobile-bar-link">
                 <PersonIcon />
                 <span>profile</span>
             </NavLink>
