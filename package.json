@@ -8,6 +8,7 @@
     "@fullcalendar/react": "^5.10.1",
     "@mui-treasury/layout": "^5.0.0-alpha.21",
     "@mui-treasury/mockup": "^5.0.0-alpha.15",
+    "@react-google-maps/api": "^2.7.0",
     "@testing-library/jest-dom": "^5.15.0",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",

@@ -4,7 +4,9 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { Alert, Backdrop, Button, CircularProgress, Grid, Skeleton, Snackbar, TextField } from "@mui/material";
 import TagsInput from 'react-tagsinput'
 import 'react-tagsinput/react-tagsinput.css'
-import v1 from '../../../../../utils/axios-instance-v1'
+import v1 from '../../../../../utils/axios-instance-v1';
+import Map from "./Map/Map";
+
 
 export default function VendorPage(props) {
     const { t } = useTranslation()
@@ -88,6 +90,9 @@ export default function VendorPage(props) {
                         <Grid item xs={12} md={12} sx={{ textAlign: 'center' }}>
                             <Button variant="contained" color="secondary" sx={{ minWidth: '30%' }} size="large" onClick={submitForm}>{t('Save')}</Button>
                         </Grid>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Map />
                         </Grid>
                         <Backdrop
                             sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
