@@ -185,7 +185,7 @@ export const searchEmployeesDataFailed = (errorMessage) => {
 export const searchEmployeesData = (language, word) => {
     return dispatch => {
         dispatch(searchEmployeesDataStart())
-        axios.get(`/vendors/employees?term=${word}&page=1&per_page=10&include[]= roles&include[]=employeeGroup&`, {
+        axios.get(`/vendors/employees?term=${word}&page=1&per_page=10&include[]= roles&include[]=employeeGroup`, {
             headers: {
                 'Accept-Language': language
             }

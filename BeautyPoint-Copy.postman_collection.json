@@ -6436,7 +6436,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{v2}}/coupons?per_page=5",
+									"raw": "{{v2}}/coupons?term=save20",
 									"host": [
 										"{{v2}}"
 									],
@@ -6446,7 +6446,12 @@
 									"query": [
 										{
 											"key": "per_page",
-											"value": "5"
+											"value": "5",
+											"disabled": true
+										},
+										{
+											"key": "term",
+											"value": "save20"
 										}
 									]
 								}
@@ -9125,6 +9130,15 @@
 											"body": null
 										}
 									]
+								},
+								{
+									"name": "QrCode",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": null
+									},
+									"response": []
 								}
 							]
 						},
@@ -9342,6 +9356,1136 @@
 										"method": "GET",
 										"header": [],
 										"url": null
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Expenses",
+							"item": [
+								{
+									"name": "All Expenses",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{v2}}/vendors/expenses?include[]=category&include[]=customer",
+											"host": [
+												"{{v2}}"
+											],
+											"path": [
+												"vendors",
+												"expenses"
+											],
+											"query": [
+												{
+													"key": "include[]",
+													"value": "category"
+												},
+												{
+													"key": "include[]",
+													"value": "customer"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Expense by id",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{v2}}/vendors/expenses/1?include[]=category&include[]=customer",
+											"host": [
+												"{{v2}}"
+											],
+											"path": [
+												"vendors",
+												"expenses",
+												"1"
+											],
+											"query": [
+												{
+													"key": "include[]",
+													"value": "category"
+												},
+												{
+													"key": "include[]",
+													"value": "customer"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "All Expense Categories",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{v2}}/vendors/expenses_categories?include[]=expenses",
+											"host": [
+												"{{v2}}"
+											],
+											"path": [
+												"vendors",
+												"expenses_categories"
+											],
+											"query": [
+												{
+													"key": "include[]",
+													"value": "expenses"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Expense Category by id",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{v2}}/vendors/expenses_categories/1?include[]=expenses",
+											"host": [
+												"{{v2}}"
+											],
+											"path": [
+												"vendors",
+												"expenses_categories",
+												"1"
+											],
+											"query": [
+												{
+													"key": "include[]",
+													"value": "expenses"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "All Expense customers",
+									"request": {
+										"method": "GET",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"url": {
+											"raw": "{{v2}}/vendors/expenses_customers?include[]=expenses",
+											"host": [
+												"{{v2}}"
+											],
+											"path": [
+												"vendors",
+												"expenses_customers"
+											],
+											"query": [
+												{
+													"key": "include[]",
+													"value": "expenses"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Expense Customer by id",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{v2}}/vendors/expenses_customers/1?include[]=expenses",
+											"host": [
+												"{{v2}}"
+											],
+											"path": [
+												"vendors",
+												"expenses_customers",
+												"1"
+											],
+											"query": [
+												{
+													"key": "include[]",
+													"value": "expenses"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create Expense Category",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": \"فواتير\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{v2}}/vendors/expenses_categories",
+											"host": [
+												"{{v2}}"
+											],
+											"path": [
+												"vendors",
+												"expenses_categories"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Create Expense Category",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "application/json",
+														"type": "text"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"name\": \"فواتير\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{v2}}/vendors/expenses_categories",
+													"host": [
+														"{{v2}}"
+													],
+													"path": [
+														"vendors",
+														"expenses_categories"
+													]
+												}
+											},
+											"status": "Created",
+											"code": 201,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Date",
+													"value": "Sun, 19 Dec 2021 22:02:16 GMT"
+												},
+												{
+													"key": "Server",
+													"value": "Apache"
+												},
+												{
+													"key": "X-Powered-By",
+													"value": "PHP/8.0.13"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, private"
+												},
+												{
+													"key": "X-RateLimit-Limit",
+													"value": "60"
+												},
+												{
+													"key": "X-RateLimit-Remaining",
+													"value": "59"
+												},
+												{
+													"key": "phpdebugbar-id",
+													"value": "Xf97d8f54b41ce71f815b90a23225e662"
+												},
+												{
+													"key": "Vary",
+													"value": "Authorization"
+												},
+												{
+													"key": "Upgrade",
+													"value": "h2,h2c"
+												},
+												{
+													"key": "Connection",
+													"value": "Upgrade, Keep-Alive"
+												},
+												{
+													"key": "Access-Control-Allow-Origin",
+													"value": "*"
+												},
+												{
+													"key": "Access-Control-Allow-Headers",
+													"value": "*"
+												},
+												{
+													"key": "Access-Control-Allow-Methods",
+													"value": "*"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=5, max=100"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"name\": \"فواتير\",\n    \"updated_at\": \"2021-12-19T22:02:17.000000Z\",\n    \"created_at\": \"2021-12-19T22:02:17.000000Z\",\n    \"id\": 1\n}"
+										}
+									]
+								},
+								{
+									"name": "Update Expense Category",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": \"كهرباء فواتير\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{v2}}/vendors/expenses_categories/1",
+											"host": [
+												"{{v2}}"
+											],
+											"path": [
+												"vendors",
+												"expenses_categories",
+												"1"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Update Expense Category",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "application/json",
+														"type": "text"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"name\": \"كهرباء فواتير\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{v2}}/vendors/expenses_categories/1",
+													"host": [
+														"{{v2}}"
+													],
+													"path": [
+														"vendors",
+														"expenses_categories",
+														"1"
+													]
+												}
+											},
+											"status": "No Content",
+											"code": 204,
+											"_postman_previewlanguage": "plain",
+											"header": [
+												{
+													"key": "Date",
+													"value": "Sun, 19 Dec 2021 22:03:54 GMT"
+												},
+												{
+													"key": "Server",
+													"value": "Apache"
+												},
+												{
+													"key": "X-Powered-By",
+													"value": "PHP/8.0.13"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, private"
+												},
+												{
+													"key": "X-RateLimit-Limit",
+													"value": "60"
+												},
+												{
+													"key": "X-RateLimit-Remaining",
+													"value": "58"
+												},
+												{
+													"key": "phpdebugbar-id",
+													"value": "X4498a93f522dfdd21d5d6ab29691a317"
+												},
+												{
+													"key": "Vary",
+													"value": "Authorization"
+												},
+												{
+													"key": "Upgrade",
+													"value": "h2,h2c"
+												},
+												{
+													"key": "Connection",
+													"value": "Upgrade, Keep-Alive"
+												},
+												{
+													"key": "Access-Control-Allow-Origin",
+													"value": "*"
+												},
+												{
+													"key": "Access-Control-Allow-Headers",
+													"value": "*"
+												},
+												{
+													"key": "Access-Control-Allow-Methods",
+													"value": "*"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=5, max=100"
+												}
+											],
+											"cookie": [],
+											"body": null
+										}
+									]
+								},
+								{
+									"name": "Delete Category expense",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{v2}}/vendors/expenses_categories/1",
+											"host": [
+												"{{v2}}"
+											],
+											"path": [
+												"vendors",
+												"expenses_categories",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create Expense Customer",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": \"محصل\",\r\n    \"mobile\": \"01231231\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{v2}}/vendors/expenses_customers",
+											"host": [
+												"{{v2}}"
+											],
+											"path": [
+												"vendors",
+												"expenses_customers"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Create Expense Customer",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "application/json",
+														"type": "text"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"name\": \"محصل\",\r\n    \"mobile\": \"01231231\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{v2}}/vendors/expenses_customers",
+													"host": [
+														"{{v2}}"
+													],
+													"path": [
+														"vendors",
+														"expenses_customers"
+													]
+												}
+											},
+											"status": "Created",
+											"code": 201,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Date",
+													"value": "Sun, 19 Dec 2021 22:06:18 GMT"
+												},
+												{
+													"key": "Server",
+													"value": "Apache"
+												},
+												{
+													"key": "X-Powered-By",
+													"value": "PHP/8.0.13"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, private"
+												},
+												{
+													"key": "X-RateLimit-Limit",
+													"value": "60"
+												},
+												{
+													"key": "X-RateLimit-Remaining",
+													"value": "59"
+												},
+												{
+													"key": "phpdebugbar-id",
+													"value": "X58c39f22cb92203a865332a15ac8f603"
+												},
+												{
+													"key": "Vary",
+													"value": "Authorization"
+												},
+												{
+													"key": "Upgrade",
+													"value": "h2,h2c"
+												},
+												{
+													"key": "Connection",
+													"value": "Upgrade, Keep-Alive"
+												},
+												{
+													"key": "Access-Control-Allow-Origin",
+													"value": "*"
+												},
+												{
+													"key": "Access-Control-Allow-Headers",
+													"value": "*"
+												},
+												{
+													"key": "Access-Control-Allow-Methods",
+													"value": "*"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=5, max=100"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"name\": \"محصل\",\n    \"mobile\": \"01231231\",\n    \"updated_at\": \"2021-12-19T22:06:19.000000Z\",\n    \"created_at\": \"2021-12-19T22:06:19.000000Z\",\n    \"id\": 1\n}"
+										}
+									]
+								},
+								{
+									"name": "Update Expense Customer",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": \"1محصل\",\r\n    \"mobile\": \"01231231\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{v2}}/vendors/expenses_customers/1",
+											"host": [
+												"{{v2}}"
+											],
+											"path": [
+												"vendors",
+												"expenses_customers",
+												"1"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Update Expense Customer",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "application/json",
+														"type": "text"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"name\": \"1محصل\",\r\n    \"mobile\": \"01231231\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{v2}}/vendors/expenses_customers/1",
+													"host": [
+														"{{v2}}"
+													],
+													"path": [
+														"vendors",
+														"expenses_customers",
+														"1"
+													]
+												}
+											},
+											"status": "No Content",
+											"code": 204,
+											"_postman_previewlanguage": "plain",
+											"header": [
+												{
+													"key": "Date",
+													"value": "Sun, 19 Dec 2021 22:25:56 GMT"
+												},
+												{
+													"key": "Server",
+													"value": "Apache"
+												},
+												{
+													"key": "X-Powered-By",
+													"value": "PHP/8.0.13"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, private"
+												},
+												{
+													"key": "X-RateLimit-Limit",
+													"value": "60"
+												},
+												{
+													"key": "X-RateLimit-Remaining",
+													"value": "59"
+												},
+												{
+													"key": "phpdebugbar-id",
+													"value": "Xfc211d850218b55da80634607aa2ed33"
+												},
+												{
+													"key": "Vary",
+													"value": "Authorization"
+												},
+												{
+													"key": "Upgrade",
+													"value": "h2,h2c"
+												},
+												{
+													"key": "Connection",
+													"value": "Upgrade, Keep-Alive"
+												},
+												{
+													"key": "Access-Control-Allow-Origin",
+													"value": "*"
+												},
+												{
+													"key": "Access-Control-Allow-Headers",
+													"value": "*"
+												},
+												{
+													"key": "Access-Control-Allow-Methods",
+													"value": "*"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=5, max=100"
+												}
+											],
+											"cookie": [],
+											"body": null
+										}
+									]
+								},
+								{
+									"name": "Delete Expense Customer",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{v2}}/vendors/expenses_customers/1",
+											"host": [
+												"{{v2}}"
+											],
+											"path": [
+												"vendors",
+												"expenses_customers",
+												"1"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create Expense",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "cat_id",
+													"value": "1",
+													"type": "text"
+												},
+												{
+													"key": "customer_id",
+													"value": "1",
+													"type": "text"
+												},
+												{
+													"key": "name",
+													"value": "فاتورة كهرباء",
+													"type": "text"
+												},
+												{
+													"key": "note",
+													"value": "",
+													"type": "text"
+												},
+												{
+													"key": "amount",
+													"value": "550",
+													"type": "text"
+												},
+												{
+													"key": "expense_date",
+													"value": "2021-12-20 12:32 PM",
+													"type": "text"
+												},
+												{
+													"key": "image",
+													"type": "file",
+													"src": "/C:/Users/ZED/Desktop/junk/index.jpg"
+												},
+												{
+													"key": "bank_name",
+													"value": "Al Ahly",
+													"type": "text"
+												},
+												{
+													"key": "bank_account",
+													"value": "21313123",
+													"type": "text"
+												}
+											],
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{v2}}/vendors/expenses",
+											"host": [
+												"{{v2}}"
+											],
+											"path": [
+												"vendors",
+												"expenses"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Create Expense",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "application/json",
+														"type": "text"
+													}
+												],
+												"body": {
+													"mode": "formdata",
+													"formdata": [
+														{
+															"key": "cat_id",
+															"value": "1",
+															"type": "text"
+														},
+														{
+															"key": "customer_id",
+															"value": "1",
+															"type": "text"
+														},
+														{
+															"key": "name",
+															"value": "فاتورة كهرباء",
+															"type": "text"
+														},
+														{
+															"key": "note",
+															"value": "",
+															"type": "text"
+														},
+														{
+															"key": "amount",
+															"value": "550",
+															"type": "text"
+														},
+														{
+															"key": "expense_date",
+															"value": "2021-12-20 12:32 PM",
+															"type": "text"
+														},
+														{
+															"key": "image",
+															"type": "file",
+															"src": "/C:/Users/ZED/Desktop/junk/index.jpg"
+														},
+														{
+															"key": "bank_name",
+															"value": "Al Ahly",
+															"type": "text"
+														},
+														{
+															"key": "bank_account",
+															"value": "21313123",
+															"type": "text"
+														}
+													],
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{v2}}/vendors/expenses",
+													"host": [
+														"{{v2}}"
+													],
+													"path": [
+														"vendors",
+														"expenses"
+													]
+												}
+											},
+											"status": "Created",
+											"code": 201,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Date",
+													"value": "Sun, 19 Dec 2021 22:32:48 GMT"
+												},
+												{
+													"key": "Server",
+													"value": "Apache"
+												},
+												{
+													"key": "X-Powered-By",
+													"value": "PHP/8.0.13"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, private"
+												},
+												{
+													"key": "X-RateLimit-Limit",
+													"value": "60"
+												},
+												{
+													"key": "X-RateLimit-Remaining",
+													"value": "59"
+												},
+												{
+													"key": "phpdebugbar-id",
+													"value": "X65a0c6fd05c0519c7dc91ad743509af4"
+												},
+												{
+													"key": "Vary",
+													"value": "Authorization"
+												},
+												{
+													"key": "Upgrade",
+													"value": "h2,h2c"
+												},
+												{
+													"key": "Connection",
+													"value": "Upgrade, Keep-Alive"
+												},
+												{
+													"key": "Access-Control-Allow-Origin",
+													"value": "*"
+												},
+												{
+													"key": "Access-Control-Allow-Headers",
+													"value": "*"
+												},
+												{
+													"key": "Access-Control-Allow-Methods",
+													"value": "*"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=5, max=100"
+												},
+												{
+													"key": "Transfer-Encoding",
+													"value": "chunked"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"name\": \"فاتورة كهرباء\",\n    \"notes\": \"\",\n    \"amount\": \"550\",\n    \"bank_name\": \"Al Ahly\",\n    \"bank_account\": \"21313123\",\n    \"expense_date\": \"2021-12-19\",\n    \"cat_id\": \"1\",\n    \"customer_id\": \"1\",\n    \"company_id\": 1,\n    \"updated_at\": \"2021-12-19T22:32:49.000000Z\",\n    \"created_at\": \"2021-12-19T22:32:49.000000Z\",\n    \"id\": 1,\n    \"expense_image_url\": \"https://testbeauty.beautypoint.sa/img/no-image.jpg\"\n}"
+										}
+									]
+								},
+								{
+									"name": "Update Expense",
+									"request": {
+										"method": "PUT",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"cat_id\":1,\r\n    \"customer_id\":1,\r\n    \"name\":\"فاتورة كهرباء\",\r\n    \"note\": \"updated\",\r\n    \"amount\":550,\r\n    \"expense_date\":\"2021-12-20 12:32 PM\",\r\n    \"bank_name\":\"Al Ahly\",\r\n    \"bank_account\":21313123\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{v2}}/vendors/expenses/1",
+											"host": [
+												"{{v2}}"
+											],
+											"path": [
+												"vendors",
+												"expenses",
+												"1"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Update Expense",
+											"originalRequest": {
+												"method": "PUT",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "application/json",
+														"type": "text"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"cat_id\":1,\r\n    \"customer_id\":1,\r\n    \"name\":\"فاتورة كهرباء\",\r\n    \"note\": \"updated\",\r\n    \"amount\":550,\r\n    \"expense_date\":\"2021-12-20 12:32 PM\",\r\n    \"bank_name\":\"Al Ahly\",\r\n    \"bank_account\":21313123\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{v2}}/vendors/expenses/1",
+													"host": [
+														"{{v2}}"
+													],
+													"path": [
+														"vendors",
+														"expenses",
+														"1"
+													]
+												}
+											},
+											"status": "No Content",
+											"code": 204,
+											"_postman_previewlanguage": "plain",
+											"header": [
+												{
+													"key": "Date",
+													"value": "Sun, 19 Dec 2021 22:44:16 GMT"
+												},
+												{
+													"key": "Server",
+													"value": "Apache"
+												},
+												{
+													"key": "X-Powered-By",
+													"value": "PHP/8.0.13"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, private"
+												},
+												{
+													"key": "X-RateLimit-Limit",
+													"value": "60"
+												},
+												{
+													"key": "X-RateLimit-Remaining",
+													"value": "59"
+												},
+												{
+													"key": "phpdebugbar-id",
+													"value": "X05c0354166dc7aa7745e48ab2dc018d9"
+												},
+												{
+													"key": "Vary",
+													"value": "Authorization"
+												},
+												{
+													"key": "Upgrade",
+													"value": "h2,h2c"
+												},
+												{
+													"key": "Connection",
+													"value": "Upgrade, Keep-Alive"
+												},
+												{
+													"key": "Access-Control-Allow-Origin",
+													"value": "*"
+												},
+												{
+													"key": "Access-Control-Allow-Headers",
+													"value": "*"
+												},
+												{
+													"key": "Access-Control-Allow-Methods",
+													"value": "*"
+												},
+												{
+													"key": "Keep-Alive",
+													"value": "timeout=5, max=100"
+												}
+											],
+											"cookie": [],
+											"body": null
+										}
+									]
+								},
+								{
+									"name": "Delete Expense",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "{{v2}}/vendors/expenses",
+											"host": [
+												"{{v2}}"
+											],
+											"path": [
+												"vendors",
+												"expenses"
+											]
+										}
 									},
 									"response": []
 								}

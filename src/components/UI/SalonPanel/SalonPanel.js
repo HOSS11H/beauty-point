@@ -91,7 +91,6 @@ export const DealPanel = styled.div`
             display: flex;
             align-items: center;
             justify-content: space-between;
-            flex-direction: ${ ( { theme }) => theme.direction === 'rtl' ? 'row-reverse' : 'row'  } ;
             .deal-title {
                 font-size: 22px;
                 line-height:1.5;

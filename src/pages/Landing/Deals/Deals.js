@@ -92,7 +92,7 @@ const Deals = props => {
                         return (
                             <DealPanel key={deal.id}>
                                 <div className="deal-img">
-                                    <img src={deal.image} alt="deal"/>
+                                    <img src={deal.image} alt="spotlight"/>
                                 </div>
                                 <div className="deal-content">
                                     <div className="deal-body" >

@@ -195,7 +195,7 @@ const ServicesSlider = props => {
                                 <img src={service.image} alt="service" />
                             </div>
                             <div className="service-title">
-                                <NavLink to="/">{service.name}</NavLink>
+                                <a href={`https://beautypoint.sa/${service.name}/services`}>{service.name}</a>
                             </div>
                         </ServicePanel>
                     ))

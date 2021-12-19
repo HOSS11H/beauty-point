@@ -20,6 +20,7 @@ export default function VendorPage(props) {
     const [show, setShow] = useState(true);
     const [open, setOpen] = useState(false);
     const [success, setSuccess] = useState(false)
+    const [ location, setLocation ] = useState({lat: '', lng:'' });
 
     useEffect(() => {
         v1.get('/vendors/settings/vendor_page')
@@ -28,12 +29,12 @@ export default function VendorPage(props) {
                 setSecondaryContact(res.data.secondary_contact)
                 setAddress(res.data.address)
                 setDescription(res.data.description)
+                setLocation({lat: res.data.latitude, lng: res.data.longitude})
                 if (res.data.seo_keywords !== null) {
                     setTags(res.data.seo_keywords.split(','))
                 }
                 setSeoDescription(res.data.seo_description ?? '')
                 setShow(false)
-                console.log(res.data)
             })
     }, [])
     function handleTagChange(input) {
@@ -92,7 +93,7 @@ export default function VendorPage(props) {
                         </Grid>
                         </Grid>
                         <Grid item xs={12}>
-                            {/* <Map /> */}
+                            {/* <Map lat={location.lat} lng={location.lng} /> */}
                         </Grid>
                         <Backdrop
                             sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
