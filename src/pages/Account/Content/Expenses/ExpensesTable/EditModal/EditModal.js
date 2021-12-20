@@ -6,178 +6,339 @@ import ThemeContext from '../../../../../../store/theme-context'
 import { CustomModal } from '../../../../../../components/UI/Modal/Modal';
 import { Grid } from '@mui/material';
 import TextField from '@mui/material/TextField';
-
-import { connect } from 'react-redux';
-import { fetchRoles } from '../../../../../../store/actions/index';
-import ValidationMessage from '../../../../../../components/UI/ValidationMessage/ValidationMessage';
-
-import InputAdornment from '@mui/material/InputAdornment';
+import ReactSelect from 'react-select';
+import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import InputLabel from '@mui/material/InputLabel';
-import LockIcon from '@mui/icons-material/Lock';
+
+import DateAdapter from '@mui/lab/AdapterDateFns';
+import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
+
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { EditorState, convertToRaw } from 'draft-js';
+import draftToHtml from 'draftjs-to-html';
+import { connect } from 'react-redux';
+import { fetchLocations, fetchServicesByLocation } from '../../../../../../store/actions/index';
+import ValidationMessage from '../../../../../../components/UI/ValidationMessage/ValidationMessage';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { format } from 'date-fns';
+import axios from '../../../../../../utils/axios-instance';
 
 
 const CustomTextField = styled(TextField)`
     width: 100%;
 `
 
+
+const EditorWrapper = styled.div`
+    .rdw-editor-wrapper {
+        border-radius: 20px;
+        border: 1px solid;
+        border-color: ${({ theme }) => theme.palette.divider};
+        margin-bottom: 20px;
+    }
+    .rdw-editor-toolbar {
+        border: 0;
+        border-bottom: 1px solid;
+        border-color: ${({ theme }) => theme.palette.divider};
+        border-radius: 20px 20px 0 0;
+        padding: 20px;
+        background-color: ${({ theme }) => theme.palette.action.hover};
+    }
+    .rdw-editor-main {
+        padding: 0 20px 20px;
+    }
+    .rdw-dropdown-carettoopen {
+        position: relative;
+        top: auto;
+        right: auto;
+        left: auto;
+    }
+    .rdw-dropdown-carettoclose {
+        position: relative;
+        top: auto;
+        right: auto;
+        left: auto;
+    }
+    .rdw-dropdown-selectedtext {
+        color: ${({ theme }) => theme.palette.common.black};
+        justify-content: space-between;
+    }
+    .rdw-dropdown-optionwrapper {
+        color: ${({ theme }) => theme.palette.common.black};
+    }
+    .rdw-embedded-modal {
+        background-color: ${({ theme }) => theme.palette.background.default};
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .rdw-image-modal {
+        background-color: ${({ theme }) => theme.palette.background.default};
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .rdw-emoji-modal {
+        background-color: ${({ theme }) => theme.palette.background.default};
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .rdw-link-modal {
+        background-color: ${({ theme }) => theme.palette.background.default};
+        left: 0%;
+    }
+`
+
+
 const CreateModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, id, fetchedRoles, fetchRolesHandler, fetchedEmployees } = props;
+    const { show, heading, confirmText, onConfirm, onClose, creatingExpenseSuccess, id, fetchedExpenses } = props;
+
+    const selectedProductIndex = fetchedExpenses.data.findIndex(expense => expense.id === id);
+
+    let expenseData = fetchedExpenses.data[selectedProductIndex];
+
+    const { name, description, price, discount, discount_type, discount_price, location, status, image, quantity } = expenseData;
 
     const { t } = useTranslation();
 
     const themeCtx = useContext(ThemeContext)
     const { lang } = themeCtx;
 
-    const selectedEmployeeIndex = fetchedEmployees.data.findIndex(employee => employee.id === id);
+    const [expenseName, setExpenseName] = useState('');
+    const [expenseNameError, setExpenseNameError] = useState(false);
 
-    let employeeData = fetchedEmployees.data[selectedEmployeeIndex];
+    const [date, setDate] = useState(new Date());
 
-    const { name, mobile, email, roles } = employeeData;
+    const [expenseBank, setExpenseBank] = useState('');
+    const [expenseBankError, setExpenseBankError] = useState(false);
 
-    const [employeeName, setEmployeeName] = useState(name);
-    const [employeeNameError, setEmployeeNameError] = useState(false);
+    const [expenseAccount, setExpenseAccount] = useState('');
+    const [expenseAccountError, setExpenseAccountError] = useState(false);
 
-    const [employeeEmail, setEmployeeEmail] = useState(email);
-    const [employeeEmailError, setEmployeeEmailError] = useState(false);
+    const [categoriesOptions, setCategoriesOptions] = useState([])
 
-    const [employeePassword, setEmployeePassword] = useState('');
-    const [employeePasswordError, setEmployeePasswordError] = useState(false);
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [selectedCategoryError, setSelectedCategoryError] = useState(false);
 
-    const [employeeNumber, setEmployeeNumber] = useState(mobile);
-    const [employeeNumberError, setEmployeeNumberError] = useState(false);
+    const [agentsOptions, setAgentsOptions] = useState([])
 
-    const [employeeRole, setEmployeeRole] = useState(roles[0].id);
-    const [employeeRoleError, setEmployeeRoleError] = useState(false);
+    const [selectedAgent, setSelectedAgent] = useState(null);
+    const [selectedAgentError, setSelectedAgentError] = useState(false);
 
-    console.log(roles)
+    const [editorState, setEditorState] = useState(
+        EditorState.createEmpty()
+    )
+    const [expenseDescriptionError, setExpenseDescriptionError] = useState(false);
 
-    useEffect(() => {
-        fetchRolesHandler(lang);
-    }, [fetchRolesHandler, lang])
+    const [expenseAmount, setExpenseAmount] = useState(0);
+    const [expenseAmountError, setExpenseAmountError] = useState(false);
 
 
-    const employeeNameChangeHandler = (event) => {
-        setEmployeeName(event.target.value);
-        setEmployeeNameError(false);
+    const expenseNameChangeHandler = (event) => {
+        setExpenseName(event.target.value);
+        setExpenseNameError(false);
+    }
+    const handleDateChange = (date) => {
+        setDate(date);
+    }
+    const expenseBankChangeHandler = (event) => {
+        setExpenseBank(event.target.value);
+        setExpenseBankError(false);
+    }
+    const expenseAccountChangeHandler = (event) => {
+        setExpenseAccount(event.target.value);
+        setExpenseAccountError(false);
     }
 
-    const employeeEmailChangeHandler = (event) => {
-        setEmployeeEmail(event.target.value);
-        setEmployeeEmailError(false);
+    const expenseAmountChangeHandler = (event) => {
+        if (event.target.value >= 0) {
+            setExpenseAmount(event.target.value);
+            setExpenseAmountError(false);
+        }
     }
-    const employeePasswordChangeHandler = (event) => {
-        setEmployeePassword(event.target.value);
-        setEmployeePasswordError(false);
+    const handleSelectCategoryOptions = (value, actions) => {
+        if (value.length !== 0) {
+            axios.get(`/vendors/expenses_categories`)
+                .then(res => {
+                    const categories = res.data.data;
+                    const options = categories.map(category => {
+                        return {
+                            value: category.id,
+                            label: category.name
+                        }
+                    })
+                    setCategoriesOptions(options);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+    }
+    const handleSelectCategory = (value, actions) => {
+        if (value) {
+            setSelectedCategory(value);
+            setSelectedCategoryError(false);
+        }
     }
 
-    const employeeNumberChangeHandler = (event) => {
-        setEmployeeNumber(event.target.value);
-        setEmployeeNumberError(false);
+    const handleSelectAgentOptions = (value, actions) => {
+        if (value.length !== 0) {
+            axios.get(`/vendors/expenses_customers`)
+                .then(res => {
+                    const categories = res.data.data;
+                    const options = categories.map(category => {
+                        return {
+                            value: category.id,
+                            label: category.name
+                        }
+                    })
+                    setAgentsOptions(options);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
     }
-    const handleEmployeeRoleChange = (event) => {
-        setEmployeeRole(event.target.value);
-        setEmployeeRoleError(false);
-    };
+    const handleSelectAgent = (value, actions) => {
+        if (value) {
+            setSelectedAgent(value);
+            setSelectedAgentError(false);
+        }
+    }
+
+
+    const onEditorChange = newState => {
+        setEditorState(newState);
+        setExpenseDescriptionError(false);
+    }
+
     const closeModalHandler = useCallback(() => {
         onClose();
-    }, [onClose])
+    }, [onClose]);
+
 
     const resetModalData = useCallback(() => {
-        setEmployeeName('');
-        setEmployeeNameError(false);
-        setEmployeeNumber(0);
-        setEmployeeNumberError(false);
-        setEmployeeEmail('');
-        setEmployeeEmailError(false);
-        setEmployeePassword('');
-        setEmployeePasswordError(false);
-        setEmployeeRole('');
-        setEmployeeRoleError(false);
+        setExpenseName('');
+        setExpenseNameError(false);
+        setDate(new Date());
+        setExpenseBank('');
+        setExpenseBankError(false);
+        setExpenseAccount('');
+        setExpenseAccountError(false);
+        setSelectedCategory(null);
+        setSelectedCategoryError(false);
+        setSelectedAgent(null);
+        setSelectedAgentError(false);
+        setExpenseAmount(0);
+        setExpenseAmountError(false);
+        setExpenseDescriptionError(false);
+        setEditorState(EditorState.createEmpty());
     }, [])
 
+    useEffect(() => {
+        creatingExpenseSuccess && resetModalData();
+    }, [creatingExpenseSuccess, resetModalData])
+
     const confirmCreateHandler = useCallback(() => {
-        const pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if (employeeName.trim().length === 0) {
-            setEmployeeNameError(true);
+
+        if (expenseName.trim().length === 0) {
+            setExpenseNameError(true);
             return;
         }
-        if (pattern.test(employeeEmail) === false) {
-            setEmployeeEmailError(true);
+        if (expenseBank.trim().length === 0) {
+            setExpenseBankError(true);
             return;
         }
-        if (employeePassword.trim().length === 0) {
-            setEmployeePasswordError(true);
+        if (expenseAccount.trim().length === 0) {
+            setExpenseAccountError(true);
             return;
         }
-        if (employeeRole === '') {
-            setEmployeeRoleError(true);
+        if (!selectedCategory) {
+            console.log('selectedCategory', selectedCategory);
+            setSelectedCategoryError(true);
             return;
-        }   
-        if (employeeNumber.trim().length === 0) {
-            setEmployeeNumberError(true);
+        }
+        if (!selectedAgent) {
+            setSelectedAgentError(true);
+            return;
+        }
+        if (editorState.getCurrentContent().hasText() === false) {
+            setExpenseDescriptionError(true);
+            return;
+        }
+        if (expenseAmount === 0) {
+            setExpenseAmountError(true);
             return;
         }
         const data = {
-            id: id,
-            name: employeeName,
-            email: employeeEmail,
-            mobile: employeeNumber,
-            role_id: employeeRole,
-            calling_code: '5555',
+            name: expenseName,
+            note: draftToHtml(convertToRaw(editorState.getCurrentContent())),
+            amount: expenseAmount,
+            expense_date: format(date, 'Y-M-dd hh:ii a'),
+            bank_name: expenseBank,
+            bank_account: expenseAccount,
+            cat_id: selectedCategory.value,
+            customer_id: selectedAgent.value,
         }
         onConfirm(data);
-        resetModalData();
-    }, [employeeEmail, employeeName, employeeNumber, employeePassword, employeeRole, id, onConfirm, resetModalData])
+    }, [expenseName, expenseBank, expenseAccount, selectedCategory, selectedAgent, editorState, expenseAmount, date, onConfirm])
 
     let content = (
         <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
-                <CustomTextField id="employee-name" label={t('name')} variant="outlined" value={employeeName} onChange={employeeNameChangeHandler} />
-                {employeeNameError && <ValidationMessage notExist>{t(`Please add name`)}</ValidationMessage>}
+                <CustomTextField id="expense-name" label={t('name')} variant="outlined" value={expenseName} onChange={expenseNameChangeHandler} />
+                {expenseNameError && <ValidationMessage notExist>{t(`Please add name`)}</ValidationMessage>}
+            </Grid>
+            <Grid item xs={12} sm={6} >
+                <LocalizationProvider dateAdapter={DateAdapter}>
+                    <DesktopDatePicker
+                        label={t("Date from")}
+                        inputFormat="MM/dd/yyyy"
+                        value={date}
+                        onChange={handleDateChange}
+                        renderInput={(params) => <TextField sx={{ width: '100%' }} {...params} />}
+                    />
+                </LocalizationProvider>
             </Grid>
             <Grid item xs={12} sm={6}>
-                <CustomTextField id="employee-email" label={t('email')} variant="outlined" value={employeeEmail} onChange={employeeEmailChangeHandler} />
-                {employeeEmailError && <ValidationMessage notExist>{t(`Please add email`)}</ValidationMessage>}
+                <CustomTextField id="expense-bank" label={t('bank')} variant="outlined" value={expenseBank} onChange={expenseBankChangeHandler} />
+                {expenseBankError && <ValidationMessage notExist>{t(`Please add bank`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6}>
-                <TextField id='employee-password' placeholder='******' variant="outlined" fullWidth
-                    type='password' name='employee-password' value={employeePassword} onChange={employeePasswordChangeHandler}
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <LockIcon />
-                            </InputAdornment>
-                        ),
-                    }}
-                />
-                {employeePasswordError && <ValidationMessage notExist>{t(`Please add password`)}</ValidationMessage>}
+                <CustomTextField id="expense-account" label={t('account')} variant="outlined" value={expenseAccount} onChange={expenseAccountChangeHandler} />
+                {expenseAccountError && <ValidationMessage notExist>{t(`Please add account`)}</ValidationMessage>}
             </Grid>
-            <Grid item xs={12} sm={6}>
-                <FormControl fullWidth>
-                    <InputLabel id="item-role">{t('role')}</InputLabel>
-                    <Select
-                        labelId="item-role"
-                        id="item-role-select"
-                        value={employeeRole}
-                        label={t("Role")}
-                        onChange={handleEmployeeRoleChange}
-                    >
-                        {
-                            fetchedRoles.map(role => {
-                                return <MenuItem key={role.id} value={role.id}>{t(role.name)}</MenuItem>
-                            })
-                        }
-                    </Select>
+            <Grid item xs={12} sm={6} >
+                <FormLabel component="legend" sx={{ textAlign: 'left', textTransform: 'capitalize', marginBottom: '8px' }} >{t('select category')}</FormLabel>
+                <FormControl fullWidth sx={{ minWidth: '200px' }} >
+                    <ReactSelect options={categoriesOptions} isClearable isRtl={lang === 'ar'}
+                        onChange={handleSelectCategory} onInputChange={handleSelectCategoryOptions} />
                 </FormControl>
-                {employeeRoleError && <ValidationMessage notExist>{t(`Please add a role`)}</ValidationMessage>}
+                {selectedCategoryError && <ValidationMessage notExist>{t(`Please select category`)}</ValidationMessage>}
+            </Grid>
+            <Grid item xs={12} sm={6} >
+                <FormLabel component="legend" sx={{ textAlign: 'left', textTransform: 'capitalize', marginBottom: '8px' }} >{t('select agent')}</FormLabel>
+                <FormControl fullWidth sx={{ minWidth: '200px' }} >
+                    <ReactSelect options={agentsOptions} isClearable isRtl={lang === 'ar'}
+                        onChange={handleSelectAgent} onInputChange={handleSelectAgentOptions} />
+                </FormControl>
+                {selectedAgentError && <ValidationMessage notExist>{t(`Please select agent`)}</ValidationMessage>}
+            </Grid>
+            <Grid item xs={12}>
+                <EditorWrapper>
+                    <Editor
+                        editorState={editorState}
+                        wrapperClassName="demo-wrapper"
+                        editorClassName="demo-editor"
+                        onEditorStateChange={onEditorChange}
+                        textAlignment={themeCtx.direction === 'rtl' ? 'right' : 'left'}
+                    />
+                </EditorWrapper>
+                {expenseDescriptionError && <ValidationMessage notExist>{t(`Please add Description`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6}>
-                <CustomTextField id="employee-number"label={t('mobile number')} variant="outlined" value={employeeNumber} onChange={employeeNumberChangeHandler} />
-                {employeeNumberError && <ValidationMessage notExist>{t(`Please add Number`)}</ValidationMessage>}
+                <CustomTextField id="expense-amount" type='number' label={t('amount')} variant="outlined" value={expenseAmount} onChange={expenseAmountChangeHandler} />
+                {expenseAmountError && <ValidationMessage notExist>{t(`Please add amount`)}</ValidationMessage>}
             </Grid>
         </Grid>
     )
@@ -190,14 +351,17 @@ const CreateModal = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        fetchedRoles: state.employees.roles,
-        creatingEmployeeSuccess: state.employees.creatingEmployeeSuccess,
+        fetchedLocations: state.locations.locations,
+        fetchedServices: state.services.servicesByLocation.services,
+        fetchingServices: state.services.servicesByLocation.fetchingServices,
+        creatingExpenseSuccess: state.expenses.creatingExpenseSuccess,
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchRolesHandler: (lang) => dispatch(fetchRoles(lang)),
+        fetchLocationsHandler: (lang) => dispatch(fetchLocations(lang)),
+        fetchServicesHandler: (lang, location) => dispatch(fetchServicesByLocation(lang, location)),
     }
 }
 

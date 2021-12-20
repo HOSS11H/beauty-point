@@ -20,6 +20,7 @@ import { useState } from 'react';
 import { useCallback } from 'react';
 import TablePaginationActions from '../../../../../components/UI/Dashboard/Table/TablePagination/TablePagination';
 import DeleteModal from './DeleteModal/DeleteModal';
+import EditModal from './EditModal/EditModal';
 
 const ExpensesWrapper = styled(Card)`
     display: flex;
@@ -62,7 +63,7 @@ function Expenses(props) {
 
     const { t } = useTranslation()
 
-    const { fetchedExpenses,fetchingExpenses, fetchExpensesHandler, searchingExpensesSuccess, deleteExpenseHandler, creatingExpenseSuccess } = props;
+    const { fetchedExpenses,fetchingExpenses, fetchExpensesHandler, searchingExpensesSuccess, deleteExpenseHandler, creatingExpenseSuccess, updateExpenseHandler } = props;
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(intialPerPage);
@@ -72,6 +73,8 @@ function Expenses(props) {
     const { lang } = themeCtx
 
     const [deleteModalOpened, setDeleteModalOpened] = useState(false);
+
+    const [editModalOpened, setEditModalOpened] = useState(false);
 
     const [selectedExpense, setSelectedExpense] = useState(null);
 
@@ -107,6 +110,21 @@ function Expenses(props) {
         setDeleteModalOpened(false);
         setSelectedExpense(null);
     }, [deleteExpenseHandler])
+    // Edit Modal
+    const editModalOpenHandler = useCallback((id) => {
+        setEditModalOpened(true);
+        setSelectedExpense(id);
+    }, [])
+    const editModalCloseHandler = useCallback(() => {
+        setEditModalOpened(false);
+        setSelectedExpense(null);
+    }, [])
+
+    const editModalConfirmHandler = useCallback((data) => {
+        setEditModalOpened(false);
+        setSelectedExpense(null);
+        updateExpenseHandler(data);
+    }, [updateExpenseHandler])
 
     let content = (
         <Fragment>
@@ -140,7 +158,7 @@ function Expenses(props) {
                         />
                         <EnhancedTableBody
                             fetchedExpenses={fetchedExpenses}
-                            editExpenseHandler={() => { }}
+                            editExpenseHandler={editModalOpenHandler}
                             deleteExpenseHandler={deleteModalOpenHandler}
                         />
                     </Table>
@@ -160,6 +178,13 @@ function Expenses(props) {
                 <DeleteModal show={deleteModalOpened} id={selectedExpense}
                     onClose={deleteModalCloseHandler} onConfirm={deleteModalConfirmHandler.bind(null, selectedExpense)}
                     heading='Do you want To delete this expense?' confirmText='delete' />
+                {
+                    editModalOpened && (
+                        <EditModal show={editModalOpened} id={selectedExpense} fetchedExpenses={fetchedExpenses}
+                            onClose={editModalCloseHandler} onConfirm={editModalConfirmHandler}
+                            heading='edit product details' confirmText='edit' />
+                    )
+                }
             </Paper>
         </Fragment>
     ) 

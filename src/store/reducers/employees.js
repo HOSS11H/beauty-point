@@ -68,6 +68,36 @@ const reducer = ( state = intialState, action ) => {
                     errorFetchingEmployees: true,
                 }
             });
+            case (actionTypes.SEARCH_EMPLOYEES_DATA_START) :
+                return updateObject( state, {
+                    employeesData: {
+                        ...state.employeesData,
+                        fetchingEmployees: true,
+                        errorFetchingEmployees: false,
+                        searchingEmployees: true,
+                        searchingEmployeesSuccess: false,
+                    },
+                });
+            case (actionTypes.SEARCH_EMPLOYEES_DATA_SUCCESS) :
+                return updateObject( state, {
+                    employeesData: {
+                        ...state.employeesData,
+                        employees: action.employees,
+                        fetchingEmployees: false,
+                        searchingEmployees: false,
+                        searchingEmployeesSuccess: true,
+                    }
+                });
+            case (actionTypes.SEARCH_EMPLOYEES_DATA_FAILED) :
+                return updateObject( state, {
+                    employeesData: {
+                        ...state.employeesData,
+                        fetchingEmployees: false,
+                        errorFetchingEmployees: true,
+                        searchingEmployees: false,
+                        searchingEmployeesSuccess: false,
+                    }
+                });
         case(actionTypes.DELETE_EMPLOYEE_DATA_START) :
             return updateObject( state, {
                 employeesData: {
