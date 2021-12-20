@@ -60,3 +60,7 @@ export {
     fetchTabularReport,
     filterTabularReport,
 } from './reports'
+export {
+    fetchExpenses,
+    deleteExpense
+} from './expenses'

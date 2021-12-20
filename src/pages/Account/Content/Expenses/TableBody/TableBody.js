@@ -10,6 +10,8 @@ import PendingIcon from '@mui/icons-material/Pending';
 
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
+import { formatCurrency } from '../../../../../shared/utility';
+import Actions from '../../../../../components/UI/Dashboard/Actions/Actions';
 
 const TableStatus = styled.div`
     display: flex;
@@ -66,14 +68,14 @@ const Items = styled.ul`
 
 const EnhancedTableBody = props => {
 
-    const { fetchedTabularReport } = props;
+    const { fetchedExpenses, editExpenseHandler, deleteExpenseHandler } = props;
 
     const { t } = useTranslation();
 
 
     return (
         <TableBody>
-            {fetchedTabularReport.data.map((row, index) => {
+            {fetchedExpenses.data.map((row, index) => {
                 return (
                     <TableRow
                         hover
@@ -87,52 +89,36 @@ const EnhancedTableBody = props => {
                         </TableCell>
                         <TableCell align="center">
                             <TableData>
-                                {row.customer_name}
+                                {row.category.name}
                             </TableData>
                         </TableCell>
                         <TableCell align="center">
                             <TableData>
-                                {row.booking_date}
+                                - {formatCurrency(row.amount)}
                             </TableData>
                         </TableCell>
                         <TableCell align="center">
                             <TableData>
-                                {row.booking_time}
+                                {row.name}
                             </TableData>
                         </TableCell>
                         <TableCell align="center">
-                            <Items>
-                                { 
-                                    row.items && (
-                                        row.items.map((item, index) => {
-                                            let loadedItems;
-                                            if (item) {
-                                                loadedItems = (
-                                                    <li key={item.id} >
-                                                        <FiberManualRecordIcon sx={{ mr: 1 }} />
-                                                        <span>{item.quantity}</span>
-                                                        <span className='divider'>x</span>
-                                                        <span>{item.item.name}</span>
-                                                    </li>
-                                                )
-                                            }
-                                            return loadedItems
-                                        })
-                                    )
-                                }
-                            </Items>
+                            <TableData>{row.expense_date}</TableData>
                         </TableCell>
                         <TableCell align="center">
-                            <TableData>{row.employee_name}</TableData>
+                            <TableData>{row.customer.name}</TableData>
                         </TableCell>
                         <TableCell align="center">
-                            <TableStatus className={row.booking_status}>{t(row.booking_status)}</TableStatus>
+                            <TableData>{row.bank_name}</TableData>
                         </TableCell>
                         <TableCell align="center">
-                            <TableData>{row.tax}</TableData>
+                            <TableData>{row.bank_account}</TableData>
                         </TableCell>
                         <TableCell align="center">
-                            <TableData style= { {display: 'flex'} } >{row.payment_status === 'completed' ? <CheckCircleIcon sx={{ mr: 1, color: '#568d00' }} /> : <PendingIcon sx={{ mr: 1, color: '#f9b904' }} />}{row.amount}</TableData>
+                            <Actions edit remove
+                                editHandler={editExpenseHandler.bind(null, row.id)}
+                                removeHandler={deleteExpenseHandler.bind(null, row.id)}
+                            />
                         </TableCell>
                     </TableRow>
                 );

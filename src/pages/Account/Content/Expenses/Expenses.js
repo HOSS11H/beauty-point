@@ -8,20 +8,18 @@ import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { fetchTabularReport } from '../../../../store/actions/index';
+import { fetchExpenses, deleteExpense } from '../../../../store/actions/index';
 import ThemeContext from '../../../../store/theme-context';
 import EnhancedTableHead from './TableHead/TableHead';
 import EnhancedTableBody from './TableBody/TableBody';
 import { useTranslation } from 'react-i18next';
-import { formatCurrency } from '../../../../shared/utility';
 import SearchMessage from "../../../../components/Search/SearchMessage/SearchMessage";
-import SearchFilters from './SearchFilters/SearchFilters';
 import Card from '@mui/material/Card';
-import { Grid } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useState } from 'react';
 import { useCallback } from 'react';
 import TablePaginationActions from '../../../../components/UI/Dashboard/Table/TablePagination/TablePagination';
+import DeleteModal from './DeleteModal/DeleteModal';
 
 const ExpensesWrapper = styled(Card)`
     display: flex;
@@ -40,7 +38,8 @@ const ExpensesWrapper = styled(Card)`
     .MuiPaper-root {
         border-radius: 0;
         border-radius:20px;
-        padding: 20px;
+        bakground-color: transparent;
+        box-shadow: none;
     }
 `
 const TablePaginationWrapper = styled.div`
@@ -48,25 +47,6 @@ const TablePaginationWrapper = styled.div`
     justify-content: flex-end;
 `
 
-const PriceCalculation = styled.div`
-    display: flex;
-    align-items: center;
-    padding: 10px 0;
-    &:last-child{
-        padding-bottom:0;
-    }
-    p {
-        font-size: 20px;
-        line-height:1.5;
-        text-transform: uppercase;
-        font-weight: 600;
-        color: ${({ theme }) => theme.palette.text.primary};
-        margin-right: 20px;
-        &:last-child {
-            margin-right: 0;
-        }
-    }
-`
 const Loader = styled(Card)`
     display: flex;
     align-items: center;
@@ -82,7 +62,7 @@ function Expenses(props) {
 
     const { t } = useTranslation()
 
-    const { fetchedTabularReport,fetchingTabularReports, fetchTabularReportHandler, filteringTabularReportsSuccess } = props;
+    const { fetchedExpenses,fetchingExpenses, fetchExpensesHandler, searchingExpensessSuccess, deleteExpenseHandler } = props;
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(intialPerPage);
@@ -91,9 +71,13 @@ function Expenses(props) {
 
     const { lang } = themeCtx
 
+    const [deleteModalOpened, setDeleteModalOpened] = useState(false);
+
+    const [selectedExpense, setSelectedExpense] = useState(null);
+
     useEffect(() => {
-        fetchTabularReportHandler(lang, page, rowsPerPage );
-    }, [lang, fetchTabularReportHandler, page, rowsPerPage]);
+        fetchExpensesHandler(lang, page, rowsPerPage );
+    }, [lang, fetchExpensesHandler, page, rowsPerPage]);
 
     const handleChangePage = useCallback((event, newPage) => {
         setPage(newPage);
@@ -102,6 +86,22 @@ function Expenses(props) {
         setRowsPerPage(event.target.value);
         setPage(0);
     }, []);
+
+    // Delete Modal
+    const deleteModalOpenHandler = useCallback((id) => {
+        setDeleteModalOpened(true);
+        setSelectedExpense(id);
+    }, [])
+    const deleteModalCloseHandler = useCallback(() => {
+        setDeleteModalOpened(false);
+        setSelectedExpense(null);
+    }, [])
+
+    const deleteModalConfirmHandler = useCallback((id) => {
+        deleteExpenseHandler( id);
+        setDeleteModalOpened(false);
+        setSelectedExpense(null);
+    }, [deleteExpenseHandler])
 
     let content = (
         <Fragment>
@@ -124,18 +124,6 @@ function Expenses(props) {
                                 <MenuItem value='20'>{t('20')}</MenuItem>
                             </Select>
                         </FormControl>
-                        {rowsPerPage !== 'all' && (
-                            <TablePaginationActions
-                                sx= {{ width: '100%'}}
-                                component="div"
-                                count={fetchedTabularReport.data.length}
-                                total={fetchedTabularReport.meta ? fetchedTabularReport.meta.total : 0}
-                                rowsPerPage={rowsPerPage}
-                                page={page}
-                                onPageChange={handleChangePage}
-                                loading={fetchingTabularReports}
-                            />
-                        )}
                     </TablePaginationWrapper>
                     <Table
                         sx={{ minWidth: 750 }}
@@ -143,47 +131,40 @@ function Expenses(props) {
                         size='medium'
                     >
                         <EnhancedTableHead
-                            rowCount={fetchedTabularReport.data.length}
+                            rowCount={fetchedExpenses.data.length}
                         />
                         <EnhancedTableBody
-                            fetchedTabularReport={fetchedTabularReport}
+                            fetchedExpenses={fetchedExpenses}
+                            editExpenseHandler={() => { }}
+                            deleteExpenseHandler={deleteModalOpenHandler}
                         />
                     </Table>
                     {rowsPerPage !== 'all' && (
                         <TablePaginationActions
                             sx= {{ width: '100%'}}
                             component="div"
-                            count={fetchedTabularReport.data.length}
-                            total={fetchedTabularReport.meta ? fetchedTabularReport.meta.total : 0}
+                            count={fetchedExpenses.data.length}
+                            total={fetchedExpenses.meta ? fetchedExpenses.meta.total : 0}
                             rowsPerPage={rowsPerPage}
                             page={page}
                             onPageChange={handleChangePage}
-                            loading={fetchingTabularReports}
+                            loading={fetchingExpenses}
                         />
                     )}
                 </TableContainer>
+                <DeleteModal show={deleteModalOpened} id={selectedExpense}
+                    onClose={deleteModalCloseHandler} onConfirm={deleteModalConfirmHandler.bind(null, selectedExpense)}
+                    heading='Do you want To delete this expense?' confirmText='delete' />
             </Paper>
-            <Grid   container   spacing={2}>
-                <Grid item xs={12} md={6}>
-                    <PriceCalculation>
-                        <p>{t('total taxes')}</p>
-                        <p>{formatCurrency(fetchedTabularReport.total_tax || 0)}</p>
-                    </PriceCalculation>
-                    <PriceCalculation>
-                        <p>{t('total amount')}</p>
-                        <p>{formatCurrency(fetchedTabularReport.total || 0)}</p>
-                    </PriceCalculation>
-                </Grid>
-            </Grid>
         </Fragment>
     ) 
-    if ( fetchedTabularReport.data.length === 0 && filteringTabularReportsSuccess) {
+    if ( fetchedExpenses.data.length === 0 && searchingExpensessSuccess) {
         content = (
             <SearchMessage>
                 {t('no results')}
             </SearchMessage>
         )
-    } else if (fetchingTabularReports) {
+    } else if (fetchingExpenses) {
         content = (
             <Loader>
                 <CircularProgress color="secondary" />
@@ -193,7 +174,6 @@ function Expenses(props) {
 
     return (
         <ExpensesWrapper>
-            <SearchFilters perPage={rowsPerPage} />
             {content}
         </ExpensesWrapper>
     );
@@ -201,15 +181,15 @@ function Expenses(props) {
 
 const mapStateToProps = state => {
     return {
-        fetchedTabularReport: state.reports.reports.tabularReport.content,
-        fetchingTabularReports: state.reports.reports.tabularReport.fetchingTabularReports,
-        filteringTabularReportsSuccess: state.reports.reports.tabularReport.filteringTabularReportsSuccess,
+        fetchedExpenses: state.expenses.expenses,
+        fetchingExpenses: state.expenses.fetchingExpenses,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchTabularReportHandler: (lang, page, rowsPerPage ) => dispatch(fetchTabularReport(lang, page, rowsPerPage)),
+        fetchExpensesHandler: (lang, page, rowsPerPage ) => dispatch(fetchExpenses(lang, page, rowsPerPage)),
+        deleteExpenseHandler: (id) => dispatch(deleteExpense(id)),
     }
 }
 

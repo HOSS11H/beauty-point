@@ -278,6 +278,13 @@ const resources = {
             'Discount Coupon': 'كوبون الخصم',
             'show': 'عرض',
             'visit store': 'زيارة المتجر',
+            'expenses': 'المصاريف',
+            'amount': 'المبلغ',
+            'date': 'التاريخ',
+            'agent': 'العميل',
+            'bank': 'البنك',
+            'account': 'الحساب',
+            'Do you want To delete this expense?': 'هل تريد حذف هذه المصاريف؟',
         }
     }
 };
