@@ -1,6 +1,6 @@
 import { Fragment, useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { searchExpenses } from '../../../../store/actions/index';
+import { searchExpenses , createExpense} from '../../../../store/actions/index';
 import SearchBar from "../../../../components/Search/SearchBar/SearchBar";
 
 import ExpensesTable from './ExpensesTable/ExpensesTable';
@@ -9,7 +9,6 @@ import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 
 import { CustomButton } from '../../../../components/UI/Button/Button';
-/* import CreateModal from "./CreateModal/CreateModal"; */
 import CustomizedSnackbars from "../../../../components/UI/SnackBar/SnackBar";
 import CreateModal from "./CreateModal/CreateModal";
 
@@ -35,14 +34,14 @@ function Expenses(props) {
 
     const { t } = useTranslation()
 
-    const { searchExpensesHandler, addEmployeeHandler, addingEmployeeSuccess } = props;
+    const { searchExpensesHandler, addExpenseHandler, addingEmployeeSuccess } = props;
 
     const [createModalOpened, setCreateModalOpened] = useState(false);
 
     const [ messageShown, setMessageShown ] = useState(addingEmployeeSuccess);
 
     useEffect(() => {
-        setMessageShown(addingEmployeeSuccess )
+        setMessageShown( addingEmployeeSuccess )
     }, [addingEmployeeSuccess])
     const closeMessageHandler = useCallback(( ) => {
         setMessageShown(false)
@@ -58,8 +57,8 @@ function Expenses(props) {
 
     const createModalConfirmHandler = useCallback((data) => {
         setCreateModalOpened(false);
-        addEmployeeHandler(data);
-    }, [addEmployeeHandler])
+        addExpenseHandler(data);
+    }, [addExpenseHandler])
 
 
     return (
@@ -86,7 +85,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => {
     return {
         searchExpensesHandler: ( language, word ) => dispatch(searchExpenses( language, word )),
-        /* addEmployeeHandler: (data) => dispatch(addEmployeeData( data )) */
+        addExpenseHandler: (data) => dispatch(createExpense( data ))
     }
 }
 

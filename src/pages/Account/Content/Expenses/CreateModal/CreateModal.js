@@ -214,12 +214,19 @@ const CreateModal = (props) => {
     const resetModalData = useCallback(() => {
         setExpenseName('');
         setExpenseNameError(false);
+        setDate(new Date());
         setExpenseBank('');
         setExpenseBankError(false);
         setExpenseAccount('');
         setExpenseAccountError(false);
-        setEditorState(EditorState.createEmpty());
+        setSelectedCategory(null);
+        setSelectedCategoryError(false);
+        setSelectedAgent(null);
+        setSelectedAgentError(false);
+        setExpenseAmount(0);
+        setExpenseAmountError(false);
         setExpenseDescriptionError(false);
+        setEditorState(EditorState.createEmpty());
     }, [])
 
     useEffect(() => {
@@ -259,10 +266,16 @@ const CreateModal = (props) => {
         }
         const data = {
             name: expenseName,
-            description: draftToHtml(convertToRaw(editorState.getCurrentContent())),
+            note: draftToHtml(convertToRaw(editorState.getCurrentContent())),
+            amount: expenseAmount,
+            expense_date: format(date, 'Y-M-dd hh:ii a'),
+            bank_name: expenseBank,
+            bank_account: expenseAccount,
+            cat_id: selectedCategory.value,
+            customer_id: selectedAgent.value,
         }
         onConfirm(data);
-    }, [expenseName, expenseBank, expenseAccount, selectedCategory, selectedAgent, expenseAmount, editorState, onConfirm])
+    }, [expenseName, expenseBank, expenseAccount, selectedCategory, selectedAgent, editorState, expenseAmount, date, onConfirm])
 
     let content = (
         <Grid container spacing={2}>

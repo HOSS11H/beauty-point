@@ -99,3 +99,34 @@ export const searchExpenses = (language, word) => {
             })
     }
 }
+export const createExpenseStart = () => {
+    return {
+        type: actionTypes.CREATE_EXPENSE_START,
+    }
+}
+export const createExpenseSuccess = (message, createdExpenseData) => {
+    return {
+        type: actionTypes.CREATE_EXPENSE_SUCCESS,
+        message: message,
+        expenseData: createdExpenseData,
+    }
+}
+export const createExpenseFailed = (message) => {
+    return {
+        type: actionTypes.CREATE_EXPENSE_FAILED,
+        message: message,
+    }
+}
+
+export const createExpense = (data) => {
+    return dispatch => {
+        dispatch(createExpenseStart())
+        axios.post(`/vendors/expenses`, data)
+            .then(response => {
+                dispatch(createExpenseSuccess(null, { ...data, ...response.data }));
+            })
+            .catch(err => {
+                dispatch(createExpenseFailed(err.message))
+            })
+    }
+}

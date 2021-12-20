@@ -11,6 +11,9 @@ const intialState = {
     deletingExpenseMessage: null,
     searchingExpenses: false,
     searchingExpensesSuccess: false,
+    creatingExpense: false,
+    creatingExpenseSuccess: false,
+    creatingExpenseMessage: null,
 }
 
 const reducer = (state = intialState, action) => {
@@ -75,6 +78,24 @@ const reducer = (state = intialState, action) => {
                 errorFetchingExpenses: true,
                 searchingExpenses: false,
                 searchingExpensesSuccess: false,
+            })
+        case (actionTypes.CREATE_EXPENSE_START):
+            return updateObject(state, {
+                creatingExpense: true,
+                creatingExpenseSuccess: false,
+                creatingExpenseMessage: null,
+            })
+        case (actionTypes.CREATE_EXPENSE_SUCCESS):
+            return updateObject(state, {
+                creatingExpense: false,
+                creatingExpenseSuccess: true,
+                creatingExpenseMessage: action.message,
+            })
+        case ( actionTypes.CREATE_EXPENSE_FAILED ):
+            return updateObject(state, {
+                creatingExpense: false,
+                creatingExpenseSuccess: false,
+                creatingExpenseMessage: action.message,
             })
         default:
             return state;

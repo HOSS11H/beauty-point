@@ -62,7 +62,7 @@ function Expenses(props) {
 
     const { t } = useTranslation()
 
-    const { fetchedExpenses,fetchingExpenses, fetchExpensesHandler, searchingExpensesSuccess, deleteExpenseHandler } = props;
+    const { fetchedExpenses,fetchingExpenses, fetchExpensesHandler, searchingExpensesSuccess, deleteExpenseHandler, creatingExpenseSuccess } = props;
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(intialPerPage);
@@ -78,6 +78,11 @@ function Expenses(props) {
     useEffect(() => {
         fetchExpensesHandler(lang, page, rowsPerPage );
     }, [lang, fetchExpensesHandler, page, rowsPerPage]);
+    
+    useEffect(() => {
+        creatingExpenseSuccess && fetchExpensesHandler(lang, page, rowsPerPage );
+    }, [lang, fetchExpensesHandler, page, rowsPerPage, creatingExpenseSuccess]);
+
 
     const handleChangePage = useCallback((event, newPage) => {
         setPage(newPage);
@@ -184,6 +189,7 @@ const mapStateToProps = state => {
         fetchedExpenses: state.expenses.expenses,
         fetchingExpenses: state.expenses.fetchingExpenses,
         searchingExpensesSuccess: state.expenses.searchingExpensesSuccess,
+        creatingExpenseSuccess: state.expenses.creatingExpenseSuccess,
     }
 }
 
