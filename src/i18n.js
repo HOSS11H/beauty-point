@@ -287,6 +287,13 @@ const resources = {
             'Do you want To delete this expense?': 'هل تريد حذف هذه المصاريف؟',
             'add new expense': 'إضافة مصاريف جديدة',
             'add expense': 'إضافة مصاريف',
+            'Please add bank': 'يرجى إضافة البنك',
+            'Please add account': 'يرجى إضافة الحساب',
+            'select category': 'اختر الفئة',
+            'select agent': 'اختر العميل',
+            'Please select category': 'يرجى اختيار الفئة',
+            'Please select agent': 'يرجى اختيار العميل',
+            'Please add amount': 'يرجى إضافة المبلغ',
         }
     }
 };

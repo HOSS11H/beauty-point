@@ -22,7 +22,7 @@ import { fetchLocations, fetchServicesByLocation } from '../../../../../store/ac
 import ValidationMessage from '../../../../../components/UI/ValidationMessage/ValidationMessage';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { format } from 'date-fns';
-import axios from '../../../../../utils/axios-instance';  
+import axios from '../../../../../utils/axios-instance';
 
 
 const CustomTextField = styled(TextField)`
@@ -109,23 +109,23 @@ const CreateModal = (props) => {
     const [expenseAccount, setExpenseAccount] = useState('');
     const [expenseAccountError, setExpenseAccountError] = useState(false);
 
-    const [ categoriesOptions , setCategoriesOptions ] = useState([])
-    
-    const [selectedCategory, setSelectedCategory] = useState('');
-    const [selectedCategoryError, setSelectedCategoryError] = useState(false);
-    
-    const [ agentsOptions , setAgentsOptions ] = useState([])
+    const [categoriesOptions, setCategoriesOptions] = useState([])
 
-    const [selectedAgent, setSelectedAgent] = useState('');
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [selectedCategoryError, setSelectedCategoryError] = useState(false);
+
+    const [agentsOptions, setAgentsOptions] = useState([])
+
+    const [selectedAgent, setSelectedAgent] = useState(null);
     const [selectedAgentError, setSelectedAgentError] = useState(false);
-    
+
     const [editorState, setEditorState] = useState(
         EditorState.createEmpty()
     )
     const [expenseDescriptionError, setExpenseDescriptionError] = useState(false);
-    
+
     const [expenseAmount, setExpenseAmount] = useState(0);
-    const [ expenseAmountError, setExpenseAmountError ] = useState(false);
+    const [expenseAmountError, setExpenseAmountError] = useState(false);
 
 
     const expenseNameChangeHandler = (event) => {
@@ -145,13 +145,13 @@ const CreateModal = (props) => {
     }
 
     const expenseAmountChangeHandler = (event) => {
-        if (event.target.value >= 0 ) {
+        if (event.target.value >= 0) {
             setExpenseAmount(event.target.value);
             setExpenseAmountError(false);
         }
     }
     const handleSelectCategoryOptions = (value, actions) => {
-        if ( value.length !== 0 ) {
+        if (value.length !== 0) {
             axios.get(`/vendors/expenses_categories`)
                 .then(res => {
                     const categories = res.data.data;
@@ -176,7 +176,7 @@ const CreateModal = (props) => {
     }
 
     const handleSelectAgentOptions = (value, actions) => {
-        if ( value.length !== 0 ) {
+        if (value.length !== 0) {
             axios.get(`/vendors/expenses_customers`)
                 .then(res => {
                     const categories = res.data.data;
@@ -227,19 +227,42 @@ const CreateModal = (props) => {
     }, [creatingExpenseSuccess, resetModalData])
 
     const confirmCreateHandler = useCallback(() => {
+
         if (expenseName.trim().length === 0) {
             setExpenseNameError(true);
             return;
         }
-
-
-
+        if (expenseBank.trim().length === 0) {
+            setExpenseBankError(true);
+            return;
+        }
+        if (expenseAccount.trim().length === 0) {
+            setExpenseAccountError(true);
+            return;
+        }
+        if (!selectedCategory) {
+            console.log('selectedCategory', selectedCategory);
+            setSelectedCategoryError(true);
+            return;
+        }
+        if (!selectedAgent) {
+            setSelectedAgentError(true);
+            return;
+        }
+        if (editorState.getCurrentContent().hasText() === false) {
+            setExpenseDescriptionError(true);
+            return;
+        }
+        if (expenseAmount === 0) {
+            setExpenseAmountError(true);
+            return;
+        }
         const data = {
             name: expenseName,
             description: draftToHtml(convertToRaw(editorState.getCurrentContent())),
         }
         onConfirm(data);
-    }, [expenseName, editorState, onConfirm])
+    }, [expenseName, expenseBank, expenseAccount, selectedCategory, selectedAgent, expenseAmount, editorState, onConfirm])
 
     let content = (
         <Grid container spacing={2}>
@@ -267,18 +290,20 @@ const CreateModal = (props) => {
                 {expenseAccountError && <ValidationMessage notExist>{t(`Please add account`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6} >
-                <FormLabel component="legend" sx={{ textAlign: 'left', textTransform: 'capitalize', marginBottom: '8px' } } >{t('select category')}</FormLabel>
+                <FormLabel component="legend" sx={{ textAlign: 'left', textTransform: 'capitalize', marginBottom: '8px' }} >{t('select category')}</FormLabel>
                 <FormControl fullWidth sx={{ minWidth: '200px' }} >
                     <ReactSelect options={categoriesOptions} isClearable isRtl={lang === 'ar'}
-                        onChange={handleSelectCategory} onInputChange={handleSelectCategoryOptions}/>
+                        onChange={handleSelectCategory} onInputChange={handleSelectCategoryOptions} />
                 </FormControl>
+                {selectedCategoryError && <ValidationMessage notExist>{t(`Please select category`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6} >
-                <FormLabel component="legend" sx={{ textAlign: 'left', textTransform: 'capitalize', marginBottom: '8px' } } >{t('select agent')}</FormLabel>
+                <FormLabel component="legend" sx={{ textAlign: 'left', textTransform: 'capitalize', marginBottom: '8px' }} >{t('select agent')}</FormLabel>
                 <FormControl fullWidth sx={{ minWidth: '200px' }} >
                     <ReactSelect options={agentsOptions} isClearable isRtl={lang === 'ar'}
-                        onChange={handleSelectAgent} onInputChange={handleSelectAgentOptions}/>
+                        onChange={handleSelectAgent} onInputChange={handleSelectAgentOptions} />
                 </FormControl>
+                {selectedAgentError && <ValidationMessage notExist>{t(`Please select agent`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12}>
                 <EditorWrapper>
