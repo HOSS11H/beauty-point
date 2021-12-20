@@ -111,6 +111,14 @@ const CreateModal = (props) => {
 
     const [ categoriesOptions , setCategoriesOptions ] = useState([])
     
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const [selectedCategoryError, setSelectedCategoryError] = useState(false);
+    
+    const [ agentsOptions , setAgentsOptions ] = useState([])
+
+    const [selectedAgent, setSelectedAgent] = useState('');
+    const [selectedAgentError, setSelectedAgentError] = useState(false);
+    
     const [editorState, setEditorState] = useState(
         EditorState.createEmpty()
     )
@@ -144,7 +152,7 @@ const CreateModal = (props) => {
     }
     const handleSelectCategoryOptions = (value, actions) => {
         if ( value.length !== 0 ) {
-            axios.get(`/vendors/expenses_categories?include[]=expenses`)
+            axios.get(`/vendors/expenses_categories`)
                 .then(res => {
                     const categories = res.data.data;
                     const options = categories.map(category => {
@@ -162,6 +170,33 @@ const CreateModal = (props) => {
     }
     const handleSelectCategory = (value, actions) => {
         if (value) {
+            setSelectedCategory(value);
+            setSelectedCategoryError(false);
+        }
+    }
+
+    const handleSelectAgentOptions = (value, actions) => {
+        if ( value.length !== 0 ) {
+            axios.get(`/vendors/expenses_customers`)
+                .then(res => {
+                    const categories = res.data.data;
+                    const options = categories.map(category => {
+                        return {
+                            value: category.id,
+                            label: category.name
+                        }
+                    })
+                    setAgentsOptions(options);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+    }
+    const handleSelectAgent = (value, actions) => {
+        if (value) {
+            setSelectedAgent(value);
+            setSelectedAgentError(false);
         }
     }
 
@@ -236,6 +271,13 @@ const CreateModal = (props) => {
                 <FormControl fullWidth sx={{ minWidth: '200px' }} >
                     <ReactSelect options={categoriesOptions} isClearable isRtl={lang === 'ar'}
                         onChange={handleSelectCategory} onInputChange={handleSelectCategoryOptions}/>
+                </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={6} >
+                <FormLabel component="legend" sx={{ textAlign: 'left', textTransform: 'capitalize', marginBottom: '8px' } } >{t('select agent')}</FormLabel>
+                <FormControl fullWidth sx={{ minWidth: '200px' }} >
+                    <ReactSelect options={agentsOptions} isClearable isRtl={lang === 'ar'}
+                        onChange={handleSelectAgent} onInputChange={handleSelectAgentOptions}/>
                 </FormControl>
             </Grid>
             <Grid item xs={12}>
