@@ -72,7 +72,7 @@ const ServicePanel = styled.div`
     }
     &:hover {
         .service-icon {
-            i,svg {
+            i,svg, img {
                 animation: ${Bounce} 1s ease-in-out;
             }
         }
@@ -195,7 +195,7 @@ const ServicesSlider = props => {
                                 <img src={service.image} alt="service" />
                             </div>
                             <div className="service-title">
-                                <a href={`https://beautypoint.sa/${service.name}/services`}>{service.name}</a>
+                                <NavLink to="/">{service.name}</NavLink>
                             </div>
                         </ServicePanel>
                     ))
