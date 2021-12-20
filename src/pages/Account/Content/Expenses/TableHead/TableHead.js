@@ -3,7 +3,7 @@ import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import { useTranslation } from 'react-i18next';
 
-import { TableHeading } from '../../../../../../../components/UI/Dashboard/Table/Table';
+import { TableHeading } from '../../../../../components/UI/Dashboard/Table/Table';
 
 const headCells = [
     {
