@@ -9,6 +9,8 @@ const intialState = {
     deletingExpense: false,
     deletingExpenseSuccess: false,
     deletingExpenseMessage: null,
+    searchingExpenses: false,
+    searchingExpensesSuccess: false,
 }
 
 const reducer = (state = intialState, action) => {
@@ -52,6 +54,27 @@ const reducer = (state = intialState, action) => {
                 deletingExpense: false,
                 deletingExpenseSuccess: false,
                 deletingExpenseMessage: action.message,
+            })
+        case (actionTypes.SEARCH_EXPENSES_START):
+            return updateObject(state, {
+                fetchingExpenses: true,
+                errorFetchingExpenses: false,
+                searchingExpenses: true,
+                searchingExpensesSuccess: false,
+            })
+        case (actionTypes.SEARCH_EXPENSES_SUCCESS):
+            return updateObject(state, {
+                fetchingExpenses: false,
+                expenses: action.expenses,
+                searchingExpenses: false,
+                searchingExpensesSuccess: true,
+            })
+        case (actionTypes.SEARCH_EXPENSES_FAILED):
+            return updateObject(state, {
+                fetchingExpenses: false,
+                errorFetchingExpenses: true,
+                searchingExpenses: false,
+                searchingExpensesSuccess: false,
             })
         default:
             return state;

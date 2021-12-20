@@ -1,197 +1,93 @@
-import { useContext, useEffect, Fragment } from 'react';
-import Table from '@mui/material/Table';
-import TableContainer from '@mui/material/TableContainer';
-import Paper from '@mui/material/Paper';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import InputLabel from '@mui/material/InputLabel';
+import { Fragment, useCallback, useEffect, useState } from "react";
+import { connect } from "react-redux";
+import { searchExpenses } from '../../../../store/actions/index';
+import SearchBar from "../../../../components/Search/SearchBar/SearchBar";
+
+import ExpensesTable from './ExpensesTable/ExpensesTable';
+
 import styled from 'styled-components';
-import { connect } from 'react-redux';
-import { fetchExpenses, deleteExpense } from '../../../../store/actions/index';
-import ThemeContext from '../../../../store/theme-context';
-import EnhancedTableHead from './TableHead/TableHead';
-import EnhancedTableBody from './TableBody/TableBody';
 import { useTranslation } from 'react-i18next';
-import SearchMessage from "../../../../components/Search/SearchMessage/SearchMessage";
-import Card from '@mui/material/Card';
-import CircularProgress from '@mui/material/CircularProgress';
-import { useState } from 'react';
-import { useCallback } from 'react';
-import TablePaginationActions from '../../../../components/UI/Dashboard/Table/TablePagination/TablePagination';
-import DeleteModal from './DeleteModal/DeleteModal';
 
-const ExpensesWrapper = styled(Card)`
+import { CustomButton } from '../../../../components/UI/Button/Button';
+/* import CreateModal from "./CreateModal/CreateModal"; */
+import CustomizedSnackbars from "../../../../components/UI/SnackBar/SnackBar";
+import CreateModal from "./CreateModal/CreateModal";
+
+
+const ActionsWrapper = styled.div`
     display: flex;
-    max-width: 100%;
-    min-height: 100px;
-    box-shadow: rgb(90 114 123 / 11%) 0px 7px 30px 0px;
-    margin-bottom: 40px;
-    background-color: ${({ theme }) => theme.palette.background.default};
-    border-radius:20px;
-    flex-direction: column;
-    padding-bottom: 20px;
-    padding: 30px 20px;
-    &:last-child{
-        margin-bottom:0;
-    }
-    .MuiPaper-root {
-        border-radius: 0;
-        border-radius:20px;
-        bakground-color: transparent;
-        box-shadow: none;
+`
+const CreateBtn = styled(CustomButton)`
+    &.MuiButton-root {
+        margin-left: 20px;
+        width: auto;
+        padding: 0 20px;
+        height: 64px;
+        flex-shrink: 0;
+        box-shadow: rgb(90 114 123 / 11%) 0px 7px 30px 0px;
+        @media screen and (max-width: 600px) {
+            height: 50px;
+        }
     }
 `
-const TablePaginationWrapper = styled.div`
-    display: flex;
-    justify-content: flex-end;
-`
-
-const Loader = styled(Card)`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    min-height: 50vh;
-    flex-grow: 1;
-`
-
-const intialPerPage = 15;
 
 function Expenses(props) {
 
     const { t } = useTranslation()
 
-    const { fetchedExpenses,fetchingExpenses, fetchExpensesHandler, searchingExpensessSuccess, deleteExpenseHandler } = props;
+    const { searchExpensesHandler, addEmployeeHandler, addingEmployeeSuccess } = props;
 
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(intialPerPage);
+    const [createModalOpened, setCreateModalOpened] = useState(false);
 
-    const themeCtx = useContext(ThemeContext)
-
-    const { lang } = themeCtx
-
-    const [deleteModalOpened, setDeleteModalOpened] = useState(false);
-
-    const [selectedExpense, setSelectedExpense] = useState(null);
+    const [ messageShown, setMessageShown ] = useState(addingEmployeeSuccess);
 
     useEffect(() => {
-        fetchExpensesHandler(lang, page, rowsPerPage );
-    }, [lang, fetchExpensesHandler, page, rowsPerPage]);
-
-    const handleChangePage = useCallback((event, newPage) => {
-        setPage(newPage);
-    }, []);
-    const handlePerPageChange = useCallback((event) => {
-        setRowsPerPage(event.target.value);
-        setPage(0);
-    }, []);
-
-    // Delete Modal
-    const deleteModalOpenHandler = useCallback((id) => {
-        setDeleteModalOpened(true);
-        setSelectedExpense(id);
-    }, [])
-    const deleteModalCloseHandler = useCallback(() => {
-        setDeleteModalOpened(false);
-        setSelectedExpense(null);
+        setMessageShown(addingEmployeeSuccess )
+    }, [addingEmployeeSuccess])
+    const closeMessageHandler = useCallback(( ) => {
+        setMessageShown(false)
     }, [])
 
-    const deleteModalConfirmHandler = useCallback((id) => {
-        deleteExpenseHandler( id);
-        setDeleteModalOpened(false);
-        setSelectedExpense(null);
-    }, [deleteExpenseHandler])
+    // Create Modal
+    const createModalOpenHandler = useCallback((id) => {
+        setCreateModalOpened(true);
+    }, [])
+    const createModalCloseHandler = useCallback(() => {
+        setCreateModalOpened(false);
+    }, [])
 
-    let content = (
-        <Fragment>
-            <Paper sx={{ width: '100%', boxShadow: 'none',  }}>
-                <TableContainer>
-                    <TablePaginationWrapper>
-                        <FormControl sx={{ minWidth: '75px', }} variant="filled" >
-                            <InputLabel id="show-num">{t('show')}</InputLabel>
-                            <Select
-                                labelId="show-num"
-                                id="show-num-select"
-                                value={rowsPerPage}
-                                label={t('show')}
-                                onChange={handlePerPageChange}
-                            >
-                                <MenuItem value='all'>{t('all')}</MenuItem>
-                                <MenuItem value='5'>{t('5')}</MenuItem>
-                                <MenuItem value='10'>{t('10')}</MenuItem>
-                                <MenuItem value='15'>{t('15')}</MenuItem>
-                                <MenuItem value='20'>{t('20')}</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </TablePaginationWrapper>
-                    <Table
-                        sx={{ minWidth: 750 }}
-                        aria-labelledby="tableTitle"
-                        size='medium'
-                    >
-                        <EnhancedTableHead
-                            rowCount={fetchedExpenses.data.length}
-                        />
-                        <EnhancedTableBody
-                            fetchedExpenses={fetchedExpenses}
-                            editExpenseHandler={() => { }}
-                            deleteExpenseHandler={deleteModalOpenHandler}
-                        />
-                    </Table>
-                    {rowsPerPage !== 'all' && (
-                        <TablePaginationActions
-                            sx= {{ width: '100%'}}
-                            component="div"
-                            count={fetchedExpenses.data.length}
-                            total={fetchedExpenses.meta ? fetchedExpenses.meta.total : 0}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            onPageChange={handleChangePage}
-                            loading={fetchingExpenses}
-                        />
-                    )}
-                </TableContainer>
-                <DeleteModal show={deleteModalOpened} id={selectedExpense}
-                    onClose={deleteModalCloseHandler} onConfirm={deleteModalConfirmHandler.bind(null, selectedExpense)}
-                    heading='Do you want To delete this expense?' confirmText='delete' />
-            </Paper>
-        </Fragment>
-    ) 
-    if ( fetchedExpenses.data.length === 0 && searchingExpensessSuccess) {
-        content = (
-            <SearchMessage>
-                {t('no results')}
-            </SearchMessage>
-        )
-    } else if (fetchingExpenses) {
-        content = (
-            <Loader>
-                <CircularProgress color="secondary" />
-            </Loader>
-        )
-    }
+    const createModalConfirmHandler = useCallback((data) => {
+        setCreateModalOpened(false);
+        addEmployeeHandler(data);
+    }, [addEmployeeHandler])
+
 
     return (
-        <ExpensesWrapper>
-            {content}
-        </ExpensesWrapper>
+        <Fragment>
+            <ActionsWrapper>
+                <SearchBar searchHandler={searchExpensesHandler}/>
+                <CreateBtn onClick={createModalOpenHandler} >{t('add expense')}</CreateBtn>
+                <CreateModal show={createModalOpened}
+                    onClose={createModalCloseHandler} onConfirm={createModalConfirmHandler}
+                    heading='add new expense' confirmText='add' />
+            </ActionsWrapper>
+            <ExpensesTable />
+            <CustomizedSnackbars show={messageShown} message={t('Employee Added')} type='success' onClose={closeMessageHandler} />
+        </Fragment>
     );
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
-        fetchedExpenses: state.expenses.expenses,
-        fetchingExpenses: state.expenses.fetchingExpenses,
+        addingEmployeeSuccess: state.employees.employeesData.addingEmployeeSuccess,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchExpensesHandler: (lang, page, rowsPerPage ) => dispatch(fetchExpenses(lang, page, rowsPerPage)),
-        deleteExpenseHandler: (id) => dispatch(deleteExpense(id)),
+        searchExpensesHandler: ( language, word ) => dispatch(searchExpenses( language, word )),
+        /* addEmployeeHandler: (data) => dispatch(addEmployeeData( data )) */
     }
 }
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(Expenses);

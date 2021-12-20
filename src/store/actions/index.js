@@ -62,5 +62,6 @@ export {
 } from './reports'
 export {
     fetchExpenses,
-    deleteExpense
+    deleteExpense,
+    searchExpenses,
 } from './expenses'

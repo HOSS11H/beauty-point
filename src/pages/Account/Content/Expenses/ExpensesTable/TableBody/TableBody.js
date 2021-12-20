@@ -3,15 +3,15 @@
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
-import { TableData } from '../../../../../components/UI/Dashboard/Table/Table';
+import { TableData } from '../../../../../../components/UI/Dashboard/Table/Table';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PendingIcon from '@mui/icons-material/Pending';
 
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import { formatCurrency } from '../../../../../shared/utility';
-import Actions from '../../../../../components/UI/Dashboard/Actions/Actions';
+import { formatCurrency } from '../../../../../../shared/utility';
+import Actions from '../../../../../../components/UI/Dashboard/Actions/Actions';
 
 const TableStatus = styled.div`
     display: flex;

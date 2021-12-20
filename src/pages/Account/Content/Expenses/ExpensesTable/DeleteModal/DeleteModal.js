@@ -1,4 +1,4 @@
-import { CustomModal } from '../../../../../components/UI/Modal/Modal';
+import { CustomModal } from '../../../../../../components/UI/Modal/Modal';
 
 import styled from 'styled-components';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';

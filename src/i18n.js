@@ -285,6 +285,8 @@ const resources = {
             'bank': 'البنك',
             'account': 'الحساب',
             'Do you want To delete this expense?': 'هل تريد حذف هذه المصاريف؟',
+            'add new expense': 'إضافة مصاريف جديدة',
+            'add expense': 'إضافة مصاريف',
         }
     }
 };

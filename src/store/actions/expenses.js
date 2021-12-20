@@ -67,3 +67,35 @@ export const deleteExpense = (id) => {
             })
     }
 }
+export const searchExpensesStart = () => {
+    return {
+        type: actionTypes.SEARCH_EXPENSES_START,
+    }
+}
+export const searchExpensesSuccess = (expensesData) => {
+    return {
+        type: actionTypes.SEARCH_EXPENSES_SUCCESS,
+        expenses: expensesData
+    }
+}
+export const searchExpensesFailed = (errorMessage) => {
+    return {
+        type: actionTypes.SEARCH_EXPENSES_FAILED,
+        error: errorMessage,
+    }
+}
+export const searchExpenses = (language, word) => {
+    return dispatch => {
+        dispatch(searchExpensesStart())
+        axios.get(`/vendors/expenses?term=${word}&page=1&per_page=15&include[]=category&include[]=customer`, {
+            headers: {
+                'Accept-Language': language
+            }
+        }).then(response => {
+            dispatch(searchExpensesSuccess(response.data));
+        })
+            .catch(err => {
+                dispatch(searchExpensesFailed(err.message))
+            })
+    }
+}
