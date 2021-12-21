@@ -21,7 +21,7 @@ import BookingCalendar from './pages/Account/Content/BookingCalendar/BookingCale
 import Reports from './pages/Account/Content/Reports/Reports';
 import Employees from './pages/Account/Content/Employees/Employees';
 import Expenses from "./pages/Account/Content/Expenses/Expenses";
-import Categories from "./pages/Account/Content/Expenses/Categories/Categories";
+import ExpenseCategories from "./pages/Account/Content/Expenses/ExpenseCategories/ExpenseCategories";
 
 
 import Settings from "./pages/Account/Content/Settings/Settings";
@@ -54,9 +54,8 @@ function App() {
                     <Route path="services" element={<Services />} />
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="products" element={<Products />} />
-                    <Route path="expenses" element={<Expenses />} >
-                        <Route path="categories" element={<Categories />} />
-                    </Route>
+                    <Route path="expenses" element={<Expenses />} />
+                    <Route path="expenses/categories" element={<ExpenseCategories />} />
                     <Route path="deals" element={<Deals />} />
                     <Route path='point-of-sale' element={<PointOfSale />} />
                     <Route path='bookings' element={<Bookings />} />

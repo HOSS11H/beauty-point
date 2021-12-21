@@ -22,7 +22,7 @@ import TablePaginationActions from '../../../../../../components/UI/Dashboard/Ta
 import DeleteModal from './DeleteModal/DeleteModal';
 import EditModal from './EditModal/EditModal';
 
-const CategoriesWrapper = styled(Card)`
+const ExpenseCategoriesWrapper = styled(Card)`
     display: flex;
     max-width: 100%;
     min-height: 100px;
@@ -57,9 +57,9 @@ const Loader = styled(Card)`
     flex-grow: 1;
 `
 
-const intialPerPage = 15;
+const intialPerPage = 10;
 
-function Categories(props) {
+function ExpenseCategories(props) {
 
     const { t } = useTranslation()
 
@@ -206,9 +206,9 @@ function Categories(props) {
     }
 
     return (
-        <CategoriesWrapper>
+        <ExpenseCategoriesWrapper>
             {content}
-        </CategoriesWrapper>
+        </ExpenseCategoriesWrapper>
     );
 }
 
@@ -231,4 +231,4 @@ const mapDispatchToProps = dispatch => {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Categories);
+export default connect(mapStateToProps, mapDispatchToProps)(ExpenseCategories);

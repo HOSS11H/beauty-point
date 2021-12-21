@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { searchExpenses , createExpense} from '../../../../../store/actions/index';
 import SearchBar from "../../../../../components/Search/SearchBar/SearchBar";
 
-import ExpensesTable from './CategoriesTable/CategoriesTable';
+import ExpensesTable from './CategoriesTable/ExpenseCategoriesTable';
 
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
@@ -30,7 +30,7 @@ const CreateBtn = styled(CustomButton)`
     }
 `
 
-function Categories(props) {
+function ExpenseCategories(props) {
 
     const { t } = useTranslation()
 
@@ -65,10 +65,10 @@ function Categories(props) {
         <Fragment>
             <ActionsWrapper>
                 <SearchBar searchHandler={searchExpensesHandler}/>
-                <CreateBtn onClick={createModalOpenHandler} >{t('add expense')}</CreateBtn>
+                <CreateBtn onClick={createModalOpenHandler} >{t('add category')}</CreateBtn>
                 <CreateModal show={createModalOpened}
                     onClose={createModalCloseHandler} onConfirm={createModalConfirmHandler}
-                    heading='add new expense' confirmText='add' />
+                    heading='add new category' confirmText='add' />
             </ActionsWrapper>
             <ExpensesTable />
             <CustomizedSnackbars show={messageShown} message={t('Employee Added')} type='success' onClose={closeMessageHandler} />
@@ -89,4 +89,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Categories);
+export default connect(mapStateToProps, mapDispatchToProps)(ExpenseCategories);

@@ -57,7 +57,7 @@ const Loader = styled(Card)`
     flex-grow: 1;
 `
 
-const intialPerPage = 15;
+const intialPerPage = 10;
 
 function Expenses(props) {
 
