@@ -180,7 +180,7 @@ function ExpenseCategories(props) {
                 </TableContainer>
                 <DeleteModal show={deleteModalOpened} id={selectedExpenseCategory}
                     onClose={deleteModalCloseHandler} onConfirm={deleteModalConfirmHandler.bind(null, selectedExpenseCategory)}
-                    heading='Do you want To delete this expense?' confirmText='delete' />
+                    heading='Do you want To delete this category?' confirmText='delete' />
                 {
                     editModalOpened && (
                         <EditModal show={editModalOpened} id={selectedExpenseCategory} fetchedExpensesCategories={fetchedExpensesCategories}
@@ -214,7 +214,7 @@ function ExpenseCategories(props) {
 
 const mapStateToProps = state => {
     return {
-        fetchedExpensesCategories: state.expenses.expenses,
+        fetchedExpensesCategories: state.expenses.expensesCategories,
         fetchingExpensesCategories: state.expenses.fetchingExpensesCategories,
         searchingExpensesCategoriesSuccess: state.expenses.searchingExpensesCategoriesSuccess,
         creatingExpenseCategorySuccess: state.expenses.creatingExpenseCategorySuccess,

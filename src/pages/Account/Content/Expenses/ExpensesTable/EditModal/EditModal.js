@@ -90,9 +90,9 @@ const EditorWrapper = styled.div`
 `
 
 
-const CreateModal = (props) => {
+const EditModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, editingExpenseSuccess, id, fetchedExpenses } = props;
+    const { show, heading, confirmText, onConfirm, onClose, id, fetchedExpenses } = props;
 
     const selectedExpenseIndex = fetchedExpenses.data.findIndex(expense => expense.id === id);
 
@@ -330,21 +330,5 @@ const CreateModal = (props) => {
     )
 }
 
-const mapStateToProps = (state) => {
-    return {
-        fetchedLocations: state.locations.locations,
-        fetchedServices: state.services.servicesByLocation.services,
-        fetchingServices: state.services.servicesByLocation.fetchingServices,
-        creatingExpenseSuccess: state.expenses.creatingExpenseSuccess,
-    }
-}
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        fetchLocationsHandler: (lang) => dispatch(fetchLocations(lang)),
-        fetchServicesHandler: (lang, location) => dispatch(fetchServicesByLocation(lang, location)),
-    }
-}
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(CreateModal);
+export default EditModal;

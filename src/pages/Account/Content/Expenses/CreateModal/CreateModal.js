@@ -345,19 +345,8 @@ const CreateModal = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        fetchedLocations: state.locations.locations,
-        fetchedServices: state.services.servicesByLocation.services,
-        fetchingServices: state.services.servicesByLocation.fetchingServices,
         creatingExpenseSuccess: state.expenses.creatingExpenseSuccess,
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        fetchLocationsHandler: (lang) => dispatch(fetchLocations(lang)),
-        fetchServicesHandler: (lang, location) => dispatch(fetchServicesByLocation(lang, location)),
-    }
-}
-
-
-export default connect(mapStateToProps, mapDispatchToProps)(CreateModal);
+export default connect(mapStateToProps, null)(CreateModal);

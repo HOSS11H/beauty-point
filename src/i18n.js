@@ -294,6 +294,7 @@ const resources = {
             'Please select category': 'يرجى اختيار الفئة',
             'Please select agent': 'يرجى اختيار العميل',
             'Please add amount': 'يرجى إضافة المبلغ',
+            'Do you want To delete this category?': 'هل تريد حذف هذه الفئة؟',
         }
     }
 };
