@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Heading } from "../../components/UI/Heading/Heading";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { SalonPanel } from '../../components/UI/SalonPanel/SalonPanel';
+import { DealPanel } from '../../components/UI/SalonPanel/SalonPanel';
 import { useState, useEffect } from 'react';
 import axios from '../../utils/axios-instance';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -44,7 +44,7 @@ const HeroImage = styled.div`
     }
 `
 
-const SalonsWrapper = styled.section`
+const DealsWrapper = styled.section`
     margin: 100px 0;
     @media screen and (max-width: 899.98px) {
         margin: 70px 0;
@@ -61,12 +61,12 @@ const Loader = styled.div`
 const AllDeals = props => {
 
     const { t } = useTranslation();
-    const [salons, setSalons] = useState(null);
+    const [deals, setDeals] = useState(null);
 
     useEffect(() => {
-        axios.get('/companies')
+        axios.get('/deals?include[]=location')
             .then(res => {
-                setSalons(res.data.data);
+                setDeals(res.data.data);
             })
             .catch(err => {
                 console.log(err);
@@ -79,36 +79,40 @@ const AllDeals = props => {
             <CircularProgress color="secondary" />
         </Loader>
     );
-    if (salons) {
-        console.log(salons);
-        let fetchedSalons = [...salons];
-        if (fetchedSalons.length < 4) {
-            while (fetchedSalons.length < 4) {
-                fetchedSalons = fetchedSalons.concat(fetchedSalons)
-            }
-        }
+    if (deals) {
         content = (
             <Grid container spacing={2}>
                 {
-                    fetchedSalons.map((salon, index) => {
+                    deals.map((deal, index) => {
                         return (
-                            <Grid item xs={6} md={4}>
-                                <SalonPanel key={salon.id}>
-                                    <div className="salon-img">
-                                        <img src={salon.logo_url} alt="salon" />
+                            <Grid item xs={6} md={4} key={deal.id}>
+                                <DealPanel >
+                                    <div className="deal-img">
+                                        <img src={deal.image} alt="spotlight"/>
                                     </div>
-                                    <div className="salon-content">
-                                        <h3 className="salon-title">
-                                            <NavLink to="/">{salon.companyName}</NavLink>
-                                        </h3>
-                                        <p className="salon-desc">
-                                            {salon.address}
-                                        </p>
-                                        <p className="salon-location">
-                                            {salon.companyPhone}
+                                    <div className="deal-content">
+                                        <div className="deal-body" >
+                                            <div>
+                                                <h3 className="deal-title">
+                                                    <NavLink to={`/deals/${deal.id}`}>{deal.title}</NavLink>
+                                                </h3>
+                                                <p className="deal-desc">
+                                                    {deal.applied_between_time}
+                                                </p>
+                                            </div>
+                                            <div className="deal-discount">
+                                                <h5 className={`discount-percent ${ deal.discount_type === 'percentage' && 'percentage'} `}  >
+                                                    <span>{deal.discount_value}</span>
+                                                    <span className={`discount-percent-sign ${ deal.discount_type === 'percentage' && 'percentage'} `}>{deal.discount_type === 'percentage' ? '%' : 'SAR'}</span>
+                                                </h5>
+                                                <h6 className="discount-text" >off</h6>
+                                            </div>
+                                        </div>
+                                        <p className="deal-location">
+                                            {deal.status}
                                         </p>
                                     </div>
-                                </SalonPanel>
+                                </DealPanel>
                             </Grid>
                         )
                     })
@@ -123,14 +127,14 @@ const AllDeals = props => {
             <HeroImage >
                 <img src={heroImgSrc} alt="hero" />
             </HeroImage>
-        <SalonsWrapper>
+        <DealsWrapper>
             <Container maxWidth="lg">
                 <Heading>
                     <h2 className="heading-title" >{t('popular deals')}</h2>
                 </Heading>
                 {content}
             </Container>
-            </SalonsWrapper>
+            </DealsWrapper>
             <Footer />
             <ModuleWhatsapp />
             </>

@@ -10,7 +10,7 @@ import Header from "../Landing/Header/Header";
 import Footer from "../Landing/Footer/Footer";
 import ModuleWhatsapp from "../Landing/Header/Modules/ModuleWhatsapp/ModuleWhatsapp";
 import { NavLink, useParams } from "react-router-dom";
-import { SalonPanel } from '../../components/UI/SalonPanel/SalonPanel';
+import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import { formatCurrency } from "../../shared/utility";
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -67,20 +67,20 @@ const CustomCard = styled(Card)`
     }
 `
 
-const SingleService = props => {
+const SingleDeal = props => {
 
     const { t } = useTranslation();
 
     const param = useParams();
 
 
-    const [service, setService] = useState();
+    const [deal, setDeal] = useState();
 
 
     useEffect(() => {
-        axios.get(`/services/${param.serviceId}?include[]=company&include[]=location`)
+        axios.get(`/deals/${param.dealId}?include[]=location`)
             .then(res => {
-                setService(res.data);
+                setDeal(res.data);
             })
             .catch(err => {
                 console.log(err);
@@ -91,33 +91,36 @@ const SingleService = props => {
             <CircularProgress color="secondary" />
         </Loader>
     );
-    if (service) {
+    if (deal) {
         content = (
             <CustomCard sx={{ display: 'flex' }}>
                 <Box sx={{ display: 'flex', justifyContent: 'center' , flexDirection: 'column', flexBasis: '50%' }}>
                     <CardContent sx={{ flex: '1 0 auto', }}>
                         <Typography component="div" variant="h4" color="primary" sx={{ marginBottom: '20px' }}>
-                            {service.company.companyName}
+                            {deal.company.companyName}
                         </Typography>
                         <Typography component="div" variant="h5" sx={{ marginBottom: '10px' }} >
-                            {service.name}
+                            {deal.title}
                         </Typography>
-                        <Typography variant="subtitle1" color="secondary" component="div" sx={{ marginBottom: '10px' }} >
-                            {formatCurrency(service.price)}
-                        </Typography>
-                        <Typography component="div" variant="subtitle2" sx={{ display: 'flex', alignItems: 'center'}}>
-                            <WatchLaterIcon sx={{ mr: 1, width:'15px', height:'15px' }} />{service.time} {t(service.time_type)}
+                        <Typography variant="subtitle1" color="secondary" component="div" sx={{ marginBottom: '5px' }} >
+                            {formatCurrency(deal.price)}
                         </Typography>
                         <Typography component="div" variant="subtitle2" sx={{ display: 'flex', alignItems: 'center'}}>
-                            <PushPinIcon sx={{ mr: 1, width:'15px', height:'15px' }} />{service.location.name} 
+                            <WatchLaterIcon sx={{ mr: 1, width:'15px', height:'15px' }} />{t('from')} {deal.open_time} {t('to')} {deal.close_time}
+                        </Typography>
+                        <Typography component="div" variant="subtitle2" sx={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                            <PushPinIcon sx={{ mr: 1, width:'15px', height:'15px' }} />{deal.location.name} 
+                        </Typography>
+                        <Typography component="div" color='primary' variant="h6" sx={{ display: 'flex', alignItems: 'center' }}>
+                            <PhoneAndroidIcon sx={{ mr: 1, width:'15px', height:'15px' }} />{deal.company.companyPhone} 
                         </Typography>
                     </CardContent>
                 </Box>
                 <CardMedia
                     component="img"
-                    sx={{ flexBasis: '50%' }}
-                    image={service.image}
-                    alt={service.name}
+                    sx={{ flexBasis: '50%', height: '100%', objectfit: 'cover' }}
+                    image={deal.image}
+                    alt={deal.name}
                 />
             </CustomCard>
         )
@@ -138,4 +141,4 @@ const SingleService = props => {
         </>
     )
 }
-export default SingleService;
+export default SingleDeal;

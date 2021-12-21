@@ -105,7 +105,7 @@ const Deals = props => {
                                     <div className="deal-body" >
                                         <div>
                                             <h3 className="deal-title">
-                                                <NavLink to="/">{deal.title}</NavLink>
+                                                <NavLink to={`/deals/${deal.id}`}>{deal.title}</NavLink>
                                             </h3>
                                             <p className="deal-desc">
                                                 {deal.applied_between_time}
@@ -119,6 +119,7 @@ const Deals = props => {
                                             <h6 className="discount-text" >off</h6>
                                         </div>
                                     </div>
+                                    
                                     <p className="deal-location">
                                         {deal.status}
                                     </p>

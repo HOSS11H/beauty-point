@@ -91,6 +91,7 @@ export const DealPanel = styled.div`
             display: flex;
             align-items: center;
             justify-content: space-between;
+            flex-direction: row;
             .deal-title {
                 font-size: 22px;
                 line-height:1.5;

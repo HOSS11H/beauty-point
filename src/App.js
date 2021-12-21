@@ -35,6 +35,7 @@ import EmployeeSettings from "./pages/Account/Content/Settings/EmployeeSettings/
 import SingleCategory from "./pages/SignleCategory/SignleCategory";
 import SingleService from "./pages/SingleService/SingleService";
 import AllDeals from "./pages/AllDeals/AllDeals";
+import SingleDeal from "./pages/SingleDeal/SingleDeal";
 
 function App() {
 
@@ -54,6 +55,7 @@ function App() {
             <Route path="/all-deals" element={<AllDeals />} />
             <Route path="/categories/:categoryId" element={<SingleCategory />} />
             <Route path="/services/:serviceId" element={<SingleService />} />
+            <Route path="/deals/:dealId" element={<SingleDeal />} />
             <Route path='*' element={<Landing />} />
         </Routes>
     )
@@ -87,6 +89,7 @@ function App() {
                 <Route path="/all-deals" element={<AllDeals />} />
                 <Route path="/categories/:categoryId" element={<SingleCategory />} />
                 <Route path="/services/:serviceId" element={<SingleService />} />
+                <Route path="/deals/:dealId" element={<SingleDeal />} />
                 <Route path='*' element={<Landing />} />
             </Routes>
         )

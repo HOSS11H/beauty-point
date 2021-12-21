@@ -80,13 +80,7 @@ const AllSaloons = props => {
         </Loader>
     );
     if (salons) {
-        console.log(salons);
         let fetchedSalons = [...salons];
-        if (fetchedSalons.length < 4) {
-            while (fetchedSalons.length < 4) {
-                fetchedSalons = fetchedSalons.concat(fetchedSalons)
-            }
-        }
         content = (
             <Grid container spacing={2}>
                 {
