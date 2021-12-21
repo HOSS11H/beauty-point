@@ -121,7 +121,7 @@ export const searchExpensesFailed = (errorMessage) => {
 export const searchExpenses = (language, word) => {
     return dispatch => {
         dispatch(searchExpensesStart())
-        axios.get(`/vendors/expenses?term=${word}&page=1&per_page=15&include[]=category&include[]=customer`, {
+        axios.get(`/vendors/expenses?term=${word}&page=1&per_page=10&include[]=category&include[]=customer`, {
             headers: {
                 'Accept-Language': language
             }
@@ -185,7 +185,7 @@ export const fetchExpensesCategoriesFailed = ( errorMessage ) => {
 export const fetchExpensesCategories = ( language, page, perPage) => {
     return dispatch => {
         dispatch( fetchExpensesCategoriesStart( ) )
-        axios.get(`/vendors/expenses?include[]=category&include[]=customer&page=${page + 1}&per_page=${perPage}`, { 
+        axios.get(`/vendors/expenses_categories?page=${page + 1}&per_page=${perPage}`, { 
             headers: {
                 'Accept-Language': language
             }
@@ -221,7 +221,7 @@ export const deleteExpenseCategoryFailed = (message) => {
 export const deleteExpenseCategory = (id) => {
     return dispatch => {
         dispatch(deleteExpenseCategoryStart())
-        axios.delete(`/vendors/expenses/${id}`)
+        axios.delete(`/vendors/expenses_categories/${id}`)
             .then(response => {
                 dispatch(deleteExpenseCategorySuccess(response.data, id));
             })
@@ -253,7 +253,7 @@ export const updateExpenseCategory = data => {
     return dispatch => {
         console.log(data);
         dispatch(updateExpenseCategoryStart())
-        axios.put(`/vendors/expenses/${data.id}`, data)
+        axios.put(`/vendors/expenses_categories/${data.id}`, data)
             .then(response => {
                 dispatch(updateExpenseCategorySuccess(response.data, data.id));
             })
@@ -284,7 +284,7 @@ export const searchExpensesCategoriesFailed = (errorMessage) => {
 export const searchExpensesCategories = (language, word) => {
     return dispatch => {
         dispatch(searchExpensesCategoriesStart())
-        axios.get(`/vendors/expenses?term=${word}&page=1&per_page=15&include[]=category&include[]=customer`, {
+        axios.get(`/vendors/expenses_categories?term=${word}&page=1&per_page=10`, {
             headers: {
                 'Accept-Language': language
             }
@@ -318,7 +318,7 @@ export const createExpenseCategoryFailed = (message) => {
 export const createExpenseCategory = (data) => {
     return dispatch => {
         dispatch(createExpenseCategoryStart())
-        axios.post(`/vendors/expenses`, data)
+        axios.post(`/vendors/expenses_categories`, data)
             .then(response => {
                 dispatch(createExpenseCategorySuccess(null, { ...data, ...response.data }));
             })

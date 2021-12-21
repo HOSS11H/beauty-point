@@ -17,6 +17,20 @@ const intialState = {
     creatingExpense: false,
     creatingExpenseSuccess: false,
     creatingExpenseMessage: null,
+    expensesCategories: { data: [], },
+    fetchingExpensesCategories: false,
+    errorFetchingExpensesCategories: false,
+    deletingExpenseCategory: false,
+    deletingExpenseCategorySuccess: false,
+    deletingExpenseCategoryMessage: null,
+    updatingExpenseCategory: false,
+    updatingExpenseCategorySuccess: false,
+    updatingExpenseCategoryMessage: null,
+    searchingExpensesCategories: false,
+    searchingExpensesCategoriesSuccess: false,
+    creatingExpenseCategory: false,
+    creatingExpenseCategorySuccess: false,
+    creatingExpenseCategoryMessage: null,
 }
 
 const reducer = (state = intialState, action) => {
@@ -117,6 +131,103 @@ const reducer = (state = intialState, action) => {
                 creatingExpense: false,
                 creatingExpenseSuccess: false,
                 creatingExpenseMessage: action.message,
+            })
+        case (actionTypes.FETCH_EXPENSES_CATEGORIES_START):
+            return updateObject(state, {
+                fetchingExpensesCategories: true,
+                errorFetchingExpensesCategories: false,
+            });
+        case (actionTypes.FETCH_EXPENSES_CATEGORIES_SUCCESS):
+            return updateObject(state, {
+                expensesCategories: action.expensesCategories,
+                fetchingExpensesCategories: false,
+                errorFetchingExpensesCategories: false,
+            });
+        case (actionTypes.FETCH_EXPENSES_CATEGORIES_FAILED):
+            return updateObject(state, {
+                fetchingExpensesCategories: false,
+                errorFetchingExpensesCategories: true,
+            });
+        case (actionTypes.DELETE_EXPENSE_CATEGORY_START):
+            return updateObject(state, {
+                deletingExpenseCategory: true,
+                deletingExpenseCategorySuccess: false,
+                deletingExpenseCategoryMessage: null,
+            })
+        case (actionTypes.DELETE_EXPENSE_CATEGORY_SUCCESS):
+            const updatedExpensesCategories = state.expensesCategories.data.filter(expenseCategory => expenseCategory.id !== action.expenseCategoryId);
+            return updateObject(state, {
+                expensesCategories: {
+                    ...state.expensesCategories,
+                    data: updatedExpensesCategories,
+                    total: state.expensesCategories.total - 1,
+                },
+                deletingExpenseCategory: false,
+                deletingExpenseCategorySuccess: true,
+                deletingExpenseCategoryMessage: action.message,
+            })
+        case (actionTypes.DELETE_EXPENSE_CATEGORY_FAILED):
+            return updateObject(state, {
+                deletingExpenseCategory: false,
+                deletingExpenseCategorySuccess: false,
+                deletingExpenseCategoryMessage: action.message,
+            })
+        case (actionTypes.UPDATE_EXPENSE_CATEGORY_START):
+            return updateObject(state, {
+                updatingExpenseCategory: true,
+                updatingExpenseCategorySuccess: false,
+                updatingExpenseCategoryMessage: null,
+            })
+        case (actionTypes.UPDATE_EXPENSE_CATEGORY_SUCCESS):
+            return updateObject(state, {
+                updatingExpenseCategory: false,
+                updatingExpenseCategorySuccess: true,
+                updatingExpenseCategoryMessage: action.message,
+            })
+        case (actionTypes.UPDATE_EXPENSE_CATEGORY_FAILED):
+            return updateObject(state, {
+                updatingExpenseCategory: false,
+                updatingExpenseCategorySuccess: false,
+                updatingExpenseCategoryMessage: action.message,
+            })
+        case (actionTypes.SEARCH_EXPENSES_CATEGORIES_START):
+            return updateObject(state, {
+                fetchingExpensesCategories: true,
+                errorFetchingExpensesCategories: false,
+                searchingExpensesCategories: true,
+                searchingExpensesCategoriesSuccess: false,
+            })
+        case (actionTypes.SEARCH_EXPENSES_CATEGORIES_SUCCESS):
+            return updateObject(state, {
+                fetchingExpensesCategories: false,
+                expensesCategories: action.expensesCategories,
+                searchingExpensesCategories: false,
+                searchingExpensesCategoriesSuccess: true,
+            })
+        case (actionTypes.SEARCH_EXPENSES_CATEGORIES_FAILED):
+            return updateObject(state, {
+                fetchingExpensesCategories: false,
+                errorFetchingExpensesCategories: true,
+                searchingExpensesCategories: false,
+                searchingExpensesCategoriesSuccess: false,
+            })
+        case (actionTypes.CREATE_EXPENSE_CATEGORY_START):
+            return updateObject(state, {
+                creatingExpenseCategory: true,
+                creatingExpenseCategorySuccess: false,
+                creatingExpenseCategoryMessage: null,
+            })
+        case (actionTypes.CREATE_EXPENSE_CATEGORY_SUCCESS):
+            return updateObject(state, {
+                creatingExpenseCategory: false,
+                creatingExpenseCategorySuccess: true,
+                creatingExpenseCategoryMessage: action.message,
+            })
+        case (actionTypes.CREATE_EXPENSE_CATEGORY_FAILED):
+            return updateObject(state, {
+                creatingExpenseCategory: false,
+                creatingExpenseCategorySuccess: false,
+                creatingExpenseCategoryMessage: action.message,
             })
         default:
             return state;
