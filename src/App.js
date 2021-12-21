@@ -11,7 +11,7 @@ import Auth from './pages/Auth/Auth';
 import NotFound from './pages/NotFound/NotFound';
 import Landing from './pages/Landing/Landing';
 import AllCategories from "./pages/AllCategories/AllCategories";
-import Saloons from "./pages/AllSaloons/Saloons";
+import AllSaloons from "./pages/AllSaloons/AllSaloons";
 import Account from './pages/Account/Account';
 import Dashboard from './pages/Account/Content/Dashboard/Dashboard';
 import Services from './pages/Account/Content/Services/Services';
@@ -34,6 +34,7 @@ import BookingSettings from "./pages/Account/Content/Settings/BookingSettings/Bo
 import EmployeeSettings from "./pages/Account/Content/Settings/EmployeeSettings/EmployeeSettings";
 import SingleCategory from "./pages/SignleCategory/SignleCategory";
 import SingleService from "./pages/SingleService/SingleService";
+import AllDeals from "./pages/AllDeals/AllDeals";
 
 function App() {
 
@@ -49,6 +50,8 @@ function App() {
             <Route path="/auth" element={<Auth />} />
             <Route path="/" element={<Landing />} />
             <Route path="/all-categories" element={<AllCategories />} />
+            <Route path="/all-saloons" element={<AllSaloons />} />
+            <Route path="/all-deals" element={<AllDeals />} />
             <Route path="/categories/:categoryId" element={<SingleCategory />} />
             <Route path="/services/:serviceId" element={<SingleService />} />
             <Route path='*' element={<Landing />} />
@@ -80,7 +83,8 @@ function App() {
                 </ Route>
                 <Route path="/" element={<Landing />} />
                 <Route path="/all-categories" element={<AllCategories />} />
-                <Route path="/all-saloons" element={<Saloons/>} />
+                <Route path="/all-saloons" element={<AllSaloons/>} />
+                <Route path="/all-deals" element={<AllDeals />} />
                 <Route path="/categories/:categoryId" element={<SingleCategory />} />
                 <Route path="/services/:serviceId" element={<SingleService />} />
                 <Route path='*' element={<Landing />} />

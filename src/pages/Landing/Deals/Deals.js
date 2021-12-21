@@ -5,11 +5,14 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { DealPanel } from '../../../components/UI/SalonPanel/SalonPanel';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import axios from '../../../utils/axios-instance';
 import CircularProgress from '@mui/material/CircularProgress';
 import {NavLink} from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import ThemeContext from "../../../store/theme-context";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const DealsWrapper = styled.section`
     margin: 100px 0;
@@ -28,6 +31,10 @@ const Loader = styled.div`
 const Deals = props => {
     const {t} = useTranslation();
     const [deals, setDeals] = useState(null);
+
+    const themeCtx= useContext(ThemeContext);
+
+    const { theme } = themeCtx
 
     const settings = {
         dots: false,
@@ -128,7 +135,7 @@ const Deals = props => {
         <DealsWrapper>
             <Container maxWidth="lg">
                 <Heading>
-                    <h2 className="heading-title" >{t('popular deals')}</h2>
+                    <NavLink className="heading-title" to='/all-deals'>{t('popular deals')}  { theme === 'rtl' ? <ArrowForwardIcon /> : <ArrowBackIcon /> } </NavLink>
                 </Heading>
                 {content}
             </Container>

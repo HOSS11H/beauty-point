@@ -58,7 +58,7 @@ const Loader = styled.div`
     height: 200px;
 `
 
-const Saloons = props => {
+const AllSaloons = props => {
 
     const { t } = useTranslation();
     const [salons, setSalons] = useState(null);
@@ -136,4 +136,4 @@ const Saloons = props => {
             </>
     )
 }
-export default Saloons
+export default AllSaloons
