@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useState } from "react";
 import { connect } from "react-redux";
 import { searchExpenses , createExpense} from '../../../../store/actions/index';
 import SearchBar from "../../../../components/Search/SearchBar/SearchBar";
@@ -9,9 +9,8 @@ import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 
 import { CustomButton } from '../../../../components/UI/Button/Button';
-import CustomizedSnackbars from "../../../../components/UI/SnackBar/SnackBar";
 import CreateModal from "./CreateModal/CreateModal";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 
 const ActionsWrapper = styled.div`
@@ -95,7 +94,6 @@ function Expenses(props) {
                 <NavLink to='categories'>{t('customers')}</NavLink>
             </ActionButtons>
             <ExpensesTable />
-            <Outlet />
         </Fragment>
     );
 }
