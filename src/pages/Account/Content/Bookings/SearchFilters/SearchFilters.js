@@ -7,7 +7,8 @@ import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import { useTranslation } from 'react-i18next';
 import { useContext, useEffect, useState, } from 'react';
-import { fetchLocations, fetchCustomers, filterBookings } from '../../../../../store/actions/index';
+import { fetchLocations, searchCustomers, filterBookings } from '../../../../../store/actions/index';
+import ReactSelect from 'react-select';
 import { connect } from 'react-redux';
 import DateAdapter from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -18,6 +19,7 @@ import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { format } from 'date-fns';
 import Card from '@mui/material/Card';
+import axios from '../../../../../utils/axios-instance';
 
 const CustomCardMui = styled(Card)`
     &.MuiPaper-root {
@@ -31,6 +33,7 @@ const CustomCardMui = styled(Card)`
         display: flex;
         position: relative;
         margin-bottom: 30px;
+        overflow: visible;
     }
 `
 const ActionsWrapper = styled.div`
@@ -64,35 +67,39 @@ const ResetButton = styled(CustomButton)`
         }
     }
 `
+const customStyles = {
+    control: base => ({
+        ...base,
+        height: 56,
+    })
+};
 
 
 const SearchFilters = (props) => {
 
-    const { fetchedLocations, fetchLocationsHandler, fetchedCustomers, fetchCustomersHandler, filterBookingsHandler } = props;
+    const { fetchedLocations, fetchLocationsHandler, searchCustomersHandler, filterBookingsHandler } = props;
 
     const { t } = useTranslation()
 
     const themeCtx = useContext(ThemeContext)
 
     const { lang } = themeCtx;
-    
+
     const [bookingId, setBookingId] = useState('');
 
     const [location, setLocation] = useState('');
 
     const [date, setDate] = useState('');
 
+    const [options, setOptions] = useState([])
     const [customer, setCustomer] = useState('');
 
     const [bookingStatus, setBookingStatus] = useState('');
 
-
-
     useEffect(() => {
         fetchLocationsHandler(lang);
-        fetchCustomersHandler(lang);
-    }, [fetchCustomersHandler, fetchLocationsHandler, lang])
-    
+    }, [fetchLocationsHandler, lang])
+
     const handleBookingIdChange = (event) => {
         setBookingId(event.target.value);
     }
@@ -104,8 +111,31 @@ const SearchFilters = (props) => {
         setDate(formattedVal);
     }
 
-    const handleCustomerChange = (event) => {
-        setCustomer(event.target.value);
+    const handleSelectOptions = (value, actions) => {
+        if (value.length !== 0) {
+            axios.get(`/vendors/customers?term=${value}`)
+                .then(res => {
+                    const customers = res.data.data;
+                    console.log(customers)
+                    const options = customers.map(customer => {
+                        return {
+                            value: customer.id,
+                            label: customer.name
+                        }
+                    })
+                    setOptions(options);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+    }
+    const handleSelectCustomer = (value, actions) => {
+        if (value) {
+            setCustomer(value.value);
+        } else {
+            setCustomer([])
+        }
     }
     const handleBookingStatusChange = (event) => {
         setBookingStatus(event.target.value);
@@ -125,6 +155,7 @@ const SearchFilters = (props) => {
         setBookingId('');
         setLocation('');
         setDate('');
+        setOptions([]);
         setCustomer('');
         setBookingStatus('');
         filterBookingsHandler('', '', '', '', '');
@@ -175,23 +206,8 @@ const SearchFilters = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={4}>
                     <FormControl fullWidth sx={{ minWidth: '200px' }} >
-                        <InputLabel id="item-customer">{t('Customer')}</InputLabel>
-                        <Select
-                            labelId="item-customer"
-                            id="item-customer-select"
-                            value={customer}
-                            label={t('Customer')}
-                            onChange={handleCustomerChange}
-                        >
-                            {fetchedCustomers.map((customer) => (
-                                <MenuItem
-                                    key={customer.id}
-                                    value={customer.id}
-                                >
-                                    {customer.name}
-                                </MenuItem>
-                            ))}
-                        </Select>
+                        <ReactSelect styles={customStyles} options={options} isClearable isRtl={lang === 'ar'} placeholder={t('select customer')}
+                            onChange={handleSelectCustomer} onInputChange={handleSelectOptions} />
                     </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6} md={4}>
@@ -226,14 +242,12 @@ const SearchFilters = (props) => {
 const mapStateToProps = (state) => {
     return {
         fetchedLocations: state.locations.locations,
-        fetchedCustomers: state.customers.customers,
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
         fetchLocationsHandler: (lang) => dispatch(fetchLocations(lang)),
-        fetchCustomersHandler: (lang) => dispatch(fetchCustomers(lang)),
         filterBookingsHandler: (bookingId, date, location, customer, bookingStatus) => dispatch(filterBookings(bookingId, date, location, customer, bookingStatus)),
     }
 }
