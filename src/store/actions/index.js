@@ -65,4 +65,5 @@ export {
     deleteExpense,
     searchExpenses,
     createExpense,
+    updateExpense,
 } from './expenses'

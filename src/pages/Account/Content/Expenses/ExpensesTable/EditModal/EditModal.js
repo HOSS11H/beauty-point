@@ -15,8 +15,9 @@ import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { EditorState, convertToRaw } from 'draft-js';
+import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
+import htmlToDraft from 'html-to-draftjs';
 import { connect } from 'react-redux';
 import { fetchLocations, fetchServicesByLocation } from '../../../../../../store/actions/index';
 import ValidationMessage from '../../../../../../components/UI/ValidationMessage/ValidationMessage';
@@ -91,46 +92,48 @@ const EditorWrapper = styled.div`
 
 const CreateModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, creatingExpenseSuccess, id, fetchedExpenses } = props;
+    const { show, heading, confirmText, onConfirm, onClose, editingExpenseSuccess, id, fetchedExpenses } = props;
 
-    const selectedProductIndex = fetchedExpenses.data.findIndex(expense => expense.id === id);
+    const selectedExpenseIndex = fetchedExpenses.data.findIndex(expense => expense.id === id);
 
-    let expenseData = fetchedExpenses.data[selectedProductIndex];
+    let expenseData = fetchedExpenses.data[selectedExpenseIndex];
 
-    const { name, description, price, discount, discount_type, discount_price, location, status, image, quantity } = expenseData;
+    const {name, notes, amount, expense_date, bank_name, bank_account, category, customer   } = expenseData;
 
     const { t } = useTranslation();
 
     const themeCtx = useContext(ThemeContext)
     const { lang } = themeCtx;
 
-    const [expenseName, setExpenseName] = useState('');
+    const [expenseName, setExpenseName] = useState(name);
     const [expenseNameError, setExpenseNameError] = useState(false);
 
-    const [date, setDate] = useState(new Date());
+    const [date, setDate] = useState(new Date(expense_date));
 
-    const [expenseBank, setExpenseBank] = useState('');
+    const [expenseBank, setExpenseBank] = useState(bank_name);
     const [expenseBankError, setExpenseBankError] = useState(false);
 
-    const [expenseAccount, setExpenseAccount] = useState('');
+    const [expenseAccount, setExpenseAccount] = useState(bank_account);
     const [expenseAccountError, setExpenseAccountError] = useState(false);
 
-    const [categoriesOptions, setCategoriesOptions] = useState([])
+    const [categoriesOptions, setCategoriesOptions] = useState([{value: category.id, label: category.name}]);
 
-    const [selectedCategory, setSelectedCategory] = useState(null);
+    const [selectedCategory, setSelectedCategory] = useState({value: category.id, label: category.name});
     const [selectedCategoryError, setSelectedCategoryError] = useState(false);
 
-    const [agentsOptions, setAgentsOptions] = useState([])
+    const [agentsOptions, setAgentsOptions] = useState([{value: customer.id, label: customer.name}])
 
-    const [selectedAgent, setSelectedAgent] = useState(null);
+    const [selectedAgent, setSelectedAgent] = useState({value: customer.id, label: customer.name});
     const [selectedAgentError, setSelectedAgentError] = useState(false);
 
-    const [editorState, setEditorState] = useState(
-        EditorState.createEmpty()
-    )
+    const html = notes;
+    const contentBlock = htmlToDraft(html);
+    const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+
+    const [editorState, setEditorState] = useState(EditorState.createWithContent(contentState))
     const [expenseDescriptionError, setExpenseDescriptionError] = useState(false);
 
-    const [expenseAmount, setExpenseAmount] = useState(0);
+    const [expenseAmount, setExpenseAmount] = useState(amount);
     const [expenseAmountError, setExpenseAmountError] = useState(false);
 
 
@@ -216,29 +219,6 @@ const CreateModal = (props) => {
         onClose();
     }, [onClose]);
 
-
-    const resetModalData = useCallback(() => {
-        setExpenseName('');
-        setExpenseNameError(false);
-        setDate(new Date());
-        setExpenseBank('');
-        setExpenseBankError(false);
-        setExpenseAccount('');
-        setExpenseAccountError(false);
-        setSelectedCategory(null);
-        setSelectedCategoryError(false);
-        setSelectedAgent(null);
-        setSelectedAgentError(false);
-        setExpenseAmount(0);
-        setExpenseAmountError(false);
-        setExpenseDescriptionError(false);
-        setEditorState(EditorState.createEmpty());
-    }, [])
-
-    useEffect(() => {
-        creatingExpenseSuccess && resetModalData();
-    }, [creatingExpenseSuccess, resetModalData])
-
     const confirmCreateHandler = useCallback(() => {
 
         if (expenseName.trim().length === 0) {
@@ -254,7 +234,6 @@ const CreateModal = (props) => {
             return;
         }
         if (!selectedCategory) {
-            console.log('selectedCategory', selectedCategory);
             setSelectedCategoryError(true);
             return;
         }
@@ -271,6 +250,7 @@ const CreateModal = (props) => {
             return;
         }
         const data = {
+            id: id,
             name: expenseName,
             note: draftToHtml(convertToRaw(editorState.getCurrentContent())),
             amount: expenseAmount,
@@ -281,7 +261,8 @@ const CreateModal = (props) => {
             customer_id: selectedAgent.value,
         }
         onConfirm(data);
-    }, [expenseName, expenseBank, expenseAccount, selectedCategory, selectedAgent, editorState, expenseAmount, date, onConfirm])
+        console.log(data);
+    }, [expenseName, expenseBank, expenseAccount, selectedCategory, selectedAgent, editorState, expenseAmount, id, date, onConfirm])
 
     let content = (
         <Grid container spacing={2}>
@@ -311,7 +292,7 @@ const CreateModal = (props) => {
             <Grid item xs={12} sm={6} >
                 <FormLabel component="legend" sx={{ textAlign: 'left', textTransform: 'capitalize', marginBottom: '8px' }} >{t('select category')}</FormLabel>
                 <FormControl fullWidth sx={{ minWidth: '200px' }} >
-                    <ReactSelect options={categoriesOptions} isClearable isRtl={lang === 'ar'}
+                    <ReactSelect options={categoriesOptions} isClearable isRtl={lang === 'ar'} defaultValue={{value: category.id, label: category.name}}
                         onChange={handleSelectCategory} onInputChange={handleSelectCategoryOptions} />
                 </FormControl>
                 {selectedCategoryError && <ValidationMessage notExist>{t(`Please select category`)}</ValidationMessage>}
@@ -319,7 +300,7 @@ const CreateModal = (props) => {
             <Grid item xs={12} sm={6} >
                 <FormLabel component="legend" sx={{ textAlign: 'left', textTransform: 'capitalize', marginBottom: '8px' }} >{t('select agent')}</FormLabel>
                 <FormControl fullWidth sx={{ minWidth: '200px' }} >
-                    <ReactSelect options={agentsOptions} isClearable isRtl={lang === 'ar'}
+                    <ReactSelect options={agentsOptions} isClearable isRtl={lang === 'ar'} defaultValue={{value: customer.id, label: customer.name}}
                         onChange={handleSelectAgent} onInputChange={handleSelectAgentOptions} />
                 </FormControl>
                 {selectedAgentError && <ValidationMessage notExist>{t(`Please select agent`)}</ValidationMessage>}

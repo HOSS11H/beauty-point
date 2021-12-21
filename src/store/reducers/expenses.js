@@ -9,6 +9,9 @@ const intialState = {
     deletingExpense: false,
     deletingExpenseSuccess: false,
     deletingExpenseMessage: null,
+    updatingExpense: false,
+    updatingExpenseSuccess: false,
+    updatingExpenseMessage: null,
     searchingExpenses: false,
     searchingExpensesSuccess: false,
     creatingExpense: false,
@@ -58,6 +61,24 @@ const reducer = (state = intialState, action) => {
                 deletingExpenseSuccess: false,
                 deletingExpenseMessage: action.message,
             })
+        case (actionTypes.UPDATE_EXPENSE_START):
+            return updateObject(state, {
+                updatingExpense: true,
+                updatingExpenseSuccess: false,
+                updatingExpenseMessage: null,
+            })
+        case (actionTypes.UPDATE_EXPENSE_SUCCESS):
+            return updateObject(state, {
+                updatingExpense: false,
+                updatingExpenseSuccess: true,
+                updatingExpenseMessage: action.message,
+            })
+        case (actionTypes.UPDATE_EXPENSE_FAILED):
+            return updateObject(state, {
+                updatingExpense: false,
+                updatingExpenseSuccess: false,
+                updatingExpenseMessage: action.message,
+            })
         case (actionTypes.SEARCH_EXPENSES_START):
             return updateObject(state, {
                 fetchingExpenses: true,
@@ -91,7 +112,7 @@ const reducer = (state = intialState, action) => {
                 creatingExpenseSuccess: true,
                 creatingExpenseMessage: action.message,
             })
-        case ( actionTypes.CREATE_EXPENSE_FAILED ):
+        case (actionTypes.CREATE_EXPENSE_FAILED):
             return updateObject(state, {
                 creatingExpense: false,
                 creatingExpenseSuccess: false,

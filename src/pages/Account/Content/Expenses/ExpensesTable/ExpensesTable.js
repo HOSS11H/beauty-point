@@ -8,7 +8,7 @@ import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { fetchExpenses, deleteExpense } from '../../../../../store/actions/index';
+import { fetchExpenses, deleteExpense, updateExpense } from '../../../../../store/actions/index';
 import ThemeContext from '../../../../../store/theme-context';
 import EnhancedTableHead from './TableHead/TableHead';
 import EnhancedTableBody from './TableBody/TableBody';
@@ -63,7 +63,7 @@ function Expenses(props) {
 
     const { t } = useTranslation()
 
-    const { fetchedExpenses,fetchingExpenses, fetchExpensesHandler, searchingExpensesSuccess, deleteExpenseHandler, creatingExpenseSuccess, updateExpenseHandler } = props;
+    const { fetchedExpenses,fetchingExpenses, fetchExpensesHandler, searchingExpensesSuccess, deleteExpenseHandler, creatingExpenseSuccess, updateExpenseHandler, updatingExpenseSuccess } = props;
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(intialPerPage);
@@ -85,6 +85,9 @@ function Expenses(props) {
     useEffect(() => {
         creatingExpenseSuccess && fetchExpensesHandler(lang, page, rowsPerPage );
     }, [lang, fetchExpensesHandler, page, rowsPerPage, creatingExpenseSuccess]);
+    useEffect(() => {
+        updatingExpenseSuccess && fetchExpensesHandler(lang, page, rowsPerPage );
+    }, [lang, fetchExpensesHandler, page, rowsPerPage, creatingExpenseSuccess, updatingExpenseSuccess]);
 
 
     const handleChangePage = useCallback((event, newPage) => {
@@ -215,6 +218,7 @@ const mapStateToProps = state => {
         fetchingExpenses: state.expenses.fetchingExpenses,
         searchingExpensesSuccess: state.expenses.searchingExpensesSuccess,
         creatingExpenseSuccess: state.expenses.creatingExpenseSuccess,
+        updatingExpenseSuccess: state.expenses.updatingExpenseSuccess,
     }
 }
 
@@ -222,6 +226,7 @@ const mapDispatchToProps = dispatch => {
     return {
         fetchExpensesHandler: (lang, page, rowsPerPage ) => dispatch(fetchExpenses(lang, page, rowsPerPage)),
         deleteExpenseHandler: (id) => dispatch(deleteExpense(id)),
+        updateExpenseHandler: (data) => dispatch(updateExpense(data)),
     }
 }
 

@@ -67,6 +67,40 @@ export const deleteExpense = (id) => {
             })
     }
 }
+
+export const updateExpenceStart = () => {
+    return {
+        type: actionTypes.UPDATE_EXPENSE_START,
+    }
+}
+export const updateExpenseSuccess = (message, updatedExpenseId) => {
+    return {
+        type: actionTypes.UPDATE_EXPENSE_SUCCESS,
+        message: message,
+        expenseId: updatedExpenseId,
+    }
+}
+export const updateExpenseFailed = (message) => {
+    return {
+        type: actionTypes.UPDATE_EXPENSE_FAILED,
+        message: message,
+    }
+}
+export const updateExpense = data => {
+    return dispatch => {
+        console.log(data);
+        dispatch(updateExpenceStart())
+        axios.put(`/vendors/expenses/${data.id}`, data)
+            .then(response => {
+                dispatch(updateExpenseSuccess(response.data, data.id));
+            })
+            .catch(err => {
+                dispatch(updateExpenseFailed(err.message))
+            })
+    }
+}
+
+
 export const searchExpensesStart = () => {
     return {
         type: actionTypes.SEARCH_EXPENSES_START,
