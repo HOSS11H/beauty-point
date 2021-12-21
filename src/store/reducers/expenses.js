@@ -31,6 +31,20 @@ const intialState = {
     creatingExpenseCategory: false,
     creatingExpenseCategorySuccess: false,
     creatingExpenseCategoryMessage: null,
+    expensesCustomers: { data: [], },
+    fetchingExpensesCustomers: false,
+    errorFetchingExpensesCustomers: false,
+    deletingExpenseCustomer: false,
+    deletingExpenseCustomerSuccess: false,
+    deletingExpenseCustomerMessage: null,
+    updatingExpenseCustomer: false,
+    updatingExpenseCustomerSuccess: false,
+    updatingExpenseCustomerMessage: null,
+    searchingExpensesCustomers: false,
+    searchingExpensesCustomersSuccess: false,
+    creatingExpenseCustomer: false,
+    creatingExpenseCustomerSuccess: false,
+    creatingExpenseCustomerMessage: null,
 }
 
 const reducer = (state = intialState, action) => {

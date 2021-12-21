@@ -327,3 +327,166 @@ export const createExpenseCategory = (data) => {
             })
     }
 }
+
+export const fetchExpensesCustomersStart = (  ) => {
+    return {
+        type: actionTypes.FETCH_EXPENSES_CATEGORIES_START,
+    }
+}
+export const fetchExpensesCustomersSuccess = ( expensesCustomersData ) => {
+    return {
+        type: actionTypes.FETCH_EXPENSES_CATEGORIES_SUCCESS,
+        expensesCustomers: expensesCustomersData
+    }
+}
+export const fetchExpensesCustomersFailed = ( errorMessage ) => {
+    return {
+        type: actionTypes.FETCH_EXPENSES_CATEGORIES_FAILED,
+        error: errorMessage,
+    }
+}
+export const fetchExpensesCustomers = ( language, page, perPage) => {
+    return dispatch => {
+        dispatch( fetchExpensesCustomersStart( ) )
+        axios.get(`/vendors/expenses_customers?page=${page + 1}&per_page=${perPage}`, { 
+            headers: {
+                'Accept-Language': language
+            }
+        }).then( response => {
+                dispatch( fetchExpensesCustomersSuccess( response.data  ) );
+            })
+            .catch( err => {
+                console.log(err)
+                dispatch( fetchExpensesCustomersFailed( err.message  ) )
+            } )
+        }
+}
+
+export const deleteExpenseCustomerStart = () => {
+    return {
+        type: actionTypes.DELETE_EXPENSE_CATEGORY_START,
+    }
+}
+export const deleteExpenseCustomerSuccess = (message, deletedExpenseCustomerId) => {
+    return {
+        type: actionTypes.DELETE_EXPENSE_CATEGORY_SUCCESS,
+        message: message,
+        expenseCustomerId: deletedExpenseCustomerId,
+    }
+}
+export const deleteExpenseCustomerFailed = (message) => {
+    return {
+        type: actionTypes.DELETE_EXPENSE_CATEGORY_FAILED,
+        message: message,
+    }
+}
+
+export const deleteExpenseCustomer = (id) => {
+    return dispatch => {
+        dispatch(deleteExpenseCustomerStart())
+        axios.delete(`/vendors/expenses_customers/${id}`)
+            .then(response => {
+                dispatch(deleteExpenseCustomerSuccess(response.data, id));
+            })
+            .catch(err => {
+                dispatch(deleteExpenseCustomerFailed(err.message))
+            })
+    }
+}
+
+export const updateExpenseCustomerStart = () => {
+    return {
+        type: actionTypes.UPDATE_EXPENSE_CATEGORY_START,
+    }
+}
+export const updateExpenseCustomerSuccess = (message, updatedExpenseCustomerId) => {
+    return {
+        type: actionTypes.UPDATE_EXPENSE_CATEGORY_SUCCESS,
+        message: message,
+        expenseCustomerId: updatedExpenseCustomerId,
+    }
+}
+export const updateExpenseCustomerFailed = (message) => {
+    return {
+        type: actionTypes.UPDATE_EXPENSE_CATEGORY_FAILED,
+        message: message,
+    }
+}
+export const updateExpenseCustomer = data => {
+    return dispatch => {
+        console.log(data);
+        dispatch(updateExpenseCustomerStart())
+        axios.put(`/vendors/expenses_customers/${data.id}`, data)
+            .then(response => {
+                dispatch(updateExpenseCustomerSuccess(response.data, data.id));
+            })
+            .catch(err => {
+                dispatch(updateExpenseCustomerFailed(err.message))
+            })
+    }
+}
+
+
+export const searchExpensesCustomersStart = () => {
+    return {
+        type: actionTypes.SEARCH_EXPENSES_CATEGORIES_START,
+    }
+}
+export const searchExpensesCustomersSuccess = (expensesCustomersData) => {
+    return {
+        type: actionTypes.SEARCH_EXPENSES_CATEGORIES_SUCCESS,
+        expensesCustomers: expensesCustomersData
+    }
+}
+export const searchExpensesCustomersFailed = (errorMessage) => {
+    return {
+        type: actionTypes.SEARCH_EXPENSES_CATEGORIES_FAILED,
+        error: errorMessage,
+    }
+}
+export const searchExpensesCustomers = (language, word) => {
+    return dispatch => {
+        dispatch(searchExpensesCustomersStart())
+        axios.get(`/vendors/expenses_customers?term=${word}&page=1&per_page=10`, {
+            headers: {
+                'Accept-Language': language
+            }
+        }).then(response => {
+            dispatch(searchExpensesCustomersSuccess(response.data));
+        })
+            .catch(err => {
+                dispatch(searchExpensesCustomersFailed(err.message))
+            })
+    }
+}
+export const createExpenseCustomerStart = () => {
+    return {
+        type: actionTypes.CREATE_EXPENSE_CATEGORY_START,
+    }
+}
+export const createExpenseCustomerSuccess = (message, createdExpenseCustomerData) => {
+    return {
+        type: actionTypes.CREATE_EXPENSE_CATEGORY_SUCCESS,
+        message: message,
+        expenseCustomerData: createdExpenseCustomerData,
+    }
+}
+export const createExpenseCustomerFailed = (message) => {
+    return {
+        type: actionTypes.CREATE_EXPENSE_CATEGORY_FAILED,
+        message: message,
+    }
+}
+
+export const createExpenseCustomer = (data) => {
+    return dispatch => {
+        dispatch(createExpenseCustomerStart())
+        axios.post(`/vendors/expenses_customers`, data)
+            .then(response => {
+                dispatch(createExpenseCustomerSuccess(null, { ...response.data }));
+            })
+            .catch(err => {
+                dispatch(createExpenseCustomerFailed(err.message))
+            })
+    }
+}
