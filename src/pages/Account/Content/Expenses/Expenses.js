@@ -63,18 +63,9 @@ function Expenses(props) {
 
     const { t } = useTranslation()
 
-    const { searchExpensesHandler, addExpenseHandler, addingEmployeeSuccess } = props;
+    const { searchExpensesHandler, addExpenseHandler } = props;
 
     const [createModalOpened, setCreateModalOpened] = useState(false);
-
-    const [ messageShown, setMessageShown ] = useState(addingEmployeeSuccess);
-
-    useEffect(() => {
-        setMessageShown( addingEmployeeSuccess )
-    }, [addingEmployeeSuccess])
-    const closeMessageHandler = useCallback(( ) => {
-        setMessageShown(false)
-    }, [])
 
     // Create Modal
     const createModalOpenHandler = useCallback((id) => {
@@ -104,17 +95,12 @@ function Expenses(props) {
                 <NavLink to='categories'>{t('customers')}</NavLink>
             </ActionButtons>
             <ExpensesTable />
-            <CustomizedSnackbars show={messageShown} message={t('Employee Added')} type='success' onClose={closeMessageHandler} />
             <Outlet />
         </Fragment>
     );
 }
 
-const mapStateToProps = (state) => {
-    return {
-        addingEmployeeSuccess: state.employees.employeesData.addingEmployeeSuccess,
-    }
-}
+
 
 const mapDispatchToProps = dispatch => {
     return {
@@ -123,4 +109,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Expenses);
+export default connect(null, mapDispatchToProps)(Expenses);
