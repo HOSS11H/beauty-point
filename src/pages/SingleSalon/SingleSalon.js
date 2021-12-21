@@ -27,6 +27,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import TablePaginationActions from "../../components/UI/Dashboard/Table/TablePagination/TablePagination";
 
 
 function TabPanel(props) {
@@ -108,6 +109,8 @@ const CustomCard = styled(Card)`
         flex-direction: column;
     }
 `
+const servicesIntialRowsPerPage = 9
+const dealsIntialRowsPerPage = 9
 
 const SingleSalon = props => {
 
@@ -117,12 +120,19 @@ const SingleSalon = props => {
 
     const [value, setValue] = React.useState(0);
 
+    const [servicesPage, setServicesPage] = useState(0);
+    const [servicesRowsPerPage, setServicesRowsPerPage] = useState(servicesIntialRowsPerPage);
+
+    const [dealsPage, setDealsPage] = useState(0);
+    const [dealsRowsPerPage, setDealsRowsPerPage] = useState(dealsIntialRowsPerPage);
 
     const [salon, setSalon] = useState();
 
     const [services, setServices] = useState();
-
+    const [loadingServices, setLoadingServices] = useState(false);
+    
     const [deals, setDeal] = useState();
+    const [loadingDeals, setLoadingDeals] = useState(false);
 
     useEffect(() => {
         axios.get(`/companies/${param.salonId}?include[]=vendor_page&include[]=booking_times`)
@@ -134,23 +144,34 @@ const SingleSalon = props => {
             })
     }, [param.salonId])
     useEffect(() => {
-        axios.get(`/companies/${param.salonId}/services`)
-            .then(res => {
+        setLoadingServices(true);
+        axios.get(`/companies/${param.salonId}/services?page=${servicesPage + 1}&per_page=${servicesRowsPerPage}`)
+        .then(res => {
+                setLoadingServices(false);
                 setServices(res.data);
             })
             .catch(err => {
                 console.log(err);
             })
-    }, [param.salonId])
+    }, [param.salonId, servicesPage, servicesRowsPerPage])
     useEffect(() => {
-        axios.get(`/companies/${param.salonId}/deals`)
+        setLoadingDeals(true);
+        axios.get(`/companies/${param.salonId}/deals?page=${dealsPage + 1}&per_page=${dealsRowsPerPage}`)
             .then(res => {
                 setDeal(res.data);
+                setLoadingDeals(false);
             })
             .catch(err => {
                 console.log(err);
             })
-    }, [param.salonId])
+    }, [dealsPage, dealsRowsPerPage, param.salonId, servicesPage, servicesRowsPerPage])
+
+    const handleServiceChangePage = React.useCallback((event, newPage) => {
+        setServicesPage(newPage);
+    }, []);
+    const handleDealChangePage = React.useCallback((event, newPage) => {
+        setDealsPage(newPage);
+    }, []);
 
 
     const handleChange = (event, newValue) => {
@@ -178,10 +199,19 @@ const SingleSalon = props => {
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
+                    <TablePaginationActions
+                        component="div"
+                        count={services.data.length}
+                        total={services.meta ? services.meta.total : null}
+                        rowsPerPage={dealsRowsPerPage}
+                        page={servicesPage}
+                        onPageChange={handleServiceChangePage}
+                        loading={loadingServices}
+                    />
                     <Grid container spacing={2}>
                         {services.data.map(service => {
                             return (
-                                <Grid item xs={6} md={4} key={service.id}>
+                                <Grid item xs={12} sm={6} md={4} key={service.id}>
                                     <SalonPanel >
                                         <div className="salon-img">
                                             <img src={service.image} alt="salon" />
@@ -205,10 +235,19 @@ const SingleSalon = props => {
                     </Grid>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
+                    <TablePaginationActions
+                            component="div"
+                            count={deals.data.length}
+                            total={deals.meta ? deals.meta.total : null}
+                            rowsPerPage={dealsRowsPerPage}
+                            page={dealsPage}
+                            onPageChange={handleDealChangePage}
+                            loading={loadingDeals}
+                        />
                     <Grid container spacing={2}>
                         {deals.data.map(deal => {
                             return (
-                                <Grid item xs={6} md={4} key={deal.id}>
+                                <Grid item xs={12} sm={6} md={4} key={deal.id}>
                                     <DealPanel >
                                         <div className="deal-img">
                                             <img src={deal.image} alt="spotlight" />
