@@ -3,11 +3,12 @@
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
-import { TableData } from '../../../../../../components/UI/Dashboard/Table/Table';
+import { TableData } from '../../../../../../../components/UI/Dashboard/Table/Table';
 
 import { useTranslation } from 'react-i18next';
-import { formatCurrency } from '../../../../../../shared/utility';
-import Actions from '../../../../../../components/UI/Dashboard/Actions/Actions';
+import { formatCurrency } from '../../../../../../../shared/utility';
+import Actions from '../../../../../../../components/UI/Dashboard/Actions/Actions';
+
 
 
 const EnhancedTableBody = props => {
