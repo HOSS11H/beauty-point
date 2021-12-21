@@ -81,6 +81,7 @@ function Header(props) {
                         <Grid item xs />
                         <Grid item>
                             <HomeBtn onClick={ ( ) => navigate('/')   }>{t('visit store')}</HomeBtn>
+                            <HomeBtn href='https://beautypoint.sa/home' >{t('visit old version')}</HomeBtn>
                             <LogoutBtn variant='text' onClick={logout}>{t('log out')}</LogoutBtn>
                         </Grid>
                     </Grid>
