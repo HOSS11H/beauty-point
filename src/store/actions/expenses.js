@@ -236,11 +236,11 @@ export const updateExpenseCategoryStart = () => {
         type: actionTypes.UPDATE_EXPENSE_CATEGORY_START,
     }
 }
-export const updateExpenseCategorySuccess = (message, updatedExpenseCategoryId) => {
+export const updateExpenseCategorySuccess = (message, updatedExpenseCategoryData) => {
     return {
         type: actionTypes.UPDATE_EXPENSE_CATEGORY_SUCCESS,
         message: message,
-        expenseCategoryId: updatedExpenseCategoryId,
+        expenseCategoryData: updatedExpenseCategoryData,
     }
 }
 export const updateExpenseCategoryFailed = (message) => {
@@ -255,7 +255,7 @@ export const updateExpenseCategory = data => {
         dispatch(updateExpenseCategoryStart())
         axios.put(`/vendors/expenses_categories/${data.id}`, data)
             .then(response => {
-                dispatch(updateExpenseCategorySuccess(response.data, data.id));
+                dispatch(updateExpenseCategorySuccess(response.data, data));
             })
             .catch(err => {
                 dispatch(updateExpenseCategoryFailed(err.message))
@@ -399,11 +399,11 @@ export const updateExpenseCustomerStart = () => {
         type: actionTypes.UPDATE_EXPENSE_CUSTOMER_START,
     }
 }
-export const updateExpenseCustomerSuccess = (message, updatedExpenseCustomerId) => {
+export const updateExpenseCustomerSuccess = (message, updatedExpenseCustomerData) => {
     return {
         type: actionTypes.UPDATE_EXPENSE_CUSTOMER_SUCCESS,
         message: message,
-        expenseCustomerId: updatedExpenseCustomerId,
+        expenseCustomerData: updatedExpenseCustomerData,
     }
 }
 export const updateExpenseCustomerFailed = (message) => {
@@ -414,11 +414,10 @@ export const updateExpenseCustomerFailed = (message) => {
 }
 export const updateExpenseCustomer = data => {
     return dispatch => {
-        console.log(data);
         dispatch(updateExpenseCustomerStart())
         axios.put(`/vendors/expenses_customers/${data.id}`, data)
             .then(response => {
-                dispatch(updateExpenseCustomerSuccess(response.data, data.id));
+                dispatch(updateExpenseCustomerSuccess(response.data, data));
             })
             .catch(err => {
                 dispatch(updateExpenseCustomerFailed(err.message))

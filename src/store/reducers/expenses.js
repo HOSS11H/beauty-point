@@ -196,7 +196,18 @@ const reducer = (state = intialState, action) => {
                 updatingExpenseCategoryMessage: null,
             })
         case (actionTypes.UPDATE_EXPENSE_CATEGORY_SUCCESS):
+            const editedExpenseCategoryIndex = state.expensesCategories.data.findIndex(customer => customer.id === action.expenseCategoryData.id);
+            let editedExpenseCategory = { ...state.expensesCategories.data[editedExpenseCategoryIndex] }
+            const updatedEditedExpenseCategory = updateObject(editedExpenseCategory, {
+                ...action.expenseCategoryData,
+            });
+            const modifiedExpensesCategories = [ ...state.expensesCategories.data ];
+            modifiedExpensesCategories[editedExpenseCategoryIndex] = updatedEditedExpenseCategory;
             return updateObject(state, {
+                expensesCategories: {
+                    ...state.expensesCategories,
+                    data: modifiedExpensesCategories,
+                },
                 updatingExpenseCategory: false,
                 updatingExpenseCategorySuccess: true,
                 updatingExpenseCategoryMessage: action.message,
@@ -306,7 +317,18 @@ const reducer = (state = intialState, action) => {
                 updatingExpenseCustomerMessage: null,
             })
         case (actionTypes.UPDATE_EXPENSE_CUSTOMER_SUCCESS):
+            const editedExpenseCustomerIndex = state.expensesCustomers.data.findIndex(customer => customer.id === action.expenseCustomerData.id);
+            let editedExpenseCustomer = { ...state.expensesCustomers.data[editedExpenseCustomerIndex] }
+            const updatedEditedExpenseCustomer = updateObject(editedExpenseCustomer, {
+                ...action.expenseCustomerData,
+            });
+            const modifiedExpensesCustomers = [ ...state.expensesCustomers.data ];
+            modifiedExpensesCustomers[editedExpenseCustomerIndex] = updatedEditedExpenseCustomer;
             return updateObject(state, {
+                expensesCustomers: {
+                    ...state.expensesCustomers,
+                    data: modifiedExpensesCustomers,
+                },
                 updatingExpenseCustomer: false,
                 updatingExpenseCustomerSuccess: true,
                 updatingExpenseCustomerMessage: action.message,

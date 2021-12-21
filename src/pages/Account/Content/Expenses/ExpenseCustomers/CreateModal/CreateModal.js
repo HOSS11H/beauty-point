@@ -28,12 +28,20 @@ const CreateModal = (props) => {
     const [expenseName, setExpenseName] = useState('');
     const [expenseNameError, setExpenseNameError] = useState(false);
 
+    const [customerNumber, setCustomerNumber] = useState('');
+    const [customerNumberError, setCustomerNumberError] = useState(false);
+
 
 
 
     const expenseNameChangeHandler = (event) => {
         setExpenseName(event.target.value);
         setExpenseNameError(false);
+    }
+
+    const customerNumberChangeHandler = (event) => {
+        setCustomerNumber(event.target.value);
+        setCustomerNumberError(false);
     }
 
 
@@ -45,6 +53,8 @@ const CreateModal = (props) => {
     const resetModalData = useCallback(() => {
         setExpenseName('');
         setExpenseNameError(false);
+        setCustomerNumber('');
+        setCustomerNumberError(false);
     }, [])
 
     useEffect(() => {
@@ -57,18 +67,27 @@ const CreateModal = (props) => {
             setExpenseNameError(true);
             return;
         }
+        if ( customerNumber.trim().length === 0) {
+            setCustomerNumberError(true);
+            return;
+        }
 
         const data = {
             name: expenseName,
+            mobile: customerNumber
         }
         onConfirm(data);
-    }, [expenseName, onConfirm])
+    }, [customerNumber, expenseName, onConfirm])
 
     let content = (
         <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
-                <CustomTextField id="expense-name" label={t('name')} variant="outlined" value={expenseName} onChange={expenseNameChangeHandler} />
+                <CustomTextField id="customer-name" label={t('name')} variant="outlined" value={expenseName} onChange={expenseNameChangeHandler} />
                 {expenseNameError && <ValidationMessage notExist>{t(`Please add name`)}</ValidationMessage>}
+            </Grid>
+            <Grid item xs={12} sm={6} >
+                <CustomTextField id="customer-number" label={t('mobile number')} variant="outlined" value={customerNumber} onChange={customerNumberChangeHandler} />
+                {customerNumberError && <ValidationMessage notExist>{t(`Please add number`)}</ValidationMessage>}
             </Grid>
         </Grid>
     )

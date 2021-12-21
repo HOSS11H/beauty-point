@@ -67,7 +67,7 @@ const CreateModal = (props) => {
     let content = (
         <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
-                <CustomTextField id="expense-name" label={t('name')} variant="outlined" value={expenseName} onChange={expenseNameChangeHandler} />
+                <CustomTextField id="category-name" label={t('name')} variant="outlined" value={expenseName} onChange={expenseNameChangeHandler} />
                 {expenseNameError && <ValidationMessage notExist>{t(`Please add name`)}</ValidationMessage>}
             </Grid>
         </Grid>
