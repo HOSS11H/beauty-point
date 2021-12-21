@@ -34,6 +34,7 @@ const ActionButtons = styled.div`
     display: flex;
     align-items: center;
     justify-content: flex-end;
+    margin-bottom: 15px;
     a {
         display: inline-flex;
         justify-content: center;

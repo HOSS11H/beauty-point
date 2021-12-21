@@ -275,10 +275,6 @@ const EditModal = (props) => {
             setSelectedAgentError(true);
             return;
         }
-        if (editorState.getCurrentContent().hasText() === false) {
-            setExpenseDescriptionError(true);
-            return;
-        }
         if (expenseAmount === 0) {
             setExpenseAmountError(true);
             return;
@@ -296,7 +292,6 @@ const EditModal = (props) => {
             image: uploadedImages[0].data_url,
         }
         onConfirm(data);
-        console.log(data);
     }, [expenseName, expenseBank, expenseAccount, selectedCategory, selectedAgent, editorState, expenseAmount, id, date, uploadedImages, onConfirm])
 
     let content = (

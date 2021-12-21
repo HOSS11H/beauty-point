@@ -293,10 +293,6 @@ const CreateModal = (props) => {
             setSelectedAgentError(true);
             return;
         }
-        if (editorState.getCurrentContent().hasText() === false) {
-            setExpenseDescriptionError(true);
-            return;
-        }
         if (expenseAmount === 0) {
             setExpenseAmountError(true);
             return;
