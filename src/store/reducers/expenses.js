@@ -160,7 +160,10 @@ const reducer = (state = intialState, action) => {
                 expensesCategories: {
                     ...state.expensesCategories,
                     data: updatedExpensesCategories,
-                    total: state.expensesCategories.total - 1,
+                    meta : {
+                        ...state.expensesCategories.meta,
+                        total: state.expensesCategories.meta.total - 1,
+                    }
                 },
                 deletingExpenseCategory: false,
                 deletingExpenseCategorySuccess: true,
@@ -218,7 +221,17 @@ const reducer = (state = intialState, action) => {
                 creatingExpenseCategoryMessage: null,
             })
         case (actionTypes.CREATE_EXPENSE_CATEGORY_SUCCESS):
+            const updatedExpenseCategories = [ ...state.expensesCategories.data ];
+            updatedExpenseCategories.push(action.expenseCategoryData);
             return updateObject(state, {
+                expensesCategories: {
+                    ...state.expensesCategories,
+                    data: updatedExpenseCategories,
+                    meta : {
+                        ...state.expensesCategories.meta,
+                        total: state.expensesCategories.meta.total + 1,
+                    }
+                },
                 creatingExpenseCategory: false,
                 creatingExpenseCategorySuccess: true,
                 creatingExpenseCategoryMessage: action.message,

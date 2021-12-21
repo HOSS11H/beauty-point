@@ -63,7 +63,7 @@ function ExpenseCategories(props) {
 
     const { t } = useTranslation()
 
-    const { fetchedExpensesCategories,fetchingExpensesCategories, fetchExpensesCategoriesHandler, searchingExpensesCategoriesSuccess, deleteExpenseCategoryHandler, creatingExpenseCategorySuccess, updateExpenseCategoryHandler, updatingExpenseCategorySuccess } = props;
+    const { fetchedExpensesCategories,fetchingExpensesCategories, fetchExpensesCategoriesHandler, searchingExpensesCategoriesSuccess, deleteExpenseCategoryHandler, updateExpenseCategoryHandler } = props;
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(intialPerPage);
@@ -81,13 +81,6 @@ function ExpenseCategories(props) {
     useEffect(() => {
         fetchExpensesCategoriesHandler(lang, page, rowsPerPage );
     }, [lang, fetchExpensesCategoriesHandler, page, rowsPerPage]);
-    
-    useEffect(() => {
-        creatingExpenseCategorySuccess && fetchExpensesCategoriesHandler(lang, page, rowsPerPage );
-    }, [lang, fetchExpensesCategoriesHandler, page, rowsPerPage, creatingExpenseCategorySuccess]);
-    useEffect(() => {
-        updatingExpenseCategorySuccess && fetchExpensesCategoriesHandler(lang, page, rowsPerPage );
-    }, [lang, fetchExpensesCategoriesHandler, page, rowsPerPage, creatingExpenseCategorySuccess, updatingExpenseCategorySuccess]);
 
 
     const handleChangePage = useCallback((event, newPage) => {

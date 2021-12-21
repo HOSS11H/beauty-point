@@ -320,7 +320,7 @@ export const createExpenseCategory = (data) => {
         dispatch(createExpenseCategoryStart())
         axios.post(`/vendors/expenses_categories`, data)
             .then(response => {
-                dispatch(createExpenseCategorySuccess(null, { ...data, ...response.data }));
+                dispatch(createExpenseCategorySuccess(null, { ...response.data }));
             })
             .catch(err => {
                 dispatch(createExpenseCategoryFailed(err.message))

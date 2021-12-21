@@ -1,9 +1,9 @@
 import { Fragment, useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { searchExpenses , createExpense} from '../../../../../store/actions/index';
+import { searchExpensesCategories , createExpenseCategory} from '../../../../../store/actions/index';
 import SearchBar from "../../../../../components/Search/SearchBar/SearchBar";
 
-import ExpensesTable from './ExpenseCategoriesTable/ExpenseCategoriesTable';
+import ExpensesCategoriesTable from './ExpenseCategoriesTable/ExpenseCategoriesTable';
 
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
@@ -33,7 +33,7 @@ function ExpenseCategories(props) {
 
     const { t } = useTranslation()
 
-    const { searchExpensesHandler, addExpenseHandler } = props;
+    const { searchExpensesCategoriesHandler, addExpenseCategoryHandler } = props;
 
     const [createModalOpened, setCreateModalOpened] = useState(false);
 
@@ -47,20 +47,20 @@ function ExpenseCategories(props) {
 
     const createModalConfirmHandler = useCallback((data) => {
         setCreateModalOpened(false);
-        addExpenseHandler(data);
-    }, [addExpenseHandler])
+        addExpenseCategoryHandler(data);
+    }, [addExpenseCategoryHandler])
 
 
     return (
         <Fragment>
             <ActionsWrapper>
-                <SearchBar searchHandler={searchExpensesHandler}/>
+                <SearchBar searchHandler={searchExpensesCategoriesHandler}/>
                 <CreateBtn onClick={createModalOpenHandler} >{t('add category')}</CreateBtn>
                 <CreateModal show={createModalOpened}
                     onClose={createModalCloseHandler} onConfirm={createModalConfirmHandler}
                     heading='add new category' confirmText='add' />
             </ActionsWrapper>
-            <ExpensesTable />
+            <ExpensesCategoriesTable />
         </Fragment>
     );
 }
@@ -69,8 +69,8 @@ function ExpenseCategories(props) {
 
 const mapDispatchToProps = dispatch => {
     return {
-        searchExpensesHandler: ( language, word ) => dispatch(searchExpenses( language, word )),
-        addExpenseHandler: (data) => dispatch(createExpense( data ))
+        searchExpensesCategoriesHandler: ( language, word ) => dispatch(searchExpensesCategories( language, word )),
+        addExpenseCategoryHandler: (data) => dispatch(createExpenseCategory( data ))
     }
 }
 
