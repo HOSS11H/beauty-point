@@ -321,13 +321,13 @@ const CreateModal = (props) => {
         })
     }, [selectedServices])
 
-    const increaseItemHandler = useCallback((itemId) => {
+    const increaseItemHandler = useCallback((type, itemId) => {
         dispatch({
             type: 'INCREASE_SERVICE',
             payload: itemId
         })
     }, [])
-    const decreaseItemHandler = useCallback((itemId) => {
+    const decreaseItemHandler = useCallback((type, itemId) => {
         const decreasedServiceIndex = cartData.services.findIndex(service => service.id === itemId);
         if (cartData.services[decreasedServiceIndex].quantity === 1) {
             setSelectedServices(selectedServices.filter(service => service !== itemId))
@@ -496,6 +496,7 @@ const CreateModal = (props) => {
         setUploadedImages([]);
         setDefaultImage('');
         setDefaultImageError(false);
+        resetCartHandler();
     }, [])
 
     useEffect(() => {

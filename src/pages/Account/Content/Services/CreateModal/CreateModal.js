@@ -407,6 +407,7 @@ const CreateModal = (props) => {
             location: selectedLocation,
             type: 'single',
         }
+        console.log(data, 'excuted')
         onConfirm(data);
     }, [categoryName, defaultImage, discountType, editorState, employeeName, fetchedCategories, fetchedEmployees, fetchedLocations, locationName, onConfirm, priceAfterDiscount, serviceDiscount, serviceName, servicePrice, servicePriceError, serviceStatus, timeRequired, timeType, uploadedImages])
 

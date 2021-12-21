@@ -141,6 +141,7 @@ export const createServiceFailed = (message) => {
 export const createService = (data) => {
     return dispatch => {
         dispatch(createServiceStart())
+        console.log(data, 'excuted')
         axios.post(`/vendors/services`, data)
             .then(response => {
                 dispatch(createServiceSuccess(null, { ...data, ...response.data }));

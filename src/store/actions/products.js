@@ -121,6 +121,7 @@ export const createProductFailed = (message) => {
 export const createProduct = (data) => {
     return dispatch => {
         dispatch(createProductStart())
+        console.log(data, 'excuted')
         axios.post(`/vendors/products`, data)
             .then(response => {
                 dispatch(createProductSuccess(null, { ...data, ...response.data }));
