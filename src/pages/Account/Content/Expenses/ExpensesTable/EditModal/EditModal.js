@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import ThemeContext from '../../../../../../store/theme-context'
 
 import { CustomModal } from '../../../../../../components/UI/Modal/Modal';
-import { Grid } from '@mui/material';
+import { Button, Grid, IconButton } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import ReactSelect from 'react-select';
 import FormLabel from '@mui/material/FormLabel';
@@ -18,13 +18,39 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
-import { connect } from 'react-redux';
-import { fetchLocations, fetchServicesByLocation } from '../../../../../../store/actions/index';
 import ValidationMessage from '../../../../../../components/UI/ValidationMessage/ValidationMessage';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { format } from 'date-fns';
 import axios from '../../../../../../utils/axios-instance';
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import DeleteIcon from '@mui/icons-material/Delete';
+import ImageUploading from 'react-images-uploading';
 
+const UploadImageTopBar = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`
+const UploadImageBody = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    max-width: 100%;
+    width: 100%;
+    img {
+        width: 100%;
+        height: 150px;
+        object-fit: contain;
+        max-width: 100%;
+    }
+`
+const ImageItemBottomBar = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 15px;
+`
 
 const CustomTextField = styled(TextField)`
     width: 100%;
@@ -98,7 +124,7 @@ const EditModal = (props) => {
 
     let expenseData = fetchedExpenses.data[selectedExpenseIndex];
 
-    const {name, notes, amount, expense_date, bank_name, bank_account, category, customer   } = expenseData;
+    const {name, notes, amount, expense_date, bank_name, bank_account, category, customer, expense_image_url   } = expenseData;
 
     const { t } = useTranslation();
 
@@ -136,6 +162,9 @@ const EditModal = (props) => {
     const [expenseAmount, setExpenseAmount] = useState(amount);
     const [expenseAmountError, setExpenseAmountError] = useState(false);
 
+    const [uploadedImages, setUploadedImages] = useState([ { data_url: expense_image_url } ]);
+
+    const maxNumber = 1;
 
     const expenseNameChangeHandler = (event) => {
         setExpenseName(event.target.value);
@@ -215,6 +244,11 @@ const EditModal = (props) => {
         setExpenseDescriptionError(false);
     }
 
+    const onImageChangeHandler = (imageList, addUpdateIndex) => {
+        // data for submit
+        setUploadedImages(imageList);
+    };
+
     const closeModalHandler = useCallback(() => {
         onClose();
     }, [onClose]);
@@ -259,10 +293,11 @@ const EditModal = (props) => {
             bank_account: expenseAccount,
             cat_id: selectedCategory.value,
             customer_id: selectedAgent.value,
+            image: uploadedImages[0].data_url,
         }
         onConfirm(data);
         console.log(data);
-    }, [expenseName, expenseBank, expenseAccount, selectedCategory, selectedAgent, editorState, expenseAmount, id, date, onConfirm])
+    }, [expenseName, expenseBank, expenseAccount, selectedCategory, selectedAgent, editorState, expenseAmount, id, date, uploadedImages, onConfirm])
 
     let content = (
         <Grid container spacing={2}>
@@ -320,6 +355,55 @@ const EditModal = (props) => {
             <Grid item xs={12} sm={6}>
                 <CustomTextField id="expense-amount" type='number' label={t('amount')} variant="outlined" value={expenseAmount} onChange={expenseAmountChangeHandler} />
                 {expenseAmountError && <ValidationMessage notExist>{t(`Please add amount`)}</ValidationMessage>}
+            </Grid>
+            <Grid item xs={12}>
+                <ImageUploading
+                    value={uploadedImages}
+                    onChange={onImageChangeHandler}
+                    maxNumber={maxNumber}
+                    dataURLKey="data_url"
+                >
+                    {({
+                        imageList,
+                        onImageUpload,
+                        onImageRemoveAll,
+                        onImageUpdate,
+                        onImageRemove,
+                        isDragging,
+                        dragProps,
+                    }) => (
+                        // write your building UI
+                        <div className="upload__image-wrapper">
+                            <UploadImageBody>
+                                    <Grid container sx={{ width: '100%' }} spacing={2} >
+                                        {imageList.map((image, index) => (
+                                            <Grid item xs={12} sm={6} key={index} >
+                                                <div style={{ width: '100%' }} >
+                                                    <img src={image['data_url']} alt="" width="100" />
+                                                    <ImageItemBottomBar>
+                                                        <Button sx={{ mr: 1 }} size="large" variant="outlined" startIcon={<PhotoCamera />} onClick={() => onImageUpdate(index)}>
+                                                            {t('update')}
+                                                        </Button>
+                                                        <IconButton aria-label="delete" size="large" onClick={() => onImageRemove(index)}>
+                                                            <DeleteIcon />
+                                                        </IconButton>
+                                                    </ImageItemBottomBar>
+                                                </div>
+                                            </Grid>
+                                        ))}
+                                    </Grid>
+                            </UploadImageBody>
+                            <UploadImageTopBar>
+                                <Button size="medium" sx={{ mr: 2, color: isDragging && 'red' }} variant="contained" startIcon={<PhotoCamera />} {...dragProps} onClick={onImageUpload} >
+                                    {t('photos')}
+                                </Button>
+                                <Button size="medium" variant="outlined" startIcon={<DeleteIcon />} onClick={onImageRemoveAll}>
+                                    {t('Remove all')}
+                                </Button>
+                            </UploadImageTopBar>
+                        </div>
+                    )}
+                </ImageUploading>
             </Grid>
         </Grid>
     )

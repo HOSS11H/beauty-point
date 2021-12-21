@@ -263,6 +263,7 @@ const CreateModal = (props) => {
         setExpenseAmountError(false);
         setExpenseDescriptionError(false);
         setEditorState(EditorState.createEmpty());
+        setUploadedImages([]);
     }, [])
 
     useEffect(() => {
