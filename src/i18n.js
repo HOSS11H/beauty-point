@@ -302,6 +302,7 @@ const resources = {
             'add customer': 'إضافة عميل',
             'Do you want To delete this customer?': 'هل تريد حذف هذا العميل؟',
             'edit customer details': 'تعديل تفاصيل العميل',
+            'all categories': 'كل الفئات',
         }
     }
 };

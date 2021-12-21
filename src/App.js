@@ -10,6 +10,7 @@ import Layout from './components/Layout/Layout';
 import Auth from './pages/Auth/Auth';
 import NotFound from './pages/NotFound/NotFound';
 import Landing from './pages/Landing/Landing';
+import AllCategories from "./pages/AllCategories/AllCategories";
 import Account from './pages/Account/Account';
 import Dashboard from './pages/Account/Content/Dashboard/Dashboard';
 import Services from './pages/Account/Content/Services/Services';
@@ -44,6 +45,7 @@ function App() {
         <Routes>
             <Route path="/auth" element={<Auth />} />
             <Route path="/" element={<Landing />} />
+            <Route path="/all-categories" element={<AllCategories />} />
             <Route path='*' element={<Landing />} />
         </Routes>
     )
@@ -72,6 +74,7 @@ function App() {
                     </Route>
                 </ Route>
                 <Route path="/" element={<Landing />} />
+                <Route path="/all-categories" element={<AllCategories />} />
                 <Route path='*' element={<Landing />} />
             </Routes>
         )

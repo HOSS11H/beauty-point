@@ -10,6 +10,10 @@ import axios from '../../../utils/axios-instance';
 import CircularProgress from '@mui/material/CircularProgress';
 import {NavLink} from 'react-router-dom';
 import { useTranslation } from "react-i18next";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useContext } from "react";
+import ThemeContext from "../../../store/theme-context";
 
 
 const ServicesSliderWrapper = styled.section`
@@ -141,6 +145,10 @@ const ServicesSlider = props => {
 
     const {t} = useTranslation();
 
+    const themeCtx= useContext(ThemeContext);
+
+    const { theme } = themeCtx
+
     const settings = {
         dots: false,
         arrows: true,
@@ -209,7 +217,7 @@ const ServicesSlider = props => {
         <ServicesSliderWrapper>
             <Container maxWidth="lg">
                 <Heading className='heading-2'>
-                    <h2 className="heading-title" >{t('select your services')}</h2>
+                    <NavLink className="heading-title" to='/all-categories'>{t('select your services')}  { theme === 'rtl' ? <ArrowForwardIcon /> : <ArrowBackIcon /> } </NavLink>
                 </Heading>
                 {content}
             </Container>
