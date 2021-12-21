@@ -405,6 +405,7 @@ const CreateModal = (props) => {
             users: employeesData,
             category: selectedCategory,
             location: selectedLocation,
+            type: 'single',
         }
         onConfirm(data);
     }, [categoryName, defaultImage, discountType, editorState, employeeName, fetchedCategories, fetchedEmployees, fetchedLocations, locationName, onConfirm, priceAfterDiscount, serviceDiscount, serviceName, servicePrice, servicePriceError, serviceStatus, timeRequired, timeType, uploadedImages])
