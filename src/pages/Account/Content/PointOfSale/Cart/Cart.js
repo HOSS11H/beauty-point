@@ -396,7 +396,6 @@ const Cart = props => {
                             <CustomerCard>
                                 <CustomerName>{customerData.name}</CustomerName>
                                 <CustomerInfo>
-                                    <li><MailIcon sx={{ mr: 1 }} />{customerData.email}</li>
                                     <li><PhoneAndroidIcon sx={{ mr: 1 }} />{customerData.mobile}</li>
                                 </CustomerInfo>
                             </CustomerCard>

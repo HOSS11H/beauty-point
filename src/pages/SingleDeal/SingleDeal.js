@@ -111,9 +111,6 @@ const SingleDeal = props => {
                         <Typography component="div" variant="subtitle2" sx={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
                             <PushPinIcon sx={{ mr: 1, width:'15px', height:'15px' }} />{deal.location.name} 
                         </Typography>
-                        <Typography component="div" color='primary' variant="h6" sx={{ display: 'flex', alignItems: 'center' }}>
-                            <PhoneAndroidIcon sx={{ mr: 1, width:'15px', height:'15px' }} />{deal.company.companyPhone} 
-                        </Typography>
                     </CardContent>
                 </Box>
                 <CardMedia

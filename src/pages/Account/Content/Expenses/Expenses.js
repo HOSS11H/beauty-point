@@ -91,7 +91,7 @@ function Expenses(props) {
             </ActionsWrapper>
             <ActionButtons>
                 <NavLink to='categories'>{t('categories')}</NavLink>
-                <NavLink to='customers'>{t('customers')}</NavLink>
+                <NavLink to='customers'>{t('agents')}</NavLink>
             </ActionButtons>
             <ExpensesTable />
         </Fragment>

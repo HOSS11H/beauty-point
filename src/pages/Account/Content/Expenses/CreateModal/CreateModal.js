@@ -299,7 +299,7 @@ const CreateModal = (props) => {
                 {expenseBankError && <ValidationMessage notExist>{t(`Please add bank`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6}>
-                <CustomTextField id="expense-account" label={t('account')} variant="outlined" value={expenseAccount} onChange={expenseAccountChangeHandler} />
+                <CustomTextField id="expense-account" label={t('bank account')} variant="outlined" value={expenseAccount} onChange={expenseAccountChangeHandler} />
                 {expenseAccountError && <ValidationMessage notExist>{t(`Please add account`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6} >

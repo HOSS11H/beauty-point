@@ -65,9 +65,10 @@ const SingleCategory = props => {
     
 
     useEffect(() => {
-        axios.get(`/categories/${param.categoryId}?include[]=services`)
+        axios.get(`/categories/${param.categoryId}/services?include[]=company`)
             .then(res => {
                 setCategory(res.data);
+                console.log(res.data);
             })
             .catch(err => {
                 console.log(err);
@@ -79,7 +80,7 @@ const SingleCategory = props => {
         </Loader>
     );
     if (category) {
-        content = category.services.map((service, index) => (
+        content = category.data.map((service, index) => (
             <Grid item xs={6} md={4} key={index}>
                 <SalonPanel >
                     <div className="salon-img">
@@ -92,9 +93,9 @@ const SingleCategory = props => {
                         <p className="salon-desc">
                             {formatCurrency(service.price)}
                         </p>
-                        <p className="salon-location">
-                            {category.name}
-                        </p>
+                        <NavLink to={`/salons/${service.company.id}`} className="salon-location">
+                            {service.company.companyName}
+                        </NavLink>
                     </div>
                 </SalonPanel>
             </Grid>

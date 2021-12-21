@@ -173,12 +173,12 @@ function ExpenseCustomers(props) {
                 </TableContainer>
                 <DeleteModal show={deleteModalOpened} id={selectedExpenseCustomer}
                     onClose={deleteModalCloseHandler} onConfirm={deleteModalConfirmHandler.bind(null, selectedExpenseCustomer)}
-                    heading='Do you want To delete this customer?' confirmText='delete' />
+                    heading='Do you want To delete this agent?' confirmText='delete' />
                 {
                     editModalOpened && (
                         <EditModal show={editModalOpened} id={selectedExpenseCustomer} fetchedExpensesCustomers={fetchedExpensesCustomers}
                             onClose={editModalCloseHandler} onConfirm={editModalConfirmHandler}
-                            heading='edit customer details' confirmText='edit' />
+                            heading='edit agent details' confirmText='edit' />
                     )
                 }
             </Paper>

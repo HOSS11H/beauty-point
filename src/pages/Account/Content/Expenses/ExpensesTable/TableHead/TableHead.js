@@ -49,10 +49,10 @@ const headCells = [
         label: 'bank',
     },
     {
-        id: 'account',
+        id: 'bank-account',
         numeric: false,
         disablePadding: false,
-        label: 'account',
+        label: 'bank account',
     },
     {
         id: 'action',

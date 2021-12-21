@@ -55,10 +55,10 @@ function ExpenseCustomers(props) {
         <Fragment>
             <ActionsWrapper>
                 <SearchBar searchHandler={searchExpensesCustomersHandler}/>
-                <CreateBtn onClick={createModalOpenHandler} >{t('add customer')}</CreateBtn>
+                <CreateBtn onClick={createModalOpenHandler} >{t('add agent')}</CreateBtn>
                 <CreateModal show={createModalOpened}
                     onClose={createModalCloseHandler} onConfirm={createModalConfirmHandler}
-                    heading='add new customer' confirmText='add' />
+                    heading='add new agent' confirmText='add' />
             </ActionsWrapper>
             <ExpensesCustomersTable />
         </Fragment>

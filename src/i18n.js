@@ -290,9 +290,9 @@ const resources = {
             'Please add bank': 'يرجى إضافة البنك',
             'Please add account': 'يرجى إضافة الحساب',
             'select category': 'اختر الفئة',
-            'select agent': 'اختر العميل',
+            'select agent': 'اختر المورد',
             'Please select category': 'يرجى اختيار الفئة',
-            'Please select agent': 'يرجى اختيار العميل',
+            'Please select agent': 'يرجى اختيار المورد',
             'Please add amount': 'يرجى إضافة المبلغ',
             'Do you want To delete this category?': 'هل تريد حذف هذه الفئة؟',
             'add new category': 'إضافة فئة جديدة',
@@ -308,6 +308,13 @@ const resources = {
             'gallery': 'معرض الصور',
             'overview': 'نظرة عامة',
             'timing': 'الوقت',
+            'bank account': 'الحساب البنكي',
+            'agents': 'الموردين',
+            'mobile': 'الجوال',
+            'add agent': 'إضافة مورد',
+            'add new agent': 'إضافة مورد جديد',
+            'Do you want To delete this agent?': 'هل تريد حذف هذا المورد؟',
+            'edit agent details': 'تعديل تفاصيل المورد',
         }
     }
 };
