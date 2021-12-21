@@ -110,25 +110,7 @@ const BookingActions = styled.div`
     align-items: center;
     flex-wrap: wrap;
 `
-const CustomMessage = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    min-height: 70px;
-    flex-grow: 1;
-    padding: 20px;
-    border-radius: 8px;
-    border: 1px solid;
-    border-color: ${({ theme }) => theme.palette.divider};
-    p {
-        font-size: 24px;
-        line-height:1.5;
-        text-transform: capitalize;
-        font-weight: 500;
-        color: ${({ theme }) => theme.palette.text.disabled};
-    }
-`
+
 const DeleteButton = styled(CustomButton)`
     &.MuiButton-root {
         width: auto;
@@ -620,9 +602,9 @@ const EditModal = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <FormControl sx={{ width: '100%' }}>
-                        <InputLabel id="booking-status">{t('status')}</InputLabel>
+                        <InputLabel id="booking-status">{t('booking status')}</InputLabel>
                         <Select
-                            label={t('status')}
+                            label={t('booking status')}
                             labelId='booking-status'
                             value={bookingStatus}
                             onChange={bookingStatusChangeHandler}

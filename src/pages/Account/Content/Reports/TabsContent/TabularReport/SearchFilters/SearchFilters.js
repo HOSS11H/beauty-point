@@ -17,6 +17,8 @@ import { CustomButton } from '../../../../../../../components/UI/Button/Button';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { format } from 'date-fns';
+import ReactSelect from 'react-select';
+import axios from '../../../../../../../utils/axios-instance';
 
 const FiltersWrapper = styled.div`
     margin-bottom: 30px;
@@ -52,6 +54,12 @@ const ResetButton = styled(CustomButton)`
         }
     }
 `
+const customStyles = {
+    control: base => ({
+        ...base,
+        height: 56,
+    })
+};
 
 
 const SearchFilters = (props) => {
@@ -73,7 +81,8 @@ const SearchFilters = (props) => {
 
     const [selectedProducts, setSelectedProducts] = useState('');
 
-    const [customer, setCustomer] = useState('');
+    const [options, setOptions] = useState([])
+    const [customer, setCustomer] = useState([]);
 
     const [employee, setEmployee] = useState('');
 
@@ -109,8 +118,31 @@ const SearchFilters = (props) => {
         setSelectedProducts(event.target.value);
     }
 
-    const handleCustomerChange = (event) => {
-        setCustomer(event.target.value);
+    const handleSelectOptions = (value, actions) => {
+        if (value.length !== 0) {
+            axios.get(`/vendors/customers?term=${value}`)
+                .then(res => {
+                    const customers = res.data.data;
+                    console.log(customers)
+                    const options = customers.map(customer => {
+                        return {
+                            value: customer.id,
+                            label: customer.name
+                        }
+                    })
+                    setOptions(options);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+    }
+    const handleSelectCustomer = (value, actions) => {
+        if (value) {
+            setCustomer(value);
+        } else {
+            setCustomer([])
+        }
     }
     const handleEmplloyeeChange = (event) => {
         setEmployee(event.target.value);
@@ -125,10 +157,10 @@ const SearchFilters = (props) => {
         setPaymentStatus(event.target.value);
     }
 
-    const ConfirmFilteringHandler = ( ) => {
-        const selectedCustomer = customer && fetchedCustomers.find(customerObj => customerObj.id === customer);
+    const ConfirmFilteringHandler = () => {
+        const selectedCustomer = customer && fetchedCustomers.find(customerObj => customerObj.id === customer.value);
         const selectedSearchParams = {
-            per_page:perPage,
+            per_page: perPage,
             from_date: dateFrom,
             to_date: dateTo,
             customer_name: selectedCustomer ? selectedCustomer.name : '',
@@ -143,9 +175,9 @@ const SearchFilters = (props) => {
         filterTabularReportHandler(selectedSearchParams);
     }
 
-    const resetFilteringHandler = ( ) => {
+    const resetFilteringHandler = () => {
         const searchParams = {
-            per_page:perPage,
+            per_page: perPage,
         }
         setLocation('');
         setDateFrom('');
@@ -157,6 +189,8 @@ const SearchFilters = (props) => {
         setBookingType('');
         setBookingStatus('');
         setPaymentStatus('');
+        setOptions([]);
+        setCustomer([]);
         filterTabularReportHandler(searchParams);
     }
 
@@ -248,23 +282,8 @@ const SearchFilters = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={4}>
                     <FormControl fullWidth sx={{ minWidth: '200px' }} >
-                        <InputLabel id="item-customer">{t('Customer')}</InputLabel>
-                        <Select
-                            labelId="item-customer"
-                            id="item-customer-select"
-                            value={customer}
-                            label={t('Customer')}
-                            onChange={handleCustomerChange}
-                        >
-                            {fetchedCustomers.map((customer) => (
-                                <MenuItem
-                                    key={customer.id}
-                                    value={customer.id}
-                                >
-                                    {customer.name}
-                                </MenuItem>
-                            ))}
-                        </Select>
+                        <ReactSelect styles={customStyles} options={options} isClearable isRtl={lang === 'ar'} placeholder={t('select customer')} value={customer}
+                            onChange={handleSelectCustomer} onInputChange={handleSelectOptions} />
                     </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6} md={4}>
@@ -339,7 +358,7 @@ const SearchFilters = (props) => {
                 <Grid item xs={12} sm={6} md={4}>
                     <ActionsWrapper>
                         <FilterButton onClick={ConfirmFilteringHandler} endIcon={<FilterAltIcon />} >{t('filter')}</FilterButton>
-                        <ResetButton onClick={resetFilteringHandler}  endIcon={<RestartAltIcon />} >{t('reset')}</ResetButton>
+                        <ResetButton onClick={resetFilteringHandler} endIcon={<RestartAltIcon />} >{t('reset')}</ResetButton>
                     </ActionsWrapper>
                 </Grid>
             </Grid>

@@ -7,7 +7,7 @@ import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import { useTranslation } from 'react-i18next';
 import { useContext, useEffect, useState, } from 'react';
-import { fetchLocations, searchCustomers, filterBookings } from '../../../../../store/actions/index';
+import { fetchLocations, filterBookings } from '../../../../../store/actions/index';
 import ReactSelect from 'react-select';
 import { connect } from 'react-redux';
 import DateAdapter from '@mui/lab/AdapterDateFns';
@@ -157,7 +157,7 @@ const SearchFilters = (props) => {
         setBookingId('');
         setLocation('');
         setDate('');
-        setOptions(null);
+        setOptions([]);
         setCustomer([]);
         setBookingStatus('');
         filterBookingsHandler({
