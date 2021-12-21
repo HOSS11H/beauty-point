@@ -31,6 +31,8 @@ import GeneralSettings from './pages/Account/Content/Settings/GeneralSettings/Ge
 import VendorPage from './pages/Account/Content/Settings/VendorPage/VendorPage'
 import BookingSettings from "./pages/Account/Content/Settings/BookingSettings/BookingSettings";
 import EmployeeSettings from "./pages/Account/Content/Settings/EmployeeSettings/EmployeeSettings";
+import SingleCategory from "./pages/SignleCategory/SignleCategory";
+import SingleService from "./pages/SingleService/SingleService";
 
 function App() {
 
@@ -46,6 +48,8 @@ function App() {
             <Route path="/auth" element={<Auth />} />
             <Route path="/" element={<Landing />} />
             <Route path="/all-categories" element={<AllCategories />} />
+            <Route path="/categories/:categoryId" element={<SingleCategory />} />
+            <Route path="/services/:serviceId" element={<SingleService />} />
             <Route path='*' element={<Landing />} />
         </Routes>
     )
@@ -75,6 +79,8 @@ function App() {
                 </ Route>
                 <Route path="/" element={<Landing />} />
                 <Route path="/all-categories" element={<AllCategories />} />
+                <Route path="/categories/:categoryId" element={<SingleCategory />} />
+                <Route path="/services/:serviceId" element={<SingleService />} />
                 <Route path='*' element={<Landing />} />
             </Routes>
         )
