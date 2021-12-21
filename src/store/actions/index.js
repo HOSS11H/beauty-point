@@ -66,4 +66,7 @@ export {
     searchExpenses,
     createExpense,
     updateExpense,
+    fetchExpensesCategories,
+    deleteExpenseCategory,
+    updateExpenseCategory,
 } from './expenses'

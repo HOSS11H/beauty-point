@@ -8,7 +8,7 @@ import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { fetchExpenses, deleteExpense, updateExpense } from '../../../../../../store/actions/index';
+import { fetchExpensesCategories, deleteExpenseCategory, updateExpenseCategory } from '../../../../../../store/actions/index';
 import ThemeContext from '../../../../../../store/theme-context';
 import EnhancedTableHead from './TableHead/TableHead';
 import EnhancedTableBody from './TableBody/TableBody';
@@ -63,7 +63,7 @@ function ExpenseCategories(props) {
 
     const { t } = useTranslation()
 
-    const { fetchedExpenses,fetchingExpenses, fetchExpensesHandler, searchingExpensesSuccess, deleteExpenseHandler, creatingExpenseSuccess, updateExpenseHandler, updatingExpenseSuccess } = props;
+    const { fetchedExpensesCategories,fetchingExpensesCategories, fetchExpensesCategoriesHandler, searchingExpensesCategoriesSuccess, deleteExpenseCategoryHandler, creatingExpenseCategorySuccess, updateExpenseCategoryHandler, updatingExpenseCategorySuccess } = props;
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(intialPerPage);
@@ -76,18 +76,18 @@ function ExpenseCategories(props) {
 
     const [editModalOpened, setEditModalOpened] = useState(false);
 
-    const [selectedExpense, setSelectedExpense] = useState(null);
+    const [selectedExpenseCategory, setSelectedExpenseCategory] = useState(null);
 
     useEffect(() => {
-        fetchExpensesHandler(lang, page, rowsPerPage );
-    }, [lang, fetchExpensesHandler, page, rowsPerPage]);
+        fetchExpensesCategoriesHandler(lang, page, rowsPerPage );
+    }, [lang, fetchExpensesCategoriesHandler, page, rowsPerPage]);
     
     useEffect(() => {
-        creatingExpenseSuccess && fetchExpensesHandler(lang, page, rowsPerPage );
-    }, [lang, fetchExpensesHandler, page, rowsPerPage, creatingExpenseSuccess]);
+        creatingExpenseCategorySuccess && fetchExpensesCategoriesHandler(lang, page, rowsPerPage );
+    }, [lang, fetchExpensesCategoriesHandler, page, rowsPerPage, creatingExpenseCategorySuccess]);
     useEffect(() => {
-        updatingExpenseSuccess && fetchExpensesHandler(lang, page, rowsPerPage );
-    }, [lang, fetchExpensesHandler, page, rowsPerPage, creatingExpenseSuccess, updatingExpenseSuccess]);
+        updatingExpenseCategorySuccess && fetchExpensesCategoriesHandler(lang, page, rowsPerPage );
+    }, [lang, fetchExpensesCategoriesHandler, page, rowsPerPage, creatingExpenseCategorySuccess, updatingExpenseCategorySuccess]);
 
 
     const handleChangePage = useCallback((event, newPage) => {
@@ -101,33 +101,33 @@ function ExpenseCategories(props) {
     // Delete Modal
     const deleteModalOpenHandler = useCallback((id) => {
         setDeleteModalOpened(true);
-        setSelectedExpense(id);
+        setSelectedExpenseCategory(id);
     }, [])
     const deleteModalCloseHandler = useCallback(() => {
         setDeleteModalOpened(false);
-        setSelectedExpense(null);
+        setSelectedExpenseCategory(null);
     }, [])
 
     const deleteModalConfirmHandler = useCallback((id) => {
-        deleteExpenseHandler( id);
+        deleteExpenseCategoryHandler( id);
         setDeleteModalOpened(false);
-        setSelectedExpense(null);
-    }, [deleteExpenseHandler])
+        setSelectedExpenseCategory(null);
+    }, [deleteExpenseCategoryHandler])
     // Edit Modal
     const editModalOpenHandler = useCallback((id) => {
         setEditModalOpened(true);
-        setSelectedExpense(id);
+        setSelectedExpenseCategory(id);
     }, [])
     const editModalCloseHandler = useCallback(() => {
         setEditModalOpened(false);
-        setSelectedExpense(null);
+        setSelectedExpenseCategory(null);
     }, [])
 
     const editModalConfirmHandler = useCallback((data) => {
         setEditModalOpened(false);
-        setSelectedExpense(null);
-        updateExpenseHandler(data);
-    }, [updateExpenseHandler])
+        setSelectedExpenseCategory(null);
+        updateExpenseCategoryHandler(data);
+    }, [updateExpenseCategoryHandler])
 
     let content = (
         <Fragment>
@@ -157,33 +157,33 @@ function ExpenseCategories(props) {
                         size='medium'
                     >
                         <EnhancedTableHead
-                            rowCount={fetchedExpenses.data.length}
+                            rowCount={fetchedExpensesCategories.data.length}
                         />
                         <EnhancedTableBody
-                            fetchedExpenses={fetchedExpenses}
-                            editExpenseHandler={editModalOpenHandler}
-                            deleteExpenseHandler={deleteModalOpenHandler}
+                            fetchedExpensesCategories={fetchedExpensesCategories}
+                            editExpenseCategoryHandler={editModalOpenHandler}
+                            deleteExpenseCategoryHandler={deleteModalOpenHandler}
                         />
                     </Table>
                     {rowsPerPage !== 'all' && (
                         <TablePaginationActions
                             sx= {{ width: '100%'}}
                             component="div"
-                            count={fetchedExpenses.data.length}
-                            total={fetchedExpenses.meta ? fetchedExpenses.meta.total : 0}
+                            count={fetchedExpensesCategories.data.length}
+                            total={fetchedExpensesCategories.meta ? fetchedExpensesCategories.meta.total : 0}
                             rowsPerPage={rowsPerPage}
                             page={page}
                             onPageChange={handleChangePage}
-                            loading={fetchingExpenses}
+                            loading={fetchingExpensesCategories}
                         />
                     )}
                 </TableContainer>
-                <DeleteModal show={deleteModalOpened} id={selectedExpense}
-                    onClose={deleteModalCloseHandler} onConfirm={deleteModalConfirmHandler.bind(null, selectedExpense)}
+                <DeleteModal show={deleteModalOpened} id={selectedExpenseCategory}
+                    onClose={deleteModalCloseHandler} onConfirm={deleteModalConfirmHandler.bind(null, selectedExpenseCategory)}
                     heading='Do you want To delete this expense?' confirmText='delete' />
                 {
                     editModalOpened && (
-                        <EditModal show={editModalOpened} id={selectedExpense} fetchedExpenses={fetchedExpenses}
+                        <EditModal show={editModalOpened} id={selectedExpenseCategory} fetchedExpensesCategories={fetchedExpensesCategories}
                             onClose={editModalCloseHandler} onConfirm={editModalConfirmHandler}
                             heading='edit product details' confirmText='edit' />
                     )
@@ -191,13 +191,13 @@ function ExpenseCategories(props) {
             </Paper>
         </Fragment>
     ) 
-    if ( fetchedExpenses.data.length === 0 && searchingExpensesSuccess) {
+    if ( fetchedExpensesCategories.data.length === 0 && searchingExpensesCategoriesSuccess) {
         content = (
             <SearchMessage>
                 {t('no results')}
             </SearchMessage>
         )
-    } else if (fetchingExpenses) {
+    } else if (fetchingExpensesCategories) {
         content = (
             <Loader>
                 <CircularProgress color="secondary" />
@@ -214,19 +214,19 @@ function ExpenseCategories(props) {
 
 const mapStateToProps = state => {
     return {
-        fetchedExpenses: state.expenses.expenses,
-        fetchingExpenses: state.expenses.fetchingExpenses,
-        searchingExpensesSuccess: state.expenses.searchingExpensesSuccess,
-        creatingExpenseSuccess: state.expenses.creatingExpenseSuccess,
-        updatingExpenseSuccess: state.expenses.updatingExpenseSuccess,
+        fetchedExpensesCategories: state.expenses.expenses,
+        fetchingExpensesCategories: state.expenses.fetchingExpensesCategories,
+        searchingExpensesCategoriesSuccess: state.expenses.searchingExpensesCategoriesSuccess,
+        creatingExpenseCategorySuccess: state.expenses.creatingExpenseCategorySuccess,
+        updatingExpenseCategorySuccess: state.expenses.updatingExpenseCategorySuccess,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchExpensesHandler: (lang, page, rowsPerPage ) => dispatch(fetchExpenses(lang, page, rowsPerPage)),
-        deleteExpenseHandler: (id) => dispatch(deleteExpense(id)),
-        updateExpenseHandler: (data) => dispatch(updateExpense(data)),
+        fetchExpensesCategoriesHandler: (lang, page, rowsPerPage ) => dispatch(fetchExpensesCategories(lang, page, rowsPerPage)),
+        deleteExpenseCategoryHandler: (id) => dispatch(deleteExpenseCategory(id)),
+        updateExpenseCategoryHandler: (data) => dispatch(updateExpenseCategory(data)),
     }
 }
 

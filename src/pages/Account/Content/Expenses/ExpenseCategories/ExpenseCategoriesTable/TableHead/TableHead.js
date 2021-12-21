@@ -13,46 +13,10 @@ const headCells = [
         label: '#',
     },
     {
-        id: 'category',
-        numeric: false,
-        disablePadding: false,
-        label: 'category',
-    },
-    {
-        id: 'amount',
-        numeric: false,
-        disablePadding: false,
-        label: 'amount',
-    },
-    {
         id: 'name',
         numeric: false,
         disablePadding: false,
         label: 'name',
-    },
-    {
-        id: 'date',
-        numeric: false,
-        disablePadding: false,
-        label: 'date',
-    },
-    {
-        id: 'agent',
-        numeric: false,
-        disablePadding: false,
-        label: 'agent',
-    },
-    {
-        id: 'bank',
-        numeric: false,
-        disablePadding: false,
-        label: 'bank',
-    },
-    {
-        id: 'account',
-        numeric: false,
-        disablePadding: false,
-        label: 'account',
     },
     {
         id: 'action',
