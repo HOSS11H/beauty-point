@@ -108,16 +108,16 @@ const ServicePanel = styled.div`
         }
     }
     .service-title {
-        font-size: 20px;
-        line-height: 27px;
-        font-weight: 500;
-        text-transform: capitalize;
-        @media screen and (max-width: 599.98px) {
-            font-size: 15px
-        }
         a {
+            font-size: 20px;
+            line-height: 27px;
+            font-weight: 500;
+            text-transform: capitalize;
+            @media screen and (max-width: 599.98px) {
+                font-size: 15px
+            }
             transition: 0.3s ease-in-out;
-            color: ${({ theme }) => theme.vars.black};
+            color: ${({ theme }) => theme.palette.common.black};
             &:hover {
                 color: ${({ theme }) => theme.vars.primary};
             }
@@ -153,14 +153,14 @@ const AllCategories = props => {
         </Loader>
     );
     if (services) {
-        content = services.map((service, index) => (
+        content = services.map((category, index) => (
             <Grid item xs={3} lg={2} key={index}>
                 <ServicePanel>
                     <div className="service-icon">
-                        <img src={service.image} alt="service" />
+                        <img src={category.image} alt="service" />
                     </div>
                     <div className="service-title">
-                        <NavLink to="/">{service.name}</NavLink>
+                        <NavLink to={`/categories/${category.id}`}>{category.name}</NavLink>
                     </div>
                 </ServicePanel>
             </Grid>
@@ -177,8 +177,8 @@ const AllCategories = props => {
                     <Heading className='heading-2'>
                         <h2 className="heading-title">{t('all categories')}</h2>
                     </Heading>
-                    <Grid container spacing={3}>
-                        {content}   
+                    <Grid container spacing={2}>
+                        {content}
                     </Grid>
                 </Container>
             </CategoriesWrapper>
