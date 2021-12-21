@@ -316,6 +316,8 @@ const resources = {
             'Do you want To delete this agent?': 'هل تريد حذف هذا المورد؟',
             'edit agent details': 'تعديل تفاصيل المورد',
             'visit old version': 'زيارة النسخة القديمة',
+            'attachments': 'المرفقات',
+            'agent name': 'المورد',
         }
     }
 };

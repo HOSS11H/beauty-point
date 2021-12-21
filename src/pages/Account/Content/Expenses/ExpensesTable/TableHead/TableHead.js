@@ -40,7 +40,7 @@ const headCells = [
         id: 'agent',
         numeric: false,
         disablePadding: false,
-        label: 'agent',
+        label: 'agent name',
     },
     {
         id: 'bank',
@@ -53,6 +53,12 @@ const headCells = [
         numeric: false,
         disablePadding: false,
         label: 'bank account',
+    },
+    {
+        id: 'attachments',
+        numeric: false,
+        disablePadding: false,
+        label: 'attachments',
     },
     {
         id: 'action',

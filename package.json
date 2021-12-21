@@ -12,6 +12,7 @@
     "@testing-library/jest-dom": "^5.15.0",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "file-saver": "^2.0.5",
     "google-map-react": "^2.1.10",
     "http-proxy-middleware": "^2.0.1",
     "morgan": "^1.10.0",

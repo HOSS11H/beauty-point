@@ -7,11 +7,19 @@ import { TableData } from '../../../../../../components/UI/Dashboard/Table/Table
 
 import { formatCurrency } from '../../../../../../shared/utility';
 import Actions from '../../../../../../components/UI/Dashboard/Actions/Actions';
+import { IconButton } from '@mui/material';
+import DownloadIcon from '@mui/icons-material/Download';
+import { saveAs } from 'file-saver'
+import { useCallback } from 'react';
 
 
 const EnhancedTableBody = props => {
 
     const { fetchedExpenses, editExpenseHandler, deleteExpenseHandler } = props;
+
+    const downloadImage = useCallback((val) => {
+        saveAs('image_url', val) // Put your image url here.
+    }, [])
 
     return (
         <TableBody>
@@ -53,6 +61,15 @@ const EnhancedTableBody = props => {
                         </TableCell>
                         <TableCell align="center">
                             <TableData>{row.bank_account}</TableData>
+                        </TableCell>
+                        <TableCell align="center">
+                            {
+                                row.expense_image_url && (
+                                    <IconButton aria-label="delete" onClick={downloadImage.bind( null ,row.expense_image_url)} >
+                                        <DownloadIcon />
+                                    </IconButton>
+                                )
+                            }
                         </TableCell>
                         <TableCell align="center">
                             <Actions edit remove
