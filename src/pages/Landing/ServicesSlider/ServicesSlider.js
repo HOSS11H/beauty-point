@@ -155,13 +155,13 @@ const ServicesSlider = props => {
         infinite: true,
         speed: 500,
         slidesToShow: 6,
-        slidesToScroll: 1,
+        slidesToScroll: 2,
         responsive: [
             {
                 breakpoint: 1200,
                 settings: {
                     slidesToShow: 4,
-                    slidesToScroll: 1,
+                    slidesToScroll: 2,
                 }
             },
             {
@@ -169,7 +169,7 @@ const ServicesSlider = props => {
                 settings: {
                     arrows: false,
                     slidesToShow: 4,
-                    slidesToScroll: 1,
+                    slidesToScroll: 2,
                 }
             },
         ]
