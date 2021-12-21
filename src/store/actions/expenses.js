@@ -68,7 +68,7 @@ export const deleteExpense = (id) => {
     }
 }
 
-export const updateExpenceStart = () => {
+export const updateExpenseStart = () => {
     return {
         type: actionTypes.UPDATE_EXPENSE_START,
     }
@@ -89,7 +89,7 @@ export const updateExpenseFailed = (message) => {
 export const updateExpense = data => {
     return dispatch => {
         console.log(data);
-        dispatch(updateExpenceStart())
+        dispatch(updateExpenseStart())
         axios.put(`/vendors/expenses/${data.id}`, data)
             .then(response => {
                 dispatch(updateExpenseSuccess(response.data, data.id));
@@ -161,6 +161,169 @@ export const createExpense = (data) => {
             })
             .catch(err => {
                 dispatch(createExpenseFailed(err.message))
+            })
+    }
+}
+
+export const fetchExpensesCategoriesStart = (  ) => {
+    return {
+        type: actionTypes.FETCH_EXPENSES_CATEGORIES_START,
+    }
+}
+export const fetchExpensesCategoriesSuccess = ( expensesCategoriesData ) => {
+    return {
+        type: actionTypes.FETCH_EXPENSES_CATEGORIES_SUCCESS,
+        expensesCategories: expensesCategoriesData
+    }
+}
+export const fetchExpensesCategoriesFailed = ( errorMessage ) => {
+    return {
+        type: actionTypes.FETCH_EXPENSES_CATEGORIES_FAILED,
+        error: errorMessage,
+    }
+}
+export const fetchExpensesCategories = ( language, page, perPage) => {
+    return dispatch => {
+        dispatch( fetchExpensesCategoriesStart( ) )
+        axios.get(`/vendors/expenses?include[]=category&include[]=customer&page=${page + 1}&per_page=${perPage}`, { 
+            headers: {
+                'Accept-Language': language
+            }
+        }).then( response => {
+                dispatch( fetchExpensesCategoriesSuccess( response.data  ) );
+            })
+            .catch( err => {
+                console.log(err)
+                dispatch( fetchExpensesCategoriesFailed( err.message  ) )
+            } )
+        }
+}
+
+export const deleteExpenseCategoryStart = () => {
+    return {
+        type: actionTypes.DELETE_EXPENSE_CATEGORY_START,
+    }
+}
+export const deleteExpenseCategorySuccess = (message, deletedExpenseCategoryId) => {
+    return {
+        type: actionTypes.DELETE_EXPENSE_CATEGORY_SUCCESS,
+        message: message,
+        expenseCategoryId: deletedExpenseCategoryId,
+    }
+}
+export const deleteExpenseCategoryFailed = (message) => {
+    return {
+        type: actionTypes.DELETE_EXPENSE_CATEGORY_FAILED,
+        message: message,
+    }
+}
+
+export const deleteExpenseCategory = (id) => {
+    return dispatch => {
+        dispatch(deleteExpenseCategoryStart())
+        axios.delete(`/vendors/expenses/${id}`)
+            .then(response => {
+                dispatch(deleteExpenseCategorySuccess(response.data, id));
+            })
+            .catch(err => {
+                dispatch(deleteExpenseCategoryFailed(err.message))
+            })
+    }
+}
+
+export const updateExpenseCategoryStart = () => {
+    return {
+        type: actionTypes.UPDATE_EXPENSE_CATEGORY_START,
+    }
+}
+export const updateExpenseCategorySuccess = (message, updatedExpenseCategoryId) => {
+    return {
+        type: actionTypes.UPDATE_EXPENSE_CATEGORY_SUCCESS,
+        message: message,
+        expenseCategoryId: updatedExpenseCategoryId,
+    }
+}
+export const updateExpenseCategoryFailed = (message) => {
+    return {
+        type: actionTypes.UPDATE_EXPENSE_CATEGORY_FAILED,
+        message: message,
+    }
+}
+export const updateExpenseCategory = data => {
+    return dispatch => {
+        console.log(data);
+        dispatch(updateExpenseCategoryStart())
+        axios.put(`/vendors/expenses/${data.id}`, data)
+            .then(response => {
+                dispatch(updateExpenseCategorySuccess(response.data, data.id));
+            })
+            .catch(err => {
+                dispatch(updateExpenseCategoryFailed(err.message))
+            })
+    }
+}
+
+
+export const searchExpensesCategoriesStart = () => {
+    return {
+        type: actionTypes.SEARCH_EXPENSES_CATEGORIES_START,
+    }
+}
+export const searchExpensesCategoriesSuccess = (expensesCategoriesData) => {
+    return {
+        type: actionTypes.SEARCH_EXPENSES_CATEGORIES_SUCCESS,
+        expensesCategories: expensesCategoriesData
+    }
+}
+export const searchExpensesCategoriesFailed = (errorMessage) => {
+    return {
+        type: actionTypes.SEARCH_EXPENSES_CATEGORIES_FAILED,
+        error: errorMessage,
+    }
+}
+export const searchExpensesCategories = (language, word) => {
+    return dispatch => {
+        dispatch(searchExpensesCategoriesStart())
+        axios.get(`/vendors/expenses?term=${word}&page=1&per_page=15&include[]=category&include[]=customer`, {
+            headers: {
+                'Accept-Language': language
+            }
+        }).then(response => {
+            dispatch(searchExpensesCategoriesSuccess(response.data));
+        })
+            .catch(err => {
+                dispatch(searchExpensesCategoriesFailed(err.message))
+            })
+    }
+}
+export const createExpenseCategoryStart = () => {
+    return {
+        type: actionTypes.CREATE_EXPENSE_CATEGORY_START,
+    }
+}
+export const createExpenseCategorySuccess = (message, createdExpenseCategoryData) => {
+    return {
+        type: actionTypes.CREATE_EXPENSE_CATEGORY_SUCCESS,
+        message: message,
+        expenseCategoryData: createdExpenseCategoryData,
+    }
+}
+export const createExpenseCategoryFailed = (message) => {
+    return {
+        type: actionTypes.CREATE_EXPENSE_CATEGORY_FAILED,
+        message: message,
+    }
+}
+
+export const createExpenseCategory = (data) => {
+    return dispatch => {
+        dispatch(createExpenseCategoryStart())
+        axios.post(`/vendors/expenses`, data)
+            .then(response => {
+                dispatch(createExpenseCategorySuccess(null, { ...data, ...response.data }));
+            })
+            .catch(err => {
+                dispatch(createExpenseCategoryFailed(err.message))
             })
     }
 }
