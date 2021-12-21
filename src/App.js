@@ -36,6 +36,7 @@ import SingleCategory from "./pages/SignleCategory/SignleCategory";
 import SingleService from "./pages/SingleService/SingleService";
 import AllDeals from "./pages/AllDeals/AllDeals";
 import SingleDeal from "./pages/SingleDeal/SingleDeal";
+import SingleSalon from "./pages/SingleSalon/SingleSalon";
 
 function App() {
 
@@ -56,6 +57,7 @@ function App() {
             <Route path="/categories/:categoryId" element={<SingleCategory />} />
             <Route path="/services/:serviceId" element={<SingleService />} />
             <Route path="/deals/:dealId" element={<SingleDeal />} />
+            <Route path="/salons/:salonId" element={<SingleSalon />} />
             <Route path='*' element={<Landing />} />
         </Routes>
     )
@@ -90,6 +92,7 @@ function App() {
                 <Route path="/categories/:categoryId" element={<SingleCategory />} />
                 <Route path="/services/:serviceId" element={<SingleService />} />
                 <Route path="/deals/:dealId" element={<SingleDeal />} />
+                <Route path="/salons/:salonId" element={<SingleSalon />} />
                 <Route path='*' element={<Landing />} />
             </Routes>
         )

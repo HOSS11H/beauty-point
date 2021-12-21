@@ -305,6 +305,7 @@ const resources = {
             'all categories': 'كل الفئات',
             'from': 'من',
             'to': 'إلى',
+            'gallery': 'معرض الصور',
         }
     }
 };

@@ -105,7 +105,7 @@ const Salons = props => {
                                 </div>
                                 <div className="salon-content">
                                     <h3 className="salon-title">
-                                        <NavLink to="/">{salon.companyName}</NavLink>
+                                        <NavLink to={`/salons/${salon.id}`}>{salon.companyName}</NavLink>
                                     </h3>
                                     <p className="salon-desc">
                                         {salon.address}
