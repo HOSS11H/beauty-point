@@ -22,6 +22,9 @@ const AddCustomerModal = (props) => {
     const [customerName, setCustomerName] = useState('');
     const [customerNameError, setCustomerNameError] = useState(false);
 
+    const [customerEmail, setCustomerEmail] = useState('');
+    const [customerEmailError, setCustomerEmailError] = useState(false);
+
     const [customerNumber, setCustomerNumber] = useState('');
     const [customerNumberError, setCustomerNumberError] = useState(false);
     
@@ -29,7 +32,10 @@ const AddCustomerModal = (props) => {
         setCustomerName(event.target.value);
         setCustomerNameError(false);
     }
-
+    const customerEmailChangeHandler = (event) => {
+        setCustomerEmail(event.target.value);
+        setCustomerEmailError(false);
+    }
     const customerNumberChangeHandler = (event) => {
         setCustomerNumber(event.target.value);
         setCustomerNumberError(false);
@@ -40,8 +46,13 @@ const AddCustomerModal = (props) => {
     }, [onClose])
 
     const confirmAddHandler = useCallback(() => {
+        const pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if ( customerName.trim().length === 0) {
             setCustomerNameError(true);
+            return;
+        }
+        if (pattern.test(customerEmail) === false) {
+            setCustomerEmailError(true);
             return;
         }
         if ( customerNumber.trim().length === 0) {
@@ -50,15 +61,17 @@ const AddCustomerModal = (props) => {
         }
         const data = {
             name: customerName,
+            email: customerEmail,
             mobile: customerNumber
         }
 
         onConfirm(data);
         
         setCustomerName('');
+        setCustomerEmail('');
         setCustomerNumber('');
 
-    }, [customerName, customerNumber, onConfirm])
+    }, [customerEmail, customerName, customerNumber, onConfirm])
     
     return (
         <CustomModal show={show} heading={heading} confirmText={confirmText} onConfirm={confirmAddHandler} onClose={closeModalHandler} >
@@ -66,6 +79,10 @@ const AddCustomerModal = (props) => {
                 <Grid item xs={12} sm={6}>
                     <CustomTextField id="customer-name" label={t('name')} variant="outlined" value={customerName} onChange={customerNameChangeHandler} />
                     {customerNameError && <ValidationMessage notExist>{t(`Please add name`)}</ValidationMessage>}
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <CustomTextField id="customer-email" label={t('email')} variant="outlined" value={customerEmail} onChange={customerEmailChangeHandler} />
+                    {customerEmailError && <ValidationMessage notExist>{t(`Please add email`)}</ValidationMessage>}
                 </Grid>
                 <Grid item xs={12} sm={6} >
                     <CustomTextField id="customer-number" label={t('mobile number')} variant="outlined" value={customerNumber} onChange={customerNumberChangeHandler} />
