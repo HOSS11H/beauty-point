@@ -185,7 +185,7 @@ function Expenses(props) {
                     editModalOpened && (
                         <EditModal show={editModalOpened} id={selectedExpense} fetchedExpenses={fetchedExpenses}
                             onClose={editModalCloseHandler} onConfirm={editModalConfirmHandler}
-                            heading='edit product details' confirmText='edit' />
+                            heading='edit expense details' confirmText='edit' />
                     )
                 }
             </Paper>

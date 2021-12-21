@@ -295,6 +295,10 @@ const resources = {
             'Please select agent': 'يرجى اختيار العميل',
             'Please add amount': 'يرجى إضافة المبلغ',
             'Do you want To delete this category?': 'هل تريد حذف هذه الفئة؟',
+            'add new category': 'إضافة فئة جديدة',
+            'add category': 'إضافة فئة',
+            'edit category details': 'تعديل تفاصيل الفئة',
+            'edit expense details': 'تعديل تفاصيل المصاريف',
         }
     }
 };

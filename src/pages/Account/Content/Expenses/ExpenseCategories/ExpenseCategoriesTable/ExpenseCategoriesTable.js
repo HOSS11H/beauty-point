@@ -178,7 +178,7 @@ function ExpenseCategories(props) {
                     editModalOpened && (
                         <EditModal show={editModalOpened} id={selectedExpenseCategory} fetchedExpensesCategories={fetchedExpensesCategories}
                             onClose={editModalCloseHandler} onConfirm={editModalConfirmHandler}
-                            heading='edit product details' confirmText='edit' />
+                            heading='edit category details' confirmText='edit' />
                     )
                 }
             </Paper>
