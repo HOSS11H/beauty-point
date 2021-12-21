@@ -17,11 +17,16 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import { NavLink, useParams } from "react-router-dom";
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
 import PushPinIcon from '@mui/icons-material/PushPin';
 import { SalonPanel, DealPanel } from '../../components/UI/SalonPanel/SalonPanel';
 import { formatCurrency } from "../../shared/utility";
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
 
 
 function TabPanel(props) {
@@ -169,7 +174,7 @@ const SingleSalon = props => {
                     <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                         <Tab label={t('services')} {...a11yProps(0)} />
                         <Tab label={t('deals')} {...a11yProps(1)} />
-                        <Tab label={t('gallery')} {...a11yProps(2)} />
+                        <Tab label={t('overview')} {...a11yProps(2)} />
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
@@ -238,18 +243,38 @@ const SingleSalon = props => {
                     </Grid>
                 </TabPanel>
                 <TabPanel value={value} index={2}>
-                    <ImageList sx={{ width: 500, height: 450 }} cols={3} rowHeight={164}>
-                        {[].map((item) => (
-                            <ImageListItem key={item.img}>
-                                <img
-                                    src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
-                                    srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
-                                    alt={item.title}
-                                    loading="lazy"
-                                />
-                            </ImageListItem>
-                        ))}
-                    </ImageList>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12} md={6}>
+                            <Typography component="div" variant="h5" sx={{ marginBottom: '10px' }} >
+                                {t('description')}
+                            </Typography>
+                            <Typography component="div" variant="h6" sx={{ marginBottom: '10px' }} >
+                                {salon.vendor_page.description}
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <Typography component="div" variant="h5" sx={{ marginBottom: '10px' }} >
+                                {t('timing')}
+                            </Typography>
+                            <TableContainer component={Paper} sx={{ my: 2 }}>
+                                <Table aria-label="simple table">
+                                    <TableBody>
+                                        {salon.booking_times.map((item) => (
+                                            <TableRow
+                                                key={item.id}
+                                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                            >
+                                                <TableCell component="th" scope="row">
+                                                    {t(item.day)}
+                                                </TableCell>
+                                                <TableCell align="center">{t('from')} {item.start_time} {t('to')}  {item.end_time}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </Grid>
+                    </Grid>
                 </TabPanel>
             </Box>
         )

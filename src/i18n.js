@@ -306,6 +306,8 @@ const resources = {
             'from': 'من',
             'to': 'إلى',
             'gallery': 'معرض الصور',
+            'overview': 'نظرة عامة',
+            'timing': 'الوقت',
         }
     }
 };

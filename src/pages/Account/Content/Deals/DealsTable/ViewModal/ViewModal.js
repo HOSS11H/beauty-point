@@ -82,14 +82,14 @@ const ViewModal = (props) => {
 
     if (dealData) {
 
-         const formattedApplyTime = dealData.applied_between_time.split(' - ')
+        const formattedApplyTime = dealData.applied_between_time.split(' - ')
 
         /* const formattedApplyDays = JSON.parse(dealData.days)
         console.log(formattedApplyDays) */
 
         const transformedDealData = {
             ...dealData,
-             applied_between_time: formattedApplyTime,
+            applied_between_time: formattedApplyTime,
             /* days: formattedApplyDays, */
         }
 
@@ -119,7 +119,7 @@ const ViewModal = (props) => {
                         <Grid item xs={6}>
                             <DealData>
                                 <DealDataHeading>{t('discount value')}</DealDataHeading>
-                                <DealDataInfo>{ transformedDealData.discount_type === 'percentage' ? `${transformedDealData.discount_value} %` : formatCurrency(transformedDealData.discount_value)  }</DealDataInfo>
+                                <DealDataInfo>{transformedDealData.discount_type === 'percentage' ? `${transformedDealData.discount_value} %` : formatCurrency(transformedDealData.discount_value)}</DealDataInfo>
                             </DealData>
                         </Grid>
                         <Grid item xs={6}>
@@ -180,7 +180,7 @@ const ViewModal = (props) => {
                     </DealData>
                 </Grid>
                 {
-                    ( transformedDealData.services.length > 0) && (
+                    (transformedDealData.services.length > 0) && (
                         <Grid item xs={12}>
                             <DealData>
                                 <DealDataHeading>{t('deal items')}</DealDataHeading>
