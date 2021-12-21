@@ -22,6 +22,7 @@ import Reports from './pages/Account/Content/Reports/Reports';
 import Employees from './pages/Account/Content/Employees/Employees';
 import Expenses from "./pages/Account/Content/Expenses/Expenses";
 import ExpenseCategories from "./pages/Account/Content/Expenses/ExpenseCategories/ExpenseCategories";
+import ExpenseCustomers from "./pages/Account/Content/Expenses/ExpenseCustomers/ExpenseCustomers";
 
 
 import Settings from "./pages/Account/Content/Settings/Settings";
@@ -56,6 +57,7 @@ function App() {
                     <Route path="products" element={<Products />} />
                     <Route path="expenses" element={<Expenses />} />
                     <Route path="expenses/categories" element={<ExpenseCategories />} />
+                    <Route path="expenses/customers" element={<ExpenseCustomers />} />
                     <Route path="deals" element={<Deals />} />
                     <Route path='point-of-sale' element={<PointOfSale />} />
                     <Route path='bookings' element={<Bookings />} />

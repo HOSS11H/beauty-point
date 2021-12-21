@@ -330,18 +330,18 @@ export const createExpenseCategory = (data) => {
 
 export const fetchExpensesCustomersStart = (  ) => {
     return {
-        type: actionTypes.FETCH_EXPENSES_CATEGORIES_START,
+        type: actionTypes.FETCH_EXPENSES_CUSTOMERS_START,
     }
 }
 export const fetchExpensesCustomersSuccess = ( expensesCustomersData ) => {
     return {
-        type: actionTypes.FETCH_EXPENSES_CATEGORIES_SUCCESS,
+        type: actionTypes.FETCH_EXPENSES_CUSTOMERS_SUCCESS,
         expensesCustomers: expensesCustomersData
     }
 }
 export const fetchExpensesCustomersFailed = ( errorMessage ) => {
     return {
-        type: actionTypes.FETCH_EXPENSES_CATEGORIES_FAILED,
+        type: actionTypes.FETCH_EXPENSES_CUSTOMERS_FAILED,
         error: errorMessage,
     }
 }
@@ -369,14 +369,14 @@ export const deleteExpenseCustomerStart = () => {
 }
 export const deleteExpenseCustomerSuccess = (message, deletedExpenseCustomerId) => {
     return {
-        type: actionTypes.DELETE_EXPENSE_CATEGORY_SUCCESS,
+        type: actionTypes.DELETE_EXPENSE_CUSTOMER_SUCCESS,
         message: message,
         expenseCustomerId: deletedExpenseCustomerId,
     }
 }
 export const deleteExpenseCustomerFailed = (message) => {
     return {
-        type: actionTypes.DELETE_EXPENSE_CATEGORY_FAILED,
+        type: actionTypes.DELETE_EXPENSE_CUSTOMER_FAILED,
         message: message,
     }
 }
@@ -396,19 +396,19 @@ export const deleteExpenseCustomer = (id) => {
 
 export const updateExpenseCustomerStart = () => {
     return {
-        type: actionTypes.UPDATE_EXPENSE_CATEGORY_START,
+        type: actionTypes.UPDATE_EXPENSE_CUSTOMER_START,
     }
 }
 export const updateExpenseCustomerSuccess = (message, updatedExpenseCustomerId) => {
     return {
-        type: actionTypes.UPDATE_EXPENSE_CATEGORY_SUCCESS,
+        type: actionTypes.UPDATE_EXPENSE_CUSTOMER_SUCCESS,
         message: message,
         expenseCustomerId: updatedExpenseCustomerId,
     }
 }
 export const updateExpenseCustomerFailed = (message) => {
     return {
-        type: actionTypes.UPDATE_EXPENSE_CATEGORY_FAILED,
+        type: actionTypes.UPDATE_EXPENSE_CUSTOMER_FAILED,
         message: message,
     }
 }
@@ -429,18 +429,18 @@ export const updateExpenseCustomer = data => {
 
 export const searchExpensesCustomersStart = () => {
     return {
-        type: actionTypes.SEARCH_EXPENSES_CATEGORIES_START,
+        type: actionTypes.SEARCH_EXPENSES_CUSTOMERS_START,
     }
 }
 export const searchExpensesCustomersSuccess = (expensesCustomersData) => {
     return {
-        type: actionTypes.SEARCH_EXPENSES_CATEGORIES_SUCCESS,
+        type: actionTypes.SEARCH_EXPENSES_CUSTOMERS_SUCCESS,
         expensesCustomers: expensesCustomersData
     }
 }
 export const searchExpensesCustomersFailed = (errorMessage) => {
     return {
-        type: actionTypes.SEARCH_EXPENSES_CATEGORIES_FAILED,
+        type: actionTypes.SEARCH_EXPENSES_CUSTOMERS_FAILED,
         error: errorMessage,
     }
 }
@@ -461,19 +461,19 @@ export const searchExpensesCustomers = (language, word) => {
 }
 export const createExpenseCustomerStart = () => {
     return {
-        type: actionTypes.CREATE_EXPENSE_CATEGORY_START,
+        type: actionTypes.CREATE_EXPENSE_CUSTOMER_START,
     }
 }
 export const createExpenseCustomerSuccess = (message, createdExpenseCustomerData) => {
     return {
-        type: actionTypes.CREATE_EXPENSE_CATEGORY_SUCCESS,
+        type: actionTypes.CREATE_EXPENSE_CUSTOMER_SUCCESS,
         message: message,
         expenseCustomerData: createdExpenseCustomerData,
     }
 }
 export const createExpenseCustomerFailed = (message) => {
     return {
-        type: actionTypes.CREATE_EXPENSE_CATEGORY_FAILED,
+        type: actionTypes.CREATE_EXPENSE_CUSTOMER_FAILED,
         message: message,
     }
 }

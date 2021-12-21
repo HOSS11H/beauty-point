@@ -256,6 +256,116 @@ const reducer = (state = intialState, action) => {
                 creatingExpenseCategorySuccess: false,
                 creatingExpenseCategoryMessage: action.message,
             })
+        case (actionTypes.FETCH_EXPENSES_CUSTOMERS_START):
+            return updateObject(state, {
+                fetchingExpensesCustomers: true,
+                errorFetchingExpensesCustomers: false,
+            });
+        case (actionTypes.FETCH_EXPENSES_CUSTOMERS_SUCCESS):
+            return updateObject(state, {
+                expensesCustomers: action.expensesCustomers,
+                fetchingExpensesCustomers: false,
+                errorFetchingExpensesCustomers: false,
+            });
+        case (actionTypes.FETCH_EXPENSES_CUSTOMERS_FAILED):
+            return updateObject(state, {
+                fetchingExpensesCustomers: false,
+                errorFetchingExpensesCustomers: true,
+            });
+        case (actionTypes.DELETE_EXPENSE_CUSTOMER_START):
+            return updateObject(state, {
+                deletingExpenseCustomer: true,
+                deletingExpenseCustomerSuccess: false,
+                deletingExpenseCustomerMessage: null,
+            })
+        case (actionTypes.DELETE_EXPENSE_CUSTOMER_SUCCESS):
+            const updatedExpensesCustomers = state.expensesCustomers.data.filter(expenseCustomer => expenseCustomer.id !== action.expenseCustomerId);
+            return updateObject(state, {
+                expensesCustomers: {
+                    ...state.expensesCustomers,
+                    data: updatedExpensesCustomers,
+                    meta : {
+                        ...state.expensesCustomers.meta,
+                        total: state.expensesCustomers.meta.total - 1,
+                    }
+                },
+                deletingExpenseCustomer: false,
+                deletingExpenseCustomerSuccess: true,
+                deletingExpenseCustomerMessage: action.message,
+            })
+        case (actionTypes.DELETE_EXPENSE_CUSTOMER_FAILED):
+            return updateObject(state, {
+                deletingExpenseCustomer: false,
+                deletingExpenseCustomerSuccess: false,
+                deletingExpenseCustomerMessage: action.message,
+            })
+        case (actionTypes.UPDATE_EXPENSE_CUSTOMER_START):
+            return updateObject(state, {
+                updatingExpenseCustomer: true,
+                updatingExpenseCustomerSuccess: false,
+                updatingExpenseCustomerMessage: null,
+            })
+        case (actionTypes.UPDATE_EXPENSE_CUSTOMER_SUCCESS):
+            return updateObject(state, {
+                updatingExpenseCustomer: false,
+                updatingExpenseCustomerSuccess: true,
+                updatingExpenseCustomerMessage: action.message,
+            })
+        case (actionTypes.UPDATE_EXPENSE_CUSTOMER_FAILED):
+            return updateObject(state, {
+                updatingExpenseCustomer: false,
+                updatingExpenseCustomerSuccess: false,
+                updatingExpenseCustomerMessage: action.message,
+            })
+        case (actionTypes.SEARCH_EXPENSES_CUSTOMERS_START):
+            return updateObject(state, {
+                fetchingExpensesCustomers: true,
+                errorFetchingExpensesCustomers: false,
+                searchingExpensesCustomers: true,
+                searchingExpensesCustomersSuccess: false,
+            })
+        case (actionTypes.SEARCH_EXPENSES_CUSTOMERS_SUCCESS):
+            return updateObject(state, {
+                fetchingExpensesCustomers: false,
+                expensesCustomers: action.expensesCustomers,
+                searchingExpensesCustomers: false,
+                searchingExpensesCustomersSuccess: true,
+            })
+        case (actionTypes.SEARCH_EXPENSES_CUSTOMERS_FAILED):
+            return updateObject(state, {
+                fetchingExpensesCustomers: false,
+                errorFetchingExpensesCustomers: true,
+                searchingExpensesCustomers: false,
+                searchingExpensesCustomersSuccess: false,
+            })
+        case (actionTypes.CREATE_EXPENSE_CUSTOMER_START):
+            return updateObject(state, {
+                creatingExpenseCustomer: true,
+                creatingExpenseCustomerSuccess: false,
+                creatingExpenseCustomerMessage: null,
+            })
+        case (actionTypes.CREATE_EXPENSE_CUSTOMER_SUCCESS):
+            const updatedExpenseCustomers = [ ...state.expensesCustomers.data ];
+            updatedExpenseCustomers.push(action.expenseCustomerData);
+            return updateObject(state, {
+                expensesCustomers: {
+                    ...state.expensesCustomers,
+                    data: updatedExpenseCustomers,
+                    meta : {
+                        ...state.expensesCustomers.meta,
+                        total: state.expensesCustomers.meta.total + 1,
+                    }
+                },
+                creatingExpenseCustomer: false,
+                creatingExpenseCustomerSuccess: true,
+                creatingExpenseCustomerMessage: action.message,
+            })
+        case (actionTypes.CREATE_EXPENSE_CUSTOMER_FAILED):
+            return updateObject(state, {
+                creatingExpenseCustomer: false,
+                creatingExpenseCustomerSuccess: false,
+                creatingExpenseCustomerMessage: action.message,
+            })
         default:
             return state;
     }

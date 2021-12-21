@@ -71,4 +71,9 @@ export {
     updateExpenseCategory,
     searchExpensesCategories,
     createExpenseCategory,
+    fetchExpensesCustomers,
+    deleteExpenseCustomer,
+    updateExpenseCustomer,
+    searchExpensesCustomers,
+    createExpenseCustomer,
 } from './expenses'
