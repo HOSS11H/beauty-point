@@ -77,7 +77,7 @@ const customStyles = {
 
 const SearchFilters = (props) => {
 
-    const { fetchedLocations, fetchLocationsHandler, searchCustomersHandler, filterBookingsHandler } = props;
+    const { fetchedLocations, fetchLocationsHandler, filterBookingsHandler, page, perPage } = props;
 
     const { t } = useTranslation()
 
@@ -92,7 +92,7 @@ const SearchFilters = (props) => {
     const [date, setDate] = useState('');
 
     const [options, setOptions] = useState([])
-    const [customer, setCustomer] = useState('');
+    const [customer, setCustomer] = useState([]);
 
     const [bookingStatus, setBookingStatus] = useState('');
 
@@ -132,7 +132,7 @@ const SearchFilters = (props) => {
     }
     const handleSelectCustomer = (value, actions) => {
         if (value) {
-            setCustomer(value.value);
+            setCustomer(value);
         } else {
             setCustomer([])
         }
@@ -145,8 +145,10 @@ const SearchFilters = (props) => {
         const searchParams = {
             term: date || bookingId,
             location_id: location,
-            customer_id: customer,
+            customer_id: customer.value,
             status: bookingStatus,
+            /* page: page,
+            per_page: perPage */
         }
         filterBookingsHandler(searchParams);
     }
@@ -155,10 +157,13 @@ const SearchFilters = (props) => {
         setBookingId('');
         setLocation('');
         setDate('');
-        setOptions([]);
-        setCustomer('');
+        setOptions(null);
+        setCustomer([]);
         setBookingStatus('');
-        filterBookingsHandler('', '', '', '', '');
+        filterBookingsHandler({
+            /* page: page,
+            per_page: perPage */
+        });
     }
 
 
@@ -206,7 +211,7 @@ const SearchFilters = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={4}>
                     <FormControl fullWidth sx={{ minWidth: '200px' }} >
-                        <ReactSelect styles={customStyles} options={options} isClearable isRtl={lang === 'ar'} placeholder={t('select customer')}
+                        <ReactSelect styles={customStyles} options={options} isClearable isRtl={lang === 'ar'} placeholder={t('select customer')} value={customer}
                             onChange={handleSelectCustomer} onInputChange={handleSelectOptions} />
                     </FormControl>
                 </Grid>

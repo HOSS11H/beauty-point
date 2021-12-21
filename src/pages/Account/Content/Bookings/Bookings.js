@@ -142,7 +142,7 @@ function Bookings(props) {
 
     return (
         <Grid container spacing={2}>
-            <SearchFilters />
+            <SearchFilters page={page} perPage={rowsPerPage} />
             {content}
             <Grid item xs={12}>
                 { fetchedBookings.data.length !== 0 && (
