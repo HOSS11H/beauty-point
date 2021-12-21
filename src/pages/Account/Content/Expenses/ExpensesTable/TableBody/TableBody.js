@@ -29,7 +29,7 @@ const EnhancedTableBody = props => {
                         </TableCell>
                         <TableCell align="center">
                             <TableData>
-                                {row.category.name}
+                                {row.name}
                             </TableData>
                         </TableCell>
                         <TableCell align="center">
@@ -39,7 +39,7 @@ const EnhancedTableBody = props => {
                         </TableCell>
                         <TableCell align="center">
                             <TableData>
-                                {row.name}
+                                {row.category.name}
                             </TableData>
                         </TableCell>
                         <TableCell align="center">

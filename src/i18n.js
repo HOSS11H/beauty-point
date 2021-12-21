@@ -299,6 +299,9 @@ const resources = {
             'add category': 'إضافة فئة',
             'edit category details': 'تعديل تفاصيل الفئة',
             'edit expense details': 'تعديل تفاصيل المصاريف',
+            'add customer': 'إضافة عميل',
+            'Do you want To delete this customer?': 'هل تريد حذف هذا العميل؟',
+            'edit customer details': 'تعديل تفاصيل العميل',
         }
     }
 };

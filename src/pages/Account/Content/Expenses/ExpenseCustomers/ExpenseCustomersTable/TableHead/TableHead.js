@@ -3,7 +3,7 @@ import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import { useTranslation } from 'react-i18next';
 
-import { TableHeading } from '../../../../../../components/UI/Dashboard/Table/Table';
+import { TableHeading } from '../../../../../../../components/UI/Dashboard/Table/Table';
 
 const headCells = [
     {
@@ -19,40 +19,10 @@ const headCells = [
         label: 'name',
     },
     {
-        id: 'amount',
+        id: 'mobile',
         numeric: false,
         disablePadding: false,
-        label: 'amount',
-    },
-    {
-        id: 'category',
-        numeric: false,
-        disablePadding: false,
-        label: 'category',
-    },
-    {
-        id: 'date',
-        numeric: false,
-        disablePadding: false,
-        label: 'date',
-    },
-    {
-        id: 'agent',
-        numeric: false,
-        disablePadding: false,
-        label: 'agent',
-    },
-    {
-        id: 'bank',
-        numeric: false,
-        disablePadding: false,
-        label: 'bank',
-    },
-    {
-        id: 'account',
-        numeric: false,
-        disablePadding: false,
-        label: 'account',
+        label: 'mobile',
     },
     {
         id: 'action',
