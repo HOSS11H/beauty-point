@@ -199,15 +199,6 @@ const SingleSalon = props => {
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
-                    <TablePaginationActions
-                        component="div"
-                        count={services.data.length}
-                        total={services.meta ? services.meta.total : null}
-                        rowsPerPage={dealsRowsPerPage}
-                        page={servicesPage}
-                        onPageChange={handleServiceChangePage}
-                        loading={loadingServices}
-                    />
                     <Grid container spacing={2}>
                         {services.data.map(service => {
                             return (
@@ -233,17 +224,17 @@ const SingleSalon = props => {
                         })
                         }
                     </Grid>
+                    <TablePaginationActions
+                        component="div"
+                        count={services.data.length}
+                        total={services.meta ? services.meta.total : null}
+                        rowsPerPage={dealsRowsPerPage}
+                        page={servicesPage}
+                        onPageChange={handleServiceChangePage}
+                        loading={loadingServices}
+                    />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    <TablePaginationActions
-                            component="div"
-                            count={deals.data.length}
-                            total={deals.meta ? deals.meta.total : null}
-                            rowsPerPage={dealsRowsPerPage}
-                            page={dealsPage}
-                            onPageChange={handleDealChangePage}
-                            loading={loadingDeals}
-                        />
                     <Grid container spacing={2}>
                         {deals.data.map(deal => {
                             return (
@@ -280,6 +271,15 @@ const SingleSalon = props => {
                         })
                         }
                     </Grid>
+                    <TablePaginationActions
+                            component="div"
+                            count={deals.data.length}
+                            total={deals.meta ? deals.meta.total : null}
+                            rowsPerPage={dealsRowsPerPage}
+                            page={dealsPage}
+                            onPageChange={handleDealChangePage}
+                            loading={loadingDeals}
+                        />
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                     <Grid container spacing={2}>
