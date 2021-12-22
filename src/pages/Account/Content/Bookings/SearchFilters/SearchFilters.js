@@ -95,6 +95,7 @@ const SearchFilters = (props) => {
 
     const [date, setDate] = useState('');
 
+    const [customerInput, setCustomerInput] = useState('');
     const [options, setOptions] = useState([])
     const [customer, setCustomer] = useState([]);
 
@@ -116,25 +117,30 @@ const SearchFilters = (props) => {
     }
 
     const handleSelectOptions = (value, actions) => {
-        if (value.length !== 0) {
-            axios.get(`/vendors/customers?term=${value}`)
-                .then(res => {
-                    const customers = res.data.data;
-                    console.log(customers)
-                    const options = customers.map(customer => {
-                        return {
-                            value: customer.id,
-                            label: customer.name,
-                            mobile: customer.mobile,
-                        }
-                    })
-                    setOptions(options);
-                })
-                .catch(err => {
-                    console.log(err);
-                })
-        }
+        setCustomerInput(value);
     }
+    useEffect(() => {
+        if (customerInput.length !== 0) {
+            const searchTimeout = setTimeout(() => {
+                axios.get(`/vendors/customers?term=${customerInput}`)
+                    .then(res => {
+                        const customers = res.data.data;
+                        const options = customers.map(customer => {
+                            return {
+                                value: customer.id,
+                                label: customer.name,
+                                mobile: customer.mobile,
+                            }
+                        })
+                        setOptions(options);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    })
+            }, 1000)
+            return () => clearTimeout(searchTimeout);
+        }
+    })
     const filterOption = (option, inputValue) =>{
         console.log(option.data.mobile)
         if(option.data.mobile.includes(inputValue)){

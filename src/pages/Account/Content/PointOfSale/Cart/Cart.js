@@ -174,6 +174,7 @@ const Cart = props => {
     const { lang } = themeCtx;
 
 
+    const [customerInput, setCustomerInput] = useState('');
     const [customer, setCustomer] = useState([]);
     const [customerData, setCustomerData] = useState(null);
     const [customerDataError, setCustomerDataError] = useState(false)
@@ -258,9 +259,18 @@ const Cart = props => {
 
     const handleSelectOptions = (value, actions) => {
         if (value.length !== 0) {
-            searchCustomersHandler(lang, value)
+            setCustomerInput(value);
         }
     }
+    useEffect(() => {
+        if (customerInput.length !== 0) {
+            const searchTimeout = setTimeout(() => {
+                searchCustomersHandler(lang, customerInput)
+            }, 1000)
+            return () => clearTimeout(searchTimeout);
+        }
+    }, [customerInput, lang, searchCustomersHandler])
+    
     const filterOption = (option, inputValue) =>{
         console.log(option.data.mobile)
         if(option.data.mobile.includes(inputValue)){
