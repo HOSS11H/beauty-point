@@ -9,6 +9,7 @@ import ThemeContext from '../../store/theme-context';
 import styled  from 'styled-components';
 import { Container, Grid } from '@mui/material';
 import { CustomButton } from '../../components/UI/Button/Button';
+import Logo from '../../images/logo/logo_mobile.png'
 
 const AuthContainer = styled.div`
     min-height: 100vh;
@@ -23,6 +24,7 @@ const FormWrapper = styled.form`
     padding: 40px 20px;
     background-color: ${ ( { theme } ) => theme.palette.background.default };
     border-radius: 12px;
+    text-align: center;
 `
 const FormHeading = styled.h1`
     font-size: 26px;
@@ -53,12 +55,20 @@ const FormLink = styled.p`
     &:last-child {
         margin-bottom: 0;
     }
-    span {
+    span,a {
         color: ${ (  { theme } ) => theme.vars.primary };
         font-weight: 600;
         margin-left: 5px;
         cursor: pointer;
     }
+`
+
+const LogoImg = styled.img`
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    display: inline-flex;
+    justify-content: center;
 `
 
 
@@ -167,6 +177,7 @@ const Auth = props => {
                     </Grid>
                     <Grid item xs={12} md={6} >
                         <FormWrapper>
+                            <LogoImg src={Logo} alt="logo" />
                             <FormHeading>
                                 { isLogin && loginFormText.heading }
                                 { !isLogin&& subscribeFormText.heading }
@@ -185,9 +196,9 @@ const Auth = props => {
                             { isLogin && (
                                 <FormLink>
                                     {loginFormText.formSwitchText}
-                                    <span onClick={switchAuthModeHandler}>
+                                    <a href='https://beautypoint.sa/register'>
                                         {loginFormText.formSwitchLink}
-                                    </span>
+                                    </a>
                                 </FormLink>
                             )}
                             { !isLogin && (
