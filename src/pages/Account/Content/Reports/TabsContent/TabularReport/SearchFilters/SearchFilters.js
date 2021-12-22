@@ -151,7 +151,7 @@ const SearchFilters = (props) => {
         }
     }, [customerInput])
     const filterOption = (option, inputValue) => {
-        if (option.data.mobile.includes(inputValue)) {
+        if (option.data?.mobile?.includes(inputValue)) {
             return true
         }
         if (option.label.toLowerCase().includes(inputValue.toLowerCase())) {
