@@ -124,11 +124,13 @@ const SearchFilters = (props) => {
     }
 
     const handleSelectOptions = (value, actions) => {
+        console.log('excuted')
         setCustomerInput(value);
     }
     useEffect(() => {
         if (customerInput.length !== 0) {
             const searchTimeout = setTimeout(() => {
+                console.log('excuted fetch')
                 axios.get(`/vendors/customers?term=${customerInput}`)
                     .then(res => {
                         const customers = res.data.data;
@@ -147,9 +149,8 @@ const SearchFilters = (props) => {
             }, 1000)
             return () => clearTimeout(searchTimeout);
         }
-    })
+    }, [customerInput])
     const filterOption = (option, inputValue) => {
-        console.log(option.data.mobile)
         if (option.data.mobile.includes(inputValue)) {
             return true
         }

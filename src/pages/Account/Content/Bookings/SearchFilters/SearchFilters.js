@@ -140,7 +140,7 @@ const SearchFilters = (props) => {
             }, 1000)
             return () => clearTimeout(searchTimeout);
         }
-    })
+    }, [customerInput])
     const filterOption = (option, inputValue) =>{
         console.log(option.data.mobile)
         if(option.data.mobile.includes(inputValue)){
