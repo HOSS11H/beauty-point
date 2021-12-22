@@ -272,7 +272,6 @@ const Cart = props => {
     }, [customerInput, lang, searchCustomersHandler])
     
     const filterOption = (option, inputValue) =>{
-        console.log(option.data.mobile)
         if(option.data.mobile.includes(inputValue)){
             return true
         }
