@@ -157,6 +157,12 @@ const AddCustomer = styled(CustomButton)`
         flex-shrink: 0;
     }
 `
+const customStyles = {
+    option: (provided, state) => ({
+        ...provided,
+        color: '#000',
+    }),
+};
 
 const Cart = props => {
 
@@ -172,7 +178,7 @@ const Cart = props => {
     const [customerData, setCustomerData] = useState(null);
     const [customerDataError, setCustomerDataError] = useState(false)
 
-    const [ options , setOptions ] = useState([])
+    const [options, setOptions] = useState([])
 
 
     const [dateTime, setDateTime] = useState(new Date());
@@ -186,9 +192,9 @@ const Cart = props => {
     const [coupon, setCoupon] = useState('')
     const [couponExists, setCouponExists] = useState(false)
     const [couponData, setCouponData] = useState({ amount: 0 })
-    
+
     const [discount, setDiscount] = useState(0)
-    
+
     const [paymentGateway, setPaymentGateway] = useState('card')
     const [paymentGatewayError, setPaymentGatewayError] = useState(false)
 
@@ -225,7 +231,8 @@ const Cart = props => {
             setOptions(fetchedCustomers.map(customer => {
                 return {
                     value: customer.id,
-                    label: customer.name
+                    label: customer.name,
+                    mobile: customer.mobile,
                 }
             }))
         }
@@ -250,10 +257,20 @@ const Cart = props => {
     };
 
     const handleSelectOptions = (value, actions) => {
-        if ( value.length !== 0 ) {
+        if (value.length !== 0) {
             searchCustomersHandler(lang, value)
         }
     }
+    const filterOption = (option, inputValue) =>{
+        console.log(option.data.mobile)
+        if(option.data.mobile.includes(inputValue)){
+            return true
+        }
+        if (option.label.toLowerCase().includes(inputValue.toLowerCase())) {
+            return true
+        }
+    }
+
     const handleSelectCustomer = (value, actions) => {
         if (value) {
             const customerIndex = fetchedCustomers.findIndex(customer => customer.id === value.value);
@@ -289,10 +306,10 @@ const Cart = props => {
     const paidAmountChangeHandler = (event) => {
         if (event.target.value >= 0) {
             setPaidAmount(event.target.value)
-            if ( event.target.value > totalPrice ) {
-                setCashToReturn( parseFloat(event.target.value) - totalPrice)
+            if (event.target.value > totalPrice) {
+                setCashToReturn(parseFloat(event.target.value) - totalPrice)
                 setCashRemainig(0)
-            } else if ( event.target.value < totalPrice ) {
+            } else if (event.target.value < totalPrice) {
                 setCashToReturn(0)
                 setCashRemainig(totalPrice - parseFloat(event.target.value))
             }
@@ -337,7 +354,7 @@ const Cart = props => {
         } else if (!paymentGateway) {
             setPaymentGatewayError(true)
             return;
-        } else if ( !couponExists && coupon ) {
+        } else if (!couponExists && coupon) {
             return;
         }
         const data = {
@@ -380,11 +397,11 @@ const Cart = props => {
                     </LocalizationProvider>
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <FormLabel component="legend" sx={{ textAlign: 'left', textTransform: 'capitalize', marginBottom: '8px' } } >{t('select customer')}</FormLabel>
+                    <FormLabel component="legend" sx={{ textAlign: 'left', textTransform: 'capitalize', marginBottom: '8px' }} >{t('select customer')}</FormLabel>
                     <ActionsWrapper>
                         <FormControl fullWidth sx={{ minWidth: '200px' }} >
-                            <ReactSelect options={options} isClearable isRtl={lang === 'ar'}
-                                onChange={handleSelectCustomer} onInputChange={handleSelectOptions}/>
+                            <ReactSelect styles={customStyles} options={options} isClearable isRtl={lang === 'ar'} filterOption={filterOption}
+                                onChange={handleSelectCustomer} onInputChange={handleSelectOptions} />
                         </FormControl>
                         <AddCustomer onClick={addCustomerModalOpenHandler} >{t('add')}</AddCustomer>
                     </ActionsWrapper>

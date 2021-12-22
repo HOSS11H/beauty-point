@@ -68,6 +68,10 @@ const ResetButton = styled(CustomButton)`
     }
 `
 const customStyles = {
+    option: (provided, state) => ({
+        ...provided,
+        color: '#000',
+    }),
     control: base => ({
         ...base,
         height: 56,
@@ -120,7 +124,8 @@ const SearchFilters = (props) => {
                     const options = customers.map(customer => {
                         return {
                             value: customer.id,
-                            label: customer.name
+                            label: customer.name,
+                            mobile: customer.mobile,
                         }
                     })
                     setOptions(options);
@@ -128,6 +133,15 @@ const SearchFilters = (props) => {
                 .catch(err => {
                     console.log(err);
                 })
+        }
+    }
+    const filterOption = (option, inputValue) =>{
+        console.log(option.data.mobile)
+        if(option.data.mobile.includes(inputValue)){
+            return true
+        }
+        if (option.label.toLowerCase().includes(inputValue.toLowerCase())) {
+            return true
         }
     }
     const handleSelectCustomer = (value, actions) => {
@@ -211,7 +225,9 @@ const SearchFilters = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={4}>
                     <FormControl fullWidth sx={{ minWidth: '200px' }} >
-                        <ReactSelect styles={customStyles} options={options} isClearable isRtl={lang === 'ar'} placeholder={t('select customer')} value={customer}
+                        <ReactSelect styles={customStyles} options={options} isClearable isRtl={lang === 'ar'} 
+                            filterOption={filterOption}
+                            placeholder={t('select customer')} value={customer}
                             onChange={handleSelectCustomer} onInputChange={handleSelectOptions} />
                     </FormControl>
                 </Grid>

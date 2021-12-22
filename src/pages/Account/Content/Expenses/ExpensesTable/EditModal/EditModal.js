@@ -114,6 +114,12 @@ const EditorWrapper = styled.div`
         left: 0%;
     }
 `
+const customStyles = {
+    option: (provided, state) => ({
+        ...provided,
+        color: '#000',
+    }),
+};
 
 
 const EditModal = (props) => {
@@ -322,7 +328,7 @@ const EditModal = (props) => {
             <Grid item xs={12} sm={6} >
                 <FormLabel component="legend" sx={{ textAlign: 'left', textTransform: 'capitalize', marginBottom: '8px' }} >{t('select category')}</FormLabel>
                 <FormControl fullWidth sx={{ minWidth: '200px' }} >
-                    <ReactSelect options={categoriesOptions} isClearable isRtl={lang === 'ar'} defaultValue={{value: category.id, label: category.name}}
+                    <ReactSelect  styles={customStyles} options={categoriesOptions} isClearable isRtl={lang === 'ar'} defaultValue={{value: category.id, label: category.name}}
                         onChange={handleSelectCategory} onInputChange={handleSelectCategoryOptions} />
                 </FormControl>
                 {selectedCategoryError && <ValidationMessage notExist>{t(`Please select category`)}</ValidationMessage>}
@@ -330,7 +336,7 @@ const EditModal = (props) => {
             <Grid item xs={12} sm={6} >
                 <FormLabel component="legend" sx={{ textAlign: 'left', textTransform: 'capitalize', marginBottom: '8px' }} >{t('select agent')}</FormLabel>
                 <FormControl fullWidth sx={{ minWidth: '200px' }} >
-                    <ReactSelect options={agentsOptions} isClearable isRtl={lang === 'ar'} defaultValue={{value: customer.id, label: customer.name}}
+                    <ReactSelect styles={customStyles} options={agentsOptions} isClearable isRtl={lang === 'ar'} defaultValue={{value: customer.id, label: customer.name}}
                         onChange={handleSelectAgent} onInputChange={handleSelectAgentOptions} />
                 </FormControl>
                 {selectedAgentError && <ValidationMessage notExist>{t(`Please select agent`)}</ValidationMessage>}
