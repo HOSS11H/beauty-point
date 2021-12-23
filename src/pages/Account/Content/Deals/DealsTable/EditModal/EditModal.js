@@ -578,7 +578,7 @@ const EditModal = (props) => {
             locationData: selectedLocation,
         }
         onConfirm(data);
-    }, [dealName, dealLocation, selectedServices, dateTo, dateFrom, closeTime, openTime, appliedDays, editorState, dealPriceError, defaultImage, cartData.services, fetchedLocations, id, discountType, dealDiscount, priceAfterDiscount, dealAppliedOn, usesTime, userLimit, dealStatus, onConfirm])
+    }, [dealName, dealLocation, selectedServices, dateTo, dateFrom, closeTime, openTime, appliedDays, editorState, dealPriceError, cartData.services, fetchedLocations, id, discountType, dealDiscount, priceAfterDiscount, dealAppliedOn, usesTime, userLimit, dealStatus, onConfirm])
 
     let content = (
         <Grid container spacing={2}>

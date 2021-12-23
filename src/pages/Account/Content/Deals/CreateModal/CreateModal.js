@@ -497,7 +497,7 @@ const CreateModal = (props) => {
         setDefaultImage('');
         setDefaultImageError(false);
         resetCartHandler();
-    }, [])
+    }, [resetCartHandler])
 
     useEffect(() => {
         creatingDealSuccess && resetModalData();
@@ -583,7 +583,7 @@ const CreateModal = (props) => {
             locationData: selectedLocation,
         }
         onConfirm(data);
-    }, [dealName, dealLocation, selectedServices, dateTo, dateFrom, closeTime, openTime, appliedDays, editorState, dealPriceError, defaultImage, cartData.services, fetchedLocations, discountType, dealDiscount, priceAfterDiscount, dealAppliedOn, usesTime, userLimit, dealStatus, onConfirm])
+    }, [dealName, dealLocation, selectedServices, dateTo, dateFrom, closeTime, openTime, appliedDays, editorState, dealPriceError, cartData.services, fetchedLocations, discountType, dealDiscount, priceAfterDiscount, dealAppliedOn, usesTime, userLimit, dealStatus, onConfirm])
 
     let content = (
         <Grid container spacing={2}>
