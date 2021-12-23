@@ -225,7 +225,7 @@ const Invoice = React.forwardRef((props, ref) => {
 								<Grid item xs={12} md={6} >
 									<BillTotal>
 										<span>طريقة الدفع : </span>
-										<span>{bookingData.payment?.gateway}</span>
+										<span>{t(bookingData.payment?.gateway)}</span>
 									</BillTotal>
 								</Grid>
 							</Grid>

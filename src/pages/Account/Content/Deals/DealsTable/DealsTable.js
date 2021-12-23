@@ -146,8 +146,8 @@ function DealsTable(props) {
     } else {
         content = (
             <Fragment>
-                <Paper sx={{ boxShadow: 'none' }}>
-                    <TableContainer sx={{ maxWidth: '100%'}}>
+                <Paper sx={{ width: '100%', boxShadow: 'none' }}>
+                    <TableContainer >
                         <Table
                             aria-labelledby="tableTitle"
                             size='medium'
