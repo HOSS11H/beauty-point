@@ -306,10 +306,6 @@ const CreateModal = (props) => {
             setProductQuantityError(true);
             return; 
         }
-        if (defaultImage === '') {
-            setDefaultImageError(true);
-            return;
-        }
 
         const selectedLocation = fetchedLocations.find(location => location.id === locationName);
 

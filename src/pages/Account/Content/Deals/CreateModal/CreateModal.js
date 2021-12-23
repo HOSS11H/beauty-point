@@ -535,10 +535,6 @@ const CreateModal = (props) => {
             return;
         }
         if (dealPriceError) { return; }
-        if (defaultImage === '') {
-            setDefaultImageError(true);
-            return;
-        }
 
         const selectedServicesQuantity = [];
         cartData.services.forEach(service => {

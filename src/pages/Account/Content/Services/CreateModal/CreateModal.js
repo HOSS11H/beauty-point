@@ -371,10 +371,6 @@ const CreateModal = (props) => {
             setServiceTimeError(true);
             return;
         }
-        if (defaultImage === '') {
-            setDefaultImageError(true);
-            return;
-        }
         // Data To Add To State
         const employeesData = [];
         employeeName.map(employeeId => {
