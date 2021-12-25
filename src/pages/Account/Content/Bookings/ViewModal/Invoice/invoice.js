@@ -88,7 +88,7 @@ const BillTotal = styled.p`
 	margin-left: auto;
 	margin-right: auto;
     font-size: 14px;
-    line-height:1.5;
+    line-height:1;
     text-transform: capitalize;
     font-weight: 700;
     color: #000;
@@ -212,8 +212,26 @@ const Invoice = React.forwardRef((props, ref) => {
 							<Grid sx={{ width: '100%'}}  container spacing={2}>
 								<Grid item xs={12} md={6} >
 									<BillTotal>
+										<i>الخصم : </i>
+										<span>{`${bookingData.discount_percent} %`}</span>
+									</BillTotal>
+								</Grid>
+								<Grid item xs={12} md={6} >
+									<BillTotal>
+										<i>الفاتورة قبل الضريبة :</i>
+										<span>{formatCurrency((bookingData.price - bookingData.vat))}</span>
+									</BillTotal>
+								</Grid>
+								<Grid item xs={12} md={6} >
+									<BillTotal>
 										<i>ضريبة القيمة المضافة %15 : </i>
 										<span>{formatCurrency(bookingData.vat)}</span>
+									</BillTotal>
+								</Grid>
+								<Grid item xs={12} md={6} >
+									<BillTotal>
+										<span>قيمة الخصم : </span>
+										<span>{formatCurrency(bookingData.discount)}</span>
 									</BillTotal>
 								</Grid>
 								<Grid item xs={12} md={6} >
