@@ -136,6 +136,11 @@ export const createDealSuccess = (message, createdDealData) => {
         dealData: createdDealData,
     }
 }
+export const resetCreateDealSuccess = () => {
+    return {
+        type: actionTypes.RESET_CREATE_DEAL_SUCCESS,
+    }
+}
 export const createDealFailed = (message) => {
     return {
         type: actionTypes.CREATE_DEAL_FAILED,
@@ -169,6 +174,9 @@ export const createDeal = (data) => {
                     }
                 }
                 dispatch(createDealSuccess(null, editedData));
+                setTimeout(() => {
+                    dispatch(resetCreateDealSuccess())
+                }, 1000)
             })
             .catch(err => {
                 dispatch(createDealFailed(err.message))

@@ -578,6 +578,7 @@ const EditModal = (props) => {
             locationData: selectedLocation,
         }
         onConfirm(data);
+        console.log(cartData.services);
     }, [dealName, dealLocation, selectedServices, dateTo, dateFrom, closeTime, openTime, appliedDays, editorState, dealPriceError, cartData.services, fetchedLocations, id, discountType, dealDiscount, priceAfterDiscount, dealAppliedOn, usesTime, userLimit, dealStatus, onConfirm])
 
     let content = (
@@ -633,7 +634,6 @@ const EditModal = (props) => {
                         renderValue={(selected) => (
                             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                                 { !fetchingServices && selected.map((value) => {
-                                    console.log(fetchedServices.data);
                                     const item = fetchedServices.data.find(service => service.id === value);
                                     return (
                                         <Chip key={item.id} label={item.name} />

@@ -463,7 +463,7 @@ const CreateModal = (props) => {
     const resetModalData = useCallback(() => {
         setDealName('');
         setDealNameError(false);
-        setDealAppliedOn('');
+        setDealAppliedOn('location');
         setDealLocation('');
         setDealLocationError(false);
         setSelectedServices([]);
