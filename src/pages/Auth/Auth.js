@@ -110,12 +110,22 @@ const Auth = props => {
         let url ;
         let authData;
         if (isLogin) {
-            url = `/auth/sign-in`
-            authData = {
-                email: loginData.email.value,
-                password: loginData.password.value,
-                fcm_token: 'asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231',
-                device_name: 'Y621312'
+            url = `/auth/sign-in`;
+            const pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            if ( pattern.test(loginData.email.value) ) {
+                authData = {
+                    email: loginData.email.value,
+                    password: loginData.password.value,
+                    fcm_token: 'asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231',
+                    device_name: 'Y621312',
+                }
+            } else {
+                authData = {
+                    mobile: loginData.email.value,
+                    password: loginData.password.value,
+                    fcm_token: 'asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231',
+                    device_name: 'Y621312',
+                }
             }
         } else {
             url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDteusGiWoNp_qFEn36zfPtJPSwRS8hpyg`;
@@ -127,11 +137,9 @@ const Auth = props => {
         setErrorMessage(null);
         axios.post(url, authData)
             .then(res => {
-                console.log('success', res.data.token);
                 authCtx.login(res.data.token);
             })
             .catch( err => {
-                console.log(err.message)
                 setErrorMessage(err.message.split('_').join(' ').toLowerCase())
             })
     }

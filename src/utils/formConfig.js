@@ -47,10 +47,9 @@ function createFormFieldConfig(label, placeholder, name, type, defaultValue = ''
 // object representation of Login form
 export const loginForm = {
     email : {
-        ...createFormFieldConfig( {ar: 'بريد الكتروني', en: 'email' }  ,'admin@example.com', 'email', 'email'),
+        ...createFormFieldConfig( {ar: 'بريد الكتروني أو رقم هاتف', en: 'email or number' }  ,'admin@example.com', 'email', 'email'),
         validationRules: [
-            requiredRule({en: `email required`, ar: `بريد الكتروني مطلوب`}),
-            isEmailRule( {en: `email should be a valid email`, ar: `البريد الالكتروني يجب أن يكون بريد الكتروني صحيح`}),
+            requiredRule({en: `email or phone required`, ar: `بريد الكتروني أو رقم هاتف مطلوب`}),
         ],
     },
     password : {
