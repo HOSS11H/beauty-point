@@ -113,7 +113,7 @@ export function CustomModal(props) {
                                 </CardContent>
                                 <CardActions>
                                     <ButtonText variant='text' onClick={onClose}>{t('close')}</ButtonText>
-                                    <ButtonConfirm variant='contained' onClick={onConfirm}>{t(confirmText)}</ButtonConfirm>
+                                    {confirmText && <ButtonConfirm variant='contained' onClick={onConfirm}>{t(confirmText)}</ButtonConfirm>}
                                 </CardActions>
                             </CardBody>
                         </CustomCardMui>

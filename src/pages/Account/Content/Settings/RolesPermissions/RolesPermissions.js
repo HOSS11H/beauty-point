@@ -1,10 +1,11 @@
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useState, useCallback } from "react";
 import v1 from '../../../../../utils/axios-instance-v1'
 import { useTranslation } from 'react-i18next';
 import CssBaseline from '@mui/material/CssBaseline';
 import Stack from '@mui/material/Stack';
 import { Alert, Backdrop, CircularProgress, Grid, Skeleton, Snackbar } from "@mui/material";
 import Role from "./Role/Role";
+import MembersModal from "./MembersModal/MembersModal";
 
 
 
@@ -14,6 +15,8 @@ export default function RolesPermissions(props) {
     const [open, setOpen] = useState(false);
     const [success, setSuccess] = useState(false)
     const [ roles , setRoles ] = useState([])
+    const [ membersModalOpened, setMembersModalOpened ] = useState(false);
+    const [ selectedRoleId, setSelectedRoleId ] = useState(null);
     useEffect(() => {
         v1.get('/vendors/settings/roles')
             .then(res => {
@@ -25,14 +28,33 @@ export default function RolesPermissions(props) {
     function handleClose() {
         setSuccess(false)
     }
+    const membersModalOpenHandler = useCallback((id) => {
+        setSelectedRoleId(id);
+        setMembersModalOpened(true);
+    }, [])
+    const membersModalCloseHandler = useCallback(() => {
+        setMembersModalOpened(false);
+        setSelectedRoleId(null);
+    }, [])
 
 
     const content = roles && (
-        roles.map((role, index) => {
-            return (
-                <Role key={index} roleData={role} />
-            )
-        })
+        <Fragment>
+            {
+                roles.map((role, index) => {
+                    return (
+                        <Role key={index} roleData={role} openMembersHandler={membersModalOpenHandler.bind(null, role.id)} />
+                    )
+                })
+            }
+            {
+                membersModalOpened && (
+                    <MembersModal show={membersModalOpened} id={selectedRoleId} fetchedRoles={roles}
+                        onClose={membersModalCloseHandler} 
+                        heading='view members details' />
+                )
+            }
+        </Fragment>
     )
 
     return (

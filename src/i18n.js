@@ -320,6 +320,7 @@ const resources = {
             'agent name': 'المورد',
             'roles & permissions': 'الأدوار و الأذونات',
             'members': 'الأعضاء',
+            'view members details': 'عرض تفاصيل الأعضاء',
         }
     }
 };

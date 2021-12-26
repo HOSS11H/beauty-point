@@ -20,18 +20,12 @@ const RoleMembersBtn = styled.button`
     border-radius: 8px;
     text-transform: uppercase;
     color: #fff;
-`
-const RolePermissionBtn = styled.button`
-    border:0;
-    background-color: ${({ theme }) => theme.palette.secondary.main};
-    border-radius: 8px;
-    text-transform: uppercase;
-    color: #fff;
+    cursor: pointer;
 `
 
 const Role = props => {
 
-    const { roleData } = props;
+    const { roleData, openMembersHandler } = props;
 
     const {t} = useTranslation()
 
@@ -48,7 +42,7 @@ const Role = props => {
                     id="panel1a-header"
                 >
                     <Typography sx={{ textTransform: 'capitalize' }}>{t(`${roleData.name}`)}</Typography>
-                    <RoleMembersBtn>{`${roleData.users_count} ${t('members')}`}</RoleMembersBtn>
+                    <RoleMembersBtn onClick={openMembersHandler} >{`${roleData.users_count} ${t('members')}`}</RoleMembersBtn>
                 </CustomAccordionSummary>
                 <AccordionDetails>
                     <TableContainer component={Paper}>
