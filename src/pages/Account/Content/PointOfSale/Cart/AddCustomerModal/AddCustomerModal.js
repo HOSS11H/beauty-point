@@ -46,13 +46,8 @@ const AddCustomerModal = (props) => {
     }, [onClose])
 
     const confirmAddHandler = useCallback(() => {
-        const pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if ( customerName.trim().length === 0) {
             setCustomerNameError(true);
-            return;
-        }
-        if (pattern.test(customerEmail) === false) {
-            setCustomerEmailError(true);
             return;
         }
         if ( customerNumber.trim().length === 0) {
