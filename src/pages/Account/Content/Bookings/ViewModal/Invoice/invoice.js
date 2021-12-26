@@ -25,7 +25,7 @@ const ClientImg = styled.img`
     flex-shrink: 0;
     margin-bottom: 10px;
     cursor: pointer;
-	object-fit: cover;
+	object-fit: contain;
 `
 const ClientName = styled.p`
     display: block;
