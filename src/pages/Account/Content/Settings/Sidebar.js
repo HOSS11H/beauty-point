@@ -30,6 +30,7 @@ export default function Sidebar() {
                     <Tab value="" label={t("General")} />
                     <Tab value="vendor-page" label={t("Vendor page Settings")} />
                     <Tab value="booking-settings" label={t("Booking Settings")} />
+                    <Tab value="roles-permissions" label={t("roles & permissions")} />
                     {/* <Tab value="employee-settings" label={t("Employee Settings")} /> */}
                 </Tabs>
             </Box>

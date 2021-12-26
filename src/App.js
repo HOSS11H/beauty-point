@@ -37,6 +37,7 @@ import SingleService from "./pages/SingleService/SingleService";
 import AllDeals from "./pages/AllDeals/AllDeals";
 import SingleDeal from "./pages/SingleDeal/SingleDeal";
 import SingleSalon from "./pages/SingleSalon/SingleSalon";
+import RolesPermissions from "./pages/Account/Content/Settings/RolesPermissions/RolesPermissions";
 
 function App() {
 
@@ -83,6 +84,7 @@ function App() {
                         <Route path='vendor-page' element={<VendorPage />} />
                         <Route path="booking-settings" element={<BookingSettings />} />
                         <Route path="employee-settings" element={<EmployeeSettings />} />
+                        <Route path="roles-permissions" element={<RolesPermissions />} />
                     </Route>
                 </ Route>
                 <Route path="/" element={<Landing />} />

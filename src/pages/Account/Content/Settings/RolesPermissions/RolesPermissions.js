@@ -3,64 +3,37 @@ import v1 from '../../../../../utils/axios-instance-v1'
 import { useTranslation } from 'react-i18next';
 import CssBaseline from '@mui/material/CssBaseline';
 import Stack from '@mui/material/Stack';
-import { Alert, Backdrop, Button, CircularProgress, Grid, Skeleton, Snackbar } from "@mui/material";
-import styled from 'styled-components';
+import { Alert, Backdrop, CircularProgress, Grid, Skeleton, Snackbar } from "@mui/material";
+import Role from "./Role/Role";
 
 
 
-
-
-export default function GeneralSettings(props) {
+export default function RolesPermissions(props) {
     const { t } = useTranslation()
-    const [uploadedLogo, setUploadedLogo] = useState([{ data_url: '' }]);
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [phone, setPhone] = useState('');
-    const [tax, setTax] = useState('');
-    const [address, setAddress] = useState('');
-    const [notes, setNotes] = useState('');
-    const [website, setWebsite] = useState('');
     const [show, setShow] = useState(true);
     const [open, setOpen] = useState(false);
     const [success, setSuccess] = useState(false)
+    const [ roles , setRoles ] = useState([])
     useEffect(() => {
-        v1.get('/vendors/settings/company')
+        v1.get('/vendors/settings/roles')
             .then(res => {
-                setUploadedLogo([{ data_url: res.data.logo_url }])
-                setName(res.data.companyName)
-                setEmail(res.data.companyEmail)
-                setPhone(res.data.companyPhone)
-                setTax(res.data.tax_record)
-                setAddress(res.data.address)
-                setNotes(res.data.invoice_notes)
-                setWebsite(res.data.website)
+                setRoles(res.data)
                 setShow(false)
             })
     }, []);
-    function submitForm() {
-        setOpen(true)
-        v1.post('/vendors/settings/company', {
-            company_name: name,
-            company_email: email,
-            company_phone: phone,
-            logo_url: uploadedLogo[0].data_url,
-            tax_record: tax,
-            address: address,
-            website: website,
-            invoice_notes: notes
-        }).then(res => {
-            if (res.status === 204) {
-                setSuccess(true)
-            }
-            setOpen(false)
-        }).catch(err => {
-            setOpen(false)
-            console.log(err.message)
-        })
-    }
+
     function handleClose() {
         setSuccess(false)
     }
+
+
+    const content = roles && (
+        roles.map((role, index) => {
+            return (
+                <Role key={index} roleData={role} />
+            )
+        })
+    )
 
     return (
         <>
@@ -72,6 +45,7 @@ export default function GeneralSettings(props) {
                         <CssBaseline />
                         <Stack spacing={3}>
                             <Grid container spacing={3}>
+                                {content}
                             </Grid>
                         </Stack>
                         <Backdrop
@@ -99,10 +73,13 @@ function SkeletonForm() {
             <Stack spacing={2}>
                 <Grid container spacing={2}>
                     <Grid item xs={12}>
-                        <Skeleton variant="rectangular" height={150} />
+                        <Skeleton variant="rectangular" height={50} />
                     </Grid>
                     <Grid item xs={12}>
-                        <Skeleton variant="rectangular" height={150} />
+                        <Skeleton variant="rectangular" height={50} />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Skeleton variant="rectangular" height={50} />
                     </Grid>
                 </Grid>
             </Stack>

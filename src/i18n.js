@@ -318,6 +318,8 @@ const resources = {
             'visit old version': 'زيارة النسخة القديمة',
             'attachments': 'المرفقات',
             'agent name': 'المورد',
+            'roles & permissions': 'الأدوار و الأذونات',
+            'members': 'الأعضاء',
         }
     }
 };
