@@ -17,6 +17,7 @@ export default function RolesPermissions(props) {
     const [ roles , setRoles ] = useState([])
     const [ membersModalOpened, setMembersModalOpened ] = useState(false);
     const [ selectedRoleId, setSelectedRoleId ] = useState(null);
+    const [ successRefetch, setSuccessRefetch ] = useState(false);
     useEffect(() => {
         v1.get('/vendors/settings/roles')
             .then(res => {
@@ -37,13 +38,28 @@ export default function RolesPermissions(props) {
         setSelectedRoleId(null);
     }, [])
 
+    const changeStatusHandler = useCallback((roleId, permissionId, assignPermission) => {
+        setSuccessRefetch(false)
+        setOpen(true)
+        v1.post(`/vendors/settings/permissions`, {
+            roleId: roleId,
+            permissionId: permissionId,
+            assignPermission: assignPermission
+        })
+            .then(res => {
+                setOpen(false)
+                setSuccess(true)
+                setSuccessRefetch(true)
+            })
+    }, [])
+
 
     const content = roles && (
         <Fragment>
             {
                 roles.map((role, index) => {
                     return (
-                        <Role key={index} roleData={role} openMembersHandler={membersModalOpenHandler.bind(null, role.id)} />
+                        <Role key={index} roleData={role} openMembersHandler={membersModalOpenHandler.bind(null, role.id)} changeStatusHandler={changeStatusHandler} successRefetch={successRefetch} />
                     )
                 })
             }
@@ -82,7 +98,7 @@ export default function RolesPermissions(props) {
                             onClose={handleClose}
                             key={'bottom-right'}
                         >
-                            <Alert onClose={handleClose} severity="success" fullWidth>{t('Saved Successfuly')}</Alert>
+                            <Alert onClose={handleClose} severity="success">{t('Saved Successfuly')}</Alert>
                         </Snackbar>
                     </Fragment>
             }

@@ -321,6 +321,14 @@ const resources = {
             'roles & permissions': 'الأدوار و الأذونات',
             'members': 'الأعضاء',
             'view members details': 'عرض تفاصيل الأعضاء',
+            'Business Service': 'خدمات الأعمال',
+            'Employee Group': 'مجموعة الموظفين',
+            'Employee Leave': 'إجازات الموظفين',
+            'Employee Schedule': 'جدول الموظفين',
+            'Settings': 'الإعدادات',
+            'Report': 'التقارير',
+            'Booking': 'الحجوزات',
+            'Deal': 'العروض',
         }
     }
 };
