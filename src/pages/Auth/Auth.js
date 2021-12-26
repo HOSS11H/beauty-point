@@ -7,9 +7,10 @@ import AuthContext from '../../store/auth-context';
 
 import ThemeContext from '../../store/theme-context';
 import styled  from 'styled-components';
-import { Container, Grid } from '@mui/material';
+import { Container, Grid, Card } from '@mui/material';
 import { CustomButton } from '../../components/UI/Button/Button';
 import Logo from '../../images/logo/logo_mobile.png'
+import AuthBgSrc from '../../images/avatars/auth-bg.png'
 
 const AuthContainer = styled.div`
     min-height: 100vh;
@@ -17,14 +18,16 @@ const AuthContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    background-color: ${ ( { theme } ) => theme.palette.background.default };
 `;
 
-const FormWrapper = styled.form`
-    box-shadow: rgba(0, 0, 0, 0.15) 0px 2px 8px;
+const CustomizedCard = styled(Card)`
     padding: 40px 20px;
-    background-color: ${ ( { theme } ) => theme.palette.background.default };
     border-radius: 12px;
     text-align: center;
+`
+
+const FormWrapper = styled.form`
 `
 const FormHeading = styled.h1`
     font-size: 26px;
@@ -69,6 +72,22 @@ const LogoImg = styled.img`
     object-fit: cover;
     display: inline-flex;
     justify-content: center;
+`
+
+const AuthImg = styled.div`
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    @media screen and (max-width: 599.98px) {
+        display: none;
+    }
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
 `
 
 
@@ -179,45 +198,50 @@ const Auth = props => {
 
     return (
         <AuthContainer>
-            <Container maxWidth="md">
-                <Grid container  >
-                    <Grid item xs={12} md={3} >
+            <Container maxWidth="lg">
+                <Grid container spacing={3}  >
+                    <Grid item xs={12} sm={6} md={4} >
+                        <CustomizedCard>
+                            <FormWrapper>
+                                <LogoImg src={Logo} alt="logo" />
+                                <FormHeading>
+                                    { isLogin && loginFormText.heading }
+                                    { !isLogin&& subscribeFormText.heading }
+                                </FormHeading>
+                                { isLogin ? loginInputs() : subscribeInputs() }
+                                { isLogin && (
+                                    <FormLink>
+                                        {loginFormText.passwordRestoreMessage}
+                                        <span >
+                                            {loginFormText.passwordMessageLink}
+                                        </span>
+                                    </FormLink>
+                                )}
+                                { errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+                                <CustomButton onClick={submitHandler} disabled={!authIsValid} >{isLogin ? loginFormText.button : subscribeFormText.button}</CustomButton>
+                                { isLogin && (
+                                    <FormLink>
+                                        {loginFormText.formSwitchText}
+                                        <a href='https://beautypoint.sa/register'>
+                                            {loginFormText.formSwitchLink}
+                                        </a>
+                                    </FormLink>
+                                )}
+                                { !isLogin && (
+                                    <FormLink>
+                                        {subscribeFormText.formSwitchText}
+                                        <span onClick={switchAuthModeHandler}>
+                                            {subscribeFormText.formSwitchLink}
+                                        </span>
+                                    </FormLink>
+                                )}
+                            </FormWrapper>
+                        </CustomizedCard>
                     </Grid>
-                    <Grid item xs={12} md={6} >
-                        <FormWrapper>
-                            <LogoImg src={Logo} alt="logo" />
-                            <FormHeading>
-                                { isLogin && loginFormText.heading }
-                                { !isLogin&& subscribeFormText.heading }
-                            </FormHeading>
-                            { isLogin ? loginInputs() : subscribeInputs() }
-                            { isLogin && (
-                                <FormLink>
-                                    {loginFormText.passwordRestoreMessage}
-                                    <span >
-                                        {loginFormText.passwordMessageLink}
-                                    </span>
-                                </FormLink>
-                            )}
-                            { errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-                            <CustomButton onClick={submitHandler} disabled={!authIsValid} >{isLogin ? loginFormText.button : subscribeFormText.button}</CustomButton>
-                            { isLogin && (
-                                <FormLink>
-                                    {loginFormText.formSwitchText}
-                                    <a href='https://beautypoint.sa/register'>
-                                        {loginFormText.formSwitchLink}
-                                    </a>
-                                </FormLink>
-                            )}
-                            { !isLogin && (
-                                <FormLink>
-                                    {subscribeFormText.formSwitchText}
-                                    <span onClick={switchAuthModeHandler}>
-                                        {subscribeFormText.formSwitchLink}
-                                    </span>
-                                </FormLink>
-                            )}
-                        </FormWrapper>
+                    <Grid item xs={12} sm={6} md={8} >
+                        <AuthImg>
+                            <img src={AuthBgSrc} alt="auth Background" />
+                        </AuthImg>
                     </Grid>
                 </Grid>
             </Container>
