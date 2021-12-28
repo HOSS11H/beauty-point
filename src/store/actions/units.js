@@ -89,9 +89,11 @@ export const updateUnitFailed = (message) => {
 export const updateUnit = (data) => {
     return dispatch => {
         dispatch(updateUnitStart())
+        console.log('edit start')
         axios.put(`/vendors/units/${data.id}`, data)
-            .then(response => {
-                dispatch(updateUnitSuccess(response.data, data));
+        .then(response => {
+                console.log('edit success')
+                dispatch(updateUnitSuccess(response.data, {...data}));
             })
             .catch(err => {
                 dispatch(updateUnitFailed(err.message))

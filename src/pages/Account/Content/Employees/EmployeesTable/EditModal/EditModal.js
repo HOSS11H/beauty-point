@@ -86,19 +86,6 @@ const CreateModal = (props) => {
         onClose();
     }, [onClose])
 
-    const resetModalData = useCallback(() => {
-        setEmployeeName('');
-        setEmployeeNameError(false);
-        setEmployeeNumber(0);
-        setEmployeeNumberError(false);
-        setEmployeeEmail('');
-        setEmployeeEmailError(false);
-        setEmployeePassword('');
-        setEmployeePasswordError(false);
-        setEmployeeRole('');
-        setEmployeeRoleError(false);
-    }, [])
-
     const confirmCreateHandler = useCallback(() => {
         const pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if (employeeName.trim().length === 0) {
@@ -130,8 +117,7 @@ const CreateModal = (props) => {
             calling_code: '5555',
         }
         onConfirm(data);
-        resetModalData();
-    }, [employeeEmail, employeeName, employeeNumber, employeePassword, employeeRole, id, onConfirm, resetModalData])
+    }, [employeeEmail, employeeName, employeeNumber, employeePassword, employeeRole, id, onConfirm])
 
     let content = (
         <Grid container spacing={2}>
@@ -191,7 +177,6 @@ const CreateModal = (props) => {
 const mapStateToProps = (state) => {
     return {
         fetchedRoles: state.employees.roles,
-        creatingEmployeeSuccess: state.employees.creatingEmployeeSuccess,
     }
 }
 

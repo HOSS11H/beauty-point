@@ -110,7 +110,7 @@ const CreateModal = (props) => {
                 name: unitName,
                 type: type,
                 unit_quantity: unitQuantity,
-                parent_id: 1,
+                parent_id: null,
             }
         }
         if ( type === 'sub' ) {
