@@ -16,7 +16,7 @@ import { useTranslation } from 'react-i18next';
 
 const UnitsTableWrapper = styled.div`
     display: flex;
-    min-height: 100vh;
+    min-height: 60vh;
     max-width: 100%;
     box-shadow: rgb(90 114 123 / 11%) 0px 7px 30px 0px;
     margin-bottom: 40px;
@@ -34,7 +34,7 @@ const UnitsTableWrapper = styled.div`
 
 
 
-const intialRowsPerPage = 10;
+const intialRowsPerPage = 5;
 
 function UnitsTable(props) {
 

@@ -333,6 +333,10 @@ const resources = {
             'type': 'نوع',
             'Do you want To delete this unit?': 'هل تريد حذف هذه الوحدة؟',
             'edit unit details': 'تعديل تفاصيل الوحدة',
+            'add new unit': 'إضافة وحدة جديدة',
+            'add unit': 'إضافة وحدة',
+            'sub': 'فرعية',
+            'main': 'رئيسية',
         }
     }
 };

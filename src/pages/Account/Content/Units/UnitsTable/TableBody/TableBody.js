@@ -6,25 +6,6 @@ import TableRow from '@mui/material/TableRow';
 import { TableData } from '../../../../../../components/UI/Dashboard/Table/Table';
 import { useTranslation } from 'react-i18next';
 
-import styled from 'styled-components';
-
-
-const TableInfos = styled.div`
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    height: 30px;
-    padding: 0 10px;
-    border-radius: 12px;
-    color: ${({ theme }) => theme.palette.common.white};
-    font-size: 14px;
-    text-transform: capitalize;
-    font-weight: 500;
-    background-color: ${({ theme }) => theme.palette.primary.dark};
-    margin-right: 10px;
-    margin-bottom: 10px;
-`
-
 const EnhancedTableBody = props => {
 
     const { t } = useTranslation()
@@ -48,7 +29,7 @@ const EnhancedTableBody = props => {
                         </TableCell>
                         <TableCell align="center">
                             <TableData>
-                                {row.type}
+                                {t(row.type)}
                             </TableData>
                         </TableCell>
                         <TableCell align="center">
