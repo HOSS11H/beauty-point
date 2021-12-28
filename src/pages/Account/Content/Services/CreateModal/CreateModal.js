@@ -343,11 +343,11 @@ const CreateModal = (props) => {
                 .then(res => {
                     setAllProducts(res.data.data);
                 })
+            axios.get(`/vendors/units`)
+                .then(res => {
+                    setAllUnits(res.data.data);
+                })
         }
-        axios.get(`/vendors/units`)
-            .then(res => {
-                setAllUnits(res.data.data);
-            })
     }, [type])
 
 
