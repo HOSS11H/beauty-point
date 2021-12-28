@@ -27,6 +27,7 @@ import draftToHtml from 'draftjs-to-html';
 import { connect } from 'react-redux';
 import { fetchLocations } from '../../../../../store/actions/index';
 import { formatCurrency } from '../../../../../shared/utility';
+import axios from '../../../../../utils/axios-instance';
 import ValidationMessage from '../../../../../components/UI/ValidationMessage/ValidationMessage';
 
 
@@ -141,7 +142,7 @@ const EditorWrapper = styled.div`
 
 const CreateModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, fetchedLocations, fetchLocationsHandler,  creatingProductSuccess} = props;
+    const { show, heading, confirmText, onConfirm, onClose, fetchedLocations, fetchLocationsHandler, creatingProductSuccess } = props;
 
     const { t } = useTranslation();
 
@@ -150,25 +151,26 @@ const CreateModal = (props) => {
 
     const [productName, setProductName] = useState('');
     const [productNameError, setProductNameError] = useState(false);
-    
-    
-    
+
     const [editorState, setEditorState] = useState(
         EditorState.createEmpty()
     )
     const [productDescriptionError, setProductDescriptionError] = useState(false);
-        
+
     const [productPrice, setProductPrice] = useState(0);
-    
-    const [productDiscount, setProductDiscount] = useState(0);
-    
+
+    const [productDiscount, setProductDiscount] = useState('percent');
+
     const [discountType, setDiscountType] = useState('percent');
-    
+
     const [priceAfterDiscount, setPriceAfterDiscount] = useState(0);
     const [productPriceError, setProductPriceError] = useState(false);
-    
+
     const [productQuantity, setProductQuantity] = useState(0);
     const [productQuantityError, setProductQuantityError] = useState(false);
+
+    const [allUnits, setAllUnits] = useState([]);
+    const [productUnit, setProductUnit] = useState('');
 
     const [locationName, setLocationName] = useState('');
     const [productLocationError, setProductLocationError] = useState(false);
@@ -198,6 +200,12 @@ const CreateModal = (props) => {
     useEffect(() => {
         fetchLocationsHandler(lang);
     }, [fetchLocationsHandler, lang])
+    useEffect(() => {
+        axios.get(`/vendors/units`)
+            .then(res => {
+                setAllUnits(res.data.data);
+            })
+    }, [])
 
 
     const productNameChangeHandler = (event) => {
@@ -231,7 +239,7 @@ const CreateModal = (props) => {
         }
     }
     const productDiscountChangeHandler = (event) => {
-        if (event.target.value >= 0 ) {
+        if (event.target.value >= 0) {
             setProductDiscount(event.target.value);
         }
     }
@@ -243,6 +251,9 @@ const CreateModal = (props) => {
             setProductQuantity(event.target.value);
             setProductQuantityError(false);
         }
+    }
+    const productUnitChangeHandler = (event) => {
+        setProductUnit(event.target.value);
     }
     const productStatusChangeHandler = (event) => {
         setProductStatus(event.target.value);
@@ -280,6 +291,7 @@ const CreateModal = (props) => {
         setUploadedImages([]);
         setDefaultImage('');
         setDefaultImageError(false);
+        setProductUnit('');
     }, [])
 
     useEffect(() => {
@@ -287,7 +299,7 @@ const CreateModal = (props) => {
     }, [creatingProductSuccess, resetModalData])
 
     const confirmCreateHandler = useCallback(() => {
-        if ( productName.trim().length === 0 ) {
+        if (productName.trim().length === 0) {
             setProductNameError(true);
             return;
         }
@@ -296,15 +308,15 @@ const CreateModal = (props) => {
             return;
         }
 
-        if ( productPriceError)   { return; }
-        
+        if (productPriceError) { return; }
+
         if (locationName === '') {
             setProductLocationError(true);
             return;
         }
-        if (+productQuantity === 0) { 
+        if (+productQuantity === 0) {
             setProductQuantityError(true);
-            return; 
+            return;
         }
 
         const selectedLocation = fetchedLocations.find(location => location.id === locationName);
@@ -322,9 +334,10 @@ const CreateModal = (props) => {
             images: uploadedImages,
             image: defaultImage,
             location: selectedLocation,
+            unit_id: productUnit,
         };
         onConfirm(data);
-    }, [productName, editorState, productPriceError, locationName, productQuantity, defaultImage, fetchedLocations, productPrice, productDiscount, discountType, priceAfterDiscount, productStatus, uploadedImages, onConfirm])
+    }, [productName, editorState, productPriceError, locationName, productQuantity, fetchedLocations, productPrice, productDiscount, discountType, priceAfterDiscount, productStatus, uploadedImages, defaultImage, productUnit, onConfirm])
 
     let content = (
         <Grid container spacing={2}>
@@ -404,6 +417,26 @@ const CreateModal = (props) => {
             <Grid item xs={12} sm={6}>
                 <CustomTextField id="product-quantity" type='number' label={t('quantity')} variant="outlined" value={productQuantity} onChange={productQuantityChangeHandler} />
                 {productQuantityError && <ValidationMessage notExist>{t(`Please add Quantity`)}</ValidationMessage>}
+            </Grid>
+            <Grid item xs={12} sm={6}>
+                <FormControl sx={{ width: '100%' }}>
+                    <InputLabel id="product-unit">{t('unit')}</InputLabel>
+                    <Select
+                        labelId="product-unit"
+                        label={t('unit')}
+                        value={productUnit}
+                        onChange={productUnitChangeHandler}
+                        inputProps={{ 'aria-label': 'Without label' }}
+                    >
+                        {
+                            allUnits.map(unit => {
+                                return (
+                                    <MenuItem key={unit.id} value={unit.id}>{unit.name}</MenuItem>
+                                )
+                            })
+                        }
+                    </Select>
+                </FormControl>
             </Grid>
             <Grid item xs={12}>
                 <ImageUploading
