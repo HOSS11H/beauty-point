@@ -32,7 +32,7 @@ const SearchFilters = (props) => {
     const { lang } = themeCtx
 
     const [type, setType] = useState('services');
-    const [category, setCategory] = useState('all');
+    const [category, setCategory] = useState('');
     const [location, setLocation] = useState('');
     const [search, setSearch] = useState('');
 
@@ -118,7 +118,7 @@ const SearchFilters = (props) => {
                                     label={t('"Category"')}
                                     onChange={handleCategoryChange}
                                 >
-                                    <MenuItem value='all'>{t('ALL')}</MenuItem>
+                                    <MenuItem value=''>{t('ALL')}</MenuItem>
                                     {
                                         fetchedCategories.map(category => {
                                             return <MenuItem key={category.id} value={category.id}>{category.name}</MenuItem>
