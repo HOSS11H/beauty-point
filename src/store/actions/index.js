@@ -77,3 +77,11 @@ export {
     searchExpensesCustomers,
     createExpenseCustomer,
 } from './expenses'
+
+export {
+    fetchUnits,
+    deleteUnit,
+    updateUnit,
+    addUnit,
+    searchUnits,
+} from './units'

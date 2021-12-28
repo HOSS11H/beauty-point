@@ -38,6 +38,7 @@ import AllDeals from "./pages/AllDeals/AllDeals";
 import SingleDeal from "./pages/SingleDeal/SingleDeal";
 import SingleSalon from "./pages/SingleSalon/SingleSalon";
 import RolesPermissions from "./pages/Account/Content/Settings/RolesPermissions/RolesPermissions";
+import Units from "./pages/Account/Content/Units/Units";
 
 function App() {
 
@@ -73,6 +74,7 @@ function App() {
                     <Route path="expenses" element={<Expenses />} />
                     <Route path="expenses/categories" element={<ExpenseCategories />} />
                     <Route path="expenses/customers" element={<ExpenseCustomers />} />
+                    <Route path="units" element={<Units />} />
                     <Route path="deals" element={<Deals />} />
                     <Route path='point-of-sale' element={<PointOfSale />} />
                     <Route path='bookings' element={<Bookings />} />

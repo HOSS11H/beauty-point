@@ -329,6 +329,10 @@ const resources = {
             'Report': 'التقارير',
             'Booking': 'الحجوزات',
             'Deal': 'العروض',
+            'group': 'مجموعة',
+            'type': 'نوع',
+            'Do you want To delete this unit?': 'هل تريد حذف هذه الوحدة؟',
+            'edit unit details': 'تعديل تفاصيل الوحدة',
         }
     }
 };

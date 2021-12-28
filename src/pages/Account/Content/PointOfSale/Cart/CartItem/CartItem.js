@@ -13,7 +13,6 @@ import { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import ThemeContext from '../../../../../../store/theme-context';
 import { connect } from 'react-redux';
-import { formatCurrency } from '../../../../../../shared/utility';
 import Increment from '../../../../../../components/UI/Increment/Increment';
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;

@@ -21,7 +21,7 @@ import InsertChartIcon from '@mui/icons-material/InsertChart';
 import openedLogo from '../../../images/logo/logo_dark.png'
 import closedLogo from '../../../images/logo/logo_mobile.png'
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
-
+import LinearScaleIcon from '@mui/icons-material/LinearScale';
 import { useTranslation } from 'react-i18next';
 
 const categories = [
@@ -36,6 +36,7 @@ const categories = [
             { id: 'services', name: 'services', icon: <FormatListBulletedIcon /> },
             { id: 'products', name: 'products', icon: <ShoppingCartIcon /> },
             { id: 'expenses', name: 'expenses', icon: <MonetizationOnIcon /> },
+            { id: 'units', name: 'units', icon: <LinearScaleIcon /> },
             { id: 'employees', name: 'employees', icon: <PersonIcon /> },
             { id: 'deals', name: 'deals', icon: <LocalOfferIcon /> },
             { id: 'point-of-sale', name: 'points of sales', icon: <AddShoppingCartIcon /> },
