@@ -122,7 +122,7 @@ export const addUnit = (data) => {
         dispatch(addUnitStart())
         axios.post(`/vendors/units`, data)
             .then(response => {
-                dispatch(addUnitSuccess(null, {...response.data }));
+                dispatch(addUnitSuccess(null, {...response.data, ...data }));
             })
             .catch(err => {
                 dispatch(addUnitFailed(err.message))

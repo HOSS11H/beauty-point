@@ -322,8 +322,7 @@ const CreateModal = (props) => {
             images: uploadedImages,
             image: defaultImage,
             location: selectedLocation,
-        }
-        console.log(data, 'excuted')
+        };
         onConfirm(data);
     }, [productName, editorState, productPriceError, locationName, productQuantity, defaultImage, fetchedLocations, productPrice, productDiscount, discountType, priceAfterDiscount, productStatus, uploadedImages, onConfirm])
 

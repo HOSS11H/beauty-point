@@ -42,8 +42,6 @@ function UnitsTable(props) {
 
     const { fetchedUnits, fetchUnitsHandler, loadingUnits, deleteUnitHandler, searchingUnits, searchingUnitsSuccess, updateUnitHandler } = props;
 
-    console.log(fetchedUnits)
-
     const themeCtx = useContext(ThemeContext)
 
     const { lang } = themeCtx

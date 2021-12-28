@@ -104,11 +104,6 @@ const reducer = ( state = intialState, action ) => {
                     deletingUnitMessage: action.message,
                 }
             });
-        case (actionTypes.FETCH_ROLES_START) :
-            return updateObject( state, {
-                fetchingRoles: true,
-                errorFetchingRoles: false,
-            });
         case ( actionTypes.ADD_UNIT_START ) :
             return updateObject( state, {
                 units: {

@@ -337,6 +337,10 @@ const resources = {
             'add unit': 'إضافة وحدة',
             'sub': 'فرعية',
             'main': 'رئيسية',
+            'units': 'الوحدات',
+            'unit type': 'نوع الوحدة',
+            'No Units Found': 'لا توجد وحدات',
+            'Please add parent unit': 'يرجى إضافة وحدة رئيسية',
         }
     }
 };

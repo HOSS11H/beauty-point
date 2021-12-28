@@ -40,6 +40,8 @@ function Units(props) {
 
     const [ messageShown, setMessageShown ] = useState(addingUnitSuccess);
 
+    console.log(addingUnitSuccess)
+
     useEffect(() => {
         setMessageShown(addingUnitSuccess )
     }, [addingUnitSuccess])

@@ -1,22 +1,21 @@
-import { useState, useEffect, useCallback, useContext } from 'react';
+import { useState, useEffect, useCallback, useContext, Fragment } from 'react';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import ThemeContext from '../../../../../store/theme-context'
 
 import { CustomModal } from '../../../../../components/UI/Modal/Modal';
-import { Grid } from '@mui/material';
+import { Grid, InputAdornment, MenuItem, Select } from '@mui/material';
 import TextField from '@mui/material/TextField';
-
-import { connect } from 'react-redux';
-import { fetchRoles } from '../../../../../store/actions/index';
 import ValidationMessage from '../../../../../components/UI/ValidationMessage/ValidationMessage';
 
-import InputAdornment from '@mui/material/InputAdornment';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import InputLabel from '@mui/material/InputLabel';
-import LockIcon from '@mui/icons-material/Lock';
+import FormLabel from '@mui/material/FormLabel';
+import { connect } from 'react-redux';
+import axios from '../../../../../utils/axios-instance';
+
 
 
 const CustomTextField = styled(TextField)`
@@ -25,154 +24,162 @@ const CustomTextField = styled(TextField)`
 
 const CreateModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, fetchedRoles, fetchRolesHandler, creatingEmployeeSuccess } = props;
+    const { show, heading, confirmText, onConfirm, onClose, addingUnitSuccess } = props;
 
     const { t } = useTranslation();
 
     const themeCtx = useContext(ThemeContext)
     const { lang } = themeCtx;
 
-    const [employeeName, setEmployeeName] = useState('');
-    const [employeeNameError, setEmployeeNameError] = useState(false);
+    const [unitName, setUnitName] = useState('');
+    const [unitNameError, setUnitNameError] = useState(false);
 
-    const [employeeEmail, setEmployeeEmail] = useState('');
-    const [employeeEmailError, setEmployeeEmailError] = useState(false);
+    const [type, setType] = useState('main');
 
-    const [employeePassword, setEmployeePassword] = useState('');
-    const [employeePasswordError, setEmployeePasswordError] = useState(false);
+    const [unitQuantity, setProductQuantity] = useState(0);
+    const [unitQuantityError, setProductQuantityError] = useState(false);
+    
+    
+    const [ allUnits, setAllUnits ] = useState([]);
+    
+    const [parentUnit, setParentUnit] = useState('');
+    const [parentUnitError, setParentUnitError] = useState(false);
 
-    const [employeeNumber, setEmployeeNumber] = useState('');
-    const [employeeNumberError, setEmployeeNumberError] = useState(false);
-
-    const [employeeRole, setEmployeeRole] = useState('');
-    const [employeeRoleError, setEmployeeRoleError] = useState(false);
-
-    useEffect(() => {
-        fetchRolesHandler(lang);
-    }, [fetchRolesHandler, lang])
-
-
-    const employeeNameChangeHandler = (event) => {
-        setEmployeeName(event.target.value);
-        setEmployeeNameError(false);
+    const unitNameChangeHandler = (event) => {
+        setUnitName(event.target.value);
+        setUnitNameError(false);
     }
 
-    const employeeEmailChangeHandler = (event) => {
-        setEmployeeEmail(event.target.value);
-        setEmployeeEmailError(false);
-    }
-    const employeePasswordChangeHandler = (event) => {
-        setEmployeePassword(event.target.value);
-        setEmployeePasswordError(false);
-    }
-
-    const employeeNumberChangeHandler = (event) => {
-        setEmployeeNumber(event.target.value);
-        setEmployeeNumberError(false);
-    }
-    const handleEmployeeRoleChange = (event) => {
-        setEmployeeRole(event.target.value);
-        setEmployeeRoleError(false);
+    const unitTypeChangeHandler = (event) => {
+        setType(event.target.value);
     };
+
+    const unitQuantityChangeHandler = (event) => {
+        if (event.target.value >= 0) {
+            setProductQuantity(event.target.value);
+            setProductQuantityError(false);
+        }
+    }
+    const parentUnitChangeHandler = (event) => {
+        setParentUnit(event.target.value);
+        setParentUnitError(false);
+    }
+
     const closeModalHandler = useCallback(() => {
         onClose();
     }, [onClose])
 
     const resetModalData = useCallback(() => {
-        setEmployeeName('');
-        setEmployeeNameError(false);
-        setEmployeeNumber(0);
-        setEmployeeNumberError(false);
-        setEmployeeEmail('');
-        setEmployeeEmailError(false);
-        setEmployeePassword('');
-        setEmployeePasswordError(false);
-        setEmployeeRole('');
-        setEmployeeRoleError(false);
+        setUnitName('');
+        setUnitNameError(false);
+        setProductQuantity(0);
+        setProductQuantityError(false);
+        setParentUnit('');
+        setParentUnitError(false);
     }, [])
 
     useEffect(() => {
-        creatingEmployeeSuccess && resetModalData();
-    }, [creatingEmployeeSuccess, resetModalData])
+        if ( type === 'sub' ) {
+            axios.get('/vendors/units')
+                .then(res => {
+                    setAllUnits(res.data.data);
+                })
+        }
+    }, [type])
+
+    useEffect(() => {
+        addingUnitSuccess && resetModalData();
+    }, [addingUnitSuccess, resetModalData])
 
     const confirmCreateHandler = useCallback(() => {
-        const pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if (employeeName.trim().length === 0) {
-            setEmployeeNameError(true);
+        if (unitName.trim().length === 0) {
+            setUnitNameError(true);
             return;
         }
-        if (pattern.test(employeeEmail) === false) {
-            setEmployeeEmailError(true);
+        if ( type === 'sub' && parentUnit === '' ) {
+            setParentUnitError(true);
             return;
         }
-        if (employeePassword.trim().length === 0) {
-            setEmployeePasswordError(true);
+        if (+unitQuantity === 0) {
+            setProductQuantityError(true);
             return;
         }
-        if (employeeRole === '') {
-            setEmployeeRoleError(true);
-            return;
-        }   
-        if (employeeNumber.trim().length === 0) {
-            setEmployeeNumberError(true);
-            return;
+        let data;
+        if ( type === 'main' ) {
+            data = {
+                name: unitName,
+                type: type,
+                unit_quantity: unitQuantity,
+                parent_id: 1,
+            }
         }
-        const data = {
-            name: employeeName,
-            email: employeeEmail,
-            mobile: employeeNumber,
-            role_id: employeeRole,
-            calling_code: '5555',
+        if ( type === 'sub' ) {
+            data = {
+                name: unitName,
+                type: type,
+                unit_quantity: unitQuantity,
+                parent_id: parentUnit.id,
+            }
         }
         onConfirm(data);
-    }, [employeeEmail, employeeName, employeeNumber, employeePassword, employeeRole, onConfirm])
+    }, [unitName, unitQuantity, type, parentUnit, onConfirm])
 
     let content = (
         <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
-                <CustomTextField id="employee-name" label={t('name')} variant="outlined" value={employeeName} onChange={employeeNameChangeHandler} />
-                {employeeNameError && <ValidationMessage notExist>{t(`Please add name`)}</ValidationMessage>}
+                <CustomTextField id="unit-name" label={t('name')} variant="outlined" value={unitName} onChange={unitNameChangeHandler} />
+                {unitNameError && <ValidationMessage notExist>{t(`Please add name`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6}>
-                <CustomTextField id="employee-email" label={t('email')} variant="outlined" value={employeeEmail} onChange={employeeEmailChangeHandler} />
-                {employeeEmailError && <ValidationMessage notExist>{t(`Please add email`)}</ValidationMessage>}
-            </Grid>
-            <Grid item xs={12} sm={6}>
-                <TextField id='employee-password' placeholder='******' variant="outlined" fullWidth
-                    type='password' name='employee-password' value={employeePassword} onChange={employeePasswordChangeHandler}
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <LockIcon />
-                            </InputAdornment>
-                        ),
-                    }}
-                />
-                {employeePasswordError && <ValidationMessage notExist>{t(`Please add password`)}</ValidationMessage>}
-            </Grid>
-            <Grid item xs={12} sm={6}>
-                <FormControl fullWidth>
-                    <InputLabel id="item-role">{t('role')}</InputLabel>
-                    <Select
-                        labelId="item-role"
-                        id="item-role-select"
-                        value={employeeRole}
-                        label={t("Role")}
-                        onChange={handleEmployeeRoleChange}
-                    >
-                        {
-                            fetchedRoles.map(role => {
-                                return <MenuItem key={role.id} value={role.id}>{t(role.name)}</MenuItem>
-                            })
-                        }
-                    </Select>
+                <FormControl sx={{ width: '100%', textAlign: 'left' }} component="fieldset">
+                    <FormLabel component="legend">{t('unit type')}</FormLabel>
+                    <RadioGroup row aria-label="type" name="row-radio-buttons-group" value={type} onChange={unitTypeChangeHandler} >
+                        <FormControlLabel value="main" control={<Radio />} label={t('main')} />
+                        <FormControlLabel value="sub" control={<Radio />} label={t('sub')} />
+                    </RadioGroup>
                 </FormControl>
-                {employeeRoleError && <ValidationMessage notExist>{t(`Please add a role`)}</ValidationMessage>}
             </Grid>
-            <Grid item xs={12} sm={6}>
-                <CustomTextField id="employee-number"label={t('mobile number')} variant="outlined" value={employeeNumber} onChange={employeeNumberChangeHandler} />
-                {employeeNumberError && <ValidationMessage notExist>{t(`Please add Number`)}</ValidationMessage>}
-            </Grid>
+            {
+                type === 'main' && (
+                    <Grid item xs={12} sm={6}>
+                        <CustomTextField id="unit-quantity" type='number' label={t('quantity')} variant="outlined" value={unitQuantity} onChange={unitQuantityChangeHandler} />
+                        {unitQuantityError && <ValidationMessage notExist>{t(`Please add Quantity`)}</ValidationMessage>}
+                    </Grid>
+                )
+            }
+            {
+                type === 'sub' && (
+                    <Fragment>
+                        <Grid item xs={12} sm={6}>
+                            <FormControl sx={{ width: '100%' }}>
+                                <Select
+                                    value={parentUnit}
+                                    onChange={parentUnitChangeHandler}
+                                    inputProps={{ 'aria-label': 'Without label' }}
+                                >
+                                    {
+                                        allUnits.map(unit => {
+                                            return (
+                                                <MenuItem key={unit.id} value={unit}>{unit.name}</MenuItem>
+                                            )
+                                        })
+                                    }
+                                </Select>
+                            </FormControl>
+                            {parentUnitError && <ValidationMessage notExist>{t(`Please add parent unit`)}</ValidationMessage>}
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <CustomTextField id="unit-quantity" type='number' label={t('quantity')} 
+                                variant="outlined" value={unitQuantity} onChange={unitQuantityChangeHandler}
+                                InputProps={{
+                                    startAdornment: <InputAdornment position="start">{t(parentUnit.name)} </InputAdornment>,
+                                }}
+                            />
+                            {unitQuantityError && <ValidationMessage notExist>{t(`Please add Quantity`)}</ValidationMessage>}
+                        </Grid>
+                    </Fragment>
+                )
+            }
         </Grid>
     )
     return (
@@ -184,16 +191,9 @@ const CreateModal = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        fetchedRoles: state.employees.roles,
-        creatingEmployeeSuccess: state.employees.creatingEmployeeSuccess,
-    }
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        fetchRolesHandler: (lang) => dispatch(fetchRoles(lang)),
+        addingUnitSuccess: state.units.units.addingUnitSuccess,
     }
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreateModal);
+export default connect(mapStateToProps, null)(CreateModal);
