@@ -341,6 +341,12 @@ const resources = {
             'unit type': 'نوع الوحدة',
             'No Units Found': 'لا توجد وحدات',
             'Please add parent unit': 'يرجى إضافة وحدة رئيسية',
+            'service type': 'نوع الخدمة',
+            'single': 'فردي',
+            'combo': 'كومبو',
+            'unit': 'وحدة',
+            'add item': 'إضافة عنصر',
+            'clear all': 'مسح الكل',
         }
     }
 };

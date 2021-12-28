@@ -12,7 +12,6 @@ import { updateObject } from '../../../../shared/utility';
 import CustomizedSnackbars from '../../../../components/UI/SnackBar/SnackBar';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
-import { useRef } from 'react';
 
 const cartReducer = (state, action) => {
     switch(action.type) {
@@ -154,15 +153,13 @@ const PointOfSale = ( props ) => {
 
     const { t } = useTranslation()
 
-    const {filterServicesHandler, filterProductsHandler, filterDealsHandler, createBookingHandler, fetchedLocations, bookingCreated, fetchedServices, fetchedProducts, fetchedDeals } = props
+    const {filterServicesHandler, filterProductsHandler, filterDealsHandler, createBookingHandler, fetchedLocations, bookingCreated } = props
     
     const themeCtx = useContext(ThemeContext)
-    const authCtx = useContext(AuthContext)
 
     const navigate = useNavigate()
 
     const { lang } = themeCtx
-    const { token } = authCtx
 
     const [ cart , dispatch ] = useReducer(cartReducer, {
         services: [],
