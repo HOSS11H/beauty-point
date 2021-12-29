@@ -156,6 +156,14 @@ const AddCustomer = styled(CustomButton)`
         flex-shrink: 0;
     }
 `
+const CustomTextField = styled(TextField)`
+    width: 100%;
+`
+const CustomFormGroup = styled.div`
+    display: flex;
+    align-items: center;
+`
+
 const customStyles = {
     option: (provided, state) => ({
         ...provided,
@@ -194,6 +202,7 @@ const Cart = props => {
     const [couponData, setCouponData] = useState({ amount: 0 })
 
     const [discount, setDiscount] = useState(0)
+    const [discountType, setDiscountType] = useState('percent');
 
     const [paymentGateway, setPaymentGateway] = useState('card')
     const [paymentGatewayError, setPaymentGatewayError] = useState(false)
@@ -292,6 +301,9 @@ const Cart = props => {
             setCustomerData(null);
         }
     }
+    const discountTypeChangeHandler = (event) => {
+        setDiscountType(event.target.value);
+    }
 
     const paymentGatewayChangeHandler = (event) => {
         setPaymentGateway(event.target.value);
@@ -373,6 +385,7 @@ const Cart = props => {
             totalTaxes: totalTaxes,
             couponId: couponData.id ? couponData.id : null,
             discount: discount,
+            discount_type: discountType,
             payment_gateway: paymentGateway,
         }
         purchase(data);
@@ -488,17 +501,26 @@ const Cart = props => {
                     )}
                 </Grid>
                 <Grid item xs={12} sm={6} >
-                    <TextField
-                        type="number"
-                        label={t('Discount')}
-                        id="discount-value"
-                        sx={{ width: '100%' }}
-                        value={discount}
-                        onChange={discountChangeHandler}
-                        InputProps={{
-                            startAdornment: <InputAdornment position="start">%</InputAdornment>,
-                        }}
-                    />
+                    <CustomFormGroup>
+                        <CustomTextField
+                            type="number"
+                            label={t('Discount')}
+                            id="discount-value"
+                            sx={{ width: '100%' }}
+                            value={discount}
+                            onChange={discountChangeHandler}
+                        />
+                        <FormControl sx={{ minWidth: 120, ml: 1 }}>
+                            <Select
+                                value={discountType}
+                                onChange={discountTypeChangeHandler}
+                                inputProps={{ 'aria-label': 'Without label' }}
+                            >
+                                <MenuItem value='percent'>{t('percent')}</MenuItem>
+                                <MenuItem value='fixed'>{t('Fixed')}</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </CustomFormGroup>
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <FormControl sx={{ width: '100%' }}>
@@ -512,6 +534,7 @@ const Cart = props => {
                         >
                             <MenuItem value='cash'>{t('cash')}</MenuItem>
                             <MenuItem value='card'>{t('card')}</MenuItem>
+                            <MenuItem value='online'>{t('online')}</MenuItem>
                         </Select>
                     </FormControl>
                     {paymentGatewayError && (
