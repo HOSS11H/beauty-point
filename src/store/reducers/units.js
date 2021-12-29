@@ -127,10 +127,10 @@ const reducer = ( state = intialState, action ) => {
                             total: state.units.units.meta.total + 1,
                         }
                     },
+                    addingUnit: false,
+                    addingUnitSuccess: true,
+                    addingUnitMessage: action.message,
                 },
-                addingUnit: false,
-                addingUnitSuccess: true,
-                addingUnitMessage: action.message,
             });
         case ( actionTypes.ADD_UNIT_FAILED ) :
             return updateObject( state, {
@@ -174,16 +174,6 @@ const reducer = ( state = intialState, action ) => {
                     updatingUnitSuccess: false,
                     updatingUnitMessage: action.message,
                 }
-            });
-        case (actionTypes.FETCH_ROLES_SUCCESS) :
-            return updateObject( state, {
-                roles: action.roles,
-                fetchingRoles: false,
-            });
-        case (actionTypes.FETCH_ROLES_FAILED) :
-            return updateObject( state, {
-                fetchingRoles: false,
-                errorFetchingRoles: true,
             });
         default:
             return state;

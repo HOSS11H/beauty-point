@@ -388,6 +388,7 @@ const SearchFilters = (props) => {
                         >
                             <MenuItem value='cash'>{t('cash')}</MenuItem>
                             <MenuItem value='card'>{t('card')}</MenuItem>
+                            <MenuItem value='transfer'>{t('transfer')}</MenuItem>
                             <MenuItem value='online'>{t('online')}</MenuItem>
                         </Select>
                     </FormControl>

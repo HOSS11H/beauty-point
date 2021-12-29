@@ -13,7 +13,7 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
-import ReactSelect from 'react-select';
+import ReactSelect, { components } from 'react-select';
 
 import FormLabel from '@mui/material/FormLabel';
 import DateAdapter from '@mui/lab/AdapterDateFns';
@@ -22,7 +22,6 @@ import { useState, useEffect, useContext, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import SharedTableHead from './SharedTableHead/SharedTableHead';
 import CartItem from './CartItem/CartItem';
-import InputAdornment from '@mui/material/InputAdornment';
 import { ButtonText, ButtonConfirm, CustomButton } from '../../../../../components/UI/Button/Button';
 import ValidationMessage from '../../../../../components/UI/ValidationMessage/ValidationMessage';
 import { connect } from 'react-redux';
@@ -30,6 +29,8 @@ import { fetchCoupons, searchCustomers, addCustomer, fetchEmployees } from '../.
 import ThemeContext from '../../../../../store/theme-context';
 import AddCustomerModal from './AddCustomerModal/AddCustomerModal';
 import { formatCurrency } from '../../../../../shared/utility';
+import { Fragment } from 'react';
+import { useRef } from 'react';
 
 
 const CustomerCard = styled.div`
@@ -170,10 +171,66 @@ const customStyles = {
         color: '#000',
     }),
 };
+const CustomerSelectOption = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+`
+const CustomerSelectName = styled.h4`
+    display: block;
+    font-size: 14px;
+    line-height:1.5;
+    text-transform: capitalize;
+    font-weight: 600;
+    color: ${({ theme }) => theme.palette.primary.dark};
+    transition: 0.3s ease-in-out;
+    margin-bottom: 0px;
+`
+const CustomerSelectInfo = styled.ul`
+    margin: 0;
+    padding: 0;
+    li {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        line-height:1.5;
+        text-transform: capitalize;
+        font-weight: 500;
+        color: ${({ theme }) => theme.palette.text.default};
+        margin-bottom: 5px;
+        &:last-child {
+            margin-bottom: 0px;
+        }
+        svg {
+            width: 16px;
+            height: 16px;
+            &.MuiSvgIcon-root  {
+                margin:0;
+                margin-right: 8px;
+            }
+        }
+    }
+`
+
+const Option = (props) => {
+    console.log(props);
+    return (
+        <Fragment>
+            <components.Option {...props}>
+                <CustomerSelectOption>
+                    <CustomerSelectName>{props.children}</CustomerSelectName>
+                    <CustomerSelectInfo>
+                        <li><PhoneAndroidIcon sx={{ mr: 1 }} />{props.data.mobile}</li>
+                    </CustomerSelectInfo>
+                </CustomerSelectOption>
+            </components.Option>
+        </Fragment>
+    );
+};
 
 const Cart = props => {
 
-    const { cartData, removeFromCart, increaseItem, decreaseItem, resetCart, purchase, fetchedCoupons, fetchedCustomers, fetchCouponsHandler, searchCustomersHandler, addCustomerHandler, fetchedEmployeesHandler, bookingCreated } = props;
+    const { cartData, removeFromCart, increaseItem, decreaseItem, resetCart, purchase, fetchedCoupons, fetchedCustomers, fetchCouponsHandler, searchCustomersHandler, addCustomerHandler, fetchedEmployeesHandler, bookingCreated, priceChangeHandler } = props;
 
     const { t } = useTranslation()
 
@@ -182,7 +239,8 @@ const Cart = props => {
 
 
     const [customerInput, setCustomerInput] = useState('');
-    const [customer, setCustomer] = useState([]);
+    const selectInputRef = useRef()
+    const [customer, setCustomer] = useState(null);
     const [customerData, setCustomerData] = useState(null);
     const [customerDataError, setCustomerDataError] = useState(false)
 
@@ -278,9 +336,9 @@ const Cart = props => {
             return () => clearTimeout(searchTimeout);
         }
     }, [customerInput, lang, searchCustomersHandler])
-    
-    const filterOption = (option, inputValue) =>{
-        if(option.data?.mobile?.includes(inputValue)){
+
+    const filterOption = (option, inputValue) => {
+        if (option.data?.mobile?.includes(inputValue)) {
             return true
         }
         if (option.label.toLowerCase().includes(inputValue.toLowerCase())) {
@@ -293,11 +351,11 @@ const Cart = props => {
             const customerIndex = fetchedCustomers.findIndex(customer => customer.id === value.value);
             const updatedCustomerData = fetchedCustomers[customerIndex];
             setCustomerDataError(false)
-            setCustomer(value.value);
+            setCustomer(value);
             setCustomerData(updatedCustomerData);
         } else {
             setCustomerDataError(true)
-            setCustomer([])
+            setCustomer(null)
             setCustomerData(null);
         }
     }
@@ -343,10 +401,11 @@ const Cart = props => {
     }
 
     const resetCartHandler = useCallback(() => {
-        setCustomer('');
+        setCustomer(null);
         setCustomerData(null);
         setCustomerDataError(false)
         setDiscount(0)
+        setDiscountType('percent')
         setCoupon('')
         setCouponData({ amount: 0 })
         setCouponExists(false)
@@ -420,9 +479,9 @@ const Cart = props => {
                 <Grid item xs={12} md={6}>
                     <FormLabel component="legend" sx={{ textAlign: 'left', textTransform: 'capitalize', marginBottom: '8px' }} >{t('select customer')}</FormLabel>
                     <ActionsWrapper>
-                        <FormControl fullWidth sx={{ minWidth: '200px' }} >
-                            <ReactSelect styles={customStyles} options={options} isClearable isRtl={lang === 'ar'} filterOption={filterOption}
-                                onChange={handleSelectCustomer} onInputChange={handleSelectOptions} />
+                        <FormControl fullWidth sx={{ minWidth: '250px' }} >
+                            <ReactSelect styles={customStyles} options={options} isClearable ref={selectInputRef} isRtl={lang === 'ar'} filterOption={filterOption} components={{ Option }}
+                                value={customer}  onChange={handleSelectCustomer} onInputChange={handleSelectOptions} />
                         </FormControl>
                         <AddCustomer onClick={addCustomerModalOpenHandler} >{t('add')}</AddCustomer>
                     </ActionsWrapper>
@@ -452,7 +511,7 @@ const Cart = props => {
                                 <SharedTableHead name='services' />
                                 <TableBody>
                                     {cartData.services.map((row) => (
-                                        <CartItem type='services' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} />
+                                        <CartItem type='services' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} priceChangeHandler={priceChangeHandler} />
                                     ))}
                                 </TableBody>
                             </Table>
@@ -471,7 +530,7 @@ const Cart = props => {
                                 <SharedTableHead name='products' />
                                 <TableBody>
                                     {cartData.products.map((row) => (
-                                        <CartItem type='products' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} />
+                                        <CartItem type='products' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} priceChangeHandler={priceChangeHandler} />
                                     ))}
                                 </TableBody>
                             </Table>
@@ -490,7 +549,7 @@ const Cart = props => {
                                 <SharedTableHead name='deals' />
                                 <TableBody>
                                     {cartData.deals.map((row) => (
-                                        <CartItem type='deals' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} />
+                                        <CartItem type='deals' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} priceChangeHandler={priceChangeHandler} />
                                     ))}
                                 </TableBody>
                             </Table>
@@ -534,6 +593,7 @@ const Cart = props => {
                         >
                             <MenuItem value='cash'>{t('cash')}</MenuItem>
                             <MenuItem value='card'>{t('card')}</MenuItem>
+                            <MenuItem value='transfer'>{t('transfer')}</MenuItem>
                             <MenuItem value='online'>{t('online')}</MenuItem>
                         </Select>
                     </FormControl>

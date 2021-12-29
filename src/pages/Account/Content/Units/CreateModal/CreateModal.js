@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import ThemeContext from '../../../../../store/theme-context'
 
 import { CustomModal } from '../../../../../components/UI/Modal/Modal';
-import { Grid, InputAdornment, MenuItem, Select } from '@mui/material';
+import { Grid, InputAdornment, MenuItem, Select, Typography } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import ValidationMessage from '../../../../../components/UI/ValidationMessage/ValidationMessage';
 
@@ -20,6 +20,10 @@ import axios from '../../../../../utils/axios-instance';
 
 const CustomTextField = styled(TextField)`
     width: 100%;
+`
+const CustomWrapper = styled.div`
+    display: flex;
+    align-items: center;
 `
 
 const CreateModal = (props) => {
@@ -88,6 +92,7 @@ const CreateModal = (props) => {
     }, [type])
 
     useEffect(() => {
+        console.log(addingUnitSuccess)
         addingUnitSuccess && resetModalData();
     }, [addingUnitSuccess, resetModalData])
 
@@ -169,12 +174,15 @@ const CreateModal = (props) => {
                             {parentUnitError && <ValidationMessage notExist>{t(`Please add parent unit`)}</ValidationMessage>}
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            <CustomTextField id="unit-quantity" type='number' label={t('quantity')} 
-                                variant="outlined" value={unitQuantity} onChange={unitQuantityChangeHandler}
-                                InputProps={{
-                                    startAdornment: <InputAdornment position="start">{t(parentUnit.name)} </InputAdornment>,
-                                }}
-                            />
+                            <CustomWrapper>
+                                <Typography sx={ { display: 'inline-flex', marginRight: '5px' } } variant="h6">=</Typography>
+                                <CustomTextField id="unit-quantity" type='number' label={t('quantity')} 
+                                    variant="outlined" value={unitQuantity} onChange={unitQuantityChangeHandler}
+                                    InputProps={{
+                                        startAdornment: <InputAdornment position="start">{t(parentUnit.name)} </InputAdornment>,
+                                    }}
+                                />
+                            </CustomWrapper>
                             {unitQuantityError && <ValidationMessage notExist>{t(`Please add Quantity`)}</ValidationMessage>}
                         </Grid>
                     </Fragment>

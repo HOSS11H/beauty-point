@@ -295,7 +295,7 @@ const EditModal = (props) => {
             bank_account: expenseAccount,
             cat_id: selectedCategory.value,
             customer_id: selectedAgent.value,
-            image: uploadedImages[0].data_url,
+            image: uploadedImages[0]?.data_url,
         }
         onConfirm(data);
     }, [expenseName, expenseBank, expenseAccount, selectedCategory, selectedAgent, editorState, expenseAmount, id, date, uploadedImages, onConfirm])

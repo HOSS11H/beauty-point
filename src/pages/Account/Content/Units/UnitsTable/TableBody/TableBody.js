@@ -16,6 +16,7 @@ const EnhancedTableBody = props => {
     return (
         <TableBody>
             {fetchedUnits.data.map((row, index) => {
+                const parentUnit = row.type === 'sub' && fetchedUnits.data.find( unit => unit.id === row.parent_id );
                 return (
                     <TableRow
                         hover
@@ -34,7 +35,7 @@ const EnhancedTableBody = props => {
                         </TableCell>
                         <TableCell align="center">
                             <TableData>
-                                {row.unit_quantity}
+                                {`${row.unit_quantity} ${parentUnit?.name}`}
                             </TableData>
                         </TableCell>
                         <TableCell align="center">

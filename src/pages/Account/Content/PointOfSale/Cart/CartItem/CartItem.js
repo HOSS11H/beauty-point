@@ -14,6 +14,7 @@ import { useTranslation } from 'react-i18next';
 import ThemeContext from '../../../../../../store/theme-context';
 import { connect } from 'react-redux';
 import Increment from '../../../../../../components/UI/Increment/Increment';
+import { TextField } from '@mui/material';
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -43,7 +44,7 @@ const CartItem = props => {
     const themeCtx = useContext(ThemeContext)
 
 
-    const { row, remove, increase, decrease, type } = props;
+    const { row, remove, increase, decrease, type, priceChangeHandler } = props;
 
     const [employeeName, setEmployeeName] = useState([]);
 
@@ -65,7 +66,7 @@ const CartItem = props => {
                 <TableData>{row.name}</TableData>
             </TableCell>
             <TableCell align="center" sx={{ padding: '16px 8px' }}>
-                <TableData>{(row.price)}</TableData>
+                <TextField id="service-price" type='number' label={t('price')} variant="outlined" value={row.price} onChange={  e =>  priceChangeHandler(type, row.id, e.target.value)} />
             </TableCell>
             <TableCell align="center" sx={{ padding: '16px 8px' }}>
                 <Increment id={row.id} type={type} increment={increase} decrement={decrease} value={row.quantity} />

@@ -55,6 +55,15 @@ const cartReducer = (state, action) => {
             return updateObject(state, {
                 services: decreasedServices,
             })
+        case 'CHANGE_SERVICE_PRICE' :
+            const changedServiceIndex = state.services.findIndex(service => service.id === action.payload.id);
+            const changedService = {...state.services[changedServiceIndex]}
+            changedService.price = action.payload.price
+            const changedServices = [...state.services]
+            changedServices[changedServiceIndex] = changedService
+            return updateObject(state, {
+                services: changedServices,
+            })
         case 'ADD_TO_PRODUCTS':
             const productIndex = state.products.findIndex(product => product.id === action.payload.id);
             const updatedProducts = [...state.products]
@@ -95,6 +104,15 @@ const cartReducer = (state, action) => {
             return updateObject(state, {
                 products: decreasedProducts,
             })
+        case 'CHANGE_PRODUCT_PRICE' :
+            const changedProductIndex = state.products.findIndex(product => product.id === action.payload.id);
+            const changedProduct = {...state.products[changedProductIndex]}
+            changedProduct.price = action.payload.price
+            const changedProducts = [...state.products]
+            changedProducts[changedProductIndex] = changedProduct
+            return updateObject(state, {
+                products: changedProducts,
+            })
         case 'ADD_TO_DEALS':
             const dealIndex = state.deals.findIndex(deal => deal.id === action.payload.id);
             const updatedDeals = [...state.deals]
@@ -134,6 +152,15 @@ const cartReducer = (state, action) => {
             }
             return updateObject(state, {
                 deals: decreasedDeals,
+            })
+        case 'CHANGE_DEAL_PRICE' :
+            const changedDealIndex = state.deals.findIndex(deal => deal.id === action.payload.id);
+            const changedDeal = {...state.deals[changedDealIndex]}
+            changedDeal.price = action.payload.price
+            const changedDeals = [...state.deals]
+            changedDeals[changedDealIndex] = changedDeal
+            return updateObject(state, {
+                deals: changedDeals,
             })
         case 'RESET_CART':
             const intialState = {
@@ -284,6 +311,36 @@ const PointOfSale = ( props ) => {
             })
         }
     } , [])
+    const changeItemPriceHandler = useCallback(( type, itemId, price ) => {
+        console.log(type, itemId, price);
+        if (type === 'services') {
+            dispatch({
+                type: 'CHANGE_SERVICE_PRICE',
+                payload: {
+                    id: itemId,
+                    price: +price,
+                },
+            })
+        }
+        if (type === 'products') {
+            dispatch({
+                type: 'CHANGE_PRODUCT_PRICE',
+                payload: {
+                    id: itemId,
+                    price: +price,
+                },
+            })
+        }
+        if (type === 'deals') {
+            dispatch({
+                type: 'CHANGE_DEAL_PRICE',
+                payload: {
+                    id: itemId,
+                    price: +price,
+                },
+            })
+        }
+    }, [])
     const resetCartHandler = useCallback((  ) => {
         dispatch({
             type: 'RESET_CART',
@@ -314,7 +371,7 @@ const PointOfSale = ( props ) => {
                 </CustomCard>
             </Grid>
             <Grid item xs={12} md={6}>
-                <Cart cartData={cart} removeFromCart={removeFromCartHandler} increaseItem={increaseItemHandler} decreaseItem={decreaseItemHandler} resetCart={resetCartHandler} purchase={purchaseCartHandler} />
+                <Cart cartData={cart} removeFromCart={removeFromCartHandler} increaseItem={increaseItemHandler} decreaseItem={decreaseItemHandler} resetCart={resetCartHandler} purchase={purchaseCartHandler} priceChangeHandler={changeItemPriceHandler} />
                 <CustomizedSnackbars show={messageShown} message={t('Booking Created')} type='success' onClose={closeMessageHandler} />
             </Grid>
         </Grid>
