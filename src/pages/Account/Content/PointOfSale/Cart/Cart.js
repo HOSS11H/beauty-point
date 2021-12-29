@@ -417,6 +417,7 @@ const Cart = props => {
         setCartDataError(false)
         resetCart();
     }, [resetCart])
+    console.log(discountType)
 
     useEffect(() => {
         bookingCreated && resetCartHandler();
