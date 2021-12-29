@@ -97,6 +97,8 @@ const SearchFilters = (props) => {
 
     const [paymentStatus, setPaymentStatus] = useState('');
 
+    const [paymentMethod, setPaymentMethod] = useState('');
+
     useEffect(() => {
         fetchLocationsHandler(lang);
         fetchProductsHandler(lang, 1, 'all', 'name', 'desc');
@@ -124,7 +126,6 @@ const SearchFilters = (props) => {
     }
 
     const handleSelectOptions = (value, actions) => {
-        console.log('excuted')
         setCustomerInput(value);
     }
     useEffect(() => {
@@ -177,6 +178,9 @@ const SearchFilters = (props) => {
     const handlePaymentStatusChange = (event) => {
         setPaymentStatus(event.target.value);
     }
+    const handlePaymentMethodChange = (event) => {
+        setPaymentMethod(event.target.value);
+    }
 
     const ConfirmFilteringHandler = () => {
         const selectedCustomer = customer && fetchedCustomers.find(customerObj => customerObj.id === customer.value);
@@ -192,6 +196,7 @@ const SearchFilters = (props) => {
             booking_type: bookingType,
             location: location,
             payment: paymentStatus,
+            payment_method: paymentMethod,
         }
         filterTabularReportHandler(selectedSearchParams);
     }
@@ -210,6 +215,7 @@ const SearchFilters = (props) => {
         setBookingType('');
         setBookingStatus('');
         setPaymentStatus('');
+        setPaymentMethod('');
         setOptions([]);
         setCustomer([]);
         filterTabularReportHandler(searchParams);
@@ -367,6 +373,22 @@ const SearchFilters = (props) => {
                         >
                             <MenuItem value='completed'>{t('completed')}</MenuItem>
                             <MenuItem value='pending'>{t('pending')}</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12} sm={6} md={4}>
+                    <FormControl fullWidth sx={{ minWidth: '200px' }} >
+                        <InputLabel id="payment-method">{t('payment method')}</InputLabel>
+                        <Select
+                            labelId="payment-method"
+                            id="payment-method-select"
+                            value={paymentMethod}
+                            label={t('payment method')}
+                            onChange={handlePaymentMethodChange}
+                        >
+                            <MenuItem value='cash'>{t('cash')}</MenuItem>
+                            <MenuItem value='card'>{t('card')}</MenuItem>
+                            <MenuItem value='online'>{t('online')}</MenuItem>
                         </Select>
                     </FormControl>
                 </Grid>
