@@ -348,7 +348,7 @@ const resources = {
             'add item': 'إضافة عنصر',
             'clear all': 'مسح الكل',
             'piece': 'قطعة',
-            'online': 'الكتروني'
+            'online': 'تحويل اونلاين'
         }
     }
 };
