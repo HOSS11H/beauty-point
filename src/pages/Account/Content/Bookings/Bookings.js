@@ -28,7 +28,7 @@ function Bookings(props) {
     const { token } = authCtx
 
     const [selectedBookingId, setSelectedBookingId] = useState(null);
-    
+
     const [viewModalOpened, setViewModalOpened] = useState(false);
 
     const [editModalOpened, setEditModalOpened] = useState(false);
@@ -57,7 +57,7 @@ function Bookings(props) {
     const handleChangePage = useCallback((event, newPage) => {
         setPage(newPage);
     }, []);
-    
+
     // Edit Modal
     const editModalOpenHandler = useCallback((id) => {
         setEditModalOpened(true);
