@@ -431,7 +431,7 @@ const CreateModal = (props) => {
                         {
                             allUnits.map(unit => {
                                 return (
-                                    <MenuItem key={unit.id} value={unit.id}>{unit.name}</MenuItem>
+                                    <MenuItem key={unit.id} value={unit.id}>{`${unit.name} = ${unit.unit_quantity} ${t('piece')}`}</MenuItem>
                                 )
                             })
                         }

@@ -347,6 +347,7 @@ const resources = {
             'unit': 'وحدة',
             'add item': 'إضافة عنصر',
             'clear all': 'مسح الكل',
+            'piece': 'قطعة',
         }
     }
 };
