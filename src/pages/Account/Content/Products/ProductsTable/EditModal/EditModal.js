@@ -28,6 +28,7 @@ import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 import { connect } from 'react-redux';
 import { formatCurrency } from '../../../../../../shared/utility';
+import axios from '../../../../../../utils/axios-instance';
 
 
 const CustomTextField = styled(TextField)`
@@ -149,17 +150,20 @@ const EditModal = (props) => {
 
     let productData = fetchedProducts.data[selectedProductIndex];
 
-    const { name, description, price, discount, discount_type, discount_price, location, status, image, quantity } = productData;
+    const { name, description, price, discount, discount_type, discount_price, location, status, image, quantity, unit_id } = productData;
 
     const [productName, setProductName] = useState(name);
+    const [productNameError, setProductNameError] = useState(false);
 
     const html = description;
     const contentBlock = htmlToDraft(html);
     const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
 
     const [editorState, setEditorState] = useState(EditorState.createWithContent(contentState))
+    const [productDescriptionError, setProductDescriptionError] = useState(false);
 
     const [locationName, setLocationName] = useState(location.id);
+    const [productLocationError, setProductLocationError] = useState(false);
 
     const [productPrice, setProductPrice] = useState(price);
     
@@ -173,6 +177,10 @@ const EditModal = (props) => {
     const [productStatus, setProductStatus] = useState(status);
     
     const [productQuantity, setProductQuantity] = useState(quantity);
+    const [productQuantityError, setProductQuantityError] = useState(false);
+
+    const [allUnits, setAllUnits] = useState([]);
+    const [productUnit, setProductUnit] = useState(unit_id);
 
     const [uploadedImages, setUploadedImages] = useState([ { data_url: image} ]);
 
@@ -193,9 +201,16 @@ const EditModal = (props) => {
         }
     }, [discountType, productDiscount, productPrice])
 
+    useEffect(() => {
+        axios.get(`/vendors/units`)
+            .then(res => {
+                setAllUnits(res.data.data);
+            })
+    }, [])
 
     const productNameChangeHandler = (event) => {
         setProductName(event.target.value);
+        setProductNameError(false);
     }
 
     const onImageChangeHandler = (imageList, addUpdateIndex) => {
@@ -212,6 +227,7 @@ const EditModal = (props) => {
     };
     const onEditorChange = newState => {
         setEditorState(newState)
+        setProductDescriptionError(false);
     }
     const handleLocationChange = (event) => {
         const {
@@ -221,6 +237,7 @@ const EditModal = (props) => {
             // On autofill we get a the stringified value.
             typeof value === 'string' ? value.split(',') : value,
         );
+        setProductLocationError(false);
     };
 
     const productPriceChangeHandler = (event) => {
@@ -243,6 +260,10 @@ const EditModal = (props) => {
         if (event.target.value >= 0) {
             setProductQuantity(event.target.value);
         }
+        setProductQuantityError(false);
+    }
+    const productUnitChangeHandler = (event) => {
+        setProductUnit(event.target.value);
     }
 
     const closeModalHandler = useCallback(() => {
@@ -250,7 +271,25 @@ const EditModal = (props) => {
     }, [onClose])
 
     const confirmEditHandler = useCallback(() => {
-        if ( productPriceError)   { return; }
+        if (productName.trim().length === 0) {
+            setProductNameError(true);
+            return;
+        }
+        if (editorState.getCurrentContent().hasText() === false) {
+            setProductDescriptionError(true);
+            return;
+        }
+
+        if (productPriceError) { return; }
+
+        if (locationName === '') {
+            setProductLocationError(true);
+            return;
+        }
+        if (+productQuantity === 0) {
+            setProductQuantityError(true);
+            return;
+        }
 
         const selectedLocation = fetchedLocations.find(location => location.id === locationName);
         const data = {
@@ -266,15 +305,17 @@ const EditModal = (props) => {
             image: defaultImage,
             quantity: +productQuantity,
             location: selectedLocation,
+            unit_id: productUnit,
         }
         onConfirm(data);
 
-    }, [defaultImage, discountType, editorState, fetchedLocations, id, locationName, onConfirm, priceAfterDiscount, productDiscount, productName, productPrice, productPriceError, productQuantity, productStatus])
+    }, [defaultImage, discountType, editorState, fetchedLocations, id, locationName, onConfirm, priceAfterDiscount, productDiscount, productName, productPrice, productPriceError, productQuantity, productStatus, productUnit])
 
     let content = (
         <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
                 <CustomTextField id="product-name" label={t('name')} variant="outlined" value={productName} onChange={productNameChangeHandler} />
+                {productNameError && <ValidationMessage notExist>{t(`Please add name`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6}>
                 <FormControl sx={{ width: '100%' }}>
@@ -298,28 +339,7 @@ const EditModal = (props) => {
                         textAlignment={themeCtx.direction === 'rtl' ? 'right' : 'left'}
                     />
                 </EditorWrapper>
-            </Grid>
-            <Grid item xs={12} sm={6} >
-                <FormControl sx={{ width: '100%' }}>
-                    <InputLabel id="location-label">{t('location')}</InputLabel>
-                    <Select
-                        value={locationName}
-                        onChange={handleLocationChange}
-                        inputProps={{ 'aria-label': 'Without label' }}
-                    >
-                        {fetchedLocations.map((location) => (
-                            <MenuItem
-                                key={location.id}
-                                value={location.id}
-                            >
-                                {location.name}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-                <CustomTextField id="product-quantity" type='number' label={t('quantity')} variant="outlined" value={productQuantity} onChange={productQuantityChangeHandler} />
+                {productDescriptionError && <ValidationMessage notExist>{t(`Please add Description`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6}>
                 <CustomTextField id="product-price" type='number' label={t('price')} variant="outlined" value={productPrice} onChange={productPriceChangeHandler} />
@@ -345,6 +365,50 @@ const EditModal = (props) => {
                     <p>{t('price after discount')}</p>
                     <p>{formatCurrency(priceAfterDiscount)}</p>
                 </PriceCalculation>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+                <FormControl sx={{ width: '100%' }}>
+                    <InputLabel id="location-label">{t('location')}</InputLabel>
+                    <Select
+                        value={locationName}
+                        onChange={handleLocationChange}
+                        inputProps={{ 'aria-label': 'Without label' }}
+                    >
+                        {fetchedLocations.map((location) => (
+                            <MenuItem
+                                key={location.id}
+                                value={location.id}
+                            >
+                                {location.name}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+                {productLocationError && <ValidationMessage notExist>{t(`Please add Location`)}</ValidationMessage>}
+            </Grid>
+            <Grid item xs={12} sm={6}>
+                <CustomTextField id="product-quantity" type='number' label={t('quantity')} variant="outlined" value={productQuantity} onChange={productQuantityChangeHandler} />
+                {productQuantityError && <ValidationMessage notExist>{t(`Please add Quantity`)}</ValidationMessage>}
+            </Grid>
+            <Grid item xs={12} sm={6}>
+                <FormControl sx={{ width: '100%' }}>
+                    <InputLabel id="product-unit">{t('unit')}</InputLabel>
+                    <Select
+                        labelId="product-unit"
+                        label={t('unit')}
+                        value={productUnit}
+                        onChange={productUnitChangeHandler}
+                        inputProps={{ 'aria-label': 'Without label' }}
+                    >
+                        {
+                            allUnits.map(unit => {
+                                return (
+                                    <MenuItem key={unit.id} value={unit.id}>{`${unit.name} = ${unit.unit_quantity} ${t('piece')}`}</MenuItem>
+                                )
+                            })
+                        }
+                    </Select>
+                </FormControl>
             </Grid>
             <Grid item xs={12}>
                 <ImageUploading
