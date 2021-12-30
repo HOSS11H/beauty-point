@@ -110,6 +110,12 @@ const reducer = ( state = intialState , action ) => {
                 updatingServiceSuccess: true,
                 updatingServiceMessage: action.message,
             })
+        case ( actionTypes.RESET_UPDATE_SERVICE_SUCCESS ) : {
+            return updateObject( state , {
+                updatingServiceSuccess: false,
+                updatingServiceMessage: null,
+            })
+        }
         case ( actionTypes.UPDATE_SERVICE_FAILED ) :
             return updateObject( state , {
                 updatingService: false,
@@ -125,7 +131,6 @@ const reducer = ( state = intialState , action ) => {
         case ( actionTypes.CREATE_SERVICE_SUCCESS ) :
             const upgradedServices = [...state.services.data]
             upgradedServices.push(action.serviceData);
-
             return updateObject( state , {
                 services: {
                     ...state.services,
@@ -139,6 +144,12 @@ const reducer = ( state = intialState , action ) => {
                 creatingServiceSuccess: true,
                 creatingServiceMessage: action.message,
             })
+        case ( actionTypes.RESET_CREATE_SERVICE_SUCCESS ) : {
+            return updateObject( state , {
+                creatingServiceSuccess: false,
+                creatingServiceMessage: null,
+            })
+        }
         case ( actionTypes.CREATE_SERVICE_FAILED ) :
             return updateObject( state , {
                 creatingService: false,

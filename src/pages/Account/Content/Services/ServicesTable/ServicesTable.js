@@ -48,7 +48,7 @@ function ServicesTable(props) {
     const { t } = useTranslation()
 
 
-    const { fetchedServices, fetchServicesHandler, loadingServices, deleteServiceHandler, updateServiceHandler, searchingServices, searchingServicesSuccess } = props;
+    const { fetchedServices, fetchServicesHandler, loadingServices, deleteServiceHandler, updateServiceHandler, searchingServices, searchingServicesSuccess, creatingServiceSuccess, updatingServiceSuccess } = props;
 
     const themeCtx = useContext(ThemeContext)
 
@@ -72,6 +72,13 @@ function ServicesTable(props) {
     useEffect(() => {
         fetchServicesHandler(lang, page, rowsPerPage, orderBy, order);
     }, [fetchServicesHandler, lang, order, orderBy, page, rowsPerPage]);
+
+    useEffect(() => {
+        creatingServiceSuccess && fetchServicesHandler(lang, page, rowsPerPage, orderBy, order);
+    }, [creatingServiceSuccess, fetchServicesHandler, lang, order, orderBy, page, rowsPerPage]);
+    useEffect(() => {
+        updatingServiceSuccess && fetchServicesHandler(lang, page, rowsPerPage, orderBy, order);
+    }, [creatingServiceSuccess, fetchServicesHandler, lang, order, orderBy, page, rowsPerPage, updatingServiceSuccess]);
 
 
     const handleRequestSort = (event, property) => {
@@ -234,6 +241,8 @@ const mapStateToProps = state => {
         loadingServices: state.services.fetchingServices,
         searchingServices: state.services.searchingServices,
         searchingServicesSuccess: state.services.searchingServicesSuccess,
+        creatingServiceSuccess: state.services.creatingServiceSuccess,
+        updatingServiceSuccess: state.services.updatingServiceSuccess,
     }
 }
 

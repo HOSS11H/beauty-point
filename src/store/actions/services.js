@@ -22,7 +22,7 @@ export const fetchServicesFailed = (errorMessage) => {
 export const fetchServices = (language, page, perPage, orderBy, orderDir) => {
     return dispatch => {
         dispatch(fetchServicesStart())
-        axios.get(`/vendors/services?page=${page + 1}&per_page=${perPage}&order_by=${orderBy}&order_dir=${orderDir}&include[]=category&include[]=location&include[]=users&include[]=bookingItems&include[]=company`, {
+        axios.get(`/vendors/services?page=${page + 1}&per_page=${perPage}&order_by=${orderBy}&order_dir=${orderDir}&include[]=category&include[]=location&include[]=users&include[]=bookingItems&include[]=company&include[]=products`, {
             headers: {
                 'Accept-Language': language
             }
@@ -100,6 +100,11 @@ export const updateServiceSuccess = (message, updatedServiceData) => {
         serviceData: updatedServiceData,
     }
 }
+export const resetUpdateServiceSuccess = () => {
+    return {
+        type: actionTypes.RESET_UPDATE_SERVICE_SUCCESS,
+    }
+}
 export const updateServiceFailed = (message) => {
     return {
         type: actionTypes.UPDATE_SERVICE_FAILED,
@@ -111,12 +116,15 @@ export const updateService = (data) => {
     return dispatch => {
         dispatch(updateServiceStart())
         axios.put(`/vendors/services/${data.id}`, data)
-            .then(response => {
-                dispatch(updateServiceSuccess(response.data, data));
-            })
-            .catch(err => {
-                dispatch(updateServiceFailed(err.message))
-            })
+        .then(response => {
+            dispatch(updateServiceSuccess(response.data, data));
+            setTimeout(() => {
+                dispatch(resetUpdateServiceSuccess())
+            }, 2000)
+        })
+        .catch(err => {
+            dispatch(updateServiceFailed(err.message))
+        })
     }
 }
 export const createServiceStart = () => {
@@ -129,6 +137,11 @@ export const createServiceSuccess = (message, createdServiceData) => {
         type: actionTypes.CREATE_SERVICE_SUCCESS,
         message: message,
         serviceData: createdServiceData,
+    }
+}
+export const resetCreateServiceSuccess = () => {
+    return {
+        type: actionTypes.RESET_CREATE_SERVICE_SUCCESS,
     }
 }
 export const createServiceFailed = (message) => {
@@ -145,6 +158,9 @@ export const createService = (data) => {
         axios.post(`/vendors/services`, data)
             .then(response => {
                 dispatch(createServiceSuccess(null, { ...data, ...response.data }));
+                setTimeout(() => {
+                    dispatch(resetCreateServiceSuccess())
+                }, 2000)
             })
             .catch(err => {
                 dispatch(createServiceFailed(err.message))
@@ -173,7 +189,7 @@ export const searchServicesFailed = (errorMessage) => {
 export const searchServices = (language, word) => {
     return dispatch => {
         dispatch(searchServicesStart())
-        axios.get(`/vendors/services?term=${word}&page=1&per_page=15&include[]=category&include[]=location&include[]=users&include[]=bookingItems&include[]=company`, {
+        axios.get(`/vendors/services?term=${word}&page=1&per_page=15&include[]=category&include[]=location&include[]=users&include[]=bookingItems&include[]=company&include[]=products`, {
             headers: {
                 'Accept-Language': language
             }

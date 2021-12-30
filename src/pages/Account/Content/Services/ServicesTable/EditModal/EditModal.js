@@ -261,7 +261,7 @@ const EditModal = (props) => {
 
     let serviceData = fetchedServices.data[selectedServiceIndex];
 
-    const { name, description, price, discount, discount_type, discount_price, users = [], status, image, location, category, time, time_type } = serviceData;
+    const { name, description, price, discount, discount_type, discount_price, users = [], status, image, location, category, time, time_type, products } = serviceData;
 
     let employeesIds = [];
     users.map(employee => {
@@ -269,16 +269,31 @@ const EditModal = (props) => {
         return employeesIds;
     })
 
+    let intialCart = [
+        {
+            id: '',
+            name: '',
+            quantity: '',
+            unit_id: '',
+            unitName: '',
+        },
+    ]
+
+    const [allUnits, setAllUnits] = useState([]);
+
+    if ( !!products ) {
+        intialCart = products.map(product => {
+            return {
+                id: product.pivot.products_id,
+                name: product.name,
+                quantity: product.pivot.product_quantity,
+                unit_id: product.pivot.unit_id,
+            }
+        })
+    }
+
     const [cart, dispatch] = useReducer(cartReducer, {
-        products: [
-            {
-                id: '',
-                name: '',
-                quantity: '',
-                unit_id: '',
-                unitName: '',
-            },
-        ],
+        products: intialCart
     });
 
     const [serviceName, setServiceName] = useState(name);
@@ -316,11 +331,9 @@ const EditModal = (props) => {
 
     const [serviceStatus, setServiceStatus] = useState(status);
 
-    const [type, setType] = useState('single');
+    const [type, setType] = useState(!!products ? 'combo' : 'single');
 
     const [allProducts, setAllProducts] = useState([]);
-
-    const [allUnits, setAllUnits] = useState([]);
 
     const [uploadedImages, setUploadedImages] = useState([{ data_url: image }]);
 
@@ -486,7 +499,6 @@ const EditModal = (props) => {
         })
     }
     const productQuantityChangeHandler = ( val, index ) => {
-        console.log(val, index);
         dispatch({
             type: 'PRODUCT_QUANTITY_CHANGE',
             index: index,
@@ -533,6 +545,7 @@ const EditModal = (props) => {
         let data;
         if ( type === 'single' ) {
             data = {
+                id: id,
                 name: serviceName,
                 description: draftToHtml(convertToRaw(editorState.getCurrentContent())),
                 price: +servicePrice,
@@ -554,6 +567,7 @@ const EditModal = (props) => {
             }
         } else if ( type === 'combo' ) {
             data = {
+                id: id,
                 name: serviceName,
                 description: draftToHtml(convertToRaw(editorState.getCurrentContent())),
                 price: +servicePrice,
@@ -576,7 +590,7 @@ const EditModal = (props) => {
             }
         }
         onConfirm(data);
-    }, [cart.products, categoryName, defaultImage, discountType, editorState, employeeName, fetchedCategories, fetchedEmployees, fetchedLocations, locationName, onConfirm, priceAfterDiscount, serviceDiscount, serviceName, servicePrice, servicePriceError, serviceStatus, timeRequired, timeType, type, uploadedImages])
+    }, [cart.products, categoryName, defaultImage, discountType, editorState, employeeName, fetchedCategories, fetchedEmployees, fetchedLocations, id, locationName, onConfirm, priceAfterDiscount, serviceDiscount, serviceName, servicePrice, servicePriceError, serviceStatus, timeRequired, timeType, type, uploadedImages])
 
     let content = (
         <Grid container spacing={2}>
