@@ -14,6 +14,10 @@ import EditModal from './EditModal/EditModal';
 import EnhancedTableBody from './TableBody/TableBody';
 import SearchMessage from "../../../../../components/Search/SearchMessage/SearchMessage";
 import { useTranslation } from 'react-i18next';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
 
 const DealsTableWrapper = styled.div`
     display: flex;
@@ -33,7 +37,10 @@ const DealsTableWrapper = styled.div`
         max-width: 100%;
     }
 `
-
+const TablePaginationWrapper = styled.div`
+    display: flex;
+    justify-content: flex-end;
+`
 
 
 const intialRowsPerPage = 15
@@ -81,6 +88,10 @@ function DealsTable(props) {
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
     };
+    const handlePerPageChange = useCallback((event) => {
+        setRowsPerPage(event.target.value);
+        setPage(0);
+    }, []);
 
 
     // Delete Modal
@@ -93,7 +104,7 @@ function DealsTable(props) {
         setSelectedDealId(null);
     }, [])
     const deleteModalConfirmHandler = useCallback((id) => {
-        deleteDealHandler( id);
+        deleteDealHandler(id);
         setDeleteModalOpened(false);
         setSelectedDealId(null);
     }, [deleteDealHandler])
@@ -152,6 +163,24 @@ function DealsTable(props) {
             <Fragment>
                 <Paper sx={{ width: '100%', boxShadow: 'none' }}>
                     <TableContainer >
+                        <TablePaginationWrapper>
+                            <FormControl sx={{ minWidth: '75px', }} variant="filled" >
+                                <InputLabel id="show-num">{t('show')}</InputLabel>
+                                <Select
+                                    labelId="show-num"
+                                    id="show-num-select"
+                                    value={rowsPerPage}
+                                    label={t('show')}
+                                    onChange={handlePerPageChange}
+                                >
+                                    <MenuItem value='all'>{t('all')}</MenuItem>
+                                    <MenuItem value='5'>{t('5')}</MenuItem>
+                                    <MenuItem value='10'>{t('10')}</MenuItem>
+                                    <MenuItem value='15'>{t('15')}</MenuItem>
+                                    <MenuItem value='20'>{t('20')}</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </TablePaginationWrapper>
                         <Table
                             aria-labelledby="tableTitle"
                             size='medium'
@@ -172,15 +201,17 @@ function DealsTable(props) {
                             />
                         </Table>
                     </TableContainer>
-                    <TablePaginationActions
-                        component="div"
-                        count={fetchedDeals.data.length}
-                        total={fetchedDeals.meta ? fetchedDeals.meta.total : 0}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onPageChange={handleChangePage}
-                        loading={loadingDeals}
-                    />
+                    {rowsPerPage !== 'all' && (
+                        <TablePaginationActions
+                            component="div"
+                            count={fetchedDeals.data.length}
+                            total={fetchedDeals.meta ? fetchedDeals.meta.total : 0}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onPageChange={handleChangePage}
+                            loading={loadingDeals}
+                        />
+                    )}
                 </Paper>
                 <DeleteModal show={deleteModalOpened} id={selectedDealId}
                     onClose={deleteModalCloseHandler} onConfirm={deleteModalConfirmHandler.bind(null, selectedDealId)}
@@ -220,8 +251,8 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         fetchDealsHandler: (language, page, perPage, orderBy, orderDir) => dispatch(fetchDeals(language, page, perPage, orderBy, orderDir)),
-        deleteDealHandler: ( id ) => dispatch(deleteDeal( id )),
-        editDealHandler: ( data ) => dispatch(updateDeal(data)),
+        deleteDealHandler: (id) => dispatch(deleteDeal(id)),
+        editDealHandler: (data) => dispatch(updateDeal(data)),
         fetchServicesHandler: (lang, location) => dispatch(fetchServicesByLocation(lang, location)),
     }
 }

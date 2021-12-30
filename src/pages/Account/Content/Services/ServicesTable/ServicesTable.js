@@ -14,6 +14,10 @@ import ViewModal from './ViewModal/ViewModal';
 import EditModal from './EditModal/EditModal';
 import SearchMessage from "../../../../../components/Search/SearchMessage/SearchMessage";
 import { useTranslation } from 'react-i18next';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
 
 const ServicesTableWrapper = styled.div`
     display: flex;
@@ -31,6 +35,10 @@ const ServicesTableWrapper = styled.div`
         border-radius:20px;
         padding: 20px;
     }
+`
+const TablePaginationWrapper = styled.div`
+    display: flex;
+    justify-content: flex-end;
 `
 
 const intialRowsPerPage = 15
@@ -71,6 +79,10 @@ function ServicesTable(props) {
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
     };
+    const handlePerPageChange = useCallback((event) => {
+        setRowsPerPage(event.target.value);
+        setPage(0);
+    }, []);
 
     // Delete Modal
     const deleteModalOpenHandler = useCallback((id) => {
@@ -142,6 +154,24 @@ function ServicesTable(props) {
             <Fragment>
                 <Paper sx={{ width: '100%', boxShadow: 'none' }}>
                     <TableContainer>
+                        <TablePaginationWrapper>
+                            <FormControl sx={{ minWidth: '75px', }} variant="filled" >
+                                <InputLabel id="show-num">{t('show')}</InputLabel>
+                                <Select
+                                    labelId="show-num"
+                                    id="show-num-select"
+                                    value={rowsPerPage}
+                                    label={t('show')}
+                                    onChange={handlePerPageChange}
+                                >
+                                    <MenuItem value='all'>{t('all')}</MenuItem>
+                                    <MenuItem value='5'>{t('5')}</MenuItem>
+                                    <MenuItem value='10'>{t('10')}</MenuItem>
+                                    <MenuItem value='15'>{t('15')}</MenuItem>
+                                    <MenuItem value='20'>{t('20')}</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </TablePaginationWrapper>
                         <Table
                             sx={{ minWidth: 750 }}
                             aria-labelledby="tableTitle"
@@ -163,15 +193,17 @@ function ServicesTable(props) {
                             />
                         </Table>
                     </TableContainer>
-                    <TablePaginationActions
-                        component="div"
-                        count={fetchedServices.data.length}
-                        total={fetchedServices.meta ? fetchedServices.meta.total : null}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onPageChange={handleChangePage}
-                        loading={loadingServices}
-                    />
+                    {rowsPerPage !== 'all' && (
+                        <TablePaginationActions
+                            component="div"
+                            count={fetchedServices.data.length}
+                            total={fetchedServices.meta ? fetchedServices.meta.total : null}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onPageChange={handleChangePage}
+                            loading={loadingServices}
+                        />
+                    )}
                 </Paper>
                 <DeleteModal show={deleteModalOpened} id={selectedServiceId}
                     onClose={deleteModalCloseHandler} onConfirm={deleteModalConfirmHandler.bind(null, selectedServiceId)}

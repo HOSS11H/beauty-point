@@ -160,6 +160,7 @@ const Auth = props => {
             })
             .catch( err => {
                 setErrorMessage(err.message.split('_').join(' ').toLowerCase())
+                console.log(err)
             })
     }
 
