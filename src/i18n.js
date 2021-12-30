@@ -321,7 +321,7 @@ const resources = {
             'roles & permissions': 'الأدوار و الأذونات',
             'members': 'الأعضاء',
             'view members details': 'عرض تفاصيل الأعضاء',
-            'Business Service': 'خدمات الأعمال',
+            'Business Service': 'الخدمات',
             'Employee Group': 'مجموعة الموظفين',
             'Employee Leave': 'إجازات الموظفين',
             'Employee Schedule': 'جدول الموظفين',
@@ -350,6 +350,7 @@ const resources = {
             'piece': 'قطعة',
             'online': 'اونلاين',
             'transfer': 'تحويل',
+            'Booking Created': 'تم إنشاء الحجز',
         }
     }
 };

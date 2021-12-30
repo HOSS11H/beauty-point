@@ -223,7 +223,7 @@ const Auth = props => {
                                 { isLogin && (
                                     <FormLink>
                                         {loginFormText.formSwitchText}
-                                        <a href='https://beautypoint.sa/register'>
+                                        <a href='https://old.beautypoint.sa/register'>
                                             {loginFormText.formSwitchLink}
                                         </a>
                                     </FormLink>

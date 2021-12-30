@@ -1,4 +1,4 @@
-import { Grid } from '@mui/material';
+import { Backdrop, CircularProgress, Grid } from '@mui/material';
 import { useContext, useState, useEffect, useCallback, useReducer } from 'react';
 import CustomCard from '../../../../components/UI/Card/Card';
 import FilteredResults from './FilteredResults/FilteredResults';
@@ -14,14 +14,14 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 const cartReducer = (state, action) => {
-    switch(action.type) {
+    switch (action.type) {
         case 'ADD_TO_SERVICES':
             const serviceIndex = state.services.findIndex(service => service.id === action.payload.id);
             const updatedServices = [...state.services]
-            if (serviceIndex === -1) { 
+            if (serviceIndex === -1) {
                 updatedServices.push(action.payload)
             } else {
-                const updatedItem = {...updatedServices[serviceIndex]}
+                const updatedItem = { ...updatedServices[serviceIndex] }
                 updatedItem.quantity = updatedItem.quantity + 1
                 updatedServices[serviceIndex] = updatedItem
             }
@@ -33,31 +33,31 @@ const cartReducer = (state, action) => {
             return updateObject(state, {
                 services: filteredServices,
             })
-        case 'INCREASE_SERVICE' :
+        case 'INCREASE_SERVICE':
             const increasedServiceIndex = state.services.findIndex(service => service.id === action.payload);
-            const increasedService = {...state.services[increasedServiceIndex]}
+            const increasedService = { ...state.services[increasedServiceIndex] }
             increasedService.quantity = increasedService.quantity + 1;
             const increasedServices = [...state.services]
             increasedServices[increasedServiceIndex] = increasedService
             return updateObject(state, {
                 services: increasedServices,
             })
-        case 'DECREASE_SERVICE' :
+        case 'DECREASE_SERVICE':
             const decreasedServiceIndex = state.services.findIndex(service => service.id === action.payload);
-            const decreasedService = {...state.services[decreasedServiceIndex]}
+            const decreasedService = { ...state.services[decreasedServiceIndex] }
             const decreasedServices = [...state.services]
             if (decreasedService.quantity === 1) {
                 decreasedServices.splice(decreasedServiceIndex, 1)
-            } else { 
+            } else {
                 decreasedService.quantity = decreasedService.quantity - 1
                 decreasedServices[decreasedServiceIndex] = decreasedService
             }
             return updateObject(state, {
                 services: decreasedServices,
             })
-        case 'CHANGE_SERVICE_PRICE' :
+        case 'CHANGE_SERVICE_PRICE':
             const changedServiceIndex = state.services.findIndex(service => service.id === action.payload.id);
-            const changedService = {...state.services[changedServiceIndex]}
+            const changedService = { ...state.services[changedServiceIndex] }
             changedService.price = action.payload.price
             const changedServices = [...state.services]
             changedServices[changedServiceIndex] = changedService
@@ -67,10 +67,10 @@ const cartReducer = (state, action) => {
         case 'ADD_TO_PRODUCTS':
             const productIndex = state.products.findIndex(product => product.id === action.payload.id);
             const updatedProducts = [...state.products]
-            if (productIndex === -1) { 
+            if (productIndex === -1) {
                 updatedProducts.push(action.payload)
             } else {
-                const updatedItem = {...updatedProducts[productIndex]}
+                const updatedItem = { ...updatedProducts[productIndex] }
                 updatedItem.quantity = updatedItem.quantity + 1
                 updatedProducts[productIndex] = updatedItem
             }
@@ -82,18 +82,18 @@ const cartReducer = (state, action) => {
             return updateObject(state, {
                 products: filteredProducts,
             })
-        case 'INCREASE_PRODUCT' :
+        case 'INCREASE_PRODUCT':
             const increasedProductIndex = state.products.findIndex(product => product.id === action.payload);
-            const increasedProduct = {...state.products[increasedProductIndex]}
+            const increasedProduct = { ...state.products[increasedProductIndex] }
             increasedProduct.quantity = increasedProduct.quantity + 1
             const increasedProducts = [...state.products]
             increasedProducts[increasedProductIndex] = increasedProduct
             return updateObject(state, {
                 products: increasedProducts,
             })
-        case 'DECREASE_PRODUCT' :
+        case 'DECREASE_PRODUCT':
             const decreasedProductIndex = state.products.findIndex(product => product.id === action.payload);
-            const decreasedProduct = {...state.products[decreasedProductIndex]}
+            const decreasedProduct = { ...state.products[decreasedProductIndex] }
             const decreasedProducts = [...state.products]
             if (decreasedProduct.quantity === 1) {
                 decreasedProducts.splice(decreasedProductIndex, 1)
@@ -104,9 +104,9 @@ const cartReducer = (state, action) => {
             return updateObject(state, {
                 products: decreasedProducts,
             })
-        case 'CHANGE_PRODUCT_PRICE' :
+        case 'CHANGE_PRODUCT_PRICE':
             const changedProductIndex = state.products.findIndex(product => product.id === action.payload.id);
-            const changedProduct = {...state.products[changedProductIndex]}
+            const changedProduct = { ...state.products[changedProductIndex] }
             changedProduct.price = action.payload.price
             const changedProducts = [...state.products]
             changedProducts[changedProductIndex] = changedProduct
@@ -116,10 +116,10 @@ const cartReducer = (state, action) => {
         case 'ADD_TO_DEALS':
             const dealIndex = state.deals.findIndex(deal => deal.id === action.payload.id);
             const updatedDeals = [...state.deals]
-            if (dealIndex === -1) { 
+            if (dealIndex === -1) {
                 updatedDeals.push(action.payload)
             } else {
-                const updatedItem = {...updatedDeals[dealIndex]}
+                const updatedItem = { ...updatedDeals[dealIndex] }
                 updatedItem.quantity = updatedItem.quantity + 1
                 updatedDeals[dealIndex] = updatedItem
             }
@@ -131,18 +131,18 @@ const cartReducer = (state, action) => {
             return updateObject(state, {
                 deals: filteredDeals,
             })
-        case 'INCREASE_DEAL' :
+        case 'INCREASE_DEAL':
             const increasedDealIndex = state.deals.findIndex(deal => deal.id === action.payload);
-            const increasedDeal = {...state.deals[increasedDealIndex]}
+            const increasedDeal = { ...state.deals[increasedDealIndex] }
             increasedDeal.quantity = increasedDeal.quantity + 1
             const increasedDeals = [...state.deals]
             increasedDeals[increasedDealIndex] = increasedDeal
             return updateObject(state, {
                 deals: increasedDeals,
             })
-        case 'DECREASE_DEAL' :
+        case 'DECREASE_DEAL':
             const decreasedDealIndex = state.deals.findIndex(deal => deal.id === action.payload);
-            const decreasedDeal = {...state.deals[decreasedDealIndex]}
+            const decreasedDeal = { ...state.deals[decreasedDealIndex] }
             const decreasedDeals = [...state.deals]
             if (decreasedDeal.quantity === 1) {
                 decreasedDeals.splice(decreasedDealIndex, 1)
@@ -153,9 +153,9 @@ const cartReducer = (state, action) => {
             return updateObject(state, {
                 deals: decreasedDeals,
             })
-        case 'CHANGE_DEAL_PRICE' :
+        case 'CHANGE_DEAL_PRICE':
             const changedDealIndex = state.deals.findIndex(deal => deal.id === action.payload.id);
-            const changedDeal = {...state.deals[changedDealIndex]}
+            const changedDeal = { ...state.deals[changedDealIndex] }
             changedDeal.price = action.payload.price
             const changedDeals = [...state.deals]
             changedDeals[changedDealIndex] = changedDeal
@@ -176,19 +176,19 @@ const cartReducer = (state, action) => {
 
 const intialPerPage = 15;
 
-const PointOfSale = ( props ) => {
+const PointOfSale = (props) => {
 
     const { t } = useTranslation()
 
-    const {filterServicesHandler, filterProductsHandler, filterDealsHandler, createBookingHandler, fetchedLocations, bookingCreated } = props
-    
+    const { filterServicesHandler, filterProductsHandler, filterDealsHandler, createBookingHandler, fetchedLocations, bookingCreated, creatingBooking } = props
+
     const themeCtx = useContext(ThemeContext)
 
     const navigate = useNavigate()
 
     const { lang } = themeCtx
 
-    const [ cart , dispatch ] = useReducer(cartReducer, {
+    const [cart, dispatch] = useReducer(cartReducer, {
         services: [],
         products: [],
         deals: [],
@@ -197,30 +197,30 @@ const PointOfSale = ( props ) => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(intialPerPage);
 
-    const [ shownType, setShownType ] = useState('services');
-    const [ shownCategory, setShownCategory ] = useState('all');
-    const [ shownLocation, setShownLocation ] = useState('');
-    const [ searchWord, setSearchWord ] = useState('');
+    const [shownType, setShownType] = useState('services');
+    const [shownCategory, setShownCategory] = useState('all');
+    const [shownLocation, setShownLocation] = useState('');
+    const [searchWord, setSearchWord] = useState('');
 
-    const [ messageShown, setMessageShown ] = useState( bookingCreated );
+    const [messageShown, setMessageShown] = useState(bookingCreated);
 
     useEffect(() => {
-        setMessageShown( bookingCreated )
+        setMessageShown(bookingCreated)
         //bookingCreated && navigate('bookings')
     }, [bookingCreated, navigate])
 
 
     useEffect(() => {
-        if(shownType === 'services' ) {
-            filterServicesHandler(lang,  shownType, shownCategory , shownLocation, searchWord, page, rowsPerPage);
-        } else if(shownType === 'products' ) {
-            filterProductsHandler(lang, shownType,  shownLocation, searchWord, page, rowsPerPage);
-        } else if(shownType === 'deals' ) {
+        if (shownType === 'services') {
+            filterServicesHandler(lang, shownType, shownCategory, shownLocation, searchWord, page, rowsPerPage);
+        } else if (shownType === 'products') {
+            filterProductsHandler(lang, shownType, shownLocation, searchWord, page, rowsPerPage);
+        } else if (shownType === 'deals') {
             filterDealsHandler(lang, shownType, shownLocation, searchWord, page, rowsPerPage);
         }
     }, [filterDealsHandler, filterProductsHandler, filterServicesHandler, lang, page, rowsPerPage, searchWord, shownCategory, shownLocation, shownType]);
 
-    const handleResultsChange = useCallback(( type, category , location, search ) => {
+    const handleResultsChange = useCallback((type, category, location, search) => {
         setShownType(type);
         setShownCategory(category);
         setShownLocation(location);
@@ -228,20 +228,20 @@ const PointOfSale = ( props ) => {
         setPage(0);
     }, [])
 
-    const addToCartHandler = useCallback(( itemData ) => {
-        if ( shownType === 'services' ) {
+    const addToCartHandler = useCallback((itemData) => {
+        if (shownType === 'services') {
             dispatch({
                 type: 'ADD_TO_SERVICES',
                 payload: itemData
             })
         }
-        if ( shownType === 'products' ) {
+        if (shownType === 'products') {
             dispatch({
                 type: 'ADD_TO_PRODUCTS',
                 payload: itemData
             })
         }
-        if ( shownType === 'deals' ) {
+        if (shownType === 'deals') {
             dispatch({
                 type: 'ADD_TO_DEALS',
                 payload: itemData
@@ -249,7 +249,7 @@ const PointOfSale = ( props ) => {
         }
     }, [shownType])
 
-    const removeFromCartHandler = useCallback(( type, itemId ) => {
+    const removeFromCartHandler = useCallback((type, itemId) => {
         console.log(type, itemId)
         if (type === 'services') {
             dispatch({
@@ -269,9 +269,9 @@ const PointOfSale = ( props ) => {
                 payload: itemId
             })
         }
-    } , [])
+    }, [])
 
-    const increaseItemHandler = useCallback(( type, itemId ) => {
+    const increaseItemHandler = useCallback((type, itemId) => {
         if (type === 'services') {
             dispatch({
                 type: 'INCREASE_SERVICE',
@@ -290,8 +290,8 @@ const PointOfSale = ( props ) => {
                 payload: itemId
             })
         }
-    } , [])
-    const decreaseItemHandler = useCallback(( type, itemId ) => {
+    }, [])
+    const decreaseItemHandler = useCallback((type, itemId) => {
         if (type === 'services') {
             dispatch({
                 type: 'DECREASE_SERVICE',
@@ -310,8 +310,8 @@ const PointOfSale = ( props ) => {
                 payload: itemId
             })
         }
-    } , [])
-    const changeItemPriceHandler = useCallback(( type, itemId, price ) => {
+    }, [])
+    const changeItemPriceHandler = useCallback((type, itemId, price) => {
         console.log(type, itemId, price);
         if (type === 'services') {
             dispatch({
@@ -341,7 +341,7 @@ const PointOfSale = ( props ) => {
             })
         }
     }, [])
-    const resetCartHandler = useCallback((  ) => {
+    const resetCartHandler = useCallback(() => {
         dispatch({
             type: 'RESET_CART',
         })
@@ -351,11 +351,11 @@ const PointOfSale = ( props ) => {
         setPage(newPage);
     }, []);
 
-    const closeMessageHandler = useCallback(( ) => {
+    const closeMessageHandler = useCallback(() => {
         setMessageShown(false)
     }, [])
 
-    const purchaseCartHandler = useCallback(( purchasedData ) => {
+    const purchaseCartHandler = useCallback((purchasedData) => {
         createBookingHandler({
             ...purchasedData,
             location_id: shownLocation === '' ? fetchedLocations[0].id : shownLocation,
@@ -366,7 +366,7 @@ const PointOfSale = ( props ) => {
         <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
                 <CustomCard heading='view items' >
-                    <SearchFilters handleChangePage={handleChangePage} resultsHandler= {handleResultsChange}  />
+                    <SearchFilters handleChangePage={handleChangePage} resultsHandler={handleResultsChange} />
                     <FilteredResults rowsPerPage={rowsPerPage} page={page} onPageChange={handleChangePage} results={shownType} addToCart={addToCartHandler} />
                 </CustomCard>
             </Grid>
@@ -374,6 +374,12 @@ const PointOfSale = ( props ) => {
                 <Cart cartData={cart} removeFromCart={removeFromCartHandler} increaseItem={increaseItemHandler} decreaseItem={decreaseItemHandler} resetCart={resetCartHandler} purchase={purchaseCartHandler} priceChangeHandler={changeItemPriceHandler} />
                 <CustomizedSnackbars show={messageShown} message={t('Booking Created')} type='success' onClose={closeMessageHandler} />
             </Grid>
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={creatingBooking}
+            >
+                <CircularProgress color="secondary" />
+            </Backdrop>
         </Grid>
     )
 }
@@ -382,6 +388,7 @@ const mapStateToProps = (state) => {
     return {
         fetchedLocations: state.locations.locations,
         bookingCreated: state.bookings.bookingCreated,
+        creatingBooking: state.bookings.creatingBooking,
         fetchedServices: state.services.posServices.services,
         fetchedProducts: state.products.posProducts.products,
         fetchedDeals: state.deals.posDeals.deals,
@@ -390,9 +397,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        filterServicesHandler: (language,  type, category , location, search, page, rowsPerPage ) => dispatch(filterServices(language, type, category , location, search, page, rowsPerPage )),
-        filterProductsHandler: (language, type,  location, search, page, rowsPerPage ) => dispatch(filterProducts(language, type, location, search, page, rowsPerPage )),
-        filterDealsHandler: (language, type,  location, search, page, rowsPerPage ) => dispatch(filterDeals(language, type,  location, search, page, rowsPerPage )),
+        filterServicesHandler: (language, type, category, location, search, page, rowsPerPage) => dispatch(filterServices(language, type, category, location, search, page, rowsPerPage)),
+        filterProductsHandler: (language, type, location, search, page, rowsPerPage) => dispatch(filterProducts(language, type, location, search, page, rowsPerPage)),
+        filterDealsHandler: (language, type, location, search, page, rowsPerPage) => dispatch(filterDeals(language, type, location, search, page, rowsPerPage)),
         createBookingHandler: (data) => dispatch(createBooking(data)),
     }
 }
