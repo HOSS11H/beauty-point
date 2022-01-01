@@ -4933,6 +4933,207 @@
 							]
 						},
 						{
+							"name": "Tabular table Csv",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base}}/vendors/reports/tabular-table/csv?payment=completed",
+									"host": [
+										"{{base}}"
+									],
+									"path": [
+										"vendors",
+										"reports",
+										"tabular-table",
+										"csv"
+									],
+									"query": [
+										{
+											"key": "from_date",
+											"value": "2021-12-09",
+											"disabled": true
+										},
+										{
+											"key": "to_date",
+											"value": "2021-12-20",
+											"disabled": true
+										},
+										{
+											"key": "customer_name",
+											"value": "zed",
+											"disabled": true
+										},
+										{
+											"key": "service_name",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "product_name",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "employee_id",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "booking_status",
+											"value": "completed",
+											"disabled": true
+										},
+										{
+											"key": "booking_type",
+											"value": "",
+											"disabled": true
+										},
+										{
+											"key": "location",
+											"value": "1",
+											"disabled": true
+										},
+										{
+											"key": "payment",
+											"value": "completed"
+										}
+									]
+								}
+							},
+							"response": [
+								{
+									"name": "Tabular table Csv",
+									"originalRequest": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{base}}/vendors/reports/tabular-table/csv?payment=completed",
+											"host": [
+												"{{base}}"
+											],
+											"path": [
+												"vendors",
+												"reports",
+												"tabular-table",
+												"csv"
+											],
+											"query": [
+												{
+													"key": "from_date",
+													"value": "2021-12-09",
+													"disabled": true
+												},
+												{
+													"key": "to_date",
+													"value": "2021-12-20",
+													"disabled": true
+												},
+												{
+													"key": "customer_name",
+													"value": "zed",
+													"disabled": true
+												},
+												{
+													"key": "service_name",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "product_name",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "employee_id",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "booking_status",
+													"value": "completed",
+													"disabled": true
+												},
+												{
+													"key": "booking_type",
+													"value": "",
+													"disabled": true
+												},
+												{
+													"key": "location",
+													"value": "1",
+													"disabled": true
+												},
+												{
+													"key": "payment",
+													"value": "completed"
+												}
+											]
+										}
+									},
+									"status": "OK",
+									"code": 200,
+									"_postman_previewlanguage": "plain",
+									"header": [
+										{
+											"key": "Host",
+											"value": "127.0.0.1:8000"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 31 Dec 2021 19:57:21 GMT"
+										},
+										{
+											"key": "Date",
+											"value": "Fri, 31 Dec 2021 19:57:21 GMT"
+										},
+										{
+											"key": "Connection",
+											"value": "close"
+										},
+										{
+											"key": "X-Powered-By",
+											"value": "PHP/7.4.23"
+										},
+										{
+											"key": "Cache-Control",
+											"value": "public"
+										},
+										{
+											"key": "Last-Modified",
+											"value": "Fri, 31 Dec 2021 19:57:21 GMT"
+										},
+										{
+											"key": "Content-Disposition",
+											"value": "attachment; filename=\"Fri Dec 31 2021 19:57:21 GMT+0000_tabular_report.csv\""
+										},
+										{
+											"key": "Content-type",
+											"value": "text/plain;charset=UTF-8"
+										},
+										{
+											"key": "Content-Length",
+											"value": "553"
+										},
+										{
+											"key": "Accept-Ranges",
+											"value": "bytes"
+										},
+										{
+											"key": "X-RateLimit-Limit",
+											"value": "60"
+										},
+										{
+											"key": "X-RateLimit-Remaining",
+											"value": "59"
+										}
+									],
+									"cookie": [],
+									"body": "\"customer_name\",\"employee_name\",\"tax\",\"amount\",\"booking_source\",\"payment_status\",\"booking_status\",\"booking_time\",\"booking_date\"\n\"Super Admin\",\"\",\"$112.17\",\"$668.00\",\"pos\",\"completed\",\"approved\",\"09:55 pm\",\"28-11-2021\"\n\"Super Admin\",\"\",\"$112.17\",\"$668.00\",\"pos\",\"completed\",\"approved\",\"09:55 pm\",\"28-11-2021\"\n\"admin\",\"\",\"$0.00\",\"$600.00\",\"pos\",\"completed\",\"approved\",\"01:09 pm\",\"07-12-2021\"\n\"admin\",\"\",\"$0.00\",\"$400.00\",\"pos\",\"completed\",\"approved\",\"01:08 pm\",\"07-12-2021\"\n\"admin\",\"\",\"$2.35\",\"$18.00\",\"pos\",\"completed\",\"approved\",\"12:08 pm\",\"07-12-2021\"\n"
+								}
+							]
+						},
+						{
 							"name": "User type chart",
 							"request": {
 								"method": "GET",
@@ -6771,6 +6972,23 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Get all packages",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{v2}}/packages",
+									"host": [
+										"{{v2}}"
+									],
+									"path": [
+										"packages"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},
@@ -6918,7 +7136,7 @@
 											}
 										],
 										"url": {
-											"raw": "{{v2}}/vendors/services?location_id=1&per_page=all&include[]=location",
+											"raw": "{{v2}}/vendors/services",
 											"host": [
 												"{{v2}}"
 											],
@@ -6929,12 +7147,14 @@
 											"query": [
 												{
 													"key": "location_id",
-													"value": "1"
+													"value": "1",
+													"disabled": true
 												},
 												{
 													"key": "per_page",
 													"value": "all",
-													"description": "can be any number < 100 or all for no pagination"
+													"description": "can be any number < 100 or all for no pagination",
+													"disabled": true
 												},
 												{
 													"key": "include[]",
@@ -6943,7 +7163,8 @@
 												},
 												{
 													"key": "include[]",
-													"value": "location"
+													"value": "location",
+													"disabled": true
 												},
 												{
 													"key": "include[]",
@@ -6974,8 +7195,8 @@
 													"disabled": true
 												},
 												{
-													"key": "include[]",
-													"value": "users",
+													"key": "category_id",
+													"value": "3",
 													"disabled": true
 												}
 											]
@@ -7335,14 +7556,14 @@
 											}
 										],
 										"url": {
-											"raw": "{{v2}}/vendors/services/23",
+											"raw": "{{v2}}/vendors/services/25",
 											"host": [
 												"{{v2}}"
 											],
 											"path": [
 												"vendors",
 												"services",
-												"23"
+												"25"
 											]
 										}
 									},
@@ -7416,6 +7637,34 @@
 											"body": null
 										}
 									]
+								},
+								{
+									"name": "Import From CSV",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "services",
+													"type": "file",
+													"src": "/C:/Users/ZED/Downloads/sample_services.xlsx"
+												}
+											]
+										},
+										"url": {
+											"raw": "{{v2}}/vendors/services-csv",
+											"host": [
+												"{{v2}}"
+											],
+											"path": [
+												"vendors",
+												"services-csv"
+											]
+										}
+									},
+									"response": []
 								}
 							]
 						},
@@ -8669,14 +8918,14 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{v2}}/vendors/bookings/2?include[]=user&include[]=users&include[]=items&include[]=payment",
+											"raw": "{{v2}}/vendors/bookings/74?include[]=items",
 											"host": [
 												"{{v2}}"
 											],
 											"path": [
 												"vendors",
 												"bookings",
-												"2"
+												"74"
 											],
 											"query": [
 												{
@@ -8686,19 +8935,22 @@
 												},
 												{
 													"key": "include[]",
-													"value": "user"
+													"value": "user",
+													"disabled": true
 												},
 												{
 													"key": "include[]",
-													"value": "users"
+													"value": "users",
+													"disabled": true
+												},
+												{
+													"key": "include[]",
+													"value": "payment",
+													"disabled": true
 												},
 												{
 													"key": "include[]",
 													"value": "items"
-												},
-												{
-													"key": "include[]",
-													"value": "payment"
 												}
 											]
 										}
@@ -8820,7 +9072,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n    \"customerId\": 1,\r\n    \"dateTime\": \"2021-11-28T21:55:14.560Z\",\r\n    \"payment_gateway\": \"cash\",\r\n    \"cart\": {\r\n        \"services\": [\r\n            {\r\n                \"id\": 7,\r\n                \"price\": 15,\r\n                \"quantity\": 4\r\n            }\r\n        ],\r\n        \"products\": [\r\n            {\r\n                \"id\": 4,\r\n                \"price\": 100,\r\n                \"quantity\": 8\r\n            }\r\n        ],\r\n        \"deals\": [{\r\n                \"id\": 10,\r\n                \"price\": 150,\r\n                \"quantity\": 8\r\n            }]\r\n    },\r\n    \"couponId\": 1,\r\n    \"discount\": \"20\"\r\n}",
+											"raw": "{\r\n    \"customerId\": 1,\r\n    \"dateTime\": \"2021-11-28T21:55:14.560Z\",\r\n    \"payment_gateway\": \"cash\",\r\n    \"cart\": {\r\n        \"services\": [\r\n            {\r\n                \"id\": 7,\r\n                \"price\": 15,\r\n                \"quantity\": 4\r\n            }\r\n        ],\r\n        \"products\": [\r\n            {\r\n                \"id\": 4,\r\n                \"price\": 100,\r\n                \"quantity\": 8\r\n            }\r\n        ],\r\n        \"deals\": [{\r\n                \"id\": 24,\r\n                \"price\": 122,\r\n                \"quantity\": 8\r\n            }]\r\n    },\r\n    \"couponId\": null,\r\n    \"discount\": \"1000\",\r\n    \"discount_type\": \"fixed\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -9029,7 +9281,7 @@
 										"header": [],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n    \"customerId\": 1,\r\n    \"dateTime\": \"2021-11-28T21:55:14.560Z\",\r\n    \"payment_gateway\": \"cash\",\r\n    \"status\": \"pending\",\r\n    \"payment_status\": \"pending\",\r\n    \"booking\": {\r\n        \"services\": [\r\n            {\r\n                \"id\": 7,\r\n                \"price\": 15,\r\n                \"quantity\": 4\r\n            }\r\n        ],\r\n        \"products\": [\r\n            {\r\n                \"id\": 4,\r\n                \"price\": 100,\r\n                \"quantity\": 8\r\n            }\r\n        ],\r\n        \"deals\": [{\r\n                \"id\": 6,\r\n                \"price\": 150,\r\n                \"quantity\": 1\r\n            }]\r\n    },\r\n    \"couponId\": 1,\r\n    \"discount\": \"20\"\r\n}",
+											"raw": "{\r\n    \"customerId\": 1,\r\n    \"dateTime\": \"2021-11-28T21:55:14.560Z\",\r\n    \"payment_gateway\": \"cash\",\r\n    \"status\": \"pending\",\r\n    \"payment_status\": \"pending\",\r\n    \"booking\": {\r\n        \"services\": [\r\n            {\r\n                \"id\": 7,\r\n                \"price\": 15,\r\n                \"quantity\": 4\r\n            }\r\n        ],\r\n        \"products\": [\r\n            {\r\n                \"id\": 4,\r\n                \"price\": 100,\r\n                \"quantity\": 8\r\n            }\r\n        ],\r\n        \"deals\": [{\r\n                \"id\": 6,\r\n                \"price\": 150,\r\n                \"quantity\": 1\r\n            }]\r\n    },\r\n    \"couponId\": 1,\r\n    \"discount\": \"20\",\r\n    \"discount_type\": \"fixed\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -10350,16 +10602,69 @@
 												"key": "Accept",
 												"value": "application/json",
 												"type": "text"
+											},
+											{
+												"warning": "This is a duplicate header and will be overridden by the Content-Type header generated by Postman.",
+												"key": "Content-Type",
+												"value": "multipart/form-data",
+												"type": "string"
 											}
 										],
 										"body": {
-											"mode": "raw",
-											"raw": "{\r\n    \"cat_id\":1,\r\n    \"customer_id\":1,\r\n    \"name\":\"فاتورة كهرباء\",\r\n    \"note\": \"updated\",\r\n    \"amount\":550,\r\n    \"expense_date\":\"2021-12-20 12:32 PM\",\r\n    \"bank_name\":\"Al Ahly\",\r\n    \"bank_account\":21313123\r\n}",
-											"options": {
-												"raw": {
-													"language": "json"
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "cat_id",
+													"value": "1",
+													"type": "text"
+												},
+												{
+													"key": "customer_id",
+													"value": "1",
+													"type": "text"
+												},
+												{
+													"key": "name",
+													"value": "فاتورة كهرباء",
+													"type": "text"
+												},
+												{
+													"key": "note",
+													"value": "",
+													"type": "text"
+												},
+												{
+													"key": "amount",
+													"value": "550",
+													"type": "text"
+												},
+												{
+													"key": "expense_date",
+													"value": "2021-12-20 12:32 PM",
+													"type": "text"
+												},
+												{
+													"key": "bank_name",
+													"value": "Al Ahly",
+													"type": "text"
+												},
+												{
+													"key": "bank_account",
+													"value": "21313123",
+													"type": "text"
+												},
+												{
+													"key": "image",
+													"type": "file",
+													"src": "/C:/Users/ZED/Desktop/junk/index.jpg"
+												},
+												{
+													"key": "",
+													"value": "",
+													"type": "string",
+													"disabled": true
 												}
-											}
+											]
 										},
 										"url": {
 											"raw": "{{v2}}/vendors/expenses/1",

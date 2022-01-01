@@ -328,7 +328,7 @@ const SearchFilters = (props) => {
                         </Select>
                     </FormControl>
                 </Grid>
-                <Grid item xs={12} sm={6} md={4}>
+                {/* <Grid item xs={12} sm={6} md={4}>
                     <FormControl fullWidth sx={{ minWidth: '200px' }} >
                         <InputLabel id="booking-type">{t('booking type')}</InputLabel>
                         <Select
@@ -342,7 +342,7 @@ const SearchFilters = (props) => {
                             <MenuItem value='deals'>{t('deals')}</MenuItem>
                         </Select>
                     </FormControl>
-                </Grid>
+                </Grid> */}
                 <Grid item xs={12} sm={6} md={4}>
                     <FormControl fullWidth sx={{ minWidth: '200px' }} >
                         <InputLabel id="booking-status">{t('booking status')}</InputLabel>

@@ -11,6 +11,7 @@ const intialState = {
             filteringTabularReports: false,
             filteringTabularReportsSuccess: false,
             filteringTabularReportsMeassage: null,
+            tabularReportFilters: {},
         }
     },
 }
@@ -61,6 +62,16 @@ const reducer = ( state = intialState, action ) => {
                         filteringTabularReports: true,
                         filteringTabularReportsSuccess: false,
                         filteringTabularReportsMeassage: null,
+                    }
+                },
+            });
+        case (actionTypes.SAVE_TABULAR_REPORT_FILTERS): 
+            return updateObject( state, {
+                reports : {
+                    ...state.reports,
+                    tabularReport: {
+                        ...state.reports.tabularReport,
+                        tabularReportFilters: action.filters,
                     }
                 },
             });

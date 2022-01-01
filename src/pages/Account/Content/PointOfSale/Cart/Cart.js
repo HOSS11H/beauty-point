@@ -239,13 +239,11 @@ const Cart = props => {
 
 
     const [customerInput, setCustomerInput] = useState('');
-    const selectInputRef = useRef()
     const [customer, setCustomer] = useState(null);
     const [customerData, setCustomerData] = useState(null);
     const [customerDataError, setCustomerDataError] = useState(false)
 
     const [options, setOptions] = useState([])
-
 
     const [dateTime, setDateTime] = useState(new Date());
 
@@ -481,7 +479,7 @@ const Cart = props => {
                     <FormLabel component="legend" sx={{ textAlign: 'left', textTransform: 'capitalize', marginBottom: '8px' }} >{t('select customer')}</FormLabel>
                     <ActionsWrapper>
                         <FormControl fullWidth sx={{ minWidth: '250px' }} >
-                            <ReactSelect styles={customStyles} options={options} isClearable ref={selectInputRef} isRtl={lang === 'ar'} filterOption={filterOption} components={{ Option }}
+                            <ReactSelect styles={customStyles} options={options} isClearable isRtl={lang === 'ar'} filterOption={filterOption} components={{ Option }}
                                 value={customer}  onChange={handleSelectCustomer} onInputChange={handleSelectOptions} />
                         </FormControl>
                         <AddCustomer onClick={addCustomerModalOpenHandler} >{t('add')}</AddCustomer>

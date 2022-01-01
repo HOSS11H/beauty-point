@@ -155,7 +155,7 @@ export const createExpenseFailed = (message) => {
 export const createExpense = (data) => {
     return dispatch => {
         dispatch(createExpenseStart())
-        axios.post(`/vendors/expenses`, data)
+        axios.post(`/vendors/expenses`, data, {headers: {   'Content-Type': 'multipart/form-data'}})
             .then(response => {
                 dispatch(createExpenseSuccess(null, { ...data, ...response.data }));
             })

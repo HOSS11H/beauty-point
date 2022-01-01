@@ -47,6 +47,12 @@ export const filterTabularReportSuccess = ( tabularReportData ) => {
         tabularReport: tabularReportData
     }
 }
+export const saveTabularReportFilters = ( filters ) => {
+    return {
+        type: actionTypes.SAVE_TABULAR_REPORT_FILTERS,
+        filters: filters
+    }
+}
 export const filterTabularReportFailed = ( errorMessage ) => {
     return {
         type: actionTypes.FILTER_TABULAR_REPORT_FAILED,
@@ -62,11 +68,11 @@ export const filterTabularReport = ( searchParams ) => {
                 notEmptySearchParams[key] = searchParams[key]
             }
         }
-        console.log(notEmptySearchParams)
         dispatch( filterTabularReportStart( ) )
         v1.get(`/vendors/reports/tabular-table?page=1`, { params: { ...notEmptySearchParams } } )
             .then( response => {
                 dispatch( filterTabularReportSuccess( response.data  ) );
+                dispatch( saveTabularReportFilters( notEmptySearchParams ) )
             })
             .catch( err => {
                 console.log(err)

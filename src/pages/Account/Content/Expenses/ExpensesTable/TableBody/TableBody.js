@@ -18,7 +18,7 @@ const EnhancedTableBody = props => {
     const { fetchedExpenses, editExpenseHandler, deleteExpenseHandler } = props;
 
     const downloadImage = useCallback((val) => {
-        saveAs('image_url', val) // Put your image url here.
+        saveAs(val, '') // Put your image url here.
     }, [])
 
     return (

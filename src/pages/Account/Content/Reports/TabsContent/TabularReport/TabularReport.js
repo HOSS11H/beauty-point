@@ -22,6 +22,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { useState } from 'react';
 import { useCallback } from 'react';
 import TablePaginationActions from '../../../../../../components/UI/Dashboard/Table/TablePagination/TablePagination';
+import { CustomButton } from '../../../../../../components/UI/Button/Button';
+import v1 from '../../../../../../utils/axios-instance-v1';
 
 const TabularReportWrapper = styled(Card)`
     display: flex;
@@ -67,6 +69,26 @@ const PriceCalculation = styled.div`
         }
     }
 `
+const ActionButton = styled(CustomButton)`
+    &.MuiButton-root {
+        margin-right: 20px;
+        margin-bottom: 15px;
+        width: auto;
+        padding: 0 10px;
+        height: 30px;
+        flex-shrink: 0;
+        background: ${({ theme }) => theme.palette.success.main};
+        font-size: 14px;
+        &:last-child {
+            margin-bottom: 15px;
+        }
+        svg {
+            width: 14px;
+            height: 14px;
+            margin-right: 10px;
+        }
+    }
+`
 const Loader = styled(Card)`
     display: flex;
     align-items: center;
@@ -82,7 +104,7 @@ function TabularReport(props) {
 
     const { t } = useTranslation()
 
-    const { fetchedTabularReport,fetchingTabularReports, fetchTabularReportHandler, filteringTabularReportsSuccess } = props;
+    const { fetchedTabularReport,fetchingTabularReports, fetchTabularReportHandler, filteringTabularReportsSuccess, tabularReportFilters } = props;
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(intialPerPage);
@@ -102,6 +124,27 @@ function TabularReport(props) {
         setRowsPerPage(event.target.value);
         setPage(0);
     }, []);
+
+    const exportToCsvHandler = () => {
+        v1.get('/vendors/reports/tabular-table/csv', { params: { ...tabularReportFilters } })
+            .then(res => {
+                const url = window.URL.createObjectURL(new Blob([res.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'TabularReport.csv');
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        /* const hiddenElement = document.createElement('a');
+        hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+        hiddenElement.target = '_blank';
+        hiddenElement.download = 'TabularReport.csv';
+        hiddenElement.click(); */
+    }
 
     let content = (
         <Fragment>
@@ -136,6 +179,7 @@ function TabularReport(props) {
                                 loading={fetchingTabularReports}
                             />
                         )}
+                        <ActionButton onClick={exportToCsvHandler}>export to csv</ActionButton>
                     </TablePaginationWrapper>
                     <Table
                         sx={{ minWidth: 750 }}
@@ -204,6 +248,7 @@ const mapStateToProps = state => {
         fetchedTabularReport: state.reports.reports.tabularReport.content,
         fetchingTabularReports: state.reports.reports.tabularReport.fetchingTabularReports,
         filteringTabularReportsSuccess: state.reports.reports.tabularReport.filteringTabularReportsSuccess,
+        tabularReportFilters: state.reports.reports.tabularReport.tabularReportFilters,
     }
 }
 
