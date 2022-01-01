@@ -48,6 +48,7 @@ const TabularReportWrapper = styled(Card)`
 const TablePaginationWrapper = styled.div`
     display: flex;
     justify-content: flex-end;
+    align-items: center;
 `
 
 const PriceCalculation = styled.div`
@@ -71,11 +72,9 @@ const PriceCalculation = styled.div`
 `
 const ActionButton = styled(CustomButton)`
     &.MuiButton-root {
-        margin-right: 20px;
-        margin-bottom: 15px;
         width: auto;
         padding: 0 10px;
-        height: 30px;
+        height: 50px;
         flex-shrink: 0;
         background: ${({ theme }) => theme.palette.success.main};
         font-size: 14px;

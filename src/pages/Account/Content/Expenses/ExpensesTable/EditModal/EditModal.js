@@ -285,7 +285,18 @@ const EditModal = (props) => {
             setExpenseAmountError(true);
             return;
         }
-        const data = {
+        let formData = new FormData();
+        formData.append('id', id);
+        formData.append('name', expenseName);
+        formData.append('note', draftToHtml(convertToRaw(editorState.getCurrentContent())));
+        formData.append('amount', expenseAmount);
+        formData.append('expense_date', format(date, 'Y-MM-dd hh:ii a'));
+        formData.append('bank_name', expenseBank);
+        formData.append('bank_account', expenseAccount);
+        formData.append('cat_id', selectedCategory.value);
+        formData.append('customer_id', selectedAgent.value);
+        formData.append('image', uploadedImages[0].file);
+        /* const data = {
             id: id,
             name: expenseName,
             note: draftToHtml(convertToRaw(editorState.getCurrentContent())),
@@ -296,8 +307,8 @@ const EditModal = (props) => {
             cat_id: selectedCategory.value,
             customer_id: selectedAgent.value,
             image: uploadedImages[0]?.data_url,
-        }
-        onConfirm(data);
+        } */
+        onConfirm(formData);
     }, [expenseName, expenseBank, expenseAccount, selectedCategory, selectedAgent, editorState, expenseAmount, id, date, uploadedImages, onConfirm])
 
     let content = (
