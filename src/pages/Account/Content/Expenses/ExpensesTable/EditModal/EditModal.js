@@ -296,6 +296,7 @@ const EditModal = (props) => {
         formData.append('cat_id', selectedCategory.value);
         formData.append('customer_id', selectedAgent.value);
         formData.append('image', uploadedImages[0].file);
+        formData.append('_method', 'PUT');
         /* const data = {
             id: id,
             name: expenseName,

@@ -90,7 +90,7 @@ export const updateExpense = data => {
     return dispatch => {
         console.log(data);
         dispatch(updateExpenseStart())
-        axios.put(`/vendors/expenses/${data.id}`, data)
+        axios.post(`/vendors/expenses/${data.get('id')}`, data, {headers: {   'Content-Type': 'multipart/form-data'}})
             .then(response => {
                 dispatch(updateExpenseSuccess(response.data, data.id));
             })
