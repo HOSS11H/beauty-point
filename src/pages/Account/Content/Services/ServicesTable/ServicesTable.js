@@ -13,11 +13,13 @@ import DeleteModal from './DeleteModal/DeleteModal';
 import ViewModal from './ViewModal/ViewModal';
 import EditModal from './EditModal/EditModal';
 import SearchMessage from "../../../../../components/Search/SearchMessage/SearchMessage";
+import { CustomButton } from '../../../../../components/UI/Button/Button';
 import { useTranslation } from 'react-i18next';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
+import axios from '../../../../../utils/axios-instance';
 
 const ServicesTableWrapper = styled.div`
     display: flex;
@@ -39,6 +41,34 @@ const ServicesTableWrapper = styled.div`
 const TablePaginationWrapper = styled.div`
     display: flex;
     justify-content: flex-end;
+    align-items: center;
+`
+const UploadInput = styled.input`
+    display: none;
+`
+const UploadInputLabel = styled.label`
+    display: flex;
+    margin-left: 25px;
+`
+const ActionButton = styled.span`
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: auto;
+        padding: 0 10px;
+        height: 50px;
+        flex-shrink: 0;
+        background: ${({ theme }) => theme.palette.success.main};
+        color: ${({ theme }) => theme.palette.common.white};
+        text-transform: capitalize;
+        border-radius: 12px;
+        font-size: 14px;
+        cursor: pointer;
+        svg {
+            width: 14px;
+            height: 14px;
+            margin-right: 10px;
+        }
 `
 
 const intialRowsPerPage = 15
@@ -90,6 +120,30 @@ function ServicesTable(props) {
         setRowsPerPage(event.target.value);
         setPage(0);
     }, []);
+
+    const importCsvHandler = (e) => {
+        e.preventDefault();
+        /* const file = e.target.files[0];
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('lang', lang);
+        const config = {
+            headers: {
+                'content-type': 'multipart/form-data'
+            }
+        }
+        props.importCsv(formData, config); */
+        console.log(e.target.files[0])
+        axios.post('/vendors/services-csv', {
+            services: e.target.files[0],
+        })
+            .then(res => {
+                console.log(res);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
 
     // Delete Modal
     const deleteModalOpenHandler = useCallback((id) => {
@@ -178,6 +232,10 @@ function ServicesTable(props) {
                                     <MenuItem value='20'>{t('20')}</MenuItem>
                                 </Select>
                             </FormControl>
+                            <UploadInputLabel htmlFor="icon-button-file" >
+                                <UploadInput onChange={importCsvHandler} accept="*" id="icon-button-file" type="file" />
+                                <ActionButton>{t('import csv')}</ActionButton>
+                            </UploadInputLabel>
                         </TablePaginationWrapper>
                         <Table
                             sx={{ minWidth: 750 }}

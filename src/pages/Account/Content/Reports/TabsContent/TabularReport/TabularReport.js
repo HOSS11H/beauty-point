@@ -78,9 +78,6 @@ const ActionButton = styled(CustomButton)`
         flex-shrink: 0;
         background: ${({ theme }) => theme.palette.success.main};
         font-size: 14px;
-        &:last-child {
-            margin-bottom: 15px;
-        }
         svg {
             width: 14px;
             height: 14px;
@@ -138,11 +135,6 @@ function TabularReport(props) {
             .catch(err => {
                 console.log(err);
             })
-        /* const hiddenElement = document.createElement('a');
-        hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
-        hiddenElement.target = '_blank';
-        hiddenElement.download = 'TabularReport.csv';
-        hiddenElement.click(); */
     }
 
     let content = (
@@ -178,7 +170,7 @@ function TabularReport(props) {
                                 loading={fetchingTabularReports}
                             />
                         )}
-                        <ActionButton onClick={exportToCsvHandler}>export to csv</ActionButton>
+                        <ActionButton onClick={exportToCsvHandler}>{t('export to csv')}</ActionButton>
                     </TablePaginationWrapper>
                     <Table
                         sx={{ minWidth: 750 }}

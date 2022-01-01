@@ -230,13 +230,12 @@ const Option = (props) => {
 
 const Cart = props => {
 
-    const { cartData, removeFromCart, increaseItem, decreaseItem, resetCart, purchase, fetchedCoupons, fetchedCustomers, fetchCouponsHandler, searchCustomersHandler, addCustomerHandler, fetchedEmployeesHandler, bookingCreated, priceChangeHandler } = props;
+    const { cartData, removeFromCart, increaseItem, decreaseItem, resetCart, purchase, fetchedCoupons, fetchedCustomers, addedCustomerData, addingCustomerSuccess, fetchCouponsHandler, searchCustomersHandler, addCustomerHandler, fetchedEmployeesHandler, bookingCreated, priceChangeHandler } = props;
 
     const { t } = useTranslation()
 
     const themeCtx = useContext(ThemeContext);
     const { lang } = themeCtx;
-
 
     const [customerInput, setCustomerInput] = useState('');
     const [customer, setCustomer] = useState(null);
@@ -273,6 +272,12 @@ const Cart = props => {
         fetchCouponsHandler(lang);
         fetchedEmployeesHandler(lang);
     }, [fetchCouponsHandler, fetchedEmployeesHandler, lang])
+
+    useEffect(() => {
+        if ( addedCustomerData && addingCustomerSuccess ) {
+            setCustomerData(addedCustomerData);
+        }
+    },[addedCustomerData, addingCustomerSuccess])
 
     useEffect(() => {
         let total = 0;
@@ -316,7 +321,6 @@ const Cart = props => {
         addCustomerHandler(data);
     }, [addCustomerHandler])
 
-
     const handleDateChange = (newValue) => {
         setDateTime(newValue);
     };
@@ -326,6 +330,7 @@ const Cart = props => {
             setCustomerInput(value);
         }
     }
+
     useEffect(() => {
         if (customerInput.length !== 0) {
             const searchTimeout = setTimeout(() => {
@@ -357,6 +362,7 @@ const Cart = props => {
             setCustomerData(null);
         }
     }
+
     const discountTypeChangeHandler = (event) => {
         setDiscountType(event.target.value);
     }
@@ -365,7 +371,6 @@ const Cart = props => {
         setPaymentGateway(event.target.value);
         setPaymentGatewayError(false)
     }
-
 
     const couponChangeHandler = (event) => {
         setCoupon(event.target.value)
@@ -480,7 +485,7 @@ const Cart = props => {
                     <ActionsWrapper>
                         <FormControl fullWidth sx={{ minWidth: '250px' }} >
                             <ReactSelect styles={customStyles} options={options} isClearable isRtl={lang === 'ar'} filterOption={filterOption} components={{ Option }}
-                                value={customer}  onChange={handleSelectCustomer} onInputChange={handleSelectOptions} />
+                                value={customer} onChange={handleSelectCustomer} onInputChange={handleSelectOptions} />
                         </FormControl>
                         <AddCustomer onClick={addCustomerModalOpenHandler} >{t('add')}</AddCustomer>
                     </ActionsWrapper>
@@ -665,6 +670,8 @@ const Cart = props => {
 const mapStateToProps = (state) => {
     return {
         fetchedCustomers: state.customers.posCustmers.customers,
+        addedCustomerData: state.customers.posCustmers.addedCustomerData,
+        addingCustomerSuccess: state.customers.addingCustomerSuccess,
         fetchedCoupons: state.coupons.coupons,
         bookingCreated: state.bookings.bookingCreated,
     }

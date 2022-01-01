@@ -13,6 +13,7 @@ const intialState = {
         customers: [],
         searchingCustomers: false,
         errorSearchingCustomers: false,
+        addedCustomerData: null,
     },
 }
 
@@ -71,6 +72,19 @@ const reducer = (state = intialState, action) => {
                 addingCustomer: false,
                 addingCustomerSuccess: true,
                 addingCustomerMessage: action.message,
+                posCustmers: {
+                    ...state.posCustmers,
+                    addedCustomerData: action.customerData,
+                }
+            })
+        case (actionTypes.RESET_ADD_CUSTOMER_SUCCESS):
+            return updateObject(state, {
+                addingCustomerSuccess: false,
+                addingCustomerMessage: null,
+                posCustmers: {
+                    ...state.posCustmers,
+                    addedCustomerData: null,
+                }
             })
         case (actionTypes.ADD_CUSTOMER_FAILED):
             return updateObject(state, {

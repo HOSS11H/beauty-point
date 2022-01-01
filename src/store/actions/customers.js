@@ -30,10 +30,10 @@ export const fetchCustomers = (language) => {
             console.log(response.data.data)
             dispatch(fetchCustomersSuccess(response.data.data));
         })
-        .catch(err => {
-            console.log(err)
-            dispatch(fetchCustomersFailed(err.message))
-        })
+            .catch(err => {
+                console.log(err)
+                dispatch(fetchCustomersFailed(err.message))
+            })
     }
 }
 export const searchCustomersStart = () => {
@@ -63,44 +63,52 @@ export const searchCustomers = (language, word) => {
         }).then(response => {
             dispatch(searchCustomersSuccess(response.data.data));
         })
-        .catch(err => {
-            console.log(err)
-            dispatch(searchCustomersFailed(err.message))
-        })
+            .catch(err => {
+                console.log(err)
+                dispatch(searchCustomersFailed(err.message))
+            })
     }
 }
 
-export const addCustomerStart = (  ) => {
+export const addCustomerStart = () => {
     return {
         type: actionTypes.ADD_CUSTOMER_START,
     }
 }
-export const addCustomerSuccess = ( message, addedCustomerData ) => {
+export const addCustomerSuccess = (message, addedCustomerData) => {
     return {
         type: actionTypes.ADD_CUSTOMER_SUCCESS,
         message: message,
         customerData: addedCustomerData,
     }
 }
-export const addCustomerFailed = ( message ) => {
+export const resetAddCustomerSuccess = () => {
+    return {
+        type: actionTypes.RESET_ADD_CUSTOMER_SUCCESS,
+    }
+}
+export const addCustomerFailed = (message) => {
     return {
         type: actionTypes.ADD_CUSTOMER_FAILED,
         message: message,
     }
 }
 
-export const addCustomer = ( data ) => {
+export const addCustomer = (data) => {
     return dispatch => {
-        dispatch( addCustomerStart( ) )
-        console.log( data )
+        dispatch(addCustomerStart())
+        console.log(data)
         axios.post(`/vendors/customers`, data)
-        .then( response => {
-            console.log(response)
-            dispatch( addCustomerSuccess( null , {...data,  ...response.data } ) );
+            .then(response => {
+                console.log(response)
+                dispatch(addCustomerSuccess(null, { ...data, ...response.data }));
+                setTimeout(() => {
+                    dispatch(resetAddCustomerSuccess());
+                }, 2000);
             })
-            .catch( err => {
-                dispatch( addCustomerFailed( err.message  ) )
-            } )
-        }
+            .catch(err => {
+                dispatch(addCustomerFailed(err.message))
+            })
+    }
 }
 
