@@ -1,15 +1,12 @@
 import { Container, Grid } from "@mui/material";
 import { Heading } from "../../components/UI/Heading/Heading";
-import heroImgSrc from '../../assets/images/hero/1.jpg';
 import styled, {keyframes} from 'styled-components';
 import { useState, useEffect } from 'react';
 import axios from '../../utils/axios-instance';
 import CircularProgress from '@mui/material/CircularProgress';
 import {NavLink} from 'react-router-dom';
 import { useTranslation } from "react-i18next";
-import Header from "../Landing/Header/Header";
-import Footer from "../Landing/Footer/Footer";
-import ModuleWhatsapp from "../Landing/Header/Modules/ModuleWhatsapp/ModuleWhatsapp";
+import HomeLayout from "../../components/HomeLayout/HomeLayout";
 
 const CategoriesWrapper = styled.section`
     background-color: #FAFAFA;
@@ -18,35 +15,7 @@ const CategoriesWrapper = styled.section`
         padding: 25px 0 15px;
     }
 `
-const HeroImage = styled.div`
-    height: 40vh;
-    position: relative;
-    &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(150, 36, 142, 0.27);
-        z-index:0;
-    }
-    &::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(180deg, rgba(56, 56, 56, 0.72) 0%, rgba(255, 255, 255, 0) 50%);
-        z-index:0;
-    }
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-`
+
 
 const Bounce = keyframes`
     0%, 100%, 20%, 50%, 80% {
@@ -167,11 +136,7 @@ const AllCategories = props => {
         ))
     }
     return (
-        <>
-            <Header />
-            <HeroImage >
-                <img src={heroImgSrc} alt="hero" />
-            </HeroImage>
+        <HomeLayout>
             <CategoriesWrapper>
                 <Container maxWidth="lg">
                     <Heading className='heading-2'>
@@ -182,9 +147,7 @@ const AllCategories = props => {
                     </Grid>
                 </Container>
             </CategoriesWrapper>
-            <Footer />
-            <ModuleWhatsapp />
-        </>
+        </HomeLayout>
     )
 }
 export default AllCategories;

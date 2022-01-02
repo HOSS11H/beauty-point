@@ -159,7 +159,7 @@ const CreateModal = (props) => {
 
     const [productPrice, setProductPrice] = useState(0);
 
-    const [productDiscount, setProductDiscount] = useState('percent');
+    const [productDiscount, setProductDiscount] = useState(0);
 
     const [discountType, setDiscountType] = useState('percent');
 
@@ -398,6 +398,8 @@ const CreateModal = (props) => {
                 <FormControl sx={{ width: '100%' }}>
                     <InputLabel id="location-label">{t('location')}</InputLabel>
                     <Select
+                        labelId="location-label"
+                        label={t('location')}
                         value={locationName}
                         onChange={handleLocationChange}
                         inputProps={{ 'aria-label': 'Without label' }}

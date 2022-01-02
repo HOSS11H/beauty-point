@@ -9,40 +9,7 @@ import axios from '../../utils/axios-instance';
 import CircularProgress from '@mui/material/CircularProgress';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import Header from "../Landing/Header/Header";
-import Footer from "../Landing/Footer/Footer";
-import ModuleWhatsapp from "../Landing/Header/Modules/ModuleWhatsapp/ModuleWhatsapp";
-import heroImgSrc from '../../assets/images/hero/1.jpg';
-
-const HeroImage = styled.div`
-    height: 40vh;
-    position: relative;
-    &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(150, 36, 142, 0.27);
-        z-index:0;
-    }
-    &::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(180deg, rgba(56, 56, 56, 0.72) 0%, rgba(255, 255, 255, 0) 50%);
-        z-index:0;
-    }
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-`
+import HomeLayout from '../../components/HomeLayout/HomeLayout';
 
 const SalonsWrapper = styled.section`
     margin: 100px 0;
@@ -86,8 +53,8 @@ const AllSaloons = props => {
                 {
                     fetchedSalons.map((salon, index) => {
                         return (
-                            <Grid item xs={6} md={4}>
-                                <SalonPanel key={salon.id}>
+                            <Grid key={salon.id} item xs={6} md={4}>
+                                <SalonPanel >
                                     <div className="salon-img">
                                         <img src={salon.logo_url} alt="salon" />
                                     </div>
@@ -112,22 +79,16 @@ const AllSaloons = props => {
     }
 
     return (
-        <>
-            <Header />
-            <HeroImage >
-                <img src={heroImgSrc} alt="hero" />
-            </HeroImage>
-        <SalonsWrapper>
-            <Container maxWidth="lg">
-                <Heading>
-                    <h2 className="heading-title" >{t('popular saloons')}</h2>
-                </Heading>
-                {content}
-            </Container>
+        <HomeLayout>
+            <SalonsWrapper>
+                <Container maxWidth="lg">
+                    <Heading>
+                        <h2 className="heading-title" >{t('popular saloons')}</h2>
+                    </Heading>
+                    {content}
+                </Container>
             </SalonsWrapper>
-            <Footer />
-            <ModuleWhatsapp />
-            </>
+        </HomeLayout>
     )
 }
 export default AllSaloons

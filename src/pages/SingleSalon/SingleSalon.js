@@ -1,14 +1,9 @@
 import { Container, Grid } from "@mui/material";
-import { Heading } from "../../components/UI/Heading/Heading";
-import heroImgSrc from '../../assets/images/hero/1.jpg';
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import axios from '../../utils/axios-instance';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useTranslation } from "react-i18next";
-import Header from "../Landing/Header/Header";
-import Footer from "../Landing/Footer/Footer";
-import ModuleWhatsapp from "../Landing/Header/Modules/ModuleWhatsapp/ModuleWhatsapp";
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import * as React from 'react';
@@ -24,10 +19,10 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TablePaginationActions from "../../components/UI/Dashboard/Table/TablePagination/TablePagination";
+import HomeLayout from "../../components/HomeLayout/HomeLayout";
 
 
 function TabPanel(props) {
@@ -319,19 +314,13 @@ const SingleSalon = props => {
         )
     }
     return (
-        <>
-            <Header />
-            <HeroImage >
-                <img src={heroImgSrc} alt="hero" />
-            </HeroImage>
+        <HomeLayout>
             <CategoriesWrapper>
                 <Container maxWidth="lg">
                     {content}
                 </Container>
             </CategoriesWrapper>
-            <Footer />
-            <ModuleWhatsapp />
-        </>
+        </HomeLayout>
     )
 }
 export default SingleSalon;

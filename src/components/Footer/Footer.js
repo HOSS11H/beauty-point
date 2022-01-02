@@ -1,7 +1,7 @@
 import { Container, Grid } from "@mui/material"
 import styled from 'styled-components';
 import {NavLink} from 'react-router-dom';
-import logoSrc from '../../../assets/images/logo/logo-light.png';
+import logoSrc from '../../assets/images/logo/logo-light.png';
 import { useTranslation } from "react-i18next";
 
 const Logo = styled(NavLink)`

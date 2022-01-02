@@ -1,17 +1,13 @@
 import { Container, Grid } from "@mui/material";
-import { Heading } from "../../components/UI/Heading/Heading";
-import heroImgSrc from '../../assets/images/hero/1.jpg';
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import axios from '../../utils/axios-instance';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useTranslation } from "react-i18next";
-import Header from "../Landing/Header/Header";
-import Footer from "../Landing/Footer/Footer";
-import ModuleWhatsapp from "../Landing/Header/Modules/ModuleWhatsapp/ModuleWhatsapp";
 import { NavLink, useParams } from "react-router-dom";
 import { SalonPanel } from '../../components/UI/SalonPanel/SalonPanel';
 import { formatCurrency } from "../../shared/utility";
+import HomeLayout from "../../components/HomeLayout/HomeLayout";
 
 const CategoriesWrapper = styled.section`
     background-color: #FAFAFA;
@@ -102,11 +98,7 @@ const SingleCategory = props => {
         ))
     }
     return (
-        <>
-            <Header />
-            <HeroImage >
-                <img src={heroImgSrc} alt="hero" />
-            </HeroImage>
+        <HomeLayout>
             <CategoriesWrapper>
                 <Container maxWidth="lg">
                     <Grid container spacing={4}>
@@ -114,9 +106,7 @@ const SingleCategory = props => {
                     </Grid>
                 </Container>
             </CategoriesWrapper>
-            <Footer />
-            <ModuleWhatsapp />
-        </>
+        </HomeLayout>
     )
 }
 export default SingleCategory;

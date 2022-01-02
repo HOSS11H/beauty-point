@@ -2,7 +2,7 @@ import { Container } from '@mui/material';
 import styled from 'styled-components';
 import ModuleCart from '../Modules/ModuleCart/ModuleCart';
 import ModuleSearch from '../Modules/ModuleSearch/ModuleSearch';
-import logoSrc from '../../../../assets/images/logo/logo-light.png';
+import logoSrc from '../../../assets/images/logo/logo-light.png';
 import { useTranslation } from 'react-i18next';
 import ModuleContact from '../Modules/ModuleContact/ModuleContact';
 import {NavLink} from 'react-router-dom';

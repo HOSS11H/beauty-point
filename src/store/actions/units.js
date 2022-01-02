@@ -21,7 +21,7 @@ export const fetchUnitsFailed = (errorMessage) => {
 export const fetchUnits = (language, page, perPage, orderBy, orderDir) => {
     return dispatch => {
         dispatch(fetchUnitsStart())
-        axios.get(`/vendors/units?page=${page + 1}&per_page=${perPage}&order_by=${orderBy}&order_dir=${orderDir}`, {
+        axios.get(`/vendors/units?page=${page + 1}&per_page=${perPage}&order_by=${orderBy}&order_dir=${orderDir}&include[]=parent`, {
             headers: {
                 'Accept-Language': language
             }
@@ -167,7 +167,7 @@ export const searchUnitsFailed = (errorMessage) => {
 export const searchUnits = (language, word) => {
     return dispatch => {
         dispatch(searchUnitsStart())
-        axios.get(`/vendors/units?term=${word}&page=1&per_page=10&include[]=roles&include[]=unitGroup`, {
+        axios.get(`/vendors/units?term=${word}&page=1&per_page=10&include[]=parent`, {
             headers: {
                 'Accept-Language': language
             }

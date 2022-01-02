@@ -351,6 +351,7 @@ const resources = {
             'online': 'اونلاين',
             'transfer': 'تحويل',
             'Booking Created': 'تم إنشاء الحجز',
+            'Product Added': 'تمت إضافة المنتج',
         }
     }
 };

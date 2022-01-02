@@ -126,6 +126,11 @@ const reducer = (state = intialState, action) => {
                 creatingProductSuccess: true,
                 creatingProductMessage: action.message,
             })
+        case (actionTypes.RESET_CREATE_PRODUCT_SUCCESS):
+            return updateObject(state, {
+                creatingProductSuccess: false,
+                creatingProductMessage: null,
+            })
         case (actionTypes.CREATE_PRODUCT_FAILED):
             return updateObject(state, {
                 creatingProduct: false,

@@ -21,7 +21,7 @@ export const fetchProductsFailed = (errorMessage) => {
 export const fetchProducts = (language, page, perPage, orderBy, orderDir) => {
     return dispatch => {
         dispatch(fetchProductsStart())
-        axios.get(`/vendors/products?page=${page + 1}&per_page=${perPage}&order_by=${orderBy}&order_dir=${orderDir}&include[]=location`, {
+        axios.get(`/vendors/products?page=${page + 1}&per_page=${perPage}&order_by=${orderBy}&order_dir=${orderDir}&include[]=location&include[]=unit`, {
             headers: {
                 'Accept-Language': language
             }
@@ -111,6 +111,11 @@ export const createProductSuccess = (message, createdProductData) => {
         productData: createdProductData,
     }
 }
+export const resetCreateProductSuccess = () => {
+    return {
+        type: actionTypes.RESET_CREATE_PRODUCT_SUCCESS,
+    }
+}
 export const createProductFailed = (message) => {
     return {
         type: actionTypes.CREATE_PRODUCT_FAILED,
@@ -125,6 +130,9 @@ export const createProduct = (data) => {
         axios.post(`/vendors/products`, data)
             .then(response => {
                 dispatch(createProductSuccess(null, { ...data, ...response.data }));
+                setTimeout(() => {
+                    dispatch(resetCreateProductSuccess())
+                })
             })
             .catch(err => {
                 dispatch(createProductFailed(err.message))
@@ -152,7 +160,7 @@ export const searchProductsFailed = (errorMessage) => {
 export const searchProducts = (language, word) => {
     return dispatch => {
         dispatch(searchProductsStart())
-        axios.get(`/vendors/products?term=${word}&page=1&per_page=15&include[]=location`, {
+        axios.get(`/vendors/products?term=${word}&page=1&per_page=15&include[]=location&include[]=unit`, {
             headers: {
                 'Accept-Language': language
             }
