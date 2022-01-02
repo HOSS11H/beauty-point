@@ -79,6 +79,11 @@ export const updateUnitSuccess = (message, updatedUnit) => {
         unitData: updatedUnit,
     }
 }
+export const resetUpdateUnitSuccess = () => {
+    return {
+        type: actionTypes.RESET_UPDATE_UNIT_SUCCESS,
+    }
+}
 export const updateUnitFailed = (message) => {
     return {
         type: actionTypes.UPDATE_UNIT_FAILED,
@@ -92,8 +97,10 @@ export const updateUnit = (data) => {
         console.log('edit start')
         axios.put(`/vendors/units/${data.id}`, data)
         .then(response => {
-                console.log('edit success')
                 dispatch(updateUnitSuccess(response.data, {...data}));
+                setTimeout(() => {
+                    dispatch(resetUpdateUnitSuccess());
+                }, 2000);
             })
             .catch(err => {
                 dispatch(updateUnitFailed(err.message))
@@ -112,6 +119,11 @@ export const addUnitSuccess = (message, createdUnit) => {
         unitData: createdUnit,
     }
 }
+export const resetAddUnitSuccess = () => {
+    return {
+        type: actionTypes.RESET_ADD_UNIT_SUCCESS,
+    }
+}
 export const addUnitFailed = (message) => {
     return {
         type: actionTypes.ADD_UNIT_FAILED,
@@ -125,6 +137,9 @@ export const addUnit = (data) => {
         axios.post(`/vendors/units`, data)
             .then(response => {
                 dispatch(addUnitSuccess(null, {...response.data, ...data }));
+                setTimeout(() =>{
+                    dispatch(resetAddUnitSuccess());
+                }, 2000)
             })
             .catch(err => {
                 dispatch(addUnitFailed(err.message))

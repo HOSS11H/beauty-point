@@ -281,7 +281,7 @@ const EditModal = (props) => {
 
     const [allUnits, setAllUnits] = useState([]);
 
-    if ( !!products ) {
+    if ( products.length > 0 ) {
         intialCart = products.map(product => {
             return {
                 id: product.pivot.products_id,
@@ -331,7 +331,7 @@ const EditModal = (props) => {
 
     const [serviceStatus, setServiceStatus] = useState(status);
 
-    const [type, setType] = useState(!!products ? 'combo' : 'single');
+    const [type, setType] = useState(products.length > 0 ? 'combo' : 'single');
 
     const [allProducts, setAllProducts] = useState([]);
 
