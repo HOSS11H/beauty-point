@@ -312,7 +312,9 @@ const CreateModal = (props) => {
         formData.append('bank_account', expenseAccount);
         formData.append('cat_id', selectedCategory.value);
         formData.append('customer_id', selectedAgent.value);
-        formData.append('image', uploadedImages[0].file);
+        if(uploadedImages.length > 0 ) {
+            formData.append('image', uploadedImages[0].file) 
+        }
 
         /* const data = {
             name: expenseName,

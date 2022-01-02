@@ -110,9 +110,6 @@ const Salons = props => {
                                     <p className="salon-desc">
                                         {salon.address}
                                     </p>
-                                    <p className="salon-location">
-                                        {salon.companyPhone}
-                                    </p>
                                 </div>
                             </SalonPanel>
                         )

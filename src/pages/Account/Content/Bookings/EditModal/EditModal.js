@@ -542,7 +542,7 @@ const EditModal = (props) => {
             },
             couponId:  bookingData.coupon && bookingData.coupon.id,
             discount: +discount,
-            discount_type: bookingData.discount_type,
+            discount_type: 'percent',
         }
         onConfirm(booking);
     }, [bookingData, bookingStatus, cartData.deals, cartData.products, cartData.services, dateTime, discount, employeeName, fetchedEmployees, id, onConfirm, paymentStatus])
