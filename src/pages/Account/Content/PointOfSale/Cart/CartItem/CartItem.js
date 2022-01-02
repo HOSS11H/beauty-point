@@ -15,6 +15,7 @@ import ThemeContext from '../../../../../../store/theme-context';
 import { connect } from 'react-redux';
 import Increment from '../../../../../../components/UI/Increment/Increment';
 import { TextField } from '@mui/material';
+import styled from 'styled-components';
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -34,6 +35,18 @@ function getStyles(name, employeeName, theme) {
                 : theme.typography.fontWeightMedium,
     };
 }
+
+const CustomTextField = styled(TextField)`
+    width: 80px;
+    & .MuiInputBase-input {
+        -moz-appearance: textfield;
+        &::-webkit-outer-spin-button,
+        &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    }
+`
 
 const CartItem = props => {
 
@@ -66,7 +79,7 @@ const CartItem = props => {
                 <TableData>{row.name}</TableData>
             </TableCell>
             <TableCell align="center" sx={{ padding: '16px 8px' }}>
-                <TextField id="service-price" type='number' label={t('price')} variant="outlined" value={row.price} onChange={  e =>  priceChangeHandler(type, row.id, e.target.value)} />
+                <CustomTextField id="price" type='number' label={t('price')} variant="outlined" value={row.price} onChange={e => priceChangeHandler(type, row.id, e.target.value)} />
             </TableCell>
             <TableCell align="center" sx={{ padding: '16px 8px' }}>
                 <Increment id={row.id} type={type} increment={increase} decrement={decrease} value={row.quantity} />
@@ -77,7 +90,7 @@ const CartItem = props => {
             {
                 type === 'services' && (
                     <TableCell align="center" sx={{ padding: '16px 8px' }}>
-                        <FormControl sx={{ width: '100%', minWidth: '90px'}}>
+                        <FormControl sx={{ width: '100%', minWidth: '90px' }}>
                             <InputLabel id="employee-label">{t('employee')}</InputLabel>
                             <Select
                                 labelId="employee-label"
