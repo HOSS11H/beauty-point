@@ -352,6 +352,7 @@ const resources = {
             'transfer': 'تحويل',
             'Booking Created': 'تم إنشاء الحجز',
             'Product Added': 'تمت إضافة المنتج',
+            'you must add the paid Amount': 'يجب إضافة المبلغ المدفوع',
         }
     }
 };

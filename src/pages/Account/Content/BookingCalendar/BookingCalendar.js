@@ -100,7 +100,6 @@ const BookingCalendar = props => {
     
     
     useEffect( ( ) => {
-        console.log(fromDate, toDate);
         fetchBookingsHandler(lang, fromDate , toDate);
     } , [fetchBookingsHandler, fromDate, lang, toDate])
 
@@ -163,13 +162,14 @@ const BookingCalendar = props => {
     let content = (
         <FullCalendar
             plugins={[dayGridPlugin, interactionPlugin]}
-            initialView="dayGridWeek"
+            initialView="dayGridMonth"
             events={formattedBookingsData}
             eventContent={renderEventContent}
             eventClick={dateClickHandler}
             datesSet={(dateInfo) => {
                 setFromDate(format(dateInfo.start, 'yyyy-MM-dd'));
                 setToDate(format(dateInfo.end, 'yyyy-MM-dd'));
+                console.log('excuted')
             }}
         />
     )

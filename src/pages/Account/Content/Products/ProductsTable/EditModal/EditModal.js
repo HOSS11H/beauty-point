@@ -150,7 +150,7 @@ const EditModal = (props) => {
 
     let productData = fetchedProducts.data[selectedProductIndex];
 
-    const { name, description, price, discount, discount_type, discount_price, location, status, image, quantity, unit_id } = productData;
+    const { name, description, price, discount, discount_type, discount_price, location, status, image, quantity, unit } = productData;
 
     const [productName, setProductName] = useState(name);
     const [productNameError, setProductNameError] = useState(false);
@@ -180,7 +180,7 @@ const EditModal = (props) => {
     const [productQuantityError, setProductQuantityError] = useState(false);
 
     const [allUnits, setAllUnits] = useState([]);
-    const [productUnit, setProductUnit] = useState(unit_id);
+    const [productUnit, setProductUnit] = useState(unit.id);
 
     const [uploadedImages, setUploadedImages] = useState([ { data_url: image} ]);
 

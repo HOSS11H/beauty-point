@@ -263,6 +263,7 @@ const Cart = props => {
     const [paymentGatewayError, setPaymentGatewayError] = useState(false)
 
     const [paidAmount, setPaidAmount] = useState(0)
+    const [paidAmountError, setPaidAmountError] = useState(false)
     const [cashToReturn, setCashToReturn] = useState(0)
     const [cashRemainig, setCashRemainig] = useState(0)
 
@@ -386,6 +387,7 @@ const Cart = props => {
 
     const paidAmountChangeHandler = (event) => {
         if (event.target.value >= 0) {
+            setPaidAmountError(false)
             setPaidAmount(event.target.value)
             if (event.target.value > totalPrice) {
                 setCashToReturn(parseFloat(event.target.value) - totalPrice)
@@ -439,6 +441,9 @@ const Cart = props => {
             return;
         } else if (!couponExists && coupon) {
             return;
+        } else if (paidAmount < 1) {
+            setPaidAmountError(true)
+            return;
         }
         const data = {
             customerId: customerData.id,
@@ -450,6 +455,7 @@ const Cart = props => {
             discount: discount,
             discount_type: discountType,
             payment_gateway: paymentGateway,
+            paid_amount: paidAmount,
         }
         purchase(data);
     }
@@ -639,7 +645,8 @@ const Cart = props => {
                         sx={{ flexGrow: '1' }}
                         value={paidAmount}
                         onChange={paidAmountChangeHandler}
-                    />
+                        />
+                    {paidAmountError &&<ValidationMessage notExist>{t(`you must add the paid Amount`)}</ValidationMessage>}
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <AmountCalculator>

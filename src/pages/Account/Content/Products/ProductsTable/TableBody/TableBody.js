@@ -58,7 +58,7 @@ const EnhancedTableBody = props => {
                             <TableStatus className={row.status}>{t(row.status)}</TableStatus>
                         </TableCell>
                         <TableCell align="center">
-                            <TableData>{row.quantity}</TableData>
+                            <TableData>{`${row.quantity} ${row.unit ? row.unit.name : '' }`}</TableData>
                         </TableCell>
                         <TableCell align="center">
                             <Actions edit remove view

@@ -48,7 +48,7 @@ function ProductsTable(props) {
 
     const { t } = useTranslation()
 
-    const { fetchedProducts, fetchProductsHandler, loadingProducts, deleteProductHandler, searchingProducts, searchingProductsSuccess, updateProductHandler } = props;
+    const { fetchedProducts, fetchProductsHandler, loadingProducts, deleteProductHandler, searchingProducts, searchingProductsSuccess, updateProductHandler, creatingProductSuccess, updatingProductSuccess } = props;
 
     console.log(fetchedProducts)
 
@@ -75,6 +75,17 @@ function ProductsTable(props) {
         fetchProductsHandler(lang, page, rowsPerPage, orderBy, order);
     }, [fetchProductsHandler, lang, page, rowsPerPage, orderBy, order]);
 
+    useEffect(() => {
+        if (creatingProductSuccess) {
+            fetchProductsHandler(lang, page, rowsPerPage, orderBy, order);
+        }
+    }, [creatingProductSuccess, fetchProductsHandler, lang, page, rowsPerPage, orderBy, order]);
+
+    useEffect(() => {
+        if (updatingProductSuccess) {
+            fetchProductsHandler(lang, page, rowsPerPage, orderBy, order);
+        }
+    }, [updatingProductSuccess, fetchProductsHandler, lang, page, rowsPerPage, orderBy, order]);
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -235,6 +246,8 @@ const mapStateToProps = state => {
         loadingProducts: state.products.fetchingProducts,
         searchingProducts: state.products.searchingProducts,
         searchingProductsSuccess: state.products.searchingProductsSuccess,
+        creatingProductSuccess: state.products.creatingProductSuccess,
+        updatingProductSuccess: state.products.updatingProductSuccess,
     }
 }
 

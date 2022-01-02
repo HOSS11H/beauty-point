@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext } from 'react';
+import { useState, useCallback, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import ThemeContext from '../../../../../../store/theme-context'
@@ -172,6 +172,14 @@ const EditModal = (props) => {
 
     const maxNumber = 1;
 
+    useEffect(() => {
+        if (uploadedImages[0].file === undefined) {
+            fetch(uploadedImages[0].data_url).then(res => res.blob()).then(blob => {
+                setUploadedImages([{ data_url: uploadedImages[0].data_url, file: new File([blob], 'image.jpg', { type: blob.type })}]);
+            })
+        }
+    }, [uploadedImages])
+
     const expenseNameChangeHandler = (event) => {
         setExpenseName(event.target.value);
         setExpenseNameError(false);
@@ -295,8 +303,8 @@ const EditModal = (props) => {
         formData.append('bank_account', expenseAccount);
         formData.append('cat_id', selectedCategory.value);
         formData.append('customer_id', selectedAgent.value);
-        if(uploadedImages.length > 0 ) {
-            console.log('yes')
+        if(uploadedImages.length > 0 && uploadedImages[0].data_url !== null )   {
+            console.log(uploadedImages[0])
             formData.append('image', uploadedImages[0].file) 
         }
         formData.append('_method', 'PUT');
