@@ -152,7 +152,7 @@ const AllPackages = props => {
                     {
                         fetchedPackages.map(( item, index) => {
                             return (
-                                <Grid item key={item.id} xs={6} md={4}>
+                                <Grid item key={item.id} xs={12} sm={6} md={4}>
                                     <PricingPanel>
                                         <div className="pricing-head">
                                             <div className="pricing-name">{t(item.name)}</div>
