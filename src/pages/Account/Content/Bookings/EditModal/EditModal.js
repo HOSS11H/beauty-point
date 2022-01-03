@@ -525,7 +525,7 @@ const EditModal = (props) => {
         const booking = {
             customerId: id,
             dateTime: dateTime,
-            payment_gateway: bookingData.payment.gateway,
+            payment_gateway: bookingData.payment_gateway,
             payment_status: paymentStatus,
             status: bookingStatus,
             users: employeesData,
@@ -758,7 +758,7 @@ const EditModal = (props) => {
                     <BookingData>
                         <BookingDataHeading>{t('payment method')}</BookingDataHeading>
                         <BookingList>
-                            <li><MoneyIcon sx={{ mr: 1 }} />{bookingData.payment.gateway}</li>
+                            <li><MoneyIcon sx={{ mr: 1 }} />{bookingData.payment_gateway}</li>
                         </BookingList>
                     </BookingData>
                 </Grid>

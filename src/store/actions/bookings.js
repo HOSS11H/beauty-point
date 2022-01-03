@@ -24,7 +24,7 @@ export const fetchBookings = (language, page, perPage) => {
     return dispatch => {
         dispatch(fetchBookingsStart())
         console.log(language, page, perPage)
-        axios.get(`/vendors/bookings?page=${page + 1}&per_page=${perPage}&include[]=user&include[]=users&include[]=items&include[]=payment&include[]=coupon`, {
+        axios.get(`/vendors/bookings?page=${page + 1}&per_page=${perPage}&include[]=user&include[]=users&include[]=items&include[]=coupon`, {
             headers: {
                 'Accept-Language': language,
             }
@@ -187,7 +187,7 @@ export const filterBookings = ( searchParams ) => {
                 notEmptySearchParams[key] = searchParams[key]
             }
         }
-        axios.get(`/vendors/bookings?include[]=user&include[]=users&include[]=items&include[]=payment`, { params: { ...notEmptySearchParams } } )
+        axios.get(`/vendors/bookings?include[]=user&include[]=users&include[]=items`, { params: { ...notEmptySearchParams } } )
             .then(response => {
                 let editedData = response.data.data.map(item => {
                     const formattedTime = new Date(item.date_time).toLocaleString()
@@ -261,7 +261,7 @@ export const fetchCalendarBookingsFailed = (errorMessage) => {
 export const fetchCalendarBookings = (language, from, to) => {
     return dispatch => {
         dispatch(fetchCalendarBookingsStart())
-        axios.get(`/vendors/bookings?from=${from}&to=${to}&include[]=user&include[]=users&include[]=items&include[]=payment&include[]=coupon`, {
+        axios.get(`/vendors/bookings?from=${from}&to=${to}&include[]=user&include[]=users&include[]=items&include[]=coupon`, {
             headers: {
                 'Accept-Language': language,
             }
