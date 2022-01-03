@@ -39,6 +39,7 @@ import SingleDeal from "./pages/SingleDeal/SingleDeal";
 import SingleSalon from "./pages/SingleSalon/SingleSalon";
 import RolesPermissions from "./pages/Account/Content/Settings/RolesPermissions/RolesPermissions";
 import Units from "./pages/Account/Content/Units/Units";
+import AllPackages from "./pages/AllPackages/AllPackages";
 
 function App() {
 
@@ -93,6 +94,7 @@ function App() {
                 <Route path="/all-categories" element={<AllCategories />} />
                 <Route path="/all-saloons" element={<AllSaloons/>} />
                 <Route path="/all-deals" element={<AllDeals />} />
+                <Route path="/packages" element={<AllPackages />} />
                 <Route path="/categories/:categoryId" element={<SingleCategory />} />
                 <Route path="/services/:serviceId" element={<SingleService />} />
                 <Route path="/deals/:dealId" element={<SingleDeal />} />

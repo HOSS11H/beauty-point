@@ -353,6 +353,21 @@ const resources = {
             'Booking Created': 'تم إنشاء الحجز',
             'Product Added': 'تمت إضافة المنتج',
             'you must add the paid Amount': 'يجب إضافة المبلغ المدفوع',
+            'packages': 'الباقات',
+            'Free': 'مجاني',
+            'Trial': 'تجريبي',
+            'per month': 'لكل شهر',
+            'per year': 'لكل سنة',
+            'max employees': 'أقصي عدد موظفين',
+            'max services': 'أقصي عدد خدمات',
+            'max deals': 'أقصي عدد العروض',
+            'max roles': 'أقصي عدد الأدوار',
+            'modules': 'الأقسام',
+            'Reports': 'التقارير',
+            'POS': 'نقطة البيع',
+            'Subscribe': 'الاشتراك',
+            'Yearly': 'سنوي',
+            'Monthly': 'شهري',
         }
     }
 };

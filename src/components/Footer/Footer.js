@@ -85,7 +85,7 @@ const Footer = props => {
                             <ul>
                                 <li><NavLink to='/'>{t('Home')}</NavLink></li>
                                 <li><NavLink to='/'>{t("categories")}</NavLink></li>
-                                <li><NavLink to='/'>{t('deals')}</NavLink></li>
+                                <li><NavLink to='/packages'>{t('packages')}</NavLink></li>
                                 <li><NavLink to='/'>{t('help & support')}</NavLink></li>
                             </ul>
                         </div>
