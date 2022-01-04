@@ -205,14 +205,16 @@ const ViewModal = (props) => {
                         <ClientName>{bookingData.user.name}</ClientName>
                     </ClientDetails>
                 </Grid>
-                <Grid item xs={12} md={6}>
-                    <BookingData>
-                        <BookingDataHeading>{t('email')}</BookingDataHeading>
-                        <BookingList>
-                            <li><MailIcon sx={{ mr: 1 }} />{bookingData.user.email}</li>
-                        </BookingList>
-                    </BookingData>
-                </Grid>
+                {bookingData.user.email && (
+                    <Grid item xs={12} md={6}>
+                        <BookingData>
+                            <BookingDataHeading>{t('email')}</BookingDataHeading>
+                            <BookingList>
+                                <li><MailIcon sx={{ mr: 1 }} />{bookingData.user.email}</li>
+                            </BookingList>
+                        </BookingData>
+                    </Grid>
+                )}
                 <Grid item xs={12} md={6}>
                     <BookingData>
                         <BookingDataHeading>{t('phone')}</BookingDataHeading>

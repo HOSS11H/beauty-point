@@ -1,9 +1,8 @@
-import { Container, Grid, Card, Button, Typography, Stack, Switch } from '@mui/material';
+import { Container, Grid, Card, Button, Stack, Switch } from '@mui/material';
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import axios from '../../utils/axios-instance';
 import CircularProgress from '@mui/material/CircularProgress';
-import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import HomeLayout from '../../components/HomeLayout/HomeLayout';
 import { formatCurrency } from '../../shared/utility';
