@@ -30,7 +30,6 @@ import ThemeContext from '../../../../../store/theme-context';
 import AddCustomerModal from './AddCustomerModal/AddCustomerModal';
 import { formatCurrency } from '../../../../../shared/utility';
 import { Fragment } from 'react';
-import { useRef } from 'react';
 
 
 const CustomerCard = styled.div`
@@ -386,13 +385,17 @@ const Cart = props => {
     }
 
     const paidAmountChangeHandler = (event) => {
-        if (event.target.value >= 0) {
+        const value = +event.target.value;
+        if (value >= 0) {
             setPaidAmountError(false)
-            setPaidAmount(event.target.value)
-            if (event.target.value > totalPrice) {
-                setCashToReturn(parseFloat(event.target.value) - totalPrice)
+            setPaidAmount(value)
+            if ( value > totalPrice) {
+                setCashToReturn( value - totalPrice )
                 setCashRemainig(0)
-            } else if (event.target.value < totalPrice) {
+            } else if ( value === totalPrice) {
+                setCashToReturn(0)
+                setCashRemainig(0)
+            } else if (value < totalPrice) {
                 setCashToReturn(0)
                 setCashRemainig(totalPrice - parseFloat(event.target.value))
             }
@@ -422,7 +425,6 @@ const Cart = props => {
         setCartDataError(false)
         resetCart();
     }, [resetCart])
-    console.log(discountType)
 
     useEffect(() => {
         bookingCreated && resetCartHandler();

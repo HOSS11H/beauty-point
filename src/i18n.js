@@ -368,6 +368,7 @@ const resources = {
             'Subscribe': 'الاشتراك',
             'Yearly': 'سنوي',
             'Monthly': 'شهري',
+            'Service Added': 'تمت إضافة الخدمة',
         }
     }
 };

@@ -23,6 +23,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TablePaginationActions from "../../components/UI/Dashboard/Table/TablePagination/TablePagination";
 import HomeLayout from "../../components/HomeLayout/HomeLayout";
+import { CustomButton } from "../../components/UI/Button/Button";
 
 
 function TabPanel(props) {
@@ -62,35 +63,6 @@ const CategoriesWrapper = styled.section`
     background-color: #FAFAFA;
     padding: 70px 0px;
 `
-const HeroImage = styled.div`
-    height: 40vh;
-    position: relative;
-    &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(150, 36, 142, 0.27);
-        z-index:0;
-    }
-    &::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(180deg, rgba(56, 56, 56, 0.72) 0%, rgba(255, 255, 255, 0) 50%);
-        z-index:0;
-    }
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-`
 const Loader = styled.div`
     display: flex;
     align-items: center;
@@ -99,11 +71,25 @@ const Loader = styled.div`
     height: 200px;
 `
 
-const CustomCard = styled(Card)`
-    @media screen and (max-width: 599.98px) {
-        flex-direction: column;
+const ActionsWrapper = styled.div`
+    display: flex;
+    align-items: center;
+`
+const ActionButton = styled(CustomButton)`
+    &.MuiButton-root {
+        margin-right: 20px;
+        width: auto;
+        padding: 0 10px;
+        height: 56px;
+        flex-shrink: 0;
+        margin-bottom: 0;
+        &:last-child {
+            margin-right: 0;
+        }
     }
 `
+
+
 const servicesIntialRowsPerPage = 9
 const dealsIntialRowsPerPage = 9
 
@@ -186,6 +172,9 @@ const SingleSalon = props => {
                 <Typography component="div" color='primary' variant="subtitle1" sx={{ display: 'flex', alignItems: 'center', marginBottom: '30px' }}>
                     <PushPinIcon sx={{ mr: 1, width: '15px', height: '15px' }} />{salon.vendor_page.address}
                 </Typography>
+                <ActionsWrapper>
+                    <ActionButton>{t('book')}</ActionButton>
+                </ActionsWrapper>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                         <Tab label={t('services')} {...a11yProps(0)} />
