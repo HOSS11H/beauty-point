@@ -289,7 +289,7 @@ const Cart = props => {
         total = total - ((total * discount / 100) + (total * couponData.amount / 100));
         setTotalTaxes(total - (total / 1.15))
         setTotalPrice(total);
-
+        setPaidAmount(total);
         if (cartData.services.length !== 0 || cartData.products.length !== 0 || cartData.deals.length !== 0) {
             setCartDataError(false)
             return;
