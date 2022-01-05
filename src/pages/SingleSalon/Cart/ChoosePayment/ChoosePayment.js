@@ -37,6 +37,7 @@ const PaymentMethod = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
+    cursor: pointer;
     @media screen and (max-width: 599.98px) {
         padding: 20px;
     }
@@ -72,6 +73,8 @@ const DepositPanel = styled.div`
 
 const ChoosePayment = props => {
 
+    const { handlePayment } = props;
+
     const { t } = useTranslation();
 
     return (
@@ -82,13 +85,13 @@ const ChoosePayment = props => {
             </InfoMessage>
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
-                    <PaymentMethod>
+                    <PaymentMethod onClick={() => handlePayment('cash')}>
                         <img src={cashImg} alt='vector' />
                         <h5>{t('cash')}</h5>
                     </PaymentMethod>
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <PaymentMethod>
+                    <PaymentMethod onClick={() => handlePayment('card')}>
                         <img src={cardImg} alt='vector' />
                         <h5>{t('credit card')}</h5>
                     </PaymentMethod>

@@ -111,6 +111,11 @@ const Cart = props => {
         setAppointment(date);
     }, [])
 
+    const handleChoosePayment = useCallback((payment) => {
+        setPaumentMethod(payment);
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    }, [])
+
     return (
         <Modal
             aria-labelledby="transition-modal-title"
@@ -146,7 +151,7 @@ const Cart = props => {
                                 activeStep === 3 && <UserAuth />
                             }
                             {
-                                activeStep === 4 && <ChoosePayment />
+                                activeStep === 4 && <ChoosePayment handlePayment={handleChoosePayment} />
                             }
                         </CartBody>
                         <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>
