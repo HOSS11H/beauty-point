@@ -11,6 +11,7 @@ import ChooseType from './ChooseType/ChooseType';
 import ChooseItem from './ChooseItem/ChooseItem';
 import ChooseAppointment from './ChooseAppointment/ChooseAppointment';
 import UserAuth from './UserAuth/UserAuth';
+import ChoosePayment from './ChoosePayment/ChoosePayment';
 
 const CustomCardMui = styled(Card)`
     &.MuiPaper-root {
@@ -59,7 +60,7 @@ const CartBody = styled.div`
     }
 `
 
-const steps = ['Select type', 'select items', 'Select appointment', 'user infos'];
+const steps = ['Select type', 'select items', 'Select appointment', 'user infos', 'choose Payment'];
 
 const Cart = props => {
 
@@ -74,6 +75,8 @@ const Cart = props => {
     const [ selectedItems , setSelectedItems ] = useState([]);
 
     const [ appointment , setAppointment ] = useState( new Date() );
+
+    const [ paymentMethod , setPaumentMethod ] = useState('');
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -141,6 +144,9 @@ const Cart = props => {
                             }
                             {
                                 activeStep === 3 && <UserAuth />
+                            }
+                            {
+                                activeStep === 4 && <ChoosePayment />
                             }
                         </CartBody>
                         <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>

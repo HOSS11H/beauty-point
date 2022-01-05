@@ -377,6 +377,10 @@ const resources = {
             'edit booking times': 'تعديل أوقات الحجز',
             'Deal Created': 'تم إنشاء العرض',
             'log in': 'تسجيل الدخول',
+            'When would you like to pay for the service?': 'متى تريد دفع الخدمة؟',
+            'You can either pay now or pay locally on arrival. You will be able to select payment method in the next step.': 'يمكنك دفع الآن أو دفع عند الوصول. ستكون قادرا على اختيار طريقة الدفع في الخطوة التالية.',
+            'credit card': 'بطاقة ائتمان',
+            'Deposit amount :': 'العربون :',
         }
     }
 };
