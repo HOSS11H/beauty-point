@@ -234,6 +234,19 @@ const ChooseItem = props => {
                         )}
                     </ItemsWrapper>
                 </Grid>
+                <Grid item xs={12} sm={6} >
+                    {
+                        selectedDeal && (
+                            <ItemView>
+                                <h3>{selectedDeal.title}</h3>
+                                <ItemPrice>
+                                    <p>{formatCurrency(selectedDeal.discount_price)}</p>
+                                    { selectedDeal.discount_price !== selectedDeal.price && (<p className="original-price" >{formatCurrency(selectedDeal.price)}</p>)} 
+                                </ItemPrice>
+                            </ItemView>
+                        )
+                    }
+                </Grid>
             </Grid>
         )
     }
