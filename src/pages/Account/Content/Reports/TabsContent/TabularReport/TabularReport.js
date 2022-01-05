@@ -132,7 +132,7 @@ function TabularReport(props) {
 
     const exportToCsvHandler = () => {
         setExporting(true);
-        v1.get('/vendors/reports/tabular-table/csv?format=csv', { params: { ...tabularReportFilters } })
+        v1.get('/vendors/reports/tabular-table/csv?format=csv', { responseType: 'blob', params: { ...tabularReportFilters } })
             .then(res => {
                 const url = window.URL.createObjectURL(new Blob([res.data]));
                 const link = document.createElement('a');
@@ -150,9 +150,9 @@ function TabularReport(props) {
     }
     const exportToPdfHandler = () => {
         setExporting(true);
-        v1.get('/vendors/reports/tabular-table/csv?format=pdf', { params: { ...tabularReportFilters } })
+        v1.get('/vendors/reports/tabular-table/csv?format=pdf', { responseType: 'blob', params: { ...tabularReportFilters } })
             .then(res => {
-                const url = window.URL.createObjectURL(new Blob([res.data]));
+                const url = window.URL.createObjectURL(new Blob([res.data], { type: 'application/pdf'}));
                 const link = document.createElement('a');
                 link.href = url;
                 link.setAttribute('download', 'TabularReport.pdf');
@@ -168,7 +168,7 @@ function TabularReport(props) {
     }
     const exportToExcelHandler = () => {
         setExporting(true);
-        v1.get('/vendors/reports/tabular-table/csv?format=excel', { params: { ...tabularReportFilters } })
+        v1.get('/vendors/reports/tabular-table/csv?format=xlsx', { responseType: 'blob', params: { ...tabularReportFilters } })
             .then(res => {
                 const url = window.URL.createObjectURL(new Blob([res.data]));
                 const link = document.createElement('a');
@@ -263,7 +263,7 @@ function TabularReport(props) {
                 </Grid>
             </Grid>
         </Fragment>
-    ) 
+    )
     if ( fetchedTabularReport.data.length === 0 && filteringTabularReportsSuccess) {
         content = (
             <SearchMessage>
