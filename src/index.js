@@ -19,6 +19,7 @@ import customersReducer from './store/reducers/customers'
 import reportsReducer from './store/reducers/reports'
 import expensesReducer from './store/reducers/expenses'
 import unitsReducer from './store/reducers/units'
+import permissionsReducer from './store/reducers/permissions'
 
 import { BrowserRouter } from 'react-router-dom';
 
@@ -41,6 +42,7 @@ const rootReducer = combineReducers({
 	reports: reportsReducer,
 	expenses: expensesReducer,
 	units: unitsReducer,
+	permissions: permissionsReducer,
 });
 
 

@@ -25,32 +25,13 @@ import LinearScaleIcon from '@mui/icons-material/LinearScale';
 import { useTranslation } from 'react-i18next';
 import { useContext, useEffect } from 'react';
 import AuthContext from '../../../store/auth-context';
+import ThemeContext from '../../../store/theme-context';
 import v1 from '../../../utils/axios-instance-v1';
 import { useState } from 'react';
+import { connect } from 'react-redux';
+import { fetchPermissions } from '../../../store/actions/index';
+import { useMemo } from 'react';
 
-const categories = [
-    {
-        id: 'dashboard',
-        children: [
-            {
-                id: 'dashboard',
-                name: 'dashboard',
-                icon: <DashboardIcon />,
-            },
-            { id: 'services', name: 'services', icon: <FormatListBulletedIcon /> },
-            { id: 'products', name: 'products', icon: <ShoppingCartIcon /> },
-            { id: 'expenses', name: 'expenses', icon: <MonetizationOnIcon /> },
-            { id: 'units', name: 'units', icon: <LinearScaleIcon /> },
-            { id: 'employees', name: 'employees', icon: <PersonIcon /> },
-            { id: 'deals', name: 'deals', icon: <LocalOfferIcon /> },
-            { id: 'point-of-sale', name: 'points of sales', icon: <AddShoppingCartIcon /> },
-            { id: 'bookings', name: 'bookings', icon: <BookIcon /> },
-            { id: 'booking-calendar', name: 'booking calendar', icon: <EventIcon /> },
-            { id: 'reports', name: 'reports', icon: <InsertChartIcon /> },
-            { id: 'settings', name: 'settings', icon: <SettingsIcon /> },
-        ],
-    },
-];
 const drawerWidth = 256;
 const openedMixin = (theme) => ({
     width: drawerWidth,
@@ -135,9 +116,12 @@ const CustomListItemIcon = styled(ListItemIcon)`
 `
 
 
-export default function Navigator(props) {
+const Navigator = (props) => {
 
-    const { open, ...other } = props;
+    const { open, getPermissions, fetchedPermissions, ...other } = props;
+
+    const themeCtx = useContext(ThemeContext);
+    const { lang } = themeCtx;
 
     const authCtx = useContext(AuthContext)
     const { roleId } = authCtx;
@@ -145,17 +129,91 @@ export default function Navigator(props) {
     const params = useParams();
     const { t } = useTranslation();
 
-    const [permissions , setPermissions] = useState([]);
+    const [ categories, setCategories ] = useState([]);
+
+    /* const categories = [
+        {
+            id: 'dashboard',
+            children: [
+                {
+                    id: 'dashboard',
+                    name: 'dashboard',
+                    icon: <DashboardIcon />,
+                },
+                { id: 'services', name: 'services', icon: <FormatListBulletedIcon /> },
+                { id: 'products', name: 'products', icon: <ShoppingCartIcon /> },
+                { id: 'expenses', name: 'expenses', icon: <MonetizationOnIcon /> },
+                { id: 'units', name: 'units', icon: <LinearScaleIcon /> },
+                { id: 'employees', name: 'employees', icon: <PersonIcon /> },
+                { id: 'deals', name: 'deals', icon: <LocalOfferIcon /> },
+                { id: 'point-of-sale', name: 'points of sales', icon: <AddShoppingCartIcon /> },
+                { id: 'bookings', name: 'bookings', icon: <BookIcon /> },
+                { id: 'booking-calendar', name: 'booking calendar', icon: <EventIcon /> },
+                { id: 'reports', name: 'reports', icon: <InsertChartIcon /> },
+                { id: 'settings', name: 'settings', icon: <SettingsIcon /> },
+            ],
+        },
+    ]; */
 
     useEffect(() => {
-        v1.get(`/vendors/settings/roles/${roleId}/permissions`)
-            .then(res => {
-                setPermissions(res.data.permissions)
+        getPermissions(roleId, lang);
+    }, [getPermissions, lang, roleId])
+
+    
+    useEffect(() => {
+        let fetchedCategories = [{
+            id: 'dashboard',
+            children: [
+                {
+                    id: 'dashboard',
+                    name: 'dashboard',
+                    icon: <DashboardIcon />,
+                },
+                { id: 'bookings', name: 'bookings', icon: <BookIcon /> },
+                { id: 'booking-calendar', name: 'booking calendar', icon: <EventIcon /> },
+            ],
+        }];
+        if (roleId === 'customer') {
+            setCategories(fetchedCategories);
+        } else {
+            let addedRoutes = [];
+            fetchedPermissions.forEach( permission => {
+                if ( permission.name === 'read_business_service') {
+                    addedRoutes.push({ id: 'services', name: 'services', icon: <FormatListBulletedIcon /> });
+                    addedRoutes.push({ id: 'products', name: 'products', icon: <ShoppingCartIcon /> });
+                    addedRoutes.push({ id: 'units', name: 'units', icon: <LinearScaleIcon /> } );
+                    addedRoutes.push({ id: 'point-of-sale', name: 'points of sales', icon: <AddShoppingCartIcon /> });
+                }
+                if ( permission.name === 'read_customer') {
+                    
+                }
+                if ( permission.name === 'read_employee' ) {
+                    addedRoutes.push({ id: 'employees', name: 'employees', icon: <PersonIcon /> },);
+                }
+                if ( permission.name === 'read_employee_group') {
+                    
+                }
+                if ( permission.name === 'read_employee_leave') {
+    
+                }
+                if ( permission.name === 'read_employee_schedule') {
+    
+                }
+                if ( permission.name === 'read_deal') {
+                    addedRoutes.push({ id: 'deals', name: 'deals', icon: <LocalOfferIcon /> });
+                }
+                if ( permission.name === 'read_report') {
+                    addedRoutes.push({ id: 'reports', name: 'reports', icon: <InsertChartIcon /> });
+                    addedRoutes.push({ id: 'expenses', name: 'expenses', icon: <MonetizationOnIcon /> });
+                }
+                if ( permission.name === 'manage_settings') {
+                    addedRoutes.push({ id: 'settings', name: 'settings', icon: <SettingsIcon /> });
+                }
             })
-            .catch(err => {
-                console.log(err);
-            })
-    }, [roleId])
+            fetchedCategories[0].children = fetchedCategories[0].children.concat(addedRoutes);
+            setCategories(fetchedCategories);
+        }
+    }, [fetchedPermissions, roleId])
 
 
     return (
@@ -168,7 +226,7 @@ export default function Navigator(props) {
                         }
                     </NavLink>
                 </Logo>
-                {categories.map(({ id, children }) => (
+                { categories.length > 0 && categories.map(({ id, children }) => (
                     <Box key={id}>
                         {children.map(({ id: childId, name, icon, active }) => (
                             <ListItem disablePadding key={childId}>
@@ -190,3 +248,17 @@ export default function Navigator(props) {
         </Drawer>
     );
 }
+
+const mapStateToProps = (state) => {
+    return {
+        fetchedPermissions: state.permissions.permissions,
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        getPermissions: (roleId, lang ) => dispatch(fetchPermissions( roleId, lang )),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navigator);

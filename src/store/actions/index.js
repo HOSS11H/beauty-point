@@ -85,3 +85,6 @@ export {
     addUnit,
     searchUnits,
 } from './units'
+export {
+    fetchPermissions
+} from './permissions'
