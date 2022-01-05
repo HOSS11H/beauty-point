@@ -101,17 +101,12 @@ const Account = (props) => {
 	const handleDrawerToggle = useCallback(() => {
 		setMobileOpen(!mobileOpen);
 	}, [mobileOpen]);
-	let content;
-	if (fetchingPermissions) {
-		content = <Loader height='100vh' />
-	} else {
-		content = (
-			<Box sx={{ display: 'flex', minHeight: '100vh', }}>
-				<CssBaseline />
+	let content = (
+		<Fragment>
 				<Box
 					component="nav"
 					sx={{ flexShrink: { sm: 0 }, }}
-				>
+						>
 					<Navigator
 						open={mobileOpen}
 						variant="permanent"
@@ -123,16 +118,18 @@ const Account = (props) => {
 						<Outlet />
 					</Box>
 				</Box>
-			</Box>
-		)
-	}
+		</Fragment>
+	)
 	return (
 		<Fragment>
 			<ThemeProvider theme={customTheme}>
-				{content}
+				<Box sx={{ display: 'flex', minHeight: '100vh', }}>
+					<CssBaseline />
+					{content}
+				</Box>
 			</ThemeProvider>
 		</Fragment>
-	);
+	)
 }
 const mapStateToProps = (state) => {
 	return {
