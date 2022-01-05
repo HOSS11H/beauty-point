@@ -166,7 +166,7 @@ function TabularReport(props) {
                 setExporting(false);
             })
     }
-    const exportToExcelHandler = () => {
+    /* const exportToExcelHandler = () => {
         setExporting(true);
         v1.get('/vendors/reports/tabular-table/csv?format=xlsx', { responseType: 'blob', params: { ...tabularReportFilters } })
             .then(res => {
@@ -183,7 +183,7 @@ function TabularReport(props) {
                 console.log(err);
                 setExporting(false);
             })
-    }
+    } */
 
     let content = (
         <Fragment>
@@ -193,7 +193,7 @@ function TabularReport(props) {
                         <ActionsWrapper>
                             <ActionButton onClick={exportToCsvHandler}>{t('export to csv')}</ActionButton>
                             <ActionButton onClick={exportToPdfHandler}>{t('export to pdf')}</ActionButton>
-                            <ActionButton onClick={exportToExcelHandler}>{t('export to excel')}</ActionButton>
+                            {/* <ActionButton onClick={exportToExcelHandler}>{t('export to excel')}</ActionButton> */}
                         </ActionsWrapper>
                         <FormControl sx={{ minWidth: '75px', }} variant="filled" >
                             <InputLabel id="show-num">{t('show')}</InputLabel>

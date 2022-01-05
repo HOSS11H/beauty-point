@@ -41,6 +41,10 @@ const PaymentMethod = styled.div`
     @media screen and (max-width: 599.98px) {
         padding: 20px;
     }
+    &.disabled{
+        cursor: not-allowed;
+        filter: grayscale(1);
+    }
     img {
         max-width: 100%;
         margin-bottom: 10px;
@@ -91,7 +95,7 @@ const ChoosePayment = props => {
                     </PaymentMethod>
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <PaymentMethod onClick={() => handlePayment('card')}>
+                    <PaymentMethod /* onClick={() => handlePayment('card')} */ className='disabled'>
                         <img src={cardImg} alt='vector' />
                         <h5>{t('credit card')}</h5>
                     </PaymentMethod>
