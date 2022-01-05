@@ -17,7 +17,7 @@ import { formatCurrency } from '../../../../../../shared/utility';
 import SearchMessage from "../../../../../../components/Search/SearchMessage/SearchMessage";
 import SearchFilters from './SearchFilters/SearchFilters';
 import Card from '@mui/material/Card';
-import { Grid } from '@mui/material';
+import { Backdrop, Grid } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useState } from 'react';
 import { useCallback } from 'react';
@@ -47,8 +47,11 @@ const TabularReportWrapper = styled(Card)`
 `
 const TablePaginationWrapper = styled.div`
     display: flex;
-    justify-content: flex-end;
-    align-items: center;
+    align-items: flex-end;
+    flex-direction: column;
+`
+const ActionsWrapper = styled.div`
+    display: flex;
 `
 
 const PriceCalculation = styled.div`
@@ -78,6 +81,10 @@ const ActionButton = styled(CustomButton)`
         flex-shrink: 0;
         background: ${({ theme }) => theme.palette.success.main};
         font-size: 14px;
+        margin-right: 10px;
+        &:last-child {
+            margin-right: 0;
+        }
         svg {
             width: 14px;
             height: 14px;
@@ -105,6 +112,8 @@ function TabularReport(props) {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(intialPerPage);
 
+    const [exporting, setExporting] = useState(false);
+
     const themeCtx = useContext(ThemeContext)
 
     const { lang } = themeCtx
@@ -122,7 +131,8 @@ function TabularReport(props) {
     }, []);
 
     const exportToCsvHandler = () => {
-        v1.get('/vendors/reports/tabular-table/csv', { params: { ...tabularReportFilters } })
+        setExporting(true);
+        v1.get('/vendors/reports/tabular-table/csv?format=csv', { params: { ...tabularReportFilters } })
             .then(res => {
                 const url = window.URL.createObjectURL(new Blob([res.data]));
                 const link = document.createElement('a');
@@ -131,9 +141,47 @@ function TabularReport(props) {
                 document.body.appendChild(link);
                 link.click();
                 link.remove();
+                setExporting(false);
             })
             .catch(err => {
                 console.log(err);
+                setExporting(false);
+            })
+    }
+    const exportToPdfHandler = () => {
+        setExporting(true);
+        v1.get('/vendors/reports/tabular-table/csv?format=pdf', { params: { ...tabularReportFilters } })
+            .then(res => {
+                const url = window.URL.createObjectURL(new Blob([res.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'TabularReport.pdf');
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                setExporting(false);
+            })
+            .catch(err => {
+                console.log(err);
+                setExporting(false);
+            })
+    }
+    const exportToExcelHandler = () => {
+        setExporting(true);
+        v1.get('/vendors/reports/tabular-table/csv?format=excel', { params: { ...tabularReportFilters } })
+            .then(res => {
+                const url = window.URL.createObjectURL(new Blob([res.data]));
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'TabularReport.excel');
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+                setExporting(false);
+            })
+            .catch(err => {
+                console.log(err);
+                setExporting(false);
             })
     }
 
@@ -142,6 +190,11 @@ function TabularReport(props) {
             <Paper sx={{ width: '100%', boxShadow: 'none',  }}>
                 <TableContainer>
                     <TablePaginationWrapper>
+                        <ActionsWrapper>
+                            <ActionButton onClick={exportToCsvHandler}>{t('export to csv')}</ActionButton>
+                            <ActionButton onClick={exportToPdfHandler}>{t('export to pdf')}</ActionButton>
+                            <ActionButton onClick={exportToExcelHandler}>{t('export to excel')}</ActionButton>
+                        </ActionsWrapper>
                         <FormControl sx={{ minWidth: '75px', }} variant="filled" >
                             <InputLabel id="show-num">{t('show')}</InputLabel>
                             <Select
@@ -170,7 +223,6 @@ function TabularReport(props) {
                                 loading={fetchingTabularReports}
                             />
                         )}
-                        <ActionButton onClick={exportToCsvHandler}>{t('export to csv')}</ActionButton>
                     </TablePaginationWrapper>
                     <Table
                         sx={{ minWidth: 750 }}
@@ -230,6 +282,12 @@ function TabularReport(props) {
         <TabularReportWrapper>
             <SearchFilters perPage={rowsPerPage} />
             {content}
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={exporting}
+            >
+                <CircularProgress color="secondary" />
+            </Backdrop>
         </TabularReportWrapper>
     );
 }
