@@ -177,6 +177,7 @@ const cartReducer = (state, action) => {
                 services: filteredServices,
             })
         case 'INCREASE_SERVICE':
+            console.log(action.payload)
             const increasedServiceIndex = state.services.findIndex(service => service.id === action.payload);
             const increasedService = { ...state.services[increasedServiceIndex] }
             increasedService.quantity = increasedService.quantity + 1;
@@ -296,16 +297,6 @@ const EditModal = (props) => {
         friday: false,
         ...obj,
     });
-    console.log({
-        saturday: false,
-        sunday: false,
-        monday: false,
-        tuesday: false,
-        wednesday: false,
-        thursday: false,
-        friday: false,
-        ...obj,
-    })
     const { saturday, sunday, monday, tuesday, wednesday, thursday, friday} = appliedDays;
     const [appliedDaysError, setAppliedDaysError] = useState(false);
 
@@ -358,13 +349,13 @@ const EditModal = (props) => {
         })
     }, [selectedServices])
 
-    const increaseItemHandler = useCallback((itemId) => {
+    const increaseItemHandler = useCallback((type, itemId) => {
         dispatch({
             type: 'INCREASE_SERVICE',
             payload: itemId
         })
     }, [])
-    const decreaseItemHandler = useCallback((itemId) => {
+    const decreaseItemHandler = useCallback((type, itemId) => {
         const decreasedServiceIndex = cartData.services.findIndex(service => service.id === itemId);
         if (cartData.services[decreasedServiceIndex].quantity === 1) {
             setSelectedServices(selectedServices.filter(service => service !== itemId))

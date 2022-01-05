@@ -16,6 +16,7 @@ const CartItem = props => {
 
     const { row, remove, increase, decrease } = props;
 
+
     return (
         <TableRow
             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}

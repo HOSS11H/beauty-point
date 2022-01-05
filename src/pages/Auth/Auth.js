@@ -156,7 +156,7 @@ const Auth = props => {
         setErrorMessage(null);
         axios.post(url, authData)
             .then(res => {
-                authCtx.login(res.data.token);
+                authCtx.login(res.data.token, res.data.user.roles[0].id, res.data.user.roles[0].name );
             })
             .catch( err => {
                 setErrorMessage(err.message.split('_').join(' ').toLowerCase())

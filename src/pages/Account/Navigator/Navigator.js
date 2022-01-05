@@ -23,6 +23,10 @@ import closedLogo from '../../../images/logo/logo_mobile.png'
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import LinearScaleIcon from '@mui/icons-material/LinearScale';
 import { useTranslation } from 'react-i18next';
+import { useContext, useEffect } from 'react';
+import AuthContext from '../../../store/auth-context';
+import v1 from '../../../utils/axios-instance-v1';
+import { useState } from 'react';
 
 const categories = [
     {
@@ -103,16 +107,16 @@ const CustomListItemButton = styled(ListItemButton)`
         height: 48px;
         border-radius: 9px;
         margin-bottom: 8px;
-        padding: ${ ({ open }) => open ? '0 15px' : '0 8px' };
+        padding: ${({ open }) => open ? '0 15px' : '0 8px'};
         color: ${({ theme }) => theme.palette.text.primary};
         transition: 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
         text-transform: capitalize;
-        justify-content: ${ ({ open }) => open ? 'flex-start' : 'center' };
+        justify-content: ${({ open }) => open ? 'flex-start' : 'center'};
         .MuiListItemText-root {
-            display: ${ ({ open }) => open ? 'block' : 'none' };
+            display: ${({ open }) => open ? 'block' : 'none'};
         }
         .MuiListItemIcon-root {
-            margin-right:${ ({ open }) => open ? '16px' : '0' };
+            margin-right:${({ open }) => open ? '16px' : '0'};
         }
     }
 `
@@ -135,13 +139,28 @@ export default function Navigator(props) {
 
     const { open, ...other } = props;
 
+    const authCtx = useContext(AuthContext)
+    const { roleId } = authCtx;
+
     const params = useParams();
     const { t } = useTranslation();
+
+    const [permissions , setPermissions] = useState([]);
+
+    useEffect(() => {
+        v1.get(`/vendors/settings/roles/${roleId}/permissions`)
+            .then(res => {
+                setPermissions(res.data.permissions)
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }, [roleId])
 
 
     return (
         <Drawer open={open}  {...other} anchor='left'  >
-            <List disablePadding sx={{ px: open ? '16px' : '0px' , py: '16px', }} >
+            <List disablePadding sx={{ px: open ? '16px' : '0px', py: '16px', }} >
                 <Logo>
                     <NavLink to='/' >
                         {

@@ -381,6 +381,7 @@ const resources = {
             'You can either pay now or pay locally on arrival. You will be able to select payment method in the next step.': 'يمكنك دفع الآن أو دفع عند الوصول. ستكون قادرا على اختيار طريقة الدفع في الخطوة التالية.',
             'credit card': 'بطاقة ائتمان',
             'Deposit amount :': 'العربون :',
+            'edit deal details': 'تعديل تفاصيل العرض',
         }
     }
 };
