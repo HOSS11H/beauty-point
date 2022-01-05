@@ -369,6 +369,9 @@ const resources = {
             'Yearly': 'سنوي',
             'Monthly': 'شهري',
             'Service Added': 'تمت إضافة الخدمة',
+            'Back': 'رجوع',
+            'Finish': 'إنهاء',
+            'Next': 'التالي',
         }
     }
 };

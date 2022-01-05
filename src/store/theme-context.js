@@ -94,6 +94,7 @@ export const ThemeContextProvider = props => {
                 direction: direction,
                 vars: {
                     primary: '#EF14E2',
+                    theme: '#96248E',
                 },
                 fonts: {
                     ar: "'Cairo', sans-serif",

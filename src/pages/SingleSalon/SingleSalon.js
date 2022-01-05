@@ -24,6 +24,8 @@ import Paper from '@mui/material/Paper';
 import TablePaginationActions from "../../components/UI/Dashboard/Table/TablePagination/TablePagination";
 import HomeLayout from "../../components/HomeLayout/HomeLayout";
 import { CustomButton } from "../../components/UI/Button/Button";
+import { useCallback } from "react";
+import Cart from "./Cart/Cart";
 
 
 function TabPanel(props) {
@@ -39,7 +41,7 @@ function TabPanel(props) {
         >
             {value === index && (
                 <Box sx={{ p: 3 }}>
-                    <Typography>{children}</Typography>
+                    {children}
                 </Box>
             )}
         </div>
@@ -74,6 +76,7 @@ const Loader = styled.div`
 const ActionsWrapper = styled.div`
     display: flex;
     align-items: center;
+    margin-bottom: 30px;
 `
 const ActionButton = styled(CustomButton)`
     &.MuiButton-root {
@@ -99,7 +102,7 @@ const SingleSalon = props => {
 
     const param = useParams();
 
-    const [value, setValue] = React.useState(0);
+    const [value, setValue] =useState(0);
 
     const [servicesPage, setServicesPage] = useState(0);
     const [servicesRowsPerPage, setServicesRowsPerPage] = useState(servicesIntialRowsPerPage);
@@ -114,6 +117,8 @@ const SingleSalon = props => {
     
     const [deals, setDeal] = useState();
     const [loadingDeals, setLoadingDeals] = useState(false);
+
+    const [ showModal, setShowModal ] = useState(false);
 
     useEffect(() => {
         axios.get(`/companies/${param.salonId}?include[]=vendor_page&include[]=booking_times`)
@@ -158,6 +163,13 @@ const SingleSalon = props => {
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+    const openShowModalHandler = useCallback(() => {
+        setShowModal(true);
+    }, [])
+    const closeShowModalHandler = useCallback(() => {
+        setShowModal(false);
+    }, [])
+
     let content = (
         <Loader>
             <CircularProgress color="secondary" />
@@ -169,12 +181,19 @@ const SingleSalon = props => {
                 <Typography component="div" variant="h4" sx={{ marginBottom: '10px' }} >
                     {salon.companyName}
                 </Typography>
-                <Typography component="div" color='primary' variant="subtitle1" sx={{ display: 'flex', alignItems: 'center', marginBottom: '30px' }}>
-                    <PushPinIcon sx={{ mr: 1, width: '15px', height: '15px' }} />{salon.vendor_page.address}
-                </Typography>
-                <ActionsWrapper>
-                    <ActionButton>{t('book')}</ActionButton>
-                </ActionsWrapper>
+                <Grid container spacing={3}>
+                    <Grid item xs={12} sm={8} md={8} >
+                        <Typography component="div" color='primary' variant="subtitle1" sx={{ display: 'flex', alignItems: 'center', }}>
+                            <PushPinIcon sx={{ mr: 1, width: '15px', height: '15px' }} />{salon.vendor_page.address}
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={12} sm={4} md={4} >
+                        <ActionsWrapper>
+                            <ActionButton onClick={openShowModalHandler}>{t('book')}</ActionButton>
+                        </ActionsWrapper>
+                    </Grid>
+                </Grid>
+                <Cart salonData={salon}  show={showModal} onClose={closeShowModalHandler} />
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                         <Tab label={t('services')} {...a11yProps(0)} />
@@ -197,9 +216,6 @@ const SingleSalon = props => {
                                             </h3>
                                             <p className="salon-desc">
                                                 {formatCurrency(service.price)}
-                                            </p>
-                                            <p className="salon-location">
-                                                {service.name}
                                             </p>
                                         </div>
                                     </SalonPanel>
