@@ -7,6 +7,9 @@ import { a11yProps } from "../../../../shared/utility";
 import { registerForm, loginForm } from "../../../../utils/formConfig";
 import styled from "styled-components";
 import { CustomButton } from "../../../../components/UI/Button/Button";
+import { useContext } from "react";
+import AuthContext from "../../../../store/auth-context";
+import v1 from '../../../../utils/axios-instance-v1';
 
 const ErrorMessage = styled.p`
     font-size: 18px;
@@ -18,6 +21,10 @@ const ErrorMessage = styled.p`
 `
 
 const UserAuth = props => {
+
+    const { handleNext } = props;
+
+    const authCtx = useContext(AuthContext);
 
     const { t } = useTranslation();
 
@@ -43,11 +50,43 @@ const UserAuth = props => {
     };
 
     const submitHandler = () => {
+        let url ;
+        let authData;
         if (value === 0) {
             props.register(registerData)
         } else {
-            props.login(loginData)
+            url = `/auth/sign-in`;
+            const pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            if ( pattern.test(loginData.email.value) ) {
+                authData = {
+                    email: loginData.email.value,
+                    password: loginData.password.value,
+                    fcm_token: 'asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231',
+                    device_name: 'Y621312',
+                }
+            } else {
+                authData = {
+                    mobile: loginData.email.value,
+                    password: loginData.password.value,
+                    fcm_token: 'asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231',
+                    device_name: 'Y621312',
+                }
+            }
         }
+        setErrorMessage(null);
+        v1.post(url, authData)
+            .then(res => {
+                if (res.data.user.roles[0].name === 'customer') {
+                    authCtx.login(res.data.token, res.data.user.roles[0].name );
+                } else {
+                    authCtx.login(res.data.token, res.data.user.roles[0].id );
+                }
+                handleNext();
+            })
+            .catch( err => {
+                setErrorMessage(err.message.split('_').join(' ').toLowerCase())
+                console.log(err)
+            })
     }
 
     return (

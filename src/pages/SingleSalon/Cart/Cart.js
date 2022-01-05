@@ -4,7 +4,7 @@ import Fade from '@mui/material/Fade';
 import Card from '@mui/material/Card';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { useCallback, useState } from 'react';
 import CartHeadliner from './CartHeadliner/CartHeadliner';
 import ChooseType from './ChooseType/ChooseType';
@@ -12,6 +12,7 @@ import ChooseItem from './ChooseItem/ChooseItem';
 import ChooseAppointment from './ChooseAppointment/ChooseAppointment';
 import UserAuth from './UserAuth/UserAuth';
 import ChoosePayment from './ChoosePayment/ChoosePayment';
+import axios from '../../../utils/axios-instance';
 
 const CustomCardMui = styled(Card)`
     &.MuiPaper-root {
@@ -64,19 +65,22 @@ const steps = ['Select type', 'select items', 'Select appointment', 'user infos'
 
 const Cart = props => {
 
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
     const { show, onClose, salonData } = props;
 
     const [activeStep, setActiveStep] = useState(0);
 
-    const [ selectedType , setSelectedType ] = useState('');
+    const [selectedType, setSelectedType] = useState('');
 
-    const [ selectedItems , setSelectedItems ] = useState([]);
+    const [selectedItems, setSelectedItems] = useState([]);
 
-    const [ appointment , setAppointment ] = useState( new Date() );
+    const [appointment, setAppointment] = useState(new Date());
+    const [hasSelectedAppointment, setHasSelectedAppointment] = useState(false);
 
-    const [ paymentMethod , setPaumentMethod ] = useState('');
+    const [paymentMethod, setPaumentMethod] = useState('');
+
+    const [resevedBookingData, setReservedBookingData] = useState(null);
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -97,23 +101,50 @@ const Cart = props => {
     }, [])
 
     const handleChooseItems = useCallback((item) => {
-        setSelectedItems( prevState => {
-            if ( prevState.indexOf(item.id) === -1 ) {
+        setSelectedItems(prevState => {
+            if (prevState.indexOf(item.id) === -1) {
                 return [...prevState, item.id]
             } else {
-                const newState = prevState.filter( id => id !== item.id );
+                const newState = prevState.filter(id => id !== item.id);
                 return newState
             }
-        } )
+        })
     }, [])
 
     const handleAppointment = useCallback((date) => {
         setAppointment(date);
+        setHasSelectedAppointment(true);
     }, [])
 
     const handleChoosePayment = useCallback((payment) => {
         setPaumentMethod(payment);
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        if (payment === 'cash') {
+            let cart = {
+                services: [],
+                deals: [],
+            };
+            if (selectedType === 'services') {
+                const addedItems = selectedItems.map ( item => {
+                    return {
+                        id: item,
+                    }
+                } )
+                cart.services = addedItems;
+            }
+            let data = {
+                dateTime: appointment,
+                payment_gateway: payment,
+                cart: cart,
+            };
+            axios.post(`/vendors/bookings`, data)
+                .then(response => {
+                    setReservedBookingData(response.data);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
     }, [])
 
     return (
@@ -148,26 +179,64 @@ const Cart = props => {
                                 activeStep === 2 && <ChooseAppointment appointment={appointment} handleAppointment={handleAppointment} />
                             }
                             {
-                                activeStep === 3 && <UserAuth />
+                                activeStep === 3 && <UserAuth handleNext={handleNext} />
                             }
                             {
                                 activeStep === 4 && <ChoosePayment handlePayment={handleChoosePayment} />
                             }
                         </CartBody>
-                        <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>
-                            <Button
-                                color="inherit"
-                                disabled={activeStep === 0}
-                                onClick={handleBack}
-                                sx={{ mr: 1 }}
-                            >
-                                {t('Back')}
-                            </Button>
-                            <Box sx={{ flex: '1 1 auto' }} />
-                            <Button color="secondary" onClick={handleNext}>
-                                {t(activeStep === steps.length - 1 ? 'Finish' : 'Next')}
-                            </Button>
-                        </Box>
+                        {
+                            activeStep === 1 && (
+                                <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>
+                                    <Button
+                                        color="inherit"
+                                        onClick={handleBack}
+                                        sx={{ mr: 1 }}
+                                    >
+                                        {t('Back')}
+                                    </Button>
+                                    <Box sx={{ flex: '1 1 auto' }} />
+                                    <Button color="secondary" onClick={handleNext} disabled={selectedItems.length === 0} >
+                                        {t(activeStep === steps.length - 1 ? 'Finish' : 'Next')}
+                                    </Button>
+                                </Box>
+                            )
+                        }
+                        {
+                            activeStep === 2 && (
+                                <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>
+                                    <Button
+                                        color="inherit"
+                                        onClick={handleBack}
+                                        sx={{ mr: 1 }}
+                                    >
+                                        {t('Back')}
+                                    </Button>
+                                    <Box sx={{ flex: '1 1 auto' }} />
+                                    <Button color="secondary" onClick={handleNext} disabled={!hasSelectedAppointment} >
+                                        {t(activeStep === steps.length - 1 ? 'Finish' : 'Next')}
+                                    </Button>
+                                </Box>
+                            )
+                        }
+                        {
+                            activeStep === 3 && (
+                                <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>
+                                    <Button
+                                        color="inherit"
+                                        disabled={activeStep === 0}
+                                        onClick={handleBack}
+                                        sx={{ mr: 1 }}
+                                    >
+                                        {t('Back')}
+                                    </Button>
+                                    <Box sx={{ flex: '1 1 auto' }} />
+                                    <Button color="secondary" onClick={handleNext} disabled >
+                                        {t(activeStep === steps.length - 1 ? 'Finish' : 'Next')}
+                                    </Button>
+                                </Box>
+                            )
+                        }
                     </CartContent>
                 </CustomCardMui>
             </Fade>
