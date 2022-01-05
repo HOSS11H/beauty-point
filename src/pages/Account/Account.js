@@ -6,10 +6,11 @@ import Navigator from './Navigator/Navigator';
 import Header from './Header/Header';
 import { Outlet } from 'react-router';
 import ThemeContext from '../../store/theme-context';
+import { connect } from 'react-redux';
 
 const drawerWidth = 256;
 
-export default function Account( props ) {
+const Account = ( props ) => {
 
 	const themeCtx = useContext(ThemeContext)
 
@@ -106,14 +107,6 @@ export default function Account( props ) {
 						component="nav"
 						sx={{ flexShrink: { sm: 0 },  }}
 					>
-						{/* {isLgUp ? null : (
-							<Navigator
-								PaperProps={{ style: { width: drawerWidth } }}
-								variant="temporary"
-								open={mobileOpen}
-								onClose={handleDrawerToggle}
-							/>
-						)} */}
 						<Navigator
 							open={mobileOpen}
 							variant="permanent"
@@ -130,3 +123,9 @@ export default function Account( props ) {
 		</Fragment>
 	);
 }
+const mapStateToProps = (state) => {
+    return {
+        fetchedPermissions: state.permissions.permissions,
+    }
+}
+export default connect(mapStateToProps, null)(Account);
