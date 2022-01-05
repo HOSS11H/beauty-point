@@ -286,7 +286,18 @@ const Cart = props => {
                 total += item.price * item.quantity;
             }
         }
-        total = total - ((total * discount / 100) + (total * couponData.amount / 100));
+
+        if ( discountType === 'percent' ) {
+            total = total - ((total * discount / 100) );
+        } else if ( discountType === 'fixed') {
+            total = total - discount ;
+        }
+        if (couponData.discountType === 'percentage') {
+            total = total - ((total * couponData.amount / 100));
+        } else if (couponData.discountType === 'fixed') {
+            total = total - couponData.amount;
+        }
+        
         setTotalTaxes(total - (total / 1.15))
         setTotalPrice(total);
         setPaidAmount(total);
@@ -294,7 +305,7 @@ const Cart = props => {
             setCartDataError(false)
             return;
         }
-    }, [cartData, couponData, discount])
+    }, [cartData, couponData, discount, discountType])
 
     useEffect(() => {
         if (fetchedCustomers) {
