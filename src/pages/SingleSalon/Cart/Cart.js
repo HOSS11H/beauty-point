@@ -9,6 +9,7 @@ import { useCallback, useState } from 'react';
 import CartHeadliner from './CartHeadliner/CartHeadliner';
 import ChooseType from './ChooseType/ChooseType';
 import ChooseItem from './ChooseItem/ChooseItem';
+import ChooseAppointment from './ChooseAppointment/ChooseAppointment';
 
 const CustomCardMui = styled(Card)`
     &.MuiPaper-root {
@@ -55,6 +56,8 @@ const Cart = props => {
 
     const [ selectedItems , setSelectedItems ] = useState([]);
 
+    const [ appointment , setAppointment ] = useState( new Date() );
+
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
     };
@@ -84,6 +87,10 @@ const Cart = props => {
         } )
     }, [])
 
+    const handleAppointment = useCallback((date) => {
+        setAppointment(date);
+    }, [])
+
     return (
         <Modal
             aria-labelledby="transition-modal-title"
@@ -111,6 +118,9 @@ const Cart = props => {
                             }
                             {
                                 activeStep === 1 && <ChooseItem id={salonData.id} type={selectedType} onChoose={handleChooseItems} selectedItems={selectedItems} />
+                            }
+                            {
+                                activeStep === 2 && <ChooseAppointment appointment={appointment} handleAppointment={handleAppointment} />
                             }
                         </CartBody>
                         <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>
