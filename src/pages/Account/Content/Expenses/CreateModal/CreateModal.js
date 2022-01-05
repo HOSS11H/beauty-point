@@ -320,7 +320,7 @@ const CreateModal = (props) => {
             name: expenseName,
             note: draftToHtml(convertToRaw(editorState.getCurrentContent())),
             amount: expenseAmount,
-            expense_date: format(date, 'Y-M-dd hh:ii a'),
+            expense_date: format(date, 'Y-MM-dd hh:ii a'),
             bank_name: expenseBank,
             bank_account: expenseAccount,
             cat_id: selectedCategory.value,

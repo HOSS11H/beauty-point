@@ -372,6 +372,11 @@ const resources = {
             'Back': 'رجوع',
             'Finish': 'إنهاء',
             'Next': 'التالي',
+            'new registeration': 'تسجيل جديد',
+            'have an account ?': 'هل لديك حساب؟',
+            'edit booking times': 'تعديل أوقات الحجز',
+            'Deal Created': 'تم إنشاء العرض',
+            'log in': 'تسجيل الدخول',
         }
     }
 };

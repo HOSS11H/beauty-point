@@ -10,6 +10,7 @@ import CartHeadliner from './CartHeadliner/CartHeadliner';
 import ChooseType from './ChooseType/ChooseType';
 import ChooseItem from './ChooseItem/ChooseItem';
 import ChooseAppointment from './ChooseAppointment/ChooseAppointment';
+import UserAuth from './UserAuth/UserAuth';
 
 const CustomCardMui = styled(Card)`
     &.MuiPaper-root {
@@ -40,9 +41,25 @@ const CartBody = styled.div`
     flex-grow: 1;
     width: 100%;
     padding: 25px;
+    max-height: 80vh;
+    overflow-y: auto;
+    // Scroll //
+    -webkit-overflow-scrolling: touch;
+    &::-webkit-scrollbar {
+        height: 7px;
+        width: 8px;
+        background-color: ${({ theme }) => theme.palette.divider};
+        border-radius: 10px;
+    }
+    &::-webkit-scrollbar-thumb {
+        margin-left: 2px;
+        background: ${({ theme }) => theme.vars.primary};
+        border-radius: 10px;
+        cursor: pointer;
+    }
 `
 
-const steps = ['Select campaign settings', 'Create an ad group', 'Create an ad'];
+const steps = ['Select type', 'select items', 'Select appointment', 'user infos'];
 
 const Cart = props => {
 
@@ -110,7 +127,7 @@ const Cart = props => {
         >
             <Fade in={show}>
                 <CustomCardMui>
-                    <CartHeadliner activeStep={activeStep} salonNum={salonData.companyPhone} />
+                    <CartHeadliner activeStep={activeStep} salonNum={salonData.companyPhone} steps={steps} />
                     <CartContent sx={{ width: '100%' }}>
                         <CartBody>
                             {
@@ -121,6 +138,9 @@ const Cart = props => {
                             }
                             {
                                 activeStep === 2 && <ChooseAppointment appointment={appointment} handleAppointment={handleAppointment} />
+                            }
+                            {
+                                activeStep === 3 && <UserAuth />
                             }
                         </CartBody>
                         <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>

@@ -70,13 +70,12 @@ const CartContact = styled.div`
     }
 `
 
-const steps = ['Select campaign settings', 'Create an ad group', 'Create an ad'];
 
 const CartHeadliner = props => {
 
     const {t} = useTranslation();
 
-    const { activeStep, salonNum } = props;
+    const { activeStep, salonNum, steps } = props;
 
     return (
         <CartHeadlinerWrapper>

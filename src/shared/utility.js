@@ -12,3 +12,10 @@ const formatter = new Intl.NumberFormat('en-IN', {
 export  function formatCurrency(amount) {
     return formatter.format(amount)
 }
+
+export function a11yProps(index) {
+    return {
+        id: `simple-tab-${index}`,
+        'aria-controls': `simple-tabpanel-${index}`,
+    };
+}

@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import { NavLink, useParams } from "react-router-dom";
 import PushPinIcon from '@mui/icons-material/PushPin';
 import { SalonPanel, DealPanel } from '../../components/UI/SalonPanel/SalonPanel';
-import { formatCurrency } from "../../shared/utility";
+import { a11yProps, formatCurrency } from "../../shared/utility";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -26,40 +26,9 @@ import HomeLayout from "../../components/HomeLayout/HomeLayout";
 import { CustomButton } from "../../components/UI/Button/Button";
 import { useCallback } from "react";
 import Cart from "./Cart/Cart";
+import TabPanel from "../../components/UI/TabPanel/TabPanel";
 
 
-function TabPanel(props) {
-    const { children, value, index, ...other } = props;
-
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-        >
-            {value === index && (
-                <Box sx={{ p: 3 }}>
-                    {children}
-                </Box>
-            )}
-        </div>
-    );
-}
-
-TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.number.isRequired,
-    value: PropTypes.number.isRequired,
-};
-
-function a11yProps(index) {
-    return {
-        id: `simple-tab-${index}`,
-        'aria-controls': `simple-tabpanel-${index}`,
-    };
-}
 
 const CategoriesWrapper = styled.section`
     background-color: #FAFAFA;

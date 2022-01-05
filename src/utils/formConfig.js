@@ -124,3 +124,44 @@ export const subscribeForm = {
         ],
     },
 }
+
+// object representation of Register form
+export const registerForm = {
+    name: {
+        ...createFormFieldConfig({ ar: 'الاسم', en: 'name' }, 'ahmed masoud', 'name', 'text'),
+        validationRules: [
+            requiredRule( {en: `name required`, ar: `الاسم مطلوب`} ),
+        ],
+    },
+    phoneNum: {
+        ...createFormFieldConfig({ ar: 'رقم الهاتف', en: 'phone' }, '123321123' ,'phoneNum', 'phone'),
+        validationRules: [
+            requiredRule( {en: `phone number required`, ar: `رقم الهاتف مطلوب`} ),
+            isNumberRule( {en: `phone number should be a number`, ar: `رقم الهاتف يجب أن يكون رقم`} ),
+        ],
+    },
+    password : {
+        ...createFormFieldConfig( { ar: 'الرقم السري', en: 'password' }  ,'......', 'password', 'password',undefined ,undefined , undefined , undefined , false),
+        validationRules : [
+            requiredRule( { en: `password required`, ar: `رقم السر مطلوب` }),
+        ]
+    },
+    confirmPassword : {
+        ...createFormFieldConfig( { ar: 'تأكيد الرقم السري', en: 're-enter password' }  ,'......', 'confirmPassword', 'password',undefined ,undefined , undefined , undefined , false),
+        validationRules : [
+            passwordMatchRule({ ar: 'يجب تطابق كلمتي المرور', en: `passwords don't match` }),
+        ]
+    },
+    terms: {
+        ...createFormFieldConfig(
+        { 
+            ar: {text: 'انا موافق علي بند الاستخدام وسياسة الخصوصية وقد قرأتها بالكامل', linkText: 'بنود الاستخدام وسياسة الخصوصية', } , 
+            en: {text: 'I have read and agree terms & conditions', linkText: 'view terms & conditions', } ,
+            link: 'https://beautypoint.app',
+        },
+        undefined  ,'terms', 'checkbox', false ),
+        validationRules: [
+            requiredCheckRule( {en: `you should agree terms & conditions`, ar: `يجب أن توافق علي بنود الاستخدام وسياسة الخصوصية`} ),
+        ],
+    },
+}

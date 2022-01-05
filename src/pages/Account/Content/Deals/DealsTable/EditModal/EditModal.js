@@ -246,7 +246,6 @@ const EditModal = (props) => {
         obj[item] = true;
         return obj;
     })
-    console.log(selectedAppliedDays)
 
 
     const [cartData, dispatch] = useReducer(cartReducer, {
@@ -568,9 +567,9 @@ const EditModal = (props) => {
             days : selectedAppliedDays,
             description: draftToHtml(convertToRaw(editorState.getCurrentContent())),
             status: dealStatus,
-            deal_startDate: `${format(dateFrom, 'Y-M-dd hh:ii a')}`,
-            deal_endDate: `${format(dateTo, 'Y-M-dd hh:ii a')}`,
-            applied_between_dates : `${format(dateFrom, 'Y-M-dd hh:ii a')}  ${format(dateTo, 'Y-M-dd hh:ii a')}`,
+            deal_startDate: `${format(dateFrom, 'Y-MM-dd hh:ii a')}`,
+            deal_endDate: `${format(dateTo, 'Y-MM-dd hh:ii a')}`,
+            applied_between_dates : `${format(dateFrom, 'Y-MM-dd hh:ii a')}  ${format(dateTo, 'Y-MM-dd hh:ii a')}`,
             open_time : `${format(openTime, 'hh:ii a')}`,
             close_time : `${format(closeTime, 'hh:ii a')}`,
             deal_startTime: `${format(openTime, 'hh:ii a')}`,
