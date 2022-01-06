@@ -183,8 +183,8 @@ const RecentBookings = props => {
                             <BookingContent>
                                 <ClientName>{booking.user.name}</ClientName>
                                 <ClientInfo>
-                                    <li><MailIcon sx={{ mr: 1 }} />{booking.user.email}</li>
-                                    <li><PhoneAndroidIcon sx={{ mr: 1 }} />{booking.user.mobile}</li>
+                                    {booking.user.email && <li><MailIcon sx={{ mr: 1 }} />{booking.user.email}</li>}
+                                    {booking.user.mobile &&<li><PhoneAndroidIcon sx={{ mr: 1 }} />{booking.user.mobile}</li>}
                                 </ClientInfo>
                             </BookingContent>
                         </Booking>

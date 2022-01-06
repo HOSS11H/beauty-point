@@ -46,6 +46,7 @@ import FormLabel from '@mui/material/FormLabel';
 import FormGroup from '@mui/material/FormGroup';
 import Checkbox from '@mui/material/Checkbox';
 import { format } from 'date-fns';
+import {convertTime12to24} from '../../../../../../shared/utility';
 
 
 const CustomTextField = styled(TextField)`
@@ -282,9 +283,9 @@ const EditModal = (props) => {
     const [dateTo, setDateTo] = useState(new Date(end_date_time));
     const [dateToError, setDateToError] = useState(false);
     
-    const [openTime, setOpenTime] = useState(new Date(`2021-02-03 ${open_time}`));
+    const [openTime, setOpenTime] = useState(new Date(`2021-02-03 ${convertTime12to24(open_time)}`));
 
-    const [closeTime, setCloseTime] = useState(new Date(`2021-02-03 ${close_time}`));
+    const [closeTime, setCloseTime] = useState(new Date(`2021-02-03 ${convertTime12to24(close_time)}`));
     const [closeTimeError, setCloseTimeError] = useState(false);
     
     const [appliedDays, setAppliedDays] = useState({

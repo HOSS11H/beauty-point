@@ -15,6 +15,7 @@ import ValidationMessage from '../../../../../../components/UI/ValidationMessage
 import InputLabel from '@mui/material/InputLabel';
 import { format } from 'date-fns';
 import InputAdornment from '@mui/material/InputAdornment';
+import { convertTime12to24 } from '../../../../../../shared/utility';
 
 const CustomTextField = styled(TextField)`
     width: 100%;
@@ -22,7 +23,7 @@ const CustomTextField = styled(TextField)`
 
 const EditModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, bookingTimes, id, editingBookingSettingsSuccess, start_time, end_time } = props;
+    const { show, heading, confirmText, onConfirm, onClose, bookingTimes, id, editingBookingSettingsSuccess } = props;
 
     const bookingTimesData = bookingTimes.find( item => item.id === id );
 
@@ -30,9 +31,9 @@ const EditModal = (props) => {
 
     const { t } = useTranslation();
 
-    const [openTime, setOpenTime] = useState(new Date(`2021-02-03 ${bookingTimesData.start_time}`));
-
-    const [closeTime, setCloseTime] = useState(new Date(`2021-02-03 ${bookingTimesData.end_time}`));
+    const [openTime, setOpenTime] = useState(new Date(`2021-02-03 ${convertTime12to24(bookingTimesData.start_time)}`));
+    console.log( convertTime12to24('01:00 am') )
+    const [closeTime, setCloseTime] = useState(new Date(`2021-02-03 ${convertTime12to24(bookingTimesData.end_time)}`));
     const [closeTimeError, setCloseTimeError] = useState(false);
 
     const [slotDuration, setSlotDuration] = useState(bookingTimesData.slot_duration);
