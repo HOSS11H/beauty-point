@@ -5,7 +5,7 @@ import Card from '@mui/material/Card';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { Box, Button } from '@mui/material';
-import { useCallback, useReducer, useState } from 'react';
+import { useCallback, useEffect, useReducer, useState } from 'react';
 import CartHeadliner from './CartHeadliner/CartHeadliner';
 import ChooseType from './ChooseType/ChooseType';
 import ChooseItem from './ChooseItem/ChooseItem';
@@ -228,6 +228,8 @@ const Cart = props => {
 
     const [resevedBookingData, setReservedBookingData] = useState(null);
 
+    const [bookingDone, setBookingDone] = useState(false);
+
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
     };
@@ -374,6 +376,24 @@ const Cart = props => {
         setUserInfos(infos);
     }, [])
 
+    const handleBookingDone = useCallback(() => {
+        setBookingDone(true);
+    }, [])
+
+    const ResetCart = () => {
+        if (bookingDone) {
+            resetCartHandler();
+            handleReset();
+            setSelectedType('');
+            setHasSelectedAppointment(false);
+            setPaumentMethod('');
+            setCouponId(null);
+            setUserInfos('');
+            setBookingDone(false);
+            onClose();
+        }
+    }
+
     return (
         <Modal
             aria-labelledby="transition-modal-title"
@@ -415,7 +435,7 @@ const Cart = props => {
                                 activeStep === 5 && <ChoosePayment handlePayment={handleChoosePayment} />
                             }
                             {
-                                activeStep === 6 && <PrintBooking bookingData={resevedBookingData} userData={userInfos} />
+                                activeStep === 6 && <PrintBooking bookingData={resevedBookingData} userData={userInfos} handleBookingDone={handleBookingDone} />
                             }
                         </CartBody>
                         {
@@ -483,6 +503,16 @@ const Cart = props => {
                                     <Box sx={{ flex: '1 1 auto' }} />
                                     <Button color="secondary" onClick={handleNext} disabled >
                                         {t(activeStep === steps.length - 1 ? 'Finish' : 'Next')}
+                                    </Button>
+                                </Box>
+                            )
+                        }
+                        {
+                            activeStep === 6 && (
+                                <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>
+                                    <Box sx={{ flex: '1 1 auto' }} />
+                                    <Button color="secondary" onClick={ResetCart} disabled={!bookingDone} >
+                                        {t('Finish')}
                                     </Button>
                                 </Box>
                             )

@@ -46,7 +46,7 @@ const PrintBooking = props => {
 
     const {t} = useTranslation()
 
-    const { bookingData, userData } = props;
+    const { bookingData, userData, handleBookingDone } = props;
 
     const [ qrCode, setQrCode ] = useState(null);
 
@@ -60,8 +60,6 @@ const PrintBooking = props => {
         }
     }
 
-    console.log(modifiedUserData)
-
     useEffect(() => {
         if ( bookingData.id ) {
             setLoading(true);
@@ -69,13 +67,14 @@ const PrintBooking = props => {
                 .then(res => {
                     setLoading(false);
                     setQrCode(res.data.data);
+                    handleBookingDone();
                 })
                 .catch(err => {
                     setLoading(false);
                     console.log(err);
                 })
         }
-    }, [bookingData.id]);
+    }, [bookingData.id, handleBookingDone]);
 
     const invoiceRef = useRef();
 
