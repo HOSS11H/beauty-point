@@ -14,6 +14,7 @@ import UserAuth from './UserAuth/UserAuth';
 import ChoosePayment from './ChoosePayment/ChoosePayment';
 import axios from '../../../utils/axios-instance';
 import { updateObject } from '../../../shared/utility';
+import ItemsReview from './ItemsReview/ItemsReview';
 
 const CustomCardMui = styled(Card)`
     &.MuiPaper-root {
@@ -214,8 +215,6 @@ const Cart = props => {
 
     const [selectedType, setSelectedType] = useState('');
 
-    const [selectedItems, setSelectedItems] = useState([]);
-
     const [appointment, setAppointment] = useState(new Date());
     const [hasSelectedAppointment, setHasSelectedAppointment] = useState(false);
 
@@ -339,18 +338,6 @@ const Cart = props => {
         setPaumentMethod(payment);
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
         if (payment === 'cash') {
-            let cart = {
-                services: [],
-                deals: [],
-            };
-            if (selectedType === 'services') {
-                const addedItems = selectedItems.map(item => {
-                    return {
-                        id: item,
-                    }
-                })
-                cart.services = addedItems;
-            }
             let data = {
                 dateTime: appointment,
                 payment_gateway: payment,
@@ -364,7 +351,7 @@ const Cart = props => {
                     console.log(err);
                 })
         }
-    }, [appointment, selectedItems, selectedType])
+    }, [appointment, cart])
 
     return (
         <Modal
@@ -392,7 +379,10 @@ const Cart = props => {
                                 activeStep === 0 && <ChooseType handleChoosetype={handleChoosetype} />
                             }
                             {
-                                activeStep === 1 && <ChooseItem id={salonData.id} cartData={cart} type={selectedType} onChoose={addToCartHandler} selectedItems={selectedItems} />
+                                activeStep === 1 && <ChooseItem id={salonData.id} cartData={cart} type={selectedType} onChoose={addToCartHandler} />
+                            }
+                            {
+                                activeStep === 2 && <ItemsReview  cartData={cart} removeFromCart={removeFromCartHandler} increaseItem={increaseItemHandler} decreaseItem={decreaseItemHandler} />
                             }
                             {
                                 activeStep === 3 && <ChooseAppointment appointment={appointment} handleAppointment={handleAppointment} />

@@ -130,12 +130,12 @@ const ChooseItem = props => {
         }
     }, [type, page, id])
 
-
     const onChooseService = (service) => {
         const serviceData = {
             id: service.id,
             price: service.discount_price,
             quantity: 1,
+            name: service.name,
         }
         onChoose(serviceData)
     }
@@ -144,6 +144,7 @@ const ChooseItem = props => {
             id: deal.id,
             price: deal.discount_price,
             quantity: 1,
+            name: deal.title,
         }
         onChoose(dealData)
     }
