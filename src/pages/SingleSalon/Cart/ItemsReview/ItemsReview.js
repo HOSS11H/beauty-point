@@ -19,11 +19,13 @@ const CouponWrapper = styled.div`
     display: flex;
     align-items: center;
     flex-wrap: wrap;
+    margin-bottom: 20px;
 `
 
 const PriceCalculation = styled.div`
     display: flex;
     align-items: center;
+    margin: 10px 0;
     p {
         font-size: 20px;
         line-height:1.5;
