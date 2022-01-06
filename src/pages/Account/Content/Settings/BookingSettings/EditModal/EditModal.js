@@ -32,7 +32,7 @@ const EditModal = (props) => {
     const { t } = useTranslation();
 
     const [openTime, setOpenTime] = useState(new Date(`2021-02-03 ${convertTime12to24(bookingTimesData.start_time)}`));
-    console.log( convertTime12to24('01:00 am') )
+
     const [closeTime, setCloseTime] = useState(new Date(`2021-02-03 ${convertTime12to24(bookingTimesData.end_time)}`));
     const [closeTimeError, setCloseTimeError] = useState(false);
 
@@ -96,11 +96,12 @@ const EditModal = (props) => {
         editingBookingSettingsSuccess && resetModalData();
     }, [editingBookingSettingsSuccess, resetModalData])
 
+    console.log(format(closeTime, 'hh:mm a'))
     const confirmCreateHandler = useCallback(() => {
         const data= {
             id,
-            start_time: format(openTime, 'HH:mm a'),
-            end_time: format(closeTime, 'HH:mm a'),
+            start_time: format(openTime, 'hh:mm a.'),
+            end_time: format(closeTime, 'hh:mm a.'),
             multiple_booking: multipleBookings,
             max_booking: +maximumBookings,
             per_day_max_booking: +maximumBookingsPerDay,
