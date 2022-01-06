@@ -216,6 +216,7 @@ const Cart = props => {
     const [selectedType, setSelectedType] = useState('');
 
     const [appointment, setAppointment] = useState(new Date());
+    const [ slot, setSlot] = useState('');
     const [hasSelectedAppointment, setHasSelectedAppointment] = useState(false);
 
     const [paymentMethod, setPaumentMethod] = useState('');
@@ -331,6 +332,11 @@ const Cart = props => {
 
     const handleAppointment = useCallback((date) => {
         setAppointment(date);
+        setSlot('');
+    }, [])
+
+    const handleSlot = useCallback((slot) => {
+        setSlot(slot);
         setHasSelectedAppointment(true);
     }, [])
 
@@ -385,7 +391,7 @@ const Cart = props => {
                                 activeStep === 2 && <ItemsReview  cartData={cart} removeFromCart={removeFromCartHandler} increaseItem={increaseItemHandler} decreaseItem={decreaseItemHandler} />
                             }
                             {
-                                activeStep === 3 && <ChooseAppointment appointment={appointment} handleAppointment={handleAppointment} />
+                                activeStep === 3 && <ChooseAppointment id={salonData.id} appointment={appointment} handleAppointment={handleAppointment} handleSlot={handleSlot} activeSlot={slot} />
                             }
                             {
                                 activeStep === 4 && <UserAuth id={salonData.id} handleNext={handleNext} />
