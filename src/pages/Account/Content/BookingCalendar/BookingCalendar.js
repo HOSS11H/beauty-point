@@ -10,7 +10,7 @@ import ThemeContext from '../../../../store/theme-context';
 import styled from 'styled-components';
 import v1 from '../../../../utils/axios-instance-v1';
 import { useTranslation } from "react-i18next";
-import ViewModal from './ViewModal/ViewModal';
+import ViewModal from '../Bookings/ViewModal/ViewModal';
 import { format } from 'date-fns';
 import { useRef } from 'react';
 
