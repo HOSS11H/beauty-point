@@ -384,6 +384,8 @@ const resources = {
             'edit deal details': 'تعديل تفاصيل العرض',
             'share': 'مشاركة',
             'Copied !': 'تم النسخ !',
+            'open time': 'وقت الفتح',
+            'close time': 'وقت الإغلاق',
         }
     }
 };

@@ -63,13 +63,8 @@ const ItemView = styled.div`
     h3 {
         font-size: 20px;
         line-height: 1.5;
-        color: ${props => props.theme.vars.theme};
+        color: ${ ({ theme }) => theme.palette.mode === 'dark' ? theme.palette.common.white : theme.vars.theme};
         margin-bottom: 15px;
-    }
-    p {
-        font-size: 16px;
-        line-height: 1.5;
-        color: rgba(255, 255, 255, 1);
     }
 `
 const ItemPrice = styled.div`
@@ -78,7 +73,7 @@ const ItemPrice = styled.div`
     p {
         font-size: 17px;
         line-height: 1.5;
-        color: ${props => props.theme.vars.theme};
+        color: ${ ({ theme }) => theme.palette.mode === 'dark' ? theme.palette.common.white : theme.vars.theme};
         &.original-price {
             text-decoration: line-through;
             margin-left: 10px
@@ -177,11 +172,11 @@ const ChooseItem = props => {
                             {services.map((service, index) => {
                                 if (services.length === (index + 1)) {
                                     return (
-                                        <Item ref={lastElementRef} key={service.id} onClick={() => onChooseService(service)} className={`${ (selectedItems?.indexOf(service.id) > -1) ? 'active' : ''  }`} >{service.name}</Item>
+                                        <Item ref={lastElementRef} key={index} onClick={() => onChooseService(service)} className={`${ (selectedItems?.indexOf(service.id) > -1) ? 'active' : ''  }`} >{service.name}</Item>
                                     )
                                 } else {
                                     return (
-                                        <Item key={service.id} onClick={() => onChooseService(service)} className={`${ (selectedItems?.indexOf(service.id) > -1) ? 'active' : ''  }`} >{service.name}</Item>
+                                        <Item key={index} onClick={() => onChooseService(service)} className={`${ (selectedItems?.indexOf(service.id) > -1) ? 'active' : ''  }`} >{service.name}</Item>
                                     )
                                 }
                             })}
@@ -218,11 +213,11 @@ const ChooseItem = props => {
                             {deals.map((deal, index) => {
                                 if (deals.length === (index + 1)) {
                                     return (
-                                        <Item ref={lastElementRef} key={deal.id} onClick={() => onChooseDeal(deal)} className={`${ (selectedItems?.indexOf(deal.id) > -1) ? 'active' : ''  }`} >{deal.title}</Item>
+                                        <Item ref={lastElementRef} key={index} onClick={() => onChooseDeal(deal)} className={`${ (selectedItems?.indexOf(deal.id) > -1) ? 'active' : ''  }`} >{deal.title}</Item>
                                     )
                                 } else {
                                     return (
-                                        <Item key={deal.id} onClick={() => onChooseDeal(deal)} className={`${ (selectedItems?.indexOf(deal.id) > -1) ? 'active' : ''  }`} >{deal.title}</Item>
+                                        <Item key={index} onClick={() => onChooseDeal(deal)} className={`${ (selectedItems?.indexOf(deal.id) > -1) ? 'active' : ''  }`} >{deal.title}</Item>
                                     )
                                 }
                             })}

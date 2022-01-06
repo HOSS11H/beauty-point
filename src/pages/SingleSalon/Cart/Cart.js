@@ -27,7 +27,7 @@ const CustomCardMui = styled(Card)`
         @media screen and (max-width: 1199.98px) {
             width: 90%;
         }
-        @media screen and (max-width: 599.98px) {
+        @media screen and (max-width: 899.98px) {
             width: 90%;
             flex-direction: column;
         }
