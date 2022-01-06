@@ -17,7 +17,6 @@ import ThemeContext from "../../../store/theme-context";
 
 
 const ServicesSliderWrapper = styled.section`
-    background-color: #FAFAFA;
     padding: 74px 0 88px;
     @media screen and (max-width: 899.98px) {
         padding: 25px 0 15px;
@@ -126,7 +125,7 @@ const ServicePanel = styled.div`
                 font-size: 15px
             }
             transition: 0.3s ease-in-out;
-            color: ${({ theme }) => theme.palette.common.black};
+            color: ${ ( {theme} ) => theme.palette.text.primary };
             &:hover {
                 color: ${({ theme }) => theme.vars.primary};
             }

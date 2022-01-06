@@ -16,7 +16,6 @@ import Typography from '@mui/material/Typography';
 import HomeLayout from "../../components/HomeLayout/HomeLayout";
 
 const CategoriesWrapper = styled.section`
-    background-color: #FAFAFA;
     padding: 70px 0px;
 `
 const Loader = styled.div`

@@ -27,11 +27,12 @@ import { CustomButton } from "../../components/UI/Button/Button";
 import { useCallback } from "react";
 import Cart from "./Cart/Cart";
 import TabPanel from "../../components/UI/TabPanel/TabPanel";
+import ShareIcon from '@mui/icons-material/Share';
+import CustomizedSnackbars from "../../components/UI/SnackBar/SnackBar";
 
 
 
-const CategoriesWrapper = styled.section`
-    background-color: #FAFAFA;
+const Wrapper = styled.section`
     padding: 70px 0px;
 `
 const Loader = styled.div`
@@ -89,6 +90,8 @@ const SingleSalon = props => {
 
     const [ showModal, setShowModal ] = useState(false);
 
+    const [messageShown, setMessageShown] = useState(false);
+
     useEffect(() => {
         axios.get(`/companies/${param.salonId}?include[]=vendor_page&include[]=booking_times`)
             .then(res => {
@@ -139,6 +142,14 @@ const SingleSalon = props => {
         setShowModal(false);
     }, [])
 
+    const copySalonUrlHandler = ( ) => {
+        navigator.clipboard.writeText(window.location.href);
+        setMessageShown(true);
+    }
+    const closeMessageHandler = () => {
+        setMessageShown(false);
+    }
+
     let content = (
         <Loader>
             <CircularProgress color="secondary" />
@@ -159,6 +170,7 @@ const SingleSalon = props => {
                     <Grid item xs={12} sm={4} md={4} >
                         <ActionsWrapper>
                             <ActionButton onClick={openShowModalHandler}>{t('book')}</ActionButton>
+                            <ActionButton onClick={copySalonUrlHandler}><ShareIcon sx={{ mr: '5px'}} /> {t('share')}</ActionButton>
                         </ActionsWrapper>
                     </Grid>
                 </Grid>
@@ -289,11 +301,12 @@ const SingleSalon = props => {
     }
     return (
         <HomeLayout>
-            <CategoriesWrapper>
+            <Wrapper>
                 <Container maxWidth="lg">
                     {content}
                 </Container>
-            </CategoriesWrapper>
+                <CustomizedSnackbars show={messageShown} message={t('Copied !')} type='success' onClose={closeMessageHandler} />
+            </Wrapper>
         </HomeLayout>
     )
 }

@@ -382,6 +382,8 @@ const resources = {
             'credit card': 'بطاقة ائتمان',
             'Deposit amount :': 'العربون :',
             'edit deal details': 'تعديل تفاصيل العرض',
+            'share': 'مشاركة',
+            'Copied !': 'تم النسخ !',
         }
     }
 };

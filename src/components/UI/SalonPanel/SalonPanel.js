@@ -1,7 +1,6 @@
 import styled from "styled-components"
 
 export const SalonPanel = styled.div`
-    background-color: #fff;
     border-radius: 25px;
     padding: 0 9px;
     @media screen and (max-width: 899.98px) {
@@ -9,10 +8,11 @@ export const SalonPanel = styled.div`
         max-width: 370px
     }
     .salon-img  {
+        height: 250px;
         img {
             width: 100%;
+            height: 100%;
             border-radius: 25px 25px 0 0;
-            height: 250px;
             object-fit: cover;
             @media screen and (max-width: 599.98px) {
                 height: 200px;
@@ -21,6 +21,7 @@ export const SalonPanel = styled.div`
     }
     .salon-content {
         background-color: #F7F7F7;
+        background-color: ${({ theme }) => theme.palette.mode === "dark" ? "#000" : "#f7f7f7"};
         padding: 18px 20px 16px;
         border-radius: 0 0 25px 25px;
         .salon-title {
@@ -42,7 +43,7 @@ export const SalonPanel = styled.div`
             font-size:17px;
             line-height:1.5;
             font-weight: 300;
-            color         : ${props => props.theme.vars.black};
+            color: ${ ( {theme} ) => theme.palette.text.primary };
             margin-bottom: 30px;
             @media screen and (max-width: 599.98px) {
                 font-size: 14px;
@@ -54,7 +55,7 @@ export const SalonPanel = styled.div`
             font-size: 16px;
             line-height: 21px;
             font-weight: 300;
-            color         : ${props => props.theme.vars.black};
+            color: ${ ( {theme} ) => theme.palette.text.primary };
             margin-bottom: 0;
             text-transform: capitalize;
             @media screen and (max-width: 599.98px) {
@@ -65,7 +66,6 @@ export const SalonPanel = styled.div`
     }
 `
 export const DealPanel = styled.div`
-    background-color: #fff;
     border-radius: 25px;
     padding: 0 9px;
     @media screen and (max-width: 899.98px) {
@@ -84,7 +84,7 @@ export const DealPanel = styled.div`
         }
     }
     .deal-content {
-        background-color: #F7F7F7;
+        background-color: ${({ theme }) => theme.palette.mode === "dark" ? "#000" : "#f7f7f7"};
         padding: 18px 20px 16px;
         border-radius: 0 0 25px 25px;
         .deal-body {
@@ -111,7 +111,7 @@ export const DealPanel = styled.div`
                 font-size:17px;
                 line-height:1.5;
                 font-weight: 300;
-                color         : ${props => props.theme.vars.black};
+                color: ${ ( {theme} ) => theme.palette.text.primary };
                 margin-bottom: 0px;
                 @media screen and (max-width: 599.98px) {
                     font-size: 14px;
@@ -176,7 +176,7 @@ export const DealPanel = styled.div`
             font-size: 16px;
             line-height: 21px;
             font-weight: 300;
-            color         : ${props => props.theme.vars.black};
+            color: ${ ( {theme} ) => theme.palette.text.primary };
             margin-bottom: 0;
             text-transform: capitalize;
             @media screen and (max-width: 599.98px) {
