@@ -46,6 +46,14 @@ const Item = styled.div`
     color: #fff;
     transition: 0.2s ease-in-out;
     cursor: pointer;
+    text-align: left;
+    span {
+        margin-left: 5px;
+        &.original-price {
+            text-decoration: line-through;
+            margin-left: 10px
+        }
+    }
     &.active {
         background-color: #fff;
         border: 5px solid ${props => props.theme.vars.theme};
@@ -56,29 +64,6 @@ const Loading = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-`
-
-const ItemView = styled.div`
-    text-align: left;
-    h3 {
-        font-size: 20px;
-        line-height: 1.5;
-        color: ${ ({ theme }) => theme.palette.mode === 'dark' ? theme.palette.common.white : theme.vars.theme};
-        margin-bottom: 15px;
-    }
-`
-const ItemPrice = styled.div`
-    display: flex;
-    align-items: center;
-    p {
-        font-size: 17px;
-        line-height: 1.5;
-        color: ${ ({ theme }) => theme.palette.mode === 'dark' ? theme.palette.common.white : theme.vars.theme};
-        &.original-price {
-            text-decoration: line-through;
-            margin-left: 10px
-        }
-    }
 `
 
 
@@ -166,17 +151,29 @@ const ChooseItem = props => {
     if (services.length > 0 && type === 'services') {
         content = (
             <Grid container spacing={2}>
-                <Grid item xs={12} md={6} >
+                <Grid item xs={12}  >
                     <ItemsWrapper>
                         <div>
                             {services.map((service, index) => {
                                 if (services.length === (index + 1)) {
                                     return (
-                                        <Item ref={lastElementRef} key={index} onClick={() => onChooseService(service)} className={`${ (selectedItems?.indexOf(service.id) > -1) ? 'active' : ''  }`} >{service.name}</Item>
+                                        <Item ref={lastElementRef} key={index} onClick={() => onChooseService(service)} className={`${ (selectedItems?.indexOf(service.id) > -1) ? 'active' : ''  }`} >
+                                            {service.name}
+                                            <div>
+                                                <span>{formatCurrency(service.discount_price)}</span>
+                                                { service.discount_price !== service.price && (<span className="original-price" >{formatCurrency(service.price)}</span>)} 
+                                            </div>
+                                        </Item>
                                     )
                                 } else {
                                     return (
-                                        <Item key={index} onClick={() => onChooseService(service)} className={`${ (selectedItems?.indexOf(service.id) > -1) ? 'active' : ''  }`} >{service.name}</Item>
+                                        <Item key={index} onClick={() => onChooseService(service)} className={`${ (selectedItems?.indexOf(service.id) > -1) ? 'active' : ''  }`} >
+                                            {service.name}
+                                            <div>
+                                                <span>{formatCurrency(service.discount_price)}</span>
+                                                { service.discount_price !== service.price && (<span className="original-price" >{formatCurrency(service.price)}</span>)} 
+                                            </div>
+                                        </Item>
                                     )
                                 }
                             })}
@@ -187,19 +184,6 @@ const ChooseItem = props => {
                             </Loading>
                         )}
                     </ItemsWrapper>
-                </Grid>
-                <Grid item xs={12} md={6} >
-                    {
-                        selectedService && (
-                            <ItemView>
-                                <h3>{selectedService.name}</h3>
-                                <ItemPrice>
-                                    <p>{formatCurrency(selectedService.discount_price)}</p>
-                                    { selectedService.discount_price !== selectedService.price && (<p className="original-price" >{formatCurrency(selectedService.price)}</p>)} 
-                                </ItemPrice>
-                            </ItemView>
-                        )
-                    }
                 </Grid>
             </Grid>
         )
@@ -207,17 +191,29 @@ const ChooseItem = props => {
     if (deals.length > 0 && type === 'deals') {
         content = (
             <Grid container spacing={2}>
-                <Grid item xs={12} md={6} >
+                <Grid item xs={12} >
                     <ItemsWrapper>
                         <div>
                             {deals.map((deal, index) => {
                                 if (deals.length === (index + 1)) {
                                     return (
-                                        <Item ref={lastElementRef} key={index} onClick={() => onChooseDeal(deal)} className={`${ (selectedItems?.indexOf(deal.id) > -1) ? 'active' : ''  }`} >{deal.title}</Item>
+                                        <Item ref={lastElementRef} key={index} onClick={() => onChooseDeal(deal)} className={`${ (selectedItems?.indexOf(deal.id) > -1) ? 'active' : ''  }`} >
+                                            {deal.title}
+                                            <div>
+                                                <span>{formatCurrency(deal.discount_price)}</span>
+                                                { deal.discount_price !== deal.price && (<span className="original-price" >{formatCurrency(deal.price)}</span>)} 
+                                            </div>
+                                        </Item>
                                     )
                                 } else {
                                     return (
-                                        <Item key={index} onClick={() => onChooseDeal(deal)} className={`${ (selectedItems?.indexOf(deal.id) > -1) ? 'active' : ''  }`} >{deal.title}</Item>
+                                        <Item key={index} onClick={() => onChooseDeal(deal)} className={`${ (selectedItems?.indexOf(deal.id) > -1) ? 'active' : ''  }`} >
+                                            {deal.title}
+                                            <div>
+                                                <span>{formatCurrency(deal.discount_price)}</span>
+                                                { deal.discount_price !== deal.price && (<span className="original-price" >{formatCurrency(deal.price)}</span>)} 
+                                            </div>
+                                        </Item>
                                     )
                                 }
                             })}
@@ -228,19 +224,6 @@ const ChooseItem = props => {
                             </Loading>
                         )}
                     </ItemsWrapper>
-                </Grid>
-                <Grid item xs={12} md={6} >
-                    {
-                        selectedDeal && (
-                            <ItemView>
-                                <h3>{selectedDeal.title}</h3>
-                                <ItemPrice>
-                                    <p>{formatCurrency(selectedDeal.discount_price)}</p>
-                                    { selectedDeal.discount_price !== selectedDeal.price && (<p className="original-price" >{formatCurrency(selectedDeal.price)}</p>)} 
-                                </ItemPrice>
-                            </ItemView>
-                        )
-                    }
                 </Grid>
             </Grid>
         )

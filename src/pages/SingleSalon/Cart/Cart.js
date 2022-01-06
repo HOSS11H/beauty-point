@@ -24,7 +24,7 @@ const CustomCardMui = styled(Card)`
         background-color: ${({ theme }) => theme.palette.background.default};
         z-index:1;
         width: 70%;
-        @media screen and (max-width: 1199.98px) {
+        @media screen and (max-width: 1399.98px) {
             width: 90%;
         }
         @media screen and (max-width: 899.98px) {
@@ -51,6 +51,7 @@ const CartBody = styled.div`
     -webkit-overflow-scrolling: touch;
     @media screen and (max-width: 599.98px) {
         max-height: 400px;
+        padding: 25px 15px;
     }
     &::-webkit-scrollbar {
         height: 7px;

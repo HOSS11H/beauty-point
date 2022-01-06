@@ -13,7 +13,7 @@ const CartHeadlinerWrapper = styled.div`
     border-radius: 20px 0 0 20px;
     padding: 15px 30px 25px 30px;
     text-align: center;
-    @media screen and (max-width: 899.98px) {
+    @media screen and (max-width: 1999.98px) {
         flex: 0 1 35%;
         padding-left: 20px;
         padding-right: 20px;
@@ -31,7 +31,7 @@ const ModalStepLabel = styled(StepLabel)`
     }
     & .MuiStepLabel-iconContainer {
         padding-right: 15px;
-        @media screen and (max-width: 899.98px) {
+        @media screen and (max-width: 1999.98px) {
             padding-right: 5px;
         }
         & .MuiSvgIcon-root {
