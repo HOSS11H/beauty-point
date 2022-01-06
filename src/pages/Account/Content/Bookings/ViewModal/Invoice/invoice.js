@@ -71,7 +71,7 @@ const ClientInfos = styled.p`
 	width: 95%;
     display: flex;
 	align-items: center;
-	justify-content: space-between;
+	justify-content: flex-end;
     font-size: 12px;
     line-height:1.5;
     text-transform: capitalize;
@@ -80,6 +80,12 @@ const ClientInfos = styled.p`
     transition: 0.3s ease-in-out;
     margin: 10px auto;
     cursor: pointer;
+	span {
+		margin-right: 10px;
+		&:first-child {
+			margin-right: 0;
+		}
+	}
 `
 const BillTotal = styled.p`
     display: flex;

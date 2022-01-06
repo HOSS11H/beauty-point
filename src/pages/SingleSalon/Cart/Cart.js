@@ -23,11 +23,13 @@ const CustomCardMui = styled(Card)`
         border-radius:20px;
         background-color: ${({ theme }) => theme.palette.background.default};
         z-index:1;
-        @media screen and (max-width: 899.98px) {
+        width: 70%;
+        @media screen and (max-width: 1199.98px) {
             width: 90%;
         }
-        @media screen and (min-width: 900px) {
-            width: 70%;
+        @media screen and (max-width: 599.98px) {
+            width: 90%;
+            flex-direction: column;
         }
     }
 `;
@@ -47,6 +49,9 @@ const CartBody = styled.div`
     overflow-y: auto;
     // Scroll //
     -webkit-overflow-scrolling: touch;
+    @media screen and (max-width: 599.98px) {
+        max-height: 400px;
+    }
     &::-webkit-scrollbar {
         height: 7px;
         width: 8px;

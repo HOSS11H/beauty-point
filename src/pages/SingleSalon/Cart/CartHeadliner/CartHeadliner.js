@@ -13,6 +13,16 @@ const CartHeadlinerWrapper = styled.div`
     border-radius: 20px 0 0 20px;
     padding: 15px 30px 25px 30px;
     text-align: center;
+    @media screen and (max-width: 899.98px) {
+        flex: 0 1 35%;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    @media screen and (max-width: 599.98px) {
+        border-radius: 20px 20px 0 0;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
 `
 
 const ModalStepLabel = styled(StepLabel)`
@@ -21,6 +31,9 @@ const ModalStepLabel = styled(StepLabel)`
     }
     & .MuiStepLabel-iconContainer {
         padding-right: 15px;
+        @media screen and (max-width: 899.98px) {
+            padding-right: 5px;
+        }
         & .MuiSvgIcon-root {
             width: 33px;
             height: 4px;
@@ -43,13 +56,24 @@ const CartIcon = styled.img`
     max-width:90px;
     margin-top: 20px;
     margin-bottom: 20px;
+    @media screen and (max-width: 899.98px) {
+        max-width: 70px;
+        margin: 15px 0;
+    }
 `
 const CartHeading = styled.div`
     margin-bottom: 30px;
+    @media screen and (max-width: 899.98px) {
+        margin-bottom: 20px;
+    }
     h3 {
         font-size: 28px;
         line-height: 40px;
         color: rgba(255, 255, 255, 1);
+        @media screen and (max-width: 899.98px) {
+            font-size: 22px;
+            line-height: 1.5;
+        }
     }
     p {
         font-size: 17px;
@@ -62,6 +86,9 @@ const CartContact = styled.div`
         font-size: 20px;
         line-height: 1.5;
         color: rgba(255, 255, 255, 1);
+        @media screen and (max-width: 899.98px) {
+            font-size: 19px;
+        }
     }
     a {
         font-size: 17px;

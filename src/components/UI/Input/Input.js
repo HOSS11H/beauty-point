@@ -33,6 +33,9 @@ const InputLabel = styled.label`
     text-transform: capitalize;
     margin-bottom: 10px;
     text-align: center;
+    @media screen and (max-width: 599.98px) {
+        font-size: 16px;
+    }
 `
 
 const ErrorMessage = styled.p`

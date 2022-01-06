@@ -171,7 +171,7 @@ const ChooseItem = props => {
     if (services.length > 0 && type === 'services') {
         content = (
             <Grid container spacing={2}>
-                <Grid item xs={12} sm={6} >
+                <Grid item xs={12} md={6} >
                     <ItemsWrapper>
                         <div>
                             {services.map((service, index) => {
@@ -193,7 +193,7 @@ const ChooseItem = props => {
                         )}
                     </ItemsWrapper>
                 </Grid>
-                <Grid item xs={12} sm={6} >
+                <Grid item xs={12} md={6} >
                     {
                         selectedService && (
                             <ItemView>
@@ -212,7 +212,7 @@ const ChooseItem = props => {
     if (deals.length > 0 && type === 'deals') {
         content = (
             <Grid container spacing={2}>
-                <Grid item xs={12} sm={6} >
+                <Grid item xs={12} md={6} >
                     <ItemsWrapper>
                         <div>
                             {deals.map((deal, index) => {
@@ -234,7 +234,7 @@ const ChooseItem = props => {
                         )}
                     </ItemsWrapper>
                 </Grid>
-                <Grid item xs={12} sm={6} >
+                <Grid item xs={12} md={6} >
                     {
                         selectedDeal && (
                             <ItemView>
