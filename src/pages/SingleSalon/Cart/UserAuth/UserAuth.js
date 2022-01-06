@@ -22,7 +22,7 @@ const ErrorMessage = styled.p`
 
 const UserAuth = props => {
 
-    const { handleNext } = props;
+    const { handleNext, id } = props;
 
     const authCtx = useContext(AuthContext);
 
@@ -30,7 +30,7 @@ const UserAuth = props => {
 
     const [value, setValue] = useState(0);
 
-    const [ errorMessage , setErrorMessage ] = useState(null);
+    const [errorMessage, setErrorMessage] = useState(null);
 
     const { renderFormInputs: registerInputs, isFormValid: isRegisterDataValid, form: registerData } = useForm(registerForm);
 
@@ -47,17 +47,26 @@ const UserAuth = props => {
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
+        setErrorMessage(null);
     };
 
     const submitHandler = () => {
-        let url ;
+        let url;
         let authData;
         if (value === 0) {
-            props.register(registerData)
+            url = '/auth/sign-up';
+            authData = {
+                company_id: id,
+                name: registerData.name.value,
+                mobile: registerData.phoneNum.value,
+                password: registerData.password.value,
+                fcm_token: 'asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231',
+                device_name: 'Y621312',
+            }
         } else {
             url = `/auth/sign-in`;
             const pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            if ( pattern.test(loginData.email.value) ) {
+            if (pattern.test(loginData.email.value)) {
                 authData = {
                     email: loginData.email.value,
                     password: loginData.password.value,
@@ -77,15 +86,18 @@ const UserAuth = props => {
         v1.post(url, authData)
             .then(res => {
                 if (res.data.user.roles[0].name === 'customer') {
-                    authCtx.login(res.data.token, res.data.user.roles[0].name );
+                    authCtx.login(res.data.token, res.data.user.roles[0].name);
                 } else {
-                    authCtx.login(res.data.token, res.data.user.roles[0].id );
+                    authCtx.login(res.data.token, res.data.user.roles[0].id);
                 }
                 handleNext();
             })
-            .catch( err => {
-                setErrorMessage(err.message.split('_').join(' ').toLowerCase())
-                console.log(err)
+            .catch(err => {
+                if (err.response.status === 500) {
+                    setErrorMessage(t('serverError'));
+                } else {
+                    setErrorMessage(t(err.response.data.message))
+                }
             })
     }
 

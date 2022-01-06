@@ -386,6 +386,8 @@ const resources = {
             'Copied !': 'تم النسخ !',
             'open time': 'وقت الفتح',
             'close time': 'وقت الإغلاق',
+            'register': 'تسجيل',
+            'The given data was invalid.': 'تم إدخال بيانات غير صحيحة.',
         }
     }
 };

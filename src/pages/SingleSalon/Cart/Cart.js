@@ -184,7 +184,7 @@ const Cart = props => {
                                 activeStep === 2 && <ChooseAppointment appointment={appointment} handleAppointment={handleAppointment} />
                             }
                             {
-                                activeStep === 3 && <UserAuth handleNext={handleNext} />
+                                activeStep === 3 && <UserAuth  id={salonData.id} handleNext={handleNext} />
                             }
                             {
                                 activeStep === 4 && <ChoosePayment handlePayment={handleChoosePayment} />

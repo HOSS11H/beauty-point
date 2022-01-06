@@ -47,7 +47,7 @@ function createFormFieldConfig(label, placeholder, name, type, defaultValue = ''
 // object representation of Login form
 export const loginForm = {
     email : {
-        ...createFormFieldConfig( {ar: 'بريد الكتروني أو رقم هاتف', en: 'email or number' }  ,'admin@example.com', 'email', 'email'),
+        ...createFormFieldConfig( {ar: 'بريد الكتروني أو رقم هاتف', en: 'email or number' }  ,'0123456789', 'email', 'email'),
         validationRules: [
             requiredRule({en: `email or phone required`, ar: `بريد الكتروني أو رقم هاتف مطلوب`}),
         ],
@@ -128,7 +128,7 @@ export const subscribeForm = {
 // object representation of Register form
 export const registerForm = {
     name: {
-        ...createFormFieldConfig({ ar: 'الاسم', en: 'name' }, 'ahmed masoud', 'name', 'text'),
+        ...createFormFieldConfig({ ar: 'الاسم', en: 'name' }, 'Name', 'name', 'text'),
         validationRules: [
             requiredRule( {en: `name required`, ar: `الاسم مطلوب`} ),
         ],
