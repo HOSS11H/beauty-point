@@ -657,6 +657,7 @@ const EditModal = (props) => {
                     <FormControl sx={{ width: '100%' }}>
                         <InputLabel id="services-label">{t('add services')}</InputLabel>
                         <Select
+                            label={t('add services')}
                             labelId="services-label"
                             id="select-services"
                             value={selectedServices}
@@ -691,6 +692,7 @@ const EditModal = (props) => {
                     <FormControl sx={{ width: '100%' }}>
                         <InputLabel id="products-label">{t('add products')}</InputLabel>
                         <Select
+                            label={t('add products')}
                             labelId="products-label"
                             id="select-products"
                             value={selectedProducts}
@@ -725,6 +727,7 @@ const EditModal = (props) => {
                     <FormControl sx={{ width: '100%' }}>
                         <InputLabel id="deals-label">{t('add deals')}</InputLabel>
                         <Select
+                            label={t('add deals')}
                             labelId="deals-label"
                             id="select-deals"
                             value={selectedDeals}

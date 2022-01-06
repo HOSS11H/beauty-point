@@ -29,6 +29,7 @@ import Cart from "./Cart/Cart";
 import TabPanel from "../../components/UI/TabPanel/TabPanel";
 import ShareIcon from '@mui/icons-material/Share';
 import CustomizedSnackbars from "../../components/UI/SnackBar/SnackBar";
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 
 
 
@@ -146,6 +147,10 @@ const SingleSalon = props => {
         navigator.clipboard.writeText(window.location.href);
         setMessageShown(true);
     }
+    const copySalonLocationHandler = ( ) => {
+        navigator.clipboard.writeText(`geo:https://maps.google.com/maps?q=${salon.vendor_page.latitude},${salon.vendor_page.longitude}`);
+        setMessageShown(true);
+    }
     const closeMessageHandler = () => {
         setMessageShown(false);
     }
@@ -162,15 +167,16 @@ const SingleSalon = props => {
                     {salon.companyName}
                 </Typography>
                 <Grid container spacing={3}>
-                    <Grid item xs={12} sm={8} md={8} >
+                    <Grid item xs={12} sm={12} md={8} >
                         <Typography component="div" color='primary' variant="subtitle1" sx={{ display: 'flex', alignItems: 'center', }}>
                             <PushPinIcon sx={{ mr: 1, width: '15px', height: '15px' }} />{salon.vendor_page.address}
                         </Typography>
                     </Grid>
-                    <Grid item xs={12} sm={4} md={4} >
+                    <Grid item xs={12} sm={12} md={4} >
                         <ActionsWrapper>
                             <ActionButton onClick={openShowModalHandler}>{t('book')}</ActionButton>
                             <ActionButton onClick={copySalonUrlHandler}><ShareIcon sx={{ mr: '5px'}} /> {t('share')}</ActionButton>
+                            <ActionButton onClick={copySalonLocationHandler}><LocationOnIcon sx={{ mr: '5px'}} /> {t('location')}</ActionButton>
                         </ActionsWrapper>
                     </Grid>
                 </Grid>

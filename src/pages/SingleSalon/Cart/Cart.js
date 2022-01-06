@@ -16,6 +16,7 @@ import axios from '../../../utils/axios-instance';
 import { updateObject } from '../../../shared/utility';
 import ItemsReview from './ItemsReview/ItemsReview';
 import PrintBooking from './PrintBooking/PrintBooking';
+import { format } from 'date-fns/esm';
 
 const CustomCardMui = styled(Card)`
     &.MuiPaper-root {
@@ -222,7 +223,7 @@ const Cart = props => {
 
     const [userInfos, setUserInfos] = useState('');
 
-    const [paymentMethod, setPaumentMethod] = useState('');
+    const [paymentMethod, setPaymentMethod] = useState('');
 
     const [couponId, setCouponId] = useState(null);
 
@@ -352,11 +353,14 @@ const Cart = props => {
     }, [])
 
     const handleChoosePayment = useCallback((payment) => {
-        setPaumentMethod(payment);
+        setPaymentMethod(payment);
+        const chosenDate = format(appointment, 'yyyy-MM-dd');
+        const combinedDate = new Date(`${chosenDate} ${slot}`).toISOString();
+        console.log(combinedDate);
         if (payment === 'cash') {
             let data = {
                 company_id: salonData.id,
-                dateTime: appointment,
+                dateTime: combinedDate,
                 payment_gateway: payment,
                 cart: cart,
                 couponId: couponId,
@@ -370,7 +374,7 @@ const Cart = props => {
                     console.log(err);
                 })
         }
-    }, [appointment, cart, couponId, salonData.id])
+    }, [appointment, cart, couponId, salonData.id, slot])
 
     const storeUserInfos = useCallback((infos) => {
         setUserInfos(infos);
@@ -382,14 +386,17 @@ const Cart = props => {
 
     const ResetCart = () => {
         if (bookingDone) {
-            resetCartHandler();
             handleReset();
             setSelectedType('');
+            setAppointment(new Date());
+            setSlot('');
             setHasSelectedAppointment(false);
-            setPaumentMethod('');
-            setCouponId(null);
             setUserInfos('');
+            setPaymentMethod('');
+            setCouponId(null);
+            setReservedBookingData(null);
             setBookingDone(false);
+            resetCartHandler();
             onClose();
         }
     }
