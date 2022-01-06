@@ -15,6 +15,7 @@ import ChoosePayment from './ChoosePayment/ChoosePayment';
 import axios from '../../../utils/axios-instance';
 import { updateObject } from '../../../shared/utility';
 import ItemsReview from './ItemsReview/ItemsReview';
+import PrintBooking from './PrintBooking/PrintBooking';
 
 const CustomCardMui = styled(Card)`
     &.MuiPaper-root {
@@ -197,7 +198,7 @@ const cartReducer = (state, action) => {
     }
 }
 
-const steps = ['Select type', 'select items', 'review items', 'Select appointment', 'user infos', 'choose Payment'];
+const steps = ['Select type', 'select items', 'review items', 'Select appointment', 'user infos', 'choose Payment', 'print receipt'];
 
 const Cart = props => {
 
@@ -216,10 +217,14 @@ const Cart = props => {
     const [selectedType, setSelectedType] = useState('');
 
     const [appointment, setAppointment] = useState(new Date());
-    const [ slot, setSlot] = useState('');
+    const [slot, setSlot] = useState('');
     const [hasSelectedAppointment, setHasSelectedAppointment] = useState(false);
 
+    const [userInfos, setUserInfos] = useState('');
+
     const [paymentMethod, setPaumentMethod] = useState('');
+
+    const [couponId, setCouponId] = useState(null);
 
     const [resevedBookingData, setReservedBookingData] = useState(null);
 
@@ -340,24 +345,34 @@ const Cart = props => {
         setHasSelectedAppointment(true);
     }, [])
 
+    const handleCoupon = useCallback(id => {
+        setCouponId(id);
+    }, [])
+
     const handleChoosePayment = useCallback((payment) => {
         setPaumentMethod(payment);
-        setActiveStep((prevActiveStep) => prevActiveStep + 1);
         if (payment === 'cash') {
             let data = {
+                company_id: salonData.id,
                 dateTime: appointment,
                 payment_gateway: payment,
                 cart: cart,
+                couponId: couponId,
             };
-            axios.post(`/vendors/bookings`, data)
+            axios.post(`/bookings`, data)
                 .then(response => {
                     setReservedBookingData(response.data);
+                    setActiveStep((prevActiveStep) => prevActiveStep + 1);
                 })
                 .catch(err => {
                     console.log(err);
                 })
         }
-    }, [appointment, cart])
+    }, [appointment, cart, couponId, salonData.id])
+
+    const storeUserInfos = useCallback((infos) => {
+        setUserInfos(infos);
+    }, [])
 
     return (
         <Modal
@@ -388,16 +403,19 @@ const Cart = props => {
                                 activeStep === 1 && <ChooseItem id={salonData.id} cartData={cart} type={selectedType} onChoose={addToCartHandler} />
                             }
                             {
-                                activeStep === 2 && <ItemsReview  cartData={cart} removeFromCart={removeFromCartHandler} increaseItem={increaseItemHandler} decreaseItem={decreaseItemHandler} />
+                                activeStep === 2 && <ItemsReview cartData={cart} removeFromCart={removeFromCartHandler} increaseItem={increaseItemHandler} decreaseItem={decreaseItemHandler} assignCoupon={handleCoupon} />
                             }
                             {
                                 activeStep === 3 && <ChooseAppointment id={salonData.id} appointment={appointment} handleAppointment={handleAppointment} handleSlot={handleSlot} activeSlot={slot} />
                             }
                             {
-                                activeStep === 4 && <UserAuth id={salonData.id} handleNext={handleNext} />
+                                activeStep === 4 && <UserAuth id={salonData.id} handleNext={handleNext} storeUserData={storeUserInfos} />
                             }
                             {
                                 activeStep === 5 && <ChoosePayment handlePayment={handleChoosePayment} />
+                            }
+                            {
+                                activeStep === 6 && <PrintBooking bookingData={resevedBookingData} userData={userInfos} />
                             }
                         </CartBody>
                         {
@@ -411,7 +429,7 @@ const Cart = props => {
                                         {t('Back')}
                                     </Button>
                                     <Box sx={{ flex: '1 1 auto' }} />
-                                    <Button color="secondary" onClick={handleNext} disabled={cart.services.length === 0 && cart.deals.length === 0 && cart.products.length === 0 } >
+                                    <Button color="secondary" onClick={handleNext} disabled={cart.services.length === 0 && cart.deals.length === 0 && cart.products.length === 0} >
                                         {t(activeStep === steps.length - 1 ? 'Finish' : 'Next')}
                                     </Button>
                                 </Box>
@@ -428,7 +446,7 @@ const Cart = props => {
                                         {t('Back')}
                                     </Button>
                                     <Box sx={{ flex: '1 1 auto' }} />
-                                    <Button color="secondary" onClick={handleNext} disabled={cart.services.length === 0 && cart.deals.length === 0 && cart.products.length === 0 } >
+                                    <Button color="secondary" onClick={handleNext} disabled={cart.services.length === 0 && cart.deals.length === 0 && cart.products.length === 0} >
                                         {t(activeStep === steps.length - 1 ? 'Finish' : 'Next')}
                                     </Button>
                                 </Box>

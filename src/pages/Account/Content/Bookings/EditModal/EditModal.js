@@ -615,6 +615,7 @@ const EditModal = (props) => {
                             <MenuItem value='completed'>{t('completed')}</MenuItem>
                             <MenuItem value='canceled'>{t('canceled')}</MenuItem>
                             <MenuItem value='in progress'>{t('in progress')}</MenuItem>
+                            <MenuItem value='pending'>{t('pending')}</MenuItem>
                         </Select>
                     </FormControl>
                 </Grid>

@@ -156,11 +156,11 @@ const Invoice = React.forwardRef((props, ref) => {
 				<Grid container spacing={3}>
 					<Grid item xs={12}>
 						<ClientDetails>
-							<ClientImg src={userData.user.company.logo_url} />
-							<ClientName>{userData.user.company.companyName}</ClientName>
-							<ClientAddress>{userData.user.company.address}</ClientAddress>
-							<ClientAddress>رقم التليفون : {userData.user.company.companyPhone}</ClientAddress>
-							<ClientAddress><span>{userData.user.company.tax_record}</span> : الرقم الضريبي</ClientAddress>
+							<ClientImg src={userData.user.company?.logo_url} />
+							<ClientName>{userData.user.company?.companyName}</ClientName>
+							<ClientAddress>{userData.user.company?.address}</ClientAddress>
+							<ClientAddress>رقم التليفون : {userData.user.company?.companyPhone}</ClientAddress>
+							<ClientAddress><span>{userData.user.company?.tax_record}</span> : الرقم الضريبي</ClientAddress>
 							<ClientBill>رقم الحجز : {bookingData.id}</ClientBill>
 							<ClientDate>تاريخ الفاتورة : {bookingData.date}</ClientDate>
 							<Grid sx={{ width: '100%'}}  container spacing={2}>

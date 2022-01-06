@@ -22,7 +22,7 @@ const ErrorMessage = styled.p`
 
 const UserAuth = props => {
 
-    const { handleNext, id } = props;
+    const { handleNext, id, storeUserData } = props;
 
     const authCtx = useContext(AuthContext);
 
@@ -90,6 +90,7 @@ const UserAuth = props => {
                 } else {
                     authCtx.login(res.data.token, res.data.user.roles[0].id);
                 }
+                storeUserData(res.data);
                 handleNext();
             })
             .catch(err => {

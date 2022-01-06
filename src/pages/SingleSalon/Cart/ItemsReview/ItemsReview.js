@@ -42,7 +42,7 @@ const PriceCalculation = styled.div`
 
 const ItemsReview = props => {
 
-    const { cartData, fetchedCoupons, fetchCouponsHandler, removeFromCart, increaseItem, decreaseItem } = props;
+    const { cartData, fetchedCoupons, fetchCouponsHandler, removeFromCart, increaseItem, decreaseItem, assignCoupon } = props;
 
     const { t } = useTranslation();
 
@@ -86,6 +86,7 @@ const ItemsReview = props => {
         if (enteredCoupon.length > 0) {
             setCouponExists(true)
             setCouponData(enteredCoupon[0])
+            assignCoupon(enteredCoupon[0].id)
         } else {
             setCouponData({ amount: 0 })
             setCouponExists(false)
