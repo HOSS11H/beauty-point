@@ -415,7 +415,7 @@ const Cart = props => {
                                         {t('Back')}
                                     </Button>
                                     <Box sx={{ flex: '1 1 auto' }} />
-                                    <Button color="secondary" onClick={handleNext} disabled={selectedItems.length === 0} >
+                                    <Button color="secondary" onClick={handleNext} disabled={cart.services.length === 0 && cart.deals.length === 0 && cart.products.length === 0 } >
                                         {t(activeStep === steps.length - 1 ? 'Finish' : 'Next')}
                                     </Button>
                                 </Box>
