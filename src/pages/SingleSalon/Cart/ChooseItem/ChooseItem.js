@@ -1,7 +1,7 @@
 import axios from '../../../../utils/axios-instance';
 import { useState } from 'react';
 import { useEffect, useRef } from 'react';
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 import Loader from '../../../../components/UI/Loader/Loader';
 import { CircularProgress, Grid } from '@mui/material';
 import { useCallback } from 'react';
@@ -54,11 +54,11 @@ const Item = styled.div`
             margin-left: 10px
         }
     }
-    &.active {
+    ${ ( { activeItem } ) => activeItem && css`
         background-color: #fff;
         border: 5px solid ${props => props.theme.vars.theme};
         color: ${props => props.theme.vars.theme};
-    }
+    `}
 `
 const Loading = styled.div`
     display: flex;
@@ -69,14 +69,11 @@ const Loading = styled.div`
 
 const ChooseItem = props => {
 
-    const { type, id, onChoose, selectedItems } = props;
+    const { type, id, onChoose, cartData } = props;
 
     const [services, setServices] = useState([]);
-    const [selectedService, setSelectedService] = useState(null);
-    
     
     const [deals, setDeals] = useState([]);
-    const [selectedDeal, setSelectedDeal] = useState(null);
 
     const [lastPage, setLastPage] = useState(false)
     const [loading, setLoading] = useState(true)
@@ -135,12 +132,20 @@ const ChooseItem = props => {
 
 
     const onChooseService = (service) => {
-        setSelectedService(service)
-        onChoose(service)
+        const serviceData = {
+            id: service.id,
+            price: service.discount_price,
+            quantity: 1,
+        }
+        onChoose(serviceData)
     }
-    const onChooseDeal = (service) => {
-        setSelectedDeal(service)
-        onChoose(service)
+    const onChooseDeal = (deal) => {
+        const dealData = {
+            id: deal.id,
+            price: deal.discount_price,
+            quantity: 1,
+        }
+        onChoose(dealData)
     }
 
 
@@ -155,9 +160,10 @@ const ChooseItem = props => {
                     <ItemsWrapper>
                         <div>
                             {services.map((service, index) => {
+                                const activeItem = (cartData.services.find( item => item.id === service.id));
                                 if (services.length === (index + 1)) {
                                     return (
-                                        <Item ref={lastElementRef} key={index} onClick={() => onChooseService(service)} className={`${ (selectedItems?.indexOf(service.id) > -1) ? 'active' : ''  }`} >
+                                        <Item ref={lastElementRef} key={index} onClick={() => onChooseService(service)} activeItem={activeItem} >
                                             {service.name}
                                             <div>
                                                 <span>{formatCurrency(service.discount_price)}</span>
@@ -167,7 +173,7 @@ const ChooseItem = props => {
                                     )
                                 } else {
                                     return (
-                                        <Item key={index} onClick={() => onChooseService(service)} className={`${ (selectedItems?.indexOf(service.id) > -1) ? 'active' : ''  }`} >
+                                        <Item key={index} onClick={() => onChooseService(service)} activeItem={activeItem} >
                                             {service.name}
                                             <div>
                                                 <span>{formatCurrency(service.discount_price)}</span>
@@ -195,9 +201,10 @@ const ChooseItem = props => {
                     <ItemsWrapper>
                         <div>
                             {deals.map((deal, index) => {
+                                const activeItem = (!!cartData.deals.find( item => item.id === deal.id));
                                 if (deals.length === (index + 1)) {
                                     return (
-                                        <Item ref={lastElementRef} key={index} onClick={() => onChooseDeal(deal)} className={`${ (selectedItems?.indexOf(deal.id) > -1) ? 'active' : ''  }`} >
+                                        <Item ref={lastElementRef} key={index} onClick={() => onChooseDeal(deal)} activeItem={activeItem} >
                                             {deal.title}
                                             <div>
                                                 <span>{formatCurrency(deal.discount_price)}</span>
@@ -207,7 +214,7 @@ const ChooseItem = props => {
                                     )
                                 } else {
                                     return (
-                                        <Item key={index} onClick={() => onChooseDeal(deal)} className={`${ (selectedItems?.indexOf(deal.id) > -1) ? 'active' : ''  }`} >
+                                        <Item key={index} onClick={() => onChooseDeal(deal)} activeItem={activeItem} >
                                             {deal.title}
                                             <div>
                                                 <span>{formatCurrency(deal.discount_price)}</span>
