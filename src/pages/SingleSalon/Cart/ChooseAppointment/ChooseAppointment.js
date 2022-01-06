@@ -1,7 +1,7 @@
 import TextField from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import StaticDateTimePicker from '@mui/lab/StaticDateTimePicker';
+import StaticDatePicker from '@mui/lab/StaticDatePicker';
 
 const ChooseAppointment = props => {
 
@@ -9,7 +9,7 @@ const ChooseAppointment = props => {
 
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <StaticDateTimePicker
+            <StaticDatePicker 
                 displayStaticWrapperAs="desktop"
                 value={appointment}
                 onChange={(newValue) => {

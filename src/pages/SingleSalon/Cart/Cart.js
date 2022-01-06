@@ -412,6 +412,23 @@ const Cart = props => {
                             )
                         }
                         {
+                            activeStep === 2 && (
+                                <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>
+                                    <Button
+                                        color="inherit"
+                                        onClick={handleBack}
+                                        sx={{ mr: 1 }}
+                                    >
+                                        {t('Back')}
+                                    </Button>
+                                    <Box sx={{ flex: '1 1 auto' }} />
+                                    <Button color="secondary" onClick={handleNext} disabled={cart.services.length === 0 && cart.deals.length === 0 && cart.products.length === 0 } >
+                                        {t(activeStep === steps.length - 1 ? 'Finish' : 'Next')}
+                                    </Button>
+                                </Box>
+                            )
+                        }
+                        {
                             activeStep === 3 && (
                                 <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>
                                     <Button
