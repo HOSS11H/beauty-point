@@ -17,6 +17,7 @@ import { updateObject } from '../../../shared/utility';
 import ItemsReview from './ItemsReview/ItemsReview';
 import PrintBooking from './PrintBooking/PrintBooking';
 import { format } from 'date-fns/esm';
+import moment from 'moment';
 
 const CustomCardMui = styled(Card)`
     &.MuiPaper-root {
@@ -354,13 +355,13 @@ const Cart = props => {
 
     const handleChoosePayment = useCallback((payment) => {
         setPaymentMethod(payment);
-        const chosenDate = format(appointment, 'yyyy-MM-dd');
-        const combinedDate = new Date(`${chosenDate} ${slot}`).toISOString();
-        console.log(combinedDate);
+        const chosenDate = format(appointment, 'yyyy/MM/dd');
+        const combined = chosenDate + " " + slot;
+        const toDate = new Date(combined).toISOString()
         if (payment === 'cash') {
             let data = {
                 company_id: salonData.id,
-                dateTime: combinedDate,
+                dateTime: toDate,
                 payment_gateway: payment,
                 cart: cart,
                 couponId: couponId,
