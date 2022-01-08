@@ -12,6 +12,12 @@ import TableRow from '@mui/material/TableRow';
 import { useTranslation } from 'react-i18next';
 import { formatCurrency } from '../../../../../../shared/utility';
 
+const Wrapper = styled.div`
+	max-width: 95%;
+	margin-left: auto;
+	margin-right: auto;
+`
+
 const ClientDetails = styled.div`
 	padding-top: 50px;
     display: flex;
@@ -68,7 +74,6 @@ const ClientDate = styled.p`
     margin-bottom: 5px;
 `
 const ClientInfos = styled.p`
-	width: 95%;
     display: flex;
 	align-items: center;
 	justify-content: flex-end;
@@ -79,11 +84,9 @@ const ClientInfos = styled.p`
     color: #000;
     transition: 0.3s ease-in-out;
     margin: 10px auto;
-    cursor: pointer;
 	span {
-		margin-right: 10px;
 		&:first-child {
-			margin-right: 0;
+			margin-left: 5px;
 		}
 	}
 `
@@ -123,6 +126,25 @@ const BookingDataHeading = styled.p`
 	margin-top: 10px;
 	text-align: center;
 `
+const CustomTableHead = styled(TableCell)`
+	text-align: center;
+	background-color: #333;
+	padding-left: 5px;
+	padding-right: 5px;
+	span {
+		color: #fff;
+		font-size: 12px;
+		line-height:1.3;
+		font-weight: 600;
+		display: block;
+		text-transform: capitalize;
+	}
+`
+const CustomTableCell = styled(TableCell)`
+	padding-left: 5px;
+	padding-right: 5px;
+`
+
 const BookingDataBody = styled.p`
     font-size: 12px;
     line-height:1.5;
@@ -152,7 +174,7 @@ const Invoice = React.forwardRef((props, ref) => {
 
 	return (
 		<div style={{ display: 'none' }} >
-			<div ref={ref} > 
+			<Wrapper ref={ref} > 
 				<Grid container spacing={3}>
 					<Grid item xs={12}>
 						<ClientDetails>
@@ -190,9 +212,18 @@ const Invoice = React.forwardRef((props, ref) => {
 								<Table aria-label="simple table">
 									<TableHead>
 										<TableRow>
-											<TableCell align="left">{<BookingDataBody>{t('item')}</BookingDataBody>}</TableCell>
-											<TableCell align="left">{<BookingDataBody>{t('price')}</BookingDataBody>}</TableCell>
-											<TableCell align="left">{<BookingDataBody>{t('amount')}</BookingDataBody>}</TableCell>
+											<CustomTableHead align="center">
+												<span>item</span>
+												<span>{t('item')}</span>
+											</CustomTableHead>
+											<CustomTableHead align="center">
+												<span>price x quantity</span>
+												<span>الكمية X السعر</span>
+											</CustomTableHead>
+											<CustomTableHead align="center">
+												<span>amount</span>
+												<span>{t('amount')}</span>
+											</CustomTableHead>
 										</TableRow>
 									</TableHead>
 									<TableBody>
@@ -203,11 +234,11 @@ const Invoice = React.forwardRef((props, ref) => {
 														key={index}
 														sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
 													>
-														<TableCell component="th" scope="row" align="left">
+														<CustomTableCell component="th" scope="row" align="center">
 															{<BookingDataBody>{item.item.name}</BookingDataBody>}
-														</TableCell>
-														<TableCell align="left">{<BookingDataBody>{`${item.quantity} x ${item.price}`}</BookingDataBody>}</TableCell>
-														<TableCell align="left">{<BookingDataBody>{item.amount}</BookingDataBody>}</TableCell>
+														</CustomTableCell>
+														<CustomTableCell align="center">{<BookingDataBody>{`${item.quantity} x ${item.price}`}</BookingDataBody>}</CustomTableCell>
+														<CustomTableCell align="center">{<BookingDataBody>{formatCurrency(item.amount)}</BookingDataBody>}</CustomTableCell>
 													</TableRow>
 												)
 											})
@@ -218,13 +249,7 @@ const Invoice = React.forwardRef((props, ref) => {
 							<Grid sx={{ width: '100%'}}  container spacing={2}>
 								<Grid item xs={12} md={6} >
 									<BillTotal>
-										<i>الخصم : </i>
-										<span>{`${bookingData.discount_percent} %`}</span>
-									</BillTotal>
-								</Grid>
-								<Grid item xs={12} md={6} >
-									<BillTotal>
-										<i>الفاتورة قبل الضريبة :</i>
+										<i>الاجمالي قبل الضريبة :</i>
 										<span>{formatCurrency((bookingData.price - bookingData.vat))}</span>
 									</BillTotal>
 								</Grid>
@@ -234,6 +259,12 @@ const Invoice = React.forwardRef((props, ref) => {
 										<span>{formatCurrency(bookingData.vat)}</span>
 									</BillTotal>
 								</Grid>
+								{/* <Grid item xs={12} md={6} >
+									<BillTotal>
+										<i>الخصم : </i>
+										<span>{`${bookingData.discount_percent} %`}</span>
+									</BillTotal>
+								</Grid> */}
 								<Grid item xs={12} md={6} >
 									<BillTotal>
 										<span>قيمة الخصم : </span>
@@ -260,7 +291,7 @@ const Invoice = React.forwardRef((props, ref) => {
 						</ClientDetails>
 					</Grid>
 				</Grid>
-			</div>
+			</Wrapper>
 		</div>
 	)
 })
