@@ -312,9 +312,9 @@ const ViewModal = (props) => {
                 </Grid>
                 <Invoice userData={userData} ref={invoiceRef} bookingData={bookingData} qrCode={qrCode} />
                 <Grid item xs={12}>
-                    <BookingActions>
+                    {/* <BookingActions>
                         <DeleteButton onClick={(id) => onDelete(bookingData.id)} >{t('Delete')}</DeleteButton>
-                    </BookingActions>
+                    </BookingActions> */}
                 </Grid>
             </Grid>
         )

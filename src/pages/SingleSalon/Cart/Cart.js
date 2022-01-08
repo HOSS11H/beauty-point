@@ -17,7 +17,6 @@ import { updateObject } from '../../../shared/utility';
 import ItemsReview from './ItemsReview/ItemsReview';
 import PrintBooking from './PrintBooking/PrintBooking';
 import { format } from 'date-fns/esm';
-import moment from 'moment';
 
 const CustomCardMui = styled(Card)`
     &.MuiPaper-root {

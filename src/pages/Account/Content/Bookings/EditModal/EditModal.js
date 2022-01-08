@@ -815,9 +815,9 @@ const EditModal = (props) => {
                     </BookingData>
                 </Grid>
                 <Grid item xs={12}>
-                    <BookingActions>
+                    {/* <BookingActions>
                         <DeleteButton onClick={(id) => onDelete(bookingData.id)} >{t('Delete')}</DeleteButton>
-                    </BookingActions>
+                    </BookingActions> */}
                 </Grid>
             </Grid>
         )
