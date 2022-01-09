@@ -18,6 +18,20 @@ const Wrapper = styled.div`
 	margin-right: auto;
 `
 
+const InvoiceTitle = styled.p`
+    display: block;
+    font-size: 14px;
+    line-height:1.5;
+    text-transform: capitalize;
+    font-weight: 600;
+    color: #000;
+    transition: 0.3s ease-in-out;
+    margin-bottom: 5px;
+	span {
+		display: block;
+	}
+`
+
 const ClientDetails = styled.div`
 	padding-top: 50px;
     display: flex;
@@ -178,12 +192,16 @@ const Invoice = React.forwardRef((props, ref) => {
 				<Grid container spacing={3}>
 					<Grid item xs={12}>
 						<ClientDetails>
+							<InvoiceTitle>
+								<span>فاتورة ضريبية مبسطة</span>
+								<span>Simplified Tax Invoice</span>
+							</InvoiceTitle>
 							<ClientImg src={userData.user.company?.logo_url} />
 							<ClientName>{userData.user.company?.companyName}</ClientName>
 							<ClientAddress>{userData.user.company?.address}</ClientAddress>
 							<ClientAddress>رقم التليفون : {userData.user.company?.companyPhone}</ClientAddress>
 							<ClientAddress><span>{userData.user.company?.tax_record}</span> : الرقم الضريبي</ClientAddress>
-							<ClientBill>رقم الحجز : {bookingData.id}</ClientBill>
+							<ClientBill>رقم الفاتورة : {bookingData.id}</ClientBill>
 							<ClientDate>تاريخ الفاتورة : {bookingData.date}</ClientDate>
 							<Grid sx={{ width: '100%'}}  container spacing={2}>
 								<Grid item xs={6}>

@@ -307,7 +307,7 @@ const ViewModal = (props) => {
                 </Grid>
                 <Grid item xs={12}>
                     <BookingActions>
-                        <ActionButton onClick={printBookingHandler}  ><PrintIcon/>{t('print')}</ActionButton>
+                        <ActionButton onClick={ () => qrCode && printBookingHandler() }  ><PrintIcon/>{t('print')}</ActionButton>
                     </BookingActions>
                 </Grid>
                 <Invoice userData={userData} ref={invoiceRef} bookingData={bookingData} qrCode={qrCode} />
