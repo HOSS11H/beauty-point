@@ -205,10 +205,14 @@ const Invoice = React.forwardRef((props, ref) => {
 							<ClientDate>تاريخ الفاتورة : {bookingData.date}</ClientDate>
 							<Grid sx={{ width: '100%'}}  container spacing={2}>
 								<Grid item xs={6}>
-									<ClientInfos>
-										<span>{t(userData.user.name)}</span>
-										<span>: دفع الي</span>
-									</ClientInfos>
+									{
+										bookingData.status === 'completed' || bookingData.status === 'approved' ? (
+											<ClientInfos>
+												<span>{t(userData.user.name)}</span>
+												<span>: دفع الي</span>
+											</ClientInfos>
+										) : null
+									}
 									<ClientInfos>
 										<span>{t(bookingData.payment_status)}</span>
 										<span>: حالة الدفع</span>
