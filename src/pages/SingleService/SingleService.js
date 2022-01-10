@@ -50,7 +50,7 @@ const SingleService = props => {
             .catch(err => {
                 console.log(err);
             })
-    }, [])
+    }, [param.serviceId])
     let content = (
         <Loader>
             <CircularProgress color="secondary" />
