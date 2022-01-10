@@ -60,6 +60,8 @@ const Items = styled.ul`
         .divider {
             margin: 0 5px;
         }
+        /*! @noflip */
+        direction: ${ ( {theme}  ) => theme.direction === 'rtl' ?  'ltr' :  'ltr' };
     }
 `
 
@@ -74,6 +76,8 @@ const EnhancedTableBody = props => {
     return (
         <TableBody>
             {fetchedTabularReport.data.map((row, index) => {
+                const fetchedItems = row.items && row.items.split(',')
+                console.log(fetchedItems);
                 return (
                     <TableRow
                         hover
@@ -103,16 +107,14 @@ const EnhancedTableBody = props => {
                         <TableCell align="center">
                             <Items>
                                 { 
-                                    row.items && (
-                                        row.items.map((item, index) => {
+                                    fetchedItems && (
+                                        fetchedItems.map((item, index) => {
                                             let loadedItems;
-                                            if (item) {
+                                            if (item !== '') {
                                                 loadedItems = (
-                                                    <li key={item.id} >
+                                                    <li key={index} >
                                                         <FiberManualRecordIcon sx={{ mr: 1 }} />
-                                                        <span>{item.quantity}</span>
-                                                        <span className='divider'>x</span>
-                                                        <span>{item.item.name}</span>
+                                                        <span>{item}</span>
                                                     </li>
                                                 )
                                             }
