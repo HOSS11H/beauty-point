@@ -427,7 +427,7 @@ const Cart = props => {
         setCoupon('')
         setCouponData({ amount: 0 })
         setCouponExists(false)
-        setPaymentGateway('')
+        setPaymentGateway('card')
         setPaymentGatewayError(false)
         setPaidAmount(0)
         setCashToReturn(0)
