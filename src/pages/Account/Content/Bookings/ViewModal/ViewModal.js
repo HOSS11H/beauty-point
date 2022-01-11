@@ -277,7 +277,7 @@ const ViewModal = (props) => {
                         </Grid>
                     )
                 }
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} sm={6} md={6}>
                     <BookingData>
                         <BookingDataHeading>{t('payment method')}</BookingDataHeading>
                         <BookingList>
@@ -285,7 +285,7 @@ const ViewModal = (props) => {
                         </BookingList>
                     </BookingData>
                 </Grid>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} sm={6} md={6}>
                     <BookingData>
                         <BookingDataHeading>{t('payment status')}</BookingDataHeading>
                         <BookingList>
@@ -293,6 +293,14 @@ const ViewModal = (props) => {
                         </BookingList>
                     </BookingData>
                 </Grid>
+                {bookingData.remaining_amount > 0 && (
+                    <Grid item xs={12} sm={6} md={6}>
+                        <BookingData>
+                            <BookingDataHeading>{t('remaining amount')}</BookingDataHeading>
+                            <BookingDataInfo>{formatCurrency(bookingData.remaining_amount)}</BookingDataInfo>
+                        </BookingData>
+                    </Grid>
+                )}
                 <Grid item xs={12} md={6}>
                     <BookingData>
                         <BookingDataHeading>{t('taxes ( 15% )')}</BookingDataHeading>

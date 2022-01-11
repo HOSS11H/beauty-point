@@ -390,6 +390,7 @@ const resources = {
             'The given data was invalid.': 'تم إدخال بيانات غير صحيحة.',
             'Your order has been booked successfully': 'تم حجز طلبك بنجاح.',
             'price x quantity': 'السعر x الكمية',
+            'remaining amount': 'المبلغ المتبقي',
         }
     }
 };
