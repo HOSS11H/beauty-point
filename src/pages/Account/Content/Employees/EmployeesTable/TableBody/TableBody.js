@@ -83,7 +83,7 @@ const EnhancedTableBody = props => {
             {emptyRows > 0 && (
                 <TableRow
                     style={{
-                        height: (133) * emptyRows,
+                        height: (73) * emptyRows,
                     }}
                 >
                     <TableCell colSpan={9} />
