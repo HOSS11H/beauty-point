@@ -3,7 +3,7 @@ import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
 import interactionPlugin from "@fullcalendar/interaction" // needed for dayClick
 import { connect } from 'react-redux'
 import { fetchCalendarBookings, deleteCalendarBooking } from "../../../../store/actions/index";
-import { useContext, useEffect, useState, useCallback, Fragment } from 'react';
+import { useContext, useEffect, useState, useCallback } from 'react';
 import Card from '@mui/material/Card';
 import CircularProgress from '@mui/material/CircularProgress';
 import ThemeContext from '../../../../store/theme-context';

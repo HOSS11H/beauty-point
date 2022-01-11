@@ -53,8 +53,6 @@ const CreateModal = (props) => {
     const [employeeRole, setEmployeeRole] = useState(roles[0].id);
     const [employeeRoleError, setEmployeeRoleError] = useState(false);
 
-    console.log(roles)
-
     useEffect(() => {
         fetchRolesHandler(lang);
     }, [fetchRolesHandler, lang])

@@ -391,6 +391,7 @@ const resources = {
             'Your order has been booked successfully': 'تم حجز طلبك بنجاح.',
             'price x quantity': 'السعر x الكمية',
             'remaining amount': 'المبلغ المتبقي',
+            'Eash service must have an employee': 'كل خدمة يجب أن تحتوي علي موظف',
         }
     }
 };

@@ -248,6 +248,7 @@ const Cart = props => {
 
     const [totalTaxes, setTotalTaxes] = useState(0)
 
+    const [ servicesEmployeeError , setServicesEmployeeError ] = useState(false)
     const [cartDataError, setCartDataError] = useState(false)
 
     const [coupon, setCoupon] = useState('')
@@ -445,6 +446,9 @@ const Cart = props => {
         if (cartData.services.length === 0 && cartData.products.length === 0 && cartData.deals.length === 0) {
             setCartDataError(true)
             return;
+        } else if ( cartData.services.length > 0 && cartData.services.find( item => item.employee_id === null  ) ) {
+            setServicesEmployeeError(true)
+            return;
         } else if (!customerData) {
             setCustomerDataError(true)
             return;
@@ -528,16 +532,23 @@ const Cart = props => {
                         </CustomMessage>
                     )}
                     {cartData.services.length > 0 && (
-                        <TableContainer component={Paper} sx={{ my: 2 }}>
-                            <Table aria-label="services table">
-                                <SharedTableHead name='services' />
-                                <TableBody>
-                                    {cartData.services.map((row) => (
-                                        <CartItem type='services' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} priceChangeHandler={priceChangeHandler} changeEmployee={changeEmployee} />
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
+                        <Fragment>
+                            <TableContainer component={Paper} sx={{ my: 2 }}>
+                                <Table aria-label="services table">
+                                    <SharedTableHead name='services' />
+                                    <TableBody>
+                                        {cartData.services.map((row) => (
+                                            <CartItem type='services' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} priceChangeHandler={priceChangeHandler} changeEmployee={changeEmployee} />
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                            {
+                                servicesEmployeeError && (
+                                    <ValidationMessage notExist>{t('Eash service must have an employee')}</ValidationMessage>
+                                )
+                            }
+                        </Fragment>
                     )}
                 </Grid>
                 <Grid item xs={12}>
