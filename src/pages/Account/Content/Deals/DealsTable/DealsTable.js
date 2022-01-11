@@ -206,7 +206,7 @@ function DealsTable(props) {
                             component="div"
                             count={fetchedDeals.data.length}
                             total={fetchedDeals.meta ? fetchedDeals.meta.total : 0}
-                            rowsPerPage={rowsPerPage}
+                            rowsPerPage={+rowsPerPage}
                             page={page}
                             onPageChange={handleChangePage}
                             loading={loadingDeals}

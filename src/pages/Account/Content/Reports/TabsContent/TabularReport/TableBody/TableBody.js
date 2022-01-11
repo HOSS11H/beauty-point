@@ -80,7 +80,6 @@ const EnhancedTableBody = props => {
         <TableBody>
             {fetchedTabularReport.data.map((row, index) => {
                 const fetchedItems = row.items && row.items.split(',')
-                console.log(fetchedItems);
                 return (
                     <TableRow
                         hover

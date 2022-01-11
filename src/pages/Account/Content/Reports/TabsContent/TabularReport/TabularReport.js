@@ -217,7 +217,7 @@ function TabularReport(props) {
                                 component="div"
                                 count={fetchedTabularReport.data.length}
                                 total={fetchedTabularReport.meta ? fetchedTabularReport.meta.total : 0}
-                                rowsPerPage={rowsPerPage}
+                                rowsPerPage={+rowsPerPage}
                                 page={page}
                                 onPageChange={handleChangePage}
                                 loading={fetchingTabularReports}
@@ -242,7 +242,7 @@ function TabularReport(props) {
                             component="div"
                             count={fetchedTabularReport.data.length}
                             total={fetchedTabularReport.meta ? fetchedTabularReport.meta.total : 0}
-                            rowsPerPage={rowsPerPage}
+                            rowsPerPage={+rowsPerPage}
                             page={page}
                             onPageChange={handleChangePage}
                             loading={fetchingTabularReports}

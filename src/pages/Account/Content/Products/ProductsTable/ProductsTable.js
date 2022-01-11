@@ -209,7 +209,7 @@ function ProductsTable(props) {
                             component="div"
                             count={fetchedProducts.data.length}
                             total={fetchedProducts.meta ? fetchedProducts.meta.total : 0}
-                            rowsPerPage={rowsPerPage}
+                            rowsPerPage={+rowsPerPage}
                             page={page}
                             onPageChange={handleChangePage}
                             loading={loadingProducts}

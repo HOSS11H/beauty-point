@@ -259,7 +259,7 @@ function ServicesTable(props) {
                             component="div"
                             count={fetchedServices.data.length}
                             total={fetchedServices.meta ? fetchedServices.meta.total : null}
-                            rowsPerPage={rowsPerPage}
+                            rowsPerPage={+rowsPerPage}
                             page={page}
                             onPageChange={handleChangePage}
                             loading={loadingServices}
