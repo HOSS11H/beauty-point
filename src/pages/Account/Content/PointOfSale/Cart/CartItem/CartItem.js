@@ -27,15 +27,6 @@ const MenuProps = {
 };
 
 
-function getStyles(name, employeeName, theme) {
-    return {
-        fontWeight:
-            employeeName.indexOf(name) === -1
-                ? theme.typography.fontWeightRegular
-                : theme.typography.fontWeightMedium,
-    };
-}
-
 const CustomTextField = styled(TextField)`
     width: 80px;
     & .MuiInputBase-input {
@@ -57,7 +48,7 @@ const CartItem = props => {
     const themeCtx = useContext(ThemeContext)
 
 
-    const { row, remove, increase, decrease, type, priceChangeHandler } = props;
+    const { row, remove, increase, decrease, type, priceChangeHandler, changeEmployee } = props;
 
     const [employeeName, setEmployeeName] = useState([]);
 
@@ -69,6 +60,7 @@ const CartItem = props => {
             // On autofill we get a the stringified value.
             typeof value === 'string' ? value.split(',') : value,
         );
+        changeEmployee(type, row.id, value)
     };
 
     return (
@@ -93,29 +85,26 @@ const CartItem = props => {
                         <FormControl sx={{ width: '100%', minWidth: '90px' }}>
                             <InputLabel id="employee-label">{t('employee')}</InputLabel>
                             <Select
+                                label={t('employee')}
                                 labelId="employee-label"
                                 id="select-multiple-employees"
-                                multiple
                                 value={employeeName}
                                 onChange={handleEmployeesChange}
                                 input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
-                                renderValue={(selected) => (
-                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                        {fetchedEmployees.length > 0 && selected.map((value) => {
-                                            const selected = fetchedEmployees.find(user => user.id === value);
-                                            return (
-                                                <Chip key={selected.id} label={selected.name} />
-                                            )
-                                        })}
-                                    </Box>
-                                )}
+                                renderValue={ (val) => {
+                                    const selected = fetchedEmployees?.find(user => user.id === val);
+                                    return (
+                                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                            <Chip key={selected.id} label={selected.name} />
+                                        </Box>
+                                    )
+                                }}
                                 MenuProps={MenuProps}
                             >
                                 {fetchedEmployees.map((employee) => (
                                     <MenuItem
                                         key={employee.id}
                                         value={employee.id}
-                                        style={getStyles(employee, employeeName, themeCtx.theme)}
                                     >
                                         {employee.name}
                                     </MenuItem>

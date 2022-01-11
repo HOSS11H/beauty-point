@@ -64,6 +64,15 @@ const cartReducer = (state, action) => {
             return updateObject(state, {
                 services: changedServices,
             })
+        case 'CHANGE_SERVICE_EMPLOYEE':
+            const changedEmployeeServiceIndex = state.services.findIndex(service => service.id === action.payload.id);
+            const changedEmployeeService = { ...state.services[changedEmployeeServiceIndex] }
+            changedEmployeeService.employee_id = action.payload.employeeId
+            const changedEmployeeServices = [...state.services]
+            changedEmployeeServices[changedEmployeeServiceIndex] = changedEmployeeService
+            return updateObject(state, {
+                services: changedEmployeeServices,
+            })
         case 'ADD_TO_PRODUCTS':
             const productIndex = state.products.findIndex(product => product.id === action.payload.id);
             const updatedProducts = [...state.products]
@@ -341,6 +350,18 @@ const PointOfSale = (props) => {
             })
         }
     }, [])
+    const changeServiceEmployeeHandler = useCallback((type, itemId, employeeId) => {
+        console.log(type, itemId, employeeId);
+        if (type === 'services') {
+            dispatch({
+                type: 'CHANGE_SERVICE_EMPLOYEE',
+                payload: {
+                    id: itemId,
+                    employeeId: employeeId,
+                },
+            })
+        }
+    }, [])
     const resetCartHandler = useCallback(() => {
         dispatch({
             type: 'RESET_CART',
@@ -371,7 +392,7 @@ const PointOfSale = (props) => {
                 </CustomCard>
             </Grid>
             <Grid item xs={12} md={6}>
-                <Cart cartData={cart} removeFromCart={removeFromCartHandler} increaseItem={increaseItemHandler} decreaseItem={decreaseItemHandler} resetCart={resetCartHandler} purchase={purchaseCartHandler} priceChangeHandler={changeItemPriceHandler} />
+                <Cart cartData={cart} removeFromCart={removeFromCartHandler} increaseItem={increaseItemHandler} decreaseItem={decreaseItemHandler} resetCart={resetCartHandler} purchase={purchaseCartHandler} priceChangeHandler={changeItemPriceHandler} changeEmployee={changeServiceEmployeeHandler} />
                 <CustomizedSnackbars show={messageShown} message={t('Booking Created')} type='success' onClose={closeMessageHandler} />
             </Grid>
             <Backdrop

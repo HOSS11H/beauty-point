@@ -228,7 +228,7 @@ const Option = (props) => {
 
 const Cart = props => {
 
-    const { cartData, removeFromCart, increaseItem, decreaseItem, resetCart, purchase, fetchedCoupons, fetchedCustomers, addedCustomerData, addingCustomerSuccess, fetchCouponsHandler, searchCustomersHandler, addCustomerHandler, fetchedEmployeesHandler, bookingCreated, priceChangeHandler } = props;
+    const { cartData, removeFromCart, increaseItem, decreaseItem, resetCart, purchase, fetchedCoupons, fetchedCustomers, addedCustomerData, addingCustomerSuccess, fetchCouponsHandler, searchCustomersHandler, addCustomerHandler, fetchedEmployeesHandler, bookingCreated, priceChangeHandler, changeEmployee } = props;
 
     const { t } = useTranslation()
 
@@ -533,7 +533,7 @@ const Cart = props => {
                                 <SharedTableHead name='services' />
                                 <TableBody>
                                     {cartData.services.map((row) => (
-                                        <CartItem type='services' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} priceChangeHandler={priceChangeHandler} />
+                                        <CartItem type='services' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} priceChangeHandler={priceChangeHandler} changeEmployee={changeEmployee} />
                                     ))}
                                 </TableBody>
                             </Table>

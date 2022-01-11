@@ -107,8 +107,6 @@ const GridView = ( props ) => {
     const addItemHandler = ( id ) => {
         const addedItemIndex = data.findIndex( item  => item.id === id );
         const addedItem = data[addedItemIndex];
-        //type === 'products' && (addedItem.price_after_discount = addedItem.discount_price);
-        //type === 'deals' && (addedItem.price_after_discount = addedItem.price);
         type === 'deals' && (addedItem.name = addedItem.title);
         const addedItemData = {
             id: addedItem.id,
@@ -117,6 +115,7 @@ const GridView = ( props ) => {
             quantity: 1,
             type: type,
         }
+        type === 'services' && (addedItemData.employee_id = null);
         action(addedItemData);
     }
 
