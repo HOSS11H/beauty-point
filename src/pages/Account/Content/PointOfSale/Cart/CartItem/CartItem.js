@@ -9,9 +9,8 @@ import InputLabel from '@mui/material/InputLabel';
 import Box from '@mui/material/Box';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Chip from '@mui/material/Chip';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import ThemeContext from '../../../../../../store/theme-context';
 import { connect } from 'react-redux';
 import Increment from '../../../../../../components/UI/Increment/Increment';
 import { TextField } from '@mui/material';
@@ -44,9 +43,6 @@ const CartItem = props => {
     const { fetchedEmployees } = props;
 
     const { t } = useTranslation()
-
-    const themeCtx = useContext(ThemeContext)
-
 
     const { row, remove, increase, decrease, type, priceChangeHandler, changeEmployee } = props;
 

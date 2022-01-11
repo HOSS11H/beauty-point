@@ -40,9 +40,7 @@ function EmployeesTable(props) {
 
     const { t } = useTranslation()
 
-    const { fetchedEmployees, fetchEmployeesHandler, loadingEmployees, deleteEmployeeHandler, searchingEmployees, searchingEmployeesSuccess, updateEmployeeHandler } = props;
-
-    console.log(fetchedEmployees)
+    const { fetchedEmployees, fetchEmployeesHandler, loadingEmployees, deleteEmployeeHandler, searchingEmployees, searchingEmployeesSuccess, updateEmployeeHandler, updatingEmployeeSuccess, addingEmployeeSuccess } = props;
 
     const themeCtx = useContext(ThemeContext)
 
@@ -66,6 +64,18 @@ function EmployeesTable(props) {
     useEffect(() => {
         fetchEmployeesHandler(lang, page, rowsPerPage, orderBy, order);
     }, [fetchEmployeesHandler, lang, page, rowsPerPage, orderBy, order]);
+
+    useEffect(() => {
+        if (updatingEmployeeSuccess) {
+            fetchEmployeesHandler(lang, page, rowsPerPage, orderBy, order);
+        }
+    }, [updatingEmployeeSuccess, fetchEmployeesHandler, lang, page, rowsPerPage, orderBy, order]);
+
+    useEffect(() => {
+        if (addingEmployeeSuccess) {
+            fetchEmployeesHandler(lang, page, rowsPerPage, orderBy, order);
+        }
+    }, [addingEmployeeSuccess, fetchEmployeesHandler, lang, page, rowsPerPage, orderBy, order]);
 
 
     const handleRequestSort = (event, property) => {
@@ -127,7 +137,6 @@ function EmployeesTable(props) {
 
     // Avoid a layout jump when reaching the last page with empty rows & On Initialize
     const emptyRows = (rowsPerPage - fetchedEmployees.data.length);
-
 
     let content;
 
@@ -203,6 +212,8 @@ const mapStateToProps = state => {
         loadingEmployees: state.employees.employeesData.fetchingEmployees,
         searchingEmployees: state.employees.employeesData.searchingEmployees,
         searchingEmployeesSuccess: state.employees.employeesData.searchingEmployeesSuccess,
+        updatingEmployeeSuccess: state.employees.employeesData.updatingEmployeeSuccess,
+        addingEmployeeSuccess: state.employees.employeesData.addingEmployeeSuccess,
     }
 }
 
