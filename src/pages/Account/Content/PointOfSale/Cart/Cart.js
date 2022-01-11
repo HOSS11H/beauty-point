@@ -212,7 +212,6 @@ const CustomerSelectInfo = styled.ul`
 `
 
 const Option = (props) => {
-    console.log(props);
     return (
         <Fragment>
             <components.Option {...props}>

@@ -6,7 +6,7 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import { useTranslation } from 'react-i18next';
-import { useContext, useEffect, useState, } from 'react';
+import { Fragment, useContext, useEffect, useState, } from 'react';
 import { fetchServices, fetchLocations, fetchProducts, fetchCustomers, fetchEmployees, filterTabularReport } from '../../../../../../../store/actions/index';
 import { connect } from 'react-redux';
 import DateAdapter from '@mui/lab/AdapterDateFns';
@@ -17,7 +17,8 @@ import { CustomButton } from '../../../../../../../components/UI/Button/Button';
 import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { format } from 'date-fns';
-import ReactSelect from 'react-select';
+import ReactSelect, { components } from 'react-select';
+import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import axios from '../../../../../../../utils/axios-instance';
 
 const FiltersWrapper = styled.div`
@@ -64,11 +65,67 @@ const customStyles = {
         height: 56,
     })
 };
+const CustomerSelectOption = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+`
+const CustomerSelectName = styled.h4`
+    display: block;
+    font-size: 14px;
+    line-height:1.5;
+    text-transform: capitalize;
+    font-weight: 600;
+    color: ${({ theme }) => theme.palette.primary.dark};
+    transition: 0.3s ease-in-out;
+    margin-bottom: 0px;
+`
+const CustomerSelectInfo = styled.ul`
+    margin: 0;
+    padding: 0;
+    li {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        line-height:1.5;
+        text-transform: capitalize;
+        font-weight: 500;
+        color: ${({ theme }) => theme.palette.text.default};
+        margin-bottom: 5px;
+        &:last-child {
+            margin-bottom: 0px;
+        }
+        svg {
+            width: 16px;
+            height: 16px;
+            &.MuiSvgIcon-root  {
+                margin:0;
+                margin-right: 8px;
+            }
+        }
+    }
+`
+
+const Option = (props) => {
+    console.log(props);
+    return (
+        <Fragment>
+            <components.Option {...props}>
+                <CustomerSelectOption>
+                    <CustomerSelectName>{props.children}</CustomerSelectName>
+                    <CustomerSelectInfo>
+                        <li><PhoneAndroidIcon sx={{ mr: 1 }} />{props.data.mobile}</li>
+                    </CustomerSelectInfo>
+                </CustomerSelectOption>
+            </components.Option>
+        </Fragment>
+    );
+};
 
 
 const SearchFilters = (props) => {
 
-    const { fetchedLocations, fetchLocationsHandler, fetchedProducts, fetchProductsHandler, fetchedServices, fetchServicesHandler, fetchedCustomers, fetchCustomersHandler, fetchedEmployees, fetchEmployeesHandler, filterTabularReportHandler, perPage } = props;
+    const { fetchedLocations, fetchLocationsHandler, fetchedProducts, fetchProductsHandler, fetchedServices, fetchServicesHandler, fetchCustomersHandler, fetchedEmployees, fetchEmployeesHandler, filterTabularReportHandler, perPage } = props;
 
     const { t } = useTranslation()
 
@@ -103,7 +160,6 @@ const SearchFilters = (props) => {
         fetchLocationsHandler(lang);
         fetchProductsHandler(lang, 1, 'all', 'name', 'desc');
         fetchServicesHandler(lang, 1, 'all', 'name', 'desc');
-        fetchCustomersHandler(lang);
         fetchEmployeesHandler(lang);
     }, [fetchCustomersHandler, fetchEmployeesHandler, fetchLocationsHandler, fetchProductsHandler, fetchServicesHandler, lang])
 
@@ -183,12 +239,11 @@ const SearchFilters = (props) => {
     }
 
     const ConfirmFilteringHandler = () => {
-        const selectedCustomer = customer && fetchedCustomers.find(customerObj => customerObj.id === customer.value);
         const selectedSearchParams = {
             per_page: perPage,
             from_date: dateFrom,
             to_date: dateTo,
-            customer_name: selectedCustomer ? selectedCustomer.name : '',
+            customer_name: customer.label,
             service_name: selectedServices,
             product_name: selectedProducts,
             employee_id: employee,
@@ -396,7 +451,7 @@ const SearchFilters = (props) => {
                 <Grid item xs={12} sm={6} md={4}>
                     <FormControl fullWidth sx={{ minWidth: '200px' }} >
                         <ReactSelect styles={customStyles} options={options} isClearable isRtl={lang === 'ar'}
-                            placeholder={t('select customer')} value={customer} filterOption={filterOption}
+                            placeholder={t('select customer')} value={customer} filterOption={filterOption} components={{ Option }}
                             onChange={handleSelectCustomer} onInputChange={handleSelectOptions} />
                     </FormControl>
                 </Grid>

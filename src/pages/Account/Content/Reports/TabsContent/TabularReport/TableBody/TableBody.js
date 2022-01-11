@@ -15,14 +15,17 @@ const TableStatus = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 30px;
-    padding: 0 10px;
+    min-height: 30px;
+    padding: 5px 10px;
     border-radius: 12px;
     color: ${({ theme }) => theme.palette.common.white};
     font-size: 14px;
     text-transform: capitalize;
     font-weight: 500;
     background-color: ${({ theme }) => theme.palette.error.main};
+    &.pending {
+        background-color: ${({ theme }) => theme.palette.secondary.dark};
+    }
     &.in.progress {
         background-color: ${({ theme }) => theme.palette.warning.light};
     }
