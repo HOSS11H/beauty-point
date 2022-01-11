@@ -273,13 +273,7 @@ const EditModal = (props) => {
 
     let bookingData = fetchedBookings.data[bookingIndex];
 
-    const { status, date_time, users, payment_status } = bookingData;
-
-    let employeesIds = [];
-    users.map(employee => {
-        employeesIds.push(employee.id)
-        return employeesIds;
-    })
+    const { status, date_time, payment_status } = bookingData;
 
     let bookingDataServices = [];
     let bookingDataProducts = [];
@@ -313,8 +307,6 @@ const EditModal = (props) => {
     const [dateTime, setDateTime] = useState(new Date(date_time));
 
     const [bookingStatus, setBookingStatus] = useState(status);
-
-    const [employeeName, setEmployeeName] = useState(employeesIds);
 
     const [selectedServices, setSelectedServices] = useState('');
 
@@ -440,15 +432,6 @@ const EditModal = (props) => {
     const bookingStatusChangeHandler = (event) => {
         setBookingStatus(event.target.value);
     }
-    const handleEmployeesChange = (event) => {
-        const {
-            target: { value },
-        } = event;
-        setEmployeeName(
-            // On autofill we get a the stringified value.
-            typeof value === 'string' ? value.split(',') : value,
-        );
-    };
 
     const selectedServicesChangeHandler = (event) => {
         setSelectedServices('');
@@ -515,20 +498,12 @@ const EditModal = (props) => {
     }
     const EditBookingConfirmHandler = useCallback(() => {
 
-        const employeesData = [];
-        employeeName.map(employeeId => {
-            const employeeIndex = fetchedEmployees.findIndex(employee => employee.id === employeeId);
-            employeesData.push(fetchedEmployees[employeeIndex]);
-            return employeesData;
-        })
-
         const booking = {
             customerId: id,
             dateTime: dateTime,
             payment_gateway: bookingData.payment_gateway,
             payment_status: paymentStatus,
             status: bookingStatus,
-            users: employeesData,
             booking: {
                 services : [
                     ...cartData.services,
@@ -545,7 +520,7 @@ const EditModal = (props) => {
             discount_type: 'percent',
         }
         onConfirm(booking);
-    }, [bookingData, bookingStatus, cartData.deals, cartData.products, cartData.services, dateTime, discount, employeeName, fetchedEmployees, id, onConfirm, paymentStatus])
+    }, [bookingData, bookingStatus, cartData.deals, cartData.products, cartData.services, dateTime, discount, id, onConfirm, paymentStatus])
 
 
     let content;
@@ -616,40 +591,6 @@ const EditModal = (props) => {
                             <MenuItem value='canceled'>{t('canceled')}</MenuItem>
                             <MenuItem value='in progress'>{t('in progress')}</MenuItem>
                             <MenuItem value='pending'>{t('pending')}</MenuItem>
-                        </Select>
-                    </FormControl>
-                </Grid>
-                <Grid item xs={12} sm={6} >
-                    <FormControl sx={{ width: '100%' }}>
-                        <InputLabel id="employee-label">{t('employee')}</InputLabel>
-                        <Select
-                            label={t('employee')}
-                            labelId="employee-label"
-                            id="select-multiple-employees"
-                            multiple
-                            value={employeeName}
-                            onChange={handleEmployeesChange}
-                            input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
-                            renderValue={(selected) => (
-                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                    {fetchedEmployees.length > 0 && selected.map((value) => {
-                                        const selected = fetchedEmployees.find(user => user.id === value);
-                                        return (
-                                            <Chip key={selected.id} label={selected.name} />
-                                        )
-                                    })}
-                                </Box>
-                            )}
-                            MenuProps={MenuProps}
-                        >
-                            {fetchedEmployees.map((employee) => (
-                                <MenuItem
-                                    key={employee.id}
-                                    value={employee.id}
-                                >
-                                    {employee.name}
-                                </MenuItem>
-                            ))}
                         </Select>
                     </FormControl>
                 </Grid>
