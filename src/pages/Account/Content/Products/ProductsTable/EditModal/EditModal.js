@@ -180,7 +180,7 @@ const EditModal = (props) => {
     const [productQuantityError, setProductQuantityError] = useState(false);
 
     const [allUnits, setAllUnits] = useState([]);
-    const [productUnit, setProductUnit] = useState(unit.id);
+    const [productUnit, setProductUnit] = useState(unit?.id);
 
     const [uploadedImages, setUploadedImages] = useState([ { data_url: image} ]);
 
