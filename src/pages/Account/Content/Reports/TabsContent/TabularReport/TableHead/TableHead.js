@@ -37,12 +37,6 @@ const headCells = [
         label: 'item',
     },
     {
-        id: 'employee',
-        numeric: false,
-        disablePadding: false,
-        label: 'employee',
-    },
-    {
         id: 'status',
         numeric: false,
         disablePadding: false,

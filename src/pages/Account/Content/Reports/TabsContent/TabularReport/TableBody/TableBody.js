@@ -127,9 +127,6 @@ const EnhancedTableBody = props => {
                             </Items>
                         </TableCell>
                         <TableCell align="center">
-                            <TableData>{row.employee_name}</TableData>
-                        </TableCell>
-                        <TableCell align="center">
                             <TableStatus className={row.booking_status}>{t(row.booking_status)}</TableStatus>
                         </TableCell>
                         <TableCell align="center">

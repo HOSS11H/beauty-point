@@ -23,7 +23,7 @@ import { CustomButton } from '../../../../../components/UI/Button/Button';
 import PrintIcon from '@mui/icons-material/Print';
 import Invoice from './Invoice/Invoice';
 import { useReactToPrint } from 'react-to-print';
-import { useEffect, useRef , useState} from 'react';
+import { useEffect, useRef, useState } from 'react';
 import axios from '../../../../../utils/axios-instance';
 
 const ClientDetails = styled.div`
@@ -122,6 +122,20 @@ const ItemType = styled.div`
         background-color: ${({ theme }) => theme.palette.success.main};
     }
 `
+const ServiceEmployee = styled.div`
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 20px;
+    padding: 0 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    text-transform: capitalize;
+    font-weight: 500;
+    margin-left: 10px;
+    color: ${({ theme }) => theme.palette.common.white};
+    background-color: ${({ theme }) => theme.palette.warning.dark};
+`
 const BookingActions = styled.div`
     display: flex;
     align-items: center;
@@ -171,10 +185,10 @@ const ViewModal = (props) => {
 
     let content;
 
-    const [ qrCode, setQrCode ] = useState(null);
+    const [qrCode, setQrCode] = useState(null);
 
     useEffect(() => {
-        if ( id ) {
+        if (id) {
             console.log('excuted')
             axios.get(`/vendors/bookings/${id}/qr`)
                 .then(res => {
@@ -193,7 +207,6 @@ const ViewModal = (props) => {
     });
 
     if (bookingData) {
-        console.log(bookingData);
         content = (
             <Grid container spacing={3}>
                 <Grid item xs={12}>
@@ -239,7 +252,7 @@ const ViewModal = (props) => {
                     </BookingData>
                 </Grid>
                 {
-                    ( bookingData.items.length > 0) && (
+                    (bookingData.items.length > 0) && (
                         <Grid item xs={12}>
                             <BookingData>
                                 <BookingDataHeading>{t('booking items')}</BookingDataHeading>
@@ -247,7 +260,8 @@ const ViewModal = (props) => {
                                     <Table aria-label="simple table">
                                         <TableHead>
                                             <TableRow>
-                                                <TableCell>{t('item')}</TableCell>
+                                                <TableCell align="center">{t('item')}</TableCell>
+                                                <TableCell align="center">{t('employee')}</TableCell>
                                                 <TableCell align="center">{t('price')}</TableCell>
                                                 <TableCell align="center">{t('quantity')}</TableCell>
                                                 <TableCell align="center">{t('total')}</TableCell>
@@ -264,6 +278,15 @@ const ViewModal = (props) => {
                                                             {item.item.name}
                                                             <ItemType className={item.item.type}>{t(item.item.type)}</ItemType>
                                                         </ItemInfo>
+                                                    </TableCell>
+                                                    <TableCell align="center">
+                                                        {
+                                                            item.employee && (
+                                                                    <ServiceEmployee>
+                                                                        <span>{item.employee.name}</span>
+                                                                    </ServiceEmployee>
+                                                            )
+                                                        }
                                                     </TableCell>
                                                     <TableCell align="center">{item.price}</TableCell>
                                                     <TableCell align="center">{item.quantity}</TableCell>
@@ -287,9 +310,17 @@ const ViewModal = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                     <BookingData>
+                        <BookingDataHeading>{t('booking status')}</BookingDataHeading>
+                        <BookingList>
+                            <li>{t(bookingData.payment_status)}</li>
+                        </BookingList>
+                    </BookingData>
+                </Grid>
+                <Grid item xs={12} sm={6} md={6}>
+                    <BookingData>
                         <BookingDataHeading>{t('payment status')}</BookingDataHeading>
                         <BookingList>
-                            <li>{bookingData.payment_status === 'completed' ? <CheckCircleIcon sx={{ mr: 1, color: '#568d00' }} /> : <CloseIcon sx={{ mr: 1, color: 'rgb(187 163 46)' }} /> }{t(bookingData.payment_status)}</li>
+                            <li>{bookingData.payment_status === 'completed' ? <CheckCircleIcon sx={{ mr: 1, color: '#568d00' }} /> : <CloseIcon sx={{ mr: 1, color: 'rgb(187 163 46)' }} />}{t(bookingData.payment_status)}</li>
                         </BookingList>
                     </BookingData>
                 </Grid>
@@ -315,7 +346,7 @@ const ViewModal = (props) => {
                 </Grid>
                 <Grid item xs={12}>
                     <BookingActions>
-                        <ActionButton onClick={ () => qrCode && printBookingHandler() }  ><PrintIcon/>{t('print')}</ActionButton>
+                        <ActionButton onClick={() => qrCode && printBookingHandler()}  ><PrintIcon />{t('print')}</ActionButton>
                     </BookingActions>
                 </Grid>
                 <Invoice userData={userData} ref={invoiceRef} bookingData={bookingData} qrCode={qrCode} />

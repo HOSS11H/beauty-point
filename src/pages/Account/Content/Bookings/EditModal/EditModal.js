@@ -297,7 +297,6 @@ const EditModal = (props) => {
         }
         return bookingDataServices;
     })
-    console.log(splittedItems)
 
     const [cartData, dispatch] = useReducer(cartReducer, {
         services: bookingDataServices,
