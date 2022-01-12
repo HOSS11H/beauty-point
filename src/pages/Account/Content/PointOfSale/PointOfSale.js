@@ -5,13 +5,14 @@ import FilteredResults from './FilteredResults/FilteredResults';
 import SearchFilters from './SearchFilters/SearchFilters';
 import { connect } from 'react-redux';
 import { filterServices, filterProducts, filterDeals, createBooking } from '../../../../store/actions/index';
-import AuthContext from '../../../../store/auth-context';
 import ThemeContext from '../../../../store/theme-context';
 import Cart from './Cart/Cart';
 import { updateObject } from '../../../../shared/utility';
 import CustomizedSnackbars from '../../../../components/UI/SnackBar/SnackBar';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import axios from '../../../../utils/axios-instance';
+import PrintBookingModal from './PrintBookingModal/PrintBookingModal';
 
 const cartReducer = (state, action) => {
     switch (action.type) {
@@ -213,9 +214,13 @@ const PointOfSale = (props) => {
 
     const [messageShown, setMessageShown] = useState(bookingCreated);
 
+    const [reservedBookingData, setReservedBookingData] = useState(null);
+    const [reservingBokking, setReservingBokking] = useState(false);
+
+    const [printBookingModalOpened, setPrintBookingModalOpened] = useState(false);
+
     useEffect(() => {
         setMessageShown(bookingCreated)
-        //bookingCreated && navigate('bookings')
     }, [bookingCreated, navigate])
 
 
@@ -383,6 +388,35 @@ const PointOfSale = (props) => {
         })
     }, [createBookingHandler, fetchedLocations, shownLocation])
 
+    // Add Customer Modal
+    const printBookingModalOpenHandler = useCallback((id) => {
+        setPrintBookingModalOpened(true);
+    }, [])
+    const printBookingModalCloseHandler = useCallback(() => {
+        setPrintBookingModalOpened(false);
+    }, [])
+
+    const purchasePrintBookingHandler = useCallback((purchasedData) => {
+        setReservingBokking(true);
+        axios.post(`/vendors/bookings`, {
+            ...purchasedData,
+            location_id: shownLocation === '' ? fetchedLocations[0].id : shownLocation,
+        })
+            .then(response => {
+                setReservingBokking(false);
+                setReservedBookingData(response.data);
+                setPrintBookingModalOpened((true))
+            })
+            .catch(err => {
+
+            })
+    }, [fetchedLocations, shownLocation])
+
+    const resetPrintedBookingData = useCallback(() => {
+        setReservedBookingData(null);
+        setPrintBookingModalOpened(false);
+    }, [])
+
     return (
         <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
@@ -392,15 +426,23 @@ const PointOfSale = (props) => {
                 </CustomCard>
             </Grid>
             <Grid item xs={12} md={6}>
-                <Cart cartData={cart} removeFromCart={removeFromCartHandler} increaseItem={increaseItemHandler} decreaseItem={decreaseItemHandler} resetCart={resetCartHandler} purchase={purchaseCartHandler} priceChangeHandler={changeItemPriceHandler} changeEmployee={changeServiceEmployeeHandler} />
+                <Cart cartData={cart} removeFromCart={removeFromCartHandler} increaseItem={increaseItemHandler} decreaseItem={decreaseItemHandler} 
+                    resetCart={resetCartHandler} reserved={reservedBookingData}
+                    purchase={purchaseCartHandler} print={purchasePrintBookingHandler}
+                    priceChangeHandler={changeItemPriceHandler} changeEmployee={changeServiceEmployeeHandler} />
                 <CustomizedSnackbars show={messageShown} message={t('Booking Created')} type='success' onClose={closeMessageHandler} />
             </Grid>
             <Backdrop
                 sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                open={creatingBooking}
+                open={creatingBooking || reservingBokking}
             >
                 <CircularProgress color="secondary" />
             </Backdrop>
+            {
+                printBookingModalOpened && (
+                    <PrintBookingModal show={printBookingModalOpened} onClose={printBookingModalCloseHandler} bookingData={reservedBookingData} reset={resetPrintedBookingData} />
+                )
+            }
         </Grid>
     )
 }

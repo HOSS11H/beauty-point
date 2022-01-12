@@ -228,7 +228,7 @@ const Option = (props) => {
 
 const Cart = props => {
 
-    const { cartData, removeFromCart, increaseItem, decreaseItem, resetCart, purchase, fetchedCoupons, fetchedCustomers, addedCustomerData, addingCustomerSuccess, fetchCouponsHandler, searchCustomersHandler, addCustomerHandler, fetchedEmployeesHandler, bookingCreated, priceChangeHandler, changeEmployee } = props;
+    const { cartData, removeFromCart, increaseItem, decreaseItem, resetCart, reserved, reset, purchase, print, fetchedCoupons, fetchedCustomers, addedCustomerData, addingCustomerSuccess, fetchCouponsHandler, searchCustomersHandler, addCustomerHandler, fetchedEmployeesHandler, bookingCreated, priceChangeHandler, changeEmployee } = props;
 
     const { t } = useTranslation()
 
@@ -437,9 +437,15 @@ const Cart = props => {
         resetCart();
     }, [resetCart])
 
+
     useEffect(() => {
         bookingCreated && resetCartHandler();
     }, [bookingCreated, resetCartHandler])
+
+    useEffect(() => {
+        reserved && resetCartHandler();
+    }, [reserved, reset, resetCartHandler])
+
 
     const purchaseCartHandler = (e) => {
         e.preventDefault();
@@ -474,6 +480,42 @@ const Cart = props => {
             paid_amount: paidAmount,
         }
         purchase(data);
+    }
+
+
+    const purchasePrintCartHandler = (e) => {
+        e.preventDefault();
+        if (cartData.services.length === 0 && cartData.products.length === 0 && cartData.deals.length === 0) {
+            setCartDataError(true)
+            return;
+        } else if ( cartData.services.length > 0 && cartData.services.find( item => item.employee_id === null  ) ) {
+            setServicesEmployeeError(true)
+            return;
+        } else if (!customerData) {
+            setCustomerDataError(true)
+            return;
+        } else if (!paymentGateway) {
+            setPaymentGatewayError(true)
+            return;
+        } else if (!couponExists && coupon) {
+            return;
+        } else if (paidAmount < 1) {
+            setPaidAmountError(true)
+            return;
+        }
+        const data = {
+            customerId: customerData.id,
+            dateTime: dateTime,
+            cart: cartData,
+            totalPrice: totalPrice,
+            totalTaxes: totalTaxes,
+            couponId: couponData.id ? couponData.id : null,
+            discount: discount,
+            discount_type: discountType,
+            payment_gateway: paymentGateway,
+            paid_amount: paidAmount,
+        }
+        print(data);
     }
 
     return (
@@ -687,6 +729,7 @@ const Cart = props => {
                     <CardActions>
                         <ButtonText variant='text' onClick={resetCartHandler}>{t('reset cart')}</ButtonText>
                         <ButtonConfirm variant='contained' onClick={purchaseCartHandler}>{t('book')}</ButtonConfirm>
+                        <ButtonConfirm variant='contained' onClick={purchasePrintCartHandler}>{t('book & print')}</ButtonConfirm>
                     </CardActions>
                 </Grid>
             </Grid>

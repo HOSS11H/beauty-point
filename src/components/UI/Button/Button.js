@@ -40,10 +40,12 @@ export const ButtonSmall = styled(CustomButton)`
     }
 `
 export const ButtonText = styled(Button)`
+    margin-bottom: 0;
     color: ${ ( { theme } ) => theme.vars.primary};
 `
 export const ButtonConfirm = styled(CustomButton)`
     &.MuiButton-root {
+        margin-bottom: 0;
         min-width: 150px;
         width: auto;
         padding: 0 25px;
