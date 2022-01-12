@@ -15,6 +15,7 @@ import { connect } from 'react-redux';
 import Increment from '../../../../../../components/UI/Increment/Increment';
 import { TextField } from '@mui/material';
 import styled from 'styled-components';
+
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -40,11 +41,9 @@ const CustomTextField = styled(TextField)`
 
 const CartItem = props => {
 
-    const { fetchedEmployees } = props;
-
     const { t } = useTranslation()
 
-    const { row, remove, increase, decrease, type, priceChangeHandler, changeEmployee } = props;
+    const { row, remove, increase, decrease, type, priceChangeHandler, changeEmployee, fetchedEmployees } = props;
 
     const [employeeName, setEmployeeName] = useState([]);
 

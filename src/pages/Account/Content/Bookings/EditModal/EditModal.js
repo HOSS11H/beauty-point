@@ -121,15 +121,6 @@ const DeleteButton = styled(CustomButton)`
         font-size: 16px;
     }
 `
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-    PaperProps: {
-        style: {
-            maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        },
-    },
-};
 
 const cartReducer = (state, action) => {
     switch (action.type) {
@@ -173,6 +164,15 @@ const cartReducer = (state, action) => {
             return updateObject(state, {
                 services: decreasedServices,
             })
+            case 'CHANGE_SERVICE_EMPLOYEE':
+                const changedEmployeeServiceIndex = state.services.findIndex(service => service.id === action.payload.id);
+                const changedEmployeeService = { ...state.services[changedEmployeeServiceIndex] }
+                changedEmployeeService.employee_id = action.payload.employeeId
+                const changedEmployeeServices = [...state.services]
+                changedEmployeeServices[changedEmployeeServiceIndex] = changedEmployeeService
+                return updateObject(state, {
+                    services: changedEmployeeServices,
+                })
         case 'ADD_TO_PRODUCTS':
             const productIndex = state.products.findIndex(product => product.item.id === action.payload.id);
             const updatedProducts = [...state.products]
@@ -281,18 +281,27 @@ const EditModal = (props) => {
     const splittedItems = bookingData.items.map(item => {
         if (item.item.type === 'service') {
             bookingDataServices.push({
-                ...item,
                 id: item.item.id,
+                quantity: item.quantity,
+                price: item.price,
+                name: item.item.name,
+                employee_id: item.employee.id,
+                employee: item.employee,
+                item: item.item,
             })
         } if (item.item.type === 'product') {
             bookingDataProducts.push({
-                ...item,
                 id: item.item.id,
+                quantity: item.quantity,
+                price: item.price,
+                item: item.item,
             })
         } if (item.item.type === 'deal') {
             bookingDataDeals.push({
-                ...item,
                 id: item.item.id,
+                quantity: item.quantity,
+                price: item.price,
+                item: item.item,
             })
         }
         return bookingDataServices;
@@ -420,6 +429,18 @@ const EditModal = (props) => {
             dispatch({
                 type: 'DECREASE_DEAL',
                 payload: itemId
+            })
+        }
+    }, [])
+
+    const changeServiceEmployeeHandler = useCallback((type, itemId, employeeId) => {
+        if (type === 'services') {
+            dispatch({
+                type: 'CHANGE_SERVICE_EMPLOYEE',
+                payload: {
+                    id: itemId,
+                    employeeId: employeeId,
+                },
             })
         }
     }, [])
@@ -621,7 +642,10 @@ const EditModal = (props) => {
                                 <SharedTableHead name='services' />
                                 <TableBody>
                                     {cartData.services.map((row) => (
-                                        <CartItem type='services' key={row.id} row={row} remove={removeFromCartHandler} increase={increaseItemHandler} decrease={decreaseItemHandler} />
+                                        <CartItem type='services' key={row.id} row={row} remove={removeFromCartHandler} increase={increaseItemHandler} 
+                                            decrease={decreaseItemHandler} fetchedEmployees={fetchedEmployees} 
+                                            changeEmployee={changeServiceEmployeeHandler}
+                                        />
                                     ))}
                                 </TableBody>
                             </Table>

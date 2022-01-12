@@ -16,6 +16,11 @@ const SharedTableHead = props => {
                 <TableCell align="center">{t('price')}</TableCell>
                 <TableCell align="center">{t('quantity')}</TableCell>
                 <TableCell align="center">{t('total')}</TableCell>
+                {
+                    name === 'services' && (
+                        <TableCell align="center">{t('employee')}</TableCell>
+                    )
+                }
                 <TableCell align="center">{t('action')}</TableCell>
             </TableRow>
         </TableHead>
