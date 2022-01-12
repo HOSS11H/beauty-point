@@ -181,6 +181,7 @@ const EditModal = (props) => {
 
     const [allUnits, setAllUnits] = useState([]);
     const [productUnit, setProductUnit] = useState(unit?.id);
+    const [productUnitError, setProductUnitError] = useState(false);
 
     const [uploadedImages, setUploadedImages] = useState([ { data_url: image} ]);
 
@@ -264,6 +265,7 @@ const EditModal = (props) => {
     }
     const productUnitChangeHandler = (event) => {
         setProductUnit(event.target.value);
+        setProductUnitError(false);
     }
 
     const closeModalHandler = useCallback(() => {
@@ -288,6 +290,10 @@ const EditModal = (props) => {
         }
         if (+productQuantity === 0) {
             setProductQuantityError(true);
+            return;
+        }
+        if (productUnit === '') {
+            setProductUnitError(true);
             return;
         }
 
@@ -409,6 +415,7 @@ const EditModal = (props) => {
                         }
                     </Select>
                 </FormControl>
+                {productUnitError && <ValidationMessage notExist>{t(`Please add Unit`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12}>
                 <ImageUploading

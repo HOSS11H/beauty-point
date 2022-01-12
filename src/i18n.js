@@ -393,6 +393,7 @@ const resources = {
             'remaining amount': 'المبلغ المتبقي',
             'Eash service must have an employee': 'كل خدمة يجب أن تحتوي علي موظف',
             'book & print': 'حجز و طباعة',
+            'Please add Unit': 'يرجى إضافة وحدة',
         }
     }
 };

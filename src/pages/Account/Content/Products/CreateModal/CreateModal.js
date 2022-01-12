@@ -171,6 +171,7 @@ const CreateModal = (props) => {
 
     const [allUnits, setAllUnits] = useState([]);
     const [productUnit, setProductUnit] = useState('');
+    const [productUnitError, setProductUnitError] = useState(false);
 
     const [locationName, setLocationName] = useState('');
     const [productLocationError, setProductLocationError] = useState(false);
@@ -254,6 +255,7 @@ const CreateModal = (props) => {
     }
     const productUnitChangeHandler = (event) => {
         setProductUnit(event.target.value);
+        setProductUnitError(false);
     }
     const productStatusChangeHandler = (event) => {
         setProductStatus(event.target.value);
@@ -292,6 +294,7 @@ const CreateModal = (props) => {
         setDefaultImage('');
         setDefaultImageError(false);
         setProductUnit('');
+        setProductUnitError(false);
     }, [])
 
     useEffect(() => {
@@ -316,6 +319,10 @@ const CreateModal = (props) => {
         }
         if (+productQuantity === 0) {
             setProductQuantityError(true);
+            return;
+        }
+        if (productUnit === '') {
+            setProductUnitError(true);
             return;
         }
 
@@ -439,6 +446,7 @@ const CreateModal = (props) => {
                         }
                     </Select>
                 </FormControl>
+                {productUnitError && <ValidationMessage notExist>{t(`Please add Unit`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12}>
                 <ImageUploading
