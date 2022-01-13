@@ -99,7 +99,7 @@ const Spotlights = props => {
                                     <div className="deal-body" >
                                         <div>
                                             <h3 className="deal-title">
-                                                <NavLink to="/">{spotlight.deal.title}</NavLink>
+                                                <NavLink to={`/deals/${spotlight.id}`}>{spotlight.deal.title}</NavLink>
                                             </h3>
                                             <p className="deal-desc">
                                                 {spotlight.deal.applied_between_time}

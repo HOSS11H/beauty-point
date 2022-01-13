@@ -88,10 +88,10 @@ const SingleDeal = props => {
     if (deal) {
         content = (
             <CustomCard sx={{ display: 'flex' }}>
-                <Box sx={{ display: 'flex', justifyContent: 'center' , flexDirection: 'column', flexBasis: '50%' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'center' , flexDirection: 'column', flexBasis: '50%', flexShrink: '0' }}>
                     <CardContent sx={{ flex: '1 0 auto', }}>
                         <Typography component="div" variant="h4" color="primary" sx={{ marginBottom: '20px' }}>
-                            {deal.company.companyName}
+                            {deal.companyName}
                         </Typography>
                         <Typography component="div" variant="h5" sx={{ marginBottom: '10px' }} >
                             {deal.title}
@@ -109,7 +109,7 @@ const SingleDeal = props => {
                 </Box>
                 <CardMedia
                     component="img"
-                    sx={{ flexBasis: '50%', height: '100%', objectfit: 'cover' }}
+                    sx={{flexBasis: '50%', flexGrow:'0', height: '500px', objectFit: 'cover' }}
                     image={deal.image}
                     alt={deal.name}
                 />

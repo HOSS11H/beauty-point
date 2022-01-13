@@ -250,7 +250,7 @@ const resources = {
             'login': 'تسجيل الدخول',
             'select your services': 'اختر خدماتك',
             'popular saloons': 'الصالونات المشهورة',
-            'popular spotlights': 'المنشورات المشهورة',
+            'popular spotlights': 'أفضل العروض',
             'popular deals': 'العروض المشهورة',
             'Quick Links': 'روابط سريعة',
             'help & support': 'المساعدة والدعم',
