@@ -70,6 +70,9 @@ const PaymentMethod = styled.div`
         font-weight: 600;
         color :${({ theme }) => theme.vars.theme};
         text-transform:capitalize;
+        @media screen and (max-width: 599.98px) {
+            font-size: 16px;
+        }
     }
 `
 const CouponWrapper = styled.div`
@@ -125,13 +128,13 @@ const ChoosePayment = props => {
                 <p>{t('You can either pay now or pay locally on arrival. You will be able to select payment method in the next step.')}</p>
             </InfoMessage>
             <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={6} sm={6}>
                     <PaymentMethod onClick={() => handlePayment('cash')}>
                         <img src={cashImg} alt='vector' />
                         <h5>{t('cash')}</h5>
                     </PaymentMethod>
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={6} sm={6}>
                     <PaymentMethod /* onClick={() => handlePayment('card')} */ className='disabled'>
                         <img src={cardImg} alt='vector' />
                         <h5>{t('credit card')}</h5>
