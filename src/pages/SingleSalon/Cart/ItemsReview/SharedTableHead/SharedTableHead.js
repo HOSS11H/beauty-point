@@ -13,9 +13,6 @@ const SharedTableHead = props => {
         <TableHead>
             <TableRow>
                 <TableCell sx={{ padding: '16px 8px' }} align="center" >{t(name)}</TableCell>
-                <TableCell sx={{ padding: '16px 8px' }} align="center">{t('price')}</TableCell>
-                <TableCell sx={{ padding: '16px 8px' }} align="center">{t('quantity')}</TableCell>
-                <TableCell sx={{ padding: '16px 8px' }} align="center">{t('price including taxes')}</TableCell>
                 <TableCell sx={{ padding: '16px 8px' }} align="center">{t('action')}</TableCell>
             </TableRow>
         </TableHead>

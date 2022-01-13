@@ -3,13 +3,11 @@ import TableCell from '@mui/material/TableCell';
 import { TableData } from '../../../../../components/UI/Dashboard/Table/Table';
 import Actions from '../../../../../components/UI/Dashboard/Actions/Actions';
 
-import Increment from '../../../../../components/UI/Increment/Increment';
-import { formatCurrency } from '../../../../../shared/utility';
 
 
 const CartItem = props => {
 
-    const { row, remove, increase, decrease, type } = props;
+    const { row, remove, type } = props;
 
     return (
         <TableRow
@@ -17,15 +15,6 @@ const CartItem = props => {
         >
             <TableCell component="th" sx={{ padding: '16px 8px' }} scope="row">
                 <TableData>{row.name}</TableData>
-            </TableCell>
-            <TableCell align="center" sx={{ padding: '16px 8px' }}>
-                <TableData>{(row.price)}</TableData>
-            </TableCell>
-            <TableCell align="center" sx={{ padding: '16px 8px' }}>
-                <Increment id={row.id} type={type} increment={increase} decrement={decrease} value={row.quantity} />
-            </TableCell>
-            <TableCell align="center" sx={{ padding: '16px 8px' }}>
-                <TableData>{formatCurrency(row.quantity * row.price)}</TableData>
             </TableCell>
             <TableCell align="center" sx={{ padding: '16px 8px' }}>
                 <Actions remove

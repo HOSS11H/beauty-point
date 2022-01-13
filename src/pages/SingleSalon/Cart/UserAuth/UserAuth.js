@@ -110,10 +110,10 @@ const UserAuth = props => {
                     <Tab label={t('have an account ?')} {...a11yProps(1)} />
                 </Tabs>
             </Box>
-            <TabPanel value={value} index={0}>
+            <TabPanel value={value} index={0} padding='0px 10px' >
                 {registerInputs()}
             </TabPanel>
-            <TabPanel value={value} index={1}>
+            <TabPanel value={value} index={1} padding='0px 10px' >
                 {loginInputs()}
             </TabPanel>
             {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}

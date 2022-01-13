@@ -8,20 +8,27 @@ const CartHeadlinerWrapper = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    flex: 0 0 270px;
     background-color: ${({ theme }) => theme.vars.theme};
     border-radius: 20px 0 0 20px;
     padding: 15px 30px 25px 30px;
     text-align: center;
+    height:100%;
     @media screen and (max-width: 1999.98px) {
         flex: 0 1 35%;
         padding-left: 20px;
         padding-right: 20px;
     }
-    @media screen and (max-width: 599.98px) {
+    @media screen and (max-width: 899.98px) {
         border-radius: 20px 20px 0 0;
         padding-left: 30px;
         padding-right: 30px;
+        display: none;
+    }
+`
+
+const CustomStep = styled(Step)`
+    &.MuiStep-root {
+        padding: 0 3px;
     }
 `
 
@@ -30,12 +37,8 @@ const ModalStepLabel = styled(StepLabel)`
         padding: 0;
     }
     & .MuiStepLabel-iconContainer {
-        padding-right: 15px;
-        @media screen and (max-width: 1999.98px) {
-            padding-right: 5px;
-        }
         & .MuiSvgIcon-root {
-            width: 33px;
+            width: 20px;
             height: 4px;
             background-color: rgba(255, 255, 255, 0.4);
             border-radius: 4px;
@@ -57,8 +60,8 @@ const CartIcon = styled.img`
     margin-top: 20px;
     margin-bottom: 20px;
     @media screen and (max-width: 899.98px) {
-        max-width: 70px;
-        margin: 15px 0;
+        max-width: 50px;
+        margin: 10px 0;
     }
 `
 const CartHeading = styled.div`
@@ -71,7 +74,7 @@ const CartHeading = styled.div`
         line-height: 40px;
         color: rgba(255, 255, 255, 1);
         @media screen and (max-width: 899.98px) {
-            font-size: 22px;
+            font-size: 20px;
             line-height: 1.5;
         }
     }
@@ -87,7 +90,7 @@ const CartContact = styled.div`
         line-height: 1.5;
         color: rgba(255, 255, 255, 1);
         @media screen and (max-width: 899.98px) {
-            font-size: 19px;
+            font-size: 18px;
         }
     }
     a {
@@ -106,14 +109,14 @@ const CartHeadliner = props => {
 
     return (
         <CartHeadlinerWrapper>
-            <Stepper activeStep={activeStep} sx={{ marginBottom: '20px' }} >
+            <Stepper activeStep={activeStep} sx={{ marginBottom: '15px' }} >
                 {steps.map((label, index) => {
                     const stepProps = {};
                     const labelProps = {};
                     return (
-                        <Step key={label} {...stepProps}>
+                        <CustomStep key={label} {...stepProps}>
                             <ModalStepLabel {...labelProps}>{label}</ModalStepLabel>
-                        </Step>
+                        </CustomStep>
                     );
                 })}
             </Stepper>

@@ -4,7 +4,7 @@ import { useEffect } from "react"
 import styled from 'styled-components';
 import ValidationMessage from "../../../../components/UI/ValidationMessage/ValidationMessage";
 import { formatCurrency } from "../../../../shared/utility";
-import { fetchCoupons  } from '../../../../store/actions/index';
+import { fetchCoupons } from '../../../../store/actions/index';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
@@ -15,27 +15,20 @@ import CartItem from "./CartItem/CartItem";
 import { useContext } from "react";
 import ThemeContext from "../../../../store/theme-context";
 
-const CouponWrapper = styled.div`
+const CustomMessage = styled.div`
     display: flex;
     align-items: center;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
-`
-
-const PriceCalculation = styled.div`
-    display: flex;
-    align-items: center;
-    margin: 10px 0;
+    justify-content: center;
+    text-align: center;
+    height: 100%;
+    flex-grow: 1;
+    padding: 20px;
     p {
-        font-size: 20px;
+        font-size: 24px;
         line-height:1.5;
-        text-transform: uppercase;
-        font-weight: 600;
-        color: ${({ theme }) => theme.palette.text.primary};
-        margin-right: 20px;
-        &:last-child {
-            margin-right: 0;
-        }
+        text-transform: capitalize;
+        font-weight: 500;
+        color: ${({ theme }) => theme.palette.text.disabled};
     }
 `
 
@@ -92,7 +85,8 @@ const ItemsReview = props => {
             setCouponExists(false)
         }
     }
-    return (
+
+    let content = (
         <Grid container>
             <Grid item xs={12}>
                 {cartData.services.length > 0 && (
@@ -115,7 +109,7 @@ const ItemsReview = props => {
                             <SharedTableHead name='products' />
                             <TableBody>
                                 {cartData.products.map((row) => (
-                                    <CartItem type='products' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem}  />
+                                    <CartItem type='products' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} />
                                 ))}
                             </TableBody>
                         </Table>
@@ -136,33 +130,19 @@ const ItemsReview = props => {
                     </TableContainer>
                 )}
             </Grid>
-            <Grid item xs={12}>
-                <CouponWrapper>
-                    <TextField
-                        label={t('Discount Coupon')}
-                        id="coupon-value"
-                        sx={{ flexGrow: '1' }}
-                        value={coupon}
-                        onChange={couponChangeHandler}
-                    />
-                    {couponExists && <ValidationMessage exist>{t('Coupon Exists')}</ValidationMessage>}
-                    {!couponExists && coupon !== '' ? <ValidationMessage notExist>{t(`Coupon Doesn't Exist`)}</ValidationMessage> : null}
-                </CouponWrapper>
-            </Grid>
-            <Grid item xs={12}>
-                <PriceCalculation>
-                    <p>{t('total taxes')}</p>
-                    <p>{formatCurrency(totalTaxes)}</p>
-                </PriceCalculation>
-            </Grid>
-            <Grid item xs={12}>
-                <PriceCalculation>
-                    <p>{t('price after discount')}</p>
-                    <p>{formatCurrency(totalPrice)}</p>
-                </PriceCalculation>
-            </Grid>
         </Grid>
     )
+    if ( cartData.products.length === 0 && cartData.services.length === 0 && cartData.deals.length === 0 ) {
+        content = (
+            <CustomMessage>
+                <CustomMessage>
+                    <p>{t('no items')}</p>
+                </CustomMessage>
+            </CustomMessage>
+        )
+    }
+
+    return content;
 }
 
 const mapStateToProps = (state) => {

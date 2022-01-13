@@ -1,9 +1,12 @@
-import { Grid } from "@mui/material";
+import { Grid, TextField } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import cashImg from "../../../../images/pages/cart/cash.png";
 import cardImg from "../../../../images/pages/cart/card.png";
 import { formatCurrency } from "../../../../shared/utility";
+import { useState } from "react";
+import { connect } from "react-redux";
+import ValidationMessage from "../../../../components/UI/ValidationMessage/ValidationMessage";
 
 const Wrapper = styled.div`
 
@@ -16,13 +19,13 @@ const InfoMessage = styled.div`
         font-size: 22px;
         line-height: 1.5;
         font-weight: 600;
-        color :${ ( { theme } ) => theme.vars.theme };
+        color :${({ theme }) => theme.vars.theme};
     }
     p {
         font-size: 18px;
         line-height: 1.5;
         font-weight: 500;
-        color :${ ( { theme } ) => theme.vars.theme };
+        color :${({ theme }) => theme.vars.theme};
     }
 `
 
@@ -31,15 +34,20 @@ const PaymentMethod = styled.div`
     padding: 40px;
     border-radius: 20px;
     border: 1px solid;
-    border-color: ${ ( { theme } ) => theme.vars.theme };
+    border-color: ${({ theme }) => theme.vars.theme};
     height: 250px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
     cursor: pointer;
+    @media screen and (max-width: 899.98px) {
+        max-height: 180px;
+        padding: 20px
+    }
     @media screen and (max-width: 599.98px) {
         padding: 20px;
+        height: 150px;
     }
     &.disabled{
         cursor: not-allowed;
@@ -49,15 +57,28 @@ const PaymentMethod = styled.div`
         max-width: 100%;
         margin-bottom: 10px;
         object-fit: cover;
+        @media screen and (max-width: 899.98px) {
+            max-width: 100px;
+        }
+        @media screen and (max-width: 599.98px) {
+            max-width: 70px;
+        }
     }
     h5 {
         font-size: 22px;
         line-height: 1.5;
         font-weight: 600;
-        color :${ ( { theme } ) => theme.vars.theme };
+        color :${({ theme }) => theme.vars.theme};
         text-transform:capitalize;
     }
-    `
+`
+const CouponWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+    margin-bottom: 20px;
+`
 
 const DepositPanel = styled.div`
     margin-top: 20px;
@@ -70,16 +91,32 @@ const DepositPanel = styled.div`
         font-size: 22px;
         line-height: 1.5;
         font-weight: 600;
-        color :${ ( { theme } ) => theme.vars.theme };
+        color :${({ theme }) => theme.vars.theme};
         text-transform:capitalize;
     }
 `
 
 const ChoosePayment = props => {
 
-    const { handlePayment } = props;
+    const { handlePayment, assignCoupon, assignCouponData, fetchedCoupons } = props;
 
     const { t } = useTranslation();
+
+    const [coupon, setCoupon] = useState('')
+    const [couponExists, setCouponExists] = useState(false)
+
+    const couponChangeHandler = (event) => {
+        setCoupon(event.target.value)
+        const enteredCoupon = fetchedCoupons.filter(coupon => coupon.code === event.target.value)
+        if (enteredCoupon.length > 0) {
+            setCouponExists(true)
+            assignCouponData(enteredCoupon[0])
+            assignCoupon(enteredCoupon[0].id)
+        } else {
+            assignCouponData({ amount: 0 })
+            setCouponExists(false)
+        }
+    }
 
     return (
         <Wrapper>
@@ -101,10 +138,29 @@ const ChoosePayment = props => {
                     </PaymentMethod>
                 </Grid>
             </Grid>
-            <DepositPanel>
+            <Grid item xs={12}>
+                <CouponWrapper>
+                    <TextField
+                        label={t('Discount Coupon')}
+                        id="coupon-value"
+                        sx={{ flexGrow: '1' }}
+                        value={coupon}
+                        onChange={couponChangeHandler}
+                    />
+                    {couponExists && <ValidationMessage exist>{t('Coupon Exists')}</ValidationMessage>}
+                    {!couponExists && coupon !== '' ? <ValidationMessage notExist>{t(`Coupon Doesn't Exist`)}</ValidationMessage> : null}
+                </CouponWrapper>
+            </Grid>
+            {/* <DepositPanel>
                 <h6>{`${t('Deposit amount :')} ${formatCurrency(10)}`}</h6>
-            </DepositPanel>
+            </DepositPanel> */}
         </Wrapper>
     )
 }
-export default ChoosePayment;
+const mapStateToProps = (state) => {
+    return {
+        fetchedCoupons: state.coupons.coupons,
+    }
+}
+
+export default connect(mapStateToProps, null)(ChoosePayment);

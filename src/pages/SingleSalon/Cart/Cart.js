@@ -4,8 +4,8 @@ import Fade from '@mui/material/Fade';
 import Card from '@mui/material/Card';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import { Box, Button } from '@mui/material';
-import { useCallback, useReducer, useState } from 'react';
+import { Box, Button, Grid } from '@mui/material';
+import { useCallback, useEffect, useReducer, useState } from 'react';
 import CartHeadliner from './CartHeadliner/CartHeadliner';
 import ChooseType from './ChooseType/ChooseType';
 import ChooseItem from './ChooseItem/ChooseItem';
@@ -17,10 +17,15 @@ import { updateObject } from '../../../shared/utility';
 import ItemsReview from './ItemsReview/ItemsReview';
 import PrintBooking from './PrintBooking/PrintBooking';
 import { format } from 'date-fns/esm';
+import CartOverview from './CartOverview/CartOverview';
+import { Fragment } from 'react';
+import { connect } from 'react-redux';
+import { fetchCoupons } from '../../../store/actions/index';
+import { useContext } from 'react';
+import ThemeContext from '../../../store/theme-context';
 
 const CustomCardMui = styled(Card)`
     &.MuiPaper-root {
-        display:flex;
         margin: auto;
         overflow: hidden;
         box-shadow: none;
@@ -33,7 +38,6 @@ const CustomCardMui = styled(Card)`
         }
         @media screen and (max-width: 899.98px) {
             width: 90%;
-            flex-direction: column;
         }
     }
 `;
@@ -44,18 +48,20 @@ const CartContent = styled.div`
     align-items: center;
     justify-content: space-between;
     flex-grow: 1;
+    height: 100%;
 `
 const CartBody = styled.div`
+    margin-top: 25px;
     flex-grow: 1;
     width: 100%;
-    padding: 25px;
-    max-height: 80vh;
+    padding: 0 25px 25px;
+    max-height: 70vh;
     overflow-y: auto;
     // Scroll //
     -webkit-overflow-scrolling: touch;
-    @media screen and (max-width: 599.98px) {
-        max-height: 400px;
-        padding: 25px 15px;
+    @media screen and (max-width: 899.98px) {
+        max-height: 40vh;
+        padding:  0 15px 25px;
     }
     &::-webkit-scrollbar {
         height: 7px;
@@ -205,13 +211,20 @@ const Cart = props => {
 
     const { t } = useTranslation();
 
-    const { show, onClose, salonData } = props;
+    const themeCtx = useContext(ThemeContext);
+    const { lang } = themeCtx;
+
+    const { show, onClose, salonData, fetchedCoupons, fetchCouponsHandler } = props;
 
     const [cart, dispatch] = useReducer(cartReducer, {
         services: [],
         products: [],
         deals: [],
     });
+
+    const [totalPrice, setTotalPrice] = useState(0)
+
+    const [totalTaxes, setTotalTaxes] = useState(0)
 
     const [activeStep, setActiveStep] = useState(0);
 
@@ -226,10 +239,35 @@ const Cart = props => {
     const [paymentMethod, setPaymentMethod] = useState('');
 
     const [couponId, setCouponId] = useState(null);
+    const [couponData, setCouponData] = useState({ amount: 0 })
 
     const [resevedBookingData, setReservedBookingData] = useState(null);
 
     const [bookingDone, setBookingDone] = useState(false);
+
+
+
+    useEffect(() => {
+        let total = 0;
+        for (let section in cart) {
+            for (let item of cart[section]) {
+                total += item.price * item.quantity;
+            }
+        }
+
+        if (couponData.discountType === 'percentage') {
+            total = total - ((total * couponData.amount / 100));
+        } else if (couponData.discountType === 'fixed') {
+            total = total - couponData.amount;
+        }
+
+        setTotalTaxes(total - (total / 1.15))
+        setTotalPrice(total);
+    }, [cart, couponData])
+
+    useEffect(() => {
+        fetchCouponsHandler(lang);
+    }, [fetchCouponsHandler, lang])
 
     const handleNext = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -291,7 +329,7 @@ const Cart = props => {
         }
     }, [])
 
-    const increaseItemHandler = useCallback((type, itemId) => {
+    /* const increaseItemHandler = useCallback((type, itemId) => {
         if (type === 'services') {
             dispatch({
                 type: 'INCREASE_SERVICE',
@@ -330,7 +368,7 @@ const Cart = props => {
                 payload: itemId
             })
         }
-    }, [])
+    }, []) */
 
     const resetCartHandler = useCallback(() => {
         dispatch({
@@ -350,6 +388,9 @@ const Cart = props => {
 
     const handleCoupon = useCallback(id => {
         setCouponId(id);
+    }, [])
+    const handleCouponData = useCallback(data => {
+        setCouponData(data);
     }, [])
 
     const handleChoosePayment = useCallback((payment) => {
@@ -420,114 +461,137 @@ const Cart = props => {
         >
             <Fade in={show}>
                 <CustomCardMui>
-                    <CartHeadliner activeStep={activeStep} salonNum={salonData.companyPhone} steps={steps} />
-                    <CartContent sx={{ width: '100%' }}>
-                        <CartBody>
-                            {
-                                activeStep === 0 && <ChooseType handleChoosetype={handleChoosetype} />
-                            }
-                            {
-                                activeStep === 1 && <ChooseItem id={salonData.id} cartData={cart} type={selectedType} onChoose={addToCartHandler} />
-                            }
-                            {
-                                activeStep === 2 && <ItemsReview cartData={cart} removeFromCart={removeFromCartHandler} increaseItem={increaseItemHandler} decreaseItem={decreaseItemHandler} assignCoupon={handleCoupon} />
-                            }
-                            {
-                                activeStep === 3 && <ChooseAppointment id={salonData.id} appointment={appointment} handleAppointment={handleAppointment} handleSlot={handleSlot} activeSlot={slot} />
-                            }
-                            {
-                                activeStep === 4 && <UserAuth id={salonData.id} handleNext={handleNext} storeUserData={storeUserInfos} />
-                            }
-                            {
-                                activeStep === 5 && <ChoosePayment handlePayment={handleChoosePayment} />
-                            }
-                            {
-                                activeStep === 6 && <PrintBooking bookingData={resevedBookingData} userData={userInfos} handleBookingDone={handleBookingDone} />
-                            }
-                        </CartBody>
-                        {
-                            activeStep === 1 && (
-                                <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>
-                                    <Button
-                                        color="inherit"
-                                        onClick={handleBack}
-                                        sx={{ mr: 1 }}
-                                    >
-                                        {t('Back')}
-                                    </Button>
-                                    <Box sx={{ flex: '1 1 auto' }} />
-                                    <Button color="secondary" onClick={handleNext} disabled={cart.services.length === 0 && cart.deals.length === 0 && cart.products.length === 0} >
-                                        {t(activeStep === steps.length - 1 ? 'Finish' : 'Next')}
-                                    </Button>
-                                </Box>
-                            )
-                        }
-                        {
-                            activeStep === 2 && (
-                                <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>
-                                    <Button
-                                        color="inherit"
-                                        onClick={handleBack}
-                                        sx={{ mr: 1 }}
-                                    >
-                                        {t('Back')}
-                                    </Button>
-                                    <Box sx={{ flex: '1 1 auto' }} />
-                                    <Button color="secondary" onClick={handleNext} disabled={cart.services.length === 0 && cart.deals.length === 0 && cart.products.length === 0} >
-                                        {t(activeStep === steps.length - 1 ? 'Finish' : 'Next')}
-                                    </Button>
-                                </Box>
-                            )
-                        }
-                        {
-                            activeStep === 3 && (
-                                <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>
-                                    <Button
-                                        color="inherit"
-                                        onClick={handleBack}
-                                        sx={{ mr: 1 }}
-                                    >
-                                        {t('Back')}
-                                    </Button>
-                                    <Box sx={{ flex: '1 1 auto' }} />
-                                    <Button color="secondary" onClick={handleNext} disabled={!hasSelectedAppointment} >
-                                        {t(activeStep === steps.length - 1 ? 'Finish' : 'Next')}
-                                    </Button>
-                                </Box>
-                            )
-                        }
-                        {
-                            activeStep === 4 && (
-                                <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>
-                                    <Button
-                                        color="inherit"
-                                        disabled={activeStep === 0}
-                                        onClick={handleBack}
-                                        sx={{ mr: 1 }}
-                                    >
-                                        {t('Back')}
-                                    </Button>
-                                    <Box sx={{ flex: '1 1 auto' }} />
-                                    <Button color="secondary" onClick={handleNext} disabled >
-                                        {t(activeStep === steps.length - 1 ? 'Finish' : 'Next')}
-                                    </Button>
-                                </Box>
-                            )
-                        }
-                        {
-                            activeStep === 6 && (
-                                <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>
-                                    <Box sx={{ flex: '1 1 auto' }} />
-                                    <Button color="secondary" onClick={ResetCart} disabled={!bookingDone} >
-                                        {t('Finish')}
-                                    </Button>
-                                </Box>
-                            )
-                        }
-                    </CartContent>
+                    <Grid container spacing={0} >
+                        <Grid item xs={12} md={3}>
+                            <CartHeadliner activeStep={activeStep} salonNum={salonData.companyPhone} steps={steps} />
+                        </Grid>
+                        <Grid item xs={12} md={ activeStep === 0 || activeStep === 6 ? 9 : 6}>
+                            <CartContent sx={{ width: '100%' }}>
+                                <CartBody>
+                                    {
+                                        activeStep === 0 && <ChooseType handleChoosetype={handleChoosetype} />
+                                    }
+                                    {
+                                        activeStep === 1 && <ChooseItem id={salonData.id} cartData={cart} type={selectedType} onChoose={addToCartHandler} />
+                                    }
+                                    {
+                                        activeStep === 2 && <ItemsReview cartData={cart} removeFromCart={removeFromCartHandler} /* increaseItem={increaseItemHandler} decreaseItem={decreaseItemHandler} */ />
+                                    }
+                                    {
+                                        activeStep === 3 && <ChooseAppointment id={salonData.id} appointment={appointment} handleAppointment={handleAppointment} handleSlot={handleSlot} activeSlot={slot} />
+                                    }
+                                    {
+                                        activeStep === 4 && <UserAuth id={salonData.id} handleNext={handleNext} storeUserData={storeUserInfos} />
+                                    }
+                                    {
+                                        activeStep === 5 && <ChoosePayment handlePayment={handleChoosePayment} assignCoupon={handleCoupon} assignCouponData={handleCouponData} />
+                                    }
+                                    {
+                                        activeStep === 6 && <PrintBooking bookingData={resevedBookingData} userData={userInfos} handleBookingDone={handleBookingDone} />
+                                    }
+                                </CartBody>
+                                <Fragment>
+                                    {
+                                        activeStep === 1 && (
+                                            <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>
+                                                <Button
+                                                    color="inherit"
+                                                    onClick={handleBack}
+                                                    sx={{ mr: 1 }}
+                                                >
+                                                    {t('Back')}
+                                                </Button>
+                                                <Box sx={{ flex: '1 1 auto' }} />
+                                                <Button color="secondary" onClick={handleNext} disabled={cart.services.length === 0 && cart.deals.length === 0 && cart.products.length === 0} >
+                                                    {t(activeStep === steps.length - 1 ? 'Finish' : 'Next')}
+                                                </Button>
+                                            </Box>
+                                        )
+                                    }
+                                    {
+                                        activeStep === 2 && (
+                                            <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>
+                                                <Button
+                                                    color="inherit"
+                                                    onClick={handleBack}
+                                                    sx={{ mr: 1 }}
+                                                >
+                                                    {t('Back')}
+                                                </Button>
+                                                <Box sx={{ flex: '1 1 auto' }} />
+                                                <Button color="secondary" onClick={handleNext} disabled={cart.services.length === 0 && cart.deals.length === 0 && cart.products.length === 0} >
+                                                    {t(activeStep === steps.length - 1 ? 'Finish' : 'Next')}
+                                                </Button>
+                                            </Box>
+                                        )
+                                    }
+                                    {
+                                        activeStep === 3 && (
+                                            <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>
+                                                <Button
+                                                    color="inherit"
+                                                    onClick={handleBack}
+                                                    sx={{ mr: 1 }}
+                                                >
+                                                    {t('Back')}
+                                                </Button>
+                                                <Box sx={{ flex: '1 1 auto' }} />
+                                                <Button color="secondary" onClick={handleNext} disabled={!hasSelectedAppointment} >
+                                                    {t(activeStep === steps.length - 1 ? 'Finish' : 'Next')}
+                                                </Button>
+                                            </Box>
+                                        )
+                                    }
+                                    {
+                                        activeStep === 4 && (
+                                            <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>
+                                                <Button
+                                                    color="inherit"
+                                                    disabled={activeStep === 0}
+                                                    onClick={handleBack}
+                                                    sx={{ mr: 1 }}
+                                                >
+                                                    {t('Back')}
+                                                </Button>
+                                                <Box sx={{ flex: '1 1 auto' }} />
+                                                <Button color="secondary" onClick={handleNext} disabled >
+                                                    {t(activeStep === steps.length - 1 ? 'Finish' : 'Next')}
+                                                </Button>
+                                            </Box>
+                                        )
+                                    }
+                                    {
+                                        activeStep === 6 && (
+                                            <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>
+                                                <Box sx={{ flex: '1 1 auto' }} />
+                                                <Button color="secondary" onClick={ResetCart} disabled={!bookingDone} >
+                                                    {t('Finish')}
+                                                </Button>
+                                            </Box>
+                                        )
+                                    }
+                                </Fragment>
+                            </CartContent>
+                        </Grid>
+                        <Grid item xs={12} md={3} sx={{ display: activeStep === 0 || activeStep === 6 ? 'none' : 'block'}} >
+                            <CartOverview cartData={cart} taxes={totalTaxes} total={totalPrice} />
+                        </Grid>
+                    </Grid>
                 </CustomCardMui>
             </Fade>
         </Modal>
     )
 }
-export default Cart;
+const mapStateToProps = (state) => {
+    return {
+        fetchedCoupons: state.coupons.coupons,
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchCouponsHandler: (lang) => dispatch(fetchCoupons(lang)),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Cart);

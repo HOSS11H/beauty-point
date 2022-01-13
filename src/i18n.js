@@ -394,6 +394,8 @@ const resources = {
             'Eash service must have an employee': 'كل خدمة يجب أن تحتوي علي موظف',
             'book & print': 'حجز و طباعة',
             'Please add Unit': 'يرجى إضافة وحدة',
+            'summary': 'ملخص',
+            'no items': 'لا توجد عناصر',
         }
     }
 };

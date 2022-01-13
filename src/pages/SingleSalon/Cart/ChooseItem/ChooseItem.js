@@ -13,7 +13,7 @@ const Wrapper = styled.div`
 
 const ItemsWrapper = styled.div`
     width: 100%;
-    max-height: 290px;
+    max-height: 100%;
     overflow-y: auto;
     padding: 10px;
     // Scroll //
