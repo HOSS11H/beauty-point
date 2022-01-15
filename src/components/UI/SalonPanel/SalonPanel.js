@@ -8,7 +8,7 @@ export const SalonPanel = styled.div`
         max-width: 370px
     }
     .salon-img  {
-        height: 250px;
+        height: 200px;
         img {
             width: 100%;
             height: 100%;

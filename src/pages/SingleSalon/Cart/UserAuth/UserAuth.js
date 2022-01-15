@@ -1,5 +1,5 @@
 import { Box, Tab, Tabs } from "@mui/material";
-import { useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import TabPanel from "../../../../components/UI/TabPanel/TabPanel";
 import useForm from "../../../../hooks/useForm";
@@ -10,6 +10,7 @@ import { CustomButton } from "../../../../components/UI/Button/Button";
 import { useContext } from "react";
 import AuthContext from "../../../../store/auth-context";
 import v1 from '../../../../utils/axios-instance-v1';
+import Loader from "../../../../components/UI/Loader/Loader";
 
 const ErrorMessage = styled.p`
     font-size: 18px;
@@ -25,6 +26,8 @@ const UserAuth = props => {
     const { handleNext, id, storeUserData } = props;
 
     const authCtx = useContext(AuthContext);
+    
+    const { token } = authCtx;
 
     const { t } = useTranslation();
 
@@ -43,6 +46,12 @@ const UserAuth = props => {
     } else {
         authIsValid = isLoginDataValid()
     }
+
+    useEffect(() => {
+        if (token) {
+            handleNext()
+        }
+    }, [handleNext, token])
 
 
     const handleChange = (event, newValue) => {
@@ -102,23 +111,34 @@ const UserAuth = props => {
             })
     }
 
+    let content = (
+        <Loader height='300px' />
+    )
+    if ( !token ) {
+        content = (
+            <Fragment>
+                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                    <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                        <Tab label={t('new registeration')} {...a11yProps(0)} />
+                        <Tab label={t('have an account ?')} {...a11yProps(1)} />
+                    </Tabs>
+                </Box>
+                <TabPanel value={value} index={0} padding='15px 10px' >
+                    {registerInputs()}
+                </TabPanel>
+                <TabPanel value={value} index={1} padding='15px 10px' >
+                    {loginInputs()}
+                </TabPanel>
+                {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+                <CustomButton onClick={submitHandler} disabled={!authIsValid} >{value === 0 ? t('register') : t('log in')}</CustomButton>
+            </Fragment>
+        )
+    }
+
     return (
-        <>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                    <Tab label={t('new registeration')} {...a11yProps(0)} />
-                    <Tab label={t('have an account ?')} {...a11yProps(1)} />
-                </Tabs>
-            </Box>
-            <TabPanel value={value} index={0} padding='15px 10px' >
-                {registerInputs()}
-            </TabPanel>
-            <TabPanel value={value} index={1} padding='15px 10px' >
-                {loginInputs()}
-            </TabPanel>
-            {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-            <CustomButton onClick={submitHandler} disabled={!authIsValid} >{value === 0 ? t('register') : t('log in')}</CustomButton>
-        </>
+        <Fragment>
+            {content}
+        </Fragment>
     )
 }
 export default UserAuth;

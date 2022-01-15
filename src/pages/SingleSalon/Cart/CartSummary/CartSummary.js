@@ -1,3 +1,4 @@
+import { format } from 'date-fns/esm';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { formatCurrency } from '../../../../shared/utility';
@@ -82,7 +83,7 @@ const Item = styled.div`
     font-weight: 500;
 `
 
-const PriceCalculation = styled.div`
+const BookingInfos = styled.div`
     display: flex;
     align-items: center;
     margin: 10px 0;
@@ -102,7 +103,7 @@ const PriceCalculation = styled.div`
 
 const CartOverview = props => {
 
-    const { cartData, taxes, total } = props;
+    const { cartData, taxes, total, hasSelectedAppointment, appointment, slot, hasSelectedCoupon, couponDiscount } = props;
 
     const { t } = useTranslation()
 
@@ -138,14 +139,31 @@ const CartOverview = props => {
                 }
             </OverviewBody>
             <div>
-                <PriceCalculation>
+                {
+                    hasSelectedAppointment && (
+                        <BookingInfos>
+                            <p>{t('appointment')}</p>
+                            <p>{(format(appointment,'yyyy-MM-dd' ))}</p>
+                            <p>{slot}</p>
+                        </BookingInfos>
+                    )
+                }
+                {
+                    hasSelectedCoupon && couponDiscount > 0 && (
+                        <BookingInfos>
+                            <p>{t('coupon discount')}</p>
+                            <p>{formatCurrency(couponDiscount)}</p>
+                        </BookingInfos>
+                    )
+                }
+                <BookingInfos>
                     <p>{t('total taxes')}</p>
                     <p>{formatCurrency(taxes)}</p>
-                </PriceCalculation>
-                <PriceCalculation>
+                </BookingInfos>
+                <BookingInfos>
                     <p>{t('price after discount')}</p>
                     <p>{formatCurrency(total)}</p>
-                </PriceCalculation>
+                </BookingInfos>
             </div>
         </Wrapper>
     )

@@ -307,7 +307,7 @@ const Invoice = React.forwardRef((props, ref) => {
 								</Grid>
 							</Grid>
 							<QrWrapper>
-								{qrCode && <QRCode value={qrCode} />}
+								{typeof(qrCode) == 'string' && <QRCode value={qrCode} />}
 							</QrWrapper>
 							<BookingCopyright>Powered By Beauty Point</BookingCopyright>
 						</ClientDetails>

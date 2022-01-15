@@ -8,6 +8,7 @@ import Loader from "../../../../components/UI/Loader/Loader";
 import { useTranslation } from "react-i18next";
 import styled from 'styled-components';
 import { CustomButton } from "../../../../components/UI/Button/Button";
+import { format } from "date-fns";
 
 const Wrapper = styled.div`
     display: flex;
@@ -41,12 +42,20 @@ const Message = styled.p`
     text-transform: capitalize;
     color: ${({ theme }) => theme.vars.primary};
 `
+const BookingInfos = styled.p`
+    font-size: 18px;
+    line-height: 1.4;
+    margin-bottom: 10px;
+    text-align: center;
+    text-transform: capitalize;
+    color: ${({ theme }) => theme.palette.text.primary};
+`
 
 const PrintBooking = props => {
 
     const {t} = useTranslation()
 
-    const { bookingData, userData, handleBookingDone } = props;
+    const { bookingData, userData, handleBookingDone, salonName, appointment, slot } = props;
 
     const [ qrCode, setQrCode ] = useState(null);
 
@@ -89,7 +98,10 @@ const PrintBooking = props => {
     if ( !loading && bookingData.id ) {
         content = (
             <Wrapper>
-                <Message>{t('Your order has been booked successfully')}</Message>
+                <Message>{`${t('Your order has been booked successfully in ')}${salonName}`}</Message>
+                <BookingInfos>{t('Booking Num')} : {bookingData.id}</BookingInfos>
+                <BookingInfos>{t('date')} : {format(appointment,'yyyy-MM-dd' )}</BookingInfos>
+                <BookingInfos>{t('time')} :{slot}</BookingInfos>
                 <ActionButton onClick={printBookingHandler}  ><PrintIcon/>{t('print')}</ActionButton>
                 <Invoice userData={modifiedUserData} ref={invoiceRef} bookingData={bookingData} qrCode={qrCode} />
             </Wrapper>

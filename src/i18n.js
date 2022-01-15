@@ -396,6 +396,19 @@ const resources = {
             'Please add Unit': 'يرجى إضافة وحدة',
             'summary': 'ملخص',
             'no items': 'لا توجد عناصر',
+            'Please select services you want to schedule appointment for': 'يرجى اختيار الخدمات تريد تحديد موعد لها',
+            'Please select services you want from ': 'يرجى اختيار الخدمات التي تريدها من ',
+            'confirm services': 'أكد الخدمات',
+            'that you want from ': 'التي تريدها من ',
+            'click on the date then choose the available time below': 'انقر على التاريخ ثم اختر الوقت المتاح للحجز أدناه',
+            'choose date and time': 'اختر التاريخ و الوقت',
+            'please provide your contact details to receive a confirmation and send you the appointment details': 'يرجى تقديم تفاصيل الاتصال الخاصة بك حتي نتمكن من ارسال تأكيد ومعلومات الاتصال الأخري اليك',
+            'you can pay online with your mada card or pay cash on arrival': 'يمكنك دفع عبر الانترنت ببطاقة مدي أو يمكنك الدفع نقدا عند الوصول',
+            'appointment': 'الموعد',
+            'coupon discount': 'خصم الكوبون',
+            'Your order has been booked successfully in ': 'تم حجز طلبك بنجاح في ',
+            'Booking Num': 'رقم الحجز',
+            'thank you for choosing us': 'شكرا لكم على اختيارنا',
         }
     }
 };

@@ -148,7 +148,7 @@ const SingleSalon = props => {
         setMessageShown(true);
     }
     const copySalonLocationHandler = ( ) => {
-        navigator.clipboard.writeText(`geo:https://maps.google.com/maps?q=${salon.vendor_page.latitude},${salon.vendor_page.longitude}`);
+        navigator.clipboard.writeText(`https://maps.google.com/maps?q=${salon.vendor_page.latitude},${salon.vendor_page.longitude}`);
         setMessageShown(true);
     }
     const closeMessageHandler = () => {

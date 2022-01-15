@@ -66,8 +66,6 @@ const ListView = ( props ) => {
         console.log(id, data);
         const addedItemIndex = data.findIndex( item  => item.id === id );
         const addedItem = data[addedItemIndex];
-        // type === 'products' && (addedItem.price_after_discount = addedItem.discount_price);
-        // type === 'deals' && (addedItem.price_after_discount = addedItem.price);
         type === 'deals' && (addedItem.name = addedItem.title);
         const addedItemData = {
             id: addedItem.id,
@@ -76,12 +74,11 @@ const ListView = ( props ) => {
             quantity: 1,
             type: type,
         }
+        type === 'services' && (addedItemData.employee_id = null);
         action(addedItemData);
     }
 
     let content = data.map( (item, index) => {
-        // type === 'products' && (item.price_after_discount = item.discount_price);
-        // type === 'deals' && (item.price_after_discount = item.price);
         type === 'deals' && (item.name = item.title);
         return (
             <Grid item xs={6} sm={3} md={4} lg={3} key={item.id}>

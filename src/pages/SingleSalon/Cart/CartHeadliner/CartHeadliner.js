@@ -84,20 +84,12 @@ const CartHeading = styled.div`
         color: rgba(255, 255, 255, 1);
     }
 `
-const CartContact = styled.div`
-    h4 {
-        font-size: 20px;
-        line-height: 1.5;
-        color: rgba(255, 255, 255, 1);
-        @media screen and (max-width: 899.98px) {
-            font-size: 18px;
-        }
-    }
-    a {
-        font-size: 17px;
-        line-height: 1.5;
-        color: rgba(255, 255, 255, 1);
-    }
+const CartBody = styled.div`
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 `
 
 
@@ -105,7 +97,7 @@ const CartHeadliner = props => {
 
     const {t} = useTranslation();
 
-    const { activeStep, salonNum, steps } = props;
+    const { activeStep, salonName, steps } = props;
 
     return (
         <CartHeadlinerWrapper>
@@ -120,15 +112,27 @@ const CartHeadliner = props => {
                     );
                 })}
             </Stepper>
-            <CartIcon src={iconSrc} />
-            <CartHeading>
-                <h3>{t('select your services')}</h3>
-                <p>{t('Please select a service you want to schedule appointment for')}</p>
-            </CartHeading>
-            <CartContact>
-                <h4>{t('Question ?')}</h4>
-                <a href={`tel:${salonNum}`}>{salonNum}</a>
-            </CartContact>
+            <CartBody>
+                <CartIcon src={iconSrc} />
+                <CartHeading>
+                    <h3>
+                        { activeStep === 0 && t('select your services')}
+                        { activeStep === 1 && t('select your services')}
+                        { activeStep === 2 && t('confirm services')}
+                        { activeStep === 3 && t('choose date and time')}
+                        { activeStep === 5 && t('choose payment method')}
+                        { activeStep === 6 && t('thank you for choosing us')}
+                    </h3>
+                    <p>
+                        { activeStep === 0 && t('Please select services you want to schedule appointment for')}
+                        { activeStep === 1 && `${t('Please select services you want from ')}${salonName}`}
+                        { activeStep === 2 && `${t('that you want from ')}${salonName}`}
+                        { activeStep === 3 && t('click on the date then choose the available time below')}
+                        { activeStep === 4 && t('please provide your contact details to receive a confirmation and send you the appointment details')}
+                        { activeStep === 5 && t('you can pay online with your mada card or pay cash on arrival')}
+                    </p>
+                </CartHeading>
+            </CartBody>
         </CartHeadlinerWrapper>
     )
 }

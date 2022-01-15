@@ -17,7 +17,7 @@ import { updateObject } from '../../../shared/utility';
 import ItemsReview from './ItemsReview/ItemsReview';
 import PrintBooking from './PrintBooking/PrintBooking';
 import { format } from 'date-fns/esm';
-import CartOverview from './CartOverview/CartOverview';
+import CartSummary from './CartSummary/CartSummary';
 import { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { fetchCoupons } from '../../../store/actions/index';
@@ -214,7 +214,7 @@ const Cart = props => {
     const themeCtx = useContext(ThemeContext);
     const { lang } = themeCtx;
 
-    const { show, onClose, salonData, fetchedCoupons, fetchCouponsHandler } = props;
+    const { show, onClose, salonData, fetchCouponsHandler } = props;
 
     const [cart, dispatch] = useReducer(cartReducer, {
         services: [],
@@ -463,7 +463,7 @@ const Cart = props => {
                 <CustomCardMui>
                     <Grid container spacing={0} >
                         <Grid item xs={12} md={3}>
-                            <CartHeadliner activeStep={activeStep} salonNum={salonData.companyPhone} steps={steps} />
+                            <CartHeadliner activeStep={activeStep} salonName={salonData.companyName} steps={steps} />
                         </Grid>
                         <Grid item xs={12} md={ activeStep === 0 || activeStep === 6 ? 9 : 6}>
                             <CartContent sx={{ width: '100%' }}>
@@ -484,10 +484,10 @@ const Cart = props => {
                                         activeStep === 4 && <UserAuth id={salonData.id} handleNext={handleNext} storeUserData={storeUserInfos} />
                                     }
                                     {
-                                        activeStep === 5 && <ChoosePayment handlePayment={handleChoosePayment} assignCoupon={handleCoupon} assignCouponData={handleCouponData} />
+                                        activeStep === 5 && <ChoosePayment handlePayment={handleChoosePayment} assignCoupon={handleCoupon} assignCouponData={handleCouponData} couponData={couponData} />
                                     }
                                     {
-                                        activeStep === 6 && <PrintBooking bookingData={resevedBookingData} userData={userInfos} handleBookingDone={handleBookingDone} />
+                                        activeStep === 6 && <PrintBooking bookingData={resevedBookingData} userData={userInfos} handleBookingDone={handleBookingDone} salonName={salonData.companyName} appointment={appointment} slot={slot} />
                                     }
                                 </CartBody>
                                 <Fragment>
@@ -561,6 +561,21 @@ const Cart = props => {
                                         )
                                     }
                                     {
+                                        activeStep === 5 && (
+                                            <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>
+                                                <Button
+                                                    color="inherit"
+                                                    disabled={activeStep === 0}
+                                                    onClick={( ) => setActiveStep(activeStep - 2)}
+                                                    sx={{ mr: 1 }}
+                                                >
+                                                    {t('Back')}
+                                                </Button>
+                                                <Box sx={{ flex: '1 1 auto' }} />
+                                            </Box>
+                                        )
+                                    }
+                                    {
                                         activeStep === 6 && (
                                             <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>
                                                 <Box sx={{ flex: '1 1 auto' }} />
@@ -574,18 +589,13 @@ const Cart = props => {
                             </CartContent>
                         </Grid>
                         <Grid item xs={12} md={3} sx={{ display: activeStep === 0 || activeStep === 6 ? 'none' : 'block'}} >
-                            <CartOverview cartData={cart} taxes={totalTaxes} total={totalPrice} />
+                            <CartSummary cartData={cart} taxes={totalTaxes} total={totalPrice} hasSelectedAppointment={hasSelectedAppointment} appointment={appointment} slot={slot} hasSelectedCoupon={couponId} couponDiscount={couponData.amount} />
                         </Grid>
                     </Grid>
                 </CustomCardMui>
             </Fade>
         </Modal>
     )
-}
-const mapStateToProps = (state) => {
-    return {
-        fetchedCoupons: state.coupons.coupons,
-    }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -594,4 +604,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Cart);
+export default connect(null, mapDispatchToProps)(Cart);
