@@ -100,8 +100,8 @@ const EditModal = (props) => {
     const confirmCreateHandler = useCallback(() => {
         const data= {
             id,
-            start_time: format(openTime, 'hh:mm a.'),
-            end_time: format(closeTime, 'hh:mm a.'),
+            start_time: format(openTime, 'hh:mm a'),
+            end_time: format(closeTime, 'hh:mm a'),
             multiple_booking: multipleBookings,
             max_booking: +maximumBookings,
             per_day_max_booking: +maximumBookingsPerDay,
