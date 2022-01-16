@@ -34,6 +34,7 @@ import { connect } from 'react-redux';
 import { fetchEmployees, fetchProducts, fetchServices, fetchDeals } from '../../../../../store/actions/index';
 import InputAdornment from '@mui/material/InputAdornment';
 import ThemeContext from '../../../../../store/theme-context';
+import ValidationMessage from '../../../../../components/UI/ValidationMessage/ValidationMessage';
 
 const ClientDetails = styled.div`
     display: flex;
@@ -164,15 +165,15 @@ const cartReducer = (state, action) => {
             return updateObject(state, {
                 services: decreasedServices,
             })
-            case 'CHANGE_SERVICE_EMPLOYEE':
-                const changedEmployeeServiceIndex = state.services.findIndex(service => service.id === action.payload.id);
-                const changedEmployeeService = { ...state.services[changedEmployeeServiceIndex] }
-                changedEmployeeService.employee_id = action.payload.employeeId
-                const changedEmployeeServices = [...state.services]
-                changedEmployeeServices[changedEmployeeServiceIndex] = changedEmployeeService
-                return updateObject(state, {
-                    services: changedEmployeeServices,
-                })
+        case 'CHANGE_SERVICE_EMPLOYEE':
+            const changedEmployeeServiceIndex = state.services.findIndex(service => service.id === action.payload.id);
+            const changedEmployeeService = { ...state.services[changedEmployeeServiceIndex] }
+            changedEmployeeService.employee_id = action.payload.employeeId
+            const changedEmployeeServices = [...state.services]
+            changedEmployeeServices[changedEmployeeServiceIndex] = changedEmployeeService
+            return updateObject(state, {
+                services: changedEmployeeServices,
+            })
         case 'ADD_TO_PRODUCTS':
             const productIndex = state.products.findIndex(product => product.item.id === action.payload.id);
             const updatedProducts = [...state.products]
@@ -213,46 +214,46 @@ const cartReducer = (state, action) => {
             return updateObject(state, {
                 products: decreasedProducts,
             })
-            case 'ADD_TO_DEALS':
-                const dealIndex = state.deals.findIndex(deal => deal.id === action.payload.id);
-                const updatedDeals = [...state.deals]
-                if (dealIndex === -1) { 
-                    updatedDeals.push(action.payload)
-                } else {
-                    const updatedItem = {...updatedDeals[dealIndex]}
-                    updatedItem.quantity = updatedItem.quantity + 1
-                    updatedDeals[dealIndex] = updatedItem
-                }
-                return updateObject(state, {
-                    deals: updatedDeals,
-                })
-            case 'REMOVE_DEAL':
-                const filteredDeals = state.deals.filter(deal => deal.id !== action.payload)
-                return updateObject(state, {
-                    deals: filteredDeals,
-                })
-            case 'INCREASE_DEAL' :
-                const increasedDealIndex = state.deals.findIndex(deal => deal.id === action.payload);
-                const increasedDeal = {...state.deals[increasedDealIndex]}
-                increasedDeal.quantity = increasedDeal.quantity + 1
-                const increasedDeals = [...state.deals]
-                increasedDeals[increasedDealIndex] = increasedDeal
-                return updateObject(state, {
-                    deals: increasedDeals,
-                })
-            case 'DECREASE_DEAL' :
-                const decreasedDealIndex = state.deals.findIndex(deal => deal.id === action.payload);
-                const decreasedDeal = {...state.deals[decreasedDealIndex]}
-                const decreasedDeals = [...state.deals]
-                if (decreasedDeal.quantity === 1) {
-                    decreasedDeals.splice(decreasedDealIndex, 1)
-                } else {
-                    decreasedDeal.quantity = decreasedDeal.quantity - 1
-                    decreasedDeals[decreasedDealIndex] = decreasedDeal
-                }
-                return updateObject(state, {
-                    deals: decreasedDeals,
-                })
+        case 'ADD_TO_DEALS':
+            const dealIndex = state.deals.findIndex(deal => deal.id === action.payload.id);
+            const updatedDeals = [...state.deals]
+            if (dealIndex === -1) {
+                updatedDeals.push(action.payload)
+            } else {
+                const updatedItem = { ...updatedDeals[dealIndex] }
+                updatedItem.quantity = updatedItem.quantity + 1
+                updatedDeals[dealIndex] = updatedItem
+            }
+            return updateObject(state, {
+                deals: updatedDeals,
+            })
+        case 'REMOVE_DEAL':
+            const filteredDeals = state.deals.filter(deal => deal.id !== action.payload)
+            return updateObject(state, {
+                deals: filteredDeals,
+            })
+        case 'INCREASE_DEAL':
+            const increasedDealIndex = state.deals.findIndex(deal => deal.id === action.payload);
+            const increasedDeal = { ...state.deals[increasedDealIndex] }
+            increasedDeal.quantity = increasedDeal.quantity + 1
+            const increasedDeals = [...state.deals]
+            increasedDeals[increasedDealIndex] = increasedDeal
+            return updateObject(state, {
+                deals: increasedDeals,
+            })
+        case 'DECREASE_DEAL':
+            const decreasedDealIndex = state.deals.findIndex(deal => deal.id === action.payload);
+            const decreasedDeal = { ...state.deals[decreasedDealIndex] }
+            const decreasedDeals = [...state.deals]
+            if (decreasedDeal.quantity === 1) {
+                decreasedDeals.splice(decreasedDealIndex, 1)
+            } else {
+                decreasedDeal.quantity = decreasedDeal.quantity - 1
+                decreasedDeals[decreasedDealIndex] = decreasedDeal
+            }
+            return updateObject(state, {
+                deals: decreasedDeals,
+            })
         default:
             return state;
     }
@@ -261,7 +262,7 @@ const cartReducer = (state, action) => {
 
 const EditModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, id, fetchedBookings, onDelete, fetchedEmployees, fetchEmployeesHandler, fetchedProducts, fetchProductsHandler, fetchedServices, fetchServicesHandler,fetchedDeals, fetchDealsHandler } = props;
+    const { show, heading, confirmText, onConfirm, onClose, id, fetchedBookings, onDelete, fetchedEmployees, fetchEmployeesHandler, fetchedProducts, fetchProductsHandler, fetchedServices, fetchServicesHandler, fetchedDeals, fetchDealsHandler } = props;
 
     const { t } = useTranslation();
 
@@ -285,7 +286,7 @@ const EditModal = (props) => {
                 quantity: item.quantity,
                 price: item.price,
                 name: item.item.name,
-                employee_id: item.employee?.id,
+                employee_id: item.employee ? item.employee.id : null,
                 employee: item.employee && item.employee,
                 item: item.item,
             })
@@ -330,6 +331,8 @@ const EditModal = (props) => {
 
     const [paymentStatus, setPaymentStatus] = useState(payment_status);
 
+    const [servicesEmployeeError, setServicesEmployeeError] = useState(false)
+
     useEffect(() => {
         fetchEmployeesHandler(lang);
         fetchProductsHandler(lang, 1, 'all', 'name', 'desc');
@@ -350,20 +353,20 @@ const EditModal = (props) => {
 
     }, [cartData, discount])
 
-    const addToCartHandler = useCallback(( type, itemData ) => {
-        if ( type === 'services' ) {
+    const addToCartHandler = useCallback((type, itemData) => {
+        if (type === 'services') {
             dispatch({
                 type: 'ADD_TO_SERVICES',
                 payload: itemData
             })
         }
-        if ( type === 'products' ) {
+        if (type === 'products') {
             dispatch({
                 type: 'ADD_TO_PRODUCTS',
                 payload: itemData
             })
         }
-        if ( type === 'deals' ) {
+        if (type === 'deals') {
             dispatch({
                 type: 'ADD_TO_DEALS',
                 payload: itemData
@@ -511,13 +514,16 @@ const EditModal = (props) => {
     const discountChangeHandler = (event) => {
         if (event.target.value >= 0) {
             setDiscount(event.target.value)
-        } 
+        }
     }
     const paymentStatusChangeHandler = (event) => {
         setPaymentStatus(event.target.value);
     }
     const EditBookingConfirmHandler = useCallback(() => {
-
+        if ( cartData.services.length > 0 && cartData.services.find( item => item.employee_id === null ) ) {
+            setServicesEmployeeError(true)
+            return;
+        }
         const booking = {
             customerId: id,
             dateTime: dateTime,
@@ -525,17 +531,17 @@ const EditModal = (props) => {
             payment_status: paymentStatus,
             status: bookingStatus,
             booking: {
-                services : [
+                services: [
                     ...cartData.services,
                 ],
-                products : [
+                products: [
                     ...cartData.products,
                 ],
-                deals : [
+                deals: [
                     ...cartData.deals,
                 ],
             },
-            couponId:  bookingData.coupon && bookingData.coupon.id,
+            couponId: bookingData.coupon && bookingData.coupon.id,
             discount: +discount,
             discount_type: 'percent',
         }
@@ -642,8 +648,8 @@ const EditModal = (props) => {
                                 <SharedTableHead name='services' />
                                 <TableBody>
                                     {cartData.services.map((row) => (
-                                        <CartItem type='services' key={row.id} row={row} remove={removeFromCartHandler} increase={increaseItemHandler} 
-                                            decrease={decreaseItemHandler} fetchedEmployees={fetchedEmployees} 
+                                        <CartItem type='services' key={row.id} row={row} remove={removeFromCartHandler} increase={increaseItemHandler}
+                                            decrease={decreaseItemHandler} fetchedEmployees={fetchedEmployees}
                                             changeEmployee={changeServiceEmployeeHandler}
                                         />
                                     ))}
@@ -651,6 +657,11 @@ const EditModal = (props) => {
                             </Table>
                         </TableContainer>
                     )}
+                    {
+                        servicesEmployeeError && (
+                            <ValidationMessage notExist>{t('Eash service must have an employee')}</ValidationMessage>
+                        )
+                    }
                 </Grid>
                 <Grid item xs={12}>
                     <FormControl sx={{ width: '100%' }}>
