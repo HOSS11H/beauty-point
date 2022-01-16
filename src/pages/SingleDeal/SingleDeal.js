@@ -14,6 +14,7 @@ import WatchLaterIcon from '@mui/icons-material/WatchLater';
 import PushPinIcon from '@mui/icons-material/PushPin';
 import Typography from '@mui/material/Typography';
 import HomeLayout from "../../components/HomeLayout/HomeLayout";
+import SingleCard from "../../components/UI/SingleCard/SingleCard";
 
 const CategoriesWrapper = styled.section`
     padding: 70px 0px;
@@ -72,7 +73,7 @@ const SingleDeal = props => {
 
 
     useEffect(() => {
-        axios.get(`/deals/${param.dealId}?include[]=location`)
+        axios.get(`/deals/${param.dealId}?include[]=location&include[]=company`)
             .then(res => {
                 setDeal(res.data);
             })
@@ -87,33 +88,8 @@ const SingleDeal = props => {
     );
     if (deal) {
         content = (
-            <CustomCard sx={{ display: 'flex' }}>
-                <Box sx={{ display: 'flex', justifyContent: 'center' , flexDirection: 'column', flexBasis: '50%', flexShrink: '0' }}>
-                    <CardContent sx={{ flex: '1 0 auto', }}>
-                        <Typography component="div" variant="h4" color="primary" sx={{ marginBottom: '20px' }}>
-                            {deal.companyName}
-                        </Typography>
-                        <Typography component="div" variant="h5" sx={{ marginBottom: '10px' }} >
-                            {deal.title}
-                        </Typography>
-                        <Typography variant="subtitle1" color="secondary" component="div" sx={{ marginBottom: '5px' }} >
-                            {formatCurrency(deal.price)}
-                        </Typography>
-                        <Typography component="div" variant="subtitle2" sx={{ display: 'flex', alignItems: 'center'}}>
-                            <WatchLaterIcon sx={{ mr: 1, width:'15px', height:'15px' }} />{t('from')} {deal.open_time} {t('to')} {deal.close_time}
-                        </Typography>
-                        <Typography component="div" variant="subtitle2" sx={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-                            <PushPinIcon sx={{ mr: 1, width:'15px', height:'15px' }} />{deal.location.name} 
-                        </Typography>
-                    </CardContent>
-                </Box>
-                <CardMedia
-                    component="img"
-                    sx={{flexBasis: '50%', flexGrow:'0', height: '500px', objectFit: 'cover' }}
-                    image={deal.image}
-                    alt={deal.name}
-                />
-            </CustomCard>
+            <SingleCard image={deal.image} title={deal.title} name={deal.company.companyName} compnyId={deal.company.id}
+                price={deal.price} time={`${t('from')} ${deal.open_time} ${t('to')} ${deal.close_time}`} location={deal.location.name} />
         )
     }
     return (

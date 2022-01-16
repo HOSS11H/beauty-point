@@ -409,6 +409,7 @@ const resources = {
             'Your order has been booked successfully in ': 'تم حجز طلبك بنجاح في ',
             'Booking Num': 'رقم الحجز',
             'thank you for choosing us': 'شكرا لكم على اختيارنا',
+            'salon': 'الصالون',
         }
     }
 };
