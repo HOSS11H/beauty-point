@@ -493,7 +493,7 @@ const Cart = props => {
                                 <Fragment>
                                     {
                                         activeStep === 1 && (
-                                            <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>
+                                            <Box sx={{ display: 'flex', flexDirection: 'row', py: 2 }}>
                                                 <Button
                                                     color="inherit"
                                                     onClick={handleBack}

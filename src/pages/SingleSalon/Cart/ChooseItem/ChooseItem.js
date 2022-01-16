@@ -8,28 +8,11 @@ import { useCallback } from 'react';
 import { formatCurrency } from '../../../../shared/utility';
 
 const Wrapper = styled.div`
-    
 `
 
 const ItemsWrapper = styled.div`
     width: 100%;
     max-height: 100%;
-    overflow-y: auto;
-    padding: 10px;
-    // Scroll //
-    -webkit-overflow-scrolling: touch;
-    &::-webkit-scrollbar {
-        height: 7px;
-        width: 8px;
-        background-color: ${({ theme }) => theme.palette.divider};
-        border-radius: 10px;
-    }
-    &::-webkit-scrollbar-thumb {
-        margin-left: 2px;
-        background: ${({ theme }) => theme.vars.primary};
-        border-radius: 10px;
-        cursor: pointer;
-    }
 `
 
 const Item = styled.div`
@@ -59,8 +42,16 @@ const Item = styled.div`
         border: 5px solid ${props => props.theme.vars.theme};
         color: ${props => props.theme.vars.theme};
     `}
+    &:last-child {
+        margin-bottom: 0;
+    }
+    @media screen and (max-width: 599.98px) {
+        padding: 10px;
+        font-size: 14px;
+    }
 `
 const Loading = styled.div`
+    margin-top: 10px;
     display: flex;
     align-items: center;
     justify-content: center;

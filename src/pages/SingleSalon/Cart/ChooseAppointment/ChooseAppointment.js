@@ -13,7 +13,7 @@ import { Fragment } from 'react';
 const SlotsWrapper = styled.div`
     display: flex;
     flex-wrap: wrap;
-    justify-content: start;
+    justify-content: space-evenly;
     margin-top: 25px;
 `
 
@@ -32,6 +32,9 @@ const Slot = styled.div`
         background-color: #fff;
         color: ${props => props.theme.vars.theme};
     `}
+    @media screen and (max-width: 599.98px) {
+        flex-basis: 30%;
+    }
 `
 
 const ChooseAppointment = props => {

@@ -20,6 +20,12 @@ const Choice = styled.div`
     padding: 20px;
     color: #fff;
     cursor: pointer;
+    &:last-child {
+        margin-bottom: 0;
+    }
+    @media screen and (max-width: 599.98px) {
+        padding: 10px;
+    }
 `
 
 const ChooseType = props =>{

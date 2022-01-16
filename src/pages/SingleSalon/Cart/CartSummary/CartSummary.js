@@ -29,6 +29,7 @@ const Wrapper = styled.div`
     @media screen and (max-width: 899.98px) {
         max-height: 40vh;
         padding-bottom: 25px;
+        padding-top:0;
     }
 `
 const OverviewBody = styled.div`
