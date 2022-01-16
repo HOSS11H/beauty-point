@@ -90,7 +90,7 @@ export const updateProduct = (data) => {
     return dispatch => {
         dispatch(updateProductStart())
         console.log(data)
-        axios.put(`/vendors/products/${data.id}`, data)
+        axios.post(`/vendors/products/${data.get('id')}`, data, {headers: {   'Content-Type': 'multipart/form-data'}})
             .then(response => {
                 dispatch(updateProductSuccess(response.data, data));
             })
@@ -127,7 +127,7 @@ export const createProduct = (data) => {
     return dispatch => {
         dispatch(createProductStart())
         console.log(data, 'excuted')
-        axios.post(`/vendors/products`, data)
+        axios.post(`/vendors/products`, data, {headers: {   'Content-Type': 'multipart/form-data'}})
             .then(response => {
                 dispatch(createProductSuccess(null, { ...data, ...response.data }));
                 setTimeout(() => {

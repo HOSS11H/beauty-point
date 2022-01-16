@@ -187,7 +187,7 @@ const EditModal = (props) => {
 
     const [defaultImage, setDefaultImage] = useState(image);
 
-    const maxNumber = 69;
+    const maxNumber = 1;
 
     useEffect(() => {
         let netPrice;
@@ -297,25 +297,26 @@ const EditModal = (props) => {
             return;
         }
 
-        const selectedLocation = fetchedLocations.find(location => location.id === locationName);
-        const data = {
-            id: id,
-            name: productName,
-            description: draftToHtml(convertToRaw(editorState.getCurrentContent())),
-            price: +productPrice,
-            discount_price: +priceAfterDiscount,
-            discount: +productDiscount,
-            discount_type: discountType,
-            location_id: locationName,
-            status: productStatus,
-            image: defaultImage,
-            quantity: +productQuantity,
-            location: selectedLocation,
-            unit_id: productUnit,
+        let formData = new FormData();
+        formData.append('id', id);
+        formData.append('name', productName);
+        formData.append('description', draftToHtml(convertToRaw(editorState.getCurrentContent())) );
+        formData.append('price', +productPrice);
+        formData.append('discount', +productDiscount);
+        formData.append('discount_type', discountType);
+        formData.append('discount_price', +priceAfterDiscount);
+        formData.append('location_id', locationName);
+        formData.append('quantity', +productQuantity);
+        formData.append('status', productStatus);
+        if(uploadedImages.length > 0 ) {
+            formData.append('images', uploadedImages[0].file) 
+            formData.append('image', uploadedImages[0].file) 
         }
-        onConfirm(data);
+        formData.append('unit_id', productUnit)
+        formData.append('_method', 'PUT');
+        onConfirm(formData);
 
-    }, [defaultImage, discountType, editorState, fetchedLocations, id, locationName, onConfirm, priceAfterDiscount, productDiscount, productName, productPrice, productPriceError, productQuantity, productStatus, productUnit])
+    }, [discountType, editorState, id, locationName, onConfirm, priceAfterDiscount, productDiscount, productName, productPrice, productPriceError, productQuantity, productStatus, productUnit, uploadedImages])
 
     let content = (
         <Grid container spacing={2}>
@@ -467,9 +468,6 @@ const EditModal = (props) => {
                             <UploadImageTopBar>
                                 <Button size="medium" sx={{ mr: 2, color: isDragging && 'red' }} variant="contained" startIcon={<PhotoCamera />} {...dragProps} onClick={onImageUpload} >
                                     {t('photos')}
-                                </Button>
-                                <Button size="medium" variant="outlined" startIcon={<DeleteIcon />} onClick={onImageRemoveAll}>
-                                    {t('Remove all')}
                                 </Button>
                             </UploadImageTopBar>
                         </div>

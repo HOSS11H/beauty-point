@@ -183,7 +183,7 @@ const CreateModal = (props) => {
     const [defaultImage, setDefaultImage] = useState('');
     const [defaultImageError, setDefaultImageError] = useState(false);
 
-    const maxNumber = 69;
+    const maxNumber = 1;
 
     useEffect(() => {
         let netPrice;
@@ -326,25 +326,24 @@ const CreateModal = (props) => {
             return;
         }
 
-        const selectedLocation = fetchedLocations.find(location => location.id === locationName);
+        let formData = new FormData();
+        formData.append('name', productName);
+        formData.append('description', draftToHtml(convertToRaw(editorState.getCurrentContent())) );
+        formData.append('price', +productPrice);
+        formData.append('discount', +productDiscount);
+        formData.append('discount_type', discountType);
+        formData.append('discount_price', +priceAfterDiscount);
+        formData.append('location_id', locationName);
+        formData.append('quantity', +productQuantity);
+        formData.append('status', productStatus);
+        if(uploadedImages.length > 0 ) {
+            formData.append('images', uploadedImages[0].file) 
+            formData.append('image', uploadedImages[0].file) 
+        }
+        formData.append('unit_id', productUnit)
 
-        const data = {
-            name: productName,
-            description: draftToHtml(convertToRaw(editorState.getCurrentContent())),
-            price: +productPrice,
-            discount: +productDiscount,
-            discount_type: discountType,
-            discount_price: +priceAfterDiscount,
-            location_id: locationName,
-            quantity: +productQuantity,
-            status: productStatus,
-            images: uploadedImages,
-            image: defaultImage,
-            location: selectedLocation,
-            unit_id: productUnit,
-        };
-        onConfirm(data);
-    }, [productName, editorState, productPriceError, locationName, productQuantity, fetchedLocations, productPrice, productDiscount, discountType, priceAfterDiscount, productStatus, uploadedImages, defaultImage, productUnit, onConfirm])
+        onConfirm(formData);
+    }, [productName, editorState, productPriceError, locationName, productQuantity, fetchedLocations, productPrice, productDiscount, discountType, priceAfterDiscount, productStatus, uploadedImages, productUnit, onConfirm])
 
     let content = (
         <Grid container spacing={2}>
@@ -498,9 +497,6 @@ const CreateModal = (props) => {
                             <UploadImageTopBar>
                                 <Button size="medium" sx={{ mr: 2, color: isDragging && 'red' }} variant="contained" startIcon={<PhotoCamera />} {...dragProps} onClick={onImageUpload} >
                                     {t('photos')}
-                                </Button>
-                                <Button size="medium" variant="outlined" startIcon={<DeleteIcon />} onClick={onImageRemoveAll}>
-                                    {t('Remove all')}
                                 </Button>
                             </UploadImageTopBar>
                         </div>

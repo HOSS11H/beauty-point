@@ -73,27 +73,7 @@ const reducer = (state = intialState, action) => {
                 updatingProductMessage: null,
             })
         case (actionTypes.UPDATE_PRODUCT_SUCCESS):
-            const editedProductIndex = state.products.data.findIndex(product => product.id === action.productData.id);
-            let editedProduct = { ...state.products.data[editedProductIndex] }
-            const updatedEditedProduct = updateObject(editedProduct, {
-                name: action.productData.name,
-                description: action.productData.description,
-                price: action.productData.price,
-                discount_price: action.productData.discount_price,
-                discount: action.productData.discount,
-                discount_type: action.productData.discount_type,
-                status: action.productData.status,
-                image: action.productData.image,
-                location: action.productData.location,
-                quantity: action.productData.quantity,
-            })
-            const editedProducts = [...state.products.data]
-            editedProducts[editedProductIndex] = updatedEditedProduct
             return updateObject(state, {
-                products: {
-                    ...state.products,
-                    data: editedProducts,
-                },
                 updatingProduct: false,
                 updatingProductSuccess: true,
                 updatingProductMessage: action.message,
@@ -111,17 +91,7 @@ const reducer = (state = intialState, action) => {
                 creatingProductMessage: null,
             })
         case (actionTypes.CREATE_PRODUCT_SUCCESS):
-            const upgradedProducts = [...state.products.data]
-            upgradedProducts.push(action.productData);
             return updateObject(state, {
-                products: {
-                    ...state.products,
-                    data: upgradedProducts,
-                    meta: {
-                        ...state.products.meta,
-                        total: state.products.meta.total + 1,
-                    }
-                },
                 creatingProduct: false,
                 creatingProductSuccess: true,
                 creatingProductMessage: action.message,

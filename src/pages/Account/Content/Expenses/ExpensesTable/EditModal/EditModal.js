@@ -307,7 +307,6 @@ const EditModal = (props) => {
             formData.append('image', uploadedImages[0].file) 
         }
         formData.append('_method', 'PUT');
-
         onConfirm(formData);
     }, [expenseName, expenseBank, expenseAccount, selectedCategory, selectedAgent, editorState, expenseAmount, id, date, uploadedImages, onConfirm])
 
