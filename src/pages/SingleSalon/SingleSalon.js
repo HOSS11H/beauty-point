@@ -5,16 +5,14 @@ import axios from '../../utils/axios-instance';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useTranslation } from "react-i18next";
 import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
-import { NavLink, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import PushPinIcon from '@mui/icons-material/PushPin';
-import { SalonPanel, DealPanel } from '../../components/UI/SalonPanel/SalonPanel';
-import { a11yProps, formatCurrency } from "../../shared/utility";
+import DealPanel from '../../components/UI/DealPanel/DealPanel';
+import { a11yProps } from "../../shared/utility";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -30,6 +28,7 @@ import TabPanel from "../../components/UI/TabPanel/TabPanel";
 import ShareIcon from '@mui/icons-material/Share';
 import CustomizedSnackbars from "../../components/UI/SnackBar/SnackBar";
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import ServicePanel from "../../components/UI/ServicePanel/ServicePanel";
 
 
 
@@ -193,19 +192,7 @@ const SingleSalon = props => {
                         {services.data.map(service => {
                             return (
                                 <Grid item xs={12} sm={6} md={4} key={service.id}>
-                                    <SalonPanel >
-                                        <div className="salon-img">
-                                            <img src={service.image} alt="salon" />
-                                        </div>
-                                        <div className="salon-content">
-                                            <h3 className="salon-title">
-                                                <NavLink to={`/services/${service.id}`}>{service.name}</NavLink>
-                                            </h3>
-                                            <p className="salon-desc">
-                                                {formatCurrency(service.price)}
-                                            </p>
-                                        </div>
-                                    </SalonPanel>
+                                    <ServicePanel service={service} />
                                 </Grid>
                             )
                         })
@@ -226,33 +213,7 @@ const SingleSalon = props => {
                         {deals.data.map(deal => {
                             return (
                                 <Grid item xs={12} sm={6} md={4} key={deal.id}>
-                                    <DealPanel >
-                                        <div className="deal-img">
-                                            <img src={deal.image} alt="spotlight" />
-                                        </div>
-                                        <div className="deal-content">
-                                            <div className="deal-body" >
-                                                <div>
-                                                    <h3 className="deal-title">
-                                                        <NavLink to={`/deals/${deal.id}`}>{deal.title}</NavLink>
-                                                    </h3>
-                                                    <p className="deal-desc">
-                                                        {deal.applied_between_time}
-                                                    </p>
-                                                </div>
-                                                <div className="deal-discount">
-                                                    <h5 className={`discount-percent ${deal.discount_type === 'percentage' && 'percentage'} `}  >
-                                                        <span>{deal.discount_value}</span>
-                                                        <span className={`discount-percent-sign ${deal.discount_type === 'percentage' && 'percentage'} `}>{deal.discount_type === 'percentage' ? '%' : 'SAR'}</span>
-                                                    </h5>
-                                                    <h6 className="discount-text" >off</h6>
-                                                </div>
-                                            </div>
-                                            <p className="deal-location">
-                                                {deal.status}
-                                            </p>
-                                        </div>
-                                    </DealPanel>
+                                    <DealPanel  deal={deal} />
                                 </Grid>
                             )
                         })

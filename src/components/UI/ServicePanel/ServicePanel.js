@@ -1,7 +1,8 @@
-import { NavLink, useNavigate } from "react-router-dom"
-import styled from "styled-components"
+import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
+import { formatCurrency } from '../../../shared/utility';
 
-const SalonPanelCard = styled.div`
+const ServicePanelCard = styled.div`
     border-radius: 25px;
     padding: 0 9px;
     @media screen and (max-width: 899.98px) {
@@ -10,13 +11,13 @@ const SalonPanelCard = styled.div`
     }
     cursor: pointer;
     &:hover {
-        .salon-img  {
+        .service-img  {
             img {
                 transform: scale(1.1);
             }
         }
     }
-    .salon-img  {
+    .service-img  {
         height: 200px;
         overflow: hidden;
         border-radius: 25px 25px 0 0;
@@ -25,18 +26,18 @@ const SalonPanelCard = styled.div`
             height: 100%;
             border-radius: 25px 25px 0 0;
             object-fit: cover;
-            transition: all 0.3s ease;
-            @media screen and (max-width: 599.98px) {
+            transition: 0.3s ease;
+            @media screen and (max-width: 899.98px) {
                 height: 200px;
             }
         }
     }
-    .salon-content {
+    .service-content {
         background-color: #F7F7F7;
         background-color: ${({ theme }) => theme.palette.mode === "dark" ? "#000" : "#f7f7f7"};
         padding: 18px 20px 16px;
         border-radius: 0 0 25px 25px;
-        .salon-title {
+        .service-title {
             font-size: 22px;
             line-height:1.5;
             font-weight: 500;
@@ -51,7 +52,7 @@ const SalonPanelCard = styled.div`
                 color         : #96248e;
             }
         }
-        .salon-desc {
+        .service-price {
             font-size:17px;
             line-height:1.5;
             font-weight: 300;
@@ -63,42 +64,31 @@ const SalonPanelCard = styled.div`
                 margin-bottom: 20px;
             }
         }
-        .salon-location {
-            font-size: 16px;
-            line-height: 21px;
-            font-weight: 300;
-            color: ${({ theme }) => theme.palette.text.primary};
-            margin-bottom: 0;
-            text-transform: capitalize;
-            @media screen and (max-width: 899.98px) {
-                font-size: 14px;
-                line-height: 1.5;
-            }
-        }
     }
 `
-const SalonPanel = props => {
 
-    const { salon } = props;
+const ServicePanel = props => {
+
+    const { service } = props;
 
     const navigate = useNavigate();
 
     const handleClick = () => {
-        navigate(`/salons/${salon.id}`)
+        navigate(`/services/${service.id}`)
     }
 
     return (
-        <SalonPanelCard onClick={handleClick} >
-            <div className="salon-img">
-                <img src={salon.logo_url} alt="salon" />
+        <ServicePanelCard onClick={handleClick} >
+            <div className="service-img">
+                <img src={service.image} alt="service" />
             </div>
-            <div className="salon-content">
-                <h3 className="salon-title">{salon.companyName}</h3>
-                <p className="salon-desc">
-                    {salon.address}
+            <div className="service-content">
+                <h3 className="service-title">{service.name}</h3>
+                <p className="service-price">
+                    {formatCurrency(service.price)}
                 </p>
             </div>
-        </SalonPanelCard>
+        </ServicePanelCard>
     )
 }
-export default SalonPanel;
+export default ServicePanel;

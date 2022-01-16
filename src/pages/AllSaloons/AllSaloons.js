@@ -3,11 +3,10 @@ import styled from 'styled-components';
 import { Heading } from "../../components/UI/Heading/Heading";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { SalonPanel } from '../../components/UI/SalonPanel/SalonPanel';
+import SalonPanel from '../../components/UI/SalonPanel/SalonPanel';
 import { useState, useEffect } from 'react';
 import axios from '../../utils/axios-instance';
 import CircularProgress from '@mui/material/CircularProgress';
-import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import HomeLayout from '../../components/HomeLayout/HomeLayout';
 
@@ -54,22 +53,7 @@ const AllSaloons = props => {
                     fetchedSalons.map((salon, index) => {
                         return (
                             <Grid key={salon.id} item xs={6} md={4}>
-                                <SalonPanel >
-                                    <div className="salon-img">
-                                        <img src={salon.logo_url} alt="salon" />
-                                    </div>
-                                    <div className="salon-content">
-                                        <h3 className="salon-title">
-                                            <NavLink to={`/salons/${salon.id}`}>{salon.companyName}</NavLink>
-                                        </h3>
-                                        <p className="salon-desc">
-                                            {salon.address}
-                                        </p>
-                                        <p className="salon-location">
-                                            {salon.companyPhone}
-                                        </p>
-                                    </div>
-                                </SalonPanel>
+                                <SalonPanel salon={salon} /> 
                             </Grid>
                         )
                     })

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Heading } from "../../components/UI/Heading/Heading";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { DealPanel } from '../../components/UI/SalonPanel/SalonPanel';
+import DealPanel from '../../components/UI/DealPanel/DealPanel';
 import { useState, useEffect } from 'react';
 import axios from '../../utils/axios-instance';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -53,33 +53,7 @@ const AllDeals = props => {
                     deals.map((deal, index) => {
                         return (
                             <Grid item xs={6} md={4} key={deal.id}>
-                                <DealPanel >
-                                    <div className="deal-img">
-                                        <img src={deal.image} alt="spotlight" />
-                                    </div>
-                                    <div className="deal-content">
-                                        <div className="deal-body" >
-                                            <div>
-                                                <h3 className="deal-title">
-                                                    <NavLink to={`/deals/${deal.id}`}>{deal.title}</NavLink>
-                                                </h3>
-                                                <p className="deal-desc">
-                                                    {deal.applied_between_time}
-                                                </p>
-                                            </div>
-                                            <div className="deal-discount">
-                                                <h5 className={`discount-percent ${deal.discount_type === 'percentage' && 'percentage'} `}  >
-                                                    <span>{deal.discount_value}</span>
-                                                    <span className={`discount-percent-sign ${deal.discount_type === 'percentage' && 'percentage'} `}>{deal.discount_type === 'percentage' ? '%' : 'SAR'}</span>
-                                                </h5>
-                                                <h6 className="discount-text" >off</h6>
-                                            </div>
-                                        </div>
-                                        <p className="deal-location">
-                                            {deal.status}
-                                        </p>
-                                    </div>
-                                </DealPanel>
+                                <DealPanel deal={deal} />
                             </Grid>
                         )
                     })

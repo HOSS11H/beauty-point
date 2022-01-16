@@ -5,9 +5,10 @@ import axios from '../../utils/axios-instance';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useTranslation } from "react-i18next";
 import { NavLink, useParams } from "react-router-dom";
-import { SalonPanel } from '../../components/UI/SalonPanel/SalonPanel';
+import SalonPanel from '../../components/UI/SalonPanel/SalonPanel';
 import { formatCurrency } from "../../shared/utility";
 import HomeLayout from "../../components/HomeLayout/HomeLayout";
+import ServicePanel from "../../components/UI/ServicePanel/ServicePanel";
 
 const CategoriesWrapper = styled.section`
     padding: 70px 0px;
@@ -49,22 +50,7 @@ const SingleCategory = props => {
     if (category) {
         content = category.data.map((service, index) => (
             <Grid item xs={6} md={4} key={index}>
-                <SalonPanel >
-                    <div className="salon-img">
-                        <img src={service.image} alt="salon"/>
-                    </div>
-                    <div className="salon-content">
-                        <h3 className="salon-title">
-                            <NavLink to={`/services/${service.id}`}>{service.name}</NavLink>
-                        </h3>
-                        <p className="salon-desc">
-                            {formatCurrency(service.price)}
-                        </p>
-                        <NavLink to={`/salons/${service.company.id}`} className="salon-location">
-                            {service.company.companyName}
-                        </NavLink>
-                    </div>
-                </SalonPanel>
+                <ServicePanel service={service} />
             </Grid>
         ))
     }
