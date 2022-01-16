@@ -104,7 +104,7 @@ function ServicesTable(props) {
     }, [fetchServicesHandler, lang, order, orderBy, page, rowsPerPage]);
 
     useEffect(() => {
-        creatingServiceSuccess && fetchServicesHandler(lang, page, rowsPerPage, orderBy, order);
+        creatingServiceSuccess && fetchServicesHandler(lang, page, rowsPerPage, 'id', 'desc');
     }, [creatingServiceSuccess, fetchServicesHandler, lang, order, orderBy, page, rowsPerPage]);
     useEffect(() => {
         updatingServiceSuccess && fetchServicesHandler(lang, page, rowsPerPage, orderBy, order);

@@ -86,15 +86,15 @@ const CartItem = props => {
                                 value={employeeName}
                                 onChange={handleEmployeesChange}
                                 input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+                                MenuProps={MenuProps}
                                 renderValue={ (val) => {
-                                    const selected = fetchedEmployees?.find(user => user.id === val);
+                                    const selected = fetchedEmployees?.find(employee => employee.id === val);
                                     return (
                                         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                                             <Chip key={selected.id} label={selected.name} />
                                         </Box>
                                     )
                                 }}
-                                MenuProps={MenuProps}
                             >
                                 {fetchedEmployees.map((employee) => (
                                     <MenuItem

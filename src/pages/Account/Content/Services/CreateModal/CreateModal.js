@@ -184,15 +184,6 @@ const MenuProps = {
     },
 };
 
-function getStyles(selected, items, theme) {
-    const selectedIndex = items.findIndex(name => name.id === selected.id);
-    return {
-        fontWeight:
-            selectedIndex === -1
-                ? theme.typography.fontWeightRegular
-                : theme.typography.fontWeightMedium,
-    };
-}
 const cartReducer = (state, action) => {
     switch (action.type) {
         case 'ADD_TO_PRODUCTS':
@@ -316,7 +307,7 @@ const CreateModal = (props) => {
     const [defaultImage, setDefaultImage] = useState('');
     const [defaultImageError, setDefaultImageError] = useState(false);
 
-    const maxNumber = 69;
+    const maxNumber = 1;
 
     useEffect(() => {
         let netPrice;
@@ -482,7 +473,6 @@ const CreateModal = (props) => {
         })
     }
     const productQuantityChangeHandler = ( val, index ) => {
-        console.log(val, index);
         dispatch({
             type: 'PRODUCT_QUANTITY_CHANGE',
             index: index,
@@ -517,6 +507,7 @@ const CreateModal = (props) => {
         setUploadedImages([]);
         setDefaultImage('');
         setDefaultImageError(false);
+        resetCartHandler();
     }, [])
 
     useEffect(() => {
@@ -548,64 +539,43 @@ const CreateModal = (props) => {
             return;
         }
         // Data To Add To State
-        const employeesData = [];
-        employeeName.map(employeeId => {
-            const employeeIndex = fetchedEmployees.findIndex(employee => employee.id === employeeId);
-            employeesData.push(fetchedEmployees[employeeIndex]);
-            return employeesData;
-        })
+        const employeeIndex = fetchedEmployees.findIndex(employee => employee.id === employeeName);
+        const employeesData = fetchedEmployees[employeeIndex];
 
         const selectedCategory = fetchedCategories.find(category => category.id === categoryName);
 
         const selectedLocation = fetchedLocations.find(location => location.id === locationName);
 
-        let data;
-        if ( type === 'single' ) {
-            data = {
-                name: serviceName,
-                description: draftToHtml(convertToRaw(editorState.getCurrentContent())),
-                price: +servicePrice,
-                discount: +serviceDiscount,
-                discount_type: discountType,
-                discount_price: +priceAfterDiscount,
-                time: +timeRequired,
-                time_type: timeType,
-                category_id: categoryName,
-                location_id: locationName,
-                employee_ids: employeeName,
-                status: serviceStatus,
-                images: uploadedImages,
-                image: defaultImage,
-                users: employeesData,
-                category: selectedCategory,
-                location: selectedLocation,
-                type: type,
-            }
-        } else if ( type === 'combo' ) {
-            data = {
-                name: serviceName,
-                description: draftToHtml(convertToRaw(editorState.getCurrentContent())),
-                price: +servicePrice,
-                discount: +serviceDiscount,
-                discount_type: discountType,
-                discount_price: +priceAfterDiscount,
-                time: +timeRequired,
-                time_type: timeType,
-                category_id: categoryName,
-                location_id: locationName,
-                employee_ids: employeeName,
-                status: serviceStatus,
-                images: uploadedImages,
-                image: defaultImage,
-                users: employeesData,
-                category: selectedCategory,
-                location: selectedLocation,
-                type: type,
-                products: cart.products,
+        let formData = new FormData();
+        formData.append('name', serviceName);
+        formData.append('description', draftToHtml(convertToRaw(editorState.getCurrentContent())));
+        formData.append('price', +servicePrice);
+        formData.append('discount', +serviceDiscount);
+        formData.append('discount_type', discountType);
+        formData.append('discount_price', +priceAfterDiscount);
+        formData.append('time', +timeRequired);
+        formData.append('time_type', timeType);
+        formData.append('category_id', categoryName);
+        formData.append('location_id', locationName);
+        formData.append('employee_ids[0]', employeeName);
+        formData.append('status', serviceStatus);
+        if(uploadedImages.length > 0 ) {
+            formData.append('images', uploadedImages[0].file) 
+            formData.append('image', uploadedImages[0].file) 
+        }
+        formData.append('users', employeesData)
+        formData.append('category', selectedCategory)
+        formData.append('location', selectedLocation)
+        formData.append('type', type)
+        if ( type === 'combo' ) {
+            for (var i = 0; i < cart.products.length; i++) {
+                formData.append(`products[${i}][id]`, cart.products[i].id);
+                formData.append(`products[${i}][quantity]`, cart.products[i].quantity);
+                formData.append(`products[${i}][unit_id]`, cart.products[i].unit_id);
             }
         }
-        onConfirm(data);
-    }, [cart, categoryName, defaultImage, discountType, editorState, employeeName, fetchedCategories, fetchedEmployees, fetchedLocations, locationName, onConfirm, priceAfterDiscount, serviceDiscount, serviceName, servicePrice, servicePriceError, serviceStatus, timeRequired, timeType, type, uploadedImages])
+        onConfirm(formData);
+    }, [cart, categoryName, discountType, editorState, employeeName, fetchedCategories, fetchedEmployees, fetchedLocations, locationName, onConfirm, priceAfterDiscount, serviceDiscount, serviceName, servicePrice, servicePriceError, serviceStatus, timeRequired, timeType, type, uploadedImages])
 
     let content = (
         <Grid container spacing={2}>
@@ -728,27 +698,23 @@ const CreateModal = (props) => {
                         label={t('employee')}
                         labelId="employee-label"
                         id="select-multiple-employees"
-                        multiple
                         value={employeeName}
                         onChange={handleEmployeesChange}
                         input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
-                        renderValue={(selected) => (
-                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                {fetchedEmployees.length > 0 && selected.map((value) => {
-                                    const selected = fetchedEmployees.find(user => user.id === value);
-                                    return (
-                                        <Chip key={selected.id} label={selected.name} />
-                                    )
-                                })}
-                            </Box>
-                        )}
                         MenuProps={MenuProps}
+                        renderValue={(val) => {
+                            const selected = fetchedEmployees?.find(employee => employee.id === val)
+                            return (
+                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                    <Chip key={selected.id} label={selected.name} />
+                                </Box>
+                            )
+                        }}
                     >
                         {fetchedEmployees.map((employee) => (
                             <MenuItem
                                 key={employee.id}
                                 value={employee.id}
-                                style={getStyles(employee, employeeName, themeCtx.theme)}
                             >
                                 {employee.name}
                             </MenuItem>
@@ -795,6 +761,7 @@ const CreateModal = (props) => {
                                                     <FormControl sx={{ width: '100%' }}>
                                                         <InputLabel id="product-label">{t('product')}</InputLabel>
                                                         <Select
+                                                            name={`products[${index}][id]`}
                                                             label={t('product')} 
                                                             labelId="product-label"
                                                             value={row.id}
@@ -815,6 +782,7 @@ const CreateModal = (props) => {
                                                     <FormControl sx={{ width: '100%' }}>
                                                         <InputLabel id="unit-label">{t('unit')}</InputLabel>
                                                         <Select
+                                                            name={`products[${index}][unit_id]`}
                                                             label={t('unit')}
                                                             labelId="unit-label"
                                                             value={row.unit_id}
@@ -832,7 +800,7 @@ const CreateModal = (props) => {
                                                     </FormControl>
                                                 </TableCell>
                                                 <TableCell align="center" sx={{ padding: '16px 8px' }}>
-                                                    <CustomTextField id="unit-quantity" type='number' label={t('quantity')}  sx={{ minWidth: '80px' }}
+                                                    <CustomTextField name={`products[${index}][quantity]`} type='number' label={t('quantity')}  sx={{ minWidth: '80px' }}
                                                         variant="outlined" value={row.quantity} onChange={ ( e ) => productQuantityChangeHandler( e.target.value, index ) }
                                                         InputProps={{
                                                             startAdornment: <InputAdornment position="start">{t(row.unitName)} </InputAdornment>,
@@ -903,9 +871,6 @@ const CreateModal = (props) => {
                             <UploadImageTopBar>
                                 <Button size="medium" sx={{ mr: 2, color: isDragging && 'red' }} variant="contained" startIcon={<PhotoCamera />} {...dragProps} onClick={onImageUpload} >
                                     {t('photos')}
-                                </Button>
-                                <Button size="medium" variant="outlined" startIcon={<DeleteIcon />} onClick={onImageRemoveAll}>
-                                    {t('Remove all')}
                                 </Button>
                             </UploadImageTopBar>
                         </div>

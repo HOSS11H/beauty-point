@@ -184,15 +184,6 @@ const MenuProps = {
     },
 };
 
-function getStyles(employee, employeeName, theme) {
-    const selectedIndex = employeeName.findIndex(name => name.id === employee.id);
-    return {
-        fontWeight:
-            selectedIndex === -1
-                ? theme.typography.fontWeightRegular
-                : theme.typography.fontWeightMedium,
-    };
-}
 const cartReducer = (state, action) => {
     switch (action.type) {
         case 'ADD_TO_PRODUCTS':
@@ -339,7 +330,7 @@ const EditModal = (props) => {
 
     const [defaultImage, setDefaultImage] = useState(image);
 
-    const maxNumber = 69;
+    const maxNumber = 1;
 
     useEffect(() => {
         let netPrice;
@@ -542,55 +533,38 @@ const EditModal = (props) => {
 
         const selectedLocation = fetchedLocations.find(location => location.id === locationName);
         
-        let data;
-        if ( type === 'single' ) {
-            data = {
-                id: id,
-                name: serviceName,
-                description: draftToHtml(convertToRaw(editorState.getCurrentContent())),
-                price: +servicePrice,
-                discount: +serviceDiscount,
-                discount_type: discountType,
-                discount_price: +priceAfterDiscount,
-                time: +timeRequired,
-                time_type: timeType,
-                category_id: categoryName,
-                location_id: locationName,
-                employee_ids: employeeName,
-                status: serviceStatus,
-                images: uploadedImages,
-                image: defaultImage,
-                users: employeesData,
-                category: selectedCategory,
-                location: selectedLocation,
-                type: type,
-            }
-        } else if ( type === 'combo' ) {
-            data = {
-                id: id,
-                name: serviceName,
-                description: draftToHtml(convertToRaw(editorState.getCurrentContent())),
-                price: +servicePrice,
-                discount: +serviceDiscount,
-                discount_type: discountType,
-                discount_price: +priceAfterDiscount,
-                time: +timeRequired,
-                time_type: timeType,
-                category_id: categoryName,
-                location_id: locationName,
-                employee_ids: employeeName,
-                status: serviceStatus,
-                images: uploadedImages,
-                image: defaultImage,
-                users: employeesData,
-                category: selectedCategory,
-                location: selectedLocation,
-                type: type,
-                products: cart.products,
+        let formData = new FormData();
+        formData.append('id', id);
+        formData.append('name', serviceName);
+        formData.append('description', draftToHtml(convertToRaw(editorState.getCurrentContent())));
+        formData.append('price', +servicePrice);
+        formData.append('discount', +serviceDiscount);
+        formData.append('discount_type', discountType);
+        formData.append('discount_price', +priceAfterDiscount);
+        formData.append('time', +timeRequired);
+        formData.append('time_type', timeType);
+        formData.append('category_id', categoryName);
+        formData.append('location_id', locationName);
+        formData.append('employee_ids[0]', employeeName);
+        formData.append('status', serviceStatus);
+        if(uploadedImages.length > 0 && uploadedImages[0].data_url !== null ) {
+            formData.append('images', uploadedImages[0].file) 
+            formData.append('image', uploadedImages[0].file) 
+        }
+        formData.append('users', employeesData)
+        formData.append('category', selectedCategory)
+        formData.append('location', selectedLocation)
+        formData.append('type', type)
+        if ( type === 'combo' ) {
+            for (var i = 0; i < cart.products.length; i++) {
+                formData.append(`products[${i}][id]`, cart.products[i].id);
+                formData.append(`products[${i}][quantity]`, cart.products[i].quantity);
+                formData.append(`products[${i}][unit_id]`, cart.products[i].unit_id);
             }
         }
-        onConfirm(data);
-    }, [cart.products, categoryName, defaultImage, discountType, editorState, employeeName, fetchedCategories, fetchedEmployees, fetchedLocations, id, locationName, onConfirm, priceAfterDiscount, serviceDiscount, serviceName, servicePrice, servicePriceError, serviceStatus, timeRequired, timeType, type, uploadedImages])
+        formData.append('_method', 'PUT');
+        onConfirm(formData);
+    }, [cart.products, categoryName, discountType, editorState, employeeName, fetchedCategories, fetchedEmployees, fetchedLocations, id, locationName, onConfirm, priceAfterDiscount, serviceDiscount, serviceName, servicePrice, servicePriceError, serviceStatus, timeRequired, timeType, type, uploadedImages])
 
     let content = (
         <Grid container spacing={2}>
@@ -713,7 +687,6 @@ const EditModal = (props) => {
                         label={t('employee')}
                         labelId="employee-label"
                         id="select-multiple-employees"
-                        multiple
                         value={employeeName}
                         onChange={handleEmployeesChange}
                         input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
@@ -733,7 +706,6 @@ const EditModal = (props) => {
                             <MenuItem
                                 key={employee.id}
                                 value={employee.id}
-                                style={getStyles(employee, employeeName, themeCtx.theme)}
                             >
                                 {employee.name}
                             </MenuItem>
@@ -888,9 +860,6 @@ const EditModal = (props) => {
                             <UploadImageTopBar>
                                 <Button size="medium" sx={{ mr: 2, color: isDragging && 'red' }} variant="contained" startIcon={<PhotoCamera />} {...dragProps} onClick={onImageUpload} >
                                     {t('photos')}
-                                </Button>
-                                <Button size="medium" variant="outlined" startIcon={<DeleteIcon />} onClick={onImageRemoveAll}>
-                                    {t('Remove all')}
                                 </Button>
                             </UploadImageTopBar>
                         </div>

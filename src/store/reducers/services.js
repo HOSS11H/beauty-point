@@ -84,28 +84,7 @@ const reducer = ( state = intialState , action ) => {
                 updatingServiceMessage: null,
             })
         case ( actionTypes.UPDATE_SERVICE_SUCCESS ) :
-            const editedServiceIndex = state.services.data.findIndex(service => service.id === action.serviceData.id);
-            let editedService = {...state.services.data[editedServiceIndex]}
-            const updatedEditedService = updateObject(editedService, {
-                name: action.serviceData.name,
-                description: action.serviceData.description,
-                price: action.serviceData.price,
-                discount_price: action.serviceData.discount_price,
-                discount: action.serviceData.discount,
-                discount_type: action.serviceData.discount_type,
-                users: action.serviceData.users,
-                status: action.serviceData.status,
-                image: action.serviceData.image,
-                images: action.serviceData.images,
-            })
-            console.log(updatedEditedService);
-            const editedServices = [...state.services.data]
-            editedServices[editedServiceIndex] = updatedEditedService
             return updateObject( state , {
-                services: {
-                    ...state.services,
-                    data: editedServices,
-                },
                 updatingService: false,
                 updatingServiceSuccess: true,
                 updatingServiceMessage: action.message,
@@ -129,17 +108,7 @@ const reducer = ( state = intialState , action ) => {
                 creatingServiceMessage: null,
             })
         case ( actionTypes.CREATE_SERVICE_SUCCESS ) :
-            const upgradedServices = [...state.services.data]
-            upgradedServices.push(action.serviceData);
             return updateObject( state , {
-                services: {
-                    ...state.services,
-                    data: upgradedServices,
-                    meta : {
-                        ...state.services.meta,
-                        total: state.services.meta.total + 1,
-                    }
-                },
                 creatingService: false,
                 creatingServiceSuccess: true,
                 creatingServiceMessage: action.message,

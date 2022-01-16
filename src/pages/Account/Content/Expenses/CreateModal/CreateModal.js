@@ -291,7 +291,6 @@ const CreateModal = (props) => {
             return;
         }
         if (!selectedCategory) {
-            console.log('selectedCategory', selectedCategory);
             setSelectedCategoryError(true);
             return;
         }

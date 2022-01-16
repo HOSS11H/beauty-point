@@ -77,7 +77,7 @@ function ProductsTable(props) {
 
     useEffect(() => {
         if (creatingProductSuccess) {
-            fetchProductsHandler(lang, page, rowsPerPage, orderBy, order);
+            fetchProductsHandler(lang, page, rowsPerPage, 'id', 'desc');
         }
     }, [creatingProductSuccess, fetchProductsHandler, lang, page, rowsPerPage, orderBy, order]);
 
