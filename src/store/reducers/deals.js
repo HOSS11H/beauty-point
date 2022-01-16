@@ -73,20 +73,7 @@ const reducer = ( state = intialState , action ) => {
                 updatingDealMessage: null,
             })
         case (actionTypes.UPDATE_DEAL_SUCCESS):
-            const editedDealIndex = state.deals.data.findIndex(deal => deal.id === action.dealData.id);
-            let editedDeal = { ...state.deals.data[editedDealIndex] }
-
-            const updatedEditedDeal = updateObject(editedDeal, {
-                ...action.dealData,
-                location: action.dealData.locationData,
-            })
-            const editedDeals = [...state.deals.data]
-            editedDeals[editedDealIndex] = updatedEditedDeal
             return updateObject(state, {
-                deals: {
-                    ...state.deals,
-                    data: editedDeals,
-                },
                 updatingDeal: false,
                 updatingDealSuccess: true,
                 updatingDealMessage: action.message,
@@ -109,17 +96,7 @@ const reducer = ( state = intialState , action ) => {
                 creatingDealMessage: null,
             })
         case (actionTypes.CREATE_DEAL_SUCCESS):
-            const upgradedDeals = [...state.deals.data]
-            upgradedDeals.push(action.dealData);
             return updateObject(state, {
-                deals: {
-                    ...state.deals,
-                    data: upgradedDeals,
-                    meta: {
-                        ...state.deals.meta,
-                        total: state.deals.meta.total + 1,
-                    }
-                },
                 creatingDeal: false,
                 creatingDealSuccess: true,
                 creatingDealMessage: action.message,

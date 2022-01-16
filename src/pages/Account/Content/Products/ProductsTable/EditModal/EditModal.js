@@ -308,7 +308,7 @@ const EditModal = (props) => {
         formData.append('location_id', locationName);
         formData.append('quantity', +productQuantity);
         formData.append('status', productStatus);
-        if(uploadedImages.length > 0 ) {
+        if(uploadedImages.length > 0 && uploadedImages[0].data_url !== null ) {
             formData.append('images', uploadedImages[0].file) 
             formData.append('image', uploadedImages[0].file) 
         }

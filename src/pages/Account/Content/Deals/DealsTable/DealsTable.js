@@ -75,12 +75,13 @@ function DealsTable(props) {
     }, [fetchDealsHandler, lang, order, orderBy, page, rowsPerPage]);
 
     useEffect(() => {
+        creatingDealSuccess && fetchDealsHandler(lang, page, rowsPerPage, 'id', 'desc');
+    }, [fetchDealsHandler, lang, order, orderBy, page, rowsPerPage, creatingDealSuccess])
+    
+    useEffect(() => {
         updatingDealSuccess && fetchDealsHandler(lang, page, rowsPerPage, orderBy, order);
     }, [fetchDealsHandler, lang, order, orderBy, page, rowsPerPage, updatingDealSuccess])
 
-    useEffect(() => {
-        creatingDealSuccess && fetchDealsHandler(lang, page, rowsPerPage, orderBy, order);
-    }, [fetchDealsHandler, lang, order, orderBy, page, rowsPerPage, creatingDealSuccess])
 
 
     const handleRequestSort = (event, property) => {

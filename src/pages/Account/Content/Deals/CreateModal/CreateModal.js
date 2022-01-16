@@ -281,7 +281,7 @@ const CreateModal = (props) => {
 
 
 
-    const maxNumber = 69;
+    const maxNumber = 1;
 
     const dealPrice = cartData.services.reduce((sum, curr) => {
         return sum + curr.price * curr.quantity
@@ -535,19 +535,6 @@ const CreateModal = (props) => {
             return;
         }
         if (dealPriceError) { return; }
-
-        const selectedServicesQuantity = [];
-        cartData.services.forEach(service => {
-            selectedServicesQuantity.push(service.quantity);
-        })
-        const selectedServicesPrice = [];
-        cartData.services.forEach(service => {
-            selectedServicesPrice.push(service.price);
-        })
-        const selectedServicesDiscount = [];
-        cartData.services.forEach(service => {
-            selectedServicesDiscount.push(service.discount);
-        })
         
         const selectedAppliedDays = [];
         Object.keys(appliedDays).forEach(day => {
@@ -555,35 +542,48 @@ const CreateModal = (props) => {
                 selectedAppliedDays.push(day);
             }
         })
-        const selectedLocation = fetchedLocations.find(location => location.id === dealLocation);
 
-        const data = {
-            title: dealName,
-            location: dealLocation,
-            deal_services: selectedServices,
-            deal_quantity: selectedServicesQuantity,
-            deal_unit_price: selectedServicesPrice,
-            deal_discount: selectedServicesDiscount,
-            discount_type: discountType,
-            discount: +dealDiscount,
-            discount_amount: +priceAfterDiscount,
-            choice : dealAppliedOn,
-            uses_time: +userLimit,
-            customer_uses_time: +usesTime,
-            days : selectedAppliedDays,
-            description: draftToHtml(convertToRaw(editorState.getCurrentContent())),
-            status: dealStatus,
-            deal_startDate: `${format(dateFrom, 'Y-MM-dd hh:ii a')}`,
-            deal_endDate: `${format(dateTo, 'Y-MM-dd hh:ii a')}`,
-            applied_between_dates : `${format(dateFrom, 'Y-MM-dd hh:ii a')}  ${format(dateTo, 'Y-MM-dd hh:ii a')}`,
-            open_time : `${format(openTime, 'hh:ii a')}`,
-            close_time : `${format(closeTime, 'hh:ii a')}`,
-            deal_startTime: `${format(openTime, 'hh:ii a')}`,
-            deal_endTime: `${format(closeTime, 'hh:ii a')}`,
-            locationData: selectedLocation,
+
+        let formData = new FormData();
+        formData.append('title', dealName);
+        formData.append('location', dealLocation);
+        for (var i = 0; i < selectedServices.length; i++) {
+            formData.append(`deal_services[${i}]`, selectedServices[i]);
         }
-        onConfirm(data);
-    }, [dealName, dealLocation, selectedServices, dateTo, dateFrom, closeTime, openTime, appliedDays, editorState, dealPriceError, cartData.services, fetchedLocations, discountType, dealDiscount, priceAfterDiscount, dealAppliedOn, usesTime, userLimit, dealStatus, onConfirm])
+        for (var x = 0; x < cartData.services.length; x++) {
+            formData.append(`deal_quantity[${x}]`, cartData.services[x].quantity);
+        }
+        for (var y = 0; y < cartData.services.length; y++) {
+            formData.append(`deal_unit_price[${y}]`, cartData.services[y].price);
+        }
+        for (var z = 0; z < cartData.services.length; z++) {
+            formData.append(`deal_discount[${z}]`, cartData.services[z].discount);
+        }
+        formData.append('discount_type', discountType);
+        formData.append('discount', +dealDiscount);
+        formData.append('discount_amount', +priceAfterDiscount);
+        formData.append('choice', dealAppliedOn);
+        formData.append('uses_time', +userLimit);
+        formData.append('customer_uses_time', +usesTime);
+        for ( var c = 0; c < selectedAppliedDays.length; c++) {
+            formData.append(`days[${c}]`, selectedAppliedDays[c]);
+        }
+
+        formData.append('description', draftToHtml(convertToRaw(editorState.getCurrentContent())));
+        formData.append('status', dealStatus);
+        formData.append('deal_startDate', `${format(dateFrom, 'Y-MM-dd hh:ii a')}`);
+        formData.append('deal_endDate', `${format(dateTo, 'Y-MM-dd hh:ii a')}`);
+        formData.append('applied_between_dates', `${format(dateFrom, 'Y-MM-dd hh:ii a')}  ${format(dateTo, 'Y-MM-dd hh:ii a')}`);
+        formData.append('open_time', `${format(openTime, 'hh:ii a')}`);
+        formData.append('close_time', `${format(closeTime, 'hh:ii a')}`);
+        formData.append('deal_startTime',  `${format(openTime, 'hh:ii a')}`);
+        formData.append('deal_endTime', `${format(closeTime, 'hh:ii a')}`);
+        if(uploadedImages.length > 0 ) {
+            formData.append('images', uploadedImages[0].file) 
+            formData.append('image', uploadedImages[0].file) 
+        }
+        onConfirm(formData);
+    }, [dealName, dealLocation, selectedServices, dateTo, dateFrom, closeTime, openTime, appliedDays, editorState, dealPriceError, cartData.services, discountType, dealDiscount, priceAfterDiscount, dealAppliedOn, userLimit, usesTime, dealStatus, uploadedImages, onConfirm])
 
     let content = (
         <Grid container spacing={2}>
@@ -876,9 +876,6 @@ const CreateModal = (props) => {
                             <UploadImageTopBar>
                                 <Button size="medium" sx={{ mr: 2, color: isDragging && 'red' }} variant="contained" startIcon={<PhotoCamera />} {...dragProps} onClick={onImageUpload} >
                                     {t('photos')}
-                                </Button>
-                                <Button size="medium" variant="outlined" startIcon={<DeleteIcon />} onClick={onImageRemoveAll}>
-                                    {t('Remove all')}
                                 </Button>
                             </UploadImageTopBar>
                         </div>
