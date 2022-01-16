@@ -100,7 +100,6 @@ const UserAuth = props => {
                     authCtx.login(res.data.token, res.data.user.roles[0].id);
                 }
                 storeUserData(res.data);
-                handleNext();
             })
             .catch(err => {
                 if (err.response.status === 500) {

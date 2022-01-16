@@ -285,8 +285,8 @@ const EditModal = (props) => {
                 quantity: item.quantity,
                 price: item.price,
                 name: item.item.name,
-                employee_id: item.employee.id,
-                employee: item.employee,
+                employee_id: item.employee?.id,
+                employee: item.employee && item.employee,
                 item: item.item,
             })
         } if (item.item.type === 'product') {

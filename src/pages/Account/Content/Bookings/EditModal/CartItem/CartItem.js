@@ -26,7 +26,7 @@ const CartItem = props => {
 
     const { row, remove, increase, decrease, type, changeEmployee, fetchedEmployees } = props;
 
-    const [employeeName, setEmployeeName] = useState(type === 'services' ? row.employee.id : null);
+    const [employeeName, setEmployeeName] = useState(type === 'services' ? row.employee?.id : null);
 
     const handleEmployeesChange = (event) => {
         const {
