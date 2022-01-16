@@ -315,18 +315,6 @@ const CreateModal = (props) => {
         if(uploadedImages.length > 0 ) {
             formData.append('image', uploadedImages[0].file) 
         }
-
-        /* const data = {
-            name: expenseName,
-            note: draftToHtml(convertToRaw(editorState.getCurrentContent())),
-            amount: expenseAmount,
-            expense_date: format(date, 'Y-MM-dd hh:ii a'),
-            bank_name: expenseBank,
-            bank_account: expenseAccount,
-            cat_id: selectedCategory.value,
-            customer_id: selectedAgent.value,
-            image: uploadedImages[0]?.data_url,
-        } */
         onConfirm(formData);
     }, [expenseName, expenseBank, expenseAccount, selectedCategory, selectedAgent, editorState, expenseAmount, date, uploadedImages, onConfirm])
 

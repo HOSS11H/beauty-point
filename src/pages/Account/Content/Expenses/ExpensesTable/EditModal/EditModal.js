@@ -304,22 +304,10 @@ const EditModal = (props) => {
         formData.append('cat_id', selectedCategory.value);
         formData.append('customer_id', selectedAgent.value);
         if(uploadedImages.length > 0 && uploadedImages[0].data_url !== null )   {
-            console.log(uploadedImages[0])
             formData.append('image', uploadedImages[0].file) 
         }
         formData.append('_method', 'PUT');
-        /* const data = {
-            id: id,
-            name: expenseName,
-            note: draftToHtml(convertToRaw(editorState.getCurrentContent())),
-            amount: expenseAmount,
-            expense_date: format(date, 'Y-MM-dd hh:ii a'),
-            bank_name: expenseBank,
-            bank_account: expenseAccount,
-            cat_id: selectedCategory.value,
-            customer_id: selectedAgent.value,
-            image: uploadedImages[0]?.data_url,
-        } */
+
         onConfirm(formData);
     }, [expenseName, expenseBank, expenseAccount, selectedCategory, selectedAgent, editorState, expenseAmount, id, date, uploadedImages, onConfirm])
 
