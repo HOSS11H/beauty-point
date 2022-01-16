@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components"
+import styled from "styled-components";
 
 const DealPanelCard = styled.div`
     border-radius: 25px;
@@ -68,7 +68,7 @@ const DealPanelCard = styled.div`
             text-align: center;
             margin-left: 10px;
             @media screen and (max-width: 899.98px) {
-                margin-left: 5px;
+                margin-right: 5px;
             }
             .discount-percent {
                 display: flex;
@@ -85,12 +85,12 @@ const DealPanelCard = styled.div`
                     align-items: center;
                 }
                 .discount-percent-sign {
-                    font-size: 10px;
+                    font-size: 12px;
                     line-height: 14px;
                     font-weight: 500;
                     color         : #96248e;
                     text-transform: uppercase;
-                    transform: translate(-2px, -2px);
+                    transform: translate(4px, -2px);
                     &.percentage {
                         font-size: 18px;
                         line-height: 21px;

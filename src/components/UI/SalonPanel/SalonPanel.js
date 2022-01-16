@@ -62,6 +62,9 @@ const SalonPanelCard = styled.div`
                 line-height: 1.5;
                 margin-bottom: 20px;
             }
+            &:last-child {
+                margin-bottom: 0;
+            }
         }
         .salon-location {
             font-size: 16px;
