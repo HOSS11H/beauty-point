@@ -57,6 +57,7 @@ function App() {
             <Route path="/all-categories" element={<AllCategories />} />
             <Route path="/all-saloons" element={<AllSaloons />} />
             <Route path="/all-deals" element={<AllDeals />} />
+            <Route path="/packages" element={<AllPackages />} />
             <Route path="/categories/:categoryId" element={<SingleCategory />} />
             <Route path="/services/:serviceId" element={<SingleService />} />
             <Route path="/deals/:dealId" element={<SingleDeal />} />
@@ -92,7 +93,7 @@ function App() {
                 </ Route>
                 <Route path="/" element={<Landing />} />
                 <Route path="/all-categories" element={<AllCategories />} />
-                <Route path="/all-saloons" element={<AllSaloons/>} />
+                <Route path="/all-saloons" element={<AllSaloons />} />
                 <Route path="/all-deals" element={<AllDeals />} />
                 <Route path="/packages" element={<AllPackages />} />
                 <Route path="/categories/:categoryId" element={<SingleCategory />} />

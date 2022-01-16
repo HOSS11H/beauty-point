@@ -3,19 +3,22 @@ import TopBar from "./TopBar/TopBar";
 import styled from 'styled-components';
 import MobileBar from "./MobileBar/MobileBar";
 
+
+
 const HeaderWrapper = styled.header`
     background-color: transparent;
     position        : absolute;
     top             : 0;
     left            : 0;
     width           : 100%;
-    z-index:5;
+    z-index:9999;
 `
 
 const Header = () => {
+
     return (
-        <HeaderWrapper>
-            <TopBar/>
+        <HeaderWrapper >
+            <TopBar />
             <NavBar />
             <MobileBar />
         </HeaderWrapper>
