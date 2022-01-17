@@ -114,7 +114,7 @@ const Salons = props => {
         <SalonsWrapper>
             <Container maxWidth="lg">
                 <Heading>
-                    <NavLink className="heading-title" to='/all-saloons'>{t('popular saloons')}  { theme === 'rtl' ? <ArrowForwardIcon /> : <ArrowBackIcon /> } </NavLink>
+                    <NavLink className="heading-title" to='/all-saloons'>{t('salons')}  { theme === 'rtl' ? <ArrowForwardIcon /> : <ArrowBackIcon /> } </NavLink>
                 </Heading>
                 {content}
             </Container>

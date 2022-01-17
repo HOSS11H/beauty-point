@@ -17,9 +17,9 @@ import ThemeContext from "../../../store/theme-context";
 
 
 const ServicesSliderWrapper = styled.section`
-    padding: 74px 0 88px;
+    padding: 74px 0 0px;
     @media screen and (max-width: 899.98px) {
-        padding: 25px 0 15px;
+        padding: 25px 0 0px;
     }
     && {
         .slick-prev, .slick-next {

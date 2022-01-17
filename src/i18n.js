@@ -250,7 +250,7 @@ const resources = {
             'login': 'تسجيل الدخول',
             'select your services': 'اختر خدماتك',
             'popular saloons': 'الصالونات المشهورة',
-            'popular spotlights': 'أفضل العروض',
+            'popular spotlights': 'العروض المميزة',
             'popular deals': 'العروض المشهورة',
             'Quick Links': 'روابط سريعة',
             'help & support': 'المساعدة والدعم',
@@ -412,6 +412,7 @@ const resources = {
             'salon': 'الصالون',
             'My Account': 'حسابي',
             'logout': 'تسجيل الخروج',
+            'salons': 'الصالونات',
         }
     }
 };

@@ -66,7 +66,7 @@ const AllDeals = props => {
             <DealsWrapper>
                 <Container maxWidth="lg">
                     <Heading>
-                        <h2 className="heading-title" >{t('popular deals')}</h2>
+                        <h2 className="heading-title" >{t('deals')}</h2>
                     </Heading>
                     {content}
                 </Container>

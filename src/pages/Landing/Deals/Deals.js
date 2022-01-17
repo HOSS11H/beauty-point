@@ -112,7 +112,7 @@ const Deals = props => {
         <DealsWrapper>
             <Container maxWidth="lg">
                 <Heading>
-                    <NavLink className="heading-title" to='/all-deals'>{t('popular deals')}  { theme === 'rtl' ? <ArrowForwardIcon /> : <ArrowBackIcon /> } </NavLink>
+                    <NavLink className="heading-title" to='/all-deals'>{t('deals')}  { theme === 'rtl' ? <ArrowForwardIcon /> : <ArrowBackIcon /> } </NavLink>
                 </Heading>
                 {content}
             </Container>
