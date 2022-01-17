@@ -140,9 +140,6 @@ export default function GeneralSettings(props) {
                                                                             <Button sx={{ mr: 1 }} size="large" variant="outlined" startIcon={<PhotoCamera />} onClick={() => onImageUpdate(index)}>
                                                                                 {t('update')}
                                                                             </Button>
-                                                                            <IconButton aria-label="delete" size="large" onClick={() => onImageRemove(index)}>
-                                                                                <DeleteIcon />
-                                                                            </IconButton>
                                                                         </ImageItemBottomBar>
                                                                     </div>
                                                                 </Grid>
