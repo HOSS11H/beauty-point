@@ -59,31 +59,34 @@ export default function GeneralSettings(props) {
                 setPhone(res.data.companyPhone)
                 setTax(res.data.tax_record)
                 setAddress(res.data.address)
-                setNotes(res.data.invoice_notes)
+                setNotes(res.data.invoice_notes ?? '')
                 setWebsite(res.data.website)
                 setShow(false)
             })
     }, []);
     function submitForm() {
         setOpen(true)
-        v1.post('/vendors/settings/company', {
-            company_name: name,
-            company_email: email,
-            company_phone: phone,
-            logo_url: uploadedLogo[0].data_url,
-            tax_record: tax,
-            address: address,
-            website: website,
-            invoice_notes: notes
-        }).then(res => {
-            if (res.status === 204) {
-                setSuccess(true)
-            }
-            setOpen(false)
-        }).catch(err => {
-            setOpen(false)
-            console.log(err.message)
-        })
+        let formData = new FormData();
+        formData.append('company_name', name);
+        formData.append('company_email', email);
+        formData.append('company_phone', phone);
+        if (uploadedLogo.length > 0 && uploadedLogo[0].data_url !== null) {
+            formData.append('logo', uploadedLogo[0].file);
+        }
+        formData.append('tax_record', tax);
+        formData.append('address', address);
+        formData.append('website', website);
+        formData.append('invoice_notes', notes);
+        v1.post('/vendors/settings/company', formData, {headers: {'Content-Type': 'multipart/form-data'}})
+            .then(res => {
+                if (res.status === 204) {
+                    setSuccess(true)
+                }
+                setOpen(false)
+            }).catch(err => {
+                setOpen(false)
+                console.log(err.message)
+            })
     }
     function handleClose() {
         setSuccess(false)
@@ -167,7 +170,7 @@ export default function GeneralSettings(props) {
                                                     <TextField value={email} onChange={(e) => setEmail(e.target.value)} fullWidth label={t('Business Email')} variant="outlined" required />
                                                 </Grid>
                                                 <Grid item xs={12} >
-                                                <TextField value={tax} onChange={(e) => setTax(e.target.value)} fullWidth label={t("Tax Record")} variant="outlined" required />
+                                                    <TextField value={tax} onChange={(e) => setTax(e.target.value)} fullWidth label={t("Tax Record")} variant="outlined" required />
                                                 </Grid>
                                             </Grid>
                                         </Grid>
