@@ -1,16 +1,17 @@
 import { useContext, useEffect, useState } from 'react';
-import axios from '../../utils/axios-instance-v1';
+import v1 from '../../utils/axios-instance-v1';
 import useForm from '../../hooks/useForm';
 import { loginForm, subscribeForm } from '../../utils/formConfig';
 import { useNavigate } from 'react-router-dom';
 import AuthContext from '../../store/auth-context';
 
 import ThemeContext from '../../store/theme-context';
-import styled  from 'styled-components';
+import styled from 'styled-components';
 import { Container, Grid, Card } from '@mui/material';
 import { CustomButton } from '../../components/UI/Button/Button';
 import Logo from '../../images/logo/logo_mobile.png'
 import AuthBgSrc from '../../images/avatars/auth-bg.png'
+import Map from './Map/Map';
 
 const AuthContainer = styled.div`
     min-height: 100vh;
@@ -18,13 +19,15 @@ const AuthContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: ${ ( { theme } ) => theme.palette.background.default };
+    background-color: ${({ theme }) => theme.palette.background.default};
 `;
 
 const CustomizedCard = styled(Card)`
     padding: 40px 20px;
     border-radius: 12px;
     text-align: center;
+    max-width: 500px;
+    margin: 0 auto;
 `
 
 const FormWrapper = styled.form`
@@ -36,7 +39,7 @@ const FormHeading = styled.h1`
     margin: 0 0 20px;
     text-align: center;
     text-transform: capitalize;
-    color: ${ ( { theme } ) => theme.palette.text.primary };
+    color: ${({ theme }) => theme.palette.text.primary};
 `
 const ErrorMessage = styled.p`
     font-size: 18px;
@@ -59,7 +62,7 @@ const FormLink = styled.p`
         margin-bottom: 0;
     }
     span,a {
-        color: ${ (  { theme } ) => theme.vars.primary };
+        color: ${({ theme }) => theme.vars.primary};
         font-weight: 600;
         margin-left: 5px;
         cursor: pointer;
@@ -80,7 +83,7 @@ const AuthImg = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    @media screen and (max-width: 599.98px) {
+    @media screen and (max-width: 899.98px) {
         display: none;
     }
     img {
@@ -99,14 +102,16 @@ const Auth = props => {
 
     const navigate = useNavigate();
 
-    const [ isLogin , setIsLogin ] = useState(true);
+    const [isLogin, setIsLogin] = useState(true);
 
-    const [ errorMessage , setErrorMessage ] = useState(null);
+    const [errorMessage, setErrorMessage] = useState(null);
 
     const { isLoggedIn } = authCtx;
 
     const { renderFormInputs: loginInputs, isFormValid: isLoginDataValid, form: loginData } = useForm(loginForm);
     const { renderFormInputs: subscribeInputs, isFormValid: isSubscribeDataValid, form: subscribeData } = useForm(subscribeForm);
+
+    const [ pendingSignedUp, setPendingSignedUp ] = useState(false);
 
     let authIsValid;
 
@@ -120,18 +125,18 @@ const Auth = props => {
         isLoggedIn && navigate('/account/dashboard', { replace: true })
     }, [isLoggedIn, navigate])
 
-    const switchAuthModeHandler = ( ) => {
+    const switchAuthModeHandler = () => {
         setIsLogin(prevState => !prevState);
         setErrorMessage(null)
     }
-    const submitHandler = async ( e ) => {
-        e.preventDefault();
-        let url ;
+    console.log(subscribeData)
+    const submitHandler = () => {
+        let url;
         let authData;
         if (isLogin) {
             url = `/auth/sign-in`;
             const pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            if ( pattern.test(loginData.email.value) ) {
+            if (pattern.test(loginData.email.value)) {
                 authData = {
                     email: loginData.email.value,
                     password: loginData.password.value,
@@ -147,24 +152,30 @@ const Auth = props => {
                 }
             }
         } else {
-            url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDteusGiWoNp_qFEn36zfPtJPSwRS8hpyg`;
+            url = `/auth/sign-up-as-vendor`;
             authData = {
+                name: subscribeData.name.value,
+                business_name: subscribeData.sallonName.value,
                 email: subscribeData.email.value,
+                contact: subscribeData.phoneNum.value,
+                address: subscribeData.address.value,
                 password: subscribeData.password.value,
+                map: '',
+                calling_code: '+91',
+                fcm_token: 'asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231',
             }
         }
         setErrorMessage(null);
-        axios.post(url, authData)
+        v1.post(url, authData)
             .then(res => {
                 if (res.data.user.roles[0].name === 'customer') {
-                    authCtx.login(res.data.token, res.data.user.roles[0].name, res.data.user.name[0] );
+                    authCtx.login(res.data.token, res.data.user.roles[0].name, res.data.user.name[0]);
                 } else {
-                    authCtx.login(res.data.token, res.data.user.roles[0].id, res.data.user.name[0] );
+                    authCtx.login(res.data.token, res.data.user.roles[0].id, res.data.user.name[0]);
                 }
             })
-            .catch( err => {
-                setErrorMessage(err.message.split('_').join(' ').toLowerCase())
-                console.log(err)
+            .catch(err => {
+                setErrorMessage(err.message);
             })
     }
 
@@ -183,7 +194,7 @@ const Auth = props => {
         formSwitchLink: `login`,
     }
 
-    if (themeCtx.direction === 'rtl' ) {
+    if (themeCtx.direction === 'rtl') {
         loginFormText = {
             heading: 'تسجيل الدخول',
             passwordRestoreMessage: 'نسيت كلمة المرور؟   ',
@@ -203,18 +214,19 @@ const Auth = props => {
 
     return (
         <AuthContainer>
-            <Container maxWidth="lg">
+            <Container maxWidth="xl">
                 <Grid container spacing={3}  >
-                    <Grid item xs={12} sm={6} md={4} >
+                    <Grid item xs={12} md={6}  >
                         <CustomizedCard>
                             <FormWrapper>
                                 <LogoImg src={Logo} alt="logo" />
                                 <FormHeading>
-                                    { isLogin && loginFormText.heading }
-                                    { !isLogin&& subscribeFormText.heading }
+                                    {isLogin && loginFormText.heading}
+                                    {!isLogin && subscribeFormText.heading}
                                 </FormHeading>
-                                { isLogin ? loginInputs() : subscribeInputs() }
-                                { isLogin && (
+                                {isLogin ? loginInputs() : subscribeInputs()}
+                                {!isLogin && <Map /> }
+                                {isLogin && (
                                     <FormLink>
                                         {loginFormText.passwordRestoreMessage}
                                         <span >
@@ -222,17 +234,17 @@ const Auth = props => {
                                         </span>
                                     </FormLink>
                                 )}
-                                { errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+                                {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
                                 <CustomButton onClick={submitHandler} disabled={!authIsValid} >{isLogin ? loginFormText.button : subscribeFormText.button}</CustomButton>
-                                { isLogin && (
+                                {isLogin && (
                                     <FormLink>
                                         {loginFormText.formSwitchText}
-                                        <a href='https://old.beautypoint.sa/register'>
+                                        <span onClick={switchAuthModeHandler}>
                                             {loginFormText.formSwitchLink}
-                                        </a>
+                                        </span>
                                     </FormLink>
                                 )}
-                                { !isLogin && (
+                                {!isLogin && (
                                     <FormLink>
                                         {subscribeFormText.formSwitchText}
                                         <span onClick={switchAuthModeHandler}>
@@ -243,7 +255,7 @@ const Auth = props => {
                             </FormWrapper>
                         </CustomizedCard>
                     </Grid>
-                    <Grid item xs={12} sm={6} md={8} >
+                    <Grid item xs={12} md={6} >
                         <AuthImg>
                             <img src={AuthBgSrc} alt="auth Background" />
                         </AuthImg>

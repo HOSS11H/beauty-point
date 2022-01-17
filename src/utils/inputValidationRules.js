@@ -57,10 +57,10 @@ export function isNumberRule(errorMessage) {
     );
 }
 
-export function minLengthRule(inputName, minCharacters) {
+export function minLengthRule(errorMessage, minCharacters) {
     return createValidationRule(
         'minLength',
-        `${inputName} should contain atleast ${minCharacters} characters`,
+        errorMessage,
         (inputValue, formObj) => inputValue.trim().length >= minCharacters
     );
 }

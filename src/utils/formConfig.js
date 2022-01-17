@@ -5,6 +5,7 @@ import {
     requiredCheckRule,
     passwordMatchRule,
     isEmailRule,
+    minLengthRule,
 } from './inputValidationRules';
 /**
  * creates and returns object representation of form field
@@ -61,6 +62,12 @@ export const loginForm = {
 }
 // object representation of Subscribe form
 export const subscribeForm = {
+    sallonName: {
+        ...createFormFieldConfig({ ar: 'اسم الصالون', en: 'sallon name' }, 'Salon Name' ,'sallonName', 'text'),
+        validationRules: [
+            requiredRule( {en: `sallon name required`, ar: `اسم الصالون مطلوب`} ),
+        ],
+    },
     email : {
         ...createFormFieldConfig( {ar: 'بريد الكتروني', en: 'email' }  ,'admin@example.com', 'email', 'email'),
         validationRules: [
@@ -81,21 +88,17 @@ export const subscribeForm = {
         ]
     },
     name: {
-        ...createFormFieldConfig({ ar: 'الاسم', en: 'name' }, 'ahmed masoud', 'name', 'text'),
+        ...createFormFieldConfig({ ar: 'الاسم', en: 'name' }, 'Name', 'name', 'text'),
         validationRules: [
             requiredRule( {en: `name required`, ar: `الاسم مطلوب`} ),
-        ],
-    },
-    sallonName: {
-        ...createFormFieldConfig({ ar: 'اسم الصالون', en: 'sallon name' }, 'ahmed masoud sallon' ,'sallonName', 'text'),
-        validationRules: [
-            requiredRule( {en: `sallon name required`, ar: `اسم الصالون مطلوب`} ),
+            minLengthRule( {en: `name should be at least 5 characters`, ar: `الاسم يجب أن يكون أكثر من 5 أحرف`} , 5),
         ],
     },
     address: {
-        ...createFormFieldConfig({ ar: 'العنوان', en: 'address' }, 'foo bar zee address' ,'address', 'address'),
+        ...createFormFieldConfig({ ar: 'العنوان', en: 'address' }, 'Address' ,'address', 'address'),
         validationRules: [
             requiredRule( {en: `address required`, ar: `عنوان الصالون مطلوب`} ),
+            minLengthRule( {en: `address should be at least 10 characters`, ar: `عنوان الصالون يجب أن يكون على الأقل 10 أحرف`} , 10),
         ],
     },
     phoneNum: {
@@ -103,12 +106,6 @@ export const subscribeForm = {
         validationRules: [
             requiredRule( {en: `phone number required`, ar: `رقم الهاتف مطلوب`} ),
             isNumberRule( {en: `phone number should be a number`, ar: `رقم الهاتف يجب أن يكون رقم`} ),
-        ],
-    },
-    website: {
-        ...createFormFieldConfig({ ar: 'رابط الموقع', en: 'website link' }, 'https://website.com' ,'website', 'website'),
-        validationRules: [
-            requiredRule( {en: `website link required`, ar: `رابط الموقع مطلوب`} ),
         ],
     },
     terms: {
@@ -147,7 +144,7 @@ export const registerForm = {
         ]
     },
     confirmPassword : {
-        ...createFormFieldConfig( { ar: 'تأكيد الرقم السري', en: 're-enter password' }  ,'......', 'confirmPassword', 'password',undefined ,undefined , undefined , undefined , false),
+        ...createFormFieldConfig( { ar: 'تأكيد الرقم السري', en: 're-enter password' }  ,'......', 'confirmPassword', 'password',undefined ,undefined , true , undefined , false),
         validationRules : [
             passwordMatchRule({ ar: 'يجب تطابق كلمتي المرور', en: `passwords don't match` }),
         ]
