@@ -24,12 +24,12 @@ const Slot = styled.div`
     padding: 5px;
     border-radius: 8px;
     background-color: ${({ theme }) => theme.vars.theme};
-    color: #fff;
+    color: ${ ( { theme } ) => theme.palette.common.white};
     margin-right: 5px;
     margin-bottom: 10px;
     cursor: pointer;
     ${ ( { active } ) => active && css`
-        background-color: #fff;
+        background-color: ${ ( { theme } ) => theme.palette.common.white};
         color: ${props => props.theme.vars.theme};
     `}
     @media screen and (max-width: 599.98px) {

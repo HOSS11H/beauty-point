@@ -1,7 +1,8 @@
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import styled from 'styled-components';
 
-const ModuleCartWrapper = styled.div`
+
+export const ModuleCartWrapper = styled.div`
     display: inline-flex;
     margin-right: 20px;
     &:last-child {
@@ -13,7 +14,7 @@ const ModuleCartWrapper = styled.div`
         align-items: center;
         width: 50px;
         height: 50px;
-        background: #fff;
+        background: ${({ theme }) => theme.palette.common.white};
         border-radius: 50%;
         transition: 0.3s ease-in-out;
         @media screen and (max-width: 500px) {
@@ -21,15 +22,18 @@ const ModuleCartWrapper = styled.div`
             height: 40px;
         }
         &:hover {
-            background-color:  #96248e;
+            background-color:  ${({ theme }) => theme.vars.secondary};
             svg {
-                color: #fff;
+                color: ${({ theme }) => theme.palette.common.white};
             }
         }
         svg {
             transition: 0.3s ease-in-out;
-            font-size: 18px;
-            color: #96248e;
+            font-size: 20px;
+            color: ${({ theme }) => theme.vars.secondary};
+            @media screen and (max-width: 500px) {
+                font-size: 17px;
+            }
         }
     }
 `

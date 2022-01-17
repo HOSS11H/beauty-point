@@ -12,7 +12,7 @@ const ModuleWhatsappWrapper = styled.div`
         justify-content : center;
         bottom          : 40px;
         right           : 40px;
-        background-color: #96248e;
+        background-color: ${ ( { theme } ) => theme.vars.secondary};
         color           : #FFF;
         border-radius   : 50px;
         text-align      : center;

@@ -86,7 +86,7 @@ const HeroButton = styled(NavLink)`
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    background-color: #96248e;
+    background-color: ${ ( { theme } ) => theme.vars.secondary};
     color: ${ ( { theme } ) => theme.palette.common.white};
     border:0;
     outline: none;
@@ -108,13 +108,13 @@ const HeroButton = styled(NavLink)`
     }
     &:hover {
         background-color: ${ ( { theme } ) => theme.palette.common.white};
-        color: #96248e;
+        color: ${ ( { theme } ) => theme.vars.secondary};
     }
     &.inversed {
         background-color: ${ ( { theme } ) => theme.palette.common.white};
-        color:#96248e;
+        color:${ ( { theme } ) => theme.vars.secondary};
         &:hover {
-            background-color: #96248e;
+            background-color: ${ ( { theme } ) => theme.vars.secondary};
             color: ${ ( { theme } ) => theme.palette.common.white};
         }
     }

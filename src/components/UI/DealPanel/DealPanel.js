@@ -39,7 +39,7 @@ const DealPanelCard = styled.div`
             font-size: 22px;
             line-height:1.5;
             font-weight: 500;
-            color         : #96248e;
+            color         : ${ ( { theme } ) => theme.vars.secondary};
             margin-bottom:0;
             text-transform: capitalize;
             @media screen and (max-width: 899.98px) {
@@ -47,7 +47,7 @@ const DealPanelCard = styled.div`
                 line-height: 1.5;
             }
             a {
-                color         : #96248e;
+                color         : ${ ( { theme } ) => theme.vars.secondary};
             }
         }
         .deal-desc {
@@ -76,7 +76,7 @@ const DealPanelCard = styled.div`
                 font-size: 18px;
                 line-height: 21px;
                 font-weight: 300;
-                color         : #96248e;
+                color         : ${ ( { theme } ) => theme.vars.secondary};
                 @media screen and (max-width: 899.98px) {
                     font-size: 14px;
                     line-height: 1.5;
@@ -88,7 +88,7 @@ const DealPanelCard = styled.div`
                     font-size: 12px;
                     line-height: 14px;
                     font-weight: 500;
-                    color         : #96248e;
+                    color         : ${ ( { theme } ) => theme.vars.secondary};
                     text-transform: uppercase;
                     transform: translate(4px, -2px);
                     &.percentage {
@@ -106,7 +106,7 @@ const DealPanelCard = styled.div`
                 font-size: 18px;
                 line-height: 21px;
                 font-weight: 300;
-                color         : #96248e;
+                color         : ${ ( { theme } ) => theme.vars.secondary};
                 text-transform: uppercase;
                 @media screen and (max-width: 599.98px) {
                     font-size: 14px;

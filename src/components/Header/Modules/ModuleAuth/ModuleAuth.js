@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useContext } from 'react';
+import AuthContext from '../../../../store/auth-context';
+import UserProfile from './UserProfile/UserProfile';
 
 const ModuleContactWrapper = styled.div`
     display    : inline-flex;
@@ -9,7 +12,7 @@ const ModuleContactWrapper = styled.div`
         display:none;
     }
 `
-const ModuleButton = styled(NavLink)`
+export const ModuleButton = styled(NavLink)`
     font-size:15px;
     width: 148px;
     font-weight: 700;
@@ -19,7 +22,7 @@ const ModuleButton = styled(NavLink)`
     justify-content: center;
     align-items: center;
     background-color:  ${ ( { theme } ) => theme.palette.common.white};
-    color: #96248e;
+    color: ${ ( { theme } ) => theme.vars.secondary};
     border:0;
     outline: none;
     cursor: pointer;
@@ -27,18 +30,24 @@ const ModuleButton = styled(NavLink)`
     transition: 0.3s ease-in-out;
     text-transform: capitalize;
     &:hover {
-        background-color: #96248e;
+        background-color: ${ ( { theme } ) => theme.vars.secondary};
         color: ${ ( { theme } ) => theme.palette.common.white};
     }
 `
 
-const ModuleContact = props => {
+const ModuleAuth = props => {
     const {t} = useTranslation();
+
+    const authCtx = useContext(AuthContext);
+
+    const {isLoggedIn} = authCtx;
+
     return (
         <ModuleContactWrapper>
-            <ModuleButton to='/auth' >{t('login')}</ModuleButton>
+            {!isLoggedIn && <ModuleButton to='/auth' >{t('login')}</ModuleButton>}
+            {isLoggedIn && <UserProfile />}
         </ModuleContactWrapper>
     )
 }
 
-export default ModuleContact;
+export default ModuleAuth;

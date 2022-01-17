@@ -41,7 +41,7 @@ const ServicePanelCard = styled.div`
             font-size: 22px;
             line-height:1.5;
             font-weight: 500;
-            color         : #96248e;
+            color         : ${ ( { theme } ) => theme.vars.secondary};
             margin-bottom:0;
             text-transform: capitalize;
             @media screen and (max-width: 899.98px) {
@@ -49,7 +49,7 @@ const ServicePanelCard = styled.div`
                 line-height: 1.5;
             }
             a {
-                color         : #96248e;
+                color         : ${ ( { theme } ) => theme.vars.secondary};
             }
         }
         .service-price {

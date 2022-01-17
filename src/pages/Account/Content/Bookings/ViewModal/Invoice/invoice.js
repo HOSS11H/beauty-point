@@ -146,7 +146,7 @@ const CustomTableHead = styled(TableCell)`
 	padding-left: 5px;
 	padding-right: 5px;
 	span {
-		color: #fff;
+		color: ${ ( { theme } ) => theme.palette.common.white};
 		font-size: 12px;
 		line-height:1.3;
 		font-weight: 600;

@@ -48,14 +48,14 @@ const FooterWrapper = styled.div`
                 li {
                     display: block;
                     a {
-                        color         : #fff;
+                        color         : ${ ( { theme } ) => theme.palette.common.white};
                         font-size     : 16px;
                         font-weight   : 400;
                         line-height   : 33px;
                         text-transform: capitalize;
                         transition : all 0.3s ease-in-out;
                         &:hover {
-                            color: #96248e;
+                            color: ${ ( { theme } ) => theme.vars.secondary};
                         }
                     }
                 }

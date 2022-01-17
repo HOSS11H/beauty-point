@@ -157,9 +157,9 @@ const Auth = props => {
         axios.post(url, authData)
             .then(res => {
                 if (res.data.user.roles[0].name === 'customer') {
-                    authCtx.login(res.data.token, res.data.user.roles[0].name );
+                    authCtx.login(res.data.token, res.data.user.roles[0].name, res.data.user.name[0] );
                 } else {
-                    authCtx.login(res.data.token, res.data.user.roles[0].id );
+                    authCtx.login(res.data.token, res.data.user.roles[0].id, res.data.user.name[0] );
                 }
             })
             .catch( err => {

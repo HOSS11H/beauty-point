@@ -44,7 +44,7 @@ const ModalStepLabel = styled(StepLabel)`
             border-radius: 4px;
             color: transparent;
             &.Mui-active {
-                background-color: #fff;
+                background-color: ${ ( { theme } ) => theme.palette.common.white};
             }
             & .MuiStepIcon-text {
                 display: none;

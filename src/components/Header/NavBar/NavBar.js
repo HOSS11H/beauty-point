@@ -5,10 +5,13 @@ import ModuleSearch from '../Modules/ModuleSearch/ModuleSearch';
 import logoWhite from '../../../images/logo/logo_white.png';
 import logoDark from '../../../images/logo/logo_dark.png';
 import { useTranslation } from 'react-i18next';
-import ModuleContact from '../Modules/ModuleContact/ModuleContact';
+import ModuleAuth from '../Modules/ModuleAuth/ModuleAuth';
 import { NavLink } from 'react-router-dom';
 import { useEffect, useRef } from 'react';
 import { useState } from 'react';
+import {ModuleCartWrapper} from '../Modules/ModuleCart/ModuleCart';
+import {ModuleSearchWrapper} from '../Modules/ModuleSearch/ModuleSearch';
+import {ModuleButton} from '../Modules/ModuleAuth/ModuleAuth';
 
 const fadeInDown = keyframes`
     from {
@@ -73,13 +76,13 @@ const NavbarNav = styled.ul`
                 margin          : auto;
                 width           : 0%;
                 height          : 4px;
-                background      : #96248e;
+                background      : ${ ( { theme } ) => theme.vars.secondary};
                 transition      : 0.3s ease-in-out;
             }
         }
         &:hover {
             >a {
-                color: #96248e;
+                color: ${ ( { theme } ) => theme.vars.secondary};
                 &::before {
                     width : 100%;
                 }
@@ -116,7 +119,27 @@ const Nav = styled.nav`
                         color: ${ ( { theme } ) => theme.palette.text.primary };
                     }
                 }
-            }   
+            } 
+            & ${ModuleCartWrapper} {
+                .module-icon {
+                    background: ${ ( { theme } ) => theme.vars.secondary};
+                    svg {
+                        color: ${ ( { theme } ) => theme.palette.common.white};
+                    }
+                }
+            }
+            & ${ModuleSearchWrapper} {
+                .module-icon {
+                    background: ${ ( { theme } ) => theme.vars.secondary};
+                    svg {
+                        color: ${ ( { theme } ) => theme.palette.common.white};
+                    }
+                }
+            }
+            & ${ModuleButton} {
+                background-color:  ${ ( { theme } ) => theme.vars.secondary};
+                color: ${ ( { theme } ) => theme.palette.common.white};
+            }
         }
     `}
 `
@@ -170,7 +193,7 @@ const NavBar = () => {
 
     useEffect(() => {
         const handleScroll = () => {
-            if (window.scrollY > headerRef.current.getBoundingClientRect().height) {
+            if (window.scrollY > 100) {
                 setIsSticky(true);
             } else {
                 setIsSticky(false);
@@ -211,7 +234,7 @@ const NavBar = () => {
                         <ModulesHolder>
                             <ModuleSearch />
                             <ModuleCart />
-                            <ModuleContact />
+                            <ModuleAuth />
                         </ModulesHolder>
                     </NavbarCollapse>
                 </NavHolder>

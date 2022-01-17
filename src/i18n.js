@@ -410,6 +410,8 @@ const resources = {
             'Booking Num': 'رقم الحجز',
             'thank you for choosing us': 'شكرا لكم على اختيارنا',
             'salon': 'الصالون',
+            'My Account': 'حسابي',
+            'logout': 'تسجيل الخروج',
         }
     }
 };

@@ -10,7 +10,7 @@ const MobileBarWrapper = styled.div`
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: #fff;
+    background-color: ${ ( { theme } ) => theme.palette.common.white};
     display: flex;
     align-items: center;
     justify-content: space-evenly;
@@ -41,7 +41,7 @@ const MobileBarWrapper = styled.div`
         &:hover {
             background-color: ${ ( { theme } ) => theme.vars.primary};
             svg{
-                color: #fff;
+                color: ${ ( { theme } ) => theme.palette.common.white};
                 transform: translateY(7px);
             }
             span {

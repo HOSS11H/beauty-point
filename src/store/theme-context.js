@@ -95,6 +95,7 @@ export const ThemeContextProvider = props => {
                 vars: {
                     primary: '#EF14E2',
                     theme: '#96248E',
+                    secondary: '#96248e',
                 },
                 fonts: {
                     ar: "'Cairo', sans-serif",

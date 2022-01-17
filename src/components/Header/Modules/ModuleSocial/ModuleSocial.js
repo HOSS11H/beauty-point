@@ -14,11 +14,11 @@ const ModuleSocialWrapper = styled.div`
         }
         svg{
             font-size :16px;
-            color        :#fff;
+            color        :${ ( { theme } ) => theme.palette.common.white};
             transition   : 300ms ease-in-out;
             &:hover {
                 transform: translateY(-5px);
-                color    : #96248e;
+                color    : ${ ( { theme } ) => theme.vars.secondary};
             }
         }
     }

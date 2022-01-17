@@ -23,7 +23,7 @@ export const Heading = styled.div`
         line-height   : 1.5;
         margin-bottom : 0px;
         font-weight   : 500;
-        color         : #96248e;
+        color         : ${ ( { theme } ) => theme.vars.secondary};
         @media screen and (max-width: 899.98px) {
             font-size  : 30px;
             line-height: 1.4;

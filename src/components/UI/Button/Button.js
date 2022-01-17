@@ -12,7 +12,7 @@ export const CustomButton = styled(Button)`
         margin-bottom: 15px;
         width:100%;
         background: ${ ( { theme } ) => theme.vars.primary};
-        color: #fff;
+        color: ${ ( { theme } ) => theme.palette.common.white};
         border:0;
         outline: none;
         cursor: pointer;

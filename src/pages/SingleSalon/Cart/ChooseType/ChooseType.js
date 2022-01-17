@@ -18,7 +18,7 @@ const Choice = styled.div`
     border-radius: 15px;
     background-color: ${ props => props.theme.vars.theme };
     padding: 20px;
-    color: #fff;
+    color: ${ ( { theme } ) => theme.palette.common.white};
     cursor: pointer;
     &:last-child {
         margin-bottom: 0;

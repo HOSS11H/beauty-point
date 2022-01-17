@@ -32,7 +32,7 @@ const RoleMembersBtn = styled.button`
     background-color: ${({ theme }) => theme.palette.error.main};
     border-radius: 8px;
     text-transform: uppercase;
-    color: #fff;
+    color: ${ ( { theme } ) => theme.palette.common.white};
     cursor: pointer;
 `
 

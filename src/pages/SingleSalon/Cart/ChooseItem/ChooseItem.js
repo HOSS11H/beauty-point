@@ -26,7 +26,7 @@ const Item = styled.div`
     border: 5px solid ;
     border-color: ${props => props.theme.vars.theme};;
     padding: 10px 15px;
-    color: #fff;
+    color: ${ ( { theme } ) => theme.palette.common.white};
     transition: 0.2s ease-in-out;
     cursor: pointer;
     text-align: left;
@@ -38,7 +38,7 @@ const Item = styled.div`
         }
     }
     ${ ( { activeItem } ) => activeItem && css`
-        background-color: #fff;
+        background-color: ${ ( { theme } ) => theme.palette.common.white};
         border: 5px solid ${props => props.theme.vars.theme};
         color: ${props => props.theme.vars.theme};
     `}

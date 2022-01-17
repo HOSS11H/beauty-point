@@ -44,7 +44,7 @@ const ActionButtons = styled.div`
         padding: 0 10px;
         height: 30px;
         flex-shrink: 0;
-        color: #fff;
+        color: ${ ( { theme } ) => theme.palette.common.white};
         border-radius: 10px;
         background: ${({ theme }) => theme.palette.success.main};
         font-size: 14px;

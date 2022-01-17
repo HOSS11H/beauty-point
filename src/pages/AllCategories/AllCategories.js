@@ -46,7 +46,7 @@ const ServicePanel = styled.div`
         align-items: center;
         width: 127px;
         height: 127px;
-        background: #96248e;
+        background: ${ ( { theme } ) => theme.vars.secondary};
         border-radius: 50%;
         margin-bottom: 14px;
         @media screen and (max-width: 899.98px) {
@@ -58,7 +58,7 @@ const ServicePanel = styled.div`
             height:50px;
         }
         i, svg {
-            color: #fff;
+            color: ${ ( { theme } ) => theme.palette.common.white};
             transition: 0.3s ease-in-out;
             font-size: 60px;
             @media screen and (max-width: 899.98px) {
