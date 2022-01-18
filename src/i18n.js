@@ -413,6 +413,7 @@ const resources = {
             'My Account': 'حسابي',
             'logout': 'تسجيل الخروج',
             'salons': 'الصالونات',
+            '`Please add Employee': 'يرجى إضافة موظف',
         }
     }
 };

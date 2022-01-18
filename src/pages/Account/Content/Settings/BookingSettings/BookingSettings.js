@@ -5,6 +5,8 @@ import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper
 import EditModal from "./EditModal/EditModal";
 import styled from "styled-components";
 import Card from '@mui/material/Card';
+import { format } from "date-fns/esm";
+import { convertTime12to24 } from "../../../../../shared/utility";
 
 
 const Loader = styled(Card)`
@@ -39,9 +41,11 @@ export default function BookingSettings(props) {
         let times = [...bookingTimes];
         let idx = times.findIndex(t => t.id === id)
         let time = { ...times[idx] }
+        const openTime = new Date(`2021-02-03 ${convertTime12to24(time.start_time)}`)
+        const closeTime = new Date(`2021-02-03 ${convertTime12to24(time.end_time)}`)
         v1.put('/vendors/settings/booking_times/' + id, {
-            start_time: time.start_time,
-            end_time: time.end_time,
+            start_time: format(openTime, 'hh:mm a'),
+            end_time: format(closeTime, 'hh:mm a'),
             multiple_booking: time.multiple_booking,
             max_booking: time.max_booking,
             per_day_max_booking: time.per_day_max_booking,

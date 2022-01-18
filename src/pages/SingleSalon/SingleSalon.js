@@ -72,7 +72,7 @@ const SingleSalon = props => {
 
     const param = useParams();
 
-    const [value, setValue] =useState(0);
+    const [value, setValue] = useState(0);
 
     const [servicesPage, setServicesPage] = useState(0);
     const [servicesRowsPerPage, setServicesRowsPerPage] = useState(servicesIntialRowsPerPage);
@@ -84,11 +84,11 @@ const SingleSalon = props => {
 
     const [services, setServices] = useState();
     const [loadingServices, setLoadingServices] = useState(false);
-    
+
     const [deals, setDeal] = useState();
     const [loadingDeals, setLoadingDeals] = useState(false);
 
-    const [ showModal, setShowModal ] = useState(false);
+    const [showModal, setShowModal] = useState(false);
 
     const [messageShown, setMessageShown] = useState(false);
 
@@ -104,7 +104,7 @@ const SingleSalon = props => {
     useEffect(() => {
         setLoadingServices(true);
         axios.get(`/companies/${param.salonId}/services?page=${servicesPage + 1}&per_page=${servicesRowsPerPage}`)
-        .then(res => {
+            .then(res => {
                 setLoadingServices(false);
                 setServices(res.data);
             })
@@ -114,7 +114,7 @@ const SingleSalon = props => {
     }, [param.salonId, servicesPage, servicesRowsPerPage])
     useEffect(() => {
         setLoadingDeals(true);
-        axios.get(`/companies/${param.salonId}/deals?page=${dealsPage + 1}&per_page=${dealsRowsPerPage}`)
+        axios.get(`/companies/${param.salonId}/deals?page=${dealsPage + 1}&per_page=${dealsRowsPerPage}&include[]=company`)
             .then(res => {
                 setDeal(res.data);
                 setLoadingDeals(false);
@@ -142,11 +142,11 @@ const SingleSalon = props => {
         setShowModal(false);
     }, [])
 
-    const copySalonUrlHandler = ( ) => {
+    const copySalonUrlHandler = () => {
         navigator.clipboard.writeText(window.location.href);
         setMessageShown(true);
     }
-    const copySalonLocationHandler = ( ) => {
+    const copySalonLocationHandler = () => {
         navigator.clipboard.writeText(`https://maps.google.com/maps?q=${salon.vendor_page.latitude},${salon.vendor_page.longitude}`);
         setMessageShown(true);
     }
@@ -174,12 +174,12 @@ const SingleSalon = props => {
                     <Grid item xs={12} sm={12} md={4} >
                         <ActionsWrapper>
                             <ActionButton onClick={openShowModalHandler}>{t('book')}</ActionButton>
-                            <ActionButton onClick={copySalonUrlHandler}><ShareIcon sx={{ mr: '5px'}} /> {t('share')}</ActionButton>
-                            <ActionButton onClick={copySalonLocationHandler}><LocationOnIcon sx={{ mr: '5px'}} /> {t('location')}</ActionButton>
+                            <ActionButton onClick={copySalonUrlHandler}><ShareIcon sx={{ mr: '5px' }} /> {t('share')}</ActionButton>
+                            <ActionButton onClick={copySalonLocationHandler}><LocationOnIcon sx={{ mr: '5px' }} /> {t('location')}</ActionButton>
                         </ActionsWrapper>
                     </Grid>
                 </Grid>
-                <Cart salonData={salon}  show={showModal} onClose={closeShowModalHandler} />
+                <Cart salonData={salon} show={showModal} onClose={closeShowModalHandler} />
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                         <Tab label={t('services')} {...a11yProps(0)} />
@@ -213,21 +213,21 @@ const SingleSalon = props => {
                         {deals.data.map(deal => {
                             return (
                                 <Grid item xs={12} sm={6} md={4} key={deal.id}>
-                                    <DealPanel  deal={deal} />
+                                    <DealPanel deal={deal} />
                                 </Grid>
                             )
                         })
                         }
                     </Grid>
                     <TablePaginationActions
-                            component="div"
-                            count={deals.data.length}
-                            total={deals.meta ? deals.meta.total : null}
-                            rowsPerPage={dealsRowsPerPage}
-                            page={dealsPage}
-                            onPageChange={handleDealChangePage}
-                            loading={loadingDeals}
-                        />
+                        component="div"
+                        count={deals.data.length}
+                        total={deals.meta ? deals.meta.total : null}
+                        rowsPerPage={dealsRowsPerPage}
+                        page={dealsPage}
+                        onPageChange={handleDealChangePage}
+                        loading={loadingDeals}
+                    />
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                     <Grid container spacing={2}>
@@ -246,17 +246,23 @@ const SingleSalon = props => {
                             <TableContainer component={Paper} sx={{ my: 2 }}>
                                 <Table aria-label="simple table">
                                     <TableBody>
-                                        {salon.booking_times.map((item) => (
-                                            <TableRow
-                                                key={item.id}
-                                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                            >
-                                                <TableCell component="th" scope="row">
-                                                    {t(item.day)}
-                                                </TableCell>
-                                                <TableCell align="center">{t('from')} {item.start_time} {t('to')}  {item.end_time}</TableCell>
-                                            </TableRow>
-                                        ))}
+                                        {salon.booking_times.map((item) => {
+                                            if (item.status === 'enabled') {
+                                                return (
+                                                    <TableRow
+                                                        key={item.id}
+                                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                                    >
+                                                        <TableCell component="th" scope="row">
+                                                            {t(item.day)}
+                                                        </TableCell>
+                                                        <TableCell align="center">{t('from')} {item.start_time} {t('to')}  {item.end_time}</TableCell>
+                                                    </TableRow>
+                                                )
+                                            } else {
+                                                return null;
+                                            }
+                                        })}
                                     </TableBody>
                                 </Table>
                             </TableContainer>

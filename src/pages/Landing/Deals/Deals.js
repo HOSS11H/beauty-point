@@ -73,7 +73,7 @@ const Deals = props => {
         ]
     };
     useEffect(() => {
-        axios.get('/deals')
+        axios.get('/deals?include[]=company')
             .then(res => {
                 setDeals(res.data.data);
             })

@@ -55,7 +55,10 @@ function Header(props) {
 
     const {logout} = authCtx;
 
-
+    const logoutHandler = () => {
+        logout();
+        navigate("/");
+    }
 
     return (
         <Fragment>
@@ -82,7 +85,7 @@ function Header(props) {
                         <Grid item>
                             <HomeBtn onClick={ ( ) => navigate('/')   }>{t('visit store')}</HomeBtn>
                             <HomeBtn href='https://old.beautypoint.sa/home' >{t('visit old version')}</HomeBtn>
-                            <LogoutBtn variant='text' onClick={logout}>{t('log out')}</LogoutBtn>
+                            <LogoutBtn variant='text' onClick={logoutHandler}>{t('log out')}</LogoutBtn>
                         </Grid>
                     </Grid>
                 </Toolbar>

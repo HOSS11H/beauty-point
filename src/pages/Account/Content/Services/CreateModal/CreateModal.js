@@ -282,6 +282,7 @@ const CreateModal = (props) => {
     const [servicePriceError, setServicePriceError] = useState(false);
 
     const [employeeName, setEmployeeName] = useState([]);
+    const [ employeeNameError, setEmployeeNameError ] = useState(false);
 
     const [locationName, setLocationName] = useState('');
     const [serviceLocationError, setServiceLocationError] = useState(false);
@@ -386,6 +387,7 @@ const CreateModal = (props) => {
     }
 
     const handleEmployeesChange = (event) => {
+        setEmployeeNameError(false);
         const {
             target: { value },
         } = event;
@@ -538,9 +540,10 @@ const CreateModal = (props) => {
             setServiceTimeError(true);
             return;
         }
-        // Data To Add To State
-        const employeeIndex = fetchedEmployees.findIndex(employee => employee.id === employeeName);
-        const employeesData = fetchedEmployees[employeeIndex];
+        if ( employeeName.length === 0) {
+            setEmployeeNameError(true);
+            return;
+        }
 
         const selectedCategory = fetchedCategories.find(category => category.id === categoryName);
 
@@ -563,7 +566,6 @@ const CreateModal = (props) => {
             formData.append('images', uploadedImages[0].file) 
             formData.append('image', uploadedImages[0].file) 
         }
-        formData.append('users', employeesData)
         formData.append('category', selectedCategory)
         formData.append('location', selectedLocation)
         formData.append('type', type)
@@ -575,7 +577,7 @@ const CreateModal = (props) => {
             }
         }
         onConfirm(formData);
-    }, [cart, categoryName, discountType, editorState, employeeName, fetchedCategories, fetchedEmployees, fetchedLocations, locationName, onConfirm, priceAfterDiscount, serviceDiscount, serviceName, servicePrice, servicePriceError, serviceStatus, timeRequired, timeType, type, uploadedImages])
+    }, [cart, categoryName, discountType, editorState, employeeName, fetchedCategories, fetchedLocations, locationName, onConfirm, priceAfterDiscount, serviceDiscount, serviceName, servicePrice, servicePriceError, serviceStatus, timeRequired, timeType, type, uploadedImages])
 
     let content = (
         <Grid container spacing={2}>
@@ -721,6 +723,7 @@ const CreateModal = (props) => {
                         ))}
                     </Select>
                 </FormControl>
+                {employeeNameError && <ValidationMessage notExist>{t(`Please add Employee`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6}>
                 <FormControl sx={{ width: '100%', textAlign: 'left' }} component="fieldset">

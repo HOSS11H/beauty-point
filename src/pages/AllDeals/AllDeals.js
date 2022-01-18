@@ -31,7 +31,7 @@ const AllDeals = props => {
     const [deals, setDeals] = useState(null);
 
     useEffect(() => {
-        axios.get('/deals?include[]=location')
+        axios.get('/deals?include[]=location&include[]=company')
             .then(res => {
                 setDeals(res.data.data);
             })

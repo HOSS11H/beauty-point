@@ -302,6 +302,7 @@ const EditModal = (props) => {
     const [servicePriceError, setServicePriceError] = useState(false);
 
     const [employeeName, setEmployeeName] = useState(users[0].id);
+    const [ employeeNameError, setEmployeeNameError ] = useState(false);
 
     const [locationName, setLocationName] = useState(location.id);
     const [serviceLocationError, setServiceLocationError] = useState(false);
@@ -397,6 +398,7 @@ const EditModal = (props) => {
     }
 
     const handleEmployeesChange = (event) => {
+        setEmployeeNameError(false);
         const {
             target: { value },
         } = event;
@@ -514,6 +516,10 @@ const EditModal = (props) => {
         }
         if (+timeRequired === 0) {
             setServiceTimeError(true);
+            return;
+        }
+        if ( employeeName.length === 0) {
+            setEmployeeNameError(true);
             return;
         }
         const selectedCategory = fetchedCategories.find(category => category.id === categoryName);
@@ -696,6 +702,7 @@ const EditModal = (props) => {
                         ))}
                     </Select>
                 </FormControl>
+                {employeeNameError && <ValidationMessage notExist>{t(`Please add Employee`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6}>
                 <FormControl sx={{ width: '100%', textAlign: 'left' }} component="fieldset">

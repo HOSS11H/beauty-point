@@ -3,7 +3,7 @@ import styled from "styled-components"
 
 const SalonPanelCard = styled.div`
     border-radius: 25px;
-    padding: 0 9px;
+    margin: 0 9px;
     @media screen and (max-width: 899.98px) {
         margin: 0 auto 0px;
         max-width: 370px

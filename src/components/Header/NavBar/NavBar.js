@@ -6,7 +6,7 @@ import logoWhite from '../../../images/logo/logo_white.png';
 import logoDark from '../../../images/logo/logo_dark.png';
 import { useTranslation } from 'react-i18next';
 import ModuleAuth from '../Modules/ModuleAuth/ModuleAuth';
-import { NavLink } from 'react-router-dom';
+import { createSearchParams, NavLink, useNavigate } from 'react-router-dom';
 import { useEffect, useRef } from 'react';
 import { useState } from 'react';
 import {ModuleCartWrapper} from '../Modules/ModuleCart/ModuleCart';
@@ -179,7 +179,7 @@ const navLinks = [
     },
     {
         name: 'join us',
-        link: '/',
+        link: '/auth?page=join-us',
     },
 ]
 
@@ -190,6 +190,8 @@ const NavBar = () => {
     const [isSticky, setIsSticky] = useState(false);
 
     const headerRef = useRef();
+    
+    const navigate = useNavigate()
 
     useEffect(() => {
         const handleScroll = () => {
@@ -204,6 +206,7 @@ const NavBar = () => {
             window.removeEventListener('scroll', handleScroll);
         }
     }, [])
+
 
     return (
         <Nav  ref={headerRef} sticky={isSticky} >

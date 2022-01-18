@@ -52,6 +52,22 @@ const ServicePanelCard = styled.div`
                 color         : ${ ( { theme } ) => theme.vars.secondary};
             }
         }
+        .service-salon {
+            font-size: 18px;
+            line-height:1.5;
+            font-weight: 500;
+            color: ${({ theme }) => theme.palette.text.primary};
+            margin-bottom:0;
+            text-transform: capitalize;
+            margin-bottom: 15px;
+            @media screen and (max-width: 899.98px) {
+                font-size: 16px;
+                line-height: 1.5;
+            }
+            a {
+                color: ${({ theme }) => theme.palette.text.primary};
+            }
+        }
         .service-price {
             font-size:17px;
             line-height:1.5;
@@ -87,6 +103,7 @@ const ServicePanel = props => {
             </div>
             <div className="service-content">
                 <h3 className="service-title">{service.name}</h3>
+                <h3 className="service-salon">{service.company?.companyName}</h3>
                 <p className="service-price">
                     {formatCurrency(service.price)}
                 </p>

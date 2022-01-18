@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 const DealPanelCard = styled.div`
     border-radius: 25px;
-    padding: 0 9px;
+    margin: 0 9px;
     @media screen and (max-width: 899.98px) {
         margin: 0 auto 0px;
         max-width: 370px
@@ -50,6 +50,22 @@ const DealPanelCard = styled.div`
                 color         : ${ ( { theme } ) => theme.vars.secondary};
             }
         }
+        .deal-salon {
+            font-size: 19px;
+            line-height:1.5;
+            font-weight: 500;
+            color: ${({ theme }) => theme.palette.text.primary};
+            margin-bottom:0;
+            text-transform: capitalize;
+            margin-bottom: 15px;
+            @media screen and (max-width: 899.98px) {
+                font-size: 16px;
+                line-height: 1.5;
+            }
+            a {
+                color: ${({ theme }) => theme.palette.text.primary};
+            }
+        }
         .deal-desc {
             font-size:17px;
             line-height:1.5;
@@ -90,11 +106,11 @@ const DealPanelCard = styled.div`
                     font-weight: 500;
                     color         : ${ ( { theme } ) => theme.vars.secondary};
                     text-transform: uppercase;
-                    transform: translate(4px, -2px);
+                    margin-left: 5px;
                     &.percentage {
                         font-size: 18px;
                         line-height: 21px;
-                        transform: translate(0,0);
+                        margin-right: 0px;
                         @media screen and (max-width: 899.98px) {
                             font-size: 14px;
                             line-height: 1.5;
@@ -154,6 +170,7 @@ const DealPanel = props => {
             </div>
             <div className="deal-content">
                 <h3 className="deal-title">{deal.title}</h3>
+                <h3 className="deal-salon">{deal.company?.companyName}</h3>
                 <p className="deal-desc">
                     {deal.applied_between_time}
                 </p>

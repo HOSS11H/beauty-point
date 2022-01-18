@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import v1 from '../../utils/axios-instance-v1';
 import useForm from '../../hooks/useForm';
 import { loginForm, subscribeForm } from '../../utils/formConfig';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import AuthContext from '../../store/auth-context';
 
 import ThemeContext from '../../store/theme-context';
@@ -102,11 +102,15 @@ const Auth = props => {
 
     const navigate = useNavigate();
 
-    const [isLogin, setIsLogin] = useState(true);
+    const [searchParams] = useSearchParams();
+    const navedTo = searchParams.get('page');
+
+    const [isLogin, setIsLogin] = useState(navedTo === 'join-us' ? false : true);
 
     const [errorMessage, setErrorMessage] = useState(null);
 
     const { isLoggedIn } = authCtx;
+
 
     const { renderFormInputs: loginInputs, isFormValid: isLoginDataValid, form: loginData } = useForm(loginForm);
     const { renderFormInputs: subscribeInputs, isFormValid: isSubscribeDataValid, form: subscribeData } = useForm(subscribeForm);
