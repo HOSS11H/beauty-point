@@ -254,12 +254,6 @@ const EditModal = (props) => {
 
     const { name, description, price, discount, discount_type, discount_price, users = [], status, image, location, category, time, time_type, products } = serviceData;
 
-    let employeesIds = [];
-    users.map(employee => {
-        employeesIds.push(employee.id)
-        return employeesIds;
-    })
-
     let intialCart = [
         {
             id: '',
@@ -272,7 +266,7 @@ const EditModal = (props) => {
 
     const [allUnits, setAllUnits] = useState([]);
 
-    if ( products.length > 0 ) {
+    if (products.length > 0) {
         intialCart = products.map(product => {
             return {
                 id: product.pivot.products_id,
@@ -307,7 +301,7 @@ const EditModal = (props) => {
     const [priceAfterDiscount, setPriceAfterDiscount] = useState(discount_price);
     const [servicePriceError, setServicePriceError] = useState(false);
 
-    const [employeeName, setEmployeeName] = useState(employeesIds);
+    const [employeeName, setEmployeeName] = useState(users[0].id);
 
     const [locationName, setLocationName] = useState(location.id);
     const [serviceLocationError, setServiceLocationError] = useState(false);
@@ -456,7 +450,7 @@ const EditModal = (props) => {
         })
     }
 
-    const removeFromCartHandler = ( index ) => {
+    const removeFromCartHandler = (index) => {
         dispatch({
             type: 'REMOVE_PRODUCT',
             payload: index
@@ -467,7 +461,7 @@ const EditModal = (props) => {
             type: 'RESET_CART',
         })
     }
-    const productNameChangeHandler = ( productId, index ) => {
+    const productNameChangeHandler = (productId, index) => {
         const productName = allProducts.filter(product => product.id === productId);
         dispatch({
             type: 'PRODUCT_NAME_CHANGE',
@@ -478,7 +472,7 @@ const EditModal = (props) => {
             }
         })
     }
-    const productUnitChangeHandler = ( unitId, index ) => {
+    const productUnitChangeHandler = (unitId, index) => {
         const unitName = allUnits.filter(unit => unit.id === unitId);
         dispatch({
             type: 'PRODUCT_UNIT_CHANGE',
@@ -489,7 +483,7 @@ const EditModal = (props) => {
             },
         })
     }
-    const productQuantityChangeHandler = ( val, index ) => {
+    const productQuantityChangeHandler = (val, index) => {
         dispatch({
             type: 'PRODUCT_QUANTITY_CHANGE',
             index: index,
@@ -522,17 +516,10 @@ const EditModal = (props) => {
             setServiceTimeError(true);
             return;
         }
-        // Data To Add To State
-        const employeesData = [];
-        employeeName.map(employeeId => {
-            const employeeIndex = fetchedEmployees.findIndex(employee => employee.id === employeeId);
-            employeesData.push(fetchedEmployees[employeeIndex]);
-            return employeesData;
-        })
         const selectedCategory = fetchedCategories.find(category => category.id === categoryName);
 
         const selectedLocation = fetchedLocations.find(location => location.id === locationName);
-        
+
         let formData = new FormData();
         formData.append('id', id);
         formData.append('name', serviceName);
@@ -547,15 +534,14 @@ const EditModal = (props) => {
         formData.append('location_id', locationName);
         formData.append('employee_ids[0]', employeeName);
         formData.append('status', serviceStatus);
-        if(uploadedImages.length > 0 && uploadedImages[0].data_url !== null ) {
-            formData.append('images', uploadedImages[0].file) 
-            formData.append('image', uploadedImages[0].file) 
+        if (uploadedImages.length > 0 && uploadedImages[0].data_url !== null) {
+            formData.append('images', uploadedImages[0].file)
+            formData.append('image', uploadedImages[0].file)
         }
-        formData.append('users', employeesData)
         formData.append('category', selectedCategory)
         formData.append('location', selectedLocation)
         formData.append('type', type)
-        if ( type === 'combo' ) {
+        if (type === 'combo') {
             for (var i = 0; i < cart.products.length; i++) {
                 formData.append(`products[${i}][id]`, cart.products[i].id);
                 formData.append(`products[${i}][quantity]`, cart.products[i].quantity);
@@ -564,7 +550,7 @@ const EditModal = (props) => {
         }
         formData.append('_method', 'PUT');
         onConfirm(formData);
-    }, [cart.products, categoryName, discountType, editorState, employeeName, fetchedCategories, fetchedEmployees, fetchedLocations, id, locationName, onConfirm, priceAfterDiscount, serviceDiscount, serviceName, servicePrice, servicePriceError, serviceStatus, timeRequired, timeType, type, uploadedImages])
+    }, [cart.products, categoryName, discountType, editorState, employeeName, fetchedCategories, fetchedLocations, id, locationName, onConfirm, priceAfterDiscount, serviceDiscount, serviceName, servicePrice, servicePriceError, serviceStatus, timeRequired, timeType, type, uploadedImages])
 
     let content = (
         <Grid container spacing={2}>
@@ -690,17 +676,15 @@ const EditModal = (props) => {
                         value={employeeName}
                         onChange={handleEmployeesChange}
                         input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
-                        renderValue={(selected) => (
-                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                {fetchedEmployees.length > 0 && selected.map((value) => {
-                                    const selected = fetchedEmployees.find(user => user.id === value);
-                                    return (
-                                        <Chip key={selected.id} label={selected.name} />
-                                    )
-                                })}
-                            </Box>
-                        )}
                         MenuProps={MenuProps}
+                        renderValue={(val) => {
+                            const selected = fetchedEmployees?.find(employee => employee.id === val)
+                            return (
+                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                    <Chip key={selected.id} label={selected.name} />
+                                </Box>
+                            )
+                        }}
                     >
                         {fetchedEmployees.map((employee) => (
                             <MenuItem
@@ -866,13 +850,13 @@ const EditModal = (props) => {
                     )}
                 </ImageUploading>
             </Grid>
-        </Grid>
+        </Grid >
     )
-    return (
-        <CustomModal show={show} heading={heading} confirmText={confirmText} onConfirm={confirmEditHandler} onClose={closeModalHandler} >
-            {content}
-        </CustomModal>
-    )
+return (
+    <CustomModal show={show} heading={heading} confirmText={confirmText} onConfirm={confirmEditHandler} onClose={closeModalHandler} >
+        {content}
+    </CustomModal>
+)
 }
 
 const mapStateToProps = (state) => {
