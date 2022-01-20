@@ -78,7 +78,7 @@ const Deals = props => {
                 setDeals(res.data.data);
             })
             .catch(err => {
-                console.log(err);
+                //console.log(err);
             })
     }, [])
 

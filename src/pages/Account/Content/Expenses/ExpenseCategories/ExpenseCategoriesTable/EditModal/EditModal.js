@@ -53,7 +53,7 @@ const EditModal = (props) => {
             name: expenseName,
         }
         onConfirm(data);
-        console.log(data);
+        //console.log(data);
     }, [expenseName, id, onConfirm])
 
     let content = (

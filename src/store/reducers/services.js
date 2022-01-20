@@ -57,7 +57,7 @@ const reducer = ( state = intialState , action ) => {
             })
         case ( actionTypes.DELETE_SERVICE_SUCCESS ) :
             const updatedServices = state.services.data.filter( service => service.id !== action.serviceId );
-            console.log(state.services)
+            //console.log(state.services)
             return updateObject( state , {
                 services: {
                     ...state.services,

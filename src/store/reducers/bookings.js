@@ -56,7 +56,7 @@ const reducer = (state = intialState, action) => {
             })
         case (actionTypes.DELETE_BOOKING_SUCCESS):
             const updatedBookings = state.bookings.data.filter(booking => booking.id !== action.bookingId);
-            console.log(state.bookings)
+            //console.log(state.bookings)
             return updateObject(state, {
                 bookings: {
                     ...state.bookings,
@@ -84,7 +84,7 @@ const reducer = (state = intialState, action) => {
             const updatedEditedBooking = updateObject(editedBooking, {
                 ...action.bookingData,
             })
-            console.log(updatedEditedBooking);
+            //console.log(updatedEditedBooking);
             const editedBookings = [...state.bookings.data]
             editedBookings[editedBookingIndex] = updatedEditedBooking
             return updateObject(state, {

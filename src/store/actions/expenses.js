@@ -30,7 +30,7 @@ export const fetchExpenses = ( language, page, perPage) => {
                 dispatch( fetchExpensesSuccess( response.data  ) );
             })
             .catch( err => {
-                console.log(err)
+                //console.log(err)
                 dispatch( fetchExpensesFailed( err.message  ) )
             } )
         }
@@ -88,7 +88,7 @@ export const updateExpenseFailed = (message) => {
 }
 export const updateExpense = data => {
     return dispatch => {
-        console.log(data);
+        //console.log(data);
         dispatch(updateExpenseStart())
         axios.post(`/vendors/expenses/${data.get('id')}`, data, {headers: {   'Content-Type': 'multipart/form-data'}})
             .then(response => {
@@ -193,7 +193,7 @@ export const fetchExpensesCategories = ( language, page, perPage) => {
                 dispatch( fetchExpensesCategoriesSuccess( response.data  ) );
             })
             .catch( err => {
-                console.log(err)
+                //console.log(err)
                 dispatch( fetchExpensesCategoriesFailed( err.message  ) )
             } )
         }
@@ -251,7 +251,7 @@ export const updateExpenseCategoryFailed = (message) => {
 }
 export const updateExpenseCategory = data => {
     return dispatch => {
-        console.log(data);
+        //console.log(data);
         dispatch(updateExpenseCategoryStart())
         axios.put(`/vendors/expenses_categories/${data.id}`, data)
             .then(response => {
@@ -356,7 +356,7 @@ export const fetchExpensesCustomers = ( language, page, perPage) => {
                 dispatch( fetchExpensesCustomersSuccess( response.data  ) );
             })
             .catch( err => {
-                console.log(err)
+                //console.log(err)
                 dispatch( fetchExpensesCustomersFailed( err.message  ) )
             } )
         }

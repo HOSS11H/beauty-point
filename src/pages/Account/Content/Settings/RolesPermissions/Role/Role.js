@@ -61,7 +61,7 @@ const Role = props => {
                 setModulePermissions(res.data)
             })
             .catch(err => {
-                console.log(err)
+                //console.log(err)
             })
     }, [])
 
@@ -72,7 +72,7 @@ const Role = props => {
                 setPermissions(res.data)
             })
             .catch( err => {
-                console.log(err)
+                //console.log(err)
             })
         }
     }, [modulePermissions, roleData.id, successRefetch])

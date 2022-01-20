@@ -85,7 +85,7 @@ const ViewModal = (props) => {
         const formattedApplyTime = dealData.applied_between_time.split(' - ')
 
         /* const formattedApplyDays = JSON.parse(dealData.days)
-        console.log(formattedApplyDays) */
+        //console.log(formattedApplyDays) */
 
         const transformedDealData = {
             ...dealData,

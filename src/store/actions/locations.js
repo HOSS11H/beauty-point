@@ -30,7 +30,7 @@ export const fetchLocations = ( language ) => {
                 dispatch( fetchLocationsSuccess( response.data  ) );
             })
             .catch( err => {
-                console.log(err)
+                //console.log(err)
                 dispatch( fetchLocationsFailed( err.message  ) )
             } )
         }

@@ -35,7 +35,7 @@ const AllSaloons = props => {
                 setSalons(res.data.data);
             })
             .catch(err => {
-                console.log(err);
+                //console.log(err);
             })
     }, [])
 

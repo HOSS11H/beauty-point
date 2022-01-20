@@ -46,7 +46,7 @@ function Bookings(props) {
             }
             )
             .catch(err => {
-                console.log(err)
+                //console.log(err)
             })
     }, [fetchBookingsHandler, lang, page, rowsPerPage]);
 
@@ -76,7 +76,7 @@ function Bookings(props) {
     const editModalConfirmHandler = useCallback((data) => {
         setEditModalOpened(false);
         setSelectedBookingId(null);
-        console.log(data)
+        //console.log(data)
         updateBookingHandler(data);
     }, [updateBookingHandler])
 

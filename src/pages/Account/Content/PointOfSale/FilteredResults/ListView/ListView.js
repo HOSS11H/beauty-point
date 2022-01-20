@@ -63,7 +63,7 @@ const ListView = ( props ) => {
     const { data, type, loading, action } = props;
 
     const addItemHandler = ( id ) => {
-        console.log(id, data);
+        //console.log(id, data);
         const addedItemIndex = data.findIndex( item  => item.id === id );
         const addedItem = data[addedItemIndex];
         type === 'deals' && (addedItem.name = addedItem.title);

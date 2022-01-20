@@ -72,7 +72,7 @@ const Spotlights = props => {
                 setSpotlights(res.data.data);
             })
             .catch(err => {
-                console.log(err);
+                //console.log(err);
             })
     }, [])
 

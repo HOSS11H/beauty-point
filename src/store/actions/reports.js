@@ -22,7 +22,7 @@ export const fetchTabularReportFailed = ( errorMessage ) => {
 export const fetchTabularReport = ( language, page, perPage) => {
     return dispatch => {
         dispatch( fetchTabularReportStart( ) )
-        console.log(page, perPage)
+        //console.log(page, perPage)
         v1.get(`/vendors/reports/tabular-table?page=${page + 1}&per_page=${perPage}`, { 
             headers: {
                 'Accept-Language': language
@@ -31,7 +31,7 @@ export const fetchTabularReport = ( language, page, perPage) => {
                 dispatch( fetchTabularReportSuccess( response.data  ) );
             })
             .catch( err => {
-                console.log(err)
+                //console.log(err)
                 dispatch( fetchTabularReportFailed( err.message  ) )
             } )
         }
@@ -75,7 +75,7 @@ export const filterTabularReport = ( searchParams ) => {
                 dispatch( saveTabularReportFilters( notEmptySearchParams ) )
             })
             .catch( err => {
-                console.log(err)
+                //console.log(err)
                 dispatch( filterTabularReportFailed( err.message  ) )
             } )
         }

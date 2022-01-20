@@ -194,7 +194,7 @@ const ViewModal = (props) => {
                     setQrCode(res.data.data);
                 })
                 .catch(err => {
-                    console.log(err);
+                    //console.log(err);
                 })
         }
     }, [id]);

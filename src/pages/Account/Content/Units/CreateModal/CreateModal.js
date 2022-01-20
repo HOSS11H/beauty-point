@@ -92,7 +92,7 @@ const CreateModal = (props) => {
     }, [type])
 
     useEffect(() => {
-        console.log(addingUnitSuccess)
+        //console.log(addingUnitSuccess)
         addingUnitSuccess && resetModalData();
     }, [addingUnitSuccess, resetModalData])
 

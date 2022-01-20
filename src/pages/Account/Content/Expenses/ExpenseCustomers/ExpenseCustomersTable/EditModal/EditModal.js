@@ -63,7 +63,7 @@ const EditModal = (props) => {
             mobile: customerNumber
         }
         onConfirm(data);
-        console.log(data);
+        //console.log(data);
     }, [customerNumber, expenseName, id, onConfirm])
 
     let content = (

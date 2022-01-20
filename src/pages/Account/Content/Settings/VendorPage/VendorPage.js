@@ -54,7 +54,7 @@ export default function VendorPage(props) {
             setSuccess(true)
             setOpen(false)
         }).catch(err => {
-            console.log(err.message)
+            //console.log(err.message)
             setOpen(false)
         })
     }

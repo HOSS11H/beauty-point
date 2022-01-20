@@ -11,7 +11,7 @@ export default function Sidebar() {
     const {t} = useTranslation()
 
     const params = useParams();
-    console.log(params)
+    //console.log(params)
     const [value, setValue] = useState(params['*'])
     const navigate = useNavigate();
     useEffect(() => {

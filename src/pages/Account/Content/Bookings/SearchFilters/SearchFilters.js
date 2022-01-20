@@ -135,7 +135,7 @@ const SearchFilters = (props) => {
                         setOptions(options);
                     })
                     .catch(err => {
-                        console.log(err);
+                        //console.log(err);
                     })
             }, 1000)
             return () => clearTimeout(searchTimeout);

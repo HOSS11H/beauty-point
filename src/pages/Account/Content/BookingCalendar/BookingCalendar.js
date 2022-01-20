@@ -113,7 +113,7 @@ const BookingCalendar = props => {
                 }
                 )
                 .catch(err => {
-                    console.log(err)
+                    //console.log(err)
                 })
             notIntialRender.current = true;
         }
@@ -135,7 +135,7 @@ const BookingCalendar = props => {
 
     // View Modal
     const viewModalOpenHandler = useCallback((id) => {
-        console.log(userData)
+        //console.log(userData)
         setViewModalOpened(true);
         setSelectedBookingId(id);
     }, [])
@@ -169,7 +169,7 @@ const BookingCalendar = props => {
             datesSet={(dateInfo) => {
                 setFromDate(format(dateInfo.start, 'yyyy-MM-dd'));
                 setToDate(format(dateInfo.end, 'yyyy-MM-dd'));
-                console.log('excuted')
+                //console.log('excuted')
             }}
         />
     )

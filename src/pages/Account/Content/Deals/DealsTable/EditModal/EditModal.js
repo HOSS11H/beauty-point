@@ -178,7 +178,7 @@ const cartReducer = (state, action) => {
                 services: filteredServices,
             })
         case 'INCREASE_SERVICE':
-            console.log(action.payload)
+            //console.log(action.payload)
             const increasedServiceIndex = state.services.findIndex(service => service.id === action.payload);
             const increasedService = { ...state.services[increasedServiceIndex] }
             increasedService.quantity = increasedService.quantity + 1;

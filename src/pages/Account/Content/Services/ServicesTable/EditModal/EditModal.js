@@ -347,14 +347,14 @@ const EditModal = (props) => {
                     setAllProducts(res.data.data);
                 })
                 .catch(err => {
-                    console.log(err);
+                    //console.log(err);
                 })
             axios.get(`/vendors/units`)
                 .then(res => {
                     setAllUnits(res.data.data);
                 })
                 .catch(err => {
-                    console.log(err);
+                    //console.log(err);
                 })
         }
     }, [type])

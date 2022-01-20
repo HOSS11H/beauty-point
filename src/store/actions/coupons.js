@@ -30,7 +30,7 @@ export const fetchCoupons = (language) => {
             dispatch(fetchCouponsSuccess(response.data.data));
         })
         .catch(err => {
-            console.log(err)
+            //console.log(err)
             dispatch(fetchCouponsFailed(err.message))
         })
     }

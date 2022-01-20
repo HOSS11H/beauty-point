@@ -201,7 +201,7 @@ const CreateModal = (props) => {
                     setCategoriesOptions(options);
                 })
                 .catch(err => {
-                    console.log(err);
+                    //console.log(err);
                 })
         }
     }
@@ -226,7 +226,7 @@ const CreateModal = (props) => {
                     setAgentsOptions(options);
                 })
                 .catch(err => {
-                    console.log(err);
+                    //console.log(err);
                 })
         }
     }

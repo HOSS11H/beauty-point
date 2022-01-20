@@ -264,7 +264,7 @@ const PointOfSale = (props) => {
     }, [shownType])
 
     const removeFromCartHandler = useCallback((type, itemId) => {
-        console.log(type, itemId)
+        //console.log(type, itemId)
         if (type === 'services') {
             dispatch({
                 type: 'REMOVE_SERVICE',
@@ -326,7 +326,7 @@ const PointOfSale = (props) => {
         }
     }, [])
     const changeItemPriceHandler = useCallback((type, itemId, price) => {
-        console.log(type, itemId, price);
+        //console.log(type, itemId, price);
         if (type === 'services') {
             dispatch({
                 type: 'CHANGE_SERVICE_PRICE',
@@ -356,7 +356,7 @@ const PointOfSale = (props) => {
         }
     }, [])
     const changeServiceEmployeeHandler = useCallback((type, itemId, employeeId) => {
-        console.log(type, itemId, employeeId);
+        //console.log(type, itemId, employeeId);
         if (type === 'services') {
             dispatch({
                 type: 'CHANGE_SERVICE_EMPLOYEE',

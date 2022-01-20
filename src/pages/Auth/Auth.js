@@ -133,7 +133,7 @@ const Auth = props => {
         setIsLogin(prevState => !prevState);
         setErrorMessage(null)
     }
-    console.log(subscribeData)
+    //console.log(subscribeData)
     const submitHandler = () => {
         let url;
         let authData;

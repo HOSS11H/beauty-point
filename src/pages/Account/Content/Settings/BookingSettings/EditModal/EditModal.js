@@ -27,7 +27,7 @@ const EditModal = (props) => {
 
     const bookingTimesData = bookingTimes.find( item => item.id === id );
 
-    console.log( bookingTimesData )
+    //console.log( bookingTimesData )
 
     const { t } = useTranslation();
 
@@ -96,7 +96,7 @@ const EditModal = (props) => {
         editingBookingSettingsSuccess && resetModalData();
     }, [editingBookingSettingsSuccess, resetModalData])
 
-    console.log(format(closeTime, 'hh:mm a'))
+    //console.log(format(closeTime, 'hh:mm a'))
     const confirmCreateHandler = useCallback(() => {
         const data= {
             id,

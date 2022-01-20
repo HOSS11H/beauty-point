@@ -79,7 +79,7 @@ const PrintBooking = props => {
                 })
                 .catch(err => {
                     setLoading(false);
-                    console.log(err);
+                    //console.log(err);
                 })
         }
     }, [bookingData.id, handleBookingDone]);

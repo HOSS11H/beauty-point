@@ -27,11 +27,11 @@ export const fetchCustomers = (language) => {
                 'Accept-Language': language
             }
         }).then(response => {
-            console.log(response.data.data)
+            //console.log(response.data.data)
             dispatch(fetchCustomersSuccess(response.data.data));
         })
             .catch(err => {
-                console.log(err)
+                //console.log(err)
                 dispatch(fetchCustomersFailed(err.message))
             })
     }
@@ -64,7 +64,7 @@ export const searchCustomers = (language, word) => {
             dispatch(searchCustomersSuccess(response.data.data));
         })
             .catch(err => {
-                console.log(err)
+                //console.log(err)
                 dispatch(searchCustomersFailed(err.message))
             })
     }
@@ -97,10 +97,10 @@ export const addCustomerFailed = (message) => {
 export const addCustomer = (data) => {
     return dispatch => {
         dispatch(addCustomerStart())
-        console.log(data)
+        //console.log(data)
         axios.post(`/vendors/customers`, data)
             .then(response => {
-                console.log(response)
+                //console.log(response)
                 dispatch(addCustomerSuccess(null, { ...data, ...response.data }));
                 setTimeout(() => {
                     dispatch(resetAddCustomerSuccess());

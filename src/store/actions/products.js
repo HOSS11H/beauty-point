@@ -29,7 +29,7 @@ export const fetchProducts = (language, page, perPage, orderBy, orderDir) => {
             dispatch(fetchProductsSuccess(response.data));
         })
             .catch(err => {
-                console.log(err)
+                //console.log(err)
                 dispatch(fetchProductsFailed(err.message))
             })
     }
@@ -89,7 +89,7 @@ export const updateProductFailed = (message) => {
 export const updateProduct = (data) => {
     return dispatch => {
         dispatch(updateProductStart())
-        console.log(data)
+        //console.log(data)
         axios.post(`/vendors/products/${data.get('id')}`, data, {headers: {   'Content-Type': 'multipart/form-data'}})
             .then(response => {
                 dispatch(updateProductSuccess(response.data, data));
@@ -126,7 +126,7 @@ export const createProductFailed = (message) => {
 export const createProduct = (data) => {
     return dispatch => {
         dispatch(createProductStart())
-        console.log(data, 'excuted')
+        //console.log(data, 'excuted')
         axios.post(`/vendors/products`, data, {headers: {   'Content-Type': 'multipart/form-data'}})
             .then(response => {
                 dispatch(createProductSuccess(null, { ...data, ...response.data }));
@@ -168,7 +168,7 @@ export const searchProducts = (language, word) => {
             dispatch(searchProductsSuccess(response.data));
         })
             .catch(err => {
-                console.log(err)
+                //console.log(err)
                 dispatch(searchProductsFailed(err.message))
             })
     }
@@ -202,7 +202,7 @@ export const filterProducts = (language, type, location, search, page, perPage) 
             dispatch(filterProductsSuccess(response.data));
         })
             .catch(err => {
-                console.log(err)
+                //console.log(err)
                 dispatch(filterProductsFailed(err.message))
             })
     }

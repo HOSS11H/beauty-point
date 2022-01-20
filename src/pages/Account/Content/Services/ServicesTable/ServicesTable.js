@@ -137,7 +137,7 @@ function ServicesTable(props) {
                 fetchServicesHandler(lang, page, rowsPerPage, orderBy, order);
             })
             .catch(err => {
-                console.log(err);
+                //console.log(err);
             })
     }
 
@@ -161,7 +161,7 @@ function ServicesTable(props) {
     const viewModalOpenHandler = useCallback((id) => {
         setViewModalOpened(true);
         setSelectedServiceId(id);
-        console.log(id);
+        //console.log(id);
     }, [])
     const viewModalCloseHandler = useCallback(() => {
         setViewModalOpened(false);

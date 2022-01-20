@@ -100,7 +100,7 @@ const PrintBookingModal = props => {
                 setLoading(false);
             }))
             .catch(error => {
-                console.log(error);
+                //console.log(error);
                 setLoading(false);
             });
     }, [bookingData.id])
@@ -108,7 +108,7 @@ const PrintBookingModal = props => {
 
     useEffect(() => {
         if (bookingData.id && !userData && !qrCode) {
-            console.log('excuted');
+            //console.log('excuted');
             fetchData();
         }
     }, [bookingData.id, fetchData, qrCode, userData]);

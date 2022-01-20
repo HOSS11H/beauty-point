@@ -101,7 +101,7 @@ const SingleSalon = props => {
                 setSalon(res.data);
             })
             .catch(err => {
-                console.log(err);
+                //console.log(err);
             })
     }, [param.salonId])
     useEffect(() => {
@@ -112,7 +112,7 @@ const SingleSalon = props => {
                 setServices(res.data);
             })
             .catch(err => {
-                console.log(err);
+                //console.log(err);
             })
     }, [param.salonId, servicesPage, servicesRowsPerPage])
     useEffect(() => {
@@ -123,7 +123,7 @@ const SingleSalon = props => {
                 setLoadingDeals(false);
             })
             .catch(err => {
-                console.log(err);
+                //console.log(err);
             })
     }, [dealsPage, dealsRowsPerPage, param.salonId, servicesPage, servicesRowsPerPage])
 

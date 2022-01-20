@@ -216,7 +216,7 @@ const EditModal = (props) => {
                     setCategoriesOptions(options);
                 })
                 .catch(err => {
-                    console.log(err);
+                    //console.log(err);
                 })
         }
     }
@@ -241,7 +241,7 @@ const EditModal = (props) => {
                     setAgentsOptions(options);
                 })
                 .catch(err => {
-                    console.log(err);
+                    //console.log(err);
                 })
         }
     }

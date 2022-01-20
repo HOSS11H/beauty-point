@@ -64,7 +64,7 @@ export const fetchEmployeesData = (language, page, perPage, orderBy, orderDir) =
             dispatch(fetchEmployeesDataSuccess(response.data));
         })
             .catch(err => {
-                console.log(err)
+                //console.log(err)
                 dispatch(fetchEmployeesDataFailed(err.message))
             })
     }
@@ -225,7 +225,7 @@ export const fetchRoles = ( language ) => {
                 dispatch( fetchRolesSuccess( response.data  ) );
             })
             .catch( err => {
-                console.log(err)
+                //console.log(err)
                 dispatch( fetchRolesFailed( err.message  ) )
             } )
         }

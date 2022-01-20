@@ -50,7 +50,7 @@ function ProductsTable(props) {
 
     const { fetchedProducts, fetchProductsHandler, loadingProducts, deleteProductHandler, searchingProducts, searchingProductsSuccess, updateProductHandler, creatingProductSuccess, updatingProductSuccess } = props;
 
-    console.log(fetchedProducts)
+    //console.log(fetchedProducts)
 
     const themeCtx = useContext(ThemeContext)
 

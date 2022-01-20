@@ -48,7 +48,7 @@ export const fetchDeals = (language, page, perPage, orderBy, orderDir) => {
             dispatch(fetchDealsSuccess({ ...response.data, data: editedData }));
         })
             .catch(err => {
-                console.log(err)
+                //console.log(err)
                 dispatch(fetchDealsFailed(err.message))
             })
     }
@@ -111,7 +111,7 @@ export const updateDealFailed = (message) => {
 export const updateDeal = (data) => {
     return dispatch => {
         dispatch(updateDealStart())
-        console.log(data)
+        //console.log(data)
         axios.post(`/vendors/deals/${data.get('id')}`, data, {headers: {'Content-Type': 'multipart/form-data'}})
             .then(response => {
                 dispatch(updateDealSuccess(response.data, data));
@@ -263,7 +263,7 @@ export const filterDeals = (language, type, location, search, page, perPage) => 
             dispatch(filterDealsSuccess({ ...response.data, data: editedData }));
         })
             .catch(err => {
-                console.log(err)
+                //console.log(err)
                 dispatch(filterDealsFailed(err.message))
             })
     }

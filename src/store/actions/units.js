@@ -29,7 +29,7 @@ export const fetchUnits = (language, page, perPage, orderBy, orderDir) => {
             dispatch(fetchUnitsSuccess(response.data));
         })
             .catch(err => {
-                console.log(err)
+                //console.log(err)
                 dispatch(fetchUnitsFailed(err.message))
             })
     }
@@ -94,7 +94,7 @@ export const updateUnitFailed = (message) => {
 export const updateUnit = (data) => {
     return dispatch => {
         dispatch(updateUnitStart())
-        console.log('edit start')
+        //console.log('edit start')
         axios.put(`/vendors/units/${data.id}`, data)
         .then(response => {
                 dispatch(updateUnitSuccess(response.data, {...data}));

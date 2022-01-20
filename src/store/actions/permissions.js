@@ -30,7 +30,7 @@ export const fetchPermissions = ( roleId, lang ) => {
                     dispatch( fetchPermissionsSuccess( response.data  ) );
                 })
             .catch( err => {
-                console.log(err)
+                //console.log(err)
                 dispatch( fetchPermissionsFailed( err.message  ) )
             } )
         }

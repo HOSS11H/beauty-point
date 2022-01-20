@@ -32,7 +32,7 @@ const SingleService = props => {
                 setService(res.data);
             })
             .catch(err => {
-                console.log(err);
+                //console.log(err);
             })
     }, [param.serviceId])
     let content = (

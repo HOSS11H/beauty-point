@@ -41,7 +41,7 @@ function EmployeesTable(props) {
 
     const { fetchedEmployees, fetchEmployeesHandler, loadingEmployees, deleteEmployeeHandler, searchingEmployees, searchingEmployeesSuccess, updateEmployeeHandler } = props;
 
-    console.log(fetchedEmployees)
+    //console.log(fetchedEmployees)
 
     const themeCtx = useContext(ThemeContext)
 

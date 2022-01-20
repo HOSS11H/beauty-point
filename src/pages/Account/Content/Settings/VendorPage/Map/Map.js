@@ -16,7 +16,7 @@ export default function Map(props) {
 
     const { lat, lng } = props;
 
-    console.log(lat, lng)
+    //console.log(lat, lng)
 
     const defaultProps = {
         center: {

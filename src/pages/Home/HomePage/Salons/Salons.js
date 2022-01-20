@@ -79,7 +79,7 @@ const Salons = props => {
                 setSalons(res.data.data);
             })
             .catch(err => {
-                console.log(err);
+                //console.log(err);
             })
     }, [])
 
@@ -90,7 +90,7 @@ const Salons = props => {
         </Loader>
     );
     if (salons) {
-        console.log(salons);
+        //console.log(salons);
         let fetchedSalons = [...salons];
         if(fetchedSalons.length < 4){
             while (fetchedSalons.length < 4 ) {

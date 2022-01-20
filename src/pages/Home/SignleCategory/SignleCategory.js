@@ -33,7 +33,7 @@ const SingleCategory = props => {
                 setCategory(res.data);
             })
             .catch(err => {
-                console.log(err);
+                //console.log(err);
             })
     }, [])
     let content= (

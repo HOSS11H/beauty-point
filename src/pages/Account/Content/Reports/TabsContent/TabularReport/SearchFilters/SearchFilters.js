@@ -107,7 +107,7 @@ const CustomerSelectInfo = styled.ul`
 `
 
 const Option = (props) => {
-    console.log(props);
+    //console.log(props);
     return (
         <Fragment>
             <components.Option {...props}>
@@ -187,7 +187,7 @@ const SearchFilters = (props) => {
     useEffect(() => {
         if (customerInput.length !== 0) {
             const searchTimeout = setTimeout(() => {
-                console.log('excuted fetch')
+                //console.log('excuted fetch')
                 axios.get(`/vendors/customers?term=${customerInput}`)
                     .then(res => {
                         const customers = res.data.data;
@@ -201,7 +201,7 @@ const SearchFilters = (props) => {
                         setOptions(options);
                     })
                     .catch(err => {
-                        console.log(err);
+                        //console.log(err);
                     })
             }, 1000)
             return () => clearTimeout(searchTimeout);

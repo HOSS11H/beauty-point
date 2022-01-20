@@ -30,7 +30,7 @@ export const fetchCategories = ( language ) => {
                     dispatch( fetchCategoriesSuccess( response.data.data  ) );
                 })
             .catch( err => {
-                console.log(err)
+                //console.log(err)
                 dispatch( fetchCategoriesFailed( err.message  ) )
             } )
         }

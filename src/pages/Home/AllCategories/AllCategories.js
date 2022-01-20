@@ -35,7 +35,7 @@ const AllCategories = props => {
                 setServices(res.data.data);
             })
             .catch(err => {
-                console.log(err);
+                //console.log(err);
             })
     }, [])
     let content = (

@@ -144,7 +144,7 @@ function TabularReport(props) {
                 setExporting(false);
             })
             .catch(err => {
-                console.log(err);
+                //console.log(err);
                 setExporting(false);
             })
     }
@@ -162,7 +162,7 @@ function TabularReport(props) {
                 setExporting(false);
             })
             .catch(err => {
-                console.log(err);
+                //console.log(err);
                 setExporting(false);
             })
     }
@@ -180,7 +180,7 @@ function TabularReport(props) {
                 setExporting(false);
             })
             .catch(err => {
-                console.log(err);
+                //console.log(err);
                 setExporting(false);
             })
     }

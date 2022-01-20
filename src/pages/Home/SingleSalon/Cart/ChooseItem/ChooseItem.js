@@ -99,7 +99,7 @@ const ChooseItem = props => {
                 })
                 .catch(err => {
                     setLoading(false)
-                    console.log(err);
+                    //console.log(err);
                 })
         }
         if (type === 'deals') {
@@ -116,7 +116,7 @@ const ChooseItem = props => {
                 })
                 .catch(err => {
                     setLoading(false)
-                    console.log(err);
+                    //console.log(err);
                 })
         }
     }, [type, page, id])

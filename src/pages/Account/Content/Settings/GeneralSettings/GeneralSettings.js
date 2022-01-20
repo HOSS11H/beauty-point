@@ -85,7 +85,7 @@ export default function GeneralSettings(props) {
                 setOpen(false)
             }).catch(err => {
                 setOpen(false)
-                console.log(err.message)
+                //console.log(err.message)
             })
     }
     function handleClose() {

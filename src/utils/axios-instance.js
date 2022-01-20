@@ -10,7 +10,7 @@ instance.interceptors.request.use(function (config) {
     config.headers['Authorization'] =token !== null ? 'Bearer ' + token : null;
     return config;
 }, function (error) {
-    console.log(error.message);
+    //console.log(error.message);
 });
 
 export default instance;

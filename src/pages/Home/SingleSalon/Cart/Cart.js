@@ -308,7 +308,7 @@ const Cart = props => {
     }, [selectedType])
 
     const removeFromCartHandler = useCallback((type, itemId) => {
-        console.log(type, itemId)
+        //console.log(type, itemId)
         if (type === 'services') {
             dispatch({
                 type: 'REMOVE_SERVICE',
@@ -412,7 +412,7 @@ const Cart = props => {
                     setActiveStep((prevActiveStep) => prevActiveStep + 1);
                 })
                 .catch(err => {
-                    console.log(err);
+                    //console.log(err);
                 })
         }
     }, [appointment, cart, couponId, salonData.id, slot])
