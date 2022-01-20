@@ -7,10 +7,11 @@ import { useTranslation } from 'react-i18next';
 import HomeLayout from '../../components/HomeLayout/HomeLayout';
 import { formatCurrency } from '../../shared/utility';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { NavLink } from 'react-router-dom';
 
-const PackagesWrapper= styled.div`
+const PackagesWrapper = styled.div`
     padding: 100px 0;
-    background : ${ ( props ) => props.theme.palette.background.default};
+    background : ${(props) => props.theme.palette.background.default};
     @media screen and (max-width: 899.98px) {
         padding: 70px 0;
     }
@@ -23,7 +24,7 @@ const PricingPanel = styled(Card)`
     transition: all .35s ease-in-out;
     position: relative;
     border: 1px solid #f1f1f1;
-    border-color: ${ ( props ) => props.theme.palette.divider};;
+    border-color: ${(props) => props.theme.palette.divider};;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
@@ -116,9 +117,136 @@ const Loader = styled.div`
     height: 200px;
 `
 
+const PricingTable = styled.div`
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid;
+    border-color: ${({ theme }) => theme.palette.divider};
+    border-radius: 6px;
+`
+const PricingMain = styled.div`
+    flex-basis: 25%;;
+    flex-shrink: 0;
+`
+const PricingColumn = styled.div`
+    flex-basis: 25%;
+    flex-shrink: 0;
+`
+const PricingHeading = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    height: 150px;
+    padding: 25px;
+    background-color: ${({ theme }) => theme.palette.grey[300]};
+    font-size: 25px;
+    font-weight: 500;
+    line-height: 22px;
+    color: ${({ theme }) => theme.palette.common.black};
+    text-transform: capitalize;
+`
+const Wrapper = styled.div``
+
+const PricingCell = styled.div`
+    display: flex;
+    align-items: center;
+    height: 44px;
+    padding: 10px;
+    font-size:  17px;
+    font-weight: 500;
+    color: ${({ theme }) => theme.palette.common.black};
+    background-color: ${({ theme }) => theme.palette.grey[300]};
+    &:nth-child(odd) {
+        background-color: ${({ theme }) => theme.palette.common.white};
+    }
+`
+const PricingName = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 20px;
+    padding: 25px;
+    background-color: ${({ theme }) => theme.palette.grey[300]};
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 22px;
+    color: ${({ theme }) => theme.palette.common.black};
+    text-transform: capitalize;
+`
+const PricingPrice = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100px;
+    padding: 25px;
+    background-color: ${({ theme }) => theme.palette.grey[200]};
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 22px;
+    text-transform: capitalize;
+    h3, h4 {
+        color: ${({ theme }) => theme.palette.common.black};
+    }
+    h3 {
+        margin-bottom: 15px;
+    }
+`
+const PricingInfo = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    padding: 10px;
+    font-size:  17px;
+    font-weight: 500;
+    color: ${({ theme }) => theme.palette.common.black};
+    background-color: ${({ theme }) => theme.palette.grey[200]};
+    &:nth-child(odd) {
+        background-color: ${({ theme }) => theme.palette.common.white};
+    }
+`
+
+const pricingMain = {
+    title: 'pick up your plan',
+    modules: [
+        'نظام نقاط البيع السّحابي',
+        'يمكنه العمل  اوف لاين ',
+        'دعم فنّي على مدار السّاعة',
+        'إدارة قائمة المنتجات',
+        'وحدة الزّبائن',
+        'لوحة المراقبة',
+        'التّقارير',
+        'إدارة الطّاولات',
+        'إدارة المخزون',
+        'الفعاليّات المؤقّتة',
+        'الحد الأقصى من الموظفين',
+        'ادارة الموظفين',
+        'امكانيه التحكم ب الادوار للموظفين',
+        'الحد الاقصى من الخدمات',
+        'مناطق التّوصيل',
+        'بطاقات الهدايا',
+        'قائمة العروضات',
+        'برامج الولاء',
+        'تطبيق مقدم الخدمة',
+        'مدير حساب متجاوب',
+        'الويب كاشير',
+        'خدمات التّوصيل',
+        'المستودعات',
+        'تطبيق عميل',
+        'صفحة خاصه على الموقع',
+        'ربط تقويم قوقل',
+        'امكانيه اضافة الادوار للموظفين',
+        'الكوبونات',
+        'مميزات اخرى',
+        '',
+    ],
+}
+
 const AllPackages = props => {
 
-    const [ isMonthly, setIsMonthly ] = useState(true);
+    const [isMonthly, setIsMonthly] = useState(true);
 
     const { t } = useTranslation();
     const [packages, setPackages] = useState(null);
@@ -146,51 +274,38 @@ const AllPackages = props => {
     if (packages) {
         let fetchedPackages = [...packages];
         content = (
-            <Container  maxWidth="lg">
-                <Grid container spacing={4}>
+            <Container maxWidth="lg">
+                <PricingTable>
+                    <PricingMain>
+                        <PricingHeading> {t(pricingMain.title)} </PricingHeading>
+                        <Wrapper>
+                            {
+                                pricingMain.modules.map((item, index) => <PricingCell key={index}>{t(item)}</PricingCell>)
+                            }
+                        </Wrapper>
+                    </PricingMain>
                     {
-                        fetchedPackages.map(( item, index) => {
+                        fetchedPackages.map((item, index) => {
                             return (
-                                <Grid item key={item.id} xs={12} sm={6} md={4}>
-                                    <PricingPanel>
-                                        <div className="pricing-head">
-                                            <div className="pricing-name">{t(item.name)}</div>
-                                            <div className="pricing-type">
-                                                <div className="price">{formatCurrency(isMonthly ? item.monthly_price : item.annual_price)}</div>
-                                                <div className="per">{isMonthly ? t('per month') : t('per year')}</div>
-                                            </div>
-                                        </div>
-                                        <div className="pricing-body">
-                                            <div>
-                                                <ul className="pricing-list">
-                                                    <li>{`${t('max employees')} : ${item.max_employees}`}</li>
-                                                    <li>{`${t('max services')} : ${item.max_services}`}</li>
-                                                    <li>{`${t('max deals')} : ${item.max_services}`}</li>
-                                                    <li>{`${t('max roles')} : ${item.max_services}`}</li>
-                                                </ul>
-                                                {item.package_modules && <h6 className="list-heading">{t('modules')}</h6>}
-                                                <ul className="pricing-list">
-                                                    {
-                                                        item.package_modules?.map((feature, index) => {
-                                                            return (
-                                                                <li key={index}>{t(feature)}</li>
-                                                                )
-                                                            })
-                                                        }
-                                                </ul>
-                                                {item.mark_recommended === 'true' && <RecomendedSign><CheckCircleIcon color="success" /></RecomendedSign>}
-                                            </div>
-                                            {/* <NavLink to={`/packages/${item._id}`}>
-                                                <Button variant='outlined' color="secondary">{t('buy')}</Button>
-                                            </NavLink> */}
-                                            <Button href='https://old.beautypoint.sa/register' variant='outlined' color="secondary">{t('Subscribe')}</Button>
-                                        </div>
-                                    </PricingPanel>
-                                </Grid>
+                                <PricingColumn key={item.id} >
+                                    <PricingName> {t(item.name)}</PricingName>
+                                    <PricingPrice>
+                                        <h3>{formatCurrency(isMonthly ? item.monthly_price : item.annual_price)}</h3>
+                                        <h4>{isMonthly ? t('per month') : t('per year')}</h4>
+                                    </PricingPrice>
+                                    <Wrapper>
+                                        <PricingInfo>{t(item)}</PricingInfo>
+                                        <PricingInfo>
+                                            <NavLink to={`/auth?page=join-us&package=${item.id}`}>
+                                                <Button variant='outlined' color="secondary">{t('subscribe')}</Button>
+                                            </NavLink>
+                                        </PricingInfo>
+                                    </Wrapper>
+                                </PricingColumn>
                             )
                         })
                     }
-                </Grid>
+                </PricingTable>
             </Container>
         );
     }
@@ -198,11 +313,11 @@ const AllPackages = props => {
     return (
         <HomeLayout>
             <PackagesWrapper>
-            <Stack direction="row" spacing={1} alignItems="center" justifyContent='center'  sx={{ marginBottom: '20px' }} >
-                <SwitcherLabel >{t('Yearly')}</SwitcherLabel>
-                <Switch value={isMonthly} onChange={handleChange} defaultChecked color='secondary' inputProps={{ 'aria-label': 'ant design' }} />
-                <SwitcherLabel>{t('Monthly')}</SwitcherLabel>
-            </Stack>
+                <Stack direction="row" spacing={1} alignItems="center" justifyContent='center' sx={{ marginBottom: '20px' }} >
+                    <SwitcherLabel >{t('Yearly')}</SwitcherLabel>
+                    <Switch value={isMonthly} onChange={handleChange} defaultChecked color='secondary' inputProps={{ 'aria-label': 'ant design' }} />
+                    <SwitcherLabel>{t('Monthly')}</SwitcherLabel>
+                </Stack>
                 {content}
             </PackagesWrapper>
         </HomeLayout>

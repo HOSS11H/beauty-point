@@ -1,14 +1,14 @@
 import { Container } from "@mui/material";
 import { Heading } from "../../../components/UI/Heading/Heading";
 import Slider from "react-slick";
+import './beauty-icons.css';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import styled, {keyframes} from 'styled-components';
-import './beauty-icons.css'
+import styled, { keyframes } from 'styled-components';
 import { useState, useEffect } from 'react';
 import axios from '../../../utils/axios-instance';
 import CircularProgress from '@mui/material/CircularProgress';
-import {NavLink} from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { useTranslation } from "react-i18next";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -16,10 +16,10 @@ import { useContext } from "react";
 import ThemeContext from "../../../store/theme-context";
 
 
-const ServicesSliderWrapper = styled.section`
-    padding: 74px 0 0px;
+const CategoriesSliderWrapper = styled.section`
+    padding: 64px 0 0px;
     @media screen and (max-width: 899.98px) {
-        padding: 25px 0 0px;
+        padding: 15px 0 0px;
     }
     && {
         .slick-prev, .slick-next {
@@ -33,7 +33,7 @@ const ServicesSliderWrapper = styled.section`
             z-index:51;
             &::before {
                 font-family    : 'beauty-point';
-                color          : ${ ( { theme } ) => theme.vars.secondary};
+                color          : ${({ theme }) => theme.vars.secondary};
                 font-size      : 14px;
                 transition     : 0.3s ease-in-out;
                 opacity : 1;
@@ -45,13 +45,13 @@ const ServicesSliderWrapper = styled.section`
         .slick-prev {
             left: 0;
             &::before {
-                content: ${ ( {theme}  ) => theme.direction === 'rtl' ?  "'\\e901'" :  "'\\e900'" };
+                content: ${({ theme }) => theme.direction === 'rtl' ? "'\\e901'" : "'\\e900'"};
             }
         }
         .slick-next {
             right: 0;
             &::before {
-                content: ${ ( {theme}  ) => theme.direction === 'rtl' ?  "'\\e900'" :  "'\\e901'" };
+                content: ${({ theme }) => theme.direction === 'rtl' ? "'\\e900'" : "'\\e901'"};
             }
         }
     }
@@ -67,26 +67,28 @@ const Bounce = keyframes`
         transform:         translateY(-15px)
     }
 `;
-const ServicePanel = styled.div`
+const CategoryPanel = styled.div`
+    position: relative;
     text-align: center;
+    margin-top: 10px;
     @media screen and (max-width: 899.98px) {
         maz-width: 370px;
-        margin: 0 auto;
+        margin: 10px  auto 0;
     }
     &:hover {
-        .service-icon {
+        .category-icon {
             i,svg, img {
                 animation: ${Bounce} 1s ease-in-out;
             }
         }
     }   
-    .service-icon {
+    .category-icon {
         display: inline-flex;
         justify-content: center;
         align-items: center;
         width: 127px;
         height: 127px;
-        background: ${ ( { theme } ) => theme.vars.secondary};
+        background: ${({ theme }) => theme.vars.secondary};
         border-radius: 50%;
         margin-bottom: 14px;
         @media screen and (max-width: 899.98px) {
@@ -98,7 +100,7 @@ const ServicePanel = styled.div`
             height:50px;
         }
         i, svg {
-            color: ${ ( { theme } ) => theme.palette.common.white};
+            color: ${({ theme }) => theme.palette.common.white};
             transition: 0.3s ease-in-out;
             font-size: 60px;
             @media screen and (max-width: 899.98px) {
@@ -115,7 +117,7 @@ const ServicePanel = styled.div`
             border-radius: 50%;
         }
     }
-    .service-title {
+    .category-title {
         a {
             font-size: 20px;
             line-height: 27px;
@@ -125,11 +127,28 @@ const ServicePanel = styled.div`
                 font-size: 15px
             }
             transition: 0.3s ease-in-out;
-            color: ${ ( {theme} ) => theme.palette.text.primary };
+            color: ${({ theme }) => theme.palette.text.primary};
             &:hover {
                 color: ${({ theme }) => theme.vars.primary};
             }
         }
+    }
+    .category-num {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        top: 0;
+        right: 30px;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: ${({ theme }) => theme.palette.common.white};
+        color: ${({ theme }) => theme.vars.primary};
+        font-size: 16px;
+        font-weight: 600;
+        z-index: 51;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
     }
 `
 const Loader = styled.div`
@@ -139,88 +158,90 @@ const Loader = styled.div`
     width: 100%;
     height: 200px;
 `
+const settings = {
+    dots: false,
+    arrows: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 6,
+    slidesToScroll: 2,
+    responsive: [
+        {
+            breakpoint: 1200,
+            settings: {
+                slidesToShow: 4,
+                slidesToScroll: 2,
+            }
+        },
+        {
+            breakpoint: 900,
+            settings: {
+                arrows: false,
+                slidesToShow: 4,
+                slidesToScroll: 2,
+            }
+        },
+    ]
+};
 
-const ServicesSlider = props => {
+const CategoriesSlider = props => {
 
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
-    const themeCtx= useContext(ThemeContext);
+    const themeCtx = useContext(ThemeContext);
 
     const { theme } = themeCtx
 
-    const settings = {
-        dots: false,
-        arrows: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 6,
-        slidesToScroll: 2,
-        responsive: [
-            {
-                breakpoint: 1200,
-                settings: {
-                    slidesToShow: 4,
-                    slidesToScroll: 2,
-                }
-            },
-            {
-                breakpoint: 900,
-                settings: {
-                    arrows: false,
-                    slidesToShow: 4,
-                    slidesToScroll: 2,
-                }
-            },
-        ]
-    };
 
-    const [services, setServices ] = useState();
+    const [categories, setCategories] = useState();
 
     useEffect(() => {
-        axios.get('/categories')
+        axios.get('/categories?include[]=services')
             .then(res => {
-                setServices(res.data.data);
+                setCategories(res.data.data);
             })
             .catch(err => {
                 console.log(err);
             })
     }, [])
 
-    let content= (
+    let content = (
         <Loader>
             <CircularProgress color="secondary" />
         </Loader>
     );
-    if (services) {
+    if (categories) {
         content = (
             <Slider {...settings}>
                 {
-                    services.map((category, index) => (
-                        <ServicePanel key={index}>
-                            <div className="service-icon">
-                                {/* <i className={`beauty-icon ${service.icon}`}></i> */}
-                                <img src={category.image} alt="service" />
+                    categories.map((category, index) => (
+                        <CategoryPanel key={index}>
+                            <div className="category-icon">
+                                <img src={category.image} alt="Category" />
                             </div>
-                            <div className="service-title">
-                            <NavLink to={`/categories/${category.id}`}>{category.name}</NavLink>
+                            <div className="category-title">
+                                <NavLink to={`/categories/${category.id}`}>{category.name}</NavLink>
                             </div>
-                        </ServicePanel>
+                            <div className="category-num" >
+                                {category.services.length}
+                            </div>
+                        </CategoryPanel>
                     ))
                 }
             </Slider>
         )
     }
 
-    
+
     return (
-        <ServicesSliderWrapper>
+        <CategoriesSliderWrapper>
             <Container maxWidth="lg">
                 <Heading className='heading-2'>
-                    <NavLink className="heading-title" to='/all-categories'>{t('select your services')}  { theme === 'rtl' ? <ArrowForwardIcon /> : <ArrowBackIcon /> } </NavLink>
+                    <NavLink className="heading-title" to='/all-categories'>{t('select your Categories')}  {theme === 'rtl' ? <ArrowForwardIcon /> : <ArrowBackIcon />} </NavLink>
                 </Heading>
                 {content}
             </Container>
-        </ServicesSliderWrapper>
+        </CategoriesSliderWrapper>
     )
 }
-export default ServicesSlider;
+export default CategoriesSlider;

@@ -9,7 +9,7 @@ import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import PushPinIcon from '@mui/icons-material/PushPin';
 import DealPanel from '../../components/UI/DealPanel/DealPanel';
 import { a11yProps } from "../../shared/utility";
@@ -68,6 +68,9 @@ const dealsIntialRowsPerPage = 9
 
 const SingleSalon = props => {
 
+    const [searchParams] = useSearchParams();
+    const navedTo = searchParams.get('tab');
+
     const { t } = useTranslation();
 
     const param = useParams();
@@ -88,7 +91,7 @@ const SingleSalon = props => {
     const [deals, setDeal] = useState();
     const [loadingDeals, setLoadingDeals] = useState(false);
 
-    const [showModal, setShowModal] = useState(false);
+    const [showModal, setShowModal] = useState(navedTo === 'cart' ? true : false);
 
     const [messageShown, setMessageShown] = useState(false);
 

@@ -1,6 +1,6 @@
 import Header from "../../components/Header/Header";
 import Hero from "./Hero/Hero";
-import ServicesSlider from "./ServicesSlider/ServicesSlider";
+import CategoriesSlider from "./CategoriesSlider/CategoriesSlider";
 import Salons from "./Salons/Salons";
 import Spotlights from "./Spotlights/Spotlights";
 import Deals from "./Deals/Deals";
@@ -12,7 +12,7 @@ const Landing = props => {
         <div className="landing">
             <Header />
             <Hero />
-            <ServicesSlider />
+            <CategoriesSlider />
             <Salons />
             <Spotlights />
             <Deals />

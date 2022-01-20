@@ -14,12 +14,14 @@ const ModuleWhatsappWrapper = styled.div`
         right           : 40px;
         background-color: ${ ( { theme } ) => theme.vars.secondary};
         color           : #FFF;
-        border-radius   : 50px;
+        border-radius   : 50%;
         text-align      : center;
         font-size       : 30px;
         box-shadow      : 2px 2px 3px rgba(0, 0, 0, 0.2);
         z-index         : 100;
         @media screen and (max-width: 899.98px) {
+            width           : 50px;
+            height          : 50px;
             bottom : 70px;
             right  : 15px;
         }

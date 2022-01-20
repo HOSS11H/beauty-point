@@ -5,7 +5,7 @@ import { useContext } from 'react';
 import AuthContext from '../../../../store/auth-context';
 import UserProfile from './UserProfile/UserProfile';
 
-const ModuleContactWrapper = styled.div`
+const ModuleAuthWrapper = styled.div`
     display    : inline-flex;
     align-items: center;
     @media screen and (max-width: 899.98px) {
@@ -43,10 +43,10 @@ const ModuleAuth = props => {
     const {isLoggedIn} = authCtx;
 
     return (
-        <ModuleContactWrapper>
+        <ModuleAuthWrapper>
             {!isLoggedIn && <ModuleButton to='/auth' >{t('login')}</ModuleButton>}
             {isLoggedIn && <UserProfile />}
-        </ModuleContactWrapper>
+        </ModuleAuthWrapper>
     )
 }
 

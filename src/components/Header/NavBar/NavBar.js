@@ -1,15 +1,15 @@
 import { Container } from '@mui/material';
 import styled, { css, keyframes } from 'styled-components';
-import ModuleCart from '../Modules/ModuleCart/ModuleCart';
+import ModuleMood from '../Modules/ModuleMood/ModuleMood';
+import { Wrapper } from '../Modules/ModuleMood/ModuleMood';
 import ModuleSearch from '../Modules/ModuleSearch/ModuleSearch';
 import logoWhite from '../../../images/logo/logo_white.png';
 import logoDark from '../../../images/logo/logo_dark.png';
 import { useTranslation } from 'react-i18next';
 import ModuleAuth from '../Modules/ModuleAuth/ModuleAuth';
-import { createSearchParams, NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { useEffect, useRef } from 'react';
 import { useState } from 'react';
-import {ModuleCartWrapper} from '../Modules/ModuleCart/ModuleCart';
 import {ModuleSearchWrapper} from '../Modules/ModuleSearch/ModuleSearch';
 import {ModuleButton} from '../Modules/ModuleAuth/ModuleAuth';
 
@@ -28,17 +28,15 @@ const fadeInDown = keyframes`
 const Logo = styled(NavLink)`
     display: flex;
     align-items: center;
+    flex-basis    : 220px;
+    height   : auto;
     margin-right: 40px;
     @media screen and (max-width: 420px) {
+        flex-basis: 150px;
         margin-right: 30px;
     }
     img {
         max-width: 100%;
-        width    : 220px;
-        height   : auto;
-        @media screen and (max-width: 420px) {
-            width: 150px;
-        }
         &.logo-dark {
             display: none;
         }
@@ -120,12 +118,9 @@ const Nav = styled.nav`
                     }
                 }
             } 
-            & ${ModuleCartWrapper} {
-                .module-icon {
-                    background: ${ ( { theme } ) => theme.vars.secondary};
-                    svg {
-                        color: ${ ( { theme } ) => theme.palette.common.white};
-                    }
+            & ${Wrapper} {
+                svg {
+                    color: ${ ( { theme } ) => theme.palette.mode === 'dark' ? theme.palette.common.white : theme.vars.secondary};
                 }
             }
             & ${ModuleSearchWrapper} {
@@ -218,7 +213,7 @@ const NavBar = () => {
                     </Logo>
                     <ModulesHolderPhone>
                         <ModuleSearch />
-                        <ModuleCart />
+                        <ModuleMood />
                     </ModulesHolderPhone>
                     <NavbarCollapse>
                         <NavbarNav>
@@ -236,7 +231,7 @@ const NavBar = () => {
                         </NavbarNav>
                         <ModulesHolder>
                             <ModuleSearch />
-                            <ModuleCart />
+                            <ModuleMood />
                             <ModuleAuth />
                         </ModulesHolder>
                     </NavbarCollapse>

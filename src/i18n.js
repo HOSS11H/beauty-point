@@ -414,6 +414,8 @@ const resources = {
             'logout': 'تسجيل الخروج',
             'salons': 'الصالونات',
             '`Please add Employee': 'يرجى إضافة موظف',
+            'pick up your plan': 'اختر خطتك',
+            'select your Categories': 'اختر الفئات',
         }
     }
 };

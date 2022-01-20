@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const UserProfileWrapper = styled.div`
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     position: relative;
@@ -36,8 +36,8 @@ const DropdownWrapper = styled.ul`
     background-color: ${({ theme }) => theme.palette.background.default};
     position: absolute;
     top: calc(100% + 15px);
-    left: 50%;
-    transform: translateX(-50%);
+    right: 100%;
+    transform: translateX(33%);
     z-index: 100;
     width: 150px;
     border-radius: 5px;

@@ -27,6 +27,42 @@ const Loader = styled.div`
     width: 100%;
     height: 200px;
 `
+const settings = {
+    dots: false,
+    arrows: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 4,
+    responsive: [
+        {
+            breakpoint: 1200,
+            settings: {
+                slidesToShow: 3,
+            }
+        },
+        {
+            breakpoint: 900,
+            settings: {
+                arrows: false,
+                slidesToShow: 3,
+            }
+        },
+        {
+            breakpoint: 600,
+            settings: {
+                arrows: false,
+                slidesToShow: 2,
+            }
+        },
+        {
+            breakpoint: 400,
+            settings: {
+                arrows: false,
+                slidesToShow: 1,
+            }
+        },
+    ]
+};
 
 const Salons = props => {
 
@@ -37,42 +73,6 @@ const Salons = props => {
     const {t} = useTranslation();
     const [salons, setSalons] = useState(null);
 
-    const settings = {
-        dots: false,
-        arrows: false,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 4,
-        responsive: [
-            {
-                breakpoint: 1200,
-                settings: {
-                    slidesToShow: 3,
-                }
-            },
-            {
-                breakpoint: 900,
-                settings: {
-                    arrows: false,
-                    slidesToShow: 3,
-                }
-            },
-            {
-                breakpoint: 600,
-                settings: {
-                    arrows: false,
-                    slidesToShow: 2,
-                }
-            },
-            {
-                breakpoint: 400,
-                settings: {
-                    arrows: false,
-                    slidesToShow: 1,
-                }
-            },
-        ]
-    };
     useEffect(() => {
         axios.get('/companies')
             .then(res => {
