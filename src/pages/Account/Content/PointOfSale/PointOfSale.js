@@ -196,7 +196,7 @@ const PointOfSale = (props) => {
 
     const navigate = useNavigate()
 
-    const { lang } = themeCtx
+    const { lang, city } = themeCtx
 
     const [cart, dispatch] = useReducer(cartReducer, {
         services: [],
@@ -209,7 +209,7 @@ const PointOfSale = (props) => {
 
     const [shownType, setShownType] = useState('services');
     const [shownCategory, setShownCategory] = useState('all');
-    const [shownLocation, setShownLocation] = useState('');
+    const [shownLocation, setShownLocation] = useState(city);
     const [searchWord, setSearchWord] = useState('');
 
     const [messageShown, setMessageShown] = useState(bookingCreated);
@@ -384,11 +384,10 @@ const PointOfSale = (props) => {
     const purchaseCartHandler = useCallback((purchasedData) => {
         createBookingHandler({
             ...purchasedData,
-            location_id: shownLocation === '' ? fetchedLocations[0].id : shownLocation,
+            location_id: shownLocation,
         })
-    }, [createBookingHandler, fetchedLocations, shownLocation])
+    }, [createBookingHandler, shownLocation])
 
-    // Add Customer Modal
     const printBookingModalOpenHandler = useCallback((id) => {
         setPrintBookingModalOpened(true);
     }, [])
@@ -400,7 +399,7 @@ const PointOfSale = (props) => {
         setReservingBokking(true);
         axios.post(`/vendors/bookings`, {
             ...purchasedData,
-            location_id: shownLocation === '' ? fetchedLocations[0].id : shownLocation,
+            location_id: shownLocation,
         })
             .then(response => {
                 setReservingBokking(false);
@@ -410,7 +409,7 @@ const PointOfSale = (props) => {
             .catch(err => {
 
             })
-    }, [fetchedLocations, shownLocation])
+    }, [shownLocation])
 
     const resetPrintedBookingData = useCallback(() => {
         setReservedBookingData(null);

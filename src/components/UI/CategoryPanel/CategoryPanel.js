@@ -29,6 +29,7 @@ const CategoryPanelCard = styled.div`
         }
     }   
     .category-icon {
+        position: relative;
         display: inline-flex;
         justify-content: center;
         align-items: center;
@@ -62,6 +63,23 @@ const CategoryPanelCard = styled.div`
             object-fit: cover;
             border-radius: 50%;
         }
+        .category-num {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: -5px;
+            right: 0px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: ${({ theme }) => theme.palette.common.white};
+            color: ${({ theme }) => theme.vars.primary};
+            font-size: 16px;
+            font-weight: 600;
+            z-index: 51;
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        }
     }
     .category-title {
         a {
@@ -79,23 +97,6 @@ const CategoryPanelCard = styled.div`
             }
         }
     }
-    .category-num {
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        position: absolute;
-        top: 0;
-        right: 30px;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        background: ${({ theme }) => theme.palette.common.white};
-        color: ${({ theme }) => theme.vars.primary};
-        font-size: 16px;
-        font-weight: 600;
-        z-index: 51;
-        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-    }
 `
 
 const CategoryPanel = ({ category, path }) => {
@@ -104,12 +105,12 @@ const CategoryPanel = ({ category, path }) => {
         <CategoryPanelCard category={category} >
             <div className="category-icon">
                 <img src={category.image} alt="Category" />
+                <div className="category-num" >
+                    {category.services.length}
+                </div>
             </div>
             <div className="category-title">
                 <NavLink to={`${path}/${category.id}`}>{category.name}</NavLink>
-            </div>
-            <div className="category-num" >
-                {category.services.length}
             </div>
         </CategoryPanelCard>
     )

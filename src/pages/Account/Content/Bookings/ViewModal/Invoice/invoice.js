@@ -281,12 +281,6 @@ const Invoice = React.forwardRef((props, ref) => {
 										<span>{formatCurrency(bookingData.vat)}</span>
 									</BillTotal>
 								</Grid>
-								{/* <Grid item xs={12} md={6} >
-									<BillTotal>
-										<i>الخصم : </i>
-										<span>{`${bookingData.discount_percent} %`}</span>
-									</BillTotal>
-								</Grid> */}
 								<Grid item xs={12} md={6} >
 									<BillTotal>
 										<span>قيمة الخصم : </span>
@@ -307,7 +301,7 @@ const Invoice = React.forwardRef((props, ref) => {
 								</Grid>
 							</Grid>
 							<QrWrapper>
-								{typeof(qrCode) == 'string' && <QRCode value={qrCode} />}
+								{<QRCode value={qrCode} />}
 							</QrWrapper>
 							<BookingCopyright>Powered By Beauty Point</BookingCopyright>
 						</ClientDetails>

@@ -9,6 +9,7 @@ const ThemeContext = React.createContext({
     mode: '',
     direction: '',
     lang: '',
+    city: '',
     toggleMode: ( ) => { },
     toggleDirection: ( ) => { },
     toggleLanguage: ( ) => { },
@@ -17,19 +18,19 @@ const ThemeContext = React.createContext({
 
 export const ThemeContextProvider = props => {
 
-    const { t, i18n } = useTranslation();
+    const { i18n } = useTranslation();
 
     const intialMode = localStorage.getItem('mode') || "light";
     const intialDirection = localStorage.getItem('direction') || "rtl";
-    const intialLanguage = localStorage.getItem('language') || 'ar'; ;
-
+    const intialLanguage = localStorage.getItem('language') || 'ar';
+    const intialCity = localStorage.getItem('city') || null;
 
     const [ mode, setMode ] = useState(intialMode);
     const [ direction, setDirection ] = useState(intialDirection);
     const [ language, setLanguage ] = useState(intialLanguage);
+    const [ city, setCity ] = useState(intialCity);
 
     document.getElementsByTagName('body')[0].dir = direction;
-
     
     const toggleModeHandler = ( ( ) => {
         setMode( prevState =>{
@@ -87,6 +88,10 @@ export const ThemeContextProvider = props => {
             }
         } );
     } )
+    const selectCityHandler = ( id ) => {
+        setCity( id );
+        localStorage.setItem('city', id);
+    }
     
     const theme = React.useMemo(
         ( ) =>
@@ -115,9 +120,11 @@ export const ThemeContextProvider = props => {
         mode: mode,
         direction: direction,
         lang: language,
+        city: city,
         toggleMode: toggleModeHandler,
         toggleDirection: toggleDirectionHandler,
         toggleLanguage: toggleLanguageHandler,
+        selectCity: selectCityHandler,
         theme: theme,
     }
     // We Use Styled Componet To Pass The Theme

@@ -29,11 +29,11 @@ const SearchFilters = (props) => {
 
     const themeCtx = useContext(ThemeContext)
 
-    const { lang } = themeCtx
+    const { lang, city } = themeCtx
 
     const [type, setType] = useState('services');
     const [category, setCategory] = useState('');
-    const [location, setLocation] = useState('');
+    const [location, setLocation] = useState(city);
     const [search, setSearch] = useState('');
 
     useEffect(() => {

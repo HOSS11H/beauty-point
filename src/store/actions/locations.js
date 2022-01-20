@@ -1,5 +1,5 @@
 import * as actionTypes from './actionTypes';
-import axios from '../../utils/axios-instance-v1';
+import v1 from '../../utils/axios-instance-v1';
 
 
 export const fetchLocationsStart = (  ) => {
@@ -22,7 +22,7 @@ export const fetchLocationsFailed = ( errorMessage ) => {
 export const fetchLocations = ( language ) => {
     return dispatch => {
         dispatch( fetchLocationsStart( ) )
-        axios.get(`/locations`, { 
+        v1.get(`/locations`, { 
             headers: {
                 'Accept-Language': language
             }

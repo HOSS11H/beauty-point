@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { ButtonText, ButtonConfirm } from '../Button/Button';
 import { Grid } from '@mui/material';
 
-const CustomContainer = styled(Grid)`
+export const CustomContainer = styled(Grid)`
     position: absolute;
     top: 50%;
     left: 50%;
