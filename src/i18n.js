@@ -416,6 +416,7 @@ const resources = {
             '`Please add Employee': 'يرجى إضافة موظف',
             'pick up your plan': 'اختر خطتك',
             'select your Categories': 'اختر الفئات',
+            '404 page not found': '404 صفحة غير موجودة',
         }
     }
 };

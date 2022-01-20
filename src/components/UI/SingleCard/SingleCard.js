@@ -128,10 +128,10 @@ const SingleCard = props => {
 
 
     const handleClick = () => {
-        navigate(`/salons/${compnyId}`)
+        navigate(`../salons/${compnyId}`)
     }
     const handleCartClick = () => {
-        navigate(`/salons/${compnyId}?tab=cart`)
+        navigate(`../salons/${compnyId}?tab=cart`)
     }
 
     return (

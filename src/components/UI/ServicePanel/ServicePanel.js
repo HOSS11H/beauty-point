@@ -88,12 +88,12 @@ const ServicePanelCard = styled.div`
 
 const ServicePanel = props => {
 
-    const { service } = props;
+    const { service, path } = props;
 
     const navigate = useNavigate();
 
     const handleClick = () => {
-        navigate(`/services/${service.id}`)
+        navigate(`${path}/${service.id}`)
     }
 
     return (

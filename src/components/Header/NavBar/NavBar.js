@@ -162,15 +162,15 @@ const NavbarCollapse = styled.div`
 const navLinks = [
     {
         name: 'Home',
-        link: '/',
+        link: '/home',
     },
     {
         name: 'categories',
-        link: '/',
+        link: '/home/all-categories',
     },
     {
         name: 'deals',
-        link: '/',
+        link: '/home/all-deals',
     },
     {
         name: 'join us',
@@ -185,8 +185,6 @@ const NavBar = () => {
     const [isSticky, setIsSticky] = useState(false);
 
     const headerRef = useRef();
-    
-    const navigate = useNavigate()
 
     useEffect(() => {
         const handleScroll = () => {
@@ -207,7 +205,7 @@ const NavBar = () => {
         <Nav  ref={headerRef} sticky={isSticky} >
             <Container maxWidth="lg">
                 <NavHolder>
-                    <Logo to='/'>
+                    <Logo to='/home'>
                         <img className="logo-light" src={logoWhite} alt="logo" />
                         <img className="logo-dark" src={logoDark} alt="logo" />
                     </Logo>

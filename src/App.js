@@ -8,10 +8,6 @@ import AuthContext from './store/auth-context';
 
 import Layout from './components/Layout/Layout';
 import Auth from './pages/Auth/Auth';
-import NotFound from './pages/NotFound/NotFound';
-import Landing from './pages/Landing/Landing';
-import AllCategories from "./pages/AllCategories/AllCategories";
-import AllSaloons from "./pages/AllSaloons/AllSaloons";
 import Account from './pages/Account/Account';
 import Dashboard from './pages/Account/Content/Dashboard/Dashboard';
 import Services from './pages/Account/Content/Services/Services';
@@ -26,20 +22,27 @@ import Expenses from "./pages/Account/Content/Expenses/Expenses";
 import ExpenseCategories from "./pages/Account/Content/Expenses/ExpenseCategories/ExpenseCategories";
 import ExpenseCustomers from "./pages/Account/Content/Expenses/ExpenseCustomers/ExpenseCustomers";
 
-
+import Units from "./pages/Account/Content/Units/Units";
 import Settings from "./pages/Account/Content/Settings/Settings";
 import GeneralSettings from './pages/Account/Content/Settings/GeneralSettings/GeneralSettings'
 import VendorPage from './pages/Account/Content/Settings/VendorPage/VendorPage'
 import BookingSettings from "./pages/Account/Content/Settings/BookingSettings/BookingSettings";
 import EmployeeSettings from "./pages/Account/Content/Settings/EmployeeSettings/EmployeeSettings";
-import SingleCategory from "./pages/SignleCategory/SignleCategory";
-import SingleService from "./pages/SingleService/SingleService";
-import AllDeals from "./pages/AllDeals/AllDeals";
-import SingleDeal from "./pages/SingleDeal/SingleDeal";
-import SingleSalon from "./pages/SingleSalon/SingleSalon";
 import RolesPermissions from "./pages/Account/Content/Settings/RolesPermissions/RolesPermissions";
-import Units from "./pages/Account/Content/Units/Units";
-import AllPackages from "./pages/AllPackages/AllPackages";
+
+import NotFound from './pages/NotFound/NotFound';
+
+import Home from "./pages/Home/Home";
+import HomePage from "./pages/Home/HomePage/HomePage";
+import SingleCategory from "./pages/Home/SignleCategory/SignleCategory";
+import SingleService from "./pages/Home/SingleService/SingleService";
+import AllDeals from "./pages/Home/AllDeals/AllDeals";
+import SingleDeal from "./pages/Home/SingleDeal/SingleDeal";
+import SingleSalon from "./pages/Home/SingleSalon/SingleSalon";
+import AllPackages from "./pages/Home/AllPackages/AllPackages";
+import AllCategories from "./pages/Home/AllCategories/AllCategories";
+import AllSaloons from "./pages/Home/AllSaloons/AllSaloons";
+import Landing from "./pages/Landing/Landing";
 
 function App() {
 
@@ -50,19 +53,23 @@ function App() {
     const { isLoggedIn } = authCtx;
 
 
+
     let routes = (
         <Routes>
             <Route path="/auth" element={<Auth />} />
-            <Route path="/" element={<Landing />} />
-            <Route path="/all-categories" element={<AllCategories />} />
-            <Route path="/all-saloons" element={<AllSaloons />} />
-            <Route path="/all-deals" element={<AllDeals />} />
-            <Route path="/packages" element={<AllPackages />} />
-            <Route path="/categories/:categoryId" element={<SingleCategory />} />
-            <Route path="/services/:serviceId" element={<SingleService />} />
-            <Route path="/deals/:dealId" element={<SingleDeal />} />
-            <Route path="/salons/:salonId" element={<SingleSalon />} />
-            <Route path='*' element={<Landing />} />
+            <Route path="/home/*" element={<Home />} >
+                <Route path="" element={<HomePage />} />
+                <Route path="all-categories" element={<AllCategories />} />
+                <Route path="all-saloons" element={<AllSaloons />} />
+                <Route path="all-deals" element={<AllDeals />} />
+                <Route path="packages" element={<AllPackages />} />
+                <Route path="categories/:categoryId" element={<SingleCategory />} />
+                <Route path="services/:serviceId" element={<SingleService />} />
+                <Route path="deals/:dealId" element={<SingleDeal />} />
+                <Route path="salons/:salonId" element={<SingleSalon />} />
+            </Route>
+            <Route path='/' element={<Landing />} />
+            <Route path='*' element={<NotFound />} />
         </Routes>
     )
     if (isLoggedIn) {
@@ -91,16 +98,19 @@ function App() {
                         <Route path="roles-permissions" element={<RolesPermissions />} />
                     </Route>
                 </ Route>
-                <Route path="/" element={<Landing />} />
-                <Route path="/all-categories" element={<AllCategories />} />
-                <Route path="/all-saloons" element={<AllSaloons />} />
-                <Route path="/all-deals" element={<AllDeals />} />
-                <Route path="/packages" element={<AllPackages />} />
-                <Route path="/categories/:categoryId" element={<SingleCategory />} />
-                <Route path="/services/:serviceId" element={<SingleService />} />
-                <Route path="/deals/:dealId" element={<SingleDeal />} />
-                <Route path="/salons/:salonId" element={<SingleSalon />} />
-                <Route path='*' element={<Landing />} />
+                <Route path="/home/*" element={<Home />} >
+                    <Route path="" element={<HomePage />} />
+                    <Route path="all-categories" element={<AllCategories />} />
+                    <Route path="all-saloons" element={<AllSaloons />} />
+                    <Route path="all-deals" element={<AllDeals />} />
+                    <Route path="packages" element={<AllPackages />} />
+                    <Route path="categories/:categoryId" element={<SingleCategory />} />
+                    <Route path="services/:serviceId" element={<SingleService />} />
+                    <Route path="deals/:dealId" element={<SingleDeal />} />
+                    <Route path="salons/:salonId" element={<SingleSalon />} />
+                </Route>
+                <Route path='/' element={<Landing />} />
+                <Route path='*' element={<NotFound />} />
             </Routes>
         )
     }

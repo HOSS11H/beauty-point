@@ -55,7 +55,7 @@ const MobileBarWrapper = styled.div`
 const MobileBar = props => {
     return (
         <MobileBarWrapper>
-            <NavLink to="/" className="mobile-bar-link">
+            <NavLink to="/home" className="mobile-bar-link">
                 <HomeIcon />
                 <span>home</span>
             </NavLink>

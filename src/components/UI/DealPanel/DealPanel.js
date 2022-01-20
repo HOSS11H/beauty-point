@@ -152,6 +152,8 @@ const DealPanelCard = styled.div`
 `
 const DealPanel = props => {
 
+    const { path } = props;
+    
     const { t } = useTranslation()
 
     const { deal } = props;
@@ -159,7 +161,7 @@ const DealPanel = props => {
     const navigate = useNavigate();
 
     const handleClick = () => {
-        navigate(`/deals/${deal.id}`);
+        navigate(`${path}/${deal.id}`);
     }
 
 

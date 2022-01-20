@@ -82,12 +82,12 @@ const SalonPanelCard = styled.div`
 `
 const SalonPanel = props => {
 
-    const { salon } = props;
+    const { salon, path } = props;
 
     const navigate = useNavigate();
 
     const handleClick = () => {
-        navigate(`/salons/${salon.id}`)
+        navigate(`${path}/${salon.id}`)
     }
 
     return (

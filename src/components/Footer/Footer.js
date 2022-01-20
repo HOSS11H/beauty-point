@@ -83,9 +83,9 @@ const Footer = props => {
                                 <h3>{t('Quick Links')}</h3>
                             </div>
                             <ul>
-                                <li><NavLink to='/'>{t('Home')}</NavLink></li>
-                                <li><NavLink to='/'>{t("categories")}</NavLink></li>
-                                <li><NavLink to='/packages'>{t('packages')}</NavLink></li>
+                                <li><NavLink to='/home'>{t('Home')}</NavLink></li>
+                                <li><NavLink to='/home/all-categories'>{t("categories")}</NavLink></li>
+                                <li><NavLink to='/home/packages'>{t('packages')}</NavLink></li>
                                 <li><NavLink to='/'>{t('help & support')}</NavLink></li>
                             </ul>
                         </div>
@@ -97,7 +97,7 @@ const Footer = props => {
                             </div>
                             <ul>
                                 <li><NavLink to='/'>{t('about us')}</NavLink></li>
-                                <li><NavLink to='/'>{t("join us")}</NavLink></li>
+                                <li><NavLink to='/auth?page=join-us'>{t("join us")}</NavLink></li>
                                 <li><NavLink to='/'>{t('Contact us')}</NavLink></li>
                             </ul>
                         </div>
