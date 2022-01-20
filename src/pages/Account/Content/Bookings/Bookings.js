@@ -104,7 +104,7 @@ function Bookings(props) {
 
     let content = fetchedBookings.data.map((booking, index) => {
         return (
-            <Grid item xs={12} sm={6} key={booking.id} >
+            <Grid item xs={12} md={6} key={booking.id} >
                 <BookingView booking={booking} loading={fetchingBookings} onClick={viewModalOpenHandler.bind(null, booking.id)} />
             </Grid>
         )
@@ -112,22 +112,22 @@ function Bookings(props) {
     if (fetchingBookings) {
         content = (
             <Fragment>
-                <Grid item xs={12} sm={6}  >
+                <Grid item xs={12} md={6}  >
                     <BookingView loading={fetchingBookings}  />
                 </Grid>
-                <Grid item xs={12} sm={6}  >
+                <Grid item xs={12} md={6}  >
                     <BookingView loading={fetchingBookings} />
                 </Grid>
-                <Grid item xs={12} sm={6}  >
+                <Grid item xs={12} md={6}  >
                     <BookingView loading={fetchingBookings}  />
                 </Grid>
-                <Grid item xs={12} sm={6}  >
+                <Grid item xs={12} md={6}  >
                     <BookingView loading={fetchingBookings}  />
                 </Grid>
-                <Grid item xs={12} sm={6}  >
+                <Grid item xs={12} md={6}  >
                     <BookingView loading={fetchingBookings}  />
                 </Grid>
-                <Grid item xs={12} sm={6}  >
+                <Grid item xs={12} md={6}  >
                     <BookingView loading={fetchingBookings}  />
                 </Grid>
             </Fragment>

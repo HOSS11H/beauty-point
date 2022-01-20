@@ -26,22 +26,22 @@ const TotalBookings = props => {
     if ( Object.keys(fetchedTotalBookings).length > 0 ) { 
         loadedTotalBookings = (
             <Grid container spacing={3}>
-                <Grid item xs={6} md={4} >
+                <Grid item xs={12} sm={6} md={4} >
                     <Booking icon={<EventIcon />} name='completed bookings' num={fetchedTotalBookings.completed} completed />
                 </Grid>
-                <Grid item xs={6} md={4} >
+                <Grid item xs={12} sm={6} md={4} >
                     <Booking icon={<EventIcon />} name='pending bookings' num={fetchedTotalBookings.pending} pending />
                 </Grid>
-                <Grid item xs={6} md={4} >
+                <Grid item xs={12} sm={6} md={4} >
                     <Booking icon={<EventIcon />} name='approved bookings' num={fetchedTotalBookings.approved} approved />
                 </Grid>
-                <Grid item xs={6} md={4} >
+                <Grid item xs={12} sm={6} md={4} >
                     <Booking icon={<EventIcon />} name='in progress bookings' num={fetchedTotalBookings.in_progress} inProgress />
                 </Grid>
-                <Grid item xs={6} md={4} >
+                <Grid item xs={12} sm={6} md={4} >
                     <Booking icon={<EventIcon />} name='canceled bookings' num={fetchedTotalBookings.canceled} canceled />
                 </Grid>
-                <Grid item xs={6} md={4} >
+                <Grid item xs={12} sm={6} md={4} >
                     <Booking icon={<AttachMoneyIcon />} name='total' num={fetchedTotalBookings.total} earnings />
                 </Grid>
             </Grid>

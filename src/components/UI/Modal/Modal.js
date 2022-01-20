@@ -101,8 +101,8 @@ export function CustomModal(props) {
         >
             <Fade in={show}>
                 <CustomContainer container>
-                    <Grid item xs={12} sm={2} md={2} />
-                    <Grid item xs={12} sm={8} md={8}>
+                    <Grid item xs={1} sm={1} md={2} />
+                    <Grid item xs={10} sm={10} md={8}>
                         <CustomCardMui>
                             <CardHeading>
                                 <h4>{t(heading)}</h4>
