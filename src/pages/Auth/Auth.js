@@ -104,6 +104,7 @@ const Auth = props => {
 
     const [searchParams] = useSearchParams();
     const navedTo = searchParams.get('page');
+    const packageId = searchParams.get('package');
 
     const [isLogin, setIsLogin] = useState(navedTo === 'join-us' ? false : true);
 
@@ -165,6 +166,7 @@ const Auth = props => {
                 address: subscribeData.address.value,
                 password: subscribeData.password.value,
                 map: '',
+                package_id: packageId,
                 calling_code: '+91',
                 fcm_token: 'asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231',
             }
