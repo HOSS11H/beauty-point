@@ -1,4 +1,4 @@
-import { Container, Card, Button, Stack, Switch } from '@mui/material';
+import { Container, Card, Button, Stack, Switch, Grid } from '@mui/material';
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import axios from '../../../utils/axios-instance';
@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import HomeLayout from '../../../components/HomeLayout/HomeLayout';
 import { formatCurrency } from '../../../shared/utility';
 import { NavLink } from 'react-router-dom';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 const PackagesWrapper = styled.div`
     padding: 100px 0;
@@ -272,7 +273,7 @@ const AllPackages = props => {
     );
     if (packages) {
         let fetchedPackages = [...packages];
-        content = (
+        /* content = (
             <Container maxWidth="lg">
                 <PricingTable>
                     <PricingMain>
@@ -305,6 +306,56 @@ const AllPackages = props => {
                         })
                     }
                 </PricingTable>
+            </Container>
+        ); */
+        content = (
+            <Container  maxWidth="lg">
+                <Grid container spacing={4}>
+                    {
+                        fetchedPackages.map(( item, index) => {
+                            return (
+                                <Grid item key={item.id} xs={12} sm={6} md={4}>
+                                    <PricingPanel>
+                                        <div className="pricing-head">
+                                            <div className="pricing-name">{t(item.name)}</div>
+                                            <div className="pricing-type">
+                                                <div className="price">{formatCurrency(isMonthly ? item.monthly_price : item.annual_price)}</div>
+                                                <div className="per">{isMonthly ? t('per month') : t('per year')}</div>
+                                            </div>
+                                        </div>
+                                        <div className="pricing-body">
+                                            <div>
+                                                <ul className="pricing-list">
+                                                    <li>{`${t('max employees')} : ${item.max_employees}`}</li>
+                                                    <li>{`${t('max services')} : ${item.max_services}`}</li>
+                                                    <li>{`${t('max deals')} : ${item.max_services}`}</li>
+                                                    <li>{`${t('max roles')} : ${item.max_services}`}</li>
+                                                </ul>
+                                                {item.package_modules && <h6 className="list-heading">{t('modules')}</h6>}
+                                                <ul className="pricing-list">
+                                                    {
+                                                        item.package_modules?.map((feature, index) => {
+                                                            return (
+                                                                <li key={index}>{t(feature)}</li>
+                                                                )
+                                                            })
+                                                        }
+                                                </ul>
+                                                {item.mark_recommended === 'true' && <RecomendedSign><CheckCircleIcon color="success" /></RecomendedSign>}
+                                            </div>
+                                            {/* <NavLink to={`/packages/${item._id}`}>
+                                                <Button variant='outlined' color="secondary">{t('buy')}</Button>
+                                            </NavLink> */}
+                                            <NavLink to={`/auth?page=join-us&package=${item.id}`}>
+                                                <Button variant='outlined' color="secondary">{t('Subscribe')}</Button>
+                                            </NavLink>
+                                        </div>
+                                    </PricingPanel>
+                                </Grid>
+                            )
+                        })
+                    }
+                </Grid>
             </Container>
         );
     }
