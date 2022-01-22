@@ -418,6 +418,8 @@ const resources = {
             'select your Categories': 'اختر الفئات',
             '404 page not found': '404 صفحة غير موجودة',
             'choose your city': 'اختر مدينتك',
+            'print refunded invoice': 'طباعة الفاتورة المسترجعة',
+            'refunded': 'مسترجع',
         }
     }
 };

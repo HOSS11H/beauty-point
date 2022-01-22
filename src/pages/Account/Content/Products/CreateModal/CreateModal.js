@@ -343,7 +343,7 @@ const CreateModal = (props) => {
         formData.append('unit_id', productUnit)
 
         onConfirm(formData);
-    }, [productName, editorState, productPriceError, locationName, productQuantity, fetchedLocations, productPrice, productDiscount, discountType, priceAfterDiscount, productStatus, uploadedImages, productUnit, onConfirm])
+    }, [productName, editorState, productPriceError, locationName, productQuantity, productPrice, productDiscount, discountType, priceAfterDiscount, productStatus, uploadedImages, productUnit, onConfirm])
 
     let content = (
         <Grid container spacing={2}>

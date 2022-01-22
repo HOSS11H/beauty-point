@@ -311,7 +311,7 @@ const ViewModal = (props) => {
                     <BookingData>
                         <BookingDataHeading>{t('booking status')}</BookingDataHeading>
                         <BookingList>
-                            <li>{t(bookingData.payment_status)}</li>
+                            <li>{t(bookingData.status)}</li>
                         </BookingList>
                     </BookingData>
                 </Grid>
@@ -319,7 +319,12 @@ const ViewModal = (props) => {
                     <BookingData>
                         <BookingDataHeading>{t('payment status')}</BookingDataHeading>
                         <BookingList>
-                            <li>{bookingData.payment_status === 'completed' ? <CheckCircleIcon sx={{ mr: 1, color: '#568d00' }} /> : <CloseIcon sx={{ mr: 1, color: 'rgb(187 163 46)' }} />}{t(bookingData.payment_status)}</li>
+                            <li>
+                                {bookingData.payment_status === 'completed' && <CheckCircleIcon sx={{ mr: 1, color: '#568d00' }} /> } 
+                                {bookingData.payment_status === 'pending' && <CloseIcon sx={{ mr: 1, color: 'rgb(187 163 46)' }} />}
+                                {bookingData.payment_status === 'refunded' && <CloseIcon sx={{ mr: 1, color: '#f00' }} />}
+                                {t(bookingData.payment_status)}
+                            </li>
                         </BookingList>
                     </BookingData>
                 </Grid>
@@ -346,9 +351,10 @@ const ViewModal = (props) => {
                 <Grid item xs={12}>
                     <BookingActions>
                         <ActionButton onClick={() => qrCode && printBookingHandler()}  ><PrintIcon />{t('print')}</ActionButton>
+                        {bookingData.payment_status === 'refunded' && <ActionButton onClick={() => qrCode && printBookingHandler()}  ><PrintIcon />{t('print refunded invoice')}</ActionButton> }
                     </BookingActions>
                 </Grid>
-                <Invoice userData={userData} ref={invoiceRef} bookingData={bookingData} qrCode={qrCode} />
+                {qrCode && <Invoice userData={userData} ref={invoiceRef} bookingData={bookingData} qrCode={qrCode} />}
                 <Grid item xs={12}>
                     {/* <BookingActions>
                         <DeleteButton onClick={(id) => onDelete(bookingData.id)} >{t('Delete')}</DeleteButton>

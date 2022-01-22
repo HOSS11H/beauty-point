@@ -26,7 +26,7 @@ import MoneyIcon from '@mui/icons-material/Money';
 import PendingIcon from '@mui/icons-material/Pending';
 import { formatCurrency, updateObject } from '../../../../../shared/utility';
 import { CustomButton } from '../../../../../components/UI/Button/Button';
-import OutlinedInput from '@mui/material/OutlinedInput';
+import CloseIcon from '@mui/icons-material/Close';
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import { useCallback, useContext, useEffect, useReducer, useState } from 'react';
@@ -520,7 +520,7 @@ const EditModal = (props) => {
         setPaymentStatus(event.target.value);
     }
     const EditBookingConfirmHandler = useCallback(() => {
-        if ( cartData.services.length > 0 && cartData.services.find( item => item.employee_id === null ) ) {
+        if (cartData.services.length > 0 && cartData.services.find(item => item.employee_id === null)) {
             setServicesEmployeeError(true)
             return;
         }
@@ -745,7 +745,12 @@ const EditModal = (props) => {
                     <BookingData>
                         <BookingDataHeading>{t('payment status')}</BookingDataHeading>
                         <BookingList>
-                            <li>{paymentStatus === 'completed' ? <CheckCircleIcon sx={{ mr: 1, color: '#568d00' }} /> : <PendingIcon sx={{ mr: 1, color: '#f9b904' }} />}{t(paymentStatus)}</li>
+                            <li>
+                                {paymentStatus === 'completed' && <CheckCircleIcon sx={{ mr: 1, color: '#568d00' }} />}
+                                {paymentStatus === 'pending' && <CloseIcon sx={{ mr: 1, color: 'rgb(187 163 46)' }} />}
+                                {paymentStatus === 'refunded' && <CloseIcon sx={{ mr: 1, color: '#f00' }} />}
+                                {t(paymentStatus)}
+                            </li>
                         </BookingList>
                     </BookingData>
                 </Grid>
@@ -774,6 +779,7 @@ const EditModal = (props) => {
                         >
                             <MenuItem value='completed'>{t('completed')}</MenuItem>
                             <MenuItem value='pending'>{t('pending')}</MenuItem>
+                            <MenuItem value='refunded'>{t('refunded')}</MenuItem>
                         </Select>
                     </FormControl>
                 </Grid>

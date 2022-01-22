@@ -146,7 +146,7 @@ const CustomTableHead = styled(TableCell)`
 	padding-left: 5px;
 	padding-right: 5px;
 	span {
-		color: ${ ( { theme } ) => theme.palette.common.white};
+		color: ${({ theme }) => theme.palette.common.white};
 		font-size: 12px;
 		line-height:1.3;
 		font-weight: 600;
@@ -188,22 +188,38 @@ const Invoice = React.forwardRef((props, ref) => {
 
 	return (
 		<div style={{ display: 'none' }} >
-			<Wrapper ref={ref} > 
+			<Wrapper ref={ref} >
 				<Grid container spacing={3}>
 					<Grid item xs={12}>
 						<ClientDetails>
 							<InvoiceTitle>
-								<span>فاتورة ضريبية مبسطة</span>
-								<span>Simplified Tax Invoice</span>
+								{bookingData.payment_status === 'refunded' ? (
+									<>
+										<span>فاتورة استرجاع</span>
+										<span>Refunded Invoice</span>
+									</>
+								) :
+									<>
+										<span>فاتورة ضريبية مبسطة</span>
+										<span>Simplified Tax Invoice</span>
+									</>
+								}
 							</InvoiceTitle>
 							<ClientImg src={userData.user.company?.logo_url} />
 							<ClientName>{userData.user.company?.companyName}</ClientName>
 							<ClientAddress>{userData.user.company?.address}</ClientAddress>
 							<ClientAddress>رقم التليفون : {userData.user.company?.companyPhone}</ClientAddress>
 							<ClientAddress><span>{userData.user.company?.tax_record}</span> : الرقم الضريبي</ClientAddress>
-							<ClientBill>رقم الفاتورة : {bookingData.id}</ClientBill>
+							{bookingData.payment_status === 'refunded' ? (
+								<>
+									<ClientBill>رقم فاتورة الاسترجاع : {bookingData.refunded_id ?? 1}</ClientBill>
+									<ClientBill>رقم الفاتورة الأصلية : {bookingData.id}</ClientBill>
+								</>
+							) : (
+								<ClientBill>رقم الفاتورة : {bookingData.id}</ClientBill>
+							)}
 							<ClientDate>تاريخ الفاتورة : {bookingData.date}</ClientDate>
-							<Grid sx={{ width: '100%'}}  container spacing={2}>
+							<Grid sx={{ width: '100%' }} container spacing={2}>
 								<Grid item xs={6}>
 									{
 										bookingData.status === 'completed' || bookingData.status === 'approved' ? (
@@ -250,7 +266,7 @@ const Invoice = React.forwardRef((props, ref) => {
 									</TableHead>
 									<TableBody>
 										{
-											bookingData.items && bookingData.items.map( (item, index) => {
+											bookingData.items && bookingData.items.map((item, index) => {
 												return (
 													<TableRow
 														key={index}
@@ -268,7 +284,7 @@ const Invoice = React.forwardRef((props, ref) => {
 									</TableBody>
 								</Table>
 							</TableContainer>
-							<Grid sx={{ width: '100%'}}  container spacing={2}>
+							<Grid sx={{ width: '100%' }} container spacing={2}>
 								<Grid item xs={12} md={6} >
 									<BillTotal>
 										<i>الاجمالي قبل الضريبة :</i>
