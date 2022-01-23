@@ -75,7 +75,7 @@ const Option = (props) => {
 
 const SearchCustomer = props => {
 
-    const { selectCustomer, bookingCreated, reserved } = props;
+    const { selectCustomer, resetSearchData } = props;
 
 
     const themeCtx = useContext(ThemeContext);
@@ -93,10 +93,10 @@ const SearchCustomer = props => {
     }, [])
 
     useEffect(() => {
-        if (bookingCreated || reserved) {
+        if (resetSearchData) {
             reset();
         }
-    }, [bookingCreated, reserved, reset]);
+    }, [reset, resetSearchData]);
 
 
 

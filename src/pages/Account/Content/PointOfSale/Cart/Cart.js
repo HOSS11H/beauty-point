@@ -177,6 +177,7 @@ const Cart = props => {
 
     const [customerData, setCustomerData] = useState(null);
     const [customerDataError, setCustomerDataError] = useState(false)
+    const [ resetSearchData, setResetSearchData ] = useState(false)
 
     const [dateTime, setDateTime] = useState(new Date());
 
@@ -331,6 +332,7 @@ const Cart = props => {
         setCashToReturn(0)
         setCashRemainig(0)
         setCartDataError(false)
+        setResetSearchData(true)
         resetCart();
     }, [resetCart])
 
@@ -445,7 +447,7 @@ const Cart = props => {
                     <FormLabel component="legend" sx={{ textAlign: 'left', textTransform: 'capitalize', marginBottom: '8px' }} >{t('select customer')}</FormLabel>
                     <ActionsWrapper>
                         <FormControl fullWidth sx={{ minWidth: '250px' }} >
-                            <SearchCustomer selectCustomer={selectCustomer} reserved={reserved} />
+                            <SearchCustomer selectCustomer={selectCustomer} resetSearchData={resetSearchData} />
                         </FormControl>
                         <AddCustomer onClick={addCustomerModalOpenHandler} >{t('add')}</AddCustomer>
                     </ActionsWrapper>
