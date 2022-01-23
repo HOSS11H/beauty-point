@@ -116,6 +116,8 @@ const Auth = props => {
     const { renderFormInputs: loginInputs, isFormValid: isLoginDataValid, form: loginData } = useForm(loginForm);
     const { renderFormInputs: subscribeInputs, isFormValid: isSubscribeDataValid, form: subscribeData } = useForm(subscribeForm);
 
+    const [markers, setMarkers] = useState([])
+
     const [ pendingSignedUp, setPendingSignedUp ] = useState(false);
 
     let authIsValid;
@@ -133,6 +135,13 @@ const Auth = props => {
     const switchAuthModeHandler = () => {
         setIsLogin(prevState => !prevState);
         setErrorMessage(null)
+    }
+    const assignCoords = (lat, lng) => {
+        setMarkers([{
+            lat: lat,
+            lng: lng,
+            defaultAnimation: 2,
+        }])
     }
     //console.log(subscribeData)
     const submitHandler = () => {
@@ -231,7 +240,7 @@ const Auth = props => {
                                     {!isLogin && subscribeFormText.heading}
                                 </FormHeading>
                                 {isLogin ? loginInputs() : subscribeInputs()}
-                                {!isLogin && <Map /> }
+                                {!isLogin && <Map assignCoords={assignCoords} markers={markers} /> }
                                 {isLogin && (
                                     <FormLink>
                                         {loginFormText.passwordRestoreMessage}

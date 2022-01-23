@@ -30,28 +30,19 @@ const options = {
 
 const Map = props => {
 
+    const { assignCoords, markers } = props;
+
     const { isLoaded, loadError } = useLoadScript({
         googleMapsApiKey: 'AIzaSyC3k16YcaG8bZDLFUMEdwoXglBiO6fQRA0',
         libraries,
     });
-    
-    const mapRef = useRef();
-
-    const [markers, setMarkers] = useState([]);
 
     if (loadError) return "Error loading maps";
     if (!isLoaded) return "Loading Maps";
 
 
     const handleClick = e => {
-        setMarkers(prevMarkers => [
-            //...prevMarkers,
-            {
-                lat: e.latLng.lat(),
-                lng: e.latLng.lng(),
-                defaultAnimation: 2,
-            }
-        ]);
+        assignCoords(e.latLng.lat(), e.latLng.lng());
     }
 
     return (
