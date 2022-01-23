@@ -13,7 +13,6 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
-import ReactSelect, { components } from 'react-select';
 
 import FormLabel from '@mui/material/FormLabel';
 import DateAdapter from '@mui/lab/AdapterDateFns';
@@ -30,6 +29,7 @@ import ThemeContext from '../../../../../store/theme-context';
 import AddCustomerModal from './AddCustomerModal/AddCustomerModal';
 import { formatCurrency } from '../../../../../shared/utility';
 import { Fragment } from 'react';
+import SearchCustomer from './SearchCustomer/SearchCustomer';
 
 
 const CustomerCard = styled.div`
@@ -164,83 +164,19 @@ const CustomFormGroup = styled.div`
     align-items: center;
 `
 
-const customStyles = {
-    option: (provided, state) => ({
-        ...provided,
-        color: '#000',
-    }),
-};
-const CustomerSelectOption = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-`
-const CustomerSelectName = styled.h4`
-    display: block;
-    font-size: 14px;
-    line-height:1.5;
-    text-transform: capitalize;
-    font-weight: 600;
-    color: ${({ theme }) => theme.palette.primary.dark};
-    transition: 0.3s ease-in-out;
-    margin-bottom: 0px;
-`
-const CustomerSelectInfo = styled.ul`
-    margin: 0;
-    padding: 0;
-    li {
-        display: flex;
-        align-items: center;
-        font-size: 14px;
-        line-height:1.5;
-        text-transform: capitalize;
-        font-weight: 500;
-        color: ${({ theme }) => theme.palette.text.default};
-        margin-bottom: 5px;
-        &:last-child {
-            margin-bottom: 0px;
-        }
-        svg {
-            width: 16px;
-            height: 16px;
-            &.MuiSvgIcon-root  {
-                margin:0;
-                margin-right: 8px;
-            }
-        }
-    }
-`
 
-const Option = (props) => {
-    return (
-        <Fragment>
-            <components.Option {...props}>
-                <CustomerSelectOption>
-                    <CustomerSelectName>{props.children}</CustomerSelectName>
-                    <CustomerSelectInfo>
-                        <li><PhoneAndroidIcon sx={{ mr: 1 }} />{props.data.mobile}</li>
-                    </CustomerSelectInfo>
-                </CustomerSelectOption>
-            </components.Option>
-        </Fragment>
-    );
-};
 
 const Cart = props => {
 
-    const { cartData, removeFromCart, increaseItem, decreaseItem, resetCart, reserved, reset, purchase, print, fetchedCoupons, fetchedCustomers, addedCustomerData, addingCustomerSuccess, fetchCouponsHandler, searchCustomersHandler, addCustomerHandler, fetchedEmployeesHandler, bookingCreated, priceChangeHandler, changeEmployee } = props;
+    const { cartData, removeFromCart, increaseItem, decreaseItem, resetCart, reserved, reset, purchase, print, fetchedCoupons, addedCustomerData, addingCustomerSuccess, fetchCouponsHandler, addCustomerHandler, fetchedEmployeesHandler, bookingCreated, priceChangeHandler, changeEmployee } = props;
 
     const { t } = useTranslation()
 
     const themeCtx = useContext(ThemeContext);
     const { lang } = themeCtx;
 
-    const [customerInput, setCustomerInput] = useState('');
-    const [customer, setCustomer] = useState(null);
     const [customerData, setCustomerData] = useState(null);
     const [customerDataError, setCustomerDataError] = useState(false)
-
-    const [options, setOptions] = useState([])
 
     const [dateTime, setDateTime] = useState(new Date());
 
@@ -307,18 +243,6 @@ const Cart = props => {
         }
     }, [cartData, couponData, discount, discountType])
 
-    useEffect(() => {
-        if (fetchedCustomers) {
-            setOptions(fetchedCustomers.map(customer => {
-                return {
-                    value: customer.id,
-                    label: customer.name,
-                    mobile: customer.mobile,
-                }
-            }))
-        }
-    }, [fetchedCustomers])
-
     // Add Customer Modal
     const addCustomerModalOpenHandler = useCallback((id) => {
         setAddCustomerModalOpened(true);
@@ -336,43 +260,17 @@ const Cart = props => {
         setDateTime(newValue);
     };
 
-    const handleSelectOptions = (value, actions) => {
-        if (value.length !== 0) {
-            setCustomerInput(value);
-        }
-    }
 
-    useEffect(() => {
-        if (customerInput.length !== 0) {
-            const searchTimeout = setTimeout(() => {
-                searchCustomersHandler(lang, customerInput)
-            }, 1000)
-            return () => clearTimeout(searchTimeout);
-        }
-    }, [customerInput, lang, searchCustomersHandler])
 
-    const filterOption = (option, inputValue) => {
-        if (option.data?.mobile?.includes(inputValue)) {
-            return true
-        }
-        if (option.label.toLowerCase().includes(inputValue.toLowerCase())) {
-            return true
-        }
-    }
-
-    const handleSelectCustomer = (value, actions) => {
+    const selectCustomer = useCallback((value) => {
         if (value) {
-            const customerIndex = fetchedCustomers.findIndex(customer => customer.id === value.value);
-            const updatedCustomerData = fetchedCustomers[customerIndex];
             setCustomerDataError(false)
-            setCustomer(value);
-            setCustomerData(updatedCustomerData);
+            setCustomerData(value);
         } else {
             setCustomerDataError(true)
-            setCustomer(null)
             setCustomerData(null);
         }
-    }
+    } , [])
 
     const discountTypeChangeHandler = (event) => {
         setDiscountType(event.target.value);
@@ -420,7 +318,6 @@ const Cart = props => {
     }
 
     const resetCartHandler = useCallback(() => {
-        setCustomer(null);
         setCustomerData(null);
         setCustomerDataError(false)
         setDiscount(0)
@@ -548,8 +445,7 @@ const Cart = props => {
                     <FormLabel component="legend" sx={{ textAlign: 'left', textTransform: 'capitalize', marginBottom: '8px' }} >{t('select customer')}</FormLabel>
                     <ActionsWrapper>
                         <FormControl fullWidth sx={{ minWidth: '250px' }} >
-                            <ReactSelect styles={customStyles} options={options} isClearable isRtl={lang === 'ar'} filterOption={filterOption} components={{ Option }}
-                                value={customer} onChange={handleSelectCustomer} onInputChange={handleSelectOptions} />
+                            <SearchCustomer selectCustomer={selectCustomer} reserved={reserved} />
                         </FormControl>
                         <AddCustomer onClick={addCustomerModalOpenHandler} >{t('add')}</AddCustomer>
                     </ActionsWrapper>
