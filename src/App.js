@@ -42,6 +42,8 @@ import SingleSalon from "./pages/Home/SingleSalon/SingleSalon";
 import AllPackages from "./pages/Home/AllPackages/AllPackages";
 import AllCategories from "./pages/Home/AllCategories/AllCategories";
 import AllSaloons from "./pages/Home/AllSaloons/AllSaloons";
+import NearbySalons from "./pages/Home/NearbySalons/NearbySalons";
+
 import Landing from "./pages/Landing/Landing";
 
 function App() {
@@ -67,6 +69,7 @@ function App() {
                 <Route path="services/:serviceId" element={<SingleService />} />
                 <Route path="deals/:dealId" element={<SingleDeal />} />
                 <Route path="salons/:salonId" element={<SingleSalon />} />
+                <Route path="nearby-salons" element={<NearbySalons />} />
             </Route>
             <Route path='/' element={<Landing />} />
             <Route path='*' element={<NotFound />} />
@@ -108,6 +111,7 @@ function App() {
                     <Route path="services/:serviceId" element={<SingleService />} />
                     <Route path="deals/:dealId" element={<SingleDeal />} />
                     <Route path="salons/:salonId" element={<SingleSalon />} />
+                    <Route path="nearby-salons" element={<NearbySalons />} />
                 </Route>
                 <Route path='/' element={<Landing />} />
                 <Route path='*' element={<NotFound />} />
