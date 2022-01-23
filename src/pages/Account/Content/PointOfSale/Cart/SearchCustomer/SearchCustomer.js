@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import ReactSelect, { components } from 'react-select';
 import { searchCustomers } from '../../../../../../store/actions/index';
 import ThemeContext from '../../../../../../store/theme-context';
+import axios from '../../../../../../utils/axios-instance';
 import styled from 'styled-components';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import { useCallback } from 'react';
@@ -74,23 +75,25 @@ const Option = (props) => {
 
 const SearchCustomer = props => {
 
-    const { fetchedCustomers, searchCustomersHandler, selectCustomer, bookingCreated, reserved } = props;
+    const { selectCustomer, bookingCreated, reserved } = props;
+
 
     const themeCtx = useContext(ThemeContext);
     const { lang } = themeCtx;
 
+    const [customers, setCustomers] = useState([])
     const [customerInput, setCustomerInput] = useState('');
     const [customer, setCustomer] = useState(null);
 
     const [options, setOptions] = useState([])
 
-    const reset = useCallback(( ) => {
+    const reset = useCallback(() => {
         setCustomerInput('');
         setCustomer(null);
     }, [])
 
     useEffect(() => {
-        if ( bookingCreated || reserved ) {
+        if (bookingCreated || reserved) {
             reset();
         }
     }, [bookingCreated, reserved, reset]);
@@ -98,8 +101,8 @@ const SearchCustomer = props => {
 
 
     useEffect(() => {
-        if (fetchedCustomers) {
-            setOptions(fetchedCustomers.map(customer => {
+        if (customers) {
+            setOptions(customers.map(customer => {
                 return {
                     value: customer.id,
                     label: customer.name,
@@ -107,7 +110,7 @@ const SearchCustomer = props => {
                 }
             }))
         }
-    }, [fetchedCustomers])
+    }, [customers])
 
     const handleSelectOptions = (value, actions) => {
         if (value.length !== 0) {
@@ -118,11 +121,20 @@ const SearchCustomer = props => {
     useEffect(() => {
         if (customerInput.length !== 0) {
             const searchTimeout = setTimeout(() => {
-                searchCustomersHandler(lang, customerInput)
+                axios.get(`vendors/customers?term=${customerInput}`, {
+                    headers: {
+                        'Accept-Language': lang
+                    }
+                }).then(response => {
+                    setCustomers(response.data.data)
+                })
+                    .catch(err => {
+                        console.log(err)
+                    })
             }, 1000)
             return () => clearTimeout(searchTimeout);
         }
-    }, [customerInput, lang, searchCustomersHandler])
+    }, [customerInput, lang])
 
     const filterOption = (option, inputValue) => {
         if (option.data?.mobile?.includes(inputValue)) {
@@ -135,8 +147,8 @@ const SearchCustomer = props => {
 
     const handleSelectCustomer = (value, actions) => {
         if (value) {
-            const customerIndex = fetchedCustomers.findIndex(customer => customer.id === value.value);
-            const updatedCustomerData = fetchedCustomers[customerIndex];
+            const customerIndex = customers.findIndex(customer => customer.id === value.value);
+            const updatedCustomerData = customers[customerIndex];
             setCustomer(value);
             selectCustomer(updatedCustomerData)
         } else {
@@ -150,17 +162,4 @@ const SearchCustomer = props => {
     )
 }
 
-const mapStateToProps = (state) => {
-    return {
-        fetchedCustomers: state.customers.posCustmers.customers,
-        bookingCreated: state.bookings.bookingCreated,
-    }
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        searchCustomersHandler: (lang, word) => dispatch(searchCustomers(lang, word)),
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(SearchCustomer);
+export default SearchCustomer;

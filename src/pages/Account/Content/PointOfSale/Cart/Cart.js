@@ -638,7 +638,6 @@ const Cart = props => {
 
 const mapStateToProps = (state) => {
     return {
-        fetchedCustomers: state.customers.posCustmers.customers,
         addedCustomerData: state.customers.posCustmers.addedCustomerData,
         addingCustomerSuccess: state.customers.addingCustomerSuccess,
         fetchedCoupons: state.coupons.coupons,
@@ -648,7 +647,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        searchCustomersHandler: (lang, word) => dispatch(searchCustomers(lang, word)),
         fetchCouponsHandler: (lang) => dispatch(fetchCoupons(lang)),
         fetchedEmployeesHandler: (lang) => dispatch(fetchEmployees(lang)),
         addCustomerHandler: (data) => dispatch(addCustomer(data)),
