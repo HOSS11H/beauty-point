@@ -1,20 +1,23 @@
 import { useEffect, Fragment } from 'react';
 import { useContext } from 'react';
 import { useState } from 'react';
-import { connect } from 'react-redux';
 import ReactSelect, { components } from 'react-select';
-import { searchCustomers } from '../../../../../../store/actions/index';
 import ThemeContext from '../../../../../../store/theme-context';
 import axios from '../../../../../../utils/axios-instance';
 import styled from 'styled-components';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const customStyles = {
     option: (provided, state) => ({
         ...provided,
         color: '#000',
     }),
+    control: base => ({
+        ...base,
+        height: 56,
+    })
 };
 
 const CustomerSelectOption = styled.div`
@@ -74,6 +77,8 @@ const Option = (props) => {
 };
 
 const SearchCustomer = props => {
+
+    const {t} = useTranslation();
 
     const { selectCustomer, resetSearchData } = props;
 
@@ -157,7 +162,8 @@ const SearchCustomer = props => {
     }
 
     return (
-        <ReactSelect styles={customStyles} options={options} isClearable isRtl={lang === 'ar'} filterOption={filterOption} components={{ Option }}
+        <ReactSelect styles={customStyles} options={options} isClearable isRtl={lang === 'ar'} 
+            placeholder={t('select customer')} filterOption={filterOption} components={{ Option }}
             value={customer} onChange={handleSelectCustomer} onInputChange={handleSelectOptions} />
     )
 }
