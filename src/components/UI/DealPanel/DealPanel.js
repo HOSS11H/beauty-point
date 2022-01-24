@@ -6,7 +6,7 @@ const DealPanelCard = styled.div`
     border-radius: 25px;
     margin: 0 9px;
     @media screen and (max-width: 899.98px) {
-        margin: 0 auto 0px;
+        margin: 0 9px 0px;
         max-width: 370px
     }
     cursor: pointer;

@@ -1,7 +1,11 @@
+import { useMediaQuery } from '@mui/material';
 import { format } from 'date-fns/esm';
+import { Fragment } from 'react';
+import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { formatCurrency } from '../../../../../shared/utility';
+import ThemeContext from '../../../../../store/theme-context';
 
 
 const Wrapper = styled.div`
@@ -108,65 +112,75 @@ const CartOverview = props => {
 
     const { t } = useTranslation()
 
+    const themeCtx = useContext(ThemeContext);
+
+    const isMobile = useMediaQuery(themeCtx.theme.breakpoints.down('lg'));
+
     return (
-        <Wrapper>
-            <OverviewHeading>{t('summary')}</OverviewHeading>
-            <OverviewBody>
-                {
-                    cartData.services.length > 0 && (
-                        <OverviewBlock>
-                            <h4>{t('services')}</h4>
-                            {cartData.services.map(service => (
-                                <Item key={service.id}>
-                                    <span>{service.name}</span>
-                                    <span>{formatCurrency(service.price)}</span>
-                                </Item>
-                            ))}
-                        </OverviewBlock>
-                    )
-                }
-                {
-                    cartData.deals.length > 0 && (
-                        <OverviewBlock>
-                            <h4>{t('deals')}</h4>
-                            {cartData.deals.map(deal => (
-                                <Item key={deal.id}>
-                                    <span>{deal.name}</span>
-                                    <span>{formatCurrency(deal.price)}</span>
-                                </Item>
-                            ))}
-                        </OverviewBlock>
-                    )
-                }
-            </OverviewBody>
-            <div>
-                {
-                    hasSelectedAppointment && (
-                        <BookingInfos>
-                            <p>{t('appointment')}</p>
-                            <p>{(format(appointment,'yyyy-MM-dd' ))}</p>
-                            <p>{slot}</p>
-                        </BookingInfos>
-                    )
-                }
-                {
-                    hasSelectedCoupon && couponDiscount > 0 && (
-                        <BookingInfos>
-                            <p>{t('coupon discount')}</p>
-                            <p>{formatCurrency(couponDiscount)}</p>
-                        </BookingInfos>
-                    )
-                }
-                <BookingInfos>
-                    <p>{t('total taxes')}</p>
-                    <p>{formatCurrency(taxes)}</p>
-                </BookingInfos>
-                <BookingInfos>
-                    <p>{t('price after discount')}</p>
-                    <p>{formatCurrency(total)}</p>
-                </BookingInfos>
-            </div>
-        </Wrapper>
+        <Fragment>
+            {
+                !isMobile && (
+                    <Wrapper >
+                        <OverviewHeading>{t('summary')}</OverviewHeading>
+                        <OverviewBody>
+                            {
+                                cartData.services.length > 0 && (
+                                    <OverviewBlock>
+                                        <h4>{t('services')}</h4>
+                                        {cartData.services.map(service => (
+                                            <Item key={service.id}>
+                                                <span>{service.name}</span>
+                                                <span>{formatCurrency(service.price)}</span>
+                                            </Item>
+                                        ))}
+                                    </OverviewBlock>
+                                )
+                            }
+                            {
+                                cartData.deals.length > 0 && (
+                                    <OverviewBlock>
+                                        <h4>{t('deals')}</h4>
+                                        {cartData.deals.map(deal => (
+                                            <Item key={deal.id}>
+                                                <span>{deal.name}</span>
+                                                <span>{formatCurrency(deal.price)}</span>
+                                            </Item>
+                                        ))}
+                                    </OverviewBlock>
+                                )
+                            }
+                        </OverviewBody>
+                        <div>
+                            {
+                                hasSelectedAppointment && (
+                                    <BookingInfos>
+                                        <p>{t('appointment')}</p>
+                                        <p>{(format(appointment, 'yyyy-MM-dd'))}</p>
+                                        <p>{slot}</p>
+                                    </BookingInfos>
+                                )
+                            }
+                            {
+                                hasSelectedCoupon && couponDiscount > 0 && (
+                                    <BookingInfos>
+                                        <p>{t('coupon discount')}</p>
+                                        <p>{formatCurrency(couponDiscount)}</p>
+                                    </BookingInfos>
+                                )
+                            }
+                            <BookingInfos>
+                                <p>{t('total taxes')}</p>
+                                <p>{formatCurrency(taxes)}</p>
+                            </BookingInfos>
+                            <BookingInfos>
+                                <p>{t('price after discount')}</p>
+                                <p>{formatCurrency(total)}</p>
+                            </BookingInfos>
+                        </div>
+                    </Wrapper>
+                )
+            }
+        </Fragment>
     )
 }
 export default CartOverview;

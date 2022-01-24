@@ -420,6 +420,8 @@ const resources = {
             'choose your city': 'اختر مدينتك',
             'print refunded invoice': 'طباعة الفاتورة المسترجعة',
             'refunded': 'مسترجع',
+            'choose appointment': 'اختر موعد',
+            'No slots available': 'لا يوجد مواعيد متاحة',
         }
     }
 };

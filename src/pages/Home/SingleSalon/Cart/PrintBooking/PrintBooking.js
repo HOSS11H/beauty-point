@@ -102,7 +102,7 @@ const PrintBooking = props => {
                 <BookingInfos>{t('date')} : {format(appointment,'yyyy-MM-dd' )}</BookingInfos>
                 <BookingInfos>{t('time')} :{slot}</BookingInfos>
                 <ActionButton onClick={printBookingHandler}  ><PrintIcon/>{t('print')}</ActionButton>
-                <Invoice userData={modifiedUserData} ref={invoiceRef} bookingData={bookingData} qrCode={qrCode} />
+                {qrCode && <Invoice userData={modifiedUserData} ref={invoiceRef} bookingData={bookingData} qrCode={qrCode} />}
             </Wrapper>
         )
     }

@@ -79,6 +79,14 @@ const CategoryPanelCard = styled.div`
             font-weight: 600;
             z-index: 51;
             box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+            @media screen and (max-width: 899.98px) {
+                right: -15px;
+            }
+            @media screen and (max-width: 599.98px) {
+                width:30px;
+                height:30px;
+                right: -10px;
+            }
         }
     }
     .category-title {

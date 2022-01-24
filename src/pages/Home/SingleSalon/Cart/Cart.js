@@ -77,6 +77,23 @@ const CartBody = styled.div`
     }
 `
 
+const CartButton = styled(Button)`
+    &.MuiButton-root {
+        background: ${ ( { theme } ) => theme.vars.primary};
+        color: ${ ( { theme } ) => theme.palette.common.white};
+        transition: 0.3s ease-in-out;
+        border-radius: 10px;
+        &:disabled {
+            background: #eee;
+            color: #999;
+            box-shadow: none;
+        }
+        &:hover {
+            background: ${ ( { theme } ) => theme.palette.secondary.dark};
+        }
+    }
+`
+
 const cartReducer = (state, action) => {
     switch (action.type) {
         case 'ADD_TO_SERVICES':
@@ -502,9 +519,9 @@ const Cart = props => {
                                                     {t('Back')}
                                                 </Button>
                                                 <Box sx={{ flex: '1 1 auto' }} />
-                                                <Button color="secondary" onClick={handleNext} disabled={cart.services.length === 0 && cart.deals.length === 0 && cart.products.length === 0} >
-                                                    {t(activeStep === steps.length - 1 ? 'Finish' : 'Next')}
-                                                </Button>
+                                                <CartButton color="secondary" variant='contained' onClick={handleNext} disabled={cart.services.length === 0 && cart.deals.length === 0 && cart.products.length === 0} >
+                                                    {t('Next')}
+                                                </CartButton>
                                             </Box>
                                         )
                                     }
@@ -519,9 +536,9 @@ const Cart = props => {
                                                     {t('Back')}
                                                 </Button>
                                                 <Box sx={{ flex: '1 1 auto' }} />
-                                                <Button color="secondary" onClick={handleNext} disabled={cart.services.length === 0 && cart.deals.length === 0 && cart.products.length === 0} >
-                                                    {t(activeStep === steps.length - 1 ? 'Finish' : 'Next')}
-                                                </Button>
+                                                <CartButton color="secondary" variant='contained' onClick={handleNext} disabled={cart.services.length === 0 && cart.deals.length === 0 && cart.products.length === 0} >
+                                                    {t('Next')}
+                                                </CartButton>
                                             </Box>
                                         )
                                     }
@@ -536,9 +553,9 @@ const Cart = props => {
                                                     {t('Back')}
                                                 </Button>
                                                 <Box sx={{ flex: '1 1 auto' }} />
-                                                <Button color="secondary" onClick={handleNext} disabled={!hasSelectedAppointment} >
-                                                    {t(activeStep === steps.length - 1 ? 'Finish' : 'Next')}
-                                                </Button>
+                                                <CartButton color="secondary" variant='contained' onClick={handleNext} disabled={!hasSelectedAppointment} >
+                                                    {t('Next')}
+                                                </CartButton>
                                             </Box>
                                         )
                                     }
@@ -554,9 +571,9 @@ const Cart = props => {
                                                     {t('Back')}
                                                 </Button>
                                                 <Box sx={{ flex: '1 1 auto' }} />
-                                                <Button color="secondary" onClick={handleNext} disabled >
-                                                    {t(activeStep === steps.length - 1 ? 'Finish' : 'Next')}
-                                                </Button>
+                                                <CartButton color="secondary" variant='contained' onClick={handleNext} disabled >
+                                                    {t('Next')}
+                                                </CartButton>
                                             </Box>
                                         )
                                     }
@@ -579,9 +596,9 @@ const Cart = props => {
                                         activeStep === 6 && (
                                             <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>
                                                 <Box sx={{ flex: '1 1 auto' }} />
-                                                <Button color="secondary" onClick={ResetCart} disabled={!bookingDone} >
+                                                <CartButton color="secondary" variant='contained' onClick={ResetCart} disabled={!bookingDone} >
                                                     {t('Finish')}
-                                                </Button>
+                                                </CartButton>
                                             </Box>
                                         )
                                     }

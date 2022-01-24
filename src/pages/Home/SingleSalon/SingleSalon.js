@@ -168,7 +168,7 @@ const SingleSalon = props => {
                 <Typography component="div" variant="h4" sx={{ marginBottom: '10px' }} >
                     {salon.companyName}
                 </Typography>
-                <Grid container spacing={3}>
+                <Grid container spacing={2}>
                     <Grid item xs={12} sm={12} md={8} >
                         <Typography component="div" color='primary' variant="subtitle1" sx={{ display: 'flex', alignItems: 'center', }}>
                             <PushPinIcon sx={{ mr: 1, width: '15px', height: '15px' }} />{salon.vendor_page.address}
