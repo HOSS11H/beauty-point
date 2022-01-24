@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import HomeLayout from "../../../components/HomeLayout/HomeLayout";
 import Map from "./Map/Map";
 import axios from '../../../utils/axios-instance'
 import Loader from "../../../components/UI/Loader/Loader";
@@ -15,9 +14,22 @@ const NearbySalons = props => {
             setLoading(true);
             navigator.geolocation.getCurrentPosition((position) => {
                 const { latitude, longitude } = position.coords;
-                axios.get(`/nearby?lat=${latitude}&long=${longitude}&radius=70000`)
+                axios.get(`/nearby?lat=${latitude}&long=${longitude}&radius=70000&include[]=vendor_page`)
                     .then(res => {
-                        setSalons(res.data.data);
+                        const fetchedSalons = res.data.data.map(salon => {
+                            return {
+                                lat: salon.vendor_page.latitude,
+                                lng: salon.vendor_page.longitude,
+                                data: {
+                                    id: salon.id,
+                                    name: salon.companyName,
+                                    address: salon.address,
+                                    phone: salon.companyPhone,
+                                    image: salon.logo_url,
+                                }
+                            }
+                        });
+                        setSalons(fetchedSalons);
                         setLoading(false);
                     })
                     .catch(err => {
@@ -27,7 +39,7 @@ const NearbySalons = props => {
         }
     }, [salons.length])
 
-    let content = <Loader height='300px' />;
+    let content = <Loader height='100vh' />;
 
     if (salons.length > 0) {
         content = <Map salons={salons} />;
@@ -35,9 +47,9 @@ const NearbySalons = props => {
 
 
     return (
-        <HomeLayout>
+        <>
             {content}
-        </HomeLayout>
+        </>
     )
 }
 export default NearbySalons;

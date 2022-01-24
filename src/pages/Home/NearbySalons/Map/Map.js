@@ -13,14 +13,16 @@ import { mapStyles } from "./mapStyles";
 
 import markerImg from '../../../../images/marker/marker.png';
 import Locate from "./Locate/Locate";
-import { useEffect } from "react";
+import SalonsCarousel from "./SalonsCarousel/SalonsCarousel";
+import styled from "styled-components";
+
+import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 
 const libraries = ["places"];
 
 const mapContainerStyle = {
-    width: "100%",
-    height: "300px",
-    margin: "20px auto",
+    width: "100vw",
+    height: "100vh",
     position: "relative",
 }
 
@@ -34,6 +36,52 @@ const options = {
     disableDefaultUI: true,
     zoomControl: true
 }
+
+const SliderWrapper = styled.div`
+    position: absolute;
+    bottom: 40px;
+    left: 0;
+    right: 0;
+`
+
+const InfoBody = styled.div`
+    padding: 10px;
+    padding-right: 0;
+    h3 {
+        font-size: 17px;
+        line-height: 1.4;
+        font-weight: 600;
+        font-family: ${ ( {theme}  ) => theme.fonts.ar };
+        margin-bottom: 5px;
+        color: ${({ theme }) => theme.palette.common.black };
+    }
+    h4 {
+        font-size: 16px;
+        line-height: 1.4;
+        font-weight: 600;
+        margin-bottom: 5px;
+        font-family: ${ ( {theme}  ) => theme.fonts.ar };
+        color: ${({ theme }) => theme.palette.common.black };
+    }
+    p {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        line-height:1.5;
+        text-transform: capitalize;
+        font-weight: 600;
+        font-family: ${ ( {theme}  ) => theme.fonts.ar };
+        color: ${({ theme }) => theme.palette.common.black };
+        svg {
+            width: 16px;
+            height: 16px;
+            &.MuiSvgIcon-root  {
+                margin:0;
+                margin-right: 8px;
+            }
+        }
+    }
+`
 
 const Map = ( { salons } ) => {
 
@@ -54,6 +102,7 @@ const Map = ( { salons } ) => {
     }, []);
 
     const panTo = useCallback(({ lat, lng }) => {
+        console.log(lat, lng)
         mapRef.current.panTo({ lat, lng });
         mapRef.current.setZoom(14);
     }, []);
@@ -64,12 +113,12 @@ const Map = ( { salons } ) => {
     return (
         <div>
             <GoogleMap mapContainerStyle={mapContainerStyle} 
-                onLoad={ onMapLoad }
+                onLoad={ onMapLoad } options={options}
                 zoom={8} center={center} >
                 {markers.map(marker => (
                     <Marker
-                        key={marker.latitude}
-                        position={{ lat: marker.latitude, lng: marker.longitude }}
+                        key={marker.data.id}
+                        position={{ lat: +marker.lat, lng: +marker.lng }}
                         icon={{
                             url: markerImg,
                             scaledSize: new window.google.maps.Size(50, 50),
@@ -81,16 +130,23 @@ const Map = ( { salons } ) => {
                 ))}
                 {selected ? (
                     <InfoWindow
-                        position={{ lat: selected.lat, lng: selected.lng }}
+                        position={{ lat: +selected.lat, lng: +selected.lng }}
                         onCloseClick={() => setSelected(null)}
+
                     >
-                        <div>
-                            salon name
-                            {selected.time}
-                        </div>
+                        <InfoBody>
+                            <h3>{selected.data.name}</h3>
+                            <h4>{selected.data.address}</h4>
+                            <p>
+                                <PhoneAndroidIcon sx={{ mr: 1 }} />{selected.data.phone}
+                            </p>
+                        </InfoBody>
                     </InfoWindow>
                 ) : null}
                 <Locate panTo={panTo} />
+                <SliderWrapper>
+                    <SalonsCarousel salons={markers} handleClick={panTo} />
+                </SliderWrapper>
             </GoogleMap>
         </div>
     )
