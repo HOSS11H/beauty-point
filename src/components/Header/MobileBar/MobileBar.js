@@ -59,7 +59,7 @@ const MobileBar = props => {
                 <HomeIcon />
                 <span>home</span>
             </NavLink>
-            <NavLink to="/" className="mobile-bar-link">
+            <NavLink to="/home/nearby-salons" className="mobile-bar-link">
                 <RoomIcon />
                 <span>nearby</span>
             </NavLink>

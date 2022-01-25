@@ -17,7 +17,7 @@ SwiperCore.use([Autoplay]);
 // Import Swiper styles
 
 const SalonCard = styled(Card)`
-    &.MuiPaper-root {-
+    &.MuiPaper-root {
         box-shadow: rgb(90 114 123 / 11%) 0px 7px 30px 0px;
         border-radius: 20px;
         padding: 20px;
@@ -48,7 +48,7 @@ const CardBody = styled.div`
         font-weight: 700;
         font-family: ${({ theme }) => theme.fonts.ar};
         margin-bottom: 5px;
-        color: ${({ theme }) => theme.palette.common.black};
+        color: ${({ theme }) => theme.vars.theme};
     }
     h4 {
         font-size: 15px;

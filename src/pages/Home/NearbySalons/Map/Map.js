@@ -17,6 +17,7 @@ import SalonsCarousel from "./SalonsCarousel/SalonsCarousel";
 import styled from "styled-components";
 
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
+import { NavLink } from "react-router-dom";
 
 const libraries = ["places"];
 
@@ -47,13 +48,13 @@ const SliderWrapper = styled.div`
 const InfoBody = styled.div`
     padding: 10px;
     padding-right: 0;
-    h3 {
+    a {
         font-size: 17px;
         line-height: 1.4;
         font-weight: 600;
         font-family: ${ ( {theme}  ) => theme.fonts.ar };
         margin-bottom: 5px;
-        color: ${({ theme }) => theme.palette.common.black };
+        color: ${({ theme }) => theme.vars.theme};
     }
     h4 {
         font-size: 16px;
@@ -102,7 +103,6 @@ const Map = ( { salons } ) => {
     }, []);
 
     const panTo = useCallback(({ lat, lng }) => {
-        console.log(lat, lng)
         mapRef.current.panTo({ lat, lng });
         mapRef.current.setZoom(14);
     }, []);
@@ -135,7 +135,9 @@ const Map = ( { salons } ) => {
 
                     >
                         <InfoBody>
-                            <h3>{selected.data.name}</h3>
+                            <NavLink to={`../salons/${selected.data.id}`}>
+                                {selected.data.name}
+                            </NavLink>
                             <h4>{selected.data.address}</h4>
                             <p>
                                 <PhoneAndroidIcon sx={{ mr: 1 }} />{selected.data.phone}

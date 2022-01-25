@@ -70,6 +70,7 @@ function App() {
                 <Route path="deals/:dealId" element={<SingleDeal />} />
                 <Route path="salons/:salonId" element={<SingleSalon />} />
                 <Route path="nearby-salons" element={<NearbySalons />} />
+                <Route path='*' element={<NotFound />} />
             </Route>
             <Route path='/' element={<Landing />} />
             <Route path='*' element={<NotFound />} />
@@ -112,6 +113,7 @@ function App() {
                     <Route path="deals/:dealId" element={<SingleDeal />} />
                     <Route path="salons/:salonId" element={<SingleSalon />} />
                     <Route path="nearby-salons" element={<NearbySalons />} />
+                    <Route path='*' element={<NotFound />} />
                 </Route>
                 <Route path='/' element={<Landing />} />
                 <Route path='*' element={<NotFound />} />

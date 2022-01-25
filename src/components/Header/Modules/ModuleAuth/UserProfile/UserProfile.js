@@ -5,6 +5,7 @@ import { useContext, useEffect, useRef } from 'react';
 import AuthContext from '../../../../../store/auth-context';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import PersonIcon from '@mui/icons-material/Person';
 
 const UserProfileWrapper = styled.div`
     display: inline-flex;
@@ -115,7 +116,7 @@ const UserProfile = props => {
     return (
         <UserProfileWrapper ref={ref} >
             <UserImg onClick={handleOpen}>
-                <CustomAvatar >{userLetter}</CustomAvatar>
+                <CustomAvatar >{userLetter ?? <PersonIcon />}</CustomAvatar>
             </UserImg>
             <DropdownWrapper open={open}>
                 <li>
