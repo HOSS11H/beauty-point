@@ -76,7 +76,7 @@ const PrintBookingModal = props => {
     const [qrCode, setQrCode] = useState(null);
     const [userData, setUserData] = useState(null);
 
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     const fetchData = useCallback(() => {
         setLoading(true);
@@ -96,11 +96,10 @@ const PrintBookingModal = props => {
         axios.all([getUserData, getQrCode])
             .then(axios.spread((...responses) => {
                 setUserData(responses[0].data);
-                setQrCode(responses[1].data);
+                setQrCode(responses[1].data.data);
                 setLoading(false);
             }))
             .catch(error => {
-                //console.log(error);
                 setLoading(false);
             });
     }, [bookingData.id])
@@ -108,7 +107,6 @@ const PrintBookingModal = props => {
 
     useEffect(() => {
         if (bookingData.id && !userData && !qrCode) {
-            //console.log('excuted');
             fetchData();
         }
     }, [bookingData.id, fetchData, qrCode, userData]);
@@ -135,7 +133,7 @@ const PrintBookingModal = props => {
             <Wrapper>
                 <Message>{t('Your order has been booked successfully')}</Message>
                 <ActionButton onClick={handlePrint}  ><PrintIcon />{t('print')}</ActionButton>
-                <Invoice userData={userData} ref={invoiceRef} bookingData={bookingData} qrCode={qrCode} />
+                {qrCode && <Invoice userData={userData} ref={invoiceRef} bookingData={bookingData} qrCode={qrCode} />}
             </Wrapper>
         )
     }
