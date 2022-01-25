@@ -59,7 +59,6 @@ const InfoBody = styled.div`
         font-size: 16px;
         line-height: 1.4;
         font-weight: 600;
-        margin-bottom: 5px;
         font-family: ${ ( {theme}  ) => theme.fonts.ar };
         color: ${({ theme }) => theme.palette.common.black };
     }

@@ -53,9 +53,11 @@ const CardBody = styled.div`
         font-size: 15px;
         line-height: 1.4;
         font-weight: 600;
-        margin-bottom: 10px;
         font-family: ${({ theme }) => theme.fonts.ar};
         color: ${({ theme }) => theme.palette.text.primary};
+        text-overflow: ellipsis;
+        max-height: 63px;
+        overflow: hidden;
     }
 `
 
