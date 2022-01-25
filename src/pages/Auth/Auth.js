@@ -143,7 +143,6 @@ const Auth = props => {
             defaultAnimation: 2,
         }])
     }
-    //console.log(subscribeData)
     const submitHandler = () => {
         let url;
         let authData;
@@ -174,7 +173,8 @@ const Auth = props => {
                 contact: subscribeData.phoneNum.value,
                 address: subscribeData.address.value,
                 password: subscribeData.password.value,
-                map: '',
+                address_latitude: markers[0].lat,
+                address_longitude: markers[0].lng,
                 package_id: packageId,
                 calling_code: '+91',
                 fcm_token: 'asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231',
