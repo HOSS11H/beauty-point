@@ -2,11 +2,7 @@ import {
     GoogleMap,
     useLoadScript,
     Marker,
-    InfoWindow,
 } from "@react-google-maps/api";
-import { useCallback } from "react";
-import { useRef } from "react";
-import { useState } from "react";
 import { mapStyles } from "./mapStyles";
 
 const libraries = ["places"];
@@ -48,13 +44,12 @@ const Map = props => {
     return (
         <div>
             <GoogleMap mapContainerStyle={mapContainerStyle} 
-                onClick={ handleClick }
+                onClick={ handleClick } options={options}
                 zoom={8} center={center} >
                 {markers.map(marker => (
                     <Marker
                         key={marker.lat}
                         position={{ lat: marker.lat, lng: marker.lng }}
-                        onClick={() => console.log("You clicked me!")}
                     />
                 ))}
             </GoogleMap>

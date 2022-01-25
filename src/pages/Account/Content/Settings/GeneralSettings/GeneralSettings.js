@@ -4,13 +4,11 @@ import { useTranslation } from 'react-i18next';
 import CssBaseline from '@mui/material/CssBaseline';
 import Stack from '@mui/material/Stack';
 import { Alert, Backdrop, Button, CircularProgress, Grid, Skeleton, Snackbar, TextField } from "@mui/material";
-import IconButton from '@mui/material/IconButton';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
-import DeleteIcon from '@mui/icons-material/Delete';
 import styled from 'styled-components';
 
 import ImageUploading from 'react-images-uploading';
-import Map from "../../../../Auth/Map/Map";
+
 
 const UploadImageTopBar = styled.div`
     display: flex;
@@ -51,8 +49,6 @@ export default function GeneralSettings(props) {
     const [show, setShow] = useState(true);
     const [open, setOpen] = useState(false);
     const [success, setSuccess] = useState(false)
-
-    const [markers, setMarkers] = useState([])
 
     useEffect(() => {
         v1.get('/vendors/settings/company')
@@ -105,13 +101,6 @@ export default function GeneralSettings(props) {
         } */
     };
 
-    const assignCoords = (lat, lng) => {
-        setMarkers([{
-            lat: lat,
-            lng: lng,
-            defaultAnimation: 2,
-        }])
-    }
 
     return (
         <>
@@ -197,9 +186,6 @@ export default function GeneralSettings(props) {
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
                                     <TextField value={phone} onChange={(e) => setPhone(e.target.value)} fullWidth label={t("Business Phone")} variant="outlined" required />
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <Map assignCoords={assignCoords} markers={markers} />
                                 </Grid>
                                 <Grid item xs={12} md={12} sx={{ textAlign: 'center' }}>
                                     <Button variant="contained" color="secondary" sx={{ minWidth: '30%' }} size="large" onClick={submitForm}>{t('Save')}</Button>
