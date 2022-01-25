@@ -2,7 +2,6 @@ import styled from 'styled-components'
 import Card from '@mui/material/Card';
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
-import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 
 // import Swiper core and required modules
 import SwiperCore, {
@@ -56,25 +55,7 @@ const CardBody = styled.div`
         font-weight: 600;
         margin-bottom: 10px;
         font-family: ${({ theme }) => theme.fonts.ar};
-        color: ${({ theme }) => theme.palette.common.black};
-    }
-    p {
-        display: flex;
-        align-items: center;
-        font-size: 14px;
-        line-height:1.5;
-        text-transform: capitalize;
-        font-weight: 600;
-        font-family: ${({ theme }) => theme.fonts.ar};
-        color: ${({ theme }) => theme.palette.common.black};
-        svg {
-            width: 16px;
-            height: 16px;
-            &.MuiSvgIcon-root  {
-                margin:0;
-                margin-right: 8px;
-            }
-        }
+        color: ${({ theme }) => theme.palette.text.primary};
     }
 `
 
@@ -90,10 +71,7 @@ const SalonsCarousel = ({ salons, handleClick }) => {
                     </CardImg>
                     <CardBody>
                         <h3>{salon.data.name}</h3>
-                        {/* <h4>{salon.data.address}</h4> */}
-                        <p>
-                            <PhoneAndroidIcon sx={{ mr: 1 }} />{salon.data.phone}
-                        </p>
+                        <h4>{salon.data.address}</h4>
                     </CardBody>
                 </SalonCard>
             </SwiperSlide>

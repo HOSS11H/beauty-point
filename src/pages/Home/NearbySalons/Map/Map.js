@@ -16,7 +16,6 @@ import Locate from "./Locate/Locate";
 import SalonsCarousel from "./SalonsCarousel/SalonsCarousel";
 import styled from "styled-components";
 
-import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import { NavLink } from "react-router-dom";
 
 const libraries = ["places"];
@@ -63,24 +62,6 @@ const InfoBody = styled.div`
         margin-bottom: 5px;
         font-family: ${ ( {theme}  ) => theme.fonts.ar };
         color: ${({ theme }) => theme.palette.common.black };
-    }
-    p {
-        display: flex;
-        align-items: center;
-        font-size: 14px;
-        line-height:1.5;
-        text-transform: capitalize;
-        font-weight: 600;
-        font-family: ${ ( {theme}  ) => theme.fonts.ar };
-        color: ${({ theme }) => theme.palette.common.black };
-        svg {
-            width: 16px;
-            height: 16px;
-            &.MuiSvgIcon-root  {
-                margin:0;
-                margin-right: 8px;
-            }
-        }
     }
 `
 
@@ -132,16 +113,12 @@ const Map = ( { salons } ) => {
                     <InfoWindow
                         position={{ lat: +selected.lat, lng: +selected.lng }}
                         onCloseClick={() => setSelected(null)}
-
                     >
                         <InfoBody>
                             <NavLink to={`../salons/${selected.data.id}`}>
                                 {selected.data.name}
                             </NavLink>
                             <h4>{selected.data.address}</h4>
-                            <p>
-                                <PhoneAndroidIcon sx={{ mr: 1 }} />{selected.data.phone}
-                            </p>
                         </InfoBody>
                     </InfoWindow>
                 ) : null}
