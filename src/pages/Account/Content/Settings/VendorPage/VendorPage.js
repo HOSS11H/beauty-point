@@ -21,8 +21,6 @@ export default function VendorPage(props) {
     const [open, setOpen] = useState(false);
     const [success, setSuccess] = useState(false)
     const [markers, setMarkers] = useState([])
-    
-    console.log(markers)
 
     useEffect(() => {
         v1.get('/vendors/settings/vendor_page')

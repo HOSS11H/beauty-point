@@ -8,7 +8,7 @@ import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { fetchTabularReport } from '../../../../../../store/actions/index';
+import { filterTabularReport } from '../../../../../../store/actions/index';
 import ThemeContext from '../../../../../../store/theme-context';
 import EnhancedTableHead from './TableHead/TableHead';
 import EnhancedTableBody from './TableBody/TableBody';
@@ -107,10 +107,12 @@ function TabularReport(props) {
 
     const { t } = useTranslation()
 
-    const { fetchedTabularReport,fetchingTabularReports, fetchTabularReportHandler, filteringTabularReportsSuccess, tabularReportFilters } = props;
+    const { fetchedTabularReport,fetchingTabularReports, filterTabularReportHandler, filteringTabularReportsSuccess, tabularReportFilters } = props;
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(intialPerPage);
+
+    const [ searchParams, setSearchParams ] = useState({});
 
     const [exporting, setExporting] = useState(false);
 
@@ -119,8 +121,12 @@ function TabularReport(props) {
     const { lang } = themeCtx
 
     useEffect(() => {
-        fetchTabularReportHandler(lang, page, rowsPerPage );
-    }, [lang, fetchTabularReportHandler, page, rowsPerPage]);
+        filterTabularReportHandler({
+            page: +page,
+            per_page: rowsPerPage,
+            ...searchParams,
+        });
+    }, [filterTabularReportHandler, lang, page, rowsPerPage, searchParams]);
 
     const handleChangePage = useCallback((event, newPage) => {
         setPage(newPage);
@@ -129,6 +135,11 @@ function TabularReport(props) {
         setRowsPerPage(event.target.value);
         setPage(0);
     }, []);
+
+    const handleSearchParams = useCallback((searchParams) => {
+        setPage(0)
+        setSearchParams(searchParams);
+    }, [])
 
     const exportToCsvHandler = () => {
         setExporting(true);
@@ -205,10 +216,10 @@ function TabularReport(props) {
                                 onChange={handlePerPageChange}
                             >
                                 <MenuItem value='all'>{t('all')}</MenuItem>
-                                <MenuItem value='5'>{t('5')}</MenuItem>
-                                <MenuItem value='10'>{t('10')}</MenuItem>
-                                <MenuItem value='15'>{t('15')}</MenuItem>
-                                <MenuItem value='20'>{t('20')}</MenuItem>
+                                <MenuItem value={5}>{t('5')}</MenuItem>
+                                <MenuItem value={10}>{t('10')}</MenuItem>
+                                <MenuItem value={15}>{t('15')}</MenuItem>
+                                <MenuItem value={20}>{t('20')}</MenuItem>
                             </Select>
                         </FormControl>
                         {rowsPerPage !== 'all' && (
@@ -280,7 +291,7 @@ function TabularReport(props) {
 
     return (
         <TabularReportWrapper>
-            <SearchFilters perPage={rowsPerPage} />
+            <SearchFilters perPage={rowsPerPage} handleFilters={handleSearchParams} />
             {content}
             <Backdrop
                 sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -303,7 +314,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchTabularReportHandler: (lang, page, rowsPerPage ) => dispatch(fetchTabularReport(lang, page, rowsPerPage)),
+        filterTabularReportHandler: (params) => dispatch(filterTabularReport(params)),
     }
 }
 

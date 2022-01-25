@@ -61,7 +61,7 @@ const ResetButton = styled(CustomButton)`
 
 const SearchFilters = (props) => {
 
-    const { fetchedLocations, fetchLocationsHandler, fetchedProducts, fetchProductsHandler, fetchedServices, fetchServicesHandler, fetchCustomersHandler, fetchedEmployees, fetchEmployeesHandler, filterTabularReportHandler, perPage } = props;
+    const { fetchedLocations, fetchLocationsHandler, fetchedProducts, fetchProductsHandler, fetchedServices, fetchServicesHandler, fetchCustomersHandler, fetchedEmployees, fetchEmployeesHandler, handleFilters } = props;
 
     const { t } = useTranslation()
 
@@ -116,12 +116,12 @@ const SearchFilters = (props) => {
         setSelectedProducts(event.target.value);
     }
     const selectCustomer = useCallback((value) => {
-        console.log(value)
         if (value) {
             setCustomer(value);
         } else {
             setCustomer(null);
         }
+        setResetSearchData(false)
     } , [])
     const handleEmplloyeeChange = (event) => {
         setEmployee(event.target.value);
@@ -141,10 +141,9 @@ const SearchFilters = (props) => {
 
     const ConfirmFilteringHandler = () => {
         const selectedSearchParams = {
-            per_page: perPage,
             from_date: dateFrom,
             to_date: dateTo,
-            customer_name: customer.name,
+            customer_name: customer.name || '',
             service_name: selectedServices,
             product_name: selectedProducts,
             employee_id: employee,
@@ -154,12 +153,11 @@ const SearchFilters = (props) => {
             payment: paymentStatus,
             payment_method: paymentMethod,
         }
-        filterTabularReportHandler(selectedSearchParams);
+        handleFilters(selectedSearchParams);
     }
 
     const resetFilteringHandler = () => {
         const searchParams = {
-            per_page: perPage,
         }
         setLocation('');
         setDateFrom('');
@@ -171,8 +169,9 @@ const SearchFilters = (props) => {
         setBookingStatus('');
         setPaymentStatus('');
         setPaymentMethod('');
+        setCustomer([]);
         setResetSearchData(true);
-        filterTabularReportHandler(searchParams);
+        handleFilters(searchParams);
     }
 
 
@@ -380,7 +379,7 @@ const mapDispatchToProps = (dispatch) => {
         fetchProductsHandler: (lang, page, sortBy, sortDirection, search) => dispatch(fetchProducts(lang, page, sortBy, sortDirection, search)),
         fetchCustomersHandler: (lang) => dispatch(fetchCustomers(lang)),
         fetchEmployeesHandler: (language) => dispatch(fetchEmployees(language)),
-        filterTabularReportHandler: (perPage, dateFrom, dateTo, location, selectedServices, selectedProducts, customer, employee, bookingType, bookingStatus, paymentStatus) => dispatch(filterTabularReport(perPage, dateFrom, dateTo, location, selectedServices, selectedProducts, customer, employee, bookingType, bookingStatus, paymentStatus)),
+        filterTabularReportHandler: (params) => dispatch(filterTabularReport(params)),
     }
 }
 

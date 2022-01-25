@@ -271,6 +271,7 @@ const Cart = props => {
             setCustomerDataError(true)
             setCustomerData(null);
         }
+        setResetSearchData(false)
     } , [])
 
     const discountTypeChangeHandler = (event) => {
