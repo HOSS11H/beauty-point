@@ -29,6 +29,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import CustomizedSnackbars from "../../../components/UI/SnackBar/SnackBar";
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import ServicePanel from "../../../components/UI/ServicePanel/ServicePanel";
+import Map from "../../Auth/Map/Map";
 
 
 
@@ -269,6 +270,9 @@ const SingleSalon = props => {
                                     </TableBody>
                                 </Table>
                             </TableContainer>
+                        </Grid>
+                        <Grid  item xs={12}>
+                            <Map markers={[ { lat: +salon.vendor_page.latitude, lng: +salon.vendor_page.longitude } ]} />
                         </Grid>
                     </Grid>
                 </TabPanel>
