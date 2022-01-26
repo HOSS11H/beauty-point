@@ -4,10 +4,10 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
 import PushPinIcon from '@mui/icons-material/PushPin';
 import Typography from '@mui/material/Typography';
-import styled, {keyframes} from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { formatCurrency } from '../../../shared/utility';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { Fragment } from 'react';
 
 const CustomCard = styled(Card)`
@@ -21,6 +21,7 @@ const CustomCard = styled(Card)`
     .card-img {
         flex-basis: 50%;
         flex-shrink: 0;
+        height: 350px;
         @media screen and (max-width: 599.98px) {
             height: 200px;
             flex-basis: unset;
@@ -49,7 +50,7 @@ const CustomCard = styled(Card)`
                 line-height: 1.1;
                 margin-bottom: 10px;
                 text-transform: capitalize;
-                color: ${ props => props.theme.palette.text.primary};
+                color: ${props => props.theme.palette.text.primary};
                 @media screen and ( max-width: 899.98px) {
                     font-size: 24px;
                 }
@@ -59,7 +60,7 @@ const CustomCard = styled(Card)`
                 font-weight: 500;
                 line-height: 1.1;
                 text-transform: uppercase;
-                color: ${ props => props.theme.vars.primary};
+                color: ${props => props.theme.vars.primary};
                 cursor: pointer;
                 @media screen and ( max-width: 899.98px) {
                     font-size: 18px;
@@ -97,8 +98,8 @@ const CatButton = styled.div`
     justify-content: center;
     align-items: center;
     border-radius: 50%;
-    background-color: ${ props => props.theme.vars.primary};
-    color: ${ props => props.theme.palette.text.primary};
+    background-color: ${props => props.theme.vars.primary};
+    color: ${props => props.theme.palette.text.primary};
     width: 60px;
     height: 60px;
     position: fixed;
@@ -120,7 +121,7 @@ const CatButton = styled.div`
 
 const SingleCard = props => {
 
-    const { image, title, name, price, time, timeType, location, compnyId } = props;
+    const { image, title, name, price, time, timeType, location, compnyId, category, categoryId } = props;
 
     const { t } = useTranslation();
 
@@ -145,6 +146,13 @@ const SingleCard = props => {
                 </div>
                 <div className='card-content' >
                     <CardContent className="card-content" sx={{ flex: '1 0 auto', }}>
+                        {
+                            category && (
+                                <NavLink to={`../categories/${categoryId}`}>
+                                    <Typography variant="h6" color="secondary" component="div" sx={{ marginBottom: '10px' }} >{category}</Typography>
+                                </NavLink>
+                            )
+                        }
                         <div className="card-title" >
                             <h1>{title}</h1>
                             <h2 onClick={handleClick} >{name}</h2>
@@ -152,11 +160,11 @@ const SingleCard = props => {
                         <Typography variant="h6" color="secondary" component="div" sx={{ marginBottom: '10px' }} >
                             {formatCurrency(price)}
                         </Typography>
-                        <Typography component="div" variant="subtitle1" sx={{ display: 'flex', alignItems: 'center'}}>
-                            <WatchLaterIcon sx={{ mr: 1, width:'15px', height:'15px' }} />{time} {t(timeType)}
+                        <Typography component="div" variant="subtitle1" sx={{ display: 'flex', alignItems: 'center' }}>
+                            <WatchLaterIcon sx={{ mr: 1, width: '15px', height: '15px' }} />{time} {t(timeType)}
                         </Typography>
-                        <Typography component="div" variant="subtitle1" sx={{ display: 'flex', alignItems: 'center'}}>
-                            <PushPinIcon sx={{ mr: 1, width:'15px', height:'15px' }} />{location} 
+                        <Typography component="div" variant="subtitle1" sx={{ display: 'flex', alignItems: 'center' }}>
+                            <PushPinIcon sx={{ mr: 1, width: '15px', height: '15px' }} />{location}
                         </Typography>
                     </CardContent>
                 </div>

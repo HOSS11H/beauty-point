@@ -27,7 +27,7 @@ const SingleService = props => {
 
 
     useEffect(() => {
-        axios.get(`/services/${param.serviceId}?include[]=company&include[]=location`)
+        axios.get(`/services/${param.serviceId}?include[]=company&include[]=location&include[]=category`)
             .then(res => {
                 setService(res.data);
             })
@@ -42,7 +42,7 @@ const SingleService = props => {
     );
     if (service) {
         content = (
-            <SingleCard image={service.image} title={service.name} name={service.company.companyName} compnyId={service.company.id}
+            <SingleCard image={service.image} title={service.name} name={service.company.companyName} compnyId={service.company.id} category={service.category.name} categoryId={service.category.id}
                 price={service.price} time={service.time} timeType={service.time_type} location={service.location.name} />
         )
     }
