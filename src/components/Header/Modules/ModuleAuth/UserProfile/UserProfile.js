@@ -116,7 +116,7 @@ const UserProfile = props => {
     return (
         <UserProfileWrapper ref={ref} >
             <UserImg onClick={handleOpen}>
-                <CustomAvatar >{userLetter ?? <PersonIcon />}</CustomAvatar>
+                <CustomAvatar >{userLetter || <PersonIcon />}</CustomAvatar>
             </UserImg>
             <DropdownWrapper open={open}>
                 <li>

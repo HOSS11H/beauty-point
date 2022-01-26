@@ -97,7 +97,7 @@ const SalonsCarousel = ({ salons, handleClick }) => {
                         "slidesPerView": 2,
                         "spaceBetween": 20
                     },
-                    "700": {
+                    "750": {
                         "slidesPerView": 3,
                         "spaceBetween": 30
                     },
