@@ -26,7 +26,6 @@ const Loader = styled.div`
     height: 200px;
 `
 const Loading = styled.div`
-    margin-top: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
