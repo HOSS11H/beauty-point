@@ -9,6 +9,14 @@ import { useState, useEffect } from 'react';
 import axios from '../../../../utils/axios-instance';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useTranslation } from 'react-i18next';
+import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
+
+// import Swiper core and required modules
+import SwiperCore, {
+    Autoplay
+} from 'swiper';
+
+import 'swiper/swiper.min.css';
 
 const SpotlightsWrapper = styled.section`
     margin: 100px 0;
@@ -24,42 +32,8 @@ const Loader = styled.div`
     height: 200px;
 `
 
-const settings = {
-    dots: false,
-    arrows: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 4,
-    responsive: [
-        {
-            breakpoint: 1200,
-            settings: {
-                slidesToShow: 3,
-            }
-        },
-        {
-            breakpoint: 900,
-            settings: {
-                arrows: false,
-                slidesToShow: 3,
-            }
-        },
-        {
-            breakpoint: 600,
-            settings: {
-                arrows: false,
-                slidesToShow: 2,
-            }
-        },
-        {
-            breakpoint: 400,
-            settings: {
-                arrows: false,
-                slidesToShow: 1,
-            }
-        },
-    ]
-};
+// install Swiper modules
+SwiperCore.use([Autoplay]);
 
 const Spotlights = props => {
     const {t} = useTranslation();
@@ -84,21 +58,43 @@ const Spotlights = props => {
     );
     if (spotlights) {
         let fetchedSpotlights = [...spotlights];
-        if(fetchedSpotlights.length < 4){
-            while (fetchedSpotlights.length < 4 ) {
-                fetchedSpotlights = fetchedSpotlights.concat(fetchedSpotlights)
-            }
-        }
         content = (
-            <Slider {...settings} >
+            <Swiper
+                spaceBetween={30}
+                slidesPerView={3}
+                autoplay={{
+                    "delay": 2500,
+                    "disableOnInteraction": false
+                }}
+                breakpoints={{
+                    "0": {
+                        "slidesPerView": 1,
+                        "spaceBetween": 10
+                    },
+                    "450": {
+                        "slidesPerView": 2,
+                        "spaceBetween": 20
+                    },
+                    "800": {
+                        "slidesPerView": 3,
+                        "spaceBetween": 20
+                    },
+                    "1200": {
+                        "slidesPerView": 4,
+                        "spaceBetween": 20
+                    }
+                }}
+            >
                 {
                     fetchedSpotlights.map((spotlight, index) => {
                         return (
-                            <DealPanel key={spotlight.id} deal={spotlight.deal} path='deals' />
+                            <SwiperSlide key={index}>
+                                <DealPanel key={spotlight.id} deal={spotlight.deal} path='deals' />
+                            </SwiperSlide>
                         )
                     })
                 }
-            </Slider>
+            </Swiper>
         );
     }
 

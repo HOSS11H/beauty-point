@@ -1,11 +1,11 @@
-import { NavLink, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
 
 const SalonPanelCard = styled.div`
     border-radius: 25px;
-    margin: 0 9px;
+    margin: 0 auto;
     @media screen and (max-width: 899.98px) {
-        margin: 0 9px 0px;
+        margin: 0 auto 0px;
         max-width: 370px
     }
     cursor: pointer;

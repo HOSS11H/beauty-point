@@ -1,18 +1,28 @@
 import { Container } from '@mui/material';
 import styled from 'styled-components';
 import { Heading } from "../../../../components/UI/Heading/Heading";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
+import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
+
+// import Swiper core and required modules
+import SwiperCore, {
+    Autoplay
+} from 'swiper';
+
+import 'swiper/swiper.min.css';
+
+
 import DealPanel from '../../../../components/UI/DealPanel/DealPanel';
 import { useState, useEffect, useContext } from 'react';
 import axios from '../../../../utils/axios-instance';
 import CircularProgress from '@mui/material/CircularProgress';
-import {NavLink} from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import ThemeContext from "../../../../store/theme-context";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+
+// install Swiper modules
+SwiperCore.use([Autoplay]);
 
 const DealsWrapper = styled.section`
     margin: 100px 0;
@@ -27,48 +37,12 @@ const Loader = styled.div`
     width: 100%;
     height: 200px;
 `
-const settings = {
-    dots: false,
-    arrows: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 4,
-    responsive: [
-        {
-            breakpoint: 1200,
-            settings: {
-                slidesToShow: 3,
-            }
-        },
-        {
-            breakpoint: 900,
-            settings: {
-                arrows: false,
-                slidesToShow: 3,
-            }
-        },
-        {
-            breakpoint: 600,
-            settings: {
-                arrows: false,
-                slidesToShow: 2,
-            }
-        },
-        {
-            breakpoint: 400,
-            settings: {
-                arrows: false,
-                slidesToShow: 1,
-            }
-        },
-    ]
-};
 
 const Deals = props => {
-    const {t} = useTranslation();
+    const { t } = useTranslation();
     const [deals, setDeals] = useState(null);
 
-    const themeCtx= useContext(ThemeContext);
+    const themeCtx = useContext(ThemeContext);
 
     const { theme } = themeCtx
 
@@ -83,28 +57,50 @@ const Deals = props => {
     }, [])
 
 
-    let content= (
+    let content = (
         <Loader>
             <CircularProgress color="secondary" />
         </Loader>
     );
     if (deals) {
         let fetchedDeals = [...deals];
-        if(fetchedDeals.length < 4){
-            while (fetchedDeals.length < 4 ) {
-                fetchedDeals = fetchedDeals.concat(fetchedDeals)
-            }
-        }
         content = (
-            <Slider {...settings} >
+            <Swiper
+                spaceBetween={30}
+                slidesPerView={3}
+                autoplay={{
+                    "delay": 2500,
+                    "disableOnInteraction": false
+                }}
+                breakpoints={{
+                    "0": {
+                        "slidesPerView": 1,
+                        "spaceBetween": 10
+                    },
+                    "450": {
+                        "slidesPerView": 2,
+                        "spaceBetween": 20
+                    },
+                    "800": {
+                        "slidesPerView": 3,
+                        "spaceBetween": 20
+                    },
+                    "1200": {
+                        "slidesPerView": 4,
+                        "spaceBetween": 20
+                    }
+                }}
+            >
                 {
                     fetchedDeals.map((deal, index) => {
                         return (
-                            <DealPanel key={deal.id} deal={deal} path='deals' />
+                            <SwiperSlide key={index}>
+                                <DealPanel deal={deal} path='deals' />
+                            </SwiperSlide>
                         )
                     })
                 }
-            </Slider>
+            </Swiper>
         );
     }
 
@@ -112,7 +108,7 @@ const Deals = props => {
         <DealsWrapper>
             <Container maxWidth="lg">
                 <Heading>
-                    <NavLink className="heading-title" to='all-deals'>{t('deals')}  { theme === 'rtl' ? <ArrowForwardIcon /> : <ArrowBackIcon /> } </NavLink>
+                    <NavLink className="heading-title" to='all-deals'>{t('deals')}  {theme === 'rtl' ? <ArrowForwardIcon /> : <ArrowBackIcon />} </NavLink>
                 </Heading>
                 {content}
             </Container>

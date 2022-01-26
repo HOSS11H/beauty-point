@@ -13,6 +13,17 @@ import { useTranslation } from 'react-i18next';
 import ThemeContext from "../../../../store/theme-context";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
+
+// import Swiper core and required modules
+import SwiperCore, {
+    Autoplay
+} from 'swiper';
+
+import 'swiper/swiper.min.css';
+
+// install Swiper modules
+SwiperCore.use([Autoplay]);
 
 const SalonsWrapper = styled.section`
     margin: 100px 0;
@@ -27,42 +38,7 @@ const Loader = styled.div`
     width: 100%;
     height: 200px;
 `
-const settings = {
-    dots: false,
-    arrows: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 4,
-    responsive: [
-        {
-            breakpoint: 1200,
-            settings: {
-                slidesToShow: 3,
-            }
-        },
-        {
-            breakpoint: 900,
-            settings: {
-                arrows: false,
-                slidesToShow: 3,
-            }
-        },
-        {
-            breakpoint: 600,
-            settings: {
-                arrows: false,
-                slidesToShow: 2,
-            }
-        },
-        {
-            breakpoint: 400,
-            settings: {
-                arrows: false,
-                slidesToShow: 1,
-            }
-        },
-    ]
-};
+
 
 const Salons = props => {
 
@@ -90,23 +66,44 @@ const Salons = props => {
         </Loader>
     );
     if (salons) {
-        //console.log(salons);
         let fetchedSalons = [...salons];
-        if(fetchedSalons.length < 4){
-            while (fetchedSalons.length < 4 ) {
-                fetchedSalons = fetchedSalons.concat(fetchedSalons)
-            }
-        }
         content = (
-            <Slider {...settings} >
+            <Swiper
+                spaceBetween={30}
+                slidesPerView={3}
+                autoplay={{
+                    "delay": 2500,
+                    "disableOnInteraction": false
+                }}
+                breakpoints={{
+                    "0": {
+                        "slidesPerView": 1,
+                        "spaceBetween": 10
+                    },
+                    "450": {
+                        "slidesPerView": 2,
+                        "spaceBetween": 20
+                    },
+                    "800": {
+                        "slidesPerView": 3,
+                        "spaceBetween": 20
+                    },
+                    "1200": {
+                        "slidesPerView": 4,
+                        "spaceBetween": 20
+                    }
+                }}
+            >
                 {
                     fetchedSalons.map((salon, index) => {
                         return (
-                            <SalonPanel key={salon.id} salon={salon} path='salons' />
+                            <SwiperSlide key={index}>
+                                <SalonPanel salon={salon} path='salons' />
+                            </SwiperSlide>
                         )
                     })
                 }
-            </Slider>
+            </Swiper>
         );
     }
 
