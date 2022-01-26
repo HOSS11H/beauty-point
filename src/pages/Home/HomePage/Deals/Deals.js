@@ -47,7 +47,7 @@ const Deals = props => {
     const { theme } = themeCtx
 
     useEffect(() => {
-        axios.get('/deals?include[]=company')
+        axios.get('/deals?include[]=company&page=1&per_page=8')
             .then(res => {
                 setDeals(res.data.data);
             })

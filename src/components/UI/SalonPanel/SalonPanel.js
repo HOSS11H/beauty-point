@@ -4,6 +4,7 @@ import styled from "styled-components"
 const SalonPanelCard = styled.div`
     border-radius: 25px;
     margin: 0 auto;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
     @media screen and (max-width: 899.98px) {
         margin: 0 auto 0px;
         max-width: 370px

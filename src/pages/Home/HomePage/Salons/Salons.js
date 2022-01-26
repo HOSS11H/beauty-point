@@ -50,7 +50,7 @@ const Salons = props => {
     const [salons, setSalons] = useState(null);
 
     useEffect(() => {
-        axios.get('/companies')
+        axios.get('/companies?page=1&per_page=8')
             .then(res => {
                 setSalons(res.data.data);
             })
