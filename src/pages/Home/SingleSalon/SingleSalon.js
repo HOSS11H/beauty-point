@@ -86,10 +86,10 @@ const SingleSalon = props => {
 
     const [salon, setSalon] = useState();
 
-    const [services, setServices] = useState();
+    const [services, setServices] = useState([]);
     const [loadingServices, setLoadingServices] = useState(false);
 
-    const [deals, setDeal] = useState();
+    const [deals, setDeal] = useState([]);
     const [loadingDeals, setLoadingDeals] = useState(false);
 
     const [showModal, setShowModal] = useState(navedTo === 'cart' ? true : false);
@@ -163,7 +163,7 @@ const SingleSalon = props => {
             <CircularProgress color="secondary" />
         </Loader>
     );
-    if (salon && services && deals) {
+    if (salon && services.data.length > 0 && deals.data.length > 0 ) {
         content = (
             <Box sx={{ width: '100%' }}>
                 <Typography component="div" variant="h4" sx={{ marginBottom: '10px' }} >
