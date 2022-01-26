@@ -23,6 +23,7 @@ import { connect } from 'react-redux';
 import { fetchCoupons } from '../../../../store/actions/index';
 import { useContext } from 'react';
 import ThemeContext from '../../../../store/theme-context';
+import { useSearchParams } from 'react-router-dom';
 
 const CustomCardMui = styled(Card)`
     &.MuiPaper-root {
@@ -31,7 +32,7 @@ const CustomCardMui = styled(Card)`
         box-shadow: none;
         border-radius:20px;
         background-color: ${({ theme }) => theme.palette.background.default};
-        z-index:1;
+        z-index:9999;
         width: 70%;
         @media screen and (max-width: 1399.98px) {
             width: 90%;
@@ -112,66 +113,6 @@ const cartReducer = (state, action) => {
             return updateObject(state, {
                 services: filteredServices,
             })
-        case 'INCREASE_SERVICE':
-            const increasedServiceIndex = state.services.findIndex(service => service.id === action.payload);
-            const increasedService = { ...state.services[increasedServiceIndex] }
-            increasedService.quantity = increasedService.quantity + 1;
-            const increasedServices = [...state.services]
-            increasedServices[increasedServiceIndex] = increasedService
-            return updateObject(state, {
-                services: increasedServices,
-            })
-        case 'DECREASE_SERVICE':
-            const decreasedServiceIndex = state.services.findIndex(service => service.id === action.payload);
-            const decreasedService = { ...state.services[decreasedServiceIndex] }
-            const decreasedServices = [...state.services]
-            if (decreasedService.quantity === 1) {
-                decreasedServices.splice(decreasedServiceIndex, 1)
-            } else {
-                decreasedService.quantity = decreasedService.quantity - 1
-                decreasedServices[decreasedServiceIndex] = decreasedService
-            }
-            return updateObject(state, {
-                services: decreasedServices,
-            })
-        case 'ADD_TO_PRODUCTS':
-            const productIndex = state.products.findIndex(product => product.id === action.payload.id);
-            const updatedProducts = [...state.products]
-            if (productIndex === -1) {
-                updatedProducts.push(action.payload)
-            } else {
-                updatedProducts.splice(productIndex, 1)
-            }
-            return updateObject(state, {
-                products: updatedProducts,
-            })
-        case 'REMOVE_PRODUCT':
-            const filteredProducts = state.products.filter(product => product.id !== action.payload)
-            return updateObject(state, {
-                products: filteredProducts,
-            })
-        case 'INCREASE_PRODUCT':
-            const increasedProductIndex = state.products.findIndex(product => product.id === action.payload);
-            const increasedProduct = { ...state.products[increasedProductIndex] }
-            increasedProduct.quantity = increasedProduct.quantity + 1
-            const increasedProducts = [...state.products]
-            increasedProducts[increasedProductIndex] = increasedProduct
-            return updateObject(state, {
-                products: increasedProducts,
-            })
-        case 'DECREASE_PRODUCT':
-            const decreasedProductIndex = state.products.findIndex(product => product.id === action.payload);
-            const decreasedProduct = { ...state.products[decreasedProductIndex] }
-            const decreasedProducts = [...state.products]
-            if (decreasedProduct.quantity === 1) {
-                decreasedProducts.splice(decreasedProductIndex, 1)
-            } else {
-                decreasedProduct.quantity = decreasedProduct.quantity - 1
-                decreasedProducts[decreasedProductIndex] = decreasedProduct
-            }
-            return updateObject(state, {
-                products: decreasedProducts,
-            })
         case 'ADD_TO_DEALS':
             const dealIndex = state.deals.findIndex(deal => deal.id === action.payload.id);
             const updatedDeals = [...state.deals]
@@ -187,28 +128,6 @@ const cartReducer = (state, action) => {
             const filteredDeals = state.deals.filter(deal => deal.id !== action.payload)
             return updateObject(state, {
                 deals: filteredDeals,
-            })
-        case 'INCREASE_DEAL':
-            const increasedDealIndex = state.deals.findIndex(deal => deal.id === action.payload);
-            const increasedDeal = { ...state.deals[increasedDealIndex] }
-            increasedDeal.quantity = increasedDeal.quantity + 1
-            const increasedDeals = [...state.deals]
-            increasedDeals[increasedDealIndex] = increasedDeal
-            return updateObject(state, {
-                deals: increasedDeals,
-            })
-        case 'DECREASE_DEAL':
-            const decreasedDealIndex = state.deals.findIndex(deal => deal.id === action.payload);
-            const decreasedDeal = { ...state.deals[decreasedDealIndex] }
-            const decreasedDeals = [...state.deals]
-            if (decreasedDeal.quantity === 1) {
-                decreasedDeals.splice(decreasedDealIndex, 1)
-            } else {
-                decreasedDeal.quantity = decreasedDeal.quantity - 1
-                decreasedDeals[decreasedDealIndex] = decreasedDeal
-            }
-            return updateObject(state, {
-                deals: decreasedDeals,
             })
         case 'RESET_CART':
             const intialState = {
@@ -228,24 +147,57 @@ const Cart = props => {
 
     const { t } = useTranslation();
 
+    const [searchParams] = useSearchParams();
+
+    const itemType = searchParams.get('t');
+    const itemId = searchParams.get('i');
+    const itemName = searchParams.get('n');
+    const itemPrice = searchParams.get('p');
+
+    let intialCart = {
+        services: [],
+        deals: [],
+    };
+    let intialType = '';
+    if (itemType) {
+        const purchasedItem  = {
+            id: +itemId,
+            name: itemName,
+            price: +itemPrice,
+            quantity: 1,
+        }
+        if (itemType === 'service') {
+            intialCart = {
+                services: [purchasedItem],
+                deals: [],
+            }
+        } else if (itemType === 'deal') {
+            intialCart = {
+                services: [],
+                deals: [purchasedItem],
+            }
+        }
+        if (itemType === 'service') {
+            intialType = 'services'
+        } else if (itemType === 'deal') {
+            intialType = 'deals'
+        }
+    }
+
     const themeCtx = useContext(ThemeContext);
     const { lang } = themeCtx;
 
     const { show, onClose, salonData, fetchCouponsHandler } = props;
 
-    const [cart, dispatch] = useReducer(cartReducer, {
-        services: [],
-        products: [],
-        deals: [],
-    });
+    const [cart, dispatch] = useReducer(cartReducer, intialCart);
 
     const [totalPrice, setTotalPrice] = useState(0)
 
     const [totalTaxes, setTotalTaxes] = useState(0)
 
-    const [activeStep, setActiveStep] = useState(0);
+    const [activeStep, setActiveStep] = useState(itemType ? 1 : 0);
 
-    const [selectedType, setSelectedType] = useState('');
+    const [selectedType, setSelectedType] = useState(intialType);
 
     const [appointment, setAppointment] = useState(new Date());
     const [slot, setSlot] = useState('');
@@ -346,47 +298,6 @@ const Cart = props => {
         }
     }, [])
 
-    /* const increaseItemHandler = useCallback((type, itemId) => {
-        if (type === 'services') {
-            dispatch({
-                type: 'INCREASE_SERVICE',
-                payload: itemId
-            })
-        }
-        if (type === 'products') {
-            dispatch({
-                type: 'INCREASE_PRODUCT',
-                payload: itemId
-            })
-        }
-        if (type === 'deals') {
-            dispatch({
-                type: 'INCREASE_DEAL',
-                payload: itemId
-            })
-        }
-    }, [])
-    const decreaseItemHandler = useCallback((type, itemId) => {
-        if (type === 'services') {
-            dispatch({
-                type: 'DECREASE_SERVICE',
-                payload: itemId
-            })
-        }
-        if (type === 'products') {
-            dispatch({
-                type: 'DECREASE_PRODUCT',
-                payload: itemId
-            })
-        }
-        if (type === 'deals') {
-            dispatch({
-                type: 'DECREASE_DEAL',
-                payload: itemId
-            })
-        }
-    }, []) */
-
     const resetCartHandler = useCallback(() => {
         dispatch({
             type: 'RESET_CART',
@@ -474,6 +385,7 @@ const Cart = props => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                zIndex: '9999',
             }}
         >
             <Fade in={show}>
@@ -519,7 +431,7 @@ const Cart = props => {
                                                     {t('Back')}
                                                 </Button>
                                                 <Box sx={{ flex: '1 1 auto' }} />
-                                                <CartButton color="secondary" variant='contained' onClick={handleNext} disabled={cart.services.length === 0 && cart.deals.length === 0 && cart.products.length === 0} >
+                                                <CartButton color="secondary" variant='contained' onClick={handleNext} disabled={cart.services.length === 0 && cart.deals.length === 0 } >
                                                     {t('Next')}
                                                 </CartButton>
                                             </Box>
@@ -536,7 +448,7 @@ const Cart = props => {
                                                     {t('Back')}
                                                 </Button>
                                                 <Box sx={{ flex: '1 1 auto' }} />
-                                                <CartButton color="secondary" variant='contained' onClick={handleNext} disabled={cart.services.length === 0 && cart.deals.length === 0 && cart.products.length === 0} >
+                                                <CartButton color="secondary" variant='contained' onClick={handleNext} disabled={cart.services.length === 0 && cart.deals.length === 0 } >
                                                     {t('Next')}
                                                 </CartButton>
                                             </Box>

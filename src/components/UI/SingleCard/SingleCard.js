@@ -121,18 +121,23 @@ const CatButton = styled.div`
 
 const SingleCard = props => {
 
-    const { image, title, name, price, time, timeType, location, compnyId, category, categoryId } = props;
+    const { image, title, name, price, time, timeType, location, compnyId, category, categoryId, type, id } = props;
 
     const { t } = useTranslation();
 
     const navigate = useNavigate()
 
+    console.log(price)
 
     const handleClick = () => {
         navigate(`../salons/${compnyId}`)
     }
     const handleCartClick = () => {
-        navigate(`../salons/${compnyId}?tab=cart`)
+        if (type === 'service') {
+            navigate(`../salons/${compnyId}?tab=cart&t=${type}&i=${id}&n=${title}&p=${price}`)
+        } else if (type === 'deal') {
+            navigate(`../salons/${compnyId}?tab=cart&t=${type}&i=${id}&n=${title}&p=${price}`)
+        }
     }
 
     return (

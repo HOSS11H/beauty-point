@@ -86,10 +86,10 @@ const SingleSalon = props => {
 
     const [salon, setSalon] = useState();
 
-    const [services, setServices] = useState([]);
+    const [services, setServices] = useState({data: []});
     const [loadingServices, setLoadingServices] = useState(false);
 
-    const [deals, setDeal] = useState([]);
+    const [deals, setDeals] = useState({data: []});
     const [loadingDeals, setLoadingDeals] = useState(false);
 
     const [showModal, setShowModal] = useState(navedTo === 'cart' ? true : false);
@@ -120,7 +120,7 @@ const SingleSalon = props => {
         setLoadingDeals(true);
         axios.get(`/companies/${param.salonId}/deals?page=${dealsPage + 1}&per_page=${dealsRowsPerPage}&include[]=company`)
             .then(res => {
-                setDeal(res.data);
+                setDeals(res.data);
                 setLoadingDeals(false);
             })
             .catch(err => {

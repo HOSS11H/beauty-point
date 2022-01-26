@@ -42,7 +42,9 @@ const SingleService = props => {
     );
     if (service) {
         content = (
-            <SingleCard image={service.image} title={service.name} name={service.company.companyName} compnyId={service.company.id} category={service.category.name} categoryId={service.category.id}
+            <SingleCard image={service.image} title={service.name} name={service.company.companyName} 
+                compnyId={service.company.id} category={service.category.name} categoryId={service.category.id}
+                type='service' id={service.id}
                 price={service.price} time={service.time} timeType={service.time_type} location={service.location.name} />
         )
     }
