@@ -127,8 +127,6 @@ const SingleCard = props => {
 
     const navigate = useNavigate()
 
-    console.log(price)
-
     const handleClick = () => {
         navigate(`../salons/${compnyId}`)
     }
