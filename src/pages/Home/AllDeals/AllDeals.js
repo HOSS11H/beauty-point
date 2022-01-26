@@ -79,47 +79,47 @@ const AllDeals = props => {
             <CircularProgress color="secondary" />
         </Loader>
     );
-    if (deals) {
-content = (
-    <Grid container spacing={2}>
-        {
-            deals.map((deal, index) => {
-                if (deals.length === (index + 1)) {
-                    return (
-                        <Grid item xs={6} md={4} key={deal.id} ref={lastElementRef} >
-                            <DealPanel deal={deal} path='../deals' />
-                        </Grid>
-                    )
-                } else {
-                    return (
-                        <Grid item xs={6} md={4} key={deal.id}>
-                            <DealPanel deal={deal} path='../deals' />
-                        </Grid>
-                    )
+    if (deals.length > 0) {
+        content = (
+            <Grid container spacing={2}>
+                {
+                    deals.map((deal, index) => {
+                        if (deals.length === (index + 1)) {
+                            return (
+                                <Grid item xs={6} md={4} key={deal.id} ref={lastElementRef} >
+                                    <DealPanel deal={deal} path='../deals' />
+                                </Grid>
+                            )
+                        } else {
+                            return (
+                                <Grid item xs={6} md={4} key={deal.id}>
+                                    <DealPanel deal={deal} path='../deals' />
+                                </Grid>
+                            )
+                        }
+                    })
                 }
-            })
-        }
-        {!lastPage && (
-            <Grid item xs={12} >
-                <Loading>
-                    <CircularProgress color="secondary" />
-                </Loading>
+                {!lastPage && (
+                    <Grid item xs={12} >
+                        <Loading>
+                            <CircularProgress color="secondary" />
+                        </Loading>
+                    </Grid>
+                )}
             </Grid>
-        )}
-    </Grid>
-);
+        );
     }
-return (
-    <HomeLayout>
-        <DealsWrapper>
-            <Container maxWidth="lg">
-                <Heading>
-                    <h2 className="heading-title" >{t('deals')}</h2>
-                </Heading>
-                {content}
-            </Container>
-        </DealsWrapper>
-    </HomeLayout>
-)
+    return (
+        <HomeLayout>
+            <DealsWrapper>
+                <Container maxWidth="lg">
+                    <Heading>
+                        <h2 className="heading-title" >{t('deals')}</h2>
+                    </Heading>
+                    {content}
+                </Container>
+            </DealsWrapper>
+        </HomeLayout>
+    )
 }
 export default AllDeals

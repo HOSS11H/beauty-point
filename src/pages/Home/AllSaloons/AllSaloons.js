@@ -58,7 +58,7 @@ const AllSaloons = props => {
 
     useEffect(() => {
         setLoading(true)
-        axios.get(`//companies?page=${page}&per_page=10`)
+        axios.get(`/companies?page=${page}&per_page=10`)
             .then(res => {
                 setLoading(false)
                 setSalons(currentSalons => {
@@ -80,7 +80,7 @@ const AllSaloons = props => {
             <CircularProgress color="secondary" />
         </Loader>
     );
-    if (salons) {
+    if (salons.length > 0) {
         content = (
             <Grid container spacing={2}>
                 {
