@@ -18,7 +18,7 @@ export default function CustomizedSnackbars( props ) {
     };
 
     return (
-        <Snackbar open={show} autoHideDuration={4000} onClose={handleClose} >
+        <Snackbar open={show} sx={{ zIndex: '10000' }}  autoHideDuration={4000} onClose={handleClose} >
             {type === 'success' ? <Alert onClose={handleClose} severity="success">{message}</Alert> : <Alert onClose={handleClose} severity="error">{message}</Alert>}
         </Snackbar>
     );
