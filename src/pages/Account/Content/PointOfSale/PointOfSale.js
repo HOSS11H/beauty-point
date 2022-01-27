@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import axios from '../../../../utils/axios-instance';
 import PrintBookingModal from './PrintBookingModal/PrintBookingModal';
+import { toast } from 'react-toastify';
 
 const cartReducer = (state, action) => {
     switch (action.type) {
@@ -407,7 +408,11 @@ const PointOfSale = (props) => {
                 setPrintBookingModalOpened((true))
             })
             .catch(err => {
-
+                setReservingBokking(false);
+                toast.error(err.response.data.message, {
+                    position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                    closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+                });
             })
     }, [shownLocation])
 
@@ -425,7 +430,7 @@ const PointOfSale = (props) => {
                 </CustomCard>
             </Grid>
             <Grid item xs={12} md={6}>
-                <Cart cartData={cart} removeFromCart={removeFromCartHandler} increaseItem={increaseItemHandler} decreaseItem={decreaseItemHandler} 
+                <Cart cartData={cart} removeFromCart={removeFromCartHandler} increaseItem={increaseItemHandler} decreaseItem={decreaseItemHandler}
                     resetCart={resetCartHandler} reserved={reservedBookingData}
                     purchase={purchaseCartHandler} print={purchasePrintBookingHandler}
                     priceChangeHandler={changeItemPriceHandler} changeEmployee={changeServiceEmployeeHandler} />
