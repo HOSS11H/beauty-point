@@ -11,6 +11,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { useTranslation } from 'react-i18next';
 import { formatCurrency } from '../../../../../../shared/utility';
+import { format } from 'date-fns/esm';
 
 const Wrapper = styled.div`
 	max-width: 95%;
@@ -78,7 +79,8 @@ const ClientBill = styled.p`
     margin-bottom: 5px;
 `
 const ClientDate = styled.p`
-    display: block;
+    display: flex;
+	align-items: center;
     font-size: 12px;
     line-height:1.5;
     text-transform: capitalize;
@@ -90,7 +92,7 @@ const ClientDate = styled.p`
 const ClientInfos = styled.p`
     display: flex;
 	align-items: center;
-	justify-content: flex-end;
+	justify-content: flex-start;
     font-size: 12px;
     line-height:1.5;
     text-transform: capitalize;
@@ -218,7 +220,13 @@ const Invoice = React.forwardRef((props, ref) => {
 							) : (
 								<ClientBill>رقم الفاتورة : {bookingData.id}</ClientBill>
 							)}
-							<ClientDate>تاريخ الفاتورة : {bookingData.date}</ClientDate>
+							<ClientDate>
+								تاريخ الحجز : {format(new Date(bookingData.date_time), 'dd-MM-yyyy' )}
+							</ClientDate>
+							<ClientDate>
+								<span>{format(new Date(bookingData.date_time), 'hh:ii a' )}</span>
+								<span> : وقت الحجز</span>
+							</ClientDate>
 							<Grid sx={{ width: '100%' }} container spacing={2}>
 								<Grid item xs={6}>
 									{
