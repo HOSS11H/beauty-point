@@ -320,6 +320,14 @@ const EditModal = (props) => {
         return sum + curr.price * curr.quantity
     }, 0);
 
+    useEffect(() => {
+        if (uploadedImages[0].file === undefined) {
+            fetch(uploadedImages[0].data_url).then(res => res.blob()).then(blob => {
+                setUploadedImages([{ data_url: uploadedImages[0].data_url, file: new File([blob], 'image.jpg', { type: blob.type })}]);
+            })
+        }
+    }, [uploadedImages])
+
 
 
     useEffect(() => {

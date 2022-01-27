@@ -31,7 +31,7 @@ const ModuleWhatsappWrapper = styled.div`
 const ModuleWhatsapp = props => {
     return (
         <ModuleWhatsappWrapper>
-            <a href="https://api.whatsapp.com/send?phone=00966581001969&text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85" >
+            <a href="https://api.whatsapp.com/send?phone=+966581001969&text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85" >
                 <WhatsAppIcon />
             </a>
         </ModuleWhatsappWrapper>

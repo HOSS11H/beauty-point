@@ -328,6 +328,14 @@ const EditModal = (props) => {
     const maxNumber = 1;
 
     useEffect(() => {
+        if (uploadedImages[0].file === undefined) {
+            fetch(uploadedImages[0].data_url).then(res => res.blob()).then(blob => {
+                setUploadedImages([{ data_url: uploadedImages[0].data_url, file: new File([blob], 'image.jpg', { type: blob.type })}]);
+            })
+        }
+    }, [uploadedImages])
+
+    useEffect(() => {
         let netPrice;
         if (discountType === 'percent') {
             netPrice = (servicePrice - (servicePrice * (serviceDiscount / 100))).toFixed(2);
