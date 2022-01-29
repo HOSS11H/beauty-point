@@ -41,7 +41,7 @@ const Spotlights = props => {
     const [spotlights, setSpotlights] = useState(null);
 
     useEffect(() => {
-        axios.get('/spotlights?include[]=deal&page=1&per_page=8')
+        axios.get('/spotlights?include[]=deal&include[]=company&page=1&per_page=8')
             .then(res => {
                 setSpotlights(res.data.data);
             })

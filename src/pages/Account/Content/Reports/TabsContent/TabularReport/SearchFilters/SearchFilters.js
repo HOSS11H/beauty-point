@@ -143,9 +143,9 @@ const SearchFilters = (props) => {
         const selectedSearchParams = {
             from_date: dateFrom,
             to_date: dateTo,
-            customer_name: customer.name || '',
-            service_name: selectedServices,
-            product_name: selectedProducts,
+            customer_id: customer.id || '',
+            service_id: selectedServices,
+            product_id: selectedProducts,
             employee_id: employee,
             booking_status: bookingStatus,
             booking_type: bookingType,
