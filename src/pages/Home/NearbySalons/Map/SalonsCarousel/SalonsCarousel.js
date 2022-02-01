@@ -25,6 +25,9 @@ const SalonCard = styled(Card)`
         position: relative;
         cursor: pointer;
         margin-bottom: 0px;
+        @media screen and (max-width: 500px) {
+            flex-direction: column;
+        }
     }
 `
 const CardImg = styled.div`
@@ -32,6 +35,9 @@ const CardImg = styled.div`
     flex-shrink:0;
     margin-right: 10px;
     height: 150px;
+    @media screen and (max-width: 500px) {
+        margin-right:0px;
+    }
     img {
         width: 100%;
         height: 100%;
@@ -90,7 +96,7 @@ const SalonsCarousel = ({ salons, handleClick }) => {
                 }}
                 breakpoints={{
                     "0": {
-                        "slidesPerView": 1,
+                        "slidesPerView": 2,
                         "spaceBetween": 10
                     },
                     "500": {

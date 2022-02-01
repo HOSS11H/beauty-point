@@ -6,10 +6,12 @@ import Spotlights from "./Spotlights/Spotlights";
 import Deals from "./Deals/Deals";
 import Footer from "../../../components/Footer/Footer";
 import ModuleWhatsapp from '../../../components/Header/Modules/ModuleWhatsapp/ModuleWhatsapp';
+import MobileBar from "../../../components/Header/MobileBar/MobileBar";
 
 const HomePage = props => {
     return (
         <div className="landing">
+            <MobileBar />
             <Header />
             <Hero />
             <CategoriesSlider />

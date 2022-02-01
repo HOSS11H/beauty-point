@@ -13,8 +13,6 @@ const Main = styled.main`
 
 const Layout = props => {
     
-    
-
     return (
         <Main dir={props.dir}>
             <Wrapper>
