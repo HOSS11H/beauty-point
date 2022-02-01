@@ -9,6 +9,7 @@ import ServicesTable from './ServicesTable/ServicesTable';
 import { CustomButton } from '../../../../components/UI/Button/Button';
 import CreateModal from "./CreateModal/CreateModal";
 import CustomizedSnackbars from "../../../../components/UI/SnackBar/SnackBar";
+import SendingRequestIndicator from "../../../../components/UI/SendingRequestIndicator/SendingRequestIndicator";
 
 const ActionsWrapper = styled.div`
     display: flex;
@@ -31,17 +32,27 @@ function Services(props) {
 
     const { t } = useTranslation()
 
-    const { searchServicesHandler, createServiceHandler, creatingServiceSuccess } = props;
+    const { searchServicesHandler, createServiceHandler, creatingServiceSuccess, creatingService, creatingServiceFailed } = props;
 
     const [createModalOpened, setCreateModalOpened] = useState(false);
 
-    const [ messageShown, setMessageShown ] = useState(creatingServiceSuccess);
+    const [ successMessageShown, setSuccessMessageShown ] = useState(false);
+    const [ failedMessageShown, setFailedMessageShown ] = useState(false);
 
     useEffect(() => {
-        setMessageShown(creatingServiceSuccess )
+        setSuccessMessageShown(creatingServiceSuccess)
     }, [creatingServiceSuccess])
-    const closeMessageHandler = useCallback(( ) => {
-        setMessageShown(false)
+
+    const closeSuccessMessageHandler = useCallback(( ) => {
+        setSuccessMessageShown(false)
+    }, [])
+
+    useEffect(() => {
+        setFailedMessageShown(creatingServiceFailed)
+    }, [creatingServiceFailed])
+
+    const closeFailedMessageHandler = useCallback(( ) => {
+        setFailedMessageShown(false)
     }, [])
 
     // Create Modal
@@ -67,7 +78,9 @@ function Services(props) {
                     heading='create new service' confirmText='create' />
             </ActionsWrapper>
             <ServicesTable />
-            <CustomizedSnackbars show={messageShown} message={t('Service Added')} type='success' onClose={closeMessageHandler} />
+            <CustomizedSnackbars show={successMessageShown} message={t('Service Added')} type='success' onClose={closeSuccessMessageHandler} />
+            <CustomizedSnackbars show={failedMessageShown} message={t('error adding service')} type='error' onClose={closeFailedMessageHandler} />
+            <SendingRequestIndicator open={creatingService} />
         </Fragment>
     );
 }
@@ -75,6 +88,8 @@ function Services(props) {
 const mapStateToProps = (state) => {
     return {
         creatingServiceSuccess: state.services.creatingServiceSuccess,
+        creatingServiceFailed: state.services.creatingServiceFailed,
+        creatingService: state.services.creatingService,
     }
 }
 

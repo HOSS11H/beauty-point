@@ -422,6 +422,9 @@ const resources = {
             'refunded': 'مسترجع',
             'choose appointment': 'اختر موعد',
             'No slots available': 'لا يوجد مواعيد متاحة',
+            'error adding service': 'خطأ في إضافة الخدمة',
+            'Service edited': 'تم تعديل الخدمة',
+            'error editing service': 'خطأ في تعديل الخدمة',
         }
     }
 };

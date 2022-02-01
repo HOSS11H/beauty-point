@@ -4,6 +4,9 @@ import styled from 'styled-components';
 export const ModuleSearchWrapper = styled.div`
     display: inline-flex;
     margin-right: 20px;
+    @media screen and (max-width: 500px) {
+        margin-right: 5px;
+    }
     &:last-child {
         margin-right: 0px;
     }

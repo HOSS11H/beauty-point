@@ -13,13 +13,14 @@ import DeleteModal from './DeleteModal/DeleteModal';
 import ViewModal from './ViewModal/ViewModal';
 import EditModal from './EditModal/EditModal';
 import SearchMessage from "../../../../../components/Search/SearchMessage/SearchMessage";
-import { CustomButton } from '../../../../../components/UI/Button/Button';
 import { useTranslation } from 'react-i18next';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import axios from '../../../../../utils/axios-instance';
+import SendingRequestIndicator from '../../../../../components/UI/SendingRequestIndicator/SendingRequestIndicator';
+import CustomizedSnackbars from '../../../../../components/UI/SnackBar/SnackBar';
 
 const ServicesTableWrapper = styled.div`
     display: flex;
@@ -78,7 +79,7 @@ function ServicesTable(props) {
     const { t } = useTranslation()
 
 
-    const { fetchedServices, fetchServicesHandler, loadingServices, deleteServiceHandler, updateServiceHandler, searchingServices, searchingServicesSuccess, creatingServiceSuccess, updatingServiceSuccess } = props;
+    const { fetchedServices, fetchServicesHandler, loadingServices, deleteServiceHandler, updateServiceHandler, searchingServices, searchingServicesSuccess, creatingServiceSuccess, updatingService, updatingServiceSuccess, updatingServiceFailed } = props;
 
     const themeCtx = useContext(ThemeContext)
 
@@ -99,6 +100,9 @@ function ServicesTable(props) {
 
     const [selectedServiceId, setSelectedServiceId] = useState(null);
 
+    const [ successMessageShown, setSuccessMessageShown ] = useState(false);
+    const [ failedMessageShown, setFailedMessageShown ] = useState(false);
+
     useEffect(() => {
         fetchServicesHandler(lang, page, rowsPerPage, orderBy, order);
     }, [fetchServicesHandler, lang, order, orderBy, page, rowsPerPage]);
@@ -109,7 +113,22 @@ function ServicesTable(props) {
     useEffect(() => {
         updatingServiceSuccess && fetchServicesHandler(lang, page, rowsPerPage, orderBy, order);
     }, [creatingServiceSuccess, fetchServicesHandler, lang, order, orderBy, page, rowsPerPage, updatingServiceSuccess]);
+    
+    useEffect(() => {
+        setSuccessMessageShown(updatingServiceSuccess)
+    }, [updatingServiceSuccess])
 
+    const closeSuccessMessageHandler = useCallback(( ) => {
+        setSuccessMessageShown(false)
+    }, [])
+
+    useEffect(() => {
+        setFailedMessageShown(updatingServiceFailed)
+    }, [updatingServiceFailed])
+
+    const closeFailedMessageHandler = useCallback(( ) => {
+        setFailedMessageShown(false)
+    }, [])
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -197,7 +216,6 @@ function ServicesTable(props) {
     // Avoid a layout jump when reaching the last page with empty rows & On Initialize
     const emptyRows = (rowsPerPage - fetchedServices.data.length);
 
-
     let content;
 
     if (fetchedServices.data.length === 0 && searchingServicesSuccess && !searchingServices) {
@@ -279,6 +297,9 @@ function ServicesTable(props) {
                             heading='edit service details' confirmText='edit' />
                     )
                 }
+                <SendingRequestIndicator open={updatingService} />
+                <CustomizedSnackbars show={successMessageShown} message={t('Service edited')} type='success' onClose={closeSuccessMessageHandler} />
+                <CustomizedSnackbars show={failedMessageShown} message={t('error editing service')} type='error' onClose={closeFailedMessageHandler} />
             </Fragment>
         )
     }
@@ -296,7 +317,9 @@ const mapStateToProps = state => {
         searchingServices: state.services.searchingServices,
         searchingServicesSuccess: state.services.searchingServicesSuccess,
         creatingServiceSuccess: state.services.creatingServiceSuccess,
+        updatingService: state.services.updatingService,
         updatingServiceSuccess: state.services.updatingServiceSuccess,
+        updatingServiceFailed: state.services.updatingServiceFailed,
     }
 }
 

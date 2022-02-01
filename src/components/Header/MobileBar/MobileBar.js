@@ -10,11 +10,11 @@ const MobileBarWrapper = styled.div`
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: ${ ( { theme } ) => theme.palette.common.white};
+    background: ${({ theme }) => theme.palette.background.default};
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-    box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
+    box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px, rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 48px;
     z-index: 9999;
     @media screen and (min-width: 900px) {
         display: none;
@@ -26,6 +26,9 @@ const MobileBarWrapper = styled.div`
         align-items    : center;
         padding: 8px 20px;
         transition: 0.3s ease-in-out;
+        @media screen and (max-width: 500px) {
+            padding: 8px 15px;
+        }
         svg {
             font-size: 18px;
             color: ${ ( { theme } ) => theme.vars.primary};
@@ -34,7 +37,7 @@ const MobileBarWrapper = styled.div`
         }
         span {
             font-size: 12px;
-            color: ${ ( { theme } ) => theme.palette.common.black};
+            color: ${ ( { theme } ) => theme.palette.text.primary};
             text-transform: capitalize;
             transition                : 0.3s ease-in-out;
         }

@@ -7,13 +7,10 @@ import Header from './Header/Header';
 import { Outlet } from 'react-router';
 import ThemeContext from '../../store/theme-context';
 import { connect } from 'react-redux';
-import Loader from '../../components/UI/Loader/Loader';
 
 const drawerWidth = 256;
 
 const Account = (props) => {
-
-	const { fetchingPermissions } = props;
 
 	const themeCtx = useContext(ThemeContext)
 
@@ -27,7 +24,6 @@ const Account = (props) => {
 					MuiDrawer: {
 						styleOverrides: {
 							paper: {
-								//backgroundColor: theme.palette.background.default,
 								boxShadow: 'rgb(113 122 131 / 11%) 0px 7px 30px 0px',
 								borderRight: '0',
 							},
