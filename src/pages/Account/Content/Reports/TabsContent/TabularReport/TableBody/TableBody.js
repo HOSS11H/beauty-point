@@ -80,6 +80,8 @@ const EnhancedTableBody = props => {
         <TableBody>
             {fetchedTabularReport.data.map((row, index) => {
                 const fetchedItems = row.items && row.items.split(',')
+                const booking_time = new Date(row.booking_time).toLocaleDateString('en-US').toString();
+                const booking_date = new Date(row.booking_date).toLocaleTimeString().toString();
                 return (
                     <TableRow
                         hover
@@ -98,17 +100,17 @@ const EnhancedTableBody = props => {
                         </TableCell>
                         <TableCell align="center">
                             <TableData>
-                                {row.booking_date}
+                                {booking_date}
                             </TableData>
                         </TableCell>
                         <TableCell align="center">
                             <TableData>
-                                {row.booking_time}
+                                {booking_time}
                             </TableData>
                         </TableCell>
                         <TableCell align="center">
                             <Items>
-                                { 
+                                {
                                     fetchedItems && (
                                         fetchedItems.map((item, index) => {
                                             let loadedItems;
