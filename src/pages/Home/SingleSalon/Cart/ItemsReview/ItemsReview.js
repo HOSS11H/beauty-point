@@ -1,17 +1,11 @@
 import { Grid, Paper } from "@mui/material"
-import { useState } from "react";
-import { useEffect } from "react"
 import styled from 'styled-components';
-import { fetchCoupons } from '../../../../../store/actions/index';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
-import { connect } from "react-redux";
 import { useTranslation } from "react-i18next";
 import SharedTableHead from "./SharedTableHead/SharedTableHead";
 import CartItem from "./CartItem/CartItem";
-import { useContext } from "react";
-import ThemeContext from "../../../../../store/theme-context";
 
 const CustomMessage = styled.div`
     display: flex;
@@ -36,13 +30,6 @@ const ItemsReview = props => {
     const { cartData, removeFromCart, increaseItem, decreaseItem } = props;
 
     const { t } = useTranslation();
-
-    const themeCtx = useContext(ThemeContext);
-
-
-
-
-
 
     let content = (
         <Grid container>

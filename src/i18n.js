@@ -425,6 +425,12 @@ const resources = {
             'error adding service': 'خطأ في إضافة الخدمة',
             'Service edited': 'تم تعديل الخدمة',
             'error editing service': 'خطأ في تعديل الخدمة',
+            'Customer Deleted': 'تم حذف العميل',
+            'view customer details': 'عرض تفاصيل العميل',
+            'Failed Deleting Customer': 'فشل حذف العميل',
+            'save changes': 'حفظ التغييرات',
+            'Customer Details Updated': 'تم تحديث تفاصيل العميل',
+            'Failed Updating Customer Details': 'فشل تحديث تفاصيل العميل',
         }
     }
 };

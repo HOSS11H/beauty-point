@@ -45,6 +45,7 @@ import AllSaloons from "./pages/Home/AllSaloons/AllSaloons";
 import NearbySalons from "./pages/Home/NearbySalons/NearbySalons";
 
 import Landing from "./pages/Landing/Landing";
+import Customers from "./pages/Account/Content/Customers/Customers";
 
 function App() {
 
@@ -94,6 +95,7 @@ function App() {
                     <Route path='booking-calendar' element={<BookingCalendar />} />
                     <Route path='reports' element={<Reports />} />
                     <Route path='employees' element={<Employees />} />
+                    <Route path='customers' element={<Customers />} />
                     <Route path="settings/*" element={<Settings />}>
                         <Route path='' element={<GeneralSettings />} />
                         <Route path='vendor-page' element={<VendorPage />} />

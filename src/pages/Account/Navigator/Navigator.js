@@ -26,11 +26,10 @@ import { useTranslation } from 'react-i18next';
 import { useContext, useEffect } from 'react';
 import AuthContext from '../../../store/auth-context';
 import ThemeContext from '../../../store/theme-context';
-import v1 from '../../../utils/axios-instance-v1';
+import PeopleIcon from '@mui/icons-material/People';
 import { useState } from 'react';
 import { connect } from 'react-redux';
 import { fetchPermissions } from '../../../store/actions/index';
-import { useMemo } from 'react';
 
 const drawerWidth = 256;
 const openedMixin = (theme) => ({
@@ -171,6 +170,7 @@ const Navigator = (props) => {
                 },
                 { id: 'bookings', name: 'bookings', icon: <BookIcon /> },
                 { id: 'booking-calendar', name: 'booking calendar', icon: <EventIcon /> },
+                { id: 'customers', name: 'customers', icon: <PeopleIcon /> },
             ],
         }];
         if (roleId === 'customer') {
