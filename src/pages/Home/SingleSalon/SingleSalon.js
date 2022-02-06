@@ -64,8 +64,8 @@ const ActionButton = styled(CustomButton)`
 `
 
 
-const servicesIntialRowsPerPage = 9
-const dealsIntialRowsPerPage = 9
+const servicesRowsPerPage = 9
+const dealsRowsPerPage = 9
 
 const SingleSalon = props => {
 
@@ -79,12 +79,11 @@ const SingleSalon = props => {
     const [value, setValue] = useState(0);
 
     const [servicesPage, setServicesPage] = useState(0);
-    const [servicesRowsPerPage, setServicesRowsPerPage] = useState(servicesIntialRowsPerPage);
 
     const [dealsPage, setDealsPage] = useState(0);
-    const [dealsRowsPerPage, setDealsRowsPerPage] = useState(dealsIntialRowsPerPage);
 
     const [salon, setSalon] = useState();
+    const [ loading, setLoading ] = useState(true);
 
     const [services, setServices] = useState({data: []});
     const [loadingServices, setLoadingServices] = useState(false);
@@ -115,7 +114,7 @@ const SingleSalon = props => {
             .catch(err => {
                 //console.log(err);
             })
-    }, [param.salonId, servicesPage, servicesRowsPerPage])
+    }, [param.salonId, servicesPage])
     useEffect(() => {
         setLoadingDeals(true);
         axios.get(`/companies/${param.salonId}/deals?page=${dealsPage + 1}&per_page=${dealsRowsPerPage}&include[]=company`)
@@ -126,7 +125,7 @@ const SingleSalon = props => {
             .catch(err => {
                 //console.log(err);
             })
-    }, [dealsPage, dealsRowsPerPage, param.salonId, servicesPage, servicesRowsPerPage])
+    }, [dealsPage, param.salonId, servicesPage])
 
     const handleServiceChangePage = React.useCallback((event, newPage) => {
         setServicesPage(newPage);
@@ -158,11 +157,15 @@ const SingleSalon = props => {
         setMessageShown(false);
     }
 
-    let content = (
-        <Loader>
-            <CircularProgress color="secondary" />
-        </Loader>
-    );
+    let content ;
+    
+    if ( loading || loadingServices || loadingDeals ) {
+        content = (
+            <Loader>
+                <CircularProgress color="secondary" />
+            </Loader>
+        );
+    }
     if (salon && services.data.length > 0 && deals.data.length > 0 ) {
         content = (
             <Box sx={{ width: '100%' }}>
