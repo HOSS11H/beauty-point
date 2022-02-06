@@ -10,6 +10,7 @@ import Skeleton from '@mui/material/Skeleton';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { Fragment } from 'react';
 import { useTranslation } from "react-i18next";
+import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 
 const CustomCardMui = styled(Card)`
     &.MuiPaper-root {
@@ -192,7 +193,7 @@ const BookingView = props => {
 
     const { t } = useTranslation()
 
-    const { booking, loading, onClick } = props;
+    const { booking, onClick } = props;
 
     let content = (
         <CustomCardMui>
@@ -231,6 +232,7 @@ const BookingView = props => {
                     <ClientInfo>
                         {booking.user.email && <li><MailIcon sx={{ mr: 1 }} />{booking.user.email}</li>}
                         {booking.user.mobile && <li><PhoneAndroidIcon sx={{ mr: 1 }} />{booking.user.mobile}</li>}
+                        <li><AlternateEmailIcon sx={{ mr: 1 }} />{t(`via `)}{booking.source}</li>
                     </ClientInfo>
                     <BookingItems>
                         {

@@ -432,6 +432,7 @@ const resources = {
             'Customer Details Updated': 'تم تحديث تفاصيل العميل',
             'Failed Updating Customer Details': 'فشل تحديث تفاصيل العميل',
             'No Customers Found': 'لا يوجد أعضاء',
+            'via ': 'عن طريق ',
         }
     }
 };

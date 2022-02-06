@@ -36,8 +36,12 @@ function Bookings(props) {
 
     useEffect(() => {
         if (fetchedBookings.data.length === 0) {
+            console.log('fetching bookings')
             fetchBookingsHandler(lang, page, rowsPerPage);
         }
+    }, [fetchBookingsHandler, fetchedBookings.data.length, lang, page]);
+
+    useEffect(() => {
         if (!userData) {
             v1.get('/auth/me')
                 .then(res => {
@@ -48,7 +52,8 @@ function Bookings(props) {
                     //console.log(err)
                 })
         }
-    }, [fetchBookingsHandler, fetchedBookings.data.length, lang, page, userData]);
+    }, [userData]);
+
 
     useEffect(() => {
         updatingBookingSuccess && fetchBookingsHandler(lang, page, rowsPerPage);
