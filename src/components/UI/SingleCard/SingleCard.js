@@ -99,7 +99,7 @@ const CatButton = styled.div`
     align-items: center;
     border-radius: 50%;
     background-color: ${props => props.theme.vars.primary};
-    color: ${props => props.theme.palette.text.primary};
+    color: ${props => props.theme.palette.common.white};
     width: 60px;
     height: 60px;
     position: fixed;

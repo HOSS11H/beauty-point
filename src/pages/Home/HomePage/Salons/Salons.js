@@ -1,14 +1,11 @@
 import { Container } from '@mui/material';
 import styled from 'styled-components';
 import { Heading } from "../../../../components/UI/Heading/Heading";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import SalonPanel from '../../../../components/UI/SalonPanel/SalonPanel';
 import { useState, useEffect, useContext } from 'react';
 import axios from '../../../../utils/axios-instance';
 import CircularProgress from '@mui/material/CircularProgress';
-import {NavLink} from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import ThemeContext from "../../../../store/theme-context";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -42,30 +39,37 @@ const Loader = styled.div`
 
 const Salons = props => {
 
-    const themeCtx= useContext(ThemeContext);
+    const themeCtx = useContext(ThemeContext);
 
-    const { theme } = themeCtx
+    const { theme, city } = themeCtx
 
-    const {t} = useTranslation();
-    const [salons, setSalons] = useState(null);
+    const { t } = useTranslation();
+    const [salons, setSalons] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        axios.get('/companies?page=1&per_page=8')
+        setLoading(true)
+        axios.get(`/companies?page=1&per_page=8&location_id=${city}`)
             .then(res => {
+                setLoading(false)
                 setSalons(res.data.data);
             })
             .catch(err => {
+                setLoading(false)
                 //console.log(err);
             })
-    }, [])
+    }, [city])
 
 
-    let content= (
-        <Loader>
-            <CircularProgress color="secondary" />
-        </Loader>
-    );
-    if (salons) {
+    let content;
+    if (loading) {
+        content = (
+            <Loader>
+                <CircularProgress color="secondary" />
+            </Loader>
+        );
+    }
+    if (salons.length > 0) {
         let fetchedSalons = [...salons];
         content = (
             <Swiper
@@ -111,7 +115,7 @@ const Salons = props => {
         <SalonsWrapper>
             <Container maxWidth="lg">
                 <Heading>
-                    <NavLink className="heading-title" to='all-saloons'>{t('salons')}  { theme === 'rtl' ? <ArrowForwardIcon /> : <ArrowBackIcon /> } </NavLink>
+                    <NavLink className="heading-title" to='all-saloons'>{t('salons')}  {theme === 'rtl' ? <ArrowForwardIcon /> : <ArrowBackIcon />} </NavLink>
                 </Heading>
                 {content}
             </Container>

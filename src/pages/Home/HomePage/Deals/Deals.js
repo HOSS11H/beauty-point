@@ -40,29 +40,37 @@ const Loader = styled.div`
 
 const Deals = props => {
     const { t } = useTranslation();
-    const [deals, setDeals] = useState(null);
+    const [deals, setDeals] = useState([]);
+    const [ loading, setLoading ] = useState(false);
 
     const themeCtx = useContext(ThemeContext);
 
-    const { theme } = themeCtx
+    const { theme, city } = themeCtx
 
     useEffect(() => {
-        axios.get('/deals?include[]=company&page=1&per_page=8')
+        setLoading(true)
+        axios.get(`/deals?include[]=company&page=1&per_page=8&location_id=${city}`)
             .then(res => {
+                setLoading(false)
                 setDeals(res.data.data);
             })
             .catch(err => {
+                setLoading(false)
                 //console.log(err);
             })
-    }, [])
+    }, [city])
 
 
-    let content = (
-        <Loader>
-            <CircularProgress color="secondary" />
-        </Loader>
-    );
-    if (deals) {
+    let content ;
+
+    if (loading) {
+        content = (
+            <Loader>
+                <CircularProgress color="secondary" />
+            </Loader>
+        );
+    }
+    if (deals.length > 0) {
         let fetchedDeals = [...deals];
         content = (
             <Swiper

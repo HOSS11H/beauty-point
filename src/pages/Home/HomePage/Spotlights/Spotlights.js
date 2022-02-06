@@ -1,15 +1,13 @@
 import { Container } from '@mui/material';
 import styled from 'styled-components';
 import { Heading } from "../../../../components/UI/Heading/Heading";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import DealPanel from '../../../../components/UI/DealPanel/DealPanel';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import axios from '../../../../utils/axios-instance';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useTranslation } from 'react-i18next';
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
+import ThemeContext from "../../../../store/theme-context";
 
 // import Swiper core and required modules
 import SwiperCore, {
@@ -38,25 +36,36 @@ SwiperCore.use([Autoplay]);
 const Spotlights = props => {
     const {t} = useTranslation();
 
-    const [spotlights, setSpotlights] = useState(null);
+    const [spotlights, setSpotlights] = useState([]);
+    const [ loading, setLoading ] = useState(false);
+
+    const themeCtx = useContext(ThemeContext);
+    const {city} = themeCtx
 
     useEffect(() => {
-        axios.get('/spotlights?include[]=deal&include[]=company&page=1&per_page=8')
+        setLoading(true)
+        axios.get(`/spotlights?include[]=deal&include[]=company&page=1&per_page=8&location_id=${city}`)
             .then(res => {
+                setLoading(false)
                 setSpotlights(res.data.data);
             })
             .catch(err => {
+                setLoading(false)
                 //console.log(err);
             })
-    }, [])
+    }, [city])
 
 
-    let content= (
-        <Loader>
-            <CircularProgress color="secondary" />
-        </Loader>
-    );
-    if (spotlights) {
+    let content;
+
+    if (loading) {
+        content= (
+            <Loader>
+                <CircularProgress color="secondary" />
+            </Loader>
+        );
+    }
+    if (spotlights.length > 0) {
         let fetchedSpotlights = [...spotlights];
         content = (
             <Swiper

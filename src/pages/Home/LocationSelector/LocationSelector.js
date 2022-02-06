@@ -81,7 +81,7 @@ const LocationSelector = props => {
             <Wrapper>
                 <Grid container spacing={2} >
                     {cities.map( (cityObj, index) => {
-                        const activeItem = cityObj.id === city
+                        const activeItem = cityObj.id === +city
                         return (
                             <Grid key={index} item xs={12} sm={6} md={4}>
                                 <City onClick={() => onConfirm(cityObj.id)} activeItem={activeItem} >{cityObj.name}</City>

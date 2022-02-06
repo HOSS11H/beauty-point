@@ -4,13 +4,14 @@ import { Heading } from "../../../components/UI/Heading/Heading";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import DealPanel from '../../../components/UI/DealPanel/DealPanel';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import axios from '../../../utils/axios-instance';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useTranslation } from 'react-i18next';
 import HomeLayout from '../../../components/HomeLayout/HomeLayout';
 import { useRef } from 'react';
 import { useCallback } from 'react';
+import ThemeContext from '../../../store/theme-context';
 
 const DealsWrapper = styled.section`
     margin: 100px 0;
@@ -39,6 +40,9 @@ const AllDeals = props => {
     const [lastPage, setLastPage] = useState(false)
     const [loading, setLoading] = useState(true)
 
+    const themeCtx = useContext(ThemeContext);
+    const {city} = themeCtx;
+
     // tracking on which page we currently are
     const [page, setPage] = useState(1)
 
@@ -57,7 +61,7 @@ const AllDeals = props => {
 
     useEffect(() => {
         setLoading(true)
-        axios.get(`/deals?include[]=location&include[]=company&page=${page}&per_page=10`)
+        axios.get(`/deals?include[]=location&include[]=company&page=${page}&per_page=10&location_id=${city}`)
             .then(res => {
                 setLoading(false)
                 setDeals(currentDeals => {
@@ -71,7 +75,7 @@ const AllDeals = props => {
                 setLoading(false)
                 //console.log(err);
             })
-    }, [page])
+    }, [city, page])
 
 
     let content = (

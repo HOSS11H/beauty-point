@@ -11,6 +11,8 @@ import { useTranslation } from 'react-i18next';
 import HomeLayout from '../../../components/HomeLayout/HomeLayout';
 import { useRef } from 'react';
 import { useCallback } from 'react';
+import { useContext } from 'react';
+import ThemeContext from '../../../store/theme-context';
 
 const SalonsWrapper = styled.section`
     margin: 100px 0;
@@ -40,6 +42,9 @@ const AllSaloons = props => {
     const [lastPage, setLastPage] = useState(false)
     const [loading, setLoading] = useState(true)
 
+    const themeCtx = useContext(ThemeContext);
+    const {city} = themeCtx;
+
     // tracking on which page we currently are
     const [page, setPage] = useState(1)
 
@@ -58,7 +63,7 @@ const AllSaloons = props => {
 
     useEffect(() => {
         setLoading(true)
-        axios.get(`/companies?page=${page}&per_page=10`)
+        axios.get(`/companies?page=${page}&per_page=10&location_id=${city}`)
             .then(res => {
                 setLoading(false)
                 setSalons(currentSalons => {
@@ -72,7 +77,7 @@ const AllSaloons = props => {
                 setLoading(false)
                 //console.log(err);
             })
-    }, [page])
+    }, [city, page])
 
 
     let content = (
