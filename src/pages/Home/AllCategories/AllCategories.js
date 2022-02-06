@@ -1,10 +1,9 @@
 import { Container, Grid } from "@mui/material";
 import { Heading } from "../../../components/UI/Heading/Heading";
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import axios from '../../../utils/axios-instance';
 import CircularProgress from '@mui/material/CircularProgress';
-import { NavLink } from 'react-router-dom';
 import { useTranslation } from "react-i18next";
 import HomeLayout from "../../../components/HomeLayout/HomeLayout";
 import CategoryPanel from "../../../components/UI/CategoryPanel/CategoryPanel";
@@ -27,23 +26,36 @@ const AllCategories = props => {
 
     const { t } = useTranslation();
 
-    const [services, setServices] = useState();
+    const [services, setServices] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        axios.get('/categories?include[]=services')
+        const controller = new AbortController();
+        setLoading(true)
+        axios.get('/categories?include[]=services', {
+            signal: controller.signal
+        })
             .then(res => {
+                setLoading(false)
                 setServices(res.data.data);
             })
             .catch(err => {
+                setLoading(false)
                 //console.log(err);
             })
+        return () => {
+            controller.abort();
+        }
     }, [])
-    let content = (
-        <Loader>
-            <CircularProgress color="secondary" />
-        </Loader>
-    );
-    if (services) {
+    let content ;
+    if (loading) {
+        content = (
+            <Loader>
+                <CircularProgress color="secondary" />
+            </Loader>
+        );
+    }
+    if (services.length > 0) {
         content = services.map((category, index) => (
             <Grid item xs={3} lg={2} key={index}>
                 <CategoryPanel key={index} category={category} path='../categories' />

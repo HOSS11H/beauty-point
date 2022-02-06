@@ -4,7 +4,7 @@ import Slider from "react-slick";
 import './beauty-icons.css';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import axios from '../../../../utils/axios-instance';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -99,16 +99,22 @@ const CategoriesSlider = props => {
     const { theme } = themeCtx
 
 
-    const [categories, setCategories] = useState();
+    const [categories, setCategories] = useState([]);
 
     useEffect(() => {
-        axios.get('/categories?include[]=services')
+        const controller = new AbortController();
+        axios.get('/categories?include[]=services', {
+            signal: controller.signal
+        })
             .then(res => {
                 setCategories(res.data.data);
             })
             .catch(err => {
                 //console.log(err);
             })
+        return () => {
+            controller.abort();
+        }
     }, [])
 
     let content = (
@@ -116,7 +122,7 @@ const CategoriesSlider = props => {
             <CircularProgress color="secondary" />
         </Loader>
     );
-    if (categories) {
+    if (categories.length > 0) {
         content = (
             <Slider {...settings}>
                 {
