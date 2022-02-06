@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const instance = axios.create({
-    baseURL: 'https://testbeauty.beautypoint.sa/api/v1',
+    baseURL: 'https://api.beautypoint.sa/api/v1',
 });
 instance.interceptors.request.use(function (config) {
     let token =  localStorage.getItem('token');

@@ -83,7 +83,7 @@ const SingleSalon = props => {
     const [dealsPage, setDealsPage] = useState(0);
 
     const [salon, setSalon] = useState();
-    const [ loading, setLoading ] = useState(true);
+    const [ loading, setLoading ] = useState(false);
 
     const [services, setServices] = useState({data: []});
     const [loadingServices, setLoadingServices] = useState(false);
@@ -96,11 +96,14 @@ const SingleSalon = props => {
     const [messageShown, setMessageShown] = useState(false);
 
     useEffect(() => {
+        setLoading(true);
         axios.get(`/companies/${param.salonId}?include[]=vendor_page&include[]=booking_times`)
             .then(res => {
+                setLoading(false);
                 setSalon(res.data);
             })
             .catch(err => {
+                setLoading(false);
                 //console.log(err);
             })
     }, [param.salonId])
@@ -158,7 +161,7 @@ const SingleSalon = props => {
     }
 
     let content ;
-    
+
     if ( loading || loadingServices || loadingDeals ) {
         content = (
             <Loader>
@@ -166,7 +169,7 @@ const SingleSalon = props => {
             </Loader>
         );
     }
-    if (salon && services.data.length > 0 && deals.data.length > 0 ) {
+    if ( salon && !loading) {
         content = (
             <Box sx={{ width: '100%' }}>
                 <Typography component="div" variant="h4" sx={{ marginBottom: '10px' }} >
@@ -195,46 +198,58 @@ const SingleSalon = props => {
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
-                    <Grid container spacing={2}>
-                        {services.data.map(service => {
-                            return (
-                                <Grid item xs={12} sm={6} md={4} key={service.id}>
-                                    <ServicePanel service={service} path='../services' />
+                    {
+                        services.data.length > 0 && (
+                            <>
+                                <Grid container spacing={2}>
+                                    {services.data.map(service => {
+                                        return (
+                                            <Grid item xs={12} sm={6} md={4} key={service.id}>
+                                                <ServicePanel service={service} path='../services' />
+                                            </Grid>
+                                        )
+                                    })
+                                    }
                                 </Grid>
-                            )
-                        })
-                        }
-                    </Grid>
-                    <TablePaginationActions
-                        component="div"
-                        count={services.data.length}
-                        total={services.meta ? services.meta.total : null}
-                        rowsPerPage={dealsRowsPerPage}
-                        page={servicesPage}
-                        onPageChange={handleServiceChangePage}
-                        loading={loadingServices}
-                    />
+                                <TablePaginationActions
+                                    component="div"
+                                    count={services.data.length}
+                                    total={services.meta ? services.meta.total : null}
+                                    rowsPerPage={dealsRowsPerPage}
+                                    page={servicesPage}
+                                    onPageChange={handleServiceChangePage}
+                                    loading={loadingServices}
+                                />
+                            </>
+                        )
+                    }
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    <Grid container spacing={2}>
-                        {deals.data.map(deal => {
-                            return (
-                                <Grid item xs={12} sm={6} md={4} key={deal.id}>
-                                    <DealPanel deal={deal} path='../deals' />
+                    {
+                        deals.data.length > 0 && (
+                            <>
+                                <Grid container spacing={2}>
+                                    {deals.data.map(deal => {
+                                        return (
+                                            <Grid item xs={12} sm={6} md={4} key={deal.id}>
+                                                <DealPanel deal={deal} path='../deals' />
+                                            </Grid>
+                                        )
+                                    })
+                                    }
                                 </Grid>
-                            )
-                        })
-                        }
-                    </Grid>
-                    <TablePaginationActions
-                        component="div"
-                        count={deals.data.length}
-                        total={deals.meta ? deals.meta.total : null}
-                        rowsPerPage={dealsRowsPerPage}
-                        page={dealsPage}
-                        onPageChange={handleDealChangePage}
-                        loading={loadingDeals}
-                    />
+                                <TablePaginationActions
+                                    component="div"
+                                    count={deals.data.length}
+                                    total={deals.meta ? deals.meta.total : null}
+                                    rowsPerPage={dealsRowsPerPage}
+                                    page={dealsPage}
+                                    onPageChange={handleDealChangePage}
+                                    loading={loadingDeals}
+                                />
+                            </>
+                        )
+                    }
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                     <Grid container spacing={2}>
