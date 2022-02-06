@@ -1,5 +1,6 @@
 import { Container } from "@mui/material";
 import styled from 'styled-components';
+import ModuleLanguage from "../Modules/ModuleLanguage/ModuleLanguage";
 import ModuleSocial from "../Modules/ModuleSocial/ModuleSocial";
 
 const TobBarWrapper = styled.div`
@@ -21,6 +22,7 @@ const TopBar = props => {
             <Container maxWidth="lg">
                 <div className="block-right">
                     <ModuleSocial />
+                    <ModuleLanguage />
                 </div>
             </Container>
         </TobBarWrapper>

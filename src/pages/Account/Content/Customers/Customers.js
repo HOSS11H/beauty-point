@@ -9,6 +9,7 @@ import axios from '../../../../utils/axios-instance';
 import ShowCustomer from './ShowCustomer/ShowCustomer';
 import EditCustomer from './EditCustomer/EditCustomer';
 import SearchBar from '../../../../components/Search/SearchBar/SearchBar';
+import SearchMessage from "../../../../components/Search/SearchMessage/SearchMessage";
 
 
 const Customers = props => {
@@ -68,7 +69,7 @@ const Customers = props => {
     }, [page])
 
     useEffect(() => {
-        fetchCustomers({ page: page, term: searchWord, per_page: 10 })
+        fetchCustomers({ page: page, term: searchWord, per_page: 10, order_by: 'id' })
     }, [fetchCustomers, page, searchWord])
 
     const openShowCustomerHandler = useCallback((customer) => {
@@ -111,9 +112,9 @@ const Customers = props => {
         if (data) {
             setCustomers(
                 currentCustomers => {
-                    let updatedCustomerIndex = currentCustomers.findIndexOf(customer => customer.id === data.id)
+                    let updatedCustomerIndex = currentCustomers.findIndex(customer => customer.id === data.id)
                     let updatedCustomers = [...currentCustomers]
-                    let updatedCustomer = updatedCustomers[updatedCustomerIndex]
+                    let updatedCustomer = {...updatedCustomers[updatedCustomerIndex]}
                     updatedCustomer = { ...updatedCustomer, ...data }
                     updatedCustomers[updatedCustomerIndex] = updatedCustomer
                     return updatedCustomers
@@ -131,9 +132,17 @@ const Customers = props => {
 
     let content;
 
-    if ( loading && customers.length === 0) {
+    if ( loading && customers.length === 0 ) {
         content = (
             <Loader height='90vh' />
+        )
+    }
+
+    if (!loading && customers.length === 0 && searchWord !== '') {
+        content = (
+            <SearchMessage>
+                {t('No Customers Found')}
+            </SearchMessage>
         )
     }
 

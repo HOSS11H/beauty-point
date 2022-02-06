@@ -431,6 +431,7 @@ const resources = {
             'save changes': 'حفظ التغييرات',
             'Customer Details Updated': 'تم تحديث تفاصيل العميل',
             'Failed Updating Customer Details': 'فشل تحديث تفاصيل العميل',
+            'No Customers Found': 'لا يوجد أعضاء',
         }
     }
 };
