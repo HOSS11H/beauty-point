@@ -12,6 +12,7 @@ import { useEffect, useRef } from 'react';
 import { useState } from 'react';
 import {ModuleSearchWrapper} from '../Modules/ModuleSearch/ModuleSearch';
 import {ModuleButton} from '../Modules/ModuleAuth/ModuleAuth';
+import ModuleLocation from '../Modules/ModuleLocation/ModuleLocation';
 
 const fadeInDown = keyframes`
     from {
@@ -228,8 +229,8 @@ const NavBar = () => {
                             }
                         </NavbarNav>
                         <ModulesHolder>
-                            <ModuleSearch />
                             <ModuleMood />
+                            <ModuleLocation />
                             <ModuleAuth />
                         </ModulesHolder>
                     </NavbarCollapse>

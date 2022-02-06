@@ -12,7 +12,7 @@ const TobBarWrapper = styled.div`
 	.block-right {
 		display : flex;
 		align-items : center;
-		justify-content: flex-end;
+		justify-content: space-between;
 	}
 `
 
