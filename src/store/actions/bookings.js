@@ -23,7 +23,6 @@ export const fetchBookingsFailed = (errorMessage) => {
 export const fetchBookings = (language, page, perPage) => {
     return dispatch => {
         dispatch(fetchBookingsStart())
-        //console.log(language, page, perPage)
         axios.get(`/vendors/bookings?page=${page + 1}&per_page=${perPage}&include[]=user&include[]=users&include[]=items&include[]=coupon`, {
             headers: {
                 'Accept-Language': language,

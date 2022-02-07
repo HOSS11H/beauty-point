@@ -190,7 +190,7 @@ const Auth = props => {
                 }
             })
             .catch(err => {
-                setErrorMessage(err.message);
+                setErrorMessage(err.response.data.message);
             })
     }
 
