@@ -1,7 +1,5 @@
 import styled from 'styled-components';
 import { useContext, useEffect } from 'react';
-import { connect } from 'react-redux';
-import { fetchBookings } from '../../../../../store/actions/index';
 import ThemeContext from '../../../../../store/theme-context';
 import { useTranslation } from 'react-i18next';
 import CustomCard from '../../../../../components/UI/Card/Card';
@@ -13,13 +11,14 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import MailIcon from '@mui/icons-material/Mail';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
-import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
 
 import Avatar from '@mui/material/Avatar';
 import PersonIcon from '@mui/icons-material/Person';
+import { useState } from 'react';
 
+import axios from '../../../../../utils/axios-instance'
 
 const Booking = styled.div`
     display: flex;
@@ -72,31 +71,7 @@ const ClientInfo = styled.ul`
         }
     }
 `
-const BookingItems = styled.ul`
-    margin: 0;
-    padding: 0;
-    li {
-        display: flex;
-        align-items: center;
-        font-size: 14px;
-        line-height:1.5;
-        text-transform: capitalize;
-        font-weight: 500;
-        color: ${({ theme }) => theme.palette.text.disabled};
-        margin-bottom: 5px;
-        &:last-child {
-            margin-bottom: 0px;
-        }
-        svg {
-            width: 14px;
-            height: 14px;
-            color: ${({ theme }) => theme.vars.primary};
-        }
-        .divider {
-            margin: 0 5px;
-        }
-    }
-`
+
 const BookingAppointment = styled.ul`
     margin: 0;
     padding: 0;
@@ -159,17 +134,42 @@ const RecentBookings = props => {
 
     const { lang } = themeCtx
 
-    const { fetchedBookings, fetchBookingsHandler, loadingBookings } = props;
+    const [ bookings, setBookings ] = useState({ data: [], });
+    const [ loading, setLoading ] = useState(false);
+
 
     useEffect(() => {
-        fetchBookingsHandler(lang, page, perPage);
-    }, [fetchBookingsHandler, lang]);
+        setLoading(true);
+        axios.get(`/vendors/bookings?page=${page + 1}&per_page=${perPage}&include[]=user`, {
+            headers: {
+                'Accept-Language': lang,
+            }
+        })
+            .then(response => {
+                let editedData = response.data.data.map(item => {
+                    const formattedTime = new Date(item.date_time).toLocaleString()
+                    const arr = formattedTime.replace(/:.. /, " ").split(", ");
+                    let date = arr[0]
+                    let time = arr[1]
+                    return {
+                        ...item,
+                        date: date,
+                        time: time,
+                    }
+                })
+                setLoading(false);
+                setBookings({ ...response.data, data: editedData });
+            })
+            .catch(err => {
+                setLoading(false);
+            })
+    }, [ lang ]);
 
     let loadedBookings = []
 
-    if (fetchedBookings.data.length > 0) {
+    if (bookings.data.length > 0) {
 
-        loadedBookings = fetchedBookings.data.map( (booking, index) => {
+        loadedBookings = bookings.data.map( (booking, index) => {
             return (
                 <TableRow
                     key={booking.id}
@@ -190,26 +190,6 @@ const RecentBookings = props => {
                         </Booking>
                     </TableCell>
                     <TableCell align="right">
-                        <BookingItems>
-                            {
-                                booking.items.map( ( item , index) => {
-                                    let loadedItems ;
-                                    if ( item ) {
-                                        loadedItems =  (
-                                            <li key={item.id} >
-                                                <FiberManualRecordIcon sx={{ mr: 1 }} />
-                                                <span>{item.quantity}</span>
-                                                <span className='divider'>x</span>
-                                                <span>{item.item.name}</span>
-                                            </li>
-                                        )
-                                    }
-                                    return loadedItems
-                                })
-                            }
-                        </BookingItems>
-                    </TableCell>
-                    <TableCell align="right">
                         <BookingAppointment>
                             <li><EventNoteIcon sx={{ mr: 1 }} />{booking.date}</li>
                             <li><WatchLaterIcon sx={{ mr: 1 }} />{booking.time}</li>
@@ -226,7 +206,7 @@ const RecentBookings = props => {
     }
 
     return (
-        <CustomCard heading={`recent booking`} loading={loadingBookings && (fetchedBookings.data.length === 0)}>
+        <CustomCard heading={`recent booking`} loading={loading && (bookings.data.length === 0)}>
             <TableContainer component={Paper} sx={{ boxShadow: 'none' }} >
                 <Table sx={{ minWidth: 650, overflowX: 'auto' }} aria-label="simple table">
                     <TableBody>
@@ -238,17 +218,5 @@ const RecentBookings = props => {
     )
 }
 
-const mapStateToProps = state => {
-    return {
-        fetchedBookings: state.bookings.bookings,
-        loadingBookings: state.bookings.fetchingBookings,
-    }
-}
 
-const mapDispatchToProps = dispatch => {
-    return {
-        fetchBookingsHandler: (language, page, perPage) => dispatch(fetchBookings(language, page, perPage))
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(RecentBookings);
+export default RecentBookings;
