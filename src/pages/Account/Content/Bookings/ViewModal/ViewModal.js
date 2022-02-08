@@ -28,6 +28,7 @@ import axios from 'axios';
 import v2 from '../../../../../utils/axios-instance';
 import { useCallback } from 'react';
 import Loader from '../../../../../components/UI/Loader/Loader';
+import { format } from 'date-fns/esm';
 
 const ClientDetails = styled.div`
     display: flex;
@@ -266,7 +267,7 @@ const ViewModal = (props) => {
                     <BookingData>
                         <BookingDataHeading>{t('booking date')}</BookingDataHeading>
                         <BookingList>
-                            <li><EventNoteIcon sx={{ mr: 1 }} />{bookingData.date}</li>
+                            <li><EventNoteIcon sx={{ mr: 1 }} />{format(new Date(bookingData.date_time), 'Y-MM-dd')}</li>
                         </BookingList>
                     </BookingData>
                 </Grid>
@@ -274,7 +275,7 @@ const ViewModal = (props) => {
                     <BookingData>
                         <BookingDataHeading>{t('booking time')}</BookingDataHeading>
                         <BookingList>
-                            <li><WatchLaterIcon sx={{ mr: 1 }} />{bookingData.time}</li>
+                            <li><WatchLaterIcon sx={{ mr: 1 }} />{format(new Date(bookingData.date_time), 'hh:ii a')}</li>
                         </BookingList>
                     </BookingData>
                 </Grid>
