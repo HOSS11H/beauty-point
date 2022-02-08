@@ -24,7 +24,10 @@ import PrintIcon from '@mui/icons-material/Print';
 import Invoice from './Invoice/Invoice';
 import { useReactToPrint } from 'react-to-print';
 import { useEffect, useRef, useState } from 'react';
-import axios from '../../../../../utils/axios-instance';
+import axios from 'axios';
+import v2 from '../../../../../utils/axios-instance';
+import { useCallback } from 'react';
+import Loader from '../../../../../components/UI/Loader/Loader';
 
 const ClientDetails = styled.div`
     display: flex;
@@ -175,35 +178,60 @@ const DeleteButton = styled(CustomButton)`
 
 const ViewModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, id, fetchedBookings, onDelete, userData } = props;
+    const { show, heading, confirmText, onConfirm, onClose, id, onDelete, userData } = props;
 
     const { t } = useTranslation();
 
-    const bookingIndex = fetchedBookings.data.findIndex(booking => booking.id === id);
-
-    let bookingData = fetchedBookings.data[bookingIndex];
-
-    let content;
+    const [ bookingData, setBookingData ] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     const [qrCode, setQrCode] = useState(null);
 
+    const fetchData = useCallback(() => {
+        setLoading(true);
+        const headers = {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        }
+        const bookingDataEndpoint = `${v2.defaults.baseURL}/vendors/bookings/${id}?include[]=user&include[]=items`;
+        const qrCodeEndpoint = `${v2.defaults.baseURL}/vendors/bookings/${id}/qr`;
+
+        const getUserData = axios.get(bookingDataEndpoint, headers);
+        const getQrCode = axios.get(qrCodeEndpoint, headers);
+
+        axios.all([getUserData, getQrCode])
+            .then(axios.spread((...responses) => {
+                setBookingData(responses[0].data);
+                setQrCode(responses[1].data.data);
+                setLoading(false);
+            }))
+            .catch(error => {
+                setLoading(false);
+            });
+    }, [id])
+    
     useEffect(() => {
         if (id) {
-            axios.get(`/vendors/bookings/${id}/qr`)
-                .then(res => {
-                    setQrCode(res.data.data);
-                })
-                .catch(err => {
-                    //console.log(err);
-                })
+            fetchData();
         }
-    }, [id]);
+    }, [fetchData, id]);
 
     const invoiceRef = useRef();
 
     const printBookingHandler = useReactToPrint({
         content: () => invoiceRef.current,
     });
+
+    let content;
+
+    if (loading) {
+        content = (
+            <Loader  height='50vh' />
+        )
+    }
 
     if (bookingData) {
         content = (

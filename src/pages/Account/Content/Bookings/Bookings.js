@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import BookingView from "../../../../components/UI/Dashboard/BookingView/BookingView";
 import { fetchBookings, deleteBooking, updateBooking } from "../../../../store/actions/index";
 import ThemeContext from "../../../../store/theme-context";
-import AuthContext from "../../../../store/auth-context";
 import ViewModal from "./ViewModal/ViewModal";
 import EditModal from "./EditModal/EditModal";
 import SearchFilters from "./SearchFilters/SearchFilters";
@@ -13,7 +12,7 @@ import { useTranslation } from "react-i18next";
 import v1 from '../../../../utils/axios-instance-v1'
 import TablePaginationActions from '../../../../components/UI/Dashboard/Table/TablePagination/TablePagination';
 
-const intialPerPage = 15;
+const rowsPerPage = 15;
 
 function Bookings(props) {
 
@@ -22,10 +21,8 @@ function Bookings(props) {
     const { fetchedBookings, fetchBookingsHandler, fetchingBookings, deleteBookingHandler, updateBookingHandler, filteringBookingsSuccess, updatingBookingSuccess } = props;
 
     const themeCtx = useContext(ThemeContext)
-    const authCtx = useContext(AuthContext)
 
     const { lang } = themeCtx
-    const { token } = authCtx
 
     const [selectedBookingId, setSelectedBookingId] = useState(null);
 
@@ -34,7 +31,6 @@ function Bookings(props) {
     const [editModalOpened, setEditModalOpened] = useState(false);
 
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(intialPerPage);
 
     const [userData, setUserData] = useState(null);
 
@@ -48,7 +44,7 @@ function Bookings(props) {
             .catch(err => {
                 //console.log(err)
             })
-    }, [fetchBookingsHandler, lang, page, rowsPerPage]);
+    }, [fetchBookingsHandler, lang, page]);
 
     useEffect(() => {
         updatingBookingSuccess && fetchBookingsHandler(lang, 'all');
@@ -160,14 +156,14 @@ function Bookings(props) {
             </Grid>
             {
                 viewModalOpened && (
-                    <ViewModal show={viewModalOpened} id={selectedBookingId} fetchedBookings={fetchedBookings}
+                    <ViewModal show={viewModalOpened} id={selectedBookingId} 
                         onClose={viewModalCloseHandler} onConfirm={viewModalConfirmHandler.bind(null, selectedBookingId)}
                         heading='view booking details' confirmText='edit'  onDelete={viewModalDeleteHandler} userData={userData} />
                 )
             }
             {
                 editModalOpened && (
-                    <EditModal show={editModalOpened} id={selectedBookingId} fetchedBookings={fetchedBookings}
+                    <EditModal show={editModalOpened} id={selectedBookingId}
                         onClose={editModalCloseHandler} onConfirm={editModalConfirmHandler}
                         heading='edit booking details' confirmText='confirm edit' onDelete={editModalDeleteHandler} />
                 )
