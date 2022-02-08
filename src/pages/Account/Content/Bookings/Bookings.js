@@ -156,14 +156,14 @@ function Bookings(props) {
             </Grid>
             {
                 viewModalOpened && (
-                    <ViewModal show={viewModalOpened} id={selectedBookingId} fetchedBookings={fetchedBookings}
+                    <ViewModal show={viewModalOpened} id={selectedBookingId} 
                         onClose={viewModalCloseHandler} onConfirm={viewModalConfirmHandler.bind(null, selectedBookingId)}
                         heading='view booking details' confirmText='edit'  onDelete={viewModalDeleteHandler} userData={userData} />
                 )
             }
             {
                 editModalOpened && (
-                    <EditModal show={editModalOpened} id={selectedBookingId} fetchedBookings={fetchedBookings}
+                    <EditModal show={editModalOpened} id={selectedBookingId}
                         onClose={editModalCloseHandler} onConfirm={editModalConfirmHandler}
                         heading='edit booking details' confirmText='confirm edit' onDelete={editModalDeleteHandler} />
                 )

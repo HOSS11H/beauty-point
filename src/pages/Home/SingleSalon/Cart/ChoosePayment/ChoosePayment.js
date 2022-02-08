@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import styled from "styled-components";
 import cashImg from "../../../../../images/pages/cart/cash.png";
 import cardImg from "../../../../../images/pages/cart/card.png";
-import { formatCurrency } from "../../../../../shared/utility";
 import { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import ValidationMessage from "../../../../../components/UI/ValidationMessage/ValidationMessage";
@@ -83,22 +82,6 @@ const CouponWrapper = styled.div`
     margin-bottom: 20px;
 `
 
-const DepositPanel = styled.div`
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 60px;
-    background-color: rgba(150,36,142, 0.1);
-    h6 {
-        font-size: 22px;
-        line-height: 1.5;
-        font-weight: 600;
-        color :${({ theme }) => theme.vars.theme};
-        text-transform:capitalize;
-    }
-`
-
 const ChoosePayment = props => {
 
     const { handlePayment, assignCoupon, assignCouponData, fetchedCoupons, couponData } = props;
@@ -168,9 +151,6 @@ const ChoosePayment = props => {
                         {!couponExists && coupon !== '' ? <ValidationMessage notExist>{t(`Coupon Doesn't Exist`)}</ValidationMessage> : null}
                     </CouponWrapper>
                 </Grid>
-                {/* <DepositPanel>
-                <h6>{`${t('Deposit amount :')} ${formatCurrency(10)}`}</h6>
-            </DepositPanel> */}
             </Wrapper>
         )
     }

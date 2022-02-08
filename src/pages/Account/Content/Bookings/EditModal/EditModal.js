@@ -23,18 +23,18 @@ import Paper from '@mui/material/Paper';
 import Avatar from '@mui/material/Avatar';
 import PersonIcon from '@mui/icons-material/Person';
 import MoneyIcon from '@mui/icons-material/Money';
-import PendingIcon from '@mui/icons-material/Pending';
 import { formatCurrency, updateObject } from '../../../../../shared/utility';
 import { CustomButton } from '../../../../../components/UI/Button/Button';
 import CloseIcon from '@mui/icons-material/Close';
-import Box from '@mui/material/Box';
-import Chip from '@mui/material/Chip';
 import { useCallback, useContext, useEffect, useReducer, useState } from 'react';
 import { connect } from 'react-redux';
 import { fetchEmployees, fetchProducts, fetchServices, fetchDeals } from '../../../../../store/actions/index';
 import InputAdornment from '@mui/material/InputAdornment';
 import ThemeContext from '../../../../../store/theme-context';
 import ValidationMessage from '../../../../../components/UI/ValidationMessage/ValidationMessage';
+import Loader from '../../../../../components/UI/Loader/Loader';
+import axios from 'axios';
+import v2 from '../../../../../utils/axios-instance'
 
 const ClientDetails = styled.div`
     display: flex;
@@ -125,6 +125,8 @@ const DeleteButton = styled(CustomButton)`
 
 const cartReducer = (state, action) => {
     switch (action.type) {
+        case 'ADD_TO_CART':
+            return updateObject(state, action.payload)
         case 'ADD_TO_SERVICES':
             const serviceIndex = state.services.findIndex(service => service.item.id === action.payload.id);
             const updatedServices = [...state.services]
@@ -262,7 +264,7 @@ const cartReducer = (state, action) => {
 
 const EditModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, id, fetchedBookings, onDelete, fetchedEmployees, fetchEmployeesHandler, fetchedProducts, fetchProductsHandler, fetchedServices, fetchServicesHandler, fetchedDeals, fetchDealsHandler } = props;
+    const { show, heading, confirmText, onConfirm, onClose, id, onDelete, fetchedEmployees, fetchEmployeesHandler, fetchedProducts, fetchProductsHandler, fetchedServices, fetchServicesHandler, fetchedDeals, fetchDealsHandler } = props;
 
     const { t } = useTranslation();
 
@@ -270,52 +272,18 @@ const EditModal = (props) => {
 
     const { lang } = themeCtx;
 
-    const bookingIndex = fetchedBookings.data.findIndex(booking => booking.id === id);
+    const [ bookingData, setBookingData ] = useState({ items: [], user: {name: '' , email: '', mobile: ''} });
 
-    let bookingData = fetchedBookings.data[bookingIndex];
-
-    const { status, date_time, payment_status } = bookingData;
-
-    let bookingDataServices = [];
-    let bookingDataProducts = [];
-    let bookingDataDeals = [];
-    const splittedItems = bookingData.items.map(item => {
-        if (item.item.type === 'service') {
-            bookingDataServices.push({
-                id: item.item.id,
-                quantity: item.quantity,
-                price: item.price,
-                name: item.item.name,
-                employee_id: item.employee ? item.employee.id : null,
-                employee: item.employee && item.employee,
-                item: item.item,
-            })
-        } if (item.item.type === 'product') {
-            bookingDataProducts.push({
-                id: item.item.id,
-                quantity: item.quantity,
-                price: item.price,
-                item: item.item,
-            })
-        } if (item.item.type === 'deal') {
-            bookingDataDeals.push({
-                id: item.item.id,
-                quantity: item.quantity,
-                price: item.price,
-                item: item.item,
-            })
-        }
-        return bookingDataServices;
-    })
+    const [loading, setLoading] = useState(true);
 
     const [cartData, dispatch] = useReducer(cartReducer, {
-        services: bookingDataServices,
-        products: bookingDataProducts,
-        deals: bookingDataDeals,
+        services: [],
+        products: [],
+        deals: [],
     });
-    const [dateTime, setDateTime] = useState(new Date(date_time));
+    const [dateTime, setDateTime] = useState(new Date());
 
-    const [bookingStatus, setBookingStatus] = useState(status);
+    const [bookingStatus, setBookingStatus] = useState('');
 
     const [selectedServices, setSelectedServices] = useState('');
 
@@ -329,7 +297,7 @@ const EditModal = (props) => {
 
     const [discount, setDiscount] = useState(0)
 
-    const [paymentStatus, setPaymentStatus] = useState(payment_status);
+    const [paymentStatus, setPaymentStatus] = useState('');
 
     const [servicesEmployeeError, setServicesEmployeeError] = useState(false)
 
@@ -339,6 +307,71 @@ const EditModal = (props) => {
         fetchServicesHandler(lang, 1, 'all', 'name', 'desc');
         fetchDealsHandler(lang, 1, 'all', 'name', 'desc');
     }, [fetchDealsHandler, fetchEmployeesHandler, fetchProductsHandler, fetchServicesHandler, lang])
+
+    const fetchData = useCallback(() => {
+        setLoading(true);
+        const headers = {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        }
+        const bookingDataEndpoint = `${v2.defaults.baseURL}/vendors/bookings/${id}?include[]=user&include[]=items`;
+
+        const getUserData = axios.get(bookingDataEndpoint, headers);
+
+        let bookingDataServices = [];
+        let bookingDataProducts = [];
+        let bookingDataDeals = [];
+
+        axios.all([getUserData])
+            .then(axios.spread((...responses) => {
+                setBookingData(responses[0].data);
+                setBookingStatus(responses[0].data.status);
+                setDateTime(new Date(responses[0].data.date_time));
+                setPaymentStatus(responses[0].data.payment_status);
+                const splittedItems = responses[0].data.items.map(item => {
+                    if (item.item.type === 'service') {
+                        bookingDataServices.push({
+                            id: item.item.id,
+                            quantity: item.quantity,
+                            price: item.price,
+                            name: item.item.name,
+                            employee_id: item.employee ? item.employee.id : null,
+                            employee: item.employee && item.employee,
+                            item: item.item,
+                        })
+                    } if (item.item.type === 'product') {
+                        bookingDataProducts.push({
+                            id: item.item.id,
+                            quantity: item.quantity,
+                            price: item.price,
+                            item: item.item,
+                        })
+                    } if (item.item.type === 'deal') {
+                        bookingDataDeals.push({
+                            id: item.item.id,
+                            quantity: item.quantity,
+                            price: item.price,
+                            item: item.item,
+                        })
+                    }
+                    return bookingDataServices;
+                })
+                dispatch({ type: 'ADD_TO_CART', payload: { services: bookingDataServices, products: bookingDataProducts, deals: bookingDataDeals }  });
+                setLoading(false);
+            }))
+            .catch(error => {
+                setLoading(false);
+            });
+    }, [id])
+    
+    useEffect(() => {
+        if (id) {
+            fetchData();
+        }
+    }, [fetchData, id]);
 
     useEffect(() => {
         let total = 0;
@@ -551,8 +584,11 @@ const EditModal = (props) => {
 
     let content;
 
-    if (bookingData) {
-
+    if (loading) {
+        content = (
+            <Loader  height='50vh' />
+        )
+    } else {
         content = (
             <Grid container spacing={3}>
                 <Grid item xs={12}>
