@@ -30,7 +30,7 @@ const AllCategories = props => {
     const [services, setServices] = useState();
 
     useEffect(() => {
-        axios.get('/categories?include[]=services')
+        axios.get('/categories')
             .then(res => {
                 setServices(res.data.data);
             })
