@@ -102,7 +102,7 @@ const CategoriesSlider = props => {
     const [categories, setCategories] = useState();
 
     useEffect(() => {
-        axios.get('/categories?include[]=services')
+        axios.get('/categories')
             .then(res => {
                 setCategories(res.data.data);
             })
