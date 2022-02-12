@@ -23,12 +23,9 @@ import Paper from '@mui/material/Paper';
 import Avatar from '@mui/material/Avatar';
 import PersonIcon from '@mui/icons-material/Person';
 import MoneyIcon from '@mui/icons-material/Money';
-import PendingIcon from '@mui/icons-material/Pending';
 import { formatCurrency, updateObject } from '../../../../../shared/utility';
 import { CustomButton } from '../../../../../components/UI/Button/Button';
 import CloseIcon from '@mui/icons-material/Close';
-import Box from '@mui/material/Box';
-import Chip from '@mui/material/Chip';
 import { useCallback, useContext, useEffect, useReducer, useState } from 'react';
 import { connect } from 'react-redux';
 import { fetchEmployees, fetchProducts, fetchServices, fetchDeals } from '../../../../../store/actions/index';
@@ -274,7 +271,7 @@ const EditModal = (props) => {
 
     let bookingData = fetchedBookings.data[bookingIndex];
 
-    const { status, date_time, payment_status } = bookingData;
+    const { status, date_time, payment_status, payment_gateway } = bookingData;
 
     let bookingDataServices = [];
     let bookingDataProducts = [];
@@ -329,6 +326,7 @@ const EditModal = (props) => {
 
     const [discount, setDiscount] = useState(0)
 
+    const [paymentGateway, setPaymentGateway] = useState(payment_gateway)
     const [paymentStatus, setPaymentStatus] = useState(payment_status);
 
     const [servicesEmployeeError, setServicesEmployeeError] = useState(false)
@@ -519,6 +517,9 @@ const EditModal = (props) => {
     const paymentStatusChangeHandler = (event) => {
         setPaymentStatus(event.target.value);
     }
+    const paymentGatewayChangeHandler = (event) => {
+        setPaymentGateway(event.target.value);
+    }
     const EditBookingConfirmHandler = useCallback(() => {
         if (cartData.services.length > 0 && cartData.services.find(item => item.employee_id === null)) {
             setServicesEmployeeError(true)
@@ -527,7 +528,7 @@ const EditModal = (props) => {
         const booking = {
             customerId: id,
             dateTime: dateTime,
-            payment_gateway: bookingData.payment_gateway,
+            payment_gateway: paymentGateway,
             payment_status: paymentStatus,
             status: bookingStatus,
             booking: {
@@ -546,7 +547,7 @@ const EditModal = (props) => {
             discount_type: 'percent',
         }
         onConfirm(booking);
-    }, [bookingData, bookingStatus, cartData.deals, cartData.products, cartData.services, dateTime, discount, id, onConfirm, paymentStatus])
+    }, [bookingData.coupon, bookingStatus, cartData.deals, cartData.products, cartData.services, dateTime, discount, id, onConfirm, paymentGateway, paymentStatus])
 
 
     let content;
@@ -737,7 +738,7 @@ const EditModal = (props) => {
                     <BookingData>
                         <BookingDataHeading>{t('payment method')}</BookingDataHeading>
                         <BookingList>
-                            <li><MoneyIcon sx={{ mr: 1 }} />{bookingData.payment_gateway}</li>
+                            <li><MoneyIcon sx={{ mr: 1 }} />{t(paymentGateway)}</li>
                         </BookingList>
                     </BookingData>
                 </Grid>
@@ -755,17 +756,21 @@ const EditModal = (props) => {
                     </BookingData>
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <TextField
-                        type="number"
-                        label={t('Discount')}
-                        id="discount-value"
-                        sx={{ width: '100%' }}
-                        value={discount}
-                        onChange={discountChangeHandler}
-                        InputProps={{
-                            startAdornment: <InputAdornment position="start">%</InputAdornment>,
-                        }}
-                    />
+                    <FormControl sx={{ width: '100%' }}>
+                        <InputLabel id="payment-label">{t('payment method')}</InputLabel>
+                        <Select
+                            label={t('payment method')}
+                            labelId="payment-label"
+                            value={paymentGateway}
+                            onChange={paymentGatewayChangeHandler}
+                            inputProps={{ 'aria-label': 'Without label' }}
+                        >
+                            <MenuItem value='cash'>{t('cash')}</MenuItem>
+                            <MenuItem value='card'>{t('card')}</MenuItem>
+                            <MenuItem value='transfer'>{t('transfer')}</MenuItem>
+                            <MenuItem value='online'>{t('online')}</MenuItem>
+                        </Select>
+                    </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <FormControl sx={{ width: '100%' }}>
@@ -782,6 +787,19 @@ const EditModal = (props) => {
                             <MenuItem value='refunded'>{t('refunded')}</MenuItem>
                         </Select>
                     </FormControl>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <TextField
+                        type="number"
+                        label={t('Discount')}
+                        id="discount-value"
+                        sx={{ width: '100%' }}
+                        value={discount}
+                        onChange={discountChangeHandler}
+                        InputProps={{
+                            startAdornment: <InputAdornment position="start">%</InputAdornment>,
+                        }}
+                    />
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <BookingData>

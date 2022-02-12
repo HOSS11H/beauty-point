@@ -9,7 +9,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 import ThemeContext from '../../../../store/theme-context';
 import styled from 'styled-components';
 import v1 from '../../../../utils/axios-instance-v1';
-import { useTranslation } from "react-i18next";
 import ViewModal from '../Bookings/ViewModal/ViewModal';
 import { format } from 'date-fns';
 import { useRef } from 'react';
@@ -84,8 +83,6 @@ const BookingCalendar = props => {
     const themeCtx = useContext(ThemeContext)
 
     const { lang } = themeCtx;
-
-    const {t} = useTranslation()
 
     const notIntialRender = useRef(false);
 
