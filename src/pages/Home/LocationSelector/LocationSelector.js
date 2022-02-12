@@ -40,7 +40,7 @@ const LocationSelector = props => {
     const { show, onConfirm } = props;
 
     const themeCtx = useContext(ThemeContext);
-    const { lang, selectCity } = themeCtx;
+    const { lang } = themeCtx;
 
     const [loading, setLoading] = useState(false);
     const [cities, setCities] = useState(null);

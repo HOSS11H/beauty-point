@@ -37,7 +37,6 @@ export const AuthContextProvider = props => {
         localStorage.removeItem('roleId')
         setUserLetter(null);
         localStorage.removeItem('userLetter')
-        localStorage.removeItem('city')
     }
 
     const contextValue = {
