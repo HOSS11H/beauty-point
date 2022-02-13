@@ -5,7 +5,7 @@ import { Alert, Backdrop, Button, CircularProgress, Grid, Skeleton, Snackbar, Te
 import TagsInput from 'react-tagsinput'
 import 'react-tagsinput/react-tagsinput.css'
 import v1 from '../../../../../utils/axios-instance-v1';
-import Map from "../../../../Auth/Map/Map";
+import Map from "./Map/Map";
 
 
 export default function VendorPage(props) {
@@ -20,7 +20,7 @@ export default function VendorPage(props) {
     const [show, setShow] = useState(true);
     const [open, setOpen] = useState(false);
     const [success, setSuccess] = useState(false)
-    const [markers, setMarkers] = useState([])
+    const [marker, setMarker] = useState({})
 
     useEffect(() => {
         v1.get('/vendors/settings/vendor_page')
@@ -29,7 +29,7 @@ export default function VendorPage(props) {
                 setSecondaryContact(res.data.secondary_contact)
                 setAddress(res.data.address)
                 setDescription(res.data.description)
-                setMarkers([{ lat: +res.data.latitude, lng: +res.data.longitude }])
+                setMarker({ lat: +res.data.latitude, lng: +res.data.longitude })
                 if (res.data.seo_keywords !== null) {
                     setTags(res.data.seo_keywords.split(','))
                 }
@@ -50,8 +50,8 @@ export default function VendorPage(props) {
             secondary_contact,
             seo_keywords,
             seo_description,
-            latitude: markers[0].lat,
-            longitude: markers[0].lng
+            latitude: marker.lat,
+            longitude: marker.lng,
         }).then(res => {
             setSuccess(true)
             setOpen(false)
@@ -64,11 +64,11 @@ export default function VendorPage(props) {
         setSuccess(false)
     }
     const assignCoords = (lat, lng) => {
-        setMarkers([{
+        setMarker({
             lat: lat,
             lng: lng,
             defaultAnimation: 2,
-        }])
+        })
     }
 
     return (
@@ -99,7 +99,7 @@ export default function VendorPage(props) {
                                 <TextField value={seo_description} onChange={(e) => setSeoDescription(e.target.value)} multiline minRows={4} fullWidth label={t('SEO Description')} variant="outlined" />
                             </Grid>
                             <Grid item xs={12}>
-                                {markers.length > 0 && <Map assignCoords={assignCoords} markers={markers} />}
+                                <Map assignCoords={assignCoords} marker={marker} />
                             </Grid>
                             <Grid item xs={12} md={12} sx={{ textAlign: 'center' }}>
                                 <Button variant="contained" color="secondary" sx={{ minWidth: '30%' }} size="large" onClick={submitForm}>{t('Save')}</Button>

@@ -13,6 +13,11 @@ const mapContainerStyle = {
     margin: "20px auto",
 }
 
+const center = {
+    lat: 21.485811,
+    lng: 39.192505,
+}
+
 const options = {
     styles: mapStyles,
     disableDefaultUI: true,
@@ -21,7 +26,7 @@ const options = {
 
 const Map = props => {
 
-    const { assignCoords, marker } = props;
+    const { assignCoords, markers } = props;
 
     const { isLoaded, loadError } = useLoadScript({
         googleMapsApiKey: 'AIzaSyC3k16YcaG8bZDLFUMEdwoXglBiO6fQRA0',
@@ -40,14 +45,13 @@ const Map = props => {
         <div>
             <GoogleMap mapContainerStyle={mapContainerStyle} 
                 onClick={ handleClick } options={options}
-                zoom={8} center={ marker.lat ? { lat: marker.lat, lng: marker.lng } : { lat: 24.635588, lng: 46.724565 }}>
-                    {
-                        marker.lat && (
-                            <Marker
-                                key={marker.lat}
-                                position={{ lat: marker.lat, lng: marker.lng }} />
-                        )
-                    }
+                zoom={8} center={center} >
+                {markers.map(marker => (
+                    <Marker
+                        key={marker.lat}
+                        position={{ lat: marker.lat, lng: marker.lng }}
+                    />
+                ))}
             </GoogleMap>
         </div>
     )

@@ -29,7 +29,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import CustomizedSnackbars from "../../../components/UI/SnackBar/SnackBar";
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import ServicePanel from "../../../components/UI/ServicePanel/ServicePanel";
-import Map from "../../Auth/Map/Map";
+import Map from "./Map/Map";
 
 
 
