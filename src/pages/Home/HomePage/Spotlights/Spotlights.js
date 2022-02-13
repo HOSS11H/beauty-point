@@ -8,6 +8,8 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { useTranslation } from 'react-i18next';
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
 import ThemeContext from "../../../../store/theme-context";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 // import Swiper core and required modules
 import SwiperCore, {
@@ -15,6 +17,7 @@ import SwiperCore, {
 } from 'swiper';
 
 import 'swiper/swiper.min.css';
+import { NavLink } from 'react-router-dom';
 
 const SpotlightsWrapper = styled.section`
     margin: 100px 0;
@@ -40,7 +43,7 @@ const Spotlights = props => {
     const [ loading, setLoading ] = useState(false);
 
     const themeCtx = useContext(ThemeContext);
-    const {city} = themeCtx
+    const {theme, city} = themeCtx
 
     useEffect(() => {
         setLoading(true)
@@ -98,7 +101,7 @@ const Spotlights = props => {
                     fetchedSpotlights.map((spotlight, index) => {
                         return (
                             <SwiperSlide key={index}>
-                                <DealPanel key={spotlight.id} deal={spotlight.deal} path='deals' />
+                                <DealPanel key={spotlight.id} deal={{...spotlight.deal, company: spotlight.company}} path='deals' />
                             </SwiperSlide>
                         )
                     })
@@ -111,7 +114,7 @@ const Spotlights = props => {
         <SpotlightsWrapper>
             <Container maxWidth="lg">
                 <Heading>
-                    <h2 className="heading-title" >{t('popular spotlights')}</h2>
+                    <NavLink className="heading-title" to='all-spotlights'>{t('popular spotlights')}  {theme === 'rtl' ? <ArrowForwardIcon /> : <ArrowBackIcon />} </NavLink>
                 </Heading>
                 {content}
             </Container>

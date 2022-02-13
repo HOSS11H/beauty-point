@@ -37,6 +37,8 @@ import HomePage from "./pages/Home/HomePage/HomePage";
 import SingleCategory from "./pages/Home/SignleCategory/SignleCategory";
 import SingleService from "./pages/Home/SingleService/SingleService";
 import AllDeals from "./pages/Home/AllDeals/AllDeals";
+import AllSpotlights from "./pages/Home/AllSpotlights/AllSpotlights";
+
 import SingleDeal from "./pages/Home/SingleDeal/SingleDeal";
 import SingleSalon from "./pages/Home/SingleSalon/SingleSalon";
 import AllPackages from "./pages/Home/AllPackages/AllPackages";
@@ -65,6 +67,7 @@ function App() {
                 <Route path="all-categories" element={<AllCategories />} />
                 <Route path="all-saloons" element={<AllSaloons />} />
                 <Route path="all-deals" element={<AllDeals />} />
+                <Route path="all-spotlights" element={<AllSpotlights />} />
                 <Route path="packages" element={<AllPackages />} />
                 <Route path="categories/:categoryId" element={<SingleCategory />} />
                 <Route path="services/:serviceId" element={<SingleService />} />
@@ -109,6 +112,7 @@ function App() {
                     <Route path="all-categories" element={<AllCategories />} />
                     <Route path="all-saloons" element={<AllSaloons />} />
                     <Route path="all-deals" element={<AllDeals />} />
+                    <Route path="all-spotlights" element={<AllSpotlights />} />
                     <Route path="packages" element={<AllPackages />} />
                     <Route path="categories/:categoryId" element={<SingleCategory />} />
                     <Route path="services/:serviceId" element={<SingleService />} />

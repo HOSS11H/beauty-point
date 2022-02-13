@@ -433,6 +433,7 @@ const resources = {
             'Failed Updating Customer Details': 'فشل تحديث تفاصيل العميل',
             'No Customers Found': 'لا يوجد أعضاء',
             'via ': 'عن طريق ',
+            'spotlights': 'العروض المميزة',
         }
     }
 };
