@@ -23,13 +23,15 @@ import closedLogo from '../../../images/logo/logo_mobile.png'
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import LinearScaleIcon from '@mui/icons-material/LinearScale';
 import { useTranslation } from 'react-i18next';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import AuthContext from '../../../store/auth-context';
 import ThemeContext from '../../../store/theme-context';
 import PeopleIcon from '@mui/icons-material/People';
 import { useState } from 'react';
 import { connect } from 'react-redux';
 import { fetchPermissions } from '../../../store/actions/index';
+import ModuleNav from './ModuleNav/ModuleNav';
+import { Fragment } from 'react';
 
 const drawerWidth = 256;
 const openedMixin = (theme) => ({
@@ -151,14 +153,15 @@ const Navigator = (props) => {
     const params = useParams();
     const { t } = useTranslation();
 
-    const [ categories, setCategories ] = useState([]);
+    const [categories, setCategories] = useState([]);
 
 
     useEffect(() => {
         getPermissions(roleId, lang);
     }, [getPermissions, lang, roleId])
 
-    
+    let module = useRef();
+
     useEffect(() => {
         let fetchedCategories = [{
             id: 'dashboard',
@@ -177,36 +180,37 @@ const Navigator = (props) => {
             setCategories(fetchedCategories);
         } else {
             let addedRoutes = [];
-            fetchedPermissions.forEach( permission => {
-                if ( permission.name === 'read_business_service') {
+            fetchedPermissions.forEach(permission => {
+                if (permission.name === 'read_business_service') {
                     addedRoutes.push({ id: 'services', name: 'services', icon: <FormatListBulletedIcon /> });
                     addedRoutes.push({ id: 'products', name: 'products', icon: <ShoppingCartIcon /> });
-                    addedRoutes.push({ id: 'units', name: 'units', icon: <LinearScaleIcon /> } );
+                    addedRoutes.push({ id: 'units', name: 'units', icon: <LinearScaleIcon /> });
                     addedRoutes.push({ id: 'point-of-sale', name: 'points of sales', icon: <AddShoppingCartIcon /> });
+                    module.current = <ModuleNav />;
                 }
-                if ( permission.name === 'read_customer') {
-                    
+                if (permission.name === 'read_customer') {
+
                 }
-                if ( permission.name === 'read_employee' ) {
+                if (permission.name === 'read_employee') {
                     addedRoutes.push({ id: 'employees', name: 'employees', icon: <PersonIcon /> },);
                 }
-                if ( permission.name === 'read_employee_group') {
-                    
+                if (permission.name === 'read_employee_group') {
+
                 }
-                if ( permission.name === 'read_employee_leave') {
-    
+                if (permission.name === 'read_employee_leave') {
+
                 }
-                if ( permission.name === 'read_employee_schedule') {
-    
+                if (permission.name === 'read_employee_schedule') {
+
                 }
-                if ( permission.name === 'read_deal') {
+                if (permission.name === 'read_deal') {
                     addedRoutes.push({ id: 'deals', name: 'deals', icon: <LocalOfferIcon /> });
                 }
-                if ( permission.name === 'read_report') {
+                if (permission.name === 'read_report') {
                     addedRoutes.push({ id: 'reports', name: 'reports', icon: <InsertChartIcon /> });
                     addedRoutes.push({ id: 'expenses', name: 'expenses', icon: <MonetizationOnIcon /> });
                 }
-                if ( permission.name === 'manage_settings') {
+                if (permission.name === 'manage_settings') {
                     addedRoutes.push({ id: 'settings', name: 'settings', icon: <SettingsIcon /> });
                 }
             })
@@ -215,37 +219,39 @@ const Navigator = (props) => {
         }
     }, [fetchedPermissions, roleId])
 
-
     return (
-        <Drawer open={open}  {...other} anchor='left'  >
-            <List disablePadding sx={{ px: open ? '16px' : '0px', py: '16px', }} >
-                <Logo>
-                    <NavLink to='/' >
-                        {
-                            open ? <LogoImg src={openedLogo} alt='logo' /> : <LogoImg src={closedLogo} alt='logo' />
-                        }
-                    </NavLink>
-                </Logo>
-                { categories.length > 0 && categories.map(({ id, children }) => (
-                    <Box key={id}>
-                        {children.map(({ id: childId, name, icon, active }) => (
-                            <ListItem disablePadding key={childId}>
-                                <CustomNavLink
-                                    to={`${childId}`}
-                                >
-                                    <CustomListItemButton open={open} selected={params === childId}>
-                                        <CustomListItemIcon>{icon}</CustomListItemIcon>
-                                        <ListItemText >{t(name)}</ListItemText>
-                                    </CustomListItemButton>
-                                </CustomNavLink>
-                            </ListItem>
-                        ))}
+        <Fragment>
+            <Drawer open={open}  {...other} anchor='left'  >
+                <List disablePadding sx={{ px: open ? '16px' : '0px', py: '16px', }} >
+                    <Logo>
+                        <NavLink to='/' >
+                            {
+                                open ? <LogoImg src={openedLogo} alt='logo' /> : <LogoImg src={closedLogo} alt='logo' />
+                            }
+                        </NavLink>
+                    </Logo>
+                    {categories.length > 0 && categories.map(({ id, children }) => (
+                        <Box key={id}>
+                            {children.map(({ id: childId, name, icon, active }) => (
+                                <ListItem disablePadding key={childId}>
+                                    <CustomNavLink
+                                        to={`${childId}`}
+                                    >
+                                        <CustomListItemButton open={open} selected={params === childId}>
+                                            <CustomListItemIcon>{icon}</CustomListItemIcon>
+                                            <ListItemText >{t(name)}</ListItemText>
+                                        </CustomListItemButton>
+                                    </CustomNavLink>
+                                </ListItem>
+                            ))}
 
-                        <Divider sx={{ mt: 2 }} />
-                    </Box>
-                ))}
-            </List>
-        </Drawer>
+                            <Divider sx={{ mt: 2 }} />
+                        </Box>
+                    ))}
+                </List>
+            </Drawer>
+            {module.current}
+        </Fragment>
     );
 }
 
@@ -257,7 +263,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getPermissions: (roleId, lang ) => dispatch(fetchPermissions( roleId, lang )),
+        getPermissions: (roleId, lang) => dispatch(fetchPermissions(roleId, lang)),
     }
 }
 
