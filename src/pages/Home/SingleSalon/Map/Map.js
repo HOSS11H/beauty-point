@@ -9,7 +9,7 @@ const libraries = ["places"];
 
 const mapContainerStyle = {
     width: "100%",
-    height: "300px",
+    height: "400px",
     margin: "20px auto",
 }
 
@@ -26,7 +26,7 @@ const options = {
 
 const Map = props => {
 
-    const { assignCoords, markers } = props;
+    const { marker } = props;
 
     const { isLoaded, loadError } = useLoadScript({
         googleMapsApiKey: 'AIzaSyC3k16YcaG8bZDLFUMEdwoXglBiO6fQRA0',
@@ -37,23 +37,20 @@ const Map = props => {
     if (!isLoaded) return "Loading Maps";
 
 
-    const handleClick = e => {
-        assignCoords(e.latLng.lat(), e.latLng.lng());
-    }
-
     return (
         <div>
-            <GoogleMap mapContainerStyle={mapContainerStyle} 
-                onClick={ handleClick } options={options}
-                zoom={8} center={center} >
-                {markers.map(marker => (
-                    <Marker
-                        key={marker.lat}
-                        position={{ lat: marker.lat, lng: marker.lng }}
-                    />
-                ))}
+            <GoogleMap mapContainerStyle={mapContainerStyle}
+                options={options}
+                zoom={8} center={ marker.lat ? { lat: marker.lat, lng: marker.lng } : { lat: 24.635588, lng: 46.724565 }} >
+                {
+                    marker.lat && (
+                        <Marker
+                            key={marker.lat}
+                            position={{ lat: marker.lat, lng: marker.lng }} />
+                    )
+                }
             </GoogleMap>
-        </div>
+        </div >
     )
 }
 

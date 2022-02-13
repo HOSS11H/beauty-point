@@ -5,7 +5,6 @@ import Grid from '@mui/material/Grid';
 import { NavLink } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from '../../../../utils/axios-instance';
-import CircularProgress from '@mui/material/CircularProgress';
 import { useTranslation } from 'react-i18next';
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
 import DOMPurify from "dompurify";
@@ -16,9 +15,11 @@ import SwiperCore, {
 } from 'swiper';
 
 import 'swiper/swiper.min.css';
+import Loader from '../../../../components/UI/Loader/Loader';
 
 // install Swiper modules
 SwiperCore.use([Autoplay]);
+
 
 const SlideWrapper = styled.div`
     display       : flex;
@@ -178,7 +179,7 @@ const Hero = () => {
             })
     }, [])
     let content = (
-        <CircularProgress color='secondary' />
+        <Loader height='100vh' />
     )
     if (data) {
         content = (

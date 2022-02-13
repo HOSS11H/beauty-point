@@ -13,6 +13,7 @@ const ThemeContext = React.createContext({
     toggleMode: ( ) => { },
     toggleDirection: ( ) => { },
     toggleLanguage: ( ) => { },
+    selectCity: ( ) => { },
     theme: null,
 })
 

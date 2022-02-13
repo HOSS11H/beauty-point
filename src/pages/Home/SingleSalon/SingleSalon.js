@@ -290,7 +290,7 @@ const SingleSalon = props => {
                             </TableContainer>
                         </Grid>
                         <Grid  item xs={12}>
-                            <Map markers={[ { lat: +salon.vendor_page.latitude, lng: +salon.vendor_page.longitude } ]} />
+                            <Map marker={ { lat: +salon.vendor_page.latitude, lng: +salon.vendor_page.longitude } } />
                         </Grid>
                     </Grid>
                 </TabPanel>
