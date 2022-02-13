@@ -6,10 +6,21 @@ import { NavLink } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from '../../../../utils/axios-instance';
 import CircularProgress from '@mui/material/CircularProgress';
-import heroImgSrc from '../../../../assets/images/hero/1.jpg';
 import { useTranslation } from 'react-i18next';
+import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
+import DOMPurify from "dompurify";
 
-const HeroWrapper = styled.div`
+// import Swiper core and required modules
+import SwiperCore, {
+    Autoplay
+} from 'swiper';
+
+import 'swiper/swiper.min.css';
+
+// install Swiper modules
+SwiperCore.use([Autoplay]);
+
+const SlideWrapper = styled.div`
     display       : flex;
     align-items   : center;
     justify-content: center;
@@ -33,7 +44,7 @@ const HeroSubTitle = styled.p`
     line-height:1.5;
     text-transform: uppercase;
     margin-bottom: 8px;
-    color: ${ ( { theme } ) => theme.palette.common.white};
+    color: ${({ theme }) => theme.palette.common.white};
     @media screen and (max-width: 599.98px) {
         font-size: 20px
     }
@@ -44,19 +55,20 @@ const HeroTitle = styled.h1`
     font-weight: 900;
     text-transform: capitalize;
     margin-bottom: 22px;
-    color: ${ ( { theme } ) => theme.palette.common.white};
+    color: ${({ theme }) => theme.palette.common.white};
     @media screen and (max-width: 599.98px) {
         font-size: 32px
     }
 `
 const HeroDesc = styled.div`
+    margin-bottom: 32px;
     p {
         font-size: 20px;
         line-height:27px;
         font-weight: 300;
         text-transform: capitalize;
-        margin-bottom: 32px;
-        color: ${ ( { theme } ) => theme.palette.common.white};
+        color: ${({ theme }) => theme.palette.common.white};
+        margin-bottom: 0px;
         @media screen and (max-width: 599.98px) {
             font-size: 16px
         }
@@ -86,8 +98,8 @@ const HeroButton = styled(NavLink)`
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    background-color: ${ ( { theme } ) => theme.vars.secondary};
-    color: ${ ( { theme } ) => theme.palette.common.white};
+    background-color: ${({ theme }) => theme.vars.secondary};
+    color: ${({ theme }) => theme.palette.common.white};
     border:0;
     outline: none;
     cursor: pointer;
@@ -107,15 +119,15 @@ const HeroButton = styled(NavLink)`
         }
     }
     &:hover {
-        background-color: ${ ( { theme } ) => theme.palette.common.white};
-        color: ${ ( { theme } ) => theme.vars.secondary};
+        background-color: ${({ theme }) => theme.palette.common.white};
+        color: ${({ theme }) => theme.vars.secondary};
     }
     &.inversed {
-        background-color: ${ ( { theme } ) => theme.palette.common.white};
-        color:${ ( { theme } ) => theme.vars.secondary};
+        background-color: ${({ theme }) => theme.palette.common.white};
+        color:${({ theme }) => theme.vars.secondary};
         &:hover {
-            background-color: ${ ( { theme } ) => theme.vars.secondary};
-            color: ${ ( { theme } ) => theme.palette.common.white};
+            background-color: ${({ theme }) => theme.vars.secondary};
+            color: ${({ theme }) => theme.palette.common.white};
         }
     }
 `
@@ -154,47 +166,66 @@ const HeroImage = styled.div`
 `
 
 
-const Hero = (  ) => {
-    const {t} = useTranslation();
+const Hero = () => {
+    const { t } = useTranslation();
 
-    const [ data, setData ] = useState(null)
+    const [data, setData] = useState(null)
 
-    useEffect( () => {
+    useEffect(() => {
         axios.get(`/media`)
-            .then( res => {
+            .then(res => {
                 setData(res.data.data)
             })
-    }, [] )
+    }, [])
     let content = (
         <CircularProgress color='secondary' />
     )
-    if(data) {
+    if (data) {
         content = (
-            <Container maxWidth="lg">
-                <Grid container spacing={2}>
-                    <Grid item xs={12} md={6}>
-                        <HeroContent>
-                            <HeroTitle>{data[0].heading}</HeroTitle>
-                            <HeroSubTitle>{data[0].subheading}</HeroSubTitle>
-                            {/* <HeroDesc>{data[0].content}</HeroDesc> */}
-                            <HeroAction>
-                                <HeroButton to='/auth' >{t('login')}</HeroButton>
-                                {/* <HeroButton to='/' className='inversed'>click</HeroButton> */}
-                            </HeroAction>
-                        </HeroContent>
-                        <HeroImage >
-                            <img src={heroImgSrc} alt="hero" />
-                        </HeroImage>
-                    </Grid>
-                </Grid>
-            </Container>
+            <Swiper
+                spaceBetween={0}
+                slidesPerView={1}
+                autoplay={{
+                    "delay": 3500,
+                    "disableOnInteraction": false
+                }}
+            >
+                {
+                    data.map((item, index) => {
+                        const mySafeHTML = DOMPurify.sanitize(item.content);
+                        return (
+                            <SwiperSlide key={index} >
+                                <SlideWrapper>
+                                    <Container maxWidth="lg">
+                                        <Grid container spacing={2}>
+                                            <Grid item xs={12} md={6}>
+                                                <HeroContent>
+                                                    <HeroTitle>{item.heading}</HeroTitle>
+                                                    <HeroSubTitle>{item.subheading}</HeroSubTitle>
+                                                    <HeroDesc dangerouslySetInnerHTML={{ __html: mySafeHTML }} />
+                                                    <HeroAction>
+                                                        <HeroButton to='/auth' >{t('login')}</HeroButton>
+                                                    </HeroAction>
+                                                </HeroContent>
+                                                <HeroImage >
+                                                    <img src={item.image_url} alt="hero" />
+                                                </HeroImage>
+                                            </Grid>
+                                        </Grid>
+                                    </Container>
+                                </SlideWrapper>
+                            </SwiperSlide>
+                        )
+                    })
+                }
+            </Swiper>
         )
     }
 
     return (
-        <HeroWrapper>
+        <>
             {content}
-        </HeroWrapper>
+        </>
     )
 }
 export default Hero;
