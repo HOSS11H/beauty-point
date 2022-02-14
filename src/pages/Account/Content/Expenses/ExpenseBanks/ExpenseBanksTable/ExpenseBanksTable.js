@@ -59,7 +59,7 @@ const Loader = styled(Card)`
 
 const intialPerPage = 10;
 
-function ExpenseCustomersTable(props) {
+function ExpenseBanksTable(props) {
 
     const { t } = useTranslation()
 
@@ -224,4 +224,4 @@ const mapDispatchToProps = dispatch => {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(ExpenseCustomersTable);
+export default connect(mapStateToProps, mapDispatchToProps)(ExpenseBanksTable);

@@ -3370,7 +3370,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"start_time\": \"06:00 am\",\r\n    \"end_time\": \"03:00 pm\",\r\n    \"multiple_booking\": \"yes\",\r\n    \"max_booking\": 0,\r\n    \"per_day_max_booking\": 0,\r\n    \"per_slot_max_booking\": 0,\r\n    \"status\": \"enabled\",\r\n    \"slot_duration\": 30\r\n}"
+									"raw": "{\r\n    \"start_time\": \"06:00 AM\",\r\n    \"end_time\": \"03:00 PM\",\r\n    \"multiple_booking\": \"yes\",\r\n    \"max_booking\": 0,\r\n    \"per_day_max_booking\": 0,\r\n    \"per_slot_max_booking\": 0,\r\n    \"status\": \"enabled\",\r\n    \"slot_duration\": 30\r\n}"
 								},
 								"url": {
 									"raw": "{{base}}/vendors/settings/booking_times/1",
@@ -4938,7 +4938,7 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{base}}/vendors/reports/tabular-table/csv?payment=completed",
+									"raw": "{{base}}/vendors/reports/tabular-table/csv?format=pdf",
 									"host": [
 										"{{base}}"
 									],
@@ -4995,8 +4995,8 @@
 											"disabled": true
 										},
 										{
-											"key": "payment",
-											"value": "completed"
+											"key": "format",
+											"value": "pdf"
 										}
 									]
 								}
@@ -5976,7 +5976,7 @@
 							"formdata": [
 								{
 									"key": "mobile",
-									"value": "96651232312312",
+									"value": "96651231225",
 									"type": "text",
 									"disabled": true
 								},
@@ -6268,6 +6268,39 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "SignUpAsClient",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"abdo\",\r\n    \"email\": \"abdo3@example.com\",\r\n    \"mobile\": \"5701234564\",\r\n    \"password\":\"123456\",\r\n    \"company_id\":1,\r\n    \"fcm_token\": \"qeqweqwasdcasdasdasdqasdasdasdadasdasdasdasdasdasdasdasdasdasdasdasasdadasadsads\",\r\n    \"device_name\": \"Y62132\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base}}/auth/sign-up",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"auth",
+								"sign-up"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -6554,6 +6587,23 @@
 							"body": "[\n    {\n        \"id\": 1,\n        \"name\": \"GST\",\n        \"percent\": 18,\n        \"status\": \"active\",\n        \"created_at\": \"2021-10-19T09:18:37.000000Z\",\n        \"updated_at\": \"2021-10-19T09:18:37.000000Z\"\n    }\n]"
 						}
 					]
+				},
+				{
+					"name": "faq",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base}}/faq",
+							"host": [
+								"{{base}}"
+							],
+							"path": [
+								"faq"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -6989,6 +7039,50 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Booking",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{v2}}/bookings",
+									"host": [
+										"{{v2}}"
+									],
+									"path": [
+										"bookings"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "company slots",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{v2}}/company/1/slots",
+									"host": [
+										"{{v2}}"
+									],
+									"path": [
+										"company",
+										"1",
+										"slots"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Nearby",
+							"request": {
+								"method": "GET",
+								"header": []
+							},
+							"response": []
 						}
 					]
 				},
@@ -7017,7 +7111,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n    \"name\": \"New Service\",\r\n    \"description\": \"new service description\",\r\n    \"price\": 55.20,\r\n    \"discount\": 0,\r\n    \"discount_type\": \"fixed\",\r\n    \"time\": 20,\r\n    \"time_type\": \"minutes\",\r\n    \"category_id\": 1,\r\n    \"location_id\": 2,\r\n    \"employee_ids\": [1,2],\r\n    \"status\": \"active\" \r\n}",
+											"raw": "{\r\n    \"name\": \"New Service\",\r\n    \"description\": \"new service description\",\r\n    \"price\": 55.20,\r\n    \"discount\": 0,\r\n    \"discount_type\": \"fixed\",\r\n    \"time\": 20,\r\n    \"time_type\": \"minutes\",\r\n    \"category_id\": 1,\r\n    \"location_id\": 2,\r\n    \"employee_ids\": [1,2],\r\n    \"status\": \"active\" ,\r\n    \"type\": \"combo\",\r\n    \"products\":[\r\n        {\r\n            \"id\": 5,\r\n            \"quantity\": 5,\r\n            \"unit_id\": 1\r\n        }\r\n    ]\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -7683,7 +7777,7 @@
 											}
 										],
 										"url": {
-											"raw": "{{v2}}/vendors/products?include[]=location",
+											"raw": "{{v2}}/vendors/products?include[]=unit",
 											"host": [
 												"{{v2}}"
 											],
@@ -7694,7 +7788,7 @@
 											"query": [
 												{
 													"key": "include[]",
-													"value": "location"
+													"value": "unit"
 												}
 											]
 										}
@@ -8401,7 +8495,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n    \"title\": \"test-56\",\r\n    \"slug\": \"test-56\",\r\n    \"location\" : 1,\r\n    \"deal_services\" : [8, 3],\r\n    \"deal_quantity\" : [1, 1],\r\n    \"deal_unit_price\" : [15, 20],\r\n    \"discount_type\" : \"percentage\",\r\n    \"discount\" : 0,\r\n    \"choice\" : \"location\",\r\n    \"uses_time\" : \"\",\r\n    \"customer_uses_time\" : 1,\r\n    \"days\" : [\"Sunday\", \"Monday\", \"Tuesday\"],\r\n    \"description\" : \"<p>asdada</p>\",\r\n    \"status\" : \"active\",\r\n    \"deal_discount\" : [0, 0],\r\n    \"discount_amount\" : 0,\r\n    \"deal_startDate\": \"2021-10-31 11:59 PM\",\r\n    \"deal_endDate\": \"2021-11-05 11:59 PM\",\r\n    \"applied_between_dates\" : \"2021-10-31 11:59 PM 2021-11-05 11:59 PM\",\r\n    \"open_time\" : \"02:00 am\",\r\n    \"close_time\" : \"02:00 pm\",\r\n    \"deal_startTime\": \"02:00 AM\",\r\n    \"deal_endTime\":\"02:00 PM\"\r\n}",
+											"raw": "{\r\n    \"title\": \"test-56\",\r\n    \"slug\": \"test-56\",\r\n    \"location\" : 1,\r\n    \"deal_services\" : [8, 3],\r\n    \"deal_quantity\" : [1, 1],\r\n    \"deal_unit_price\" : [15, 20],\r\n    \"discount_type\" : \"percent\",\r\n    \"discount\" : 0,\r\n    \"choice\" : \"location\",\r\n    \"uses_time\" : \"\",\r\n    \"customer_uses_time\" : 1,\r\n    \"days\" : [\"Sunday\", \"Monday\", \"Tuesday\"],\r\n    \"description\" : \"<p>asdada</p>\",\r\n    \"status\" : \"active\",\r\n    \"deal_discount\" : [0, 0],\r\n    \"discount_amount\" : 0,\r\n    \"deal_startDate\": \"2021-10-31 11:59 PM\",\r\n    \"deal_endDate\": \"2021-11-05 11:59 PM\",\r\n    \"applied_between_dates\" : \"2021-10-31 11:59 PM 2021-11-05 11:59 PM\",\r\n    \"open_time\" : \"02:00 am\",\r\n    \"close_time\" : \"02:00 pm\",\r\n    \"deal_startTime\": \"02:00 AM\",\r\n    \"deal_endTime\":\"02:00 PM\"\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -8918,14 +9012,14 @@
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "{{v2}}/vendors/bookings/74?include[]=items",
+											"raw": "{{v2}}/vendors/bookings/12",
 											"host": [
 												"{{v2}}"
 											],
 											"path": [
 												"vendors",
 												"bookings",
-												"74"
+												"12"
 											],
 											"query": [
 												{
@@ -8935,7 +9029,7 @@
 												},
 												{
 													"key": "include[]",
-													"value": "user",
+													"value": "location",
 													"disabled": true
 												},
 												{
@@ -8947,10 +9041,6 @@
 													"key": "include[]",
 													"value": "payment",
 													"disabled": true
-												},
-												{
-													"key": "include[]",
-													"value": "items"
 												}
 											]
 										}
@@ -9072,7 +9162,7 @@
 										],
 										"body": {
 											"mode": "raw",
-											"raw": "{\r\n    \"customerId\": 1,\r\n    \"dateTime\": \"2021-11-28T21:55:14.560Z\",\r\n    \"payment_gateway\": \"cash\",\r\n    \"cart\": {\r\n        \"services\": [\r\n            {\r\n                \"id\": 7,\r\n                \"price\": 15,\r\n                \"quantity\": 4\r\n            }\r\n        ],\r\n        \"products\": [\r\n            {\r\n                \"id\": 4,\r\n                \"price\": 100,\r\n                \"quantity\": 8\r\n            }\r\n        ],\r\n        \"deals\": [{\r\n                \"id\": 24,\r\n                \"price\": 122,\r\n                \"quantity\": 8\r\n            }]\r\n    },\r\n    \"couponId\": null,\r\n    \"discount\": \"1000\",\r\n    \"discount_type\": \"fixed\"\r\n}",
+											"raw": "{\r\n    \"customerId\": 1,\r\n    \"dateTime\": \"2021-11-28T21:55:14.560Z\",\r\n    \"payment_gateway\": \"cash\",\r\n    \"cart\": {\r\n        \"services\": [\r\n            {\r\n                \"id\": 31,\r\n                \"price\": 100,\r\n                \"quantity\": 10,\r\n                \"employee_id\": 3\r\n            }\r\n        ],\r\n        \"products\": [\r\n        ],\r\n        \"deals\": []\r\n    },\r\n    \"couponId\": 1,\r\n    \"discount\": \"30\",\r\n    \"discount_type\": \"percent\",\r\n    \"paid_amount\": 80\r\n}",
 											"options": {
 												"raw": {
 													"language": "json"
@@ -9393,8 +9483,7 @@
 									"name": "QrCode",
 									"request": {
 										"method": "GET",
-										"header": [],
-										"url": null
+										"header": []
 									},
 									"response": []
 								}
@@ -9477,6 +9566,109 @@
 										}
 									},
 									"response": []
+								},
+								{
+									"name": "Bookings",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "{{v2}}/vendors/customers/3/bookings?per_page=15&include[]=user",
+											"host": [
+												"{{v2}}"
+											],
+											"path": [
+												"vendors",
+												"customers",
+												"3",
+												"bookings"
+											],
+											"query": [
+												{
+													"key": "per_page",
+													"value": "15"
+												},
+												{
+													"key": "include[]",
+													"value": "user"
+												}
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Bookings",
+											"originalRequest": {
+												"method": "GET",
+												"header": [],
+												"url": {
+													"raw": "{{v2}}/vendors/customers/3/bookings?per_page=15&include[]=user",
+													"host": [
+														"{{v2}}"
+													],
+													"path": [
+														"vendors",
+														"customers",
+														"3",
+														"bookings"
+													],
+													"query": [
+														{
+															"key": "per_page",
+															"value": "15"
+														},
+														{
+															"key": "include[]",
+															"value": "user"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Host",
+													"value": "127.0.0.1:8000"
+												},
+												{
+													"key": "Date",
+													"value": "Mon, 14 Feb 2022 02:06:03 GMT"
+												},
+												{
+													"key": "Date",
+													"value": "Mon, 14 Feb 2022 02:06:03 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												},
+												{
+													"key": "X-Powered-By",
+													"value": "PHP/8.0.10"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, private"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "X-RateLimit-Limit",
+													"value": "60"
+												},
+												{
+													"key": "X-RateLimit-Remaining",
+													"value": "58"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"data\": [\n        {\n            \"id\": 2,\n            \"date_time\": \"2022-01-16T07:14:15.000000Z\",\n            \"status\": \"completed\",\n            \"payment_gateway\": \"cash\",\n            \"discount\": 0,\n            \"discount_percent\": 0,\n            \"coupon_discount\": null,\n            \"vat\": 9.23,\n            \"price\": 70.8,\n            \"payment_status\": \"pending\",\n            \"remaining_amount\": 0,\n            \"source\": \"pos\",\n            \"order_id\": null,\n            \"additional_notes\": \"It is a long established fact that a reader.\",\n            \"event_id\": null,\n            \"notify_at\": null,\n            \"created_at\": \"2022-01-24T12:44:15.000000Z\",\n            \"updated_at\": \"2022-01-24T12:44:15.000000Z\",\n            \"user\": {\n                \"id\": 3,\n                \"name\": \"Malik Griffith\",\n                \"email\": \"malik@example.com\",\n                \"mobile\": \"1111\",\n                \"calling_code\": null\n            }\n        },\n        {\n            \"id\": 1,\n            \"date_time\": \"2022-01-20T07:14:15.000000Z\",\n            \"status\": \"canceled\",\n            \"payment_gateway\": \"cash\",\n            \"discount\": 0,\n            \"discount_percent\": 0,\n            \"coupon_discount\": null,\n            \"vat\": 9.7,\n            \"price\": 74.34,\n            \"payment_status\": \"pending\",\n            \"remaining_amount\": 0,\n            \"source\": \"pos\",\n            \"order_id\": null,\n            \"additional_notes\": \"It is a long established fact that a reader.\",\n            \"event_id\": null,\n            \"notify_at\": null,\n            \"created_at\": \"2022-01-24T12:44:15.000000Z\",\n            \"updated_at\": \"2022-01-24T12:44:15.000000Z\",\n            \"user\": {\n                \"id\": 3,\n                \"name\": \"Malik Griffith\",\n                \"email\": \"malik@example.com\",\n                \"mobile\": \"1111\",\n                \"company\": {\n                    \"id\": 1,\n                    \"companyName\": \"Cut & Style Salon\",\n                    \"companyEmail\": \"cutandstyle@example.com\",\n                    \"companyPhone\": \"1234512345\",\n                    \"address\": \"Jaipur, India\",\n                    \"invoice_notes\": null,\n                    \"dateFormat\": \"d-m-Y\",\n                    \"timeFormat\": \"h:i a\",\n                    \"website\": \"http://www.abc.com\",\n                    \"timezone\": \"Asia/Kolkata\",\n                    \"currency\": {\n                        \"id\": 1,\n                        \"currencyNname\": \"US Dollars\",\n                        \"currencySymbol\": \"$\",\n                        \"currencyCode\": \"USD\",\n                        \"exchangeRate\": 1,\n                        \"usdPrice\": null,\n                        \"isCryptocurrency\": \"no\",\n                        \"deletedAt\": null,\n                        \"createdAt\": \"2022-01-24T12:44:13.000000Z\",\n                        \"updatedAt\": \"2022-01-24T12:44:13.000000Z\",\n                        \"hasCompanies\": true\n                    },\n                    \"locale\": \"en\",\n                    \"logo_url\": \"http://127.0.0.1:8000/user-uploads/company-logo/company.png\",\n                    \"tax_record\": \"###\"\n                },\n                \"roles\": [\n                    {\n                        \"id\": 4,\n                        \"company_id\": 1,\n                        \"name\": \"employee\",\n                        \"display_name\": \"Employee\",\n                        \"description\": \"Employee\",\n                        \"created_at\": \"2022-01-24T12:44:14.000000Z\",\n                        \"updated_at\": \"2022-01-24T12:44:14.000000Z\",\n                        \"pivot\": {\n                            \"user_id\": 3,\n                            \"role_id\": 4,\n                            \"user_type\": \"App\\\\User\"\n                        }\n                    }\n                ],\n                \"employeeGroup\": null,\n                \"calling_code\": null,\n                \"bookings\": []\n            }\n        }\n    ],\n    \"links\": {\n        \"first\": \"http://127.0.0.1:8000/api/v2/vendors/customers/3/bookings?page=1\",\n        \"last\": \"http://127.0.0.1:8000/api/v2/vendors/customers/3/bookings?page=1\",\n        \"prev\": null,\n        \"next\": null\n    },\n    \"meta\": {\n        \"current_page\": 1,\n        \"from\": 1,\n        \"last_page\": 1,\n        \"links\": [\n            {\n                \"url\": null,\n                \"label\": \"&laquo; Previous\",\n                \"active\": false\n            },\n            {\n                \"url\": \"http://127.0.0.1:8000/api/v2/vendors/customers/3/bookings?page=1\",\n                \"label\": \"1\",\n                \"active\": true\n            },\n            {\n                \"url\": null,\n                \"label\": \"Next &raquo;\",\n                \"active\": false\n            }\n        ],\n        \"path\": \"http://127.0.0.1:8000/api/v2/vendors/customers/3/bookings\",\n        \"per_page\": \"15\",\n        \"to\": 2,\n        \"total\": 2\n    }\n}"
+										}
+									]
 								}
 							]
 						},
@@ -9612,8 +9804,7 @@
 									"name": "PUT",
 									"request": {
 										"method": "GET",
-										"header": [],
-										"url": null
+										"header": []
 									},
 									"response": []
 								}
@@ -9634,7 +9825,7 @@
 											}
 										],
 										"url": {
-											"raw": "{{v2}}/vendors/expenses?include[]=category&include[]=customer",
+											"raw": "{{v2}}/vendors/expenses?include[]=category&include[]=customer&include[]=bank",
 											"host": [
 												"{{v2}}"
 											],
@@ -9650,11 +9841,100 @@
 												{
 													"key": "include[]",
 													"value": "customer"
+												},
+												{
+													"key": "include[]",
+													"value": "bank"
 												}
 											]
 										}
 									},
-									"response": []
+									"response": [
+										{
+											"name": "All Expenses",
+											"originalRequest": {
+												"method": "GET",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "application/json",
+														"type": "text"
+													}
+												],
+												"url": {
+													"raw": "{{v2}}/vendors/expenses?include[]=category&include[]=customer&include[]=bank",
+													"host": [
+														"{{v2}}"
+													],
+													"path": [
+														"vendors",
+														"expenses"
+													],
+													"query": [
+														{
+															"key": "include[]",
+															"value": "category"
+														},
+														{
+															"key": "include[]",
+															"value": "customer"
+														},
+														{
+															"key": "include[]",
+															"value": "bank"
+														}
+													]
+												}
+											},
+											"status": "OK",
+											"code": 200,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Host",
+													"value": "127.0.0.1:8000"
+												},
+												{
+													"key": "Date",
+													"value": "Mon, 14 Feb 2022 03:00:05 GMT"
+												},
+												{
+													"key": "Date",
+													"value": "Mon, 14 Feb 2022 03:00:05 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												},
+												{
+													"key": "X-Powered-By",
+													"value": "PHP/8.0.10"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, private"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "X-RateLimit-Limit",
+													"value": "60"
+												},
+												{
+													"key": "X-RateLimit-Remaining",
+													"value": "59"
+												},
+												{
+													"key": "phpdebugbar-id",
+													"value": "X6210519b7f37536b455690888b6387b1"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"data\": [\n        {\n            \"id\": 1,\n            \"name\": \"فاتورة كهرباء\",\n            \"notes\": \"\",\n            \"amount\": 550,\n            \"expense_date\": \"2022-02-14\",\n            \"bank_name\": \"123\",\n            \"bank_account\": \"123\",\n            \"image\": null,\n            \"company_id\": 1,\n            \"cat_id\": 1,\n            \"customer_id\": 1,\n            \"created_at\": \"2022-02-14T02:59:42.000000Z\",\n            \"updated_at\": \"2022-02-14T02:59:42.000000Z\",\n            \"bank_id\": 1,\n            \"expense_image_url\": \"http://127.0.0.1:8000/img/no-image.jpg\",\n            \"category\": {\n                \"id\": 1,\n                \"name\": \"فواتير\",\n                \"created_at\": \"2022-02-14T02:59:31.000000Z\",\n                \"updated_at\": \"2022-02-14T02:59:31.000000Z\",\n                \"company_id\": 1\n            },\n            \"customer\": {\n                \"id\": 1,\n                \"name\": \"محصل\",\n                \"mobile\": \"01231231\",\n                \"created_at\": \"2022-02-14T02:59:37.000000Z\",\n                \"updated_at\": \"2022-02-14T02:59:37.000000Z\",\n                \"company_id\": 1\n            },\n            \"bank\": {\n                \"id\": 1,\n                \"name\": \"Al Ahly\",\n                \"account\": \"123123123FBC\",\n                \"created_at\": \"2022-02-14T02:59:00.000000Z\",\n                \"updated_at\": \"2022-02-14T02:59:00.000000Z\",\n                \"company_id\": 1\n            }\n        }\n    ]\n}"
+										}
+									]
 								},
 								{
 									"name": "Expense by id",
@@ -10419,14 +10699,15 @@
 													"src": "/C:/Users/ZED/Desktop/junk/index.jpg"
 												},
 												{
-													"key": "bank_name",
-													"value": "Al Ahly",
+													"key": "bank_id",
+													"value": "1",
 													"type": "text"
 												},
 												{
-													"key": "bank_account",
-													"value": "21313123",
-													"type": "text"
+													"key": "",
+													"value": "",
+													"type": "text",
+													"disabled": true
 												}
 											]
 										},
@@ -10492,21 +10773,17 @@
 															"src": "/C:/Users/ZED/Desktop/junk/index.jpg"
 														},
 														{
-															"key": "bank_name",
-															"value": "Al Ahly",
+															"key": "bank_id",
+															"value": "1",
 															"type": "text"
 														},
 														{
-															"key": "bank_account",
-															"value": "21313123",
-															"type": "text"
+															"key": "",
+															"value": "",
+															"type": "text",
+															"disabled": true
 														}
-													],
-													"options": {
-														"raw": {
-															"language": "json"
-														}
-													}
+													]
 												},
 												"url": {
 													"raw": "{{v2}}/vendors/expenses",
@@ -10524,20 +10801,32 @@
 											"_postman_previewlanguage": "json",
 											"header": [
 												{
-													"key": "Date",
-													"value": "Sun, 19 Dec 2021 22:32:48 GMT"
+													"key": "Host",
+													"value": "127.0.0.1:8000"
 												},
 												{
-													"key": "Server",
-													"value": "Apache"
+													"key": "Date",
+													"value": "Mon, 14 Feb 2022 02:59:42 GMT"
+												},
+												{
+													"key": "Date",
+													"value": "Mon, 14 Feb 2022 02:59:42 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
 												},
 												{
 													"key": "X-Powered-By",
-													"value": "PHP/8.0.13"
+													"value": "PHP/8.0.10"
 												},
 												{
 													"key": "Cache-Control",
 													"value": "no-cache, private"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
 												},
 												{
 													"key": "X-RateLimit-Limit",
@@ -10545,51 +10834,15 @@
 												},
 												{
 													"key": "X-RateLimit-Remaining",
-													"value": "59"
+													"value": "54"
 												},
 												{
 													"key": "phpdebugbar-id",
-													"value": "X65a0c6fd05c0519c7dc91ad743509af4"
-												},
-												{
-													"key": "Vary",
-													"value": "Authorization"
-												},
-												{
-													"key": "Upgrade",
-													"value": "h2,h2c"
-												},
-												{
-													"key": "Connection",
-													"value": "Upgrade, Keep-Alive"
-												},
-												{
-													"key": "Access-Control-Allow-Origin",
-													"value": "*"
-												},
-												{
-													"key": "Access-Control-Allow-Headers",
-													"value": "*"
-												},
-												{
-													"key": "Access-Control-Allow-Methods",
-													"value": "*"
-												},
-												{
-													"key": "Keep-Alive",
-													"value": "timeout=5, max=100"
-												},
-												{
-													"key": "Transfer-Encoding",
-													"value": "chunked"
-												},
-												{
-													"key": "Content-Type",
-													"value": "application/json"
+													"value": "X56913c12f5a49c6ef8ea79b1bdf8bbe0"
 												}
 											],
 											"cookie": [],
-											"body": "{\n    \"name\": \"فاتورة كهرباء\",\n    \"notes\": \"\",\n    \"amount\": \"550\",\n    \"bank_name\": \"Al Ahly\",\n    \"bank_account\": \"21313123\",\n    \"expense_date\": \"2021-12-19\",\n    \"cat_id\": \"1\",\n    \"customer_id\": \"1\",\n    \"company_id\": 1,\n    \"updated_at\": \"2021-12-19T22:32:49.000000Z\",\n    \"created_at\": \"2021-12-19T22:32:49.000000Z\",\n    \"id\": 1,\n    \"expense_image_url\": \"https://testbeauty.beautypoint.sa/img/no-image.jpg\"\n}"
+											"body": "{\n    \"name\": \"فاتورة كهرباء\",\n    \"notes\": \"\",\n    \"amount\": \"550\",\n    \"bank_name\": \"123\",\n    \"bank_account\": \"123\",\n    \"bank_id\": \"1\",\n    \"expense_date\": \"2022-02-14\",\n    \"cat_id\": \"1\",\n    \"customer_id\": \"1\",\n    \"company_id\": 1,\n    \"updated_at\": \"2022-02-14T02:59:42.000000Z\",\n    \"created_at\": \"2022-02-14T02:59:42.000000Z\",\n    \"id\": 1,\n    \"expense_image_url\": \"http://127.0.0.1:8000/img/no-image.jpg\"\n}"
 										}
 									]
 								},
@@ -10794,6 +11047,119 @@
 										}
 									},
 									"response": []
+								},
+								{
+									"name": "Create Expense Bank",
+									"request": {
+										"method": "POST",
+										"header": [
+											{
+												"key": "Accept",
+												"value": "application/json",
+												"type": "text"
+											}
+										],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"name\": \"Al Ahly\",\r\n    \"account\": \"123123123FBC\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "{{v2}}/vendors/banks",
+											"host": [
+												"{{v2}}"
+											],
+											"path": [
+												"vendors",
+												"banks"
+											]
+										}
+									},
+									"response": [
+										{
+											"name": "Create Expense Bank",
+											"originalRequest": {
+												"method": "POST",
+												"header": [
+													{
+														"key": "Accept",
+														"value": "application/json",
+														"type": "text"
+													}
+												],
+												"body": {
+													"mode": "raw",
+													"raw": "{\r\n    \"name\": \"Al Ahly\",\r\n    \"account\": \"123123123FBC\"\r\n}",
+													"options": {
+														"raw": {
+															"language": "json"
+														}
+													}
+												},
+												"url": {
+													"raw": "{{v2}}/vendors/banks",
+													"host": [
+														"{{v2}}"
+													],
+													"path": [
+														"vendors",
+														"banks"
+													]
+												}
+											},
+											"status": "Created",
+											"code": 201,
+											"_postman_previewlanguage": "json",
+											"header": [
+												{
+													"key": "Host",
+													"value": "127.0.0.1:8000"
+												},
+												{
+													"key": "Date",
+													"value": "Mon, 14 Feb 2022 02:59:00 GMT"
+												},
+												{
+													"key": "Date",
+													"value": "Mon, 14 Feb 2022 02:59:00 GMT"
+												},
+												{
+													"key": "Connection",
+													"value": "close"
+												},
+												{
+													"key": "X-Powered-By",
+													"value": "PHP/8.0.10"
+												},
+												{
+													"key": "Cache-Control",
+													"value": "no-cache, private"
+												},
+												{
+													"key": "Content-Type",
+													"value": "application/json"
+												},
+												{
+													"key": "X-RateLimit-Limit",
+													"value": "60"
+												},
+												{
+													"key": "X-RateLimit-Remaining",
+													"value": "59"
+												},
+												{
+													"key": "phpdebugbar-id",
+													"value": "Xe6d02b8b98330d70ca583c661b884cce"
+												}
+											],
+											"cookie": [],
+											"body": "{\n    \"id\": 1,\n    \"name\": \"Al Ahly\",\n    \"account\": \"123123123FBC\"\n}"
+										}
+									]
 								}
 							]
 						},
@@ -11422,6 +11788,10 @@
 		{
 			"key": "v2",
 			"value": "https://testbeauty.beautypoint.sa/api/v2"
+		},
+		{
+			"value": "",
+			"type": "string"
 		}
 	]
 }

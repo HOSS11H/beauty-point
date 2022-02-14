@@ -13,11 +13,6 @@ const mapContainerStyle = {
     margin: "20px auto",
 }
 
-const center = {
-    lat: 21.485811,
-    lng: 39.192505,
-}
-
 const options = {
     styles: mapStyles,
     disableDefaultUI: true,
