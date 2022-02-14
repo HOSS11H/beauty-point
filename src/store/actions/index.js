@@ -76,6 +76,11 @@ export {
     updateExpenseCustomer,
     searchExpensesCustomers,
     createExpenseCustomer,
+    fetchExpensesBanks,
+    deleteExpenseBank,
+    updateExpenseBank,
+    searchExpensesBanks,
+    createExpenseBank,
 } from './expenses'
 
 export {
