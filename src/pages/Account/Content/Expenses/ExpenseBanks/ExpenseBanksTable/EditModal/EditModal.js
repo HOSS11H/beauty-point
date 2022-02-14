@@ -15,11 +15,11 @@ const CustomTextField = styled(TextField)`
 
 const EditModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, id, fetchedExpensesCustomers } = props;
+    const { show, heading, confirmText, onConfirm, onClose, id, fetchedExpensesBanks } = props;
 
-    const selectedExpenseIndex = fetchedExpensesCustomers.data.findIndex(expense => expense.id === id);
+    const selectedExpenseIndex = fetchedExpensesBanks.data.findIndex(expense => expense.id === id);
 
-    let expenseData = fetchedExpensesCustomers.data[selectedExpenseIndex];
+    let expenseData = fetchedExpensesBanks.data[selectedExpenseIndex];
 
     const {name , mobile } = expenseData;
 
@@ -31,16 +31,16 @@ const EditModal = (props) => {
     const [expenseName, setExpenseName] = useState(name);
     const [expenseNameError, setExpenseNameError] = useState(false);
 
-    const [customerNumber, setCustomerNumber] = useState(mobile);
-    const [customerNumberError, setCustomerNumberError] = useState(false);
+    const [bankNumber, setBankNumber] = useState(mobile);
+    const [bankNumberError, setBankNumberError] = useState(false);
 
     const expenseNameChangeHandler = (event) => {
         setExpenseName(event.target.value);
         setExpenseNameError(false);
     }
-    const customerNumberChangeHandler = (event) => {
-        setCustomerNumber(event.target.value);
-        setCustomerNumberError(false);
+    const bankNumberChangeHandler = (event) => {
+        setBankNumber(event.target.value);
+        setBankNumberError(false);
     }
 
     const closeModalHandler = useCallback(() => {
@@ -53,18 +53,18 @@ const EditModal = (props) => {
             setExpenseNameError(true);
             return;
         }
-        if ( customerNumber.trim().length === 0) {
-            setCustomerNumberError(true);
+        if ( bankNumber.trim().length === 0) {
+            setBankNumberError(true);
             return;
         }
         const data = {
             id: id,
             name: expenseName,
-            mobile: customerNumber
+            mobile: bankNumber
         }
         onConfirm(data);
         //console.log(data);
-    }, [customerNumber, expenseName, id, onConfirm])
+    }, [bankNumber, expenseName, id, onConfirm])
 
     let content = (
         <Grid container spacing={2}>
@@ -73,8 +73,8 @@ const EditModal = (props) => {
                 {expenseNameError && <ValidationMessage notExist>{t(`Please add name`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6} >
-                <CustomTextField id="customer-number" label={t('mobile number')} variant="outlined" value={customerNumber} onChange={customerNumberChangeHandler} />
-                {customerNumberError && <ValidationMessage notExist>{t(`Please add number`)}</ValidationMessage>}
+                <CustomTextField id="bank-number" label={t('mobile number')} variant="outlined" value={bankNumber} onChange={bankNumberChangeHandler} />
+                {bankNumberError && <ValidationMessage notExist>{t(`Please add number`)}</ValidationMessage>}
             </Grid>
         </Grid>
     )

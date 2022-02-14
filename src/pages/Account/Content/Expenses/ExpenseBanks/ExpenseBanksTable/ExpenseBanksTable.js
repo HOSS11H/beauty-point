@@ -8,7 +8,7 @@ import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { fetchExpensesCustomers, deleteExpenseCustomer, updateExpenseCustomer } from '../../../../../../store/actions/index';
+import { fetchExpensesBanks, deleteExpenseBank, updateExpenseBank } from '../../../../../../store/actions/index';
 import ThemeContext from '../../../../../../store/theme-context';
 import EnhancedTableHead from './TableHead/TableHead';
 import EnhancedTableBody from './TableBody/TableBody';
@@ -22,7 +22,7 @@ import TablePaginationActions from '../../../../../../components/UI/Dashboard/Ta
 import DeleteModal from './DeleteModal/DeleteModal';
 import EditModal from './EditModal/EditModal';
 
-const ExpenseCustomersWrapper = styled(Card)`
+const ExpenseBanksWrapper = styled(Card)`
     display: flex;
     max-width: 100%;
     min-height: 100px;
@@ -63,7 +63,7 @@ function ExpenseBanksTable(props) {
 
     const { t } = useTranslation()
 
-    const { fetchedExpensesCustomers,fetchingExpensesCustomers, fetchExpensesCustomersHandler, searchingExpensesCustomersSuccess, deleteExpenseCustomerHandler, updateExpenseCustomerHandler } = props;
+    const { fetchedExpensesBanks,fetchingExpensesBanks, fetchExpensesBanksHandler, searchingExpensesBanksSuccess, deleteExpenseBankHandler, updateExpenseBankHandler } = props;
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(intialPerPage);
@@ -76,11 +76,11 @@ function ExpenseBanksTable(props) {
 
     const [editModalOpened, setEditModalOpened] = useState(false);
 
-    const [selectedExpenseCustomer, setSelectedExpenseCustomer] = useState(null);
+    const [selectedExpenseBank, setSelectedExpenseBank] = useState(null);
 
     useEffect(() => {
-        fetchExpensesCustomersHandler(lang, page, rowsPerPage );
-    }, [lang, fetchExpensesCustomersHandler, page, rowsPerPage]);
+        fetchExpensesBanksHandler(lang, page, rowsPerPage );
+    }, [lang, fetchExpensesBanksHandler, page, rowsPerPage]);
 
 
     const handleChangePage = useCallback((event, newPage) => {
@@ -94,33 +94,33 @@ function ExpenseBanksTable(props) {
     // Delete Modal
     const deleteModalOpenHandler = useCallback((id) => {
         setDeleteModalOpened(true);
-        setSelectedExpenseCustomer(id);
+        setSelectedExpenseBank(id);
     }, [])
     const deleteModalCloseHandler = useCallback(() => {
         setDeleteModalOpened(false);
-        setSelectedExpenseCustomer(null);
+        setSelectedExpenseBank(null);
     }, [])
 
     const deleteModalConfirmHandler = useCallback((id) => {
-        deleteExpenseCustomerHandler( id);
+        deleteExpenseBankHandler( id);
         setDeleteModalOpened(false);
-        setSelectedExpenseCustomer(null);
-    }, [deleteExpenseCustomerHandler])
+        setSelectedExpenseBank(null);
+    }, [deleteExpenseBankHandler])
     // Edit Modal
     const editModalOpenHandler = useCallback((id) => {
         setEditModalOpened(true);
-        setSelectedExpenseCustomer(id);
+        setSelectedExpenseBank(id);
     }, [])
     const editModalCloseHandler = useCallback(() => {
         setEditModalOpened(false);
-        setSelectedExpenseCustomer(null);
+        setSelectedExpenseBank(null);
     }, [])
 
     const editModalConfirmHandler = useCallback((data) => {
         setEditModalOpened(false);
-        setSelectedExpenseCustomer(null);
-        updateExpenseCustomerHandler(data);
-    }, [updateExpenseCustomerHandler])
+        setSelectedExpenseBank(null);
+        updateExpenseBankHandler(data);
+    }, [updateExpenseBankHandler])
 
     let content = (
         <Fragment>
@@ -150,33 +150,33 @@ function ExpenseBanksTable(props) {
                         size='medium'
                     >
                         <EnhancedTableHead
-                            rowCount={fetchedExpensesCustomers.data.length}
+                            rowCount={fetchedExpensesBanks.data.length}
                         />
                         <EnhancedTableBody
-                            fetchedExpensesCustomers={fetchedExpensesCustomers}
-                            editExpenseCustomerHandler={editModalOpenHandler}
-                            deleteExpenseCustomerHandler={deleteModalOpenHandler}
+                            fetchedExpensesBanks={fetchedExpensesBanks}
+                            editExpenseBankHandler={editModalOpenHandler}
+                            deleteExpenseBankHandler={deleteModalOpenHandler}
                         />
                     </Table>
                     {rowsPerPage !== 'all' && (
                         <TablePaginationActions
                             sx= {{ width: '100%'}}
                             component="div"
-                            count={fetchedExpensesCustomers.data.length}
-                            total={fetchedExpensesCustomers.meta ? fetchedExpensesCustomers.meta.total : 0}
+                            count={fetchedExpensesBanks.data.length}
+                            total={fetchedExpensesBanks.meta ? fetchedExpensesBanks.meta.total : 0}
                             rowsPerPage={rowsPerPage}
                             page={page}
                             onPageChange={handleChangePage}
-                            loading={fetchingExpensesCustomers}
+                            loading={fetchingExpensesBanks}
                         />
                     )}
                 </TableContainer>
-                <DeleteModal show={deleteModalOpened} id={selectedExpenseCustomer}
-                    onClose={deleteModalCloseHandler} onConfirm={deleteModalConfirmHandler.bind(null, selectedExpenseCustomer)}
+                <DeleteModal show={deleteModalOpened} id={selectedExpenseBank}
+                    onClose={deleteModalCloseHandler} onConfirm={deleteModalConfirmHandler.bind(null, selectedExpenseBank)}
                     heading='Do you want To delete this agent?' confirmText='delete' />
                 {
                     editModalOpened && (
-                        <EditModal show={editModalOpened} id={selectedExpenseCustomer} fetchedExpensesCustomers={fetchedExpensesCustomers}
+                        <EditModal show={editModalOpened} id={selectedExpenseBank} fetchedExpensesBanks={fetchedExpensesBanks}
                             onClose={editModalCloseHandler} onConfirm={editModalConfirmHandler}
                             heading='edit agent details' confirmText='edit' />
                     )
@@ -184,13 +184,13 @@ function ExpenseBanksTable(props) {
             </Paper>
         </Fragment>
     ) 
-    if ( fetchedExpensesCustomers.data.length === 0 && searchingExpensesCustomersSuccess) {
+    if ( fetchedExpensesBanks.data.length === 0 && searchingExpensesBanksSuccess) {
         content = (
             <SearchMessage>
                 {t('no results')}
             </SearchMessage>
         )
-    } else if (fetchingExpensesCustomers) {
+    } else if (fetchingExpensesBanks) {
         content = (
             <Loader>
                 <CircularProgress color="secondary" />
@@ -199,27 +199,27 @@ function ExpenseBanksTable(props) {
     }
 
     return (
-        <ExpenseCustomersWrapper>
+        <ExpenseBanksWrapper>
             {content}
-        </ExpenseCustomersWrapper>
+        </ExpenseBanksWrapper>
     );
 }
 
 const mapStateToProps = state => {
     return {
-        fetchedExpensesCustomers: state.expenses.expensesCustomers,
-        fetchingExpensesCustomers: state.expenses.fetchingExpensesCustomers,
-        searchingExpensesCustomersSuccess: state.expenses.searchingExpensesCustomersSuccess,
-        creatingExpenseCustomerSuccess: state.expenses.creatingExpenseCustomerSuccess,
-        updatingExpenseCustomerSuccess: state.expenses.updatingExpenseCustomerSuccess,
+        fetchedExpensesBanks: state.expenses.expensesBanks,
+        fetchingExpensesBanks: state.expenses.fetchingExpensesBanks,
+        searchingExpensesBanksSuccess: state.expenses.searchingExpensesBanksSuccess,
+        creatingExpenseBankSuccess: state.expenses.creatingExpenseBankSuccess,
+        updatingExpenseBankSuccess: state.expenses.updatingExpenseBankSuccess,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchExpensesCustomersHandler: (lang, page, rowsPerPage ) => dispatch(fetchExpensesCustomers(lang, page, rowsPerPage)),
-        deleteExpenseCustomerHandler: (id) => dispatch(deleteExpenseCustomer(id)),
-        updateExpenseCustomerHandler: (data) => dispatch(updateExpenseCustomer(data)),
+        fetchExpensesBanksHandler: (lang, page, rowsPerPage ) => dispatch(fetchExpensesBanks(lang, page, rowsPerPage)),
+        deleteExpenseBankHandler: (id) => dispatch(deleteExpenseBank(id)),
+        updateExpenseBankHandler: (data) => dispatch(updateExpenseBank(data)),
     }
 }
 

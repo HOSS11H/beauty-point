@@ -1,9 +1,9 @@
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useState } from "react";
 import { connect } from "react-redux";
-import { searchExpensesCustomers , createExpenseCustomer} from '../../../../../store/actions/index';
+import { searchExpensesBanks , createExpenseBank} from '../../../../../store/actions/index';
 import SearchBar from "../../../../../components/Search/SearchBar/SearchBar";
 
-import ExpensesCustomersTable from './ExpenseBanksTable/ExpenseBanksTable';
+import ExpensesBanksTable from './ExpenseBanksTable/ExpenseBanksTable';
 
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
@@ -33,7 +33,7 @@ function ExpenseBanks(props) {
 
     const { t } = useTranslation()
 
-    const { searchExpensesCustomersHandler, addExpenseCustomerHandler } = props;
+    const { searchExpensesBanksHandler, addExpenseBankHandler } = props;
 
     const [createModalOpened, setCreateModalOpened] = useState(false);
 
@@ -47,20 +47,20 @@ function ExpenseBanks(props) {
 
     const createModalConfirmHandler = useCallback((data) => {
         setCreateModalOpened(false);
-        addExpenseCustomerHandler(data);
-    }, [addExpenseCustomerHandler])
+        addExpenseBankHandler(data);
+    }, [addExpenseBankHandler])
 
 
     return (
         <Fragment>
             <ActionsWrapper>
-                <SearchBar searchHandler={searchExpensesCustomersHandler}/>
+                <SearchBar searchHandler={searchExpensesBanksHandler}/>
                 <CreateBtn onClick={createModalOpenHandler} >{t('add agent')}</CreateBtn>
                 <CreateModal show={createModalOpened}
                     onClose={createModalCloseHandler} onConfirm={createModalConfirmHandler}
                     heading='add new agent' confirmText='add' />
             </ActionsWrapper>
-            <ExpensesCustomersTable />
+            <ExpensesBanksTable />
         </Fragment>
     );
 }
@@ -69,8 +69,8 @@ function ExpenseBanks(props) {
 
 const mapDispatchToProps = dispatch => {
     return {
-        searchExpensesCustomersHandler: ( language, word ) => dispatch(searchExpensesCustomers( language, word )),
-        addExpenseCustomerHandler: (data) => dispatch(createExpenseCustomer( data ))
+        searchExpensesBanksHandler: ( language, word ) => dispatch(searchExpensesBanks( language, word )),
+        addExpenseBankHandler: (data) => dispatch(createExpenseBank( data ))
     }
 }
 
