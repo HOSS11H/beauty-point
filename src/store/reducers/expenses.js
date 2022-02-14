@@ -45,6 +45,20 @@ const intialState = {
     creatingExpenseCustomer: false,
     creatingExpenseCustomerSuccess: false,
     creatingExpenseCustomerMessage: null,
+    expensesBanks: { data: [], },
+    fetchingExpensesBanks: false,
+    errorFetchingExpensesBanks: false,
+    deletingExpenseBank: false,
+    deletingExpenseBankSuccess: false,
+    deletingExpenseBankMessage: null,
+    updatingExpenseBank: false,
+    updatingExpenseBankSuccess: false,
+    updatingExpenseBankMessage: null,
+    searchingExpensesBanks: false,
+    searchingExpensesBanksSuccess: false,
+    creatingExpenseBank: false,
+    creatingExpenseBankSuccess: false,
+    creatingExpenseBankMessage: null,
 }
 
 const reducer = (state = intialState, action) => {
@@ -196,7 +210,7 @@ const reducer = (state = intialState, action) => {
                 updatingExpenseCategoryMessage: null,
             })
         case (actionTypes.UPDATE_EXPENSE_CATEGORY_SUCCESS):
-            const editedExpenseCategoryIndex = state.expensesCategories.data.findIndex(customer => customer.id === action.expenseCategoryData.id);
+            const editedExpenseCategoryIndex = state.expensesCategories.data.findIndex(category => category.id === action.expenseCategoryData.id);
             let editedExpenseCategory = { ...state.expensesCategories.data[editedExpenseCategoryIndex] }
             const updatedEditedExpenseCategory = updateObject(editedExpenseCategory, {
                 ...action.expenseCategoryData,
@@ -387,6 +401,127 @@ const reducer = (state = intialState, action) => {
                 creatingExpenseCustomer: false,
                 creatingExpenseCustomerSuccess: false,
                 creatingExpenseCustomerMessage: action.message,
+            })
+        case (actionTypes.FETCH_EXPENSES_BANKS_START):
+            return updateObject(state, {
+                fetchingExpensesBanks: true,
+                errorFetchingExpensesBanks: false,
+            });
+        case (actionTypes.FETCH_EXPENSES_BANKS_SUCCESS):
+            return updateObject(state, {
+                expensesBanks: action.expensesBanks,
+                fetchingExpensesBanks: false,
+                errorFetchingExpensesBanks: false,
+            });
+        case (actionTypes.FETCH_EXPENSES_BANKS_FAILED):
+            return updateObject(state, {
+                fetchingExpensesBanks: false,
+                errorFetchingExpensesBanks: true,
+            });
+        case (actionTypes.DELETE_EXPENSE_BANK_START):
+            return updateObject(state, {
+                deletingExpenseBank: true,
+                deletingExpenseBankSuccess: false,
+                deletingExpenseBankMessage: null,
+            })
+        case (actionTypes.DELETE_EXPENSE_BANK_SUCCESS):
+            const updatedExpensesBanks = state.expensesBanks.data.filter(expenseBank => expenseBank.id !== action.expenseBankId);
+            return updateObject(state, {
+                expensesBanks: {
+                    ...state.expensesBanks,
+                    data: updatedExpensesBanks,
+                    meta : {
+                        ...state.expensesBanks.meta,
+                        total: state.expensesBanks.meta.total - 1,
+                    }
+                },
+                deletingExpenseBank: false,
+                deletingExpenseBankSuccess: true,
+                deletingExpenseBankMessage: action.message,
+            })
+        case (actionTypes.DELETE_EXPENSE_BANK_FAILED):
+            return updateObject(state, {
+                deletingExpenseBank: false,
+                deletingExpenseBankSuccess: false,
+                deletingExpenseBankMessage: action.message,
+            })
+        case (actionTypes.UPDATE_EXPENSE_BANK_START):
+            return updateObject(state, {
+                updatingExpenseBank: true,
+                updatingExpenseBankSuccess: false,
+                updatingExpenseBankMessage: null,
+            })
+        case (actionTypes.UPDATE_EXPENSE_BANK_SUCCESS):
+            const editedExpenseBankIndex = state.expensesBanks.data.findIndex(bank => bank.id === action.expenseBankData.id);
+            let editedExpenseBank = { ...state.expensesBanks.data[editedExpenseBankIndex] }
+            const updatedEditedExpenseBank = updateObject(editedExpenseBank, {
+                ...action.expenseBankData,
+            });
+            const modifiedExpensesBanks = [ ...state.expensesBanks.data ];
+            modifiedExpensesBanks[editedExpenseBankIndex] = updatedEditedExpenseBank;
+            return updateObject(state, {
+                expensesBanks: {
+                    ...state.expensesBanks,
+                    data: modifiedExpensesBanks,
+                },
+                updatingExpenseBank: false,
+                updatingExpenseBankSuccess: true,
+                updatingExpenseBankMessage: action.message,
+            })
+        case (actionTypes.UPDATE_EXPENSE_BANK_FAILED):
+            return updateObject(state, {
+                updatingExpenseBank: false,
+                updatingExpenseBankSuccess: false,
+                updatingExpenseBankMessage: action.message,
+            })
+        case (actionTypes.SEARCH_EXPENSES_BANKS_START):
+            return updateObject(state, {
+                fetchingExpensesBanks: true,
+                errorFetchingExpensesBanks: false,
+                searchingExpensesBanks: true,
+                searchingExpensesBanksSuccess: false,
+            })
+        case (actionTypes.SEARCH_EXPENSES_BANKS_SUCCESS):
+            return updateObject(state, {
+                fetchingExpensesBanks: false,
+                expensesBanks: action.expensesBanks,
+                searchingExpensesBanks: false,
+                searchingExpensesBanksSuccess: true,
+            })
+        case (actionTypes.SEARCH_EXPENSES_BANKS_FAILED):
+            return updateObject(state, {
+                fetchingExpensesBanks: false,
+                errorFetchingExpensesBanks: true,
+                searchingExpensesBanks: false,
+                searchingExpensesBanksSuccess: false,
+            })
+        case (actionTypes.CREATE_EXPENSE_BANK_START):
+            return updateObject(state, {
+                creatingExpenseBank: true,
+                creatingExpenseBankSuccess: false,
+                creatingExpenseBankMessage: null,
+            })
+        case (actionTypes.CREATE_EXPENSE_BANK_SUCCESS):
+            const updatedExpenseBanks = [ ...state.expensesBanks.data ];
+            updatedExpenseBanks.push(action.expenseBankData);
+            return updateObject(state, {
+                expensesBanks: {
+                    ...state.expensesBanks,
+                    data: updatedExpenseBanks,
+                    meta : {
+                        ...state.expensesBanks.meta,
+                        total: state.expensesBanks.meta.total + 1,
+                    }
+                },
+                creatingExpenseBank: false,
+                creatingExpenseBankSuccess: true,
+                creatingExpenseBankMessage: action.message,
+            })
+        case (actionTypes.CREATE_EXPENSE_BANK_FAILED):
+            return updateObject(state, {
+                creatingExpenseBank: false,
+                creatingExpenseBankSuccess: false,
+                creatingExpenseBankMessage: action.message,
             })
         default:
             return state;

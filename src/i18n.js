@@ -434,6 +434,7 @@ const resources = {
             'No Customers Found': 'لا يوجد أعضاء',
             'via ': 'عن طريق ',
             'spotlights': 'العروض المميزة',
+            'banks': 'البنوك',
         }
     }
 };

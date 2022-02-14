@@ -29,7 +29,7 @@ const CreateBtn = styled(CustomButton)`
     }
 `
 
-function ExpenseCustomers(props) {
+function ExpenseBanks(props) {
 
     const { t } = useTranslation()
 
@@ -74,4 +74,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(ExpenseCustomers);
+export default connect(null, mapDispatchToProps)(ExpenseBanks);

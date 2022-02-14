@@ -93,6 +93,7 @@ function Expenses(props) {
             <ActionButtons>
                 <NavLink to='categories'>{t('categories')}</NavLink>
                 <NavLink to='customers'>{t('agents')}</NavLink>
+                <NavLink to='banks'>{t('banks')}</NavLink>
             </ActionButtons>
             <ExpensesTable />
         </Fragment>

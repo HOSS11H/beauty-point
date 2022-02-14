@@ -48,6 +48,7 @@ import NearbySalons from "./pages/Home/NearbySalons/NearbySalons";
 
 import Landing from "./pages/Landing/Landing";
 import Customers from "./pages/Account/Content/Customers/Customers";
+import ExpenseBanks from "./pages/Account/Content/Expenses/ExpenseBanks/ExpenseBanks";
 
 function App() {
 
@@ -91,6 +92,7 @@ function App() {
                     <Route path="expenses" element={<Expenses />} />
                     <Route path="expenses/categories" element={<ExpenseCategories />} />
                     <Route path="expenses/customers" element={<ExpenseCustomers />} />
+                    <Route path="expenses/banks" element={<ExpenseBanks />} />
                     <Route path="units" element={<Units />} />
                     <Route path="deals" element={<Deals />} />
                     <Route path='point-of-sale' element={<PointOfSale />} />
