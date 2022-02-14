@@ -55,10 +55,10 @@ function ExpenseBanks(props) {
         <Fragment>
             <ActionsWrapper>
                 <SearchBar searchHandler={searchExpensesBanksHandler}/>
-                <CreateBtn onClick={createModalOpenHandler} >{t('add agent')}</CreateBtn>
+                <CreateBtn onClick={createModalOpenHandler} >{t('add bank')}</CreateBtn>
                 <CreateModal show={createModalOpened}
                     onClose={createModalCloseHandler} onConfirm={createModalConfirmHandler}
-                    heading='add new agent' confirmText='add' />
+                    heading='add new bank' confirmText='add' />
             </ActionsWrapper>
             <ExpensesBanksTable />
         </Fragment>

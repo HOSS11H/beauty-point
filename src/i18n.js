@@ -435,6 +435,11 @@ const resources = {
             'via ': 'عن طريق ',
             'spotlights': 'العروض المميزة',
             'banks': 'البنوك',
+            'add new bank': 'إضافة بنك جديد',
+            'add bank': 'إضافة بنك',
+            'bank name': 'اسم البنك',
+            'Please add account number': 'حساب البنك',
+            'account number': 'رقم الحساب',
         }
     }
 };

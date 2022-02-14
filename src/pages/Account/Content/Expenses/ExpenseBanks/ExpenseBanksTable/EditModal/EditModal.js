@@ -1,7 +1,6 @@
-import { useState,  useCallback, useContext } from 'react';
+import { useState,  useCallback } from 'react';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import ThemeContext from '../../../../../../../store/theme-context'
 
 import { CustomModal } from '../../../../../../../components/UI/Modal/Modal';
 import { Grid } from '@mui/material';
@@ -21,26 +20,23 @@ const EditModal = (props) => {
 
     let expenseData = fetchedExpensesBanks.data[selectedExpenseIndex];
 
-    const {name , mobile } = expenseData;
+    const {name , account } = expenseData;
 
-    const { t } = useTranslation();
-
-    const themeCtx = useContext(ThemeContext)
-    const { lang } = themeCtx;
+    const { t } = useTranslation()
 
     const [expenseName, setExpenseName] = useState(name);
     const [expenseNameError, setExpenseNameError] = useState(false);
 
-    const [bankNumber, setBankNumber] = useState(mobile);
-    const [bankNumberError, setBankNumberError] = useState(false);
+    const [bankAccount, setBankAccount] = useState(account);
+    const [bankAccountError, setBankAccountError] = useState(false);
 
     const expenseNameChangeHandler = (event) => {
         setExpenseName(event.target.value);
         setExpenseNameError(false);
     }
-    const bankNumberChangeHandler = (event) => {
-        setBankNumber(event.target.value);
-        setBankNumberError(false);
+    const bankAccountChangeHandler = (event) => {
+        setBankAccount(event.target.value);
+        setBankAccountError(false);
     }
 
     const closeModalHandler = useCallback(() => {
@@ -53,18 +49,18 @@ const EditModal = (props) => {
             setExpenseNameError(true);
             return;
         }
-        if ( bankNumber.trim().length === 0) {
-            setBankNumberError(true);
+        if ( bankAccount.trim().length === 0) {
+            setBankAccountError(true);
             return;
         }
         const data = {
             id: id,
             name: expenseName,
-            mobile: bankNumber
+            account: bankAccount
         }
         onConfirm(data);
         //console.log(data);
-    }, [bankNumber, expenseName, id, onConfirm])
+    }, [bankAccount, expenseName, id, onConfirm])
 
     let content = (
         <Grid container spacing={2}>
@@ -73,8 +69,8 @@ const EditModal = (props) => {
                 {expenseNameError && <ValidationMessage notExist>{t(`Please add name`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6} >
-                <CustomTextField id="bank-number" label={t('mobile number')} variant="outlined" value={bankNumber} onChange={bankNumberChangeHandler} />
-                {bankNumberError && <ValidationMessage notExist>{t(`Please add number`)}</ValidationMessage>}
+                <CustomTextField id="bank-account" type='account' label={t('bank account')} variant="outlined" value={bankAccount} onChange={bankAccountChangeHandler} />
+                {bankAccountError && <ValidationMessage notExist>{t(`Please add account number`)}</ValidationMessage>}
             </Grid>
         </Grid>
     )

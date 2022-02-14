@@ -1,7 +1,6 @@
-import { useState, useEffect, useCallback, useContext } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import ThemeContext from '../../../../../../store/theme-context'
 
 import { CustomModal } from '../../../../../../components/UI/Modal/Modal';
 import { Grid } from '@mui/material';
@@ -18,18 +17,15 @@ const CustomTextField = styled(TextField)`
 
 const CreateModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, creatingExpenseCategorySuccess } = props;
+    const { show, heading, confirmText, onConfirm, onClose, creatingExpenseBankSuccess } = props;
 
     const { t } = useTranslation();
-
-    const themeCtx = useContext(ThemeContext)
-    const { lang } = themeCtx;
 
     const [expenseName, setExpenseName] = useState('');
     const [expenseNameError, setExpenseNameError] = useState(false);
 
-    const [bankNumber, setBankNumber] = useState('');
-    const [bankNumberError, setBankNumberError] = useState(false);
+    const [bankAccount, setBankAccount] = useState('');
+    const [bankAccountError, setBankAccountError] = useState(false);
 
 
 
@@ -39,9 +35,9 @@ const CreateModal = (props) => {
         setExpenseNameError(false);
     }
 
-    const bankNumberChangeHandler = (event) => {
-        setBankNumber(event.target.value);
-        setBankNumberError(false);
+    const bankAccountChangeHandler = (event) => {
+        setBankAccount(event.target.value);
+        setBankAccountError(false);
     }
 
 
@@ -53,13 +49,13 @@ const CreateModal = (props) => {
     const resetModalData = useCallback(() => {
         setExpenseName('');
         setExpenseNameError(false);
-        setBankNumber('');
-        setBankNumberError(false);
+        setBankAccount('');
+        setBankAccountError(false);
     }, [])
 
     useEffect(() => {
-        creatingExpenseCategorySuccess && resetModalData();
-    }, [creatingExpenseCategorySuccess, resetModalData])
+        creatingExpenseBankSuccess && resetModalData();
+    }, [creatingExpenseBankSuccess, resetModalData])
 
     const confirmCreateHandler = useCallback(() => {
 
@@ -67,27 +63,27 @@ const CreateModal = (props) => {
             setExpenseNameError(true);
             return;
         }
-        if ( bankNumber.trim().length === 0) {
-            setBankNumberError(true);
+        if ( bankAccount.trim().length === 0) {
+            setBankAccountError(true);
             return;
         }
 
         const data = {
             name: expenseName,
-            mobile: bankNumber
+            account: bankAccount
         }
         onConfirm(data);
-    }, [bankNumber, expenseName, onConfirm])
+    }, [bankAccount, expenseName, onConfirm])
 
     let content = (
         <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
-                <CustomTextField id="bank-name" label={t('name')} variant="outlined" value={expenseName} onChange={expenseNameChangeHandler} />
+                <CustomTextField id="bank-name" label={t('bank name')} variant="outlined" value={expenseName} onChange={expenseNameChangeHandler} />
                 {expenseNameError && <ValidationMessage notExist>{t(`Please add name`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6} >
-                <CustomTextField id="bank-number" label={t('mobile number')} variant="outlined" value={bankNumber} onChange={bankNumberChangeHandler} />
-                {bankNumberError && <ValidationMessage notExist>{t(`Please add number`)}</ValidationMessage>}
+                <CustomTextField id="bank-account" label={t('bank account')} variant="outlined" type='number' value={bankAccount} onChange={bankAccountChangeHandler} />
+                {bankAccountError && <ValidationMessage notExist>{t(`Please add account number`)}</ValidationMessage>}
             </Grid>
         </Grid>
     )
@@ -100,7 +96,7 @@ const CreateModal = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        creatingExpenseCategorySuccess: state.expenses.creatingExpenseCategorySuccess,
+        creatingExpenseBankSuccess: state.expenses.creatingExpenseBankSuccess,
     }
 }
 

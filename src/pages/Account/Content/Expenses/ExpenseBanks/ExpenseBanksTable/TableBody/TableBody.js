@@ -5,7 +5,6 @@ import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import { TableData } from '../../../../../../../components/UI/Dashboard/Table/Table';
 
-import { useTranslation } from 'react-i18next';
 import Actions from '../../../../../../../components/UI/Dashboard/Actions/Actions';
 
 
@@ -13,9 +12,6 @@ import Actions from '../../../../../../../components/UI/Dashboard/Actions/Action
 const EnhancedTableBody = props => {
 
     const { fetchedExpensesBanks, editExpenseBankHandler, deleteExpenseBankHandler } = props;
-
-    const { t } = useTranslation();
-
 
     return (
         <TableBody>
@@ -38,7 +34,7 @@ const EnhancedTableBody = props => {
                         </TableCell>
                         <TableCell align="center">
                             <TableData>
-                                {row.mobile}
+                                {row.account}
                             </TableData>
                         </TableCell>
                         <TableCell align="center">
