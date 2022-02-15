@@ -21,7 +21,7 @@ export const fetchExpensesFailed = ( errorMessage ) => {
 export const fetchExpenses = ( language, page, perPage) => {
     return dispatch => {
         dispatch( fetchExpensesStart( ) )
-        axios.get(`/vendors/expenses?include[]=category&include[]=customer&page=${page + 1}&per_page=${perPage}`, { 
+        axios.get(`/vendors/expenses?include[]=category&include[]=customer&include[]=bank&page=${page + 1}&per_page=${perPage}`, { 
             headers: {
                 'Accept-Language': language
             }
