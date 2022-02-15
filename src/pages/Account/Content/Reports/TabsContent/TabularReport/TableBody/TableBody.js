@@ -10,6 +10,7 @@ import PendingIcon from '@mui/icons-material/Pending';
 
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
+import moment from 'moment';
 
 const TableStatus = styled.div`
     display: flex;
@@ -80,8 +81,6 @@ const EnhancedTableBody = props => {
         <TableBody>
             {fetchedTabularReport.data.map((row, index) => {
                 const fetchedItems = row.items && row.items.split(',')
-                const booking_time = new Date(row.booking_time).toLocaleDateString('en-US').toString();
-                const booking_date = new Date(row.booking_date).toLocaleTimeString().toString();
                 return (
                     <TableRow
                         hover
@@ -100,12 +99,12 @@ const EnhancedTableBody = props => {
                         </TableCell>
                         <TableCell align="center">
                             <TableData>
-                                {booking_date}
+                                {moment(row.booking_date).format("YYYY-MM-DD")}
                             </TableData>
                         </TableCell>
                         <TableCell align="center">
                             <TableData>
-                                {booking_time}
+                                {moment(row.booking_time).format("hh:mm a")}
                             </TableData>
                         </TableCell>
                         <TableCell align="center">
