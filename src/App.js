@@ -66,7 +66,7 @@ function App() {
         <Routes>
             <Route path="/auth" element={<Auth />} />
             <Route path="/home/*" element={<Home />} >
-                <Route path="" element={<HomePage />} />
+                <Route index element={<HomePage />} />
                 <Route path="all-categories" element={<AllCategories />} />
                 <Route path="all-saloons" element={<AllSaloons />} />
                 <Route path="all-deals" element={<AllDeals />} />
@@ -104,7 +104,7 @@ function App() {
                     <Route path='employees' element={<Employees />} />
                     <Route path='customers' element={<Customers />} />
                     <Route path="settings/*" element={<Settings />}>
-                        <Route path='' element={<GeneralSettings />} />
+                        <Route index element={<GeneralSettings />} />
                         <Route path='vendor-page' element={<VendorPage />} />
                         <Route path="booking-settings" element={<BookingSettings />} />
                         <Route path="employee-settings" element={<EmployeeSettings />} />
