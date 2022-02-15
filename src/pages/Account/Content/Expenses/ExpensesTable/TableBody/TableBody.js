@@ -57,10 +57,10 @@ const EnhancedTableBody = props => {
                             <TableData>{row.customer.name}</TableData>
                         </TableCell>
                         <TableCell align="center">
-                            <TableData>{row.bank_name}</TableData>
+                            <TableData>{row.bank.name}</TableData>
                         </TableCell>
                         <TableCell align="center">
-                            <TableData>{row.bank_account}</TableData>
+                            <TableData>{row.bank.account}</TableData>
                         </TableCell>
                         <TableCell align="center">
                             {
