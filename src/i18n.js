@@ -442,6 +442,7 @@ const resources = {
             'account number': 'رقم الحساب',
             'select bank': 'اختر البنك',
             'No Bookings Found': 'لا يوجد حجوزات',
+            'faqs': 'الأسئلة الشائعة',
         }
     }
 };

@@ -1,25 +1,19 @@
-import { Container, Grid } from "@mui/material";
+import { CircularProgress, Container, Grid } from "@mui/material";
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import axios from '../../../utils/axios-instance';
-import CircularProgress from '@mui/material/CircularProgress';
 import {  useParams } from "react-router-dom";
 import HomeLayout from "../../../components/HomeLayout/HomeLayout";
 import ServicePanel from "../../../components/UI/ServicePanel/ServicePanel";
 import { useRef } from 'react';
 import { useCallback } from 'react';
+import Loader from "../../../components/UI/Loader/Loader";
 
 const CategoriesWrapper = styled.section`
     padding: 70px 0px;
 `
 
-const Loader = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 200px;
-`
+
 const Loading = styled.div`
     display: flex;
     align-items: center;
@@ -70,9 +64,7 @@ const SingleCategory = props => {
     }, [page, param.categoryId])
 
     let content= (
-        <Loader>
-            <CircularProgress color="secondary" />
-        </Loader>
+        <Loader height='200px' />
     );
     if (services.length > 0) {
         content = (

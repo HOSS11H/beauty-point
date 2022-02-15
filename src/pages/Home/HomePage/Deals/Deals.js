@@ -14,12 +14,12 @@ import 'swiper/swiper.min.css';
 import DealPanel from '../../../../components/UI/DealPanel/DealPanel';
 import { useState, useEffect, useContext } from 'react';
 import axios from '../../../../utils/axios-instance';
-import CircularProgress from '@mui/material/CircularProgress';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import ThemeContext from "../../../../store/theme-context";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import Loader from '../../../../components/UI/Loader/Loader';
 
 // install Swiper modules
 SwiperCore.use([Autoplay]);
@@ -30,13 +30,7 @@ const DealsWrapper = styled.section`
         margin: 70px 0;
     }
 `
-const Loader = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 200px;
-`
+
 
 const Deals = props => {
     const { t } = useTranslation();
@@ -65,9 +59,7 @@ const Deals = props => {
 
     if (loading) {
         content = (
-            <Loader>
-                <CircularProgress color="secondary" />
-            </Loader>
+            <Loader height='200px' />
         );
     }
     if (deals.length > 0) {

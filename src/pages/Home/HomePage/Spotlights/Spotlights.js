@@ -4,7 +4,6 @@ import { Heading } from "../../../../components/UI/Heading/Heading";
 import DealPanel from '../../../../components/UI/DealPanel/DealPanel';
 import { useState, useEffect, useContext } from 'react';
 import axios from '../../../../utils/axios-instance';
-import CircularProgress from '@mui/material/CircularProgress';
 import { useTranslation } from 'react-i18next';
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
 import ThemeContext from "../../../../store/theme-context";
@@ -18,6 +17,7 @@ import SwiperCore, {
 
 import 'swiper/swiper.min.css';
 import { NavLink } from 'react-router-dom';
+import Loader from '../../../../components/UI/Loader/Loader';
 
 const SpotlightsWrapper = styled.section`
     margin: 100px 0;
@@ -25,13 +25,7 @@ const SpotlightsWrapper = styled.section`
         margin: 70px 0;
     }
 `
-const Loader = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 200px;
-`
+
 
 // install Swiper modules
 SwiperCore.use([Autoplay]);
@@ -63,9 +57,7 @@ const Spotlights = props => {
 
     if (loading) {
         content= (
-            <Loader>
-                <CircularProgress color="secondary" />
-            </Loader>
+            <Loader height='200px' />
         );
     }
     if (spotlights.length > 0) {

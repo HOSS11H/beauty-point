@@ -1,8 +1,6 @@
 import { Container, Grid } from '@mui/material';
 import styled from 'styled-components';
 import { Heading } from "../../../components/UI/Heading/Heading";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import SalonPanel from '../../../components/UI/SalonPanel/SalonPanel';
 import { useState, useEffect } from 'react';
 import axios from '../../../utils/axios-instance';
@@ -13,6 +11,7 @@ import { useRef } from 'react';
 import { useCallback } from 'react';
 import { useContext } from 'react';
 import ThemeContext from '../../../store/theme-context';
+import Loader from '../../../components/UI/Loader/Loader';
 
 const SalonsWrapper = styled.section`
     margin: 100px 0;
@@ -20,13 +19,7 @@ const SalonsWrapper = styled.section`
         margin: 70px 0;
     }
 `
-const Loader = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 200px;
-`
+
 
 const Loading = styled.div`
     display: flex;
@@ -81,9 +74,7 @@ const AllSaloons = props => {
 
 
     let content = (
-        <Loader>
-            <CircularProgress color="secondary" />
-        </Loader>
+        <Loader height='200px' />
     );
     if (salons.length > 0) {
         content = (

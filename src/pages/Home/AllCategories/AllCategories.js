@@ -3,10 +3,10 @@ import { Heading } from "../../../components/UI/Heading/Heading";
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import axios from '../../../utils/axios-instance';
-import CircularProgress from '@mui/material/CircularProgress';
 import { useTranslation } from "react-i18next";
 import HomeLayout from "../../../components/HomeLayout/HomeLayout";
 import CategoryPanel from "../../../components/UI/CategoryPanel/CategoryPanel";
+import Loader from "../../../components/UI/Loader/Loader";
 
 const CategoriesWrapper = styled.section`
     padding: 74px 0 88px;
@@ -14,13 +14,7 @@ const CategoriesWrapper = styled.section`
         padding: 25px 0 15px;
     }
 `
-const Loader = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 200px;
-`
+
 
 const AllCategories = props => {
 
@@ -50,9 +44,7 @@ const AllCategories = props => {
     let content ;
     if (loading) {
         content = (
-            <Loader>
-                <CircularProgress color="secondary" />
-            </Loader>
+            <Loader height='200px' />
         );
     }
     if (services.length > 0) {

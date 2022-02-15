@@ -7,7 +7,6 @@ import "slick-carousel/slick/slick-theme.css";
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import axios from '../../../../utils/axios-instance';
-import CircularProgress from '@mui/material/CircularProgress';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from "react-i18next";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
@@ -15,6 +14,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useContext } from "react";
 import ThemeContext from "../../../../store/theme-context";
 import CategoryPanel from "../../../../components/UI/CategoryPanel/CategoryPanel";
+import Loader from "../../../../components/UI/Loader/Loader";
 
 
 const CategoriesSliderWrapper = styled.section`
@@ -57,13 +57,7 @@ const CategoriesSliderWrapper = styled.section`
         }
     }
 `
-const Loader = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 200px;
-`
+
 const settings = {
     dots: false,
     arrows: true,
@@ -118,9 +112,7 @@ const CategoriesSlider = props => {
     }, [])
 
     let content = (
-        <Loader>
-            <CircularProgress color="secondary" />
-        </Loader>
+        <Loader height='200px' />
     );
     if (categories.length > 0) {
         content = (

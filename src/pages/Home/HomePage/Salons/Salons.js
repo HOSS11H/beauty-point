@@ -4,7 +4,6 @@ import { Heading } from "../../../../components/UI/Heading/Heading";
 import SalonPanel from '../../../../components/UI/SalonPanel/SalonPanel';
 import { useState, useEffect, useContext } from 'react';
 import axios from '../../../../utils/axios-instance';
-import CircularProgress from '@mui/material/CircularProgress';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import ThemeContext from "../../../../store/theme-context";
@@ -18,6 +17,7 @@ import SwiperCore, {
 } from 'swiper';
 
 import 'swiper/swiper.min.css';
+import Loader from '../../../../components/UI/Loader/Loader';
 
 // install Swiper modules
 SwiperCore.use([Autoplay]);
@@ -28,13 +28,7 @@ const SalonsWrapper = styled.section`
         margin: 70px 0;
     }
 `
-const Loader = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 200px;
-`
+
 
 
 const Salons = props => {
@@ -64,9 +58,7 @@ const Salons = props => {
     let content;
     if (loading) {
         content = (
-            <Loader>
-                <CircularProgress color="secondary" />
-            </Loader>
+            <Loader height='200px' />
         );
     }
     if (salons.length > 0) {

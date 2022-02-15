@@ -49,6 +49,7 @@ import NearbySalons from "./pages/Home/NearbySalons/NearbySalons";
 import Landing from "./pages/Landing/Landing";
 import Customers from "./pages/Account/Content/Customers/Customers";
 import ExpenseBanks from "./pages/Account/Content/Expenses/ExpenseBanks/ExpenseBanks";
+import FAQs from "./pages/Home/FAQs/FAQs";
 
 function App() {
 
@@ -110,12 +111,13 @@ function App() {
                     </Route>
                 </ Route>
                 <Route path="/home/*" element={<Home />} >
-                    <Route path="" element={<HomePage />} />
+                    <Route index element={<HomePage />} />
                     <Route path="all-categories" element={<AllCategories />} />
                     <Route path="all-saloons" element={<AllSaloons />} />
                     <Route path="all-deals" element={<AllDeals />} />
                     <Route path="all-spotlights" element={<AllSpotlights />} />
                     <Route path="packages" element={<AllPackages />} />
+                    <Route path="faqs" element={<FAQs />} />
                     <Route path="categories/:categoryId" element={<SingleCategory />} />
                     <Route path="services/:serviceId" element={<SingleService />} />
                     <Route path="deals/:dealId" element={<SingleDeal />} />
