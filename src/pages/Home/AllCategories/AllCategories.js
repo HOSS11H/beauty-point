@@ -26,7 +26,7 @@ const AllCategories = props => {
     useEffect(() => {
         const controller = new AbortController();
         setLoading(true)
-        axios.get('/categories?include[]=services', {
+        axios.get('/categories', {
             signal: controller.signal
         })
             .then(res => {

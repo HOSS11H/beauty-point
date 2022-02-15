@@ -97,7 +97,7 @@ const CategoriesSlider = props => {
 
     useEffect(() => {
         const controller = new AbortController();
-        axios.get('/categories?include[]=services', {
+        axios.get('/categories', {
             signal: controller.signal
         })
             .then(res => {
