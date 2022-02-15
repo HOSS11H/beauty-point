@@ -87,6 +87,7 @@ const Footer = props => {
                                 <li><NavLink to='/home/all-categories'>{t("categories")}</NavLink></li>
                                 <li><NavLink to='/home/packages'>{t('packages')}</NavLink></li>
                                 <li><NavLink to='/home/faqs'>{t('faqs')}</NavLink></li>
+                                <li><NavLink to='/home/all-spotlights'>{t('spotlights')}</NavLink></li>
                             </ul>
                         </div>
                     </Grid>
