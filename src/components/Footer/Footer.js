@@ -97,7 +97,7 @@ const Footer = props => {
                                 <h3>{t('Contact us')}</h3>
                             </div>
                             <ul>
-                                <li><NavLink to='/'>{t('about us')}</NavLink></li>
+                                <li><NavLink to='/home/about-us'>{t('about us')}</NavLink></li>
                                 <li><NavLink to='/auth?page=join-us'>{t("join us")}</NavLink></li>
                                 <li><NavLink to='/'>{t('Contact us')}</NavLink></li>
                             </ul>

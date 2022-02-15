@@ -443,6 +443,7 @@ const resources = {
             'select bank': 'اختر البنك',
             'No Bookings Found': 'لا يوجد حجوزات',
             'faqs': 'الأسئلة الشائعة',
+            'who are we': 'من نحن',
         }
     }
 };

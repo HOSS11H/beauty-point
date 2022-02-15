@@ -50,6 +50,7 @@ import Landing from "./pages/Landing/Landing";
 import Customers from "./pages/Account/Content/Customers/Customers";
 import ExpenseBanks from "./pages/Account/Content/Expenses/ExpenseBanks/ExpenseBanks";
 import FAQs from "./pages/Home/FAQs/FAQs";
+import AboutUs from "./pages/Home/AboutUs/AboutUs";
 
 function App() {
 
@@ -117,7 +118,8 @@ function App() {
                     <Route path="all-deals" element={<AllDeals />} />
                     <Route path="all-spotlights" element={<AllSpotlights />} />
                     <Route path="packages" element={<AllPackages />} />
-                    <Route path="faqs" element={<FAQs />} />
+                    <Route path="faqs" element={<FAQs />} />.
+                    <Route path="about-us" element={<AboutUs />} />.
                     <Route path="categories/:categoryId" element={<SingleCategory />} />
                     <Route path="services/:serviceId" element={<SingleService />} />
                     <Route path="deals/:dealId" element={<SingleDeal />} />
