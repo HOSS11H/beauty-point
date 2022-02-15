@@ -17,6 +17,7 @@ import styled from "styled-components";
 import { styled as MuiStyled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
+import { DebounceInput } from 'react-debounce-input';
 
 const Wrapper = styled.div`
     margin-top: 30px;
@@ -70,7 +71,7 @@ const StyledInputBase = MuiStyled(InputBase)(({ theme }) => ({
 
 const ShowBookings = props => {
 
-    const { id, deleteBookingHandler, updateBookingHandler } = props;
+    const { id, deleteBookingHandler, updateBookingHandler, updatingBookingSuccess } = props;
 
     const { t } = useTranslation()
 
@@ -132,6 +133,13 @@ const ShowBookings = props => {
     useEffect(() => {
         fetchBookings({ page: page, term: searchWord, per_page: 10, order_by: 'id' })
     }, [fetchBookings, page, searchWord])
+
+    useEffect(() => {
+        if (updatingBookingSuccess) {
+            setBookings([])
+            fetchBookings({ page: page, term: searchWord, per_page: 10, order_by: 'id' })
+        }
+    }, [fetchBookings, page, searchWord, updatingBookingSuccess])
 
     useEffect(() => {
         if (!userData) {
@@ -258,16 +266,21 @@ const ShowBookings = props => {
                 <SearchIconWrapper>
                     <SearchIcon />
                 </SearchIconWrapper>
-                <StyledInputBase
+                <DebounceInput element={StyledInputBase} debounceTimeout={500}
                     placeholder="Search…"
                     value={searchWord}
                     onChange={(e) => searchBookingsHandler(e.target.value)}
-                    inputProps={{ 'aria-label': 'search' }}
-                />
+                    inputProps={{ 'aria-label': 'search' }} />
             </Search>
             {content}
         </Wrapper>
     )
+}
+
+const mapStateToProps = state => {
+    return {
+        updatingBookingSuccess: state.bookings.updatingBookingSuccess,
+    }
 }
 
 const mapDispatchToProps = dispatch => {
@@ -277,4 +290,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(ShowBookings);
+export default connect(mapStateToProps, mapDispatchToProps)(ShowBookings);
