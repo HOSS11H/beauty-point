@@ -440,6 +440,7 @@ const resources = {
             'bank name': 'اسم البنك',
             'Please add account number': 'حساب البنك',
             'account number': 'رقم الحساب',
+            'select bank': 'اختر البنك',
         }
     }
 };
