@@ -290,7 +290,7 @@ const Invoice = React.forwardRef((props, ref) => {
 													>
 														<CustomTableCell component="th" scope="row" align="center">
 															{<BookingDataBody>{item.item.name}</BookingDataBody>}
-															{item.item.type === 'service' && <ServiceEmployee>( {item.employee.name} )</ServiceEmployee> }
+															{item.item?.type === 'service' && <ServiceEmployee>( {item.employee?.name} )</ServiceEmployee> }
 														</CustomTableCell>
 														<CustomTableCell align="center">{<BookingDataBody>{`${item.quantity} x ${item.price}`}</BookingDataBody>}</CustomTableCell>
 														<CustomTableCell align="center">{<BookingDataBody>{formatCurrency(item.amount)}</BookingDataBody>}</CustomTableCell>
