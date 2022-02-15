@@ -25,6 +25,8 @@ import { format } from 'date-fns';
 import axios from '../../../../../utils/axios-instance';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import DeleteIcon from '@mui/icons-material/Delete';
+import SearchBanks from './SearchBanks/SearchBanks';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 
 
 const CustomTextField = styled(TextField)`
@@ -119,7 +121,53 @@ const customStyles = {
         ...provided,
         color: '#000',
     }),
+    control: base => ({
+        ...base,
+        height: 56,
+    })
 };
+
+const BankCard = styled.div`
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid;
+    border-color: ${({ theme }) => theme.palette.divider};
+`
+const BankName = styled.h4`
+    display: flex;
+    font-size: 16px;
+    line-height:1.5;
+    text-transform: capitalize;
+    font-weight: 600;
+    color: ${({ theme }) => theme.palette.primary.main};
+    transition: 0.3s ease-in-out;
+    margin-bottom: 10px;
+`
+const BankInfo = styled.ul`
+    margin: 0;
+    padding: 0;
+    li {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        line-height:1.5;
+        text-transform: capitalize;
+        font-weight: 500;
+        color: ${({ theme }) => theme.palette.text.disabled};
+        margin-bottom: 5px;
+        &:last-child {
+            margin-bottom: 0px;
+        }
+        svg {
+            width: 20px;
+            height: 20px;
+            &.MuiSvgIcon-root  {
+                margin:0;
+                margin-right: 8px;
+            }
+        }
+    }
+`
 
 
 const CreateModal = (props) => {
@@ -136,11 +184,9 @@ const CreateModal = (props) => {
 
     const [date, setDate] = useState(new Date());
 
-    const [expenseBank, setExpenseBank] = useState('');
-    const [expenseBankError, setExpenseBankError] = useState(false);
-
-    const [expenseAccount, setExpenseAccount] = useState('');
-    const [expenseAccountError, setExpenseAccountError] = useState(false);
+    const [bankData, setBankData] = useState(null);
+    const [bankDataError, setBankDataError] = useState(false)
+    const [resetSearchData, setResetSearchData] = useState(false)
 
     const [categoriesOptions, setCategoriesOptions] = useState([])
 
@@ -172,14 +218,7 @@ const CreateModal = (props) => {
     const handleDateChange = (date) => {
         setDate(date);
     }
-    const expenseBankChangeHandler = (event) => {
-        setExpenseBank(event.target.value);
-        setExpenseBankError(false);
-    }
-    const expenseAccountChangeHandler = (event) => {
-        setExpenseAccount(event.target.value);
-        setExpenseAccountError(false);
-    }
+
 
     const expenseAmountChangeHandler = (event) => {
         if (event.target.value >= 0) {
@@ -187,6 +226,18 @@ const CreateModal = (props) => {
             setExpenseAmountError(false);
         }
     }
+
+    const selectBank = useCallback((value) => {
+        if (value) {
+            setBankDataError(false)
+            setBankData(value);
+        } else {
+            setBankDataError(true)
+            setBankData(null);
+        }
+        setResetSearchData(false)
+    }, [])
+
     const handleSelectCategoryOptions = (value, actions) => {
         if (value.length !== 0) {
             axios.get(`/vendors/expenses_categories`)
@@ -254,13 +305,11 @@ const CreateModal = (props) => {
 
 
     const resetModalData = useCallback(() => {
+        setBankData(null);
+        setBankDataError(false)
         setExpenseName('');
         setExpenseNameError(false);
         setDate(new Date());
-        setExpenseBank('');
-        setExpenseBankError(false);
-        setExpenseAccount('');
-        setExpenseAccountError(false);
         setSelectedCategory(null);
         setSelectedCategoryError(false);
         setSelectedAgent(null);
@@ -270,6 +319,9 @@ const CreateModal = (props) => {
         setExpenseDescriptionError(false);
         setEditorState(EditorState.createEmpty());
         setUploadedImages([]);
+        setResetSearchData(false)
+        setBankData(null);
+        setBankDataError(false)
     }, [])
 
     useEffect(() => {
@@ -282,12 +334,8 @@ const CreateModal = (props) => {
             setExpenseNameError(true);
             return;
         }
-        if (expenseBank.trim().length === 0) {
-            setExpenseBankError(true);
-            return;
-        }
-        if (expenseAccount.trim().length === 0) {
-            setExpenseAccountError(true);
+        if (!bankData) {
+            setBankDataError(true)
             return;
         }
         if (!selectedCategory) {
@@ -307,15 +355,14 @@ const CreateModal = (props) => {
         formData.append('note', draftToHtml(convertToRaw(editorState.getCurrentContent())));
         formData.append('amount', expenseAmount);
         formData.append('expense_date', format(date, 'Y-MM-dd hh:ii a'));
-        formData.append('bank_name', expenseBank);
-        formData.append('bank_account', expenseAccount);
+        formData.append('bank_id', bankData.id);
         formData.append('cat_id', selectedCategory.value);
         formData.append('customer_id', selectedAgent.value);
-        if(uploadedImages.length > 0 ) {
-            formData.append('image', uploadedImages[0].file) 
+        if (uploadedImages.length > 0) {
+            formData.append('image', uploadedImages[0].file)
         }
         onConfirm(formData);
-    }, [expenseName, expenseBank, expenseAccount, selectedCategory, selectedAgent, editorState, expenseAmount, date, uploadedImages, onConfirm])
+    }, [expenseName, bankData, selectedCategory, selectedAgent, expenseAmount, editorState, date, uploadedImages, onConfirm])
 
     let content = (
         <Grid container spacing={2}>
@@ -334,18 +381,27 @@ const CreateModal = (props) => {
                     />
                 </LocalizationProvider>
             </Grid>
-            <Grid item xs={12} sm={6}>
-                <CustomTextField id="expense-bank" label={t('bank')} variant="outlined" value={expenseBank} onChange={expenseBankChangeHandler} />
-                {expenseBankError && <ValidationMessage notExist>{t(`Please add bank`)}</ValidationMessage>}
+            <Grid item xs={12} md={6}>
+                <FormLabel component="legend" sx={{ textAlign: 'left', textTransform: 'capitalize', marginBottom: '8px' }} >{t('select bank')}</FormLabel>
+                <SearchBanks selectBank={selectBank} resetSearchData={resetSearchData} />
+                {bankDataError && <ValidationMessage notExist>{t(`Please Choose Bank`)}</ValidationMessage>}
             </Grid>
-            <Grid item xs={12} sm={6}>
-                <CustomTextField id="expense-account" label={t('bank account')} variant="outlined" value={expenseAccount} onChange={expenseAccountChangeHandler} />
-                {expenseAccountError && <ValidationMessage notExist>{t(`Please add account`)}</ValidationMessage>}
+            <Grid item xs={12} md={6}>
+                {
+                    bankData && (
+                        <BankCard>
+                            <BankName>{bankData.name}</BankName>
+                            <BankInfo>
+                                <li><AccountBalanceIcon sx={{ mr: 1 }} />{bankData.account}</li>
+                            </BankInfo>
+                        </BankCard>
+                    )
+                }
             </Grid>
             <Grid item xs={12} sm={6} >
                 <FormLabel component="legend" sx={{ textAlign: 'left', textTransform: 'capitalize', marginBottom: '8px' }} >{t('select category')}</FormLabel>
                 <FormControl fullWidth sx={{ minWidth: '200px' }} >
-                    <ReactSelect styles={customStyles}  options={categoriesOptions} isClearable isRtl={lang === 'ar'}
+                    <ReactSelect styles={customStyles} options={categoriesOptions} isClearable isRtl={lang === 'ar'}
                         onChange={handleSelectCategory} onInputChange={handleSelectCategoryOptions} />
                 </FormControl>
                 {selectedCategoryError && <ValidationMessage notExist>{t(`Please select category`)}</ValidationMessage>}
@@ -393,23 +449,23 @@ const CreateModal = (props) => {
                         // write your building UI
                         <div className="upload__image-wrapper">
                             <UploadImageBody>
-                                    <Grid container sx={{ width: '100%' }} spacing={2} >
-                                        {imageList.map((image, index) => (
-                                            <Grid item xs={12} sm={6} key={index} >
-                                                <div style={{ width: '100%' }} >
-                                                    <img src={image['data_url']} alt="" width="100" />
-                                                    <ImageItemBottomBar>
-                                                        <Button sx={{ mr: 1 }} size="large" variant="outlined" startIcon={<PhotoCamera />} onClick={() => onImageUpdate(index)}>
-                                                            {t('update')}
-                                                        </Button>
-                                                        <IconButton aria-label="delete" size="large" onClick={() => onImageRemove(index)}>
-                                                            <DeleteIcon />
-                                                        </IconButton>
-                                                    </ImageItemBottomBar>
-                                                </div>
-                                            </Grid>
-                                        ))}
-                                    </Grid>
+                                <Grid container sx={{ width: '100%' }} spacing={2} >
+                                    {imageList.map((image, index) => (
+                                        <Grid item xs={12} sm={6} key={index} >
+                                            <div style={{ width: '100%' }} >
+                                                <img src={image['data_url']} alt="" width="100" />
+                                                <ImageItemBottomBar>
+                                                    <Button sx={{ mr: 1 }} size="large" variant="outlined" startIcon={<PhotoCamera />} onClick={() => onImageUpdate(index)}>
+                                                        {t('update')}
+                                                    </Button>
+                                                    <IconButton aria-label="delete" size="large" onClick={() => onImageRemove(index)}>
+                                                        <DeleteIcon />
+                                                    </IconButton>
+                                                </ImageItemBottomBar>
+                                            </div>
+                                        </Grid>
+                                    ))}
+                                </Grid>
                             </UploadImageBody>
                             <UploadImageTopBar>
                                 <Button size="medium" sx={{ mr: 2, color: isDragging && 'red' }} variant="contained" startIcon={<PhotoCamera />} {...dragProps} onClick={onImageUpload} >

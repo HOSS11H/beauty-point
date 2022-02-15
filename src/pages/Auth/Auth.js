@@ -116,7 +116,7 @@ const Auth = props => {
     const { renderFormInputs: loginInputs, isFormValid: isLoginDataValid, form: loginData } = useForm(loginForm);
     const { renderFormInputs: subscribeInputs, isFormValid: isSubscribeDataValid, form: subscribeData } = useForm(subscribeForm);
 
-    const [markers, setMarkers] = useState([])
+    const [marker, setMarker] = useState({})
 
     const [ pendingSignedUp, setPendingSignedUp ] = useState(false);
 
@@ -137,11 +137,11 @@ const Auth = props => {
         setErrorMessage(null)
     }
     const assignCoords = (lat, lng) => {
-        setMarkers([{
+        setMarker({
             lat: lat,
             lng: lng,
             defaultAnimation: 2,
-        }])
+        })
     }
     const submitHandler = () => {
         let url;
@@ -173,11 +173,13 @@ const Auth = props => {
                 contact: subscribeData.phoneNum.value,
                 address: subscribeData.address.value,
                 password: subscribeData.password.value,
-                address_latitude: markers[0].lat,
-                address_longitude: markers[0].lng,
-                package_id: packageId,
+                address_latitude: marker.lat,
+                address_longitude: marker.lng,
                 calling_code: '+91',
                 fcm_token: 'asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231',
+            }
+            if (packageId) {
+                authData.package_id = packageId
             }
         }
         setErrorMessage(null);
@@ -190,7 +192,7 @@ const Auth = props => {
                 }
             })
             .catch(err => {
-                setErrorMessage(err.message);
+                setErrorMessage(err.response.data.message);
             })
     }
 
@@ -240,7 +242,7 @@ const Auth = props => {
                                     {!isLogin && subscribeFormText.heading}
                                 </FormHeading>
                                 {isLogin ? loginInputs() : subscribeInputs()}
-                                {!isLogin && <Map assignCoords={assignCoords} markers={markers} /> }
+                                {!isLogin && <Map assignCoords={assignCoords} marker={marker} /> }
                                 {isLogin && (
                                     <FormLink>
                                         {loginFormText.passwordRestoreMessage}

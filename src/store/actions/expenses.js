@@ -1,7 +1,6 @@
 import * as actionTypes from './actionTypes';
 import axios from '../../utils/axios-instance';
 
-
 export const fetchExpensesStart = (  ) => {
     return {
         type: actionTypes.FETCH_EXPENSES_START,
@@ -22,7 +21,7 @@ export const fetchExpensesFailed = ( errorMessage ) => {
 export const fetchExpenses = ( language, page, perPage) => {
     return dispatch => {
         dispatch( fetchExpensesStart( ) )
-        axios.get(`/vendors/expenses?include[]=category&include[]=customer&page=${page + 1}&per_page=${perPage}`, { 
+        axios.get(`/vendors/expenses?include[]=category&include[]=customer&include[]=bank&page=${page + 1}&per_page=${perPage}`, { 
             headers: {
                 'Accept-Language': language
             }
@@ -364,7 +363,7 @@ export const fetchExpensesCustomers = ( language, page, perPage) => {
 
 export const deleteExpenseCustomerStart = () => {
     return {
-        type: actionTypes.DELETE_EXPENSE_CATEGORY_START,
+        type: actionTypes.DELETE_EXPENSE_CUSTOMER_START,
     }
 }
 export const deleteExpenseCustomerSuccess = (message, deletedExpenseCustomerId) => {
@@ -486,6 +485,167 @@ export const createExpenseCustomer = (data) => {
             })
             .catch(err => {
                 dispatch(createExpenseCustomerFailed(err.message))
+            })
+    }
+}
+export const fetchExpensesBanksStart = (  ) => {
+    return {
+        type: actionTypes.FETCH_EXPENSES_BANKS_START,
+    }
+}
+export const fetchExpensesBanksSuccess = ( expensesBanksData ) => {
+    return {
+        type: actionTypes.FETCH_EXPENSES_BANKS_SUCCESS,
+        expensesBanks: expensesBanksData
+    }
+}
+export const fetchExpensesBanksFailed = ( errorMessage ) => {
+    return {
+        type: actionTypes.FETCH_EXPENSES_BANKS_FAILED,
+        error: errorMessage,
+    }
+}
+export const fetchExpensesBanks = ( language, page, perPage) => {
+    return dispatch => {
+        dispatch( fetchExpensesBanksStart( ) )
+        axios.get(`/vendors/banks?page=${page + 1}&per_page=${perPage}`, { 
+            headers: {
+                'Accept-Language': language
+            }
+        }).then( response => {
+                dispatch( fetchExpensesBanksSuccess( response.data  ) );
+            })
+            .catch( err => {
+                //console.log(err)
+                dispatch( fetchExpensesBanksFailed( err.message  ) )
+            } )
+        }
+}
+
+export const deleteExpenseBankStart = () => {
+    return {
+        type: actionTypes.DELETE_EXPENSE_BANK_START,
+    }
+}
+export const deleteExpenseBankSuccess = (message, deletedExpenseBankId) => {
+    return {
+        type: actionTypes.DELETE_EXPENSE_BANK_SUCCESS,
+        message: message,
+        expenseBankId: deletedExpenseBankId,
+    }
+}
+export const deleteExpenseBankFailed = (message) => {
+    return {
+        type: actionTypes.DELETE_EXPENSE_BANK_FAILED,
+        message: message,
+    }
+}
+
+export const deleteExpenseBank = (id) => {
+    return dispatch => {
+        dispatch(deleteExpenseBankStart())
+        axios.delete(`/vendors/banks/${id}`)
+            .then(response => {
+                dispatch(deleteExpenseBankSuccess(response.data, id));
+            })
+            .catch(err => {
+                dispatch(deleteExpenseBankFailed(err.message))
+            })
+    }
+}
+
+export const updateExpenseBankStart = () => {
+    return {
+        type: actionTypes.UPDATE_EXPENSE_BANK_START,
+    }
+}
+export const updateExpenseBankSuccess = (message, updatedExpenseBankData) => {
+    return {
+        type: actionTypes.UPDATE_EXPENSE_BANK_SUCCESS,
+        message: message,
+        expenseBankData: updatedExpenseBankData,
+    }
+}
+export const updateExpenseBankFailed = (message) => {
+    return {
+        type: actionTypes.UPDATE_EXPENSE_BANK_FAILED,
+        message: message,
+    }
+}
+export const updateExpenseBank = data => {
+    return dispatch => {
+        dispatch(updateExpenseBankStart())
+        axios.put(`/vendors/banks/${data.id}`, data)
+            .then(response => {
+                dispatch(updateExpenseBankSuccess(response.data, data));
+            })
+            .catch(err => {
+                dispatch(updateExpenseBankFailed(err.message))
+            })
+    }
+}
+
+
+export const searchExpensesBanksStart = () => {
+    return {
+        type: actionTypes.SEARCH_EXPENSES_BANKS_START,
+    }
+}
+export const searchExpensesBanksSuccess = (expensesBanksData) => {
+    return {
+        type: actionTypes.SEARCH_EXPENSES_BANKS_SUCCESS,
+        expensesBanks: expensesBanksData
+    }
+}
+export const searchExpensesBanksFailed = (errorMessage) => {
+    return {
+        type: actionTypes.SEARCH_EXPENSES_BANKS_FAILED,
+        error: errorMessage,
+    }
+}
+export const searchExpensesBanks = (language, word) => {
+    return dispatch => {
+        dispatch(searchExpensesBanksStart())
+        axios.get(`/vendors/banks?term=${word}&page=1&per_page=10`, {
+            headers: {
+                'Accept-Language': language
+            }
+        }).then(response => {
+            dispatch(searchExpensesBanksSuccess(response.data));
+        })
+            .catch(err => {
+                dispatch(searchExpensesBanksFailed(err.message))
+            })
+    }
+}
+export const createExpenseBankStart = () => {
+    return {
+        type: actionTypes.CREATE_EXPENSE_BANK_START,
+    }
+}
+export const createExpenseBankSuccess = (message, createdExpenseBankData) => {
+    return {
+        type: actionTypes.CREATE_EXPENSE_BANK_SUCCESS,
+        message: message,
+        expenseBankData: createdExpenseBankData,
+    }
+}
+export const createExpenseBankFailed = (message) => {
+    return {
+        type: actionTypes.CREATE_EXPENSE_BANK_FAILED,
+        message: message,
+    }
+}
+
+export const createExpenseBank = (data) => {
+    return dispatch => {
+        dispatch(createExpenseBankStart())
+        axios.post(`/vendors/banks`, data)
+            .then(response => {
+                dispatch(createExpenseBankSuccess(null, { ...response.data }));
+            })
+            .catch(err => {
+                dispatch(createExpenseBankFailed(err.message))
             })
     }
 }

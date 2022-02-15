@@ -7,11 +7,12 @@ import logoWhite from '../../../images/logo/logo_white.png';
 import logoDark from '../../../images/logo/logo_dark.png';
 import { useTranslation } from 'react-i18next';
 import ModuleAuth from '../Modules/ModuleAuth/ModuleAuth';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { useEffect, useRef } from 'react';
 import { useState } from 'react';
 import {ModuleSearchWrapper} from '../Modules/ModuleSearch/ModuleSearch';
 import {ModuleButton} from '../Modules/ModuleAuth/ModuleAuth';
+import ModuleLocation from '../Modules/ModuleLocation/ModuleLocation';
 
 const fadeInDown = keyframes`
     from {
@@ -228,8 +229,8 @@ const NavBar = () => {
                             }
                         </NavbarNav>
                         <ModulesHolder>
-                            <ModuleSearch />
                             <ModuleMood />
+                            <ModuleLocation />
                             <ModuleAuth />
                         </ModulesHolder>
                     </NavbarCollapse>

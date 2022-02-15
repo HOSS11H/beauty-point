@@ -14,12 +14,12 @@ import 'swiper/swiper.min.css';
 import DealPanel from '../../../../components/UI/DealPanel/DealPanel';
 import { useState, useEffect, useContext } from 'react';
 import axios from '../../../../utils/axios-instance';
-import CircularProgress from '@mui/material/CircularProgress';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import ThemeContext from "../../../../store/theme-context";
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import Loader from '../../../../components/UI/Loader/Loader';
 
 // install Swiper modules
 SwiperCore.use([Autoplay]);
@@ -30,39 +30,39 @@ const DealsWrapper = styled.section`
         margin: 70px 0;
     }
 `
-const Loader = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 200px;
-`
+
 
 const Deals = props => {
     const { t } = useTranslation();
-    const [deals, setDeals] = useState(null);
+    const [deals, setDeals] = useState([]);
+    const [ loading, setLoading ] = useState(false);
 
     const themeCtx = useContext(ThemeContext);
 
-    const { theme } = themeCtx
+    const { theme, city } = themeCtx
 
     useEffect(() => {
-        axios.get('/deals?include[]=company&page=1&per_page=8')
+        setLoading(true)
+        axios.get(`/deals?include[]=company&page=1&per_page=8&location_id=${city}`)
             .then(res => {
+                setLoading(false)
                 setDeals(res.data.data);
             })
             .catch(err => {
+                setLoading(false)
                 //console.log(err);
             })
-    }, [])
+    }, [city])
 
 
-    let content = (
-        <Loader>
-            <CircularProgress color="secondary" />
-        </Loader>
-    );
-    if (deals) {
+    let content ;
+
+    if (loading) {
+        content = (
+            <Loader height='200px' />
+        );
+    }
+    if (deals.length > 0) {
         let fetchedDeals = [...deals];
         content = (
             <Swiper

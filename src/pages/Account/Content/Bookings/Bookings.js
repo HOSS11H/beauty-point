@@ -2,7 +2,7 @@ import { Grid } from "@mui/material";
 import { useState, useContext, useEffect, useCallback, Fragment } from "react";
 import { connect } from "react-redux";
 import BookingView from "../../../../components/UI/Dashboard/BookingView/BookingView";
-import { fetchBookings, deleteBooking, updateBooking } from "../../../../store/actions/index";
+import { fetchBookings, deleteBooking, updateBooking, filterBookings } from "../../../../store/actions/index";
 import ThemeContext from "../../../../store/theme-context";
 import ViewModal from "./ViewModal/ViewModal";
 import EditModal from "./EditModal/EditModal";
@@ -18,7 +18,7 @@ function Bookings(props) {
 
     const {t} = useTranslation()
 
-    const { fetchedBookings, fetchBookingsHandler, fetchingBookings, deleteBookingHandler, updateBookingHandler, filteringBookingsSuccess, updatingBookingSuccess } = props;
+    const { fetchedBookings, fetchBookingsHandler, fetchingBookings, deleteBookingHandler, updateBookingHandler, filteringBookings, filteringBookingsSuccess, updatingBookingSuccess, filterBookingsHandler } = props;
 
     const themeCtx = useContext(ThemeContext)
 
@@ -35,24 +35,39 @@ function Bookings(props) {
     const [userData, setUserData] = useState(null);
 
     useEffect(() => {
-        fetchBookingsHandler(lang, page, rowsPerPage);
-        v1.get('/auth/me')
-            .then(res => {
-                setUserData(res.data)
-            }
-            )
-            .catch(err => {
-                //console.log(err)
-            })
-    }, [fetchBookingsHandler, lang, page]);
+        if (fetchedBookings.data.length === 0) {
+            console.log('fetching bookings')
+            fetchBookingsHandler(lang, page, rowsPerPage);
+        }
+    }, [fetchBookingsHandler, fetchedBookings.data.length, lang, page]);
 
     useEffect(() => {
-        updatingBookingSuccess && fetchBookingsHandler(lang, 'all');
-    }, [updatingBookingSuccess, fetchBookingsHandler, lang]);
+        if (!userData) {
+            v1.get('/auth/me')
+                .then(res => {
+                    setUserData(res.data)
+                }
+                )
+                .catch(err => {
+                    //console.log(err)
+                })
+        }
+    }, [userData]);
+
+
+    useEffect(() => {
+        updatingBookingSuccess && fetchBookingsHandler(lang, page, rowsPerPage);
+    }, [updatingBookingSuccess, fetchBookingsHandler, lang, page]);
+
+    const filterBookingHandler = useCallback((filters) => {
+        filterBookingsHandler({...filters, page: 1, per_page: rowsPerPage});
+        setPage(0);
+    }, [filterBookingsHandler])
 
     const handleChangePage = useCallback((event, newPage) => {
         setPage(newPage);
-    }, []);
+        fetchBookingsHandler(lang, newPage, rowsPerPage);
+    }, [fetchBookingsHandler, lang]);
 
     // Edit Modal
     const editModalOpenHandler = useCallback((id) => {
@@ -98,14 +113,9 @@ function Bookings(props) {
         editModalOpenHandler(id);
     }, [editModalOpenHandler])
 
-    let content = fetchedBookings.data.map((booking, index) => {
-        return (
-            <Grid item xs={12} md={6} key={booking.id} >
-                <BookingView booking={booking} loading={fetchingBookings} onClick={viewModalOpenHandler.bind(null, booking.id)} />
-            </Grid>
-        )
-    })
-    if (fetchingBookings) {
+    let content ;
+
+    if (fetchingBookings || filteringBookings) {
         content = (
             <Fragment>
                 <Grid item xs={12} md={6}  >
@@ -134,11 +144,19 @@ function Bookings(props) {
                 {t('No Bookings Found')}
             </SearchMessage>
         );
+    } else {
+        content = fetchedBookings.data.map((booking, index) => {
+            return (
+                <Grid item xs={12} md={6} key={booking.id} >
+                    <BookingView booking={booking} loading={fetchingBookings} onClick={viewModalOpenHandler.bind(null, booking.id)} />
+                </Grid>
+            )
+        })
     }
 
     return (
         <Grid container spacing={2}>
-            <SearchFilters page={page} perPage={rowsPerPage} />
+            <SearchFilters page={page} perPage={rowsPerPage} filterBookings={filterBookingHandler} />
             {content}
             <Grid item xs={12}>
                 { fetchedBookings.data.length !== 0 && (
@@ -176,6 +194,7 @@ const mapStateToProps = state => {
     return {
         fetchedBookings: state.bookings.bookings,
         fetchingBookings: state.bookings.fetchingBookings,
+        filteringBookings: state.bookings.filteringBookings,
         filteringBookingsSuccess: state.bookings.filteringBookingsSuccess,
         updatingBookingSuccess: state.bookings.updatingBookingSuccess,
     }
@@ -184,6 +203,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         fetchBookingsHandler: (language, page, perPage) => dispatch(fetchBookings(language, page, perPage)),
+        filterBookingsHandler: (params) => dispatch(filterBookings(params)),
         deleteBookingHandler: (id) => dispatch(deleteBooking(id)),
         updateBookingHandler: (data) => dispatch(updateBooking(data)),
     }

@@ -25,6 +25,8 @@ import axios from '../../../../../../utils/axios-instance';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ImageUploading from 'react-images-uploading';
+import SearchBanks from '../../CreateModal/SearchBanks/SearchBanks';
+import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
 
 const UploadImageTopBar = styled.div`
     display: flex;
@@ -119,7 +121,53 @@ const customStyles = {
         ...provided,
         color: '#000',
     }),
+    control: base => ({
+        ...base,
+        height: 56,
+    })
 };
+
+const BankCard = styled.div`
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid;
+    border-color: ${({ theme }) => theme.palette.divider};
+`
+const BankName = styled.h4`
+    display: flex;
+    font-size: 16px;
+    line-height:1.5;
+    text-transform: capitalize;
+    font-weight: 600;
+    color: ${({ theme }) => theme.palette.primary.main};
+    transition: 0.3s ease-in-out;
+    margin-bottom: 10px;
+`
+const BankInfo = styled.ul`
+    margin: 0;
+    padding: 0;
+    li {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        line-height:1.5;
+        text-transform: capitalize;
+        font-weight: 500;
+        color: ${({ theme }) => theme.palette.text.disabled};
+        margin-bottom: 5px;
+        &:last-child {
+            margin-bottom: 0px;
+        }
+        svg {
+            width: 20px;
+            height: 20px;
+            &.MuiSvgIcon-root  {
+                margin:0;
+                margin-right: 8px;
+            }
+        }
+    }
+`
 
 
 const EditModal = (props) => {
@@ -130,7 +178,7 @@ const EditModal = (props) => {
 
     let expenseData = fetchedExpenses.data[selectedExpenseIndex];
 
-    const {name, notes, amount, expense_date, bank_name, bank_account, category, customer, expense_image_url   } = expenseData;
+    const { name, notes, amount, expense_date, bank, category, customer, expense_image_url } = expenseData;
 
     const { t } = useTranslation();
 
@@ -142,20 +190,17 @@ const EditModal = (props) => {
 
     const [date, setDate] = useState(new Date(expense_date));
 
-    const [expenseBank, setExpenseBank] = useState(bank_name);
-    const [expenseBankError, setExpenseBankError] = useState(false);
+    const [bankData, setBankData] = useState({ id: bank.id, name: bank.name, account: bank.account });
+    const [bankDataError, setBankDataError] = useState(false);
 
-    const [expenseAccount, setExpenseAccount] = useState(bank_account);
-    const [expenseAccountError, setExpenseAccountError] = useState(false);
+    const [categoriesOptions, setCategoriesOptions] = useState([{ value: category.id, label: category.name }]);
 
-    const [categoriesOptions, setCategoriesOptions] = useState([{value: category.id, label: category.name}]);
-
-    const [selectedCategory, setSelectedCategory] = useState({value: category.id, label: category.name});
+    const [selectedCategory, setSelectedCategory] = useState({ value: category.id, label: category.name });
     const [selectedCategoryError, setSelectedCategoryError] = useState(false);
 
-    const [agentsOptions, setAgentsOptions] = useState([{value: customer.id, label: customer.name}])
+    const [agentsOptions, setAgentsOptions] = useState([{ value: customer.id, label: customer.name }])
 
-    const [selectedAgent, setSelectedAgent] = useState({value: customer.id, label: customer.name});
+    const [selectedAgent, setSelectedAgent] = useState({ value: customer.id, label: customer.name });
     const [selectedAgentError, setSelectedAgentError] = useState(false);
 
     const html = notes;
@@ -168,14 +213,14 @@ const EditModal = (props) => {
     const [expenseAmount, setExpenseAmount] = useState(amount);
     const [expenseAmountError, setExpenseAmountError] = useState(false);
 
-    const [uploadedImages, setUploadedImages] = useState([ { data_url: expense_image_url } ]);
+    const [uploadedImages, setUploadedImages] = useState([{ data_url: expense_image_url }]);
 
     const maxNumber = 1;
 
     useEffect(() => {
         if (uploadedImages[0].file === undefined) {
             fetch(uploadedImages[0].data_url).then(res => res.blob()).then(blob => {
-                setUploadedImages([{ data_url: uploadedImages[0].data_url, file: new File([blob], 'image.jpg', { type: blob.type })}]);
+                setUploadedImages([{ data_url: uploadedImages[0].data_url, file: new File([blob], 'image.jpg', { type: blob.type }) }]);
             })
         }
     }, [uploadedImages])
@@ -187,14 +232,16 @@ const EditModal = (props) => {
     const handleDateChange = (date) => {
         setDate(date);
     }
-    const expenseBankChangeHandler = (event) => {
-        setExpenseBank(event.target.value);
-        setExpenseBankError(false);
-    }
-    const expenseAccountChangeHandler = (event) => {
-        setExpenseAccount(event.target.value);
-        setExpenseAccountError(false);
-    }
+
+    const selectBank = useCallback((value) => {
+        if (value) {
+            setBankDataError(false)
+            setBankData(value);
+        } else {
+            setBankDataError(true)
+            setBankData(null);
+        }
+    }, [])
 
     const expenseAmountChangeHandler = (event) => {
         if (event.target.value >= 0) {
@@ -273,12 +320,8 @@ const EditModal = (props) => {
             setExpenseNameError(true);
             return;
         }
-        if (expenseBank.trim().length === 0) {
-            setExpenseBankError(true);
-            return;
-        }
-        if (expenseAccount.trim().length === 0) {
-            setExpenseAccountError(true);
+        if (!bankData) {
+            setBankDataError(true)
             return;
         }
         if (!selectedCategory) {
@@ -299,16 +342,15 @@ const EditModal = (props) => {
         formData.append('note', draftToHtml(convertToRaw(editorState.getCurrentContent())));
         formData.append('amount', expenseAmount);
         formData.append('expense_date', format(date, 'Y-MM-dd hh:ii a'));
-        formData.append('bank_name', expenseBank);
-        formData.append('bank_account', expenseAccount);
+        formData.append('bank_id', bankData.id);
         formData.append('cat_id', selectedCategory.value);
         formData.append('customer_id', selectedAgent.value);
-        if(uploadedImages.length > 0 && uploadedImages[0].data_url !== null )   {
-            formData.append('image', uploadedImages[0].file) 
+        if (uploadedImages.length > 0 && uploadedImages[0].data_url !== null) {
+            formData.append('image', uploadedImages[0].file)
         }
         formData.append('_method', 'PUT');
         onConfirm(formData);
-    }, [expenseName, expenseBank, expenseAccount, selectedCategory, selectedAgent, editorState, expenseAmount, id, date, uploadedImages, onConfirm])
+    }, [expenseName, bankData, selectedCategory, selectedAgent, expenseAmount, id, editorState, date, uploadedImages, onConfirm])
 
     let content = (
         <Grid container spacing={2}>
@@ -327,18 +369,27 @@ const EditModal = (props) => {
                     />
                 </LocalizationProvider>
             </Grid>
-            <Grid item xs={12} sm={6}>
-                <CustomTextField id="expense-bank" label={t('bank')} variant="outlined" value={expenseBank} onChange={expenseBankChangeHandler} />
-                {expenseBankError && <ValidationMessage notExist>{t(`Please add bank`)}</ValidationMessage>}
+            <Grid item xs={12} md={6}>
+                <FormLabel component="legend" sx={{ textAlign: 'left', textTransform: 'capitalize', marginBottom: '8px' }} >{t('select bank')}</FormLabel>
+                <SearchBanks selectBank={selectBank}  />
+                {bankDataError && <ValidationMessage notExist>{t(`Please Choose Bank`)}</ValidationMessage>}
             </Grid>
-            <Grid item xs={12} sm={6}>
-                <CustomTextField id="expense-account" label={t('bank account')} variant="outlined" value={expenseAccount} onChange={expenseAccountChangeHandler} />
-                {expenseAccountError && <ValidationMessage notExist>{t(`Please add account`)}</ValidationMessage>}
+            <Grid item xs={12} md={6}>
+                {
+                    bankData && (
+                        <BankCard>
+                            <BankName>{bankData.name}</BankName>
+                            <BankInfo>
+                                <li><AccountBalanceIcon sx={{ mr: 1 }} />{bankData.account}</li>
+                            </BankInfo>
+                        </BankCard>
+                    )
+                }
             </Grid>
             <Grid item xs={12} sm={6} >
                 <FormLabel component="legend" sx={{ textAlign: 'left', textTransform: 'capitalize', marginBottom: '8px' }} >{t('select category')}</FormLabel>
                 <FormControl fullWidth sx={{ minWidth: '200px' }} >
-                    <ReactSelect  styles={customStyles} options={categoriesOptions} isClearable isRtl={lang === 'ar'} defaultValue={{value: category.id, label: category.name}}
+                    <ReactSelect styles={customStyles} options={categoriesOptions} isClearable isRtl={lang === 'ar'} defaultValue={{ value: category.id, label: category.name }}
                         onChange={handleSelectCategory} onInputChange={handleSelectCategoryOptions} />
                 </FormControl>
                 {selectedCategoryError && <ValidationMessage notExist>{t(`Please select category`)}</ValidationMessage>}
@@ -346,7 +397,7 @@ const EditModal = (props) => {
             <Grid item xs={12} sm={6} >
                 <FormLabel component="legend" sx={{ textAlign: 'left', textTransform: 'capitalize', marginBottom: '8px' }} >{t('select agent')}</FormLabel>
                 <FormControl fullWidth sx={{ minWidth: '200px' }} >
-                    <ReactSelect styles={customStyles} options={agentsOptions} isClearable isRtl={lang === 'ar'} defaultValue={{value: customer.id, label: customer.name}}
+                    <ReactSelect styles={customStyles} options={agentsOptions} isClearable isRtl={lang === 'ar'} defaultValue={{ value: customer.id, label: customer.name }}
                         onChange={handleSelectAgent} onInputChange={handleSelectAgentOptions} />
                 </FormControl>
                 {selectedAgentError && <ValidationMessage notExist>{t(`Please select agent`)}</ValidationMessage>}
@@ -386,23 +437,23 @@ const EditModal = (props) => {
                         // write your building UI
                         <div className="upload__image-wrapper">
                             <UploadImageBody>
-                                    <Grid container sx={{ width: '100%' }} spacing={2} >
-                                        {imageList.map((image, index) => (
-                                            <Grid item xs={12} sm={6} key={index} >
-                                                <div style={{ width: '100%' }} >
-                                                    <img src={image['data_url']} alt="" width="100" />
-                                                    <ImageItemBottomBar>
-                                                        <Button sx={{ mr: 1 }} size="large" variant="outlined" startIcon={<PhotoCamera />} onClick={() => onImageUpdate(index)}>
-                                                            {t('update')}
-                                                        </Button>
-                                                        <IconButton aria-label="delete" size="large" onClick={() => onImageRemove(index)}>
-                                                            <DeleteIcon />
-                                                        </IconButton>
-                                                    </ImageItemBottomBar>
-                                                </div>
-                                            </Grid>
-                                        ))}
-                                    </Grid>
+                                <Grid container sx={{ width: '100%' }} spacing={2} >
+                                    {imageList.map((image, index) => (
+                                        <Grid item xs={12} sm={6} key={index} >
+                                            <div style={{ width: '100%' }} >
+                                                <img src={image['data_url']} alt="" width="100" />
+                                                <ImageItemBottomBar>
+                                                    <Button sx={{ mr: 1 }} size="large" variant="outlined" startIcon={<PhotoCamera />} onClick={() => onImageUpdate(index)}>
+                                                        {t('update')}
+                                                    </Button>
+                                                    <IconButton aria-label="delete" size="large" onClick={() => onImageRemove(index)}>
+                                                        <DeleteIcon />
+                                                    </IconButton>
+                                                </ImageItemBottomBar>
+                                            </div>
+                                        </Grid>
+                                    ))}
+                                </Grid>
                             </UploadImageBody>
                             <UploadImageTopBar>
                                 <Button size="medium" sx={{ mr: 2, color: isDragging && 'red' }} variant="contained" startIcon={<PhotoCamera />} {...dragProps} onClick={onImageUpload} >

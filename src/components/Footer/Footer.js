@@ -86,7 +86,8 @@ const Footer = props => {
                                 <li><NavLink to='/home'>{t('Home')}</NavLink></li>
                                 <li><NavLink to='/home/all-categories'>{t("categories")}</NavLink></li>
                                 <li><NavLink to='/home/packages'>{t('packages')}</NavLink></li>
-                                <li><NavLink to='/'>{t('help & support')}</NavLink></li>
+                                <li><NavLink to='/home/faqs'>{t('faqs')}</NavLink></li>
+                                <li><NavLink to='/home/all-spotlights'>{t('spotlights')}</NavLink></li>
                             </ul>
                         </div>
                     </Grid>
@@ -96,7 +97,7 @@ const Footer = props => {
                                 <h3>{t('Contact us')}</h3>
                             </div>
                             <ul>
-                                <li><NavLink to='/'>{t('about us')}</NavLink></li>
+                                <li><NavLink to='/home/about-us'>{t('about us')}</NavLink></li>
                                 <li><NavLink to='/auth?page=join-us'>{t("join us")}</NavLink></li>
                                 <li><NavLink to='/'>{t('Contact us')}</NavLink></li>
                             </ul>

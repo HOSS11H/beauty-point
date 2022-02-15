@@ -7,7 +7,7 @@ import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import { useTranslation } from 'react-i18next';
 import { useContext, useEffect, useState, } from 'react';
-import { fetchLocations, filterBookings } from '../../../../../store/actions/index';
+import { fetchLocations } from '../../../../../store/actions/index';
 import ReactSelect from 'react-select';
 import { connect } from 'react-redux';
 import DateAdapter from '@mui/lab/AdapterDateFns';
@@ -81,7 +81,7 @@ const customStyles = {
 
 const SearchFilters = (props) => {
 
-    const { fetchedLocations, fetchLocationsHandler, filterBookingsHandler, page, perPage } = props;
+    const { fetchedLocations, fetchLocationsHandler, filterBookings } = props;
 
     const { t } = useTranslation()
 
@@ -166,10 +166,8 @@ const SearchFilters = (props) => {
             location_id: location,
             customer_id: customer.value,
             status: bookingStatus,
-            /* page: page,
-            per_page: perPage */
         }
-        filterBookingsHandler(searchParams);
+        filterBookings(searchParams);
     }
 
     const resetFilteringHandler = () => {
@@ -179,10 +177,7 @@ const SearchFilters = (props) => {
         setOptions([]);
         setCustomer([]);
         setBookingStatus('');
-        filterBookingsHandler({
-            /* page: page,
-            per_page: perPage */
-        });
+        filterBookings({})
     }
 
 
@@ -274,7 +269,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         fetchLocationsHandler: (lang) => dispatch(fetchLocations(lang)),
-        filterBookingsHandler: (bookingId, date, location, customer, bookingStatus) => dispatch(filterBookings(bookingId, date, location, customer, bookingStatus)),
     }
 }
 

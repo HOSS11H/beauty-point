@@ -6,7 +6,7 @@ const CustomMessage = styled(Card)`
     align-items: center;
     justify-content: center;
     text-align: center;
-    min-height: 70vh;
+    min-height: ${ props => props.height || '70vh' };
     flex-grow: 1;
     p {
         font-size: 34px;
@@ -14,12 +14,18 @@ const CustomMessage = styled(Card)`
         text-transform: capitalize;
         font-weight: 500;
         color: ${({ theme }) => theme.palette.text.disabled};
+        @media screen and (max-width: 899.98px) {
+            font-size: 26px;
+        }
     }
 `
 
-const SearchMessage = props => {
+const SearchMessage = ( props ) => {
+
+    const { height } = props;
+
     return (
-        <CustomMessage>
+        <CustomMessage height={height} >
             <p>{props.children}</p>
         </CustomMessage>
     )

@@ -24,7 +24,7 @@ import CartItem from './CartItem/CartItem';
 import { ButtonText, ButtonConfirm, CustomButton } from '../../../../../components/UI/Button/Button';
 import ValidationMessage from '../../../../../components/UI/ValidationMessage/ValidationMessage';
 import { connect } from 'react-redux';
-import { fetchCoupons, searchCustomers, addCustomer, fetchEmployees } from '../../../../../store/actions/index';
+import { fetchCoupons, addCustomer, fetchEmployees } from '../../../../../store/actions/index';
 import ThemeContext from '../../../../../store/theme-context';
 import AddCustomerModal from './AddCustomerModal/AddCustomerModal';
 import { formatCurrency } from '../../../../../shared/utility';

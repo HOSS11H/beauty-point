@@ -153,11 +153,9 @@ const DealPanelCard = styled.div`
 `
 const DealPanel = props => {
 
-    const { path } = props;
+    const { deal, path } = props;
     
     const { t } = useTranslation()
-
-    const { deal } = props;
 
     const navigate = useNavigate();
 

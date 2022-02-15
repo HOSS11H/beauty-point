@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useContext } from "react";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import styled from "styled-components";
+import styled, {css} from "styled-components";
 import { CardHeading, CustomCardMui, CustomContainer } from "../../../components/UI/Modal/Modal";
 import ThemeContext from "../../../store/theme-context";
 import Loader from "../../../components/UI/Loader/Loader";
@@ -32,6 +32,11 @@ const City = styled.div`
         border-color: ${props => props.theme.vars.theme};
         color: ${props => props.theme.vars.theme};
     }
+    ${ ( { activeItem } ) => activeItem && css`
+    background-color: ${({ theme }) => theme.palette.common.white};
+        border-color: ${props => props.theme.vars.theme};
+        color: ${props => props.theme.vars.theme};
+    `}
 `
 
 
@@ -40,7 +45,7 @@ const LocationSelector = props => {
     const { show, onConfirm } = props;
 
     const themeCtx = useContext(ThemeContext);
-    const { lang } = themeCtx;
+    const { lang, city } = themeCtx;
 
     const [loading, setLoading] = useState(false);
     const [cities, setCities] = useState(null);
@@ -75,10 +80,11 @@ const LocationSelector = props => {
         content = (
             <Wrapper>
                 <Grid container spacing={2} >
-                    {cities.map( (city, index) => {
+                    {cities.map( (cityObj, index) => {
+                        const activeItem = cityObj.id === +city
                         return (
                             <Grid key={index} item xs={12} sm={6} md={4}>
-                                <City onClick={() => onConfirm(city.id)}>{city.name}</City>
+                                <City onClick={() => onConfirm(cityObj.id)} activeItem={activeItem} >{cityObj.name}</City>
                             </Grid>
                         )
                     })

@@ -2,24 +2,17 @@ import { Container } from "@mui/material";
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import axios from '../../../utils/axios-instance';
-import CircularProgress from '@mui/material/CircularProgress';
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router-dom";
-import Card from '@mui/material/Card';
 import HomeLayout from "../../../components/HomeLayout/HomeLayout";
 import SingleCard from "../../../components/UI/SingleCard/SingleCard";
+import Loader from "../../../components/UI/Loader/Loader";
 
 const CategoriesWrapper = styled.section`
     padding: 70px 0px;
 `
 
-const Loader = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 200px;
-`
+
 
 const SingleDeal = props => {
 
@@ -39,11 +32,9 @@ const SingleDeal = props => {
             .catch(err => {
                 //console.log(err);
             })
-    }, [])
+    }, [param.dealId])
     let content = (
-        <Loader>
-            <CircularProgress color="secondary" />
-        </Loader>
+        <Loader height='200px' />
     );
     if (deal) {
         content = (

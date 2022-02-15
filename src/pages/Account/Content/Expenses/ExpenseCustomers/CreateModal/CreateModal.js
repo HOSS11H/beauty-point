@@ -1,7 +1,6 @@
-import { useState, useEffect, useCallback, useContext } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import ThemeContext from '../../../../../../store/theme-context'
 
 import { CustomModal } from '../../../../../../components/UI/Modal/Modal';
 import { Grid } from '@mui/material';
@@ -21,9 +20,6 @@ const CreateModal = (props) => {
     const { show, heading, confirmText, onConfirm, onClose, creatingExpenseCategorySuccess } = props;
 
     const { t } = useTranslation();
-
-    const themeCtx = useContext(ThemeContext)
-    const { lang } = themeCtx;
 
     const [expenseName, setExpenseName] = useState('');
     const [expenseNameError, setExpenseNameError] = useState(false);
@@ -86,7 +82,7 @@ const CreateModal = (props) => {
                 {expenseNameError && <ValidationMessage notExist>{t(`Please add name`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6} >
-                <CustomTextField id="customer-number" label={t('mobile number')} variant="outlined" value={customerNumber} onChange={customerNumberChangeHandler} />
+                <CustomTextField id="customer-number" type='number' label={t('mobile number')} variant="outlined" value={customerNumber} onChange={customerNumberChangeHandler} />
                 {customerNumberError && <ValidationMessage notExist>{t(`Please add number`)}</ValidationMessage>}
             </Grid>
         </Grid>

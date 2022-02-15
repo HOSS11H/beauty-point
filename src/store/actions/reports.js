@@ -66,13 +66,10 @@ export const filterTabularReport = ( searchParams ) => {
         for ( let key in searchParams ) {
             if ( key === 'page'  ) {
                 notEmptySearchParams[key] = (searchParams[key] + 1);
-                console.log('excuted 1')
             } else if ( searchParams[key] !== '' ) {
                 notEmptySearchParams[key] = searchParams[key]
-                console.log('excuted 2')
             }
         }
-        console.log(notEmptySearchParams)
         dispatch( filterTabularReportStart( ) )
         v1.get(`/vendors/reports/tabular-table`, { params: { ...notEmptySearchParams } } )
             .then( response => {

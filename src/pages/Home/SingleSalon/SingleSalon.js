@@ -2,7 +2,6 @@ import { Container, Grid } from "@mui/material";
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
 import axios from '../../../utils/axios-instance';
-import CircularProgress from '@mui/material/CircularProgress';
 import { useTranslation } from "react-i18next";
 import Box from '@mui/material/Box';
 import * as React from 'react';
@@ -29,20 +28,15 @@ import ShareIcon from '@mui/icons-material/Share';
 import CustomizedSnackbars from "../../../components/UI/SnackBar/SnackBar";
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import ServicePanel from "../../../components/UI/ServicePanel/ServicePanel";
-import Map from "../../Auth/Map/Map";
+import Map from "./Map/Map";
+import Loader from "../../../components/UI/Loader/Loader";
 
 
 
 const Wrapper = styled.section`
     padding: 70px 0px;
 `
-const Loader = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 200px;
-`
+
 
 const ActionsWrapper = styled.div`
     display: flex;
@@ -64,8 +58,8 @@ const ActionButton = styled(CustomButton)`
 `
 
 
-const servicesIntialRowsPerPage = 9
-const dealsIntialRowsPerPage = 9
+const servicesRowsPerPage = 9
+const dealsRowsPerPage = 9
 
 const SingleSalon = props => {
 
@@ -79,12 +73,11 @@ const SingleSalon = props => {
     const [value, setValue] = useState(0);
 
     const [servicesPage, setServicesPage] = useState(0);
-    const [servicesRowsPerPage, setServicesRowsPerPage] = useState(servicesIntialRowsPerPage);
 
     const [dealsPage, setDealsPage] = useState(0);
-    const [dealsRowsPerPage, setDealsRowsPerPage] = useState(dealsIntialRowsPerPage);
 
     const [salon, setSalon] = useState();
+    const [ loading, setLoading ] = useState(false);
 
     const [services, setServices] = useState({data: []});
     const [loadingServices, setLoadingServices] = useState(false);
@@ -97,11 +90,14 @@ const SingleSalon = props => {
     const [messageShown, setMessageShown] = useState(false);
 
     useEffect(() => {
+        setLoading(true);
         axios.get(`/companies/${param.salonId}?include[]=vendor_page&include[]=booking_times`)
             .then(res => {
+                setLoading(false);
                 setSalon(res.data);
             })
             .catch(err => {
+                setLoading(false);
                 //console.log(err);
             })
     }, [param.salonId])
@@ -115,7 +111,7 @@ const SingleSalon = props => {
             .catch(err => {
                 //console.log(err);
             })
-    }, [param.salonId, servicesPage, servicesRowsPerPage])
+    }, [param.salonId, servicesPage])
     useEffect(() => {
         setLoadingDeals(true);
         axios.get(`/companies/${param.salonId}/deals?page=${dealsPage + 1}&per_page=${dealsRowsPerPage}&include[]=company`)
@@ -126,7 +122,7 @@ const SingleSalon = props => {
             .catch(err => {
                 //console.log(err);
             })
-    }, [dealsPage, dealsRowsPerPage, param.salonId, servicesPage, servicesRowsPerPage])
+    }, [dealsPage, param.salonId, servicesPage])
 
     const handleServiceChangePage = React.useCallback((event, newPage) => {
         setServicesPage(newPage);
@@ -158,12 +154,14 @@ const SingleSalon = props => {
         setMessageShown(false);
     }
 
-    let content = (
-        <Loader>
-            <CircularProgress color="secondary" />
-        </Loader>
-    );
-    if (salon && services.data.length > 0 && deals.data.length > 0 ) {
+    let content ;
+
+    if ( loading || loadingServices || loadingDeals ) {
+        content = (
+            <Loader height='200px' />
+        );
+    }
+    if ( salon && !loading) {
         content = (
             <Box sx={{ width: '100%' }}>
                 <Typography component="div" variant="h4" sx={{ marginBottom: '10px' }} >
@@ -192,46 +190,58 @@ const SingleSalon = props => {
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
-                    <Grid container spacing={2}>
-                        {services.data.map(service => {
-                            return (
-                                <Grid item xs={12} sm={6} md={4} key={service.id}>
-                                    <ServicePanel service={service} path='../services' />
+                    {
+                        services.data.length > 0 && (
+                            <>
+                                <Grid container spacing={2}>
+                                    {services.data.map(service => {
+                                        return (
+                                            <Grid item xs={12} sm={6} md={4} key={service.id}>
+                                                <ServicePanel service={service} path='../services' />
+                                            </Grid>
+                                        )
+                                    })
+                                    }
                                 </Grid>
-                            )
-                        })
-                        }
-                    </Grid>
-                    <TablePaginationActions
-                        component="div"
-                        count={services.data.length}
-                        total={services.meta ? services.meta.total : null}
-                        rowsPerPage={dealsRowsPerPage}
-                        page={servicesPage}
-                        onPageChange={handleServiceChangePage}
-                        loading={loadingServices}
-                    />
+                                <TablePaginationActions
+                                    component="div"
+                                    count={services.data.length}
+                                    total={services.meta ? services.meta.total : null}
+                                    rowsPerPage={dealsRowsPerPage}
+                                    page={servicesPage}
+                                    onPageChange={handleServiceChangePage}
+                                    loading={loadingServices}
+                                />
+                            </>
+                        )
+                    }
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    <Grid container spacing={2}>
-                        {deals.data.map(deal => {
-                            return (
-                                <Grid item xs={12} sm={6} md={4} key={deal.id}>
-                                    <DealPanel deal={deal} path='../deals' />
+                    {
+                        deals.data.length > 0 && (
+                            <>
+                                <Grid container spacing={2}>
+                                    {deals.data.map(deal => {
+                                        return (
+                                            <Grid item xs={12} sm={6} md={4} key={deal.id}>
+                                                <DealPanel deal={deal} path='../deals' />
+                                            </Grid>
+                                        )
+                                    })
+                                    }
                                 </Grid>
-                            )
-                        })
-                        }
-                    </Grid>
-                    <TablePaginationActions
-                        component="div"
-                        count={deals.data.length}
-                        total={deals.meta ? deals.meta.total : null}
-                        rowsPerPage={dealsRowsPerPage}
-                        page={dealsPage}
-                        onPageChange={handleDealChangePage}
-                        loading={loadingDeals}
-                    />
+                                <TablePaginationActions
+                                    component="div"
+                                    count={deals.data.length}
+                                    total={deals.meta ? deals.meta.total : null}
+                                    rowsPerPage={dealsRowsPerPage}
+                                    page={dealsPage}
+                                    onPageChange={handleDealChangePage}
+                                    loading={loadingDeals}
+                                />
+                            </>
+                        )
+                    }
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                     <Grid container spacing={2}>
@@ -272,7 +282,7 @@ const SingleSalon = props => {
                             </TableContainer>
                         </Grid>
                         <Grid  item xs={12}>
-                            <Map markers={[ { lat: +salon.vendor_page.latitude, lng: +salon.vendor_page.longitude } ]} />
+                            <Map marker={ { lat: +salon.vendor_page.latitude, lng: +salon.vendor_page.longitude } } />
                         </Grid>
                     </Grid>
                 </TabPanel>

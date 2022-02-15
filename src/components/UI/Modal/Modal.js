@@ -92,7 +92,6 @@ export function CustomModal(props) {
             aria-labelledby="transition-modal-title"
             aria-describedby="transition-modal-description"
             open={show}
-            onClose={onClose}
             closeAfterTransition
             BackdropComponent={Backdrop}
             BackdropProps={{

@@ -21,10 +21,12 @@ const PointOfSale = React.lazy(() => import('./pages/Account/Content/PointOfSale
 const BookingCalendar = React.lazy(() => import('./pages/Account/Content/BookingCalendar/BookingCalendar'));
 const Reports = React.lazy(() => import('./pages/Account/Content/Reports/Reports'));
 const Employees = React.lazy(() => import('./pages/Account/Content/Employees/Employees'));
+const Customers = React.lazy(() => import('./pages/Account/Content/Customers/Customers'));
 
 const Expenses = React.lazy(() => import('./pages/Account/Content/Expenses/Expenses'));
 const ExpenseCategories = React.lazy(() => import('./pages/Account/Content/Expenses/ExpenseCategories/ExpenseCategories'));
 const ExpenseCustomers = React.lazy(() => import('./pages/Account/Content/Expenses/ExpenseCustomers/ExpenseCustomers'));
+const ExpenseBanks = React.lazy(() => import('./pages/Account/Content/Expenses/ExpenseBanks/ExpenseBanks'));
 
 const Units = React.lazy(() => import('./pages/Account/Content/Units/Units'));
 
@@ -48,6 +50,9 @@ const AllPackages = React.lazy(() => import('./pages/Home/AllPackages/AllPackage
 const AllCategories = React.lazy(() => import('./pages/Home/AllCategories/AllCategories'));
 const AllSaloons = React.lazy(() => import('./pages/Home/AllSaloons/AllSaloons'));
 const NearbySalons = React.lazy(() => import('./pages/Home/NearbySalons/NearbySalons'));
+const AllSpotlights = React.lazy(() => import('./pages/Home/AllSpotlights/AllSpotlights'));
+const FAQs = React.lazy(() => import('./pages/Home/FAQs/FAQs'));
+const AboutUs = React.lazy(() => import('./pages/Home/AboutUs/AboutUs'));
 
 const Landing = React.lazy(() => import('./pages/Landing/Landing'));
 
@@ -69,7 +74,10 @@ function App() {
                 <Route path="all-categories" element={<AllCategories />} />
                 <Route path="all-saloons" element={<AllSaloons />} />
                 <Route path="all-deals" element={<AllDeals />} />
+                <Route path="all-spotlights" element={<AllSpotlights />} />
                 <Route path="packages" element={<AllPackages />} />
+                <Route path="faqs" element={<FAQs />} />.
+                <Route path="about-us" element={<AboutUs />} />.
                 <Route path="categories/:categoryId" element={<SingleCategory />} />
                 <Route path="services/:serviceId" element={<SingleService />} />
                 <Route path="deals/:dealId" element={<SingleDeal />} />
@@ -92,6 +100,7 @@ function App() {
                     <Route path="expenses" element={<Expenses />} />
                     <Route path="expenses/categories" element={<ExpenseCategories />} />
                     <Route path="expenses/customers" element={<ExpenseCustomers />} />
+                    <Route path="expenses/banks" element={<ExpenseBanks />} />
                     <Route path="units" element={<Units />} />
                     <Route path="deals" element={<Deals />} />
                     <Route path='point-of-sale' element={<PointOfSale />} />
@@ -99,6 +108,7 @@ function App() {
                     <Route path='booking-calendar' element={<BookingCalendar />} />
                     <Route path='reports' element={<Reports />} />
                     <Route path='employees' element={<Employees />} />
+                    <Route path='customers' element={<Customers />} />
                     <Route path="settings/*" element={<Settings />}>
                         <Route index element={<GeneralSettings />} />
                         <Route path='vendor-page' element={<VendorPage />} />
@@ -112,7 +122,10 @@ function App() {
                     <Route path="all-categories" element={<AllCategories />} />
                     <Route path="all-saloons" element={<AllSaloons />} />
                     <Route path="all-deals" element={<AllDeals />} />
+                    <Route path="all-spotlights" element={<AllSpotlights />} />
                     <Route path="packages" element={<AllPackages />} />
+                    <Route path="faqs" element={<FAQs />} />.
+                    <Route path="about-us" element={<AboutUs />} />.
                     <Route path="categories/:categoryId" element={<SingleCategory />} />
                     <Route path="services/:serviceId" element={<SingleService />} />
                     <Route path="deals/:dealId" element={<SingleDeal />} />

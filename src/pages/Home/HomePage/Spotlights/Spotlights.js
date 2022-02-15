@@ -1,15 +1,14 @@
 import { Container } from '@mui/material';
 import styled from 'styled-components';
 import { Heading } from "../../../../components/UI/Heading/Heading";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
 import DealPanel from '../../../../components/UI/DealPanel/DealPanel';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import axios from '../../../../utils/axios-instance';
-import CircularProgress from '@mui/material/CircularProgress';
 import { useTranslation } from 'react-i18next';
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
+import ThemeContext from "../../../../store/theme-context";
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 // import Swiper core and required modules
 import SwiperCore, {
@@ -17,6 +16,8 @@ import SwiperCore, {
 } from 'swiper';
 
 import 'swiper/swiper.min.css';
+import { NavLink } from 'react-router-dom';
+import Loader from '../../../../components/UI/Loader/Loader';
 
 const SpotlightsWrapper = styled.section`
     margin: 100px 0;
@@ -24,13 +25,7 @@ const SpotlightsWrapper = styled.section`
         margin: 70px 0;
     }
 `
-const Loader = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 200px;
-`
+
 
 // install Swiper modules
 SwiperCore.use([Autoplay]);
@@ -38,25 +33,34 @@ SwiperCore.use([Autoplay]);
 const Spotlights = props => {
     const {t} = useTranslation();
 
-    const [spotlights, setSpotlights] = useState(null);
+    const [spotlights, setSpotlights] = useState([]);
+    const [ loading, setLoading ] = useState(false);
+
+    const themeCtx = useContext(ThemeContext);
+    const {theme, city} = themeCtx
 
     useEffect(() => {
-        axios.get('/spotlights?include[]=deal&include[]=company&page=1&per_page=8')
+        setLoading(true)
+        axios.get(`/spotlights?include[]=deal&include[]=company&page=1&per_page=8&location_id=${city}`)
             .then(res => {
+                setLoading(false)
                 setSpotlights(res.data.data);
             })
             .catch(err => {
+                setLoading(false)
                 //console.log(err);
             })
-    }, [])
+    }, [city])
 
 
-    let content= (
-        <Loader>
-            <CircularProgress color="secondary" />
-        </Loader>
-    );
-    if (spotlights) {
+    let content;
+
+    if (loading) {
+        content= (
+            <Loader height='200px' />
+        );
+    }
+    if (spotlights.length > 0) {
         let fetchedSpotlights = [...spotlights];
         content = (
             <Swiper
@@ -89,7 +93,7 @@ const Spotlights = props => {
                     fetchedSpotlights.map((spotlight, index) => {
                         return (
                             <SwiperSlide key={index}>
-                                <DealPanel key={spotlight.id} deal={spotlight.deal} path='deals' />
+                                <DealPanel key={spotlight.id} deal={{...spotlight.deal, company: spotlight.company}} path='deals' />
                             </SwiperSlide>
                         )
                     })
@@ -102,7 +106,7 @@ const Spotlights = props => {
         <SpotlightsWrapper>
             <Container maxWidth="lg">
                 <Heading>
-                    <h2 className="heading-title" >{t('popular spotlights')}</h2>
+                    <NavLink className="heading-title" to='all-spotlights'>{t('popular spotlights')}  {theme === 'rtl' ? <ArrowForwardIcon /> : <ArrowBackIcon />} </NavLink>
                 </Heading>
                 {content}
             </Container>
