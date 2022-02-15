@@ -441,6 +441,7 @@ const resources = {
             'Please add account number': 'حساب البنك',
             'account number': 'رقم الحساب',
             'select bank': 'اختر البنك',
+            'No Bookings Found': 'لا يوجد حجوزات',
         }
     }
 };

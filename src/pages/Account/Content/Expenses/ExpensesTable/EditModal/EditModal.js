@@ -178,8 +178,6 @@ const EditModal = (props) => {
 
     let expenseData = fetchedExpenses.data[selectedExpenseIndex];
 
-    console.log(expenseData);
-
     const { name, notes, amount, expense_date, bank, category, customer, expense_image_url } = expenseData;
 
     const { t } = useTranslation();

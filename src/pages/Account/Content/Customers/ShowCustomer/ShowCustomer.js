@@ -7,6 +7,8 @@ import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import Avatar from '@mui/material/Avatar';
 import PersonIcon from '@mui/icons-material/Person';
 import { CustomButton } from '../../../../../components/UI/Button/Button';
+import { Fragment } from 'react';
+import ShowBookings from './ShowBookings/ShowBookings';
 
 const ClientDetails = styled.div`
     display: flex;
@@ -101,39 +103,42 @@ const ShowCustomer = (props) => {
 
     if (customer) {
         content = (
-            <Grid container spacing={3}>
-                <Grid item xs={12}>
-                    <ClientDetails>
-                        <ClientImg >
-                            <PersonIcon />
-                        </ClientImg>
-                        <ClientName>{customer.name}</ClientName>
-                    </ClientDetails>
-                </Grid>
-                {customer.email && (
+            <Fragment>
+                <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                        <ClientDetails>
+                            <ClientImg >
+                                <PersonIcon />
+                            </ClientImg>
+                            <ClientName>{customer.name}</ClientName>
+                        </ClientDetails>
+                    </Grid>
+                    {customer.email && (
+                        <Grid item xs={12} md={6}>
+                            <BookingData>
+                                <BookingDataHeading>{t('email')}</BookingDataHeading>
+                                <BookingList>
+                                    <li><MailIcon sx={{ mr: 1 }} />{customer.email}</li>
+                                </BookingList>
+                            </BookingData>
+                        </Grid>
+                    )}
                     <Grid item xs={12} md={6}>
                         <BookingData>
-                            <BookingDataHeading>{t('email')}</BookingDataHeading>
+                            <BookingDataHeading>{t('phone')}</BookingDataHeading>
                             <BookingList>
-                                <li><MailIcon sx={{ mr: 1 }} />{customer.email}</li>
+                                <li><PhoneAndroidIcon sx={{ mr: 1 }} />{customer.mobile}</li>
                             </BookingList>
                         </BookingData>
                     </Grid>
-                )}
-                <Grid item xs={12} md={6}>
-                    <BookingData>
-                        <BookingDataHeading>{t('phone')}</BookingDataHeading>
-                        <BookingList>
-                            <li><PhoneAndroidIcon sx={{ mr: 1 }} />{customer.mobile}</li>
-                        </BookingList>
-                    </BookingData>
+                    <Grid item xs={12}>
+                        <BookingActions>
+                            <DeleteButton onClick={(id) => onDelete(customer.id)} >{t('Delete')}</DeleteButton>
+                        </BookingActions>
+                    </Grid>
                 </Grid>
-                <Grid item xs={12}>
-                    <BookingActions>
-                        <DeleteButton onClick={(id) => onDelete(customer.id)} >{t('Delete')}</DeleteButton>
-                    </BookingActions>
-                </Grid>
-            </Grid>
+                <ShowBookings id={customer.id} />
+            </Fragment>
         )
     }
 

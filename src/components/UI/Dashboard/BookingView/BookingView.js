@@ -3,7 +3,6 @@ import Card from '@mui/material/Card';
 import IconButton from '@mui/material/IconButton';
 import MailIcon from '@mui/icons-material/Mail';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
-import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
 import Skeleton from '@mui/material/Skeleton';
@@ -126,7 +125,7 @@ const BookingContent = styled.div`
     flex-grow: 1;
 `
 const ClientName = styled.a`
-    display: block;
+    display: flex;
     font-size: 16px;
     line-height:1.5;
     text-transform: capitalize;
@@ -158,32 +157,6 @@ const ClientInfo = styled.ul`
                 margin:0;
                 margin-right: 8px;
             }
-        }
-    }
-`
-const BookingItems = styled.ul`
-    margin: 0;
-    padding: 0;
-    margin-top: 10px;
-    li {
-        display: flex;
-        align-items: center;
-        font-size: 14px;
-        line-height:1.5;
-        text-transform: capitalize;
-        font-weight: 500;
-        color: ${({ theme }) => theme.palette.text.disabled};
-        margin-bottom: 5px;
-        &:last-child {
-            margin-bottom: 0px;
-        }
-        svg {
-            width: 14px;
-            height: 14px;
-            color: ${({ theme }) => theme.vars.primary};
-        }
-        .divider {
-            margin: 0 5px;
         }
     }
 `
@@ -234,24 +207,6 @@ const BookingView = props => {
                         {booking.user.mobile && <li><PhoneAndroidIcon sx={{ mr: 1 }} />{booking.user.mobile}</li>}
                         <li><AlternateEmailIcon sx={{ mr: 1 }} />{t(`via `)}{booking.source}</li>
                     </ClientInfo>
-                    <BookingItems>
-                        {
-                            booking.items.map((item, index) => {
-                                let loadedItems;
-                                if (item) {
-                                    loadedItems = (
-                                        <li key={item.id} >
-                                            <FiberManualRecordIcon sx={{ mr: 1 }} />
-                                            <span>{item.quantity}</span>
-                                            <span className='divider'>x</span>
-                                            <span>{item.item.name}</span>
-                                        </li>
-                                    )
-                                }
-                                return loadedItems
-                            })
-                        }
-                    </BookingItems>
                 </BookingContent>
             </CustomCardMui>
         )
