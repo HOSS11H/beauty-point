@@ -282,7 +282,7 @@ const EditModal = (props) => {
         products: [],
         deals: [],
     });
-    const [dateTime, setDateTime] = useState(new Date(''));
+    const [dateTime, setDateTime] = useState(new Date());
 
     const [bookingStatus, setBookingStatus] = useState('');
 
@@ -370,7 +370,6 @@ const EditModal = (props) => {
                 setLoading(false);
             });
     }, [id])
-
     useEffect(() => {
         if (id) {
             fetchData();

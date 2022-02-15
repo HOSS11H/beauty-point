@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import React, { useContext, Suspense } from "react";
 import { StyleSheetManager } from "styled-components";
 import rtlPlugin from "stylis-plugin-rtl";
 import { Route, Routes } from 'react-router-dom'
@@ -7,50 +7,54 @@ import ThemeContext from './store/theme-context';
 import AuthContext from './store/auth-context';
 
 import Layout from './components/Layout/Layout';
-import Auth from './pages/Auth/Auth';
-import Account from './pages/Account/Account';
-import Dashboard from './pages/Account/Content/Dashboard/Dashboard';
-import Services from './pages/Account/Content/Services/Services';
-import Products from './pages/Account/Content/Products/Products';
-import Deals from './pages/Account/Content/Deals/Deals';
-import Bookings from './pages/Account/Content/Bookings/Bookings'
-import PointOfSale from "./pages/Account/Content/PointOfSale/PointOfSale";
-import BookingCalendar from './pages/Account/Content/BookingCalendar/BookingCalendar';
-import Reports from './pages/Account/Content/Reports/Reports';
-import Employees from './pages/Account/Content/Employees/Employees';
-import Expenses from "./pages/Account/Content/Expenses/Expenses";
-import ExpenseCategories from "./pages/Account/Content/Expenses/ExpenseCategories/ExpenseCategories";
-import ExpenseCustomers from "./pages/Account/Content/Expenses/ExpenseCustomers/ExpenseCustomers";
+import Loader from "./components/UI/Loader/Loader";
 
-import Units from "./pages/Account/Content/Units/Units";
-import Settings from "./pages/Account/Content/Settings/Settings";
-import GeneralSettings from './pages/Account/Content/Settings/GeneralSettings/GeneralSettings'
-import VendorPage from './pages/Account/Content/Settings/VendorPage/VendorPage'
-import BookingSettings from "./pages/Account/Content/Settings/BookingSettings/BookingSettings";
-import EmployeeSettings from "./pages/Account/Content/Settings/EmployeeSettings/EmployeeSettings";
-import RolesPermissions from "./pages/Account/Content/Settings/RolesPermissions/RolesPermissions";
 
-import NotFound from './pages/NotFound/NotFound';
+const Auth = React.lazy(() => import('./pages/Auth/Auth'));
+const Account = React.lazy(() => import('./pages/Account/Account'));
+const Dashboard = React.lazy(() => import('./pages/Account/Content/Dashboard/Dashboard'));
+const Services = React.lazy(() => import('./pages/Account/Content/Services/Services'));
+const Products = React.lazy(() => import('./pages/Account/Content/Products/Products'));
+const Deals = React.lazy(() => import('./pages/Account/Content/Deals/Deals'));
+const Bookings = React.lazy(() => import('./pages/Account/Content/Bookings/Bookings'));
+const PointOfSale = React.lazy(() => import('./pages/Account/Content/PointOfSale/PointOfSale'));
+const BookingCalendar = React.lazy(() => import('./pages/Account/Content/BookingCalendar/BookingCalendar'));
+const Reports = React.lazy(() => import('./pages/Account/Content/Reports/Reports'));
+const Employees = React.lazy(() => import('./pages/Account/Content/Employees/Employees'));
+const Customers = React.lazy(() => import('./pages/Account/Content/Customers/Customers'));
 
-import Home from "./pages/Home/Home";
-import HomePage from "./pages/Home/HomePage/HomePage";
-import SingleCategory from "./pages/Home/SignleCategory/SignleCategory";
-import SingleService from "./pages/Home/SingleService/SingleService";
-import AllDeals from "./pages/Home/AllDeals/AllDeals";
-import AllSpotlights from "./pages/Home/AllSpotlights/AllSpotlights";
+const Expenses = React.lazy(() => import('./pages/Account/Content/Expenses/Expenses'));
+const ExpenseCategories = React.lazy(() => import('./pages/Account/Content/Expenses/ExpenseCategories/ExpenseCategories'));
+const ExpenseCustomers = React.lazy(() => import('./pages/Account/Content/Expenses/ExpenseCustomers/ExpenseCustomers'));
+const ExpenseBanks = React.lazy(() => import('./pages/Account/Content/Expenses/ExpenseBanks/ExpenseBanks'));
 
-import SingleDeal from "./pages/Home/SingleDeal/SingleDeal";
-import SingleSalon from "./pages/Home/SingleSalon/SingleSalon";
-import AllPackages from "./pages/Home/AllPackages/AllPackages";
-import AllCategories from "./pages/Home/AllCategories/AllCategories";
-import AllSaloons from "./pages/Home/AllSaloons/AllSaloons";
-import NearbySalons from "./pages/Home/NearbySalons/NearbySalons";
+const Units = React.lazy(() => import('./pages/Account/Content/Units/Units'));
 
-import Landing from "./pages/Landing/Landing";
-import Customers from "./pages/Account/Content/Customers/Customers";
-import ExpenseBanks from "./pages/Account/Content/Expenses/ExpenseBanks/ExpenseBanks";
-import FAQs from "./pages/Home/FAQs/FAQs";
-import AboutUs from "./pages/Home/AboutUs/AboutUs";
+const Settings = React.lazy(() => import('./pages/Account/Content/Settings/Settings'));
+const GeneralSettings = React.lazy(() => import('./pages/Account/Content/Settings/GeneralSettings/GeneralSettings'));
+const VendorPage = React.lazy(() => import('./pages/Account/Content/Settings/VendorPage/VendorPage'));
+const BookingSettings = React.lazy(() => import('./pages/Account/Content/Settings/BookingSettings/BookingSettings'));
+const EmployeeSettings = React.lazy(() => import('./pages/Account/Content/Settings/EmployeeSettings/EmployeeSettings'));
+const RolesPermissions = React.lazy(() => import('./pages/Account/Content/Settings/RolesPermissions/RolesPermissions'));
+
+const NotFound = React.lazy(() => import('./pages/NotFound/NotFound'));
+
+const Home = React.lazy(() => import('./pages/Home/Home'));
+const HomePage = React.lazy(() => import('./pages/Home/HomePage/HomePage'));
+const SingleCategory = React.lazy(() => import('./pages/Home/SingleCategory/SingleCategory'));
+const SingleService = React.lazy(() => import('./pages/Home/SingleService/SingleService'));
+const AllDeals = React.lazy(() => import('./pages/Home/AllDeals/AllDeals'))
+const SingleDeal = React.lazy(() => import('./pages/Home/SingleDeal/SingleDeal'));
+const SingleSalon = React.lazy(() => import('./pages/Home/SingleSalon/SingleSalon'));
+const AllPackages = React.lazy(() => import('./pages/Home/AllPackages/AllPackages'));
+const AllCategories = React.lazy(() => import('./pages/Home/AllCategories/AllCategories'));
+const AllSaloons = React.lazy(() => import('./pages/Home/AllSaloons/AllSaloons'));
+const NearbySalons = React.lazy(() => import('./pages/Home/NearbySalons/NearbySalons'));
+const AllSpotlights = React.lazy(() => import('./pages/Home/AllSpotlights/AllSpotlights'));
+const FAQs = React.lazy(() => import('./pages/Home/FAQs/FAQs'));
+const AboutUs = React.lazy(() => import('./pages/Home/AboutUs/AboutUs'));
+
+const Landing = React.lazy(() => import('./pages/Landing/Landing'));
 
 function App() {
 
@@ -72,6 +76,8 @@ function App() {
                 <Route path="all-deals" element={<AllDeals />} />
                 <Route path="all-spotlights" element={<AllSpotlights />} />
                 <Route path="packages" element={<AllPackages />} />
+                <Route path="faqs" element={<FAQs />} />.
+                <Route path="about-us" element={<AboutUs />} />.
                 <Route path="categories/:categoryId" element={<SingleCategory />} />
                 <Route path="services/:serviceId" element={<SingleService />} />
                 <Route path="deals/:dealId" element={<SingleDeal />} />
@@ -136,7 +142,11 @@ function App() {
     return (
         <StyleSheetManager stylisPlugins={themeCtx.direction === 'rtl' && [rtlPlugin]}>
             <Layout dir={themeCtx.direction}>
-                {routes}
+                <Suspense fallback={
+                    <Loader height='100vh' />
+                }>
+                    {routes}
+                </Suspense>
             </Layout>
         </StyleSheetManager>
     );

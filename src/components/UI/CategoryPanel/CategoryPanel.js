@@ -113,9 +113,9 @@ const CategoryPanel = ({ category, path }) => {
         <CategoryPanelCard category={category} >
             <div className="category-icon">
                 <img src={category.image} alt="Category" />
-                <div className="category-num" >
+                {/*<div className="category-num" >
                     {category.services.length}
-                </div>
+                </div>*/}
             </div>
             <div className="category-title">
                 <NavLink to={`${path}/${category.id}`}>{category.name}</NavLink>
