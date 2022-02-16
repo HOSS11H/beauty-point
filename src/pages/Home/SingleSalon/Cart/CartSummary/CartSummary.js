@@ -114,7 +114,7 @@ const CartOverview = props => {
 
     const themeCtx = useContext(ThemeContext);
 
-    const isMobile = useMediaQuery(themeCtx.theme.breakpoints.down('lg'));
+    const isMobile = useMediaQuery(themeCtx.theme.breakpoints.down('md'));
 
     return (
         <Fragment>

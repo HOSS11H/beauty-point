@@ -444,6 +444,7 @@ const resources = {
             'No Bookings Found': 'لا يوجد حجوزات',
             'faqs': 'الأسئلة الشائعة',
             'who are we': 'من نحن',
+            'choose payment method': 'اختر طريقة الدفع',
         }
     }
 };

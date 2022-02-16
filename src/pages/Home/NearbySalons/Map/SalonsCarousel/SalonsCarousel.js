@@ -26,7 +26,7 @@ const SalonCard = styled(Card)`
         cursor: pointer;
         margin-bottom: 0px;
         @media screen and (max-width: 500px) {
-            flex-direction: column;
+            display: block;
         }
     }
 `
@@ -36,9 +36,12 @@ const CardImg = styled.div`
     margin-right: 10px;
     height: 150px;
     @media screen and (max-width: 500px) {
-        margin-right:0px;
+        margin-bottom: 10px;
+        margin-right: 0px;
+        height: 125px;
     }
     img {
+        display: block;
         width: 100%;
         height: 100%;
         object-fit: cover;
@@ -64,6 +67,9 @@ const CardBody = styled.div`
         text-overflow: ellipsis;
         max-height: 63px;
         overflow: hidden;
+        @media screen and (max-width: 500px) {
+            max-height: 42px;
+        }
     }
 `
 

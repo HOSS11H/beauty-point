@@ -19,9 +19,6 @@ const CartHeadlinerWrapper = styled.div`
         padding-right: 20px;
     }
     @media screen and (max-width: 899.98px) {
-        border-radius: 20px 20px 0 0;
-        padding-left: 30px;
-        padding-right: 30px;
         display: none;
     }
 `
