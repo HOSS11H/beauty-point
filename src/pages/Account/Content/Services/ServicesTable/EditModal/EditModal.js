@@ -526,10 +526,6 @@ const EditModal = (props) => {
             setServiceTimeError(true);
             return;
         }
-        if ( employeeName.length === 0) {
-            setEmployeeNameError(true);
-            return;
-        }
         const selectedCategory = fetchedCategories.find(category => category.id === categoryName);
 
         const selectedLocation = fetchedLocations.find(location => location.id === locationName);
@@ -546,7 +542,9 @@ const EditModal = (props) => {
         formData.append('time_type', timeType);
         formData.append('category_id', categoryName);
         formData.append('location_id', locationName);
-        formData.append('employee_ids[0]', employeeName);
+        if ( employeeName.length > 0 ) {
+            formData.append('employee_ids[0]', employeeName);
+        }
         formData.append('status', serviceStatus);
         if (uploadedImages.length > 0 && uploadedImages[0].data_url !== null) {
             formData.append('images', uploadedImages[0].file)

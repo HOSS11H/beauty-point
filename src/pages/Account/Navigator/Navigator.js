@@ -173,7 +173,6 @@ const Navigator = (props) => {
                 },
                 { id: 'bookings', name: 'bookings', icon: <BookIcon /> },
                 { id: 'booking-calendar', name: 'booking calendar', icon: <EventIcon /> },
-                { id: 'customers', name: 'customers', icon: <PeopleIcon /> },
             ],
         }];
         if (roleId === 'customer') {
@@ -186,6 +185,7 @@ const Navigator = (props) => {
                     addedRoutes.push({ id: 'products', name: 'products', icon: <ShoppingCartIcon /> });
                     addedRoutes.push({ id: 'units', name: 'units', icon: <LinearScaleIcon /> });
                     addedRoutes.push({ id: 'point-of-sale', name: 'points of sales', icon: <AddShoppingCartIcon /> });
+                    addedRoutes.push({ id: 'customers', name: 'customers', icon: <PeopleIcon /> });
                     module.current = <ModuleNav />;
                 }
                 if (permission.name === 'read_customer') {
