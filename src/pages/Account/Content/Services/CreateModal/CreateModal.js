@@ -281,7 +281,7 @@ const CreateModal = (props) => {
     const [priceAfterDiscount, setPriceAfterDiscount] = useState(0);
     const [servicePriceError, setServicePriceError] = useState(false);
 
-    const [employeeName, setEmployeeName] = useState([]);
+    const [employeeName, setEmployeeName] = useState('');
     const [ employeeNameError, setEmployeeNameError ] = useState(false);
 
     const [locationName, setLocationName] = useState('');
@@ -556,7 +556,7 @@ const CreateModal = (props) => {
         formData.append('time_type', timeType);
         formData.append('category_id', categoryName);
         formData.append('location_id', locationName);
-        if ( employeeName.length > 0 ) {
+        if ( employeeName.trim().length > 0 ) {
             formData.append('employee_ids[0]', employeeName);
         }
         formData.append('status', serviceStatus);

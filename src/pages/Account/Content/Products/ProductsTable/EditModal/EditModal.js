@@ -300,10 +300,6 @@ const EditModal = (props) => {
             setProductQuantityError(true);
             return;
         }
-        if (productUnit === '') {
-            setProductUnitError(true);
-            return;
-        }
 
         let formData = new FormData();
         formData.append('id', id);

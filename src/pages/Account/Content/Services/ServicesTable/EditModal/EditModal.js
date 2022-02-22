@@ -301,7 +301,7 @@ const EditModal = (props) => {
     const [priceAfterDiscount, setPriceAfterDiscount] = useState(discount_price);
     const [servicePriceError, setServicePriceError] = useState(false);
 
-    const [employeeName, setEmployeeName] = useState(users[0].id);
+    const [employeeName, setEmployeeName] = useState(users[0]?.id);
     const [ employeeNameError, setEmployeeNameError ] = useState(false);
 
     const [locationName, setLocationName] = useState(location.id);
@@ -542,7 +542,7 @@ const EditModal = (props) => {
         formData.append('time_type', timeType);
         formData.append('category_id', categoryName);
         formData.append('location_id', locationName);
-        if ( employeeName.length > 0 ) {
+        if ( employeeName.trim().length > 0 ) {
             formData.append('employee_ids[0]', employeeName);
         }
         formData.append('status', serviceStatus);
