@@ -301,7 +301,7 @@ const EditModal = (props) => {
     const [priceAfterDiscount, setPriceAfterDiscount] = useState(discount_price);
     const [servicePriceError, setServicePriceError] = useState(false);
 
-    const [employeeName, setEmployeeName] = useState(users[0]?.id);
+    const [employeeName, setEmployeeName] = useState(users[0] ? users[0].id : '');
     const [ employeeNameError, setEmployeeNameError ] = useState(false);
 
     const [locationName, setLocationName] = useState(location.id);
