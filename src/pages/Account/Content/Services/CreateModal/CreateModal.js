@@ -203,7 +203,7 @@ const cartReducer = (state, action) => {
             selectedProduct.id = action.payload.id;
             const updatedNamingProducts = [...state.products]
             updatedNamingProducts[action.index] = selectedProduct
-            return updateObject(state, {    
+            return updateObject(state, {
                 products: updatedNamingProducts,
             })
         case 'PRODUCT_UNIT_CHANGE':
@@ -212,7 +212,7 @@ const cartReducer = (state, action) => {
             chosenProduct.unitName = action.payload.unitName;
             const updatedUnitProducts = [...state.products]
             updatedUnitProducts[action.index] = chosenProduct
-            return updateObject(state, {    
+            return updateObject(state, {
                 products: updatedUnitProducts,
             })
         case 'PRODUCT_QUANTITY_CHANGE':
@@ -220,12 +220,12 @@ const cartReducer = (state, action) => {
             changedProduct.quantity = action.payload;
             const updatedQuantityProducts = [...state.products]
             updatedQuantityProducts[action.index] = changedProduct
-            return updateObject(state, {    
+            return updateObject(state, {
                 products: updatedQuantityProducts,
             })
         case 'RESET_CART':
             const intialState = {
-                products: [ 
+                products: [
                     {
                         id: '',
                         name: '',
@@ -248,7 +248,7 @@ const CreateModal = (props) => {
     const { t } = useTranslation();
 
     const [cart, dispatch] = useReducer(cartReducer, {
-        products: [ 
+        products: [
             {
                 id: '',
                 name: '',
@@ -297,7 +297,7 @@ const CreateModal = (props) => {
 
     const [serviceStatus, setServiceStatus] = useState('active');
 
-    const [type, setType] = useState('single');
+    const [type, setType] = useState('individually');
 
     const [ allProducts, setAllProducts ] = useState([]);
 
@@ -330,7 +330,7 @@ const CreateModal = (props) => {
     }, [fetchCategoriesHandler, fetchEmployeesHandler, fetchLocationsHandler, lang])
 
     useEffect(() => {
-        if (type === 'combo') {
+        if (type === 'multiple') {
             axios.get(`/vendors/products`)
                 .then(res => {
                     setAllProducts(res.data.data);
@@ -561,13 +561,13 @@ const CreateModal = (props) => {
         }
         formData.append('status', serviceStatus);
         if(uploadedImages.length > 0 ) {
-            formData.append('images', uploadedImages[0].file) 
-            formData.append('image', uploadedImages[0].file) 
+            formData.append('images', uploadedImages[0].file)
+            formData.append('image', uploadedImages[0].file)
         }
         formData.append('category', selectedCategory)
         formData.append('location', selectedLocation)
         formData.append('type', type)
-        if ( type === 'combo' ) {
+        if (type === 'multiple' ) {
             for (var i = 0; i < cart.products.length; i++) {
                 formData.append(`products[${i}][id]`, cart.products[i].id);
                 formData.append(`products[${i}][quantity]`, cart.products[i].quantity);
@@ -727,14 +727,14 @@ const CreateModal = (props) => {
                 <FormControl sx={{ width: '100%', textAlign: 'left' }} component="fieldset">
                     <FormLabel component="legend">{t('service type')}</FormLabel>
                     <RadioGroup row aria-label="type" name="row-radio-buttons-group" value={type} onChange={unitTypeChangeHandler} >
-                        <FormControlLabel value="single" control={<Radio />} label={t('single')} />
-                        <FormControlLabel value="combo" control={<Radio />} label={t('combo')} />
+                        <FormControlLabel value="individually" control={<Radio />} label={t('single')} />
+                        <FormControlLabel value="multiple" control={<Radio />} label={t('combo')} />
                     </RadioGroup>
                 </FormControl>
             </Grid>
             <Grid item xs={12}>
                 {
-                    type === 'combo' && (
+                    type === 'multiple' && (
                         <Fragment>
                             <Grid item xs={12}>
                                 <BookingActions>
@@ -763,7 +763,7 @@ const CreateModal = (props) => {
                                                         <InputLabel id="product-label">{t('product')}</InputLabel>
                                                         <Select
                                                             name={`products[${index}][id]`}
-                                                            label={t('product')} 
+                                                            label={t('product')}
                                                             labelId="product-label"
                                                             value={row.id}
                                                             onChange={ ( e ) =>productNameChangeHandler( e.target.value, index )}
@@ -805,7 +805,7 @@ const CreateModal = (props) => {
                                                         variant="outlined" value={row.quantity} onChange={ ( e ) => productQuantityChangeHandler( e.target.value, index ) }
                                                         InputProps={{
                                                             startAdornment: <InputAdornment position="start">{t(row.unitName)} </InputAdornment>,
-                                                        }} 
+                                                        }}
                                                     />
                                                 </TableCell>
                                                 <TableCell align="center" sx={{ padding: '16px 8px' }}>
