@@ -115,16 +115,16 @@ export const updateServiceFailed = (message) => {
 export const updateService = (data) => {
     return dispatch => {
         dispatch(updateServiceStart())
-        axios.post(`/vendors/services/${data.get('id')}`, data, {headers: {   'Content-Type': 'multipart/form-data'}})
-        .then(response => {
-            dispatch(updateServiceSuccess(response.data, data));
-            setTimeout(() => {
-                dispatch(resetUpdateServiceSuccess())
-            }, 2000)
-        })
-        .catch(err => {
-            dispatch(updateServiceFailed(err.message))
-        })
+        axios.post(`/vendors/services/${data.get('id')}`, data, { headers: { 'Content-Type': 'multipart/form-data' } })
+            .then(response => {
+                dispatch(updateServiceSuccess(response.data, data));
+                setTimeout(() => {
+                    dispatch(resetUpdateServiceSuccess())
+                }, 2000)
+            })
+            .catch(err => {
+                dispatch(updateServiceFailed(err.message))
+            })
     }
 }
 export const createServiceStart = () => {
@@ -135,7 +135,6 @@ export const createServiceStart = () => {
 export const createServiceSuccess = (message, createdServiceData) => {
     return {
         type: actionTypes.CREATE_SERVICE_SUCCESS,
-        message: message,
         serviceData: createdServiceData,
     }
 }
@@ -154,7 +153,7 @@ export const createServiceFailed = (message) => {
 export const createService = (data) => {
     return dispatch => {
         dispatch(createServiceStart())
-        axios.post(`/vendors/services`, data, {headers: {   'Content-Type': 'multipart/form-data'}})
+        axios.post(`/vendors/services`, data, { headers: { 'Content-Type': 'multipart/form-data' } })
             .then(response => {
                 dispatch(createServiceSuccess(null, { ...data, ...response.data }));
                 setTimeout(() => {
@@ -162,7 +161,10 @@ export const createService = (data) => {
                 }, 2000)
             })
             .catch(err => {
-                dispatch(createServiceFailed(err.message))
+                const errs = err.response.data.errors;
+                for (let key in errs) {
+                    dispatch(createServiceFailed(errs[key][0]))
+                }
             })
     }
 }

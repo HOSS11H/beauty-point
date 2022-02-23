@@ -115,12 +115,10 @@ const reducer = ( state = intialState , action ) => {
             return updateObject( state , {
                 creatingService: false,
                 creatingServiceSuccess: true,
-                creatingServiceMessage: action.message,
             })
         case ( actionTypes.RESET_CREATE_SERVICE_SUCCESS ) : {
             return updateObject( state , {
                 creatingServiceSuccess: false,
-                creatingServiceMessage: null,
             })
         }
         case ( actionTypes.CREATE_SERVICE_FAILED ) :

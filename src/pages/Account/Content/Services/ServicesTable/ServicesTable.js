@@ -317,6 +317,7 @@ const mapStateToProps = state => {
         searchingServices: state.services.searchingServices,
         searchingServicesSuccess: state.services.searchingServicesSuccess,
         creatingServiceSuccess: state.services.creatingServiceSuccess,
+        creatingServiceMessage: state.services.creatingServiceMessage,
         updatingService: state.services.updatingService,
         updatingServiceSuccess: state.services.updatingServiceSuccess,
         updatingServiceFailed: state.services.updatingServiceFailed,

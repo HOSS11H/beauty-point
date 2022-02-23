@@ -32,7 +32,7 @@ function Services(props) {
 
     const { t } = useTranslation()
 
-    const { searchServicesHandler, createServiceHandler, creatingServiceSuccess, creatingService, creatingServiceFailed } = props;
+    const { searchServicesHandler, createServiceHandler, creatingServiceSuccess, creatingService, creatingServiceFailed, creatingServiceMessage } = props;
 
     const [createModalOpened, setCreateModalOpened] = useState(false);
 
@@ -41,6 +41,7 @@ function Services(props) {
 
     useEffect(() => {
         setSuccessMessageShown(creatingServiceSuccess)
+        creatingServiceSuccess && setCreateModalOpened(false)
     }, [creatingServiceSuccess])
 
     const closeSuccessMessageHandler = useCallback(( ) => {
@@ -64,7 +65,6 @@ function Services(props) {
     }, [])
 
     const createModalConfirmHandler = useCallback((data) => {
-        setCreateModalOpened(false);
         createServiceHandler(data);
     }, [createServiceHandler])
 
@@ -79,7 +79,7 @@ function Services(props) {
             </ActionsWrapper>
             <ServicesTable />
             <CustomizedSnackbars show={successMessageShown} message={t('Service Added')} type='success' onClose={closeSuccessMessageHandler} />
-            <CustomizedSnackbars show={failedMessageShown} message={t('error adding service')} type='error' onClose={closeFailedMessageHandler} />
+            <CustomizedSnackbars show={failedMessageShown} message={creatingServiceMessage} type='error' onClose={closeFailedMessageHandler} />
             <SendingRequestIndicator open={creatingService} />
         </Fragment>
     );
@@ -89,6 +89,7 @@ const mapStateToProps = (state) => {
     return {
         creatingServiceSuccess: state.services.creatingServiceSuccess,
         creatingServiceFailed: state.services.creatingServiceFailed,
+        creatingServiceMessage: state.services.creatingServiceMessage,
         creatingService: state.services.creatingService,
     }
 }
