@@ -445,6 +445,7 @@ const resources = {
             'faqs': 'الأسئلة الشائعة',
             'who are we': 'من نحن',
             'choose payment method': 'اختر طريقة الدفع',
+            'Product edited': 'تم تعديل المنتج',
         }
     }
 };

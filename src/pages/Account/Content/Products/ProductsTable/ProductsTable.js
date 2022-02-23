@@ -18,6 +18,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
+import { toast } from 'react-toastify';
 
 const ProductsTableWrapper = styled.div`
     display: flex;
@@ -48,9 +49,7 @@ function ProductsTable(props) {
 
     const { t } = useTranslation()
 
-    const { fetchedProducts, fetchProductsHandler, loadingProducts, deleteProductHandler, searchingProducts, searchingProductsSuccess, updateProductHandler, creatingProductSuccess, updatingProductSuccess } = props;
-
-    //console.log(fetchedProducts)
+    const { fetchedProducts, fetchProductsHandler, loadingProducts, deleteProductHandler, searchingProducts, searchingProductsSuccess, updateProductHandler, creatingProductSuccess, updatingProductSuccess, updatingProductFailed, updatingProductMessage } = props;
 
     const themeCtx = useContext(ThemeContext)
 
@@ -83,9 +82,24 @@ function ProductsTable(props) {
 
     useEffect(() => {
         if (updatingProductSuccess) {
+            setEditModalOpened(false);
             fetchProductsHandler(lang, page, rowsPerPage, orderBy, order);
+            toast.success(t('Product edited'), {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
         }
-    }, [updatingProductSuccess, fetchProductsHandler, lang, page, rowsPerPage, orderBy, order]);
+    }, [updatingProductSuccess, fetchProductsHandler, lang, page, rowsPerPage, orderBy, order, t]);
+
+    useEffect(() => {
+        if (updatingProductFailed && updatingProductMessage) {
+            toast.error(updatingProductMessage, {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [updatingProductFailed, updatingProductMessage])
+
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -138,7 +152,6 @@ function ProductsTable(props) {
     }, [])
 
     const editModalConfirmHandler = useCallback((data) => {
-        setEditModalOpened(false);
         setSelectedProductId(null);
         updateProductHandler(data);
     }, [updateProductHandler])
@@ -248,6 +261,8 @@ const mapStateToProps = state => {
         searchingProductsSuccess: state.products.searchingProductsSuccess,
         creatingProductSuccess: state.products.creatingProductSuccess,
         updatingProductSuccess: state.products.updatingProductSuccess,
+        updatingProductFailed: state.products.updatingProductFailed,
+        updatingProductMessage: state.products.updatingProductMessage,
     }
 }
 

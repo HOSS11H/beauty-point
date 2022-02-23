@@ -107,19 +107,17 @@ function ServicesTable(props) {
     useEffect(() => {
         creatingServiceSuccess && fetchServicesHandler(lang, page, rowsPerPage, 'id', 'desc');
     }, [creatingServiceSuccess, fetchServicesHandler, lang, page, rowsPerPage]);
-    useEffect(() => {
-        updatingServiceSuccess && fetchServicesHandler(lang, page, rowsPerPage, orderBy, order);
-    }, [creatingServiceSuccess, fetchServicesHandler, lang, order, orderBy, page, rowsPerPage, updatingServiceSuccess]);
 
     useEffect(() => {
         if (updatingServiceSuccess) {
+            fetchServicesHandler(lang, page, rowsPerPage, orderBy, order)
             setEditModalOpened(false)
             toast.success(t('Service edited'), {
                 position: "bottom-right", autoClose: 4000, hideProgressBar: true,
                 closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
             });
         }
-    }, [t, updatingServiceSuccess])
+    }, [fetchServicesHandler, lang, order, orderBy, page, rowsPerPage, t, updatingServiceSuccess])
 
     useEffect(() => {
         if (updatingServiceFailed && updatingServiceMessage) {
@@ -129,16 +127,6 @@ function ServicesTable(props) {
             });
         }
     }, [updatingServiceFailed, updatingServiceMessage])
-
-    useEffect(() => {
-        if (updatingServiceSuccess) {
-            setEditModalOpened(false)
-            toast.success(t('Service edited'), {
-                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
-                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
-            });
-        }
-    }, [t, updatingServiceSuccess])
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';

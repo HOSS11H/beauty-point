@@ -11,6 +11,7 @@ const intialState = {
     deletingProductMessage: null,
     updatingProduct: false,
     updatingProductSuccess: false,
+    updatingProductFailed: false,
     updatingProductMessage: null,
     searchingProducts: false,
     searchingProductsSuccess: false,
@@ -71,18 +72,18 @@ const reducer = (state = intialState, action) => {
             return updateObject(state, {
                 updatingProduct: true,
                 updatingProductSuccess: false,
+                updatingProductFailed: false,
                 updatingProductMessage: null,
             })
         case (actionTypes.UPDATE_PRODUCT_SUCCESS):
             return updateObject(state, {
                 updatingProduct: false,
                 updatingProductSuccess: true,
-                updatingProductMessage: action.message,
             })
         case (actionTypes.UPDATE_PRODUCT_FAILED):
             return updateObject(state, {
                 updatingProduct: false,
-                updatingProductSuccess: false,
+                updatingProductFailed: true,
                 updatingProductMessage: action.message,
             })
         case (actionTypes.CREATE_PRODUCT_START):

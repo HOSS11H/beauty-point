@@ -72,10 +72,9 @@ export const updateProductStart = () => {
         type: actionTypes.UPDATE_PRODUCT_START,
     }
 }
-export const updateProductSuccess = (message, updatedProductData) => {
+export const updateProductSuccess = ( updatedProductData) => {
     return {
         type: actionTypes.UPDATE_PRODUCT_SUCCESS,
-        message: message,
         productData: updatedProductData,
     }
 }
@@ -89,13 +88,15 @@ export const updateProductFailed = (message) => {
 export const updateProduct = (data) => {
     return dispatch => {
         dispatch(updateProductStart())
-        //console.log(data)
         axios.post(`/vendors/products/${data.get('id')}`, data, {headers: {   'Content-Type': 'multipart/form-data'}})
             .then(response => {
-                dispatch(updateProductSuccess(response.data, data));
+                dispatch(updateProductSuccess( data));
             })
             .catch(err => {
-                dispatch(updateProductFailed(err.message))
+                const errs = err.response.data.errors;
+                for (let key in errs) {
+                    dispatch(updateProductFailed(errs[key][0]))
+                }
             })
     }
 }
