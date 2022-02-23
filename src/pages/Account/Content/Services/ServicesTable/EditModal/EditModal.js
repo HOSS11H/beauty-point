@@ -317,7 +317,7 @@ const EditModal = (props) => {
 
     const [serviceStatus, setServiceStatus] = useState(status);
 
-    const [type, setType] = useState(products.length > 0 ? 'combo' : 'single');
+    const [type, setType] = useState(products.length > 0 ? 'multiple' : 'individually');
 
     const [allProducts, setAllProducts] = useState([]);
 
@@ -349,7 +349,7 @@ const EditModal = (props) => {
     }, [discountType, serviceDiscount, servicePrice])
 
     useEffect(() => {
-        if (type === 'combo') {
+        if (type === 'multiple') {
             axios.get(`/vendors/products`)
                 .then(res => {
                     setAllProducts(res.data.data);
@@ -553,7 +553,7 @@ const EditModal = (props) => {
         formData.append('category', selectedCategory)
         formData.append('location', selectedLocation)
         formData.append('type', type)
-        if (type === 'combo') {
+        if (type === 'multiple') {
             for (var i = 0; i < cart.products.length; i++) {
                 formData.append(`products[${i}][id]`, cart.products[i].id);
                 formData.append(`products[${i}][quantity]`, cart.products[i].quantity);
@@ -714,14 +714,14 @@ const EditModal = (props) => {
                 <FormControl sx={{ width: '100%', textAlign: 'left' }} component="fieldset">
                     <FormLabel component="legend">{t('service type')}</FormLabel>
                     <RadioGroup row aria-label="type" name="row-radio-buttons-group" value={type} onChange={unitTypeChangeHandler} >
-                        <FormControlLabel value="single" control={<Radio />} label={t('single')} />
-                        <FormControlLabel value="combo" control={<Radio />} label={t('combo')} />
+                        <FormControlLabel value="individually" control={<Radio />} label={t('individually')} />
+                        <FormControlLabel value="multiple" control={<Radio />} label={t('multiple')} />
                     </RadioGroup>
                 </FormControl>
             </Grid>
             <Grid item xs={12}>
                 {
-                    type === 'combo' && (
+                    type === 'multiple' && (
                         <Fragment>
                             <Grid item xs={12}>
                                 <BookingActions>
@@ -749,7 +749,7 @@ const EditModal = (props) => {
                                                     <FormControl sx={{ width: '100%' }}>
                                                         <InputLabel id="product-label">{t('product')}</InputLabel>
                                                         <Select
-                                                            label={t('product')} 
+                                                            label={t('product')}
                                                             labelId="product-label"
                                                             value={row.id}
                                                             onChange={ ( e ) =>productNameChangeHandler( e.target.value, index )}
@@ -790,7 +790,7 @@ const EditModal = (props) => {
                                                         variant="outlined" value={row.quantity} onChange={ ( e ) => productQuantityChangeHandler( e.target.value, index ) }
                                                         InputProps={{
                                                             startAdornment: <InputAdornment position="start">{t(row.unitName)} </InputAdornment>,
-                                                        }} 
+                                                        }}
                                                     />
                                                 </TableCell>
                                                 <TableCell align="center" sx={{ padding: '16px 8px' }}>
