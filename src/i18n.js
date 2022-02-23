@@ -447,6 +447,8 @@ const resources = {
             'choose payment method': 'اختر طريقة الدفع',
             'Product edited': 'تم تعديل المنتج',
             'Deal Added': 'تم إضافة العرض',
+            'your location': 'موقعك',
+            'Deal Edited': 'تم تعديل العرض',
         }
     }
 };

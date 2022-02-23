@@ -90,10 +90,9 @@ export const updateDealStart = () => {
         type: actionTypes.UPDATE_DEAL_START,
     }
 }
-export const updateDealSuccess = (message, updatedDealData) => {
+export const updateDealSuccess = ( updatedDealData) => {
     return {
         type: actionTypes.UPDATE_DEAL_SUCCESS,
-        message: message,
         dealData: updatedDealData,
     }
 }
@@ -111,16 +110,18 @@ export const updateDealFailed = (message) => {
 export const updateDeal = (data) => {
     return dispatch => {
         dispatch(updateDealStart())
-        //console.log(data)
         axios.post(`/vendors/deals/${data.get('id')}`, data, {headers: {'Content-Type': 'multipart/form-data'}})
             .then(response => {
-                dispatch(updateDealSuccess(response.data, data));
+                dispatch(updateDealSuccess(data));
                 setTimeout(() => {
                     dispatch(resetUpdateDealSuccess())
                 }, 1000)
             })
             .catch(err => {
-                dispatch(updateDealFailed(err.message))
+                const errs = err.response.data.errors;
+                for (let key in errs) {
+                    dispatch(updateDealFailed(errs[key][0]))
+                }
             })
     }
 }

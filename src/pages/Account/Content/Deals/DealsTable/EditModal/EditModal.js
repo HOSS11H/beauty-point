@@ -244,7 +244,7 @@ const EditModal = (props) => {
         return chosenServices;
     })
     let obj = {};
-    const selectedAppliedDays = days.map( item => {
+    const appliedOnDays = days.map( item => {
         obj[item] = true;
         return obj;
     })
@@ -571,9 +571,10 @@ const EditModal = (props) => {
         formData.append('close_time', `${format(closeTime, 'hh:ii a')}`);
         formData.append('deal_startTime',  `${format(openTime, 'hh:ii a')}`);
         formData.append('deal_endTime', `${format(closeTime, 'hh:ii a')}`);
-        if(uploadedImages.length > 0 ) {
-            formData.append('images', uploadedImages[0].file) 
-            formData.append('image', uploadedImages[0].file) 
+        if (uploadedImages.length > 0 && uploadedImages[0].data_url !== null && uploadedImages[0].file !== undefined) {
+            formData.append('image', uploadedImages[0].file)
+        } else {
+            formData.append('image', '')
         }
         formData.append('_method', 'PUT');
         onConfirm(formData);

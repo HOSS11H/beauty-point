@@ -18,6 +18,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
+import { toast } from "react-toastify";
 
 const DealsTableWrapper = styled.div`
     display: flex;
@@ -49,7 +50,7 @@ function DealsTable(props) {
 
     const { t } = useTranslation()
 
-    const { fetchedDeals, fetchDealsHandler, loadingDeals, deleteDealHandler, editDealHandler, searchingDeals, searchingDealsSuccess, fetchServicesHandler, updatingDealSuccess, creatingDealSuccess } = props;
+    const { fetchedDeals, fetchDealsHandler, loadingDeals, deleteDealHandler, editDealHandler, searchingDeals, searchingDealsSuccess, fetchServicesHandler, updatingDealSuccess, updatingDealFailed, updatingDealMessage, creatingDealSuccess } = props;
 
     const themeCtx = useContext(ThemeContext)
 
@@ -77,10 +78,27 @@ function DealsTable(props) {
     useEffect(() => {
         creatingDealSuccess && fetchDealsHandler(lang, page, rowsPerPage, 'id', 'desc');
     }, [fetchDealsHandler, lang, order, orderBy, page, rowsPerPage, creatingDealSuccess])
-    
+
     useEffect(() => {
-        updatingDealSuccess && fetchDealsHandler(lang, page, rowsPerPage, orderBy, order);
-    }, [fetchDealsHandler, lang, order, orderBy, page, rowsPerPage, updatingDealSuccess])
+        if (updatingDealSuccess) {
+            fetchDealsHandler(lang, page, rowsPerPage, orderBy, order);
+            setEditModalOpened(false);
+            setSelectedDealId(null);
+            toast.success(t('Deal Edited'), {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [fetchDealsHandler, lang, order, orderBy, page, rowsPerPage, t, updatingDealSuccess])
+
+    useEffect(() => {
+        if (updatingDealFailed && updatingDealMessage) {
+            toast.error(updatingDealMessage, {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [updatingDealFailed, updatingDealMessage])
 
 
 
@@ -138,8 +156,6 @@ function DealsTable(props) {
     }, [])
 
     const editModalConfirmHandler = useCallback((data) => {
-        setEditModalOpened(false);
-        setSelectedDealId(null);
         editDealHandler(data);
     }, [editDealHandler])
 
@@ -245,6 +261,8 @@ const mapStateToProps = state => {
         searchingDeals: state.deals.searchingDeals,
         searchingDealsSuccess: state.deals.searchingDealsSuccess,
         updatingDealSuccess: state.deals.updatingDealSuccess,
+        updatingDealFailed: state.deals.updatingDealFailed,
+        updatingDealMessage: state.deals.updatingDealMessage,
         creatingDealSuccess: state.deals.creatingDealSuccess,
     }
 }
