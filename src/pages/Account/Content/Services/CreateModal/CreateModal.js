@@ -556,7 +556,7 @@ const CreateModal = (props) => {
         formData.append('time_type', timeType);
         formData.append('category_id', categoryName);
         formData.append('location_id', locationName);
-        if ( employeeName.trim().length > 0 ) {
+        if ( employeeName.length > 0 ) {
             formData.append('employee_ids[0]', employeeName);
         }
         formData.append('status', serviceStatus);
