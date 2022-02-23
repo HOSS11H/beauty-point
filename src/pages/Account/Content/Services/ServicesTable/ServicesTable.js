@@ -20,7 +20,7 @@ import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import axios from '../../../../../utils/axios-instance';
 import SendingRequestIndicator from '../../../../../components/UI/SendingRequestIndicator/SendingRequestIndicator';
-import CustomizedSnackbars from '../../../../../components/UI/SnackBar/SnackBar';
+import { toast } from 'react-toastify';
 
 const ServicesTableWrapper = styled.div`
     display: flex;
@@ -79,7 +79,7 @@ function ServicesTable(props) {
     const { t } = useTranslation()
 
 
-    const { fetchedServices, fetchServicesHandler, loadingServices, deleteServiceHandler, updateServiceHandler, searchingServices, searchingServicesSuccess, creatingServiceSuccess, updatingService, updatingServiceSuccess, updatingServiceFailed } = props;
+    const { fetchedServices, fetchServicesHandler, loadingServices, deleteServiceHandler, updateServiceHandler, searchingServices, searchingServicesSuccess, creatingServiceSuccess, updatingService, updatingServiceSuccess, updatingServiceFailed, updatingServiceMessage } = props;
 
     const themeCtx = useContext(ThemeContext)
 
@@ -100,9 +100,6 @@ function ServicesTable(props) {
 
     const [selectedServiceId, setSelectedServiceId] = useState(null);
 
-    const [ successMessageShown, setSuccessMessageShown ] = useState(false);
-    const [ failedMessageShown, setFailedMessageShown ] = useState(false);
-
     useEffect(() => {
         fetchServicesHandler(lang, page, rowsPerPage, orderBy, order);
     }, [fetchServicesHandler, lang, order, orderBy, page, rowsPerPage]);
@@ -113,22 +110,35 @@ function ServicesTable(props) {
     useEffect(() => {
         updatingServiceSuccess && fetchServicesHandler(lang, page, rowsPerPage, orderBy, order);
     }, [creatingServiceSuccess, fetchServicesHandler, lang, order, orderBy, page, rowsPerPage, updatingServiceSuccess]);
-    
-    useEffect(() => {
-        setSuccessMessageShown(updatingServiceSuccess)
-    }, [updatingServiceSuccess])
-
-    const closeSuccessMessageHandler = useCallback(( ) => {
-        setSuccessMessageShown(false)
-    }, [])
 
     useEffect(() => {
-        setFailedMessageShown(updatingServiceFailed)
-    }, [updatingServiceFailed])
+        if (updatingServiceSuccess) {
+            setEditModalOpened(false)
+            toast.success(t('Service edited'), {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [t, updatingServiceSuccess])
 
-    const closeFailedMessageHandler = useCallback(( ) => {
-        setFailedMessageShown(false)
-    }, [])
+    useEffect(() => {
+        if (updatingServiceFailed && updatingServiceMessage) {
+            toast.error(updatingServiceMessage, {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [updatingServiceFailed, updatingServiceMessage])
+
+    useEffect(() => {
+        if (updatingServiceSuccess) {
+            setEditModalOpened(false)
+            toast.success(t('Service edited'), {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [t, updatingServiceSuccess])
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -180,7 +190,6 @@ function ServicesTable(props) {
     const viewModalOpenHandler = useCallback((id) => {
         setViewModalOpened(true);
         setSelectedServiceId(id);
-        //console.log(id);
     }, [])
     const viewModalCloseHandler = useCallback(() => {
         setViewModalOpened(false);
@@ -203,7 +212,6 @@ function ServicesTable(props) {
     }, [])
 
     const editModalConfirmHandler = useCallback((data) => {
-        setEditModalOpened(false);
         setSelectedServiceId(null);
         updateServiceHandler(data);
     }, [updateServiceHandler])
@@ -298,8 +306,6 @@ function ServicesTable(props) {
                     )
                 }
                 <SendingRequestIndicator open={updatingService} />
-                <CustomizedSnackbars show={successMessageShown} message={t('Service edited')} type='success' onClose={closeSuccessMessageHandler} />
-                <CustomizedSnackbars show={failedMessageShown} message={t('error editing service')} type='error' onClose={closeFailedMessageHandler} />
             </Fragment>
         )
     }
@@ -321,6 +327,7 @@ const mapStateToProps = state => {
         updatingService: state.services.updatingService,
         updatingServiceSuccess: state.services.updatingServiceSuccess,
         updatingServiceFailed: state.services.updatingServiceFailed,
+        updatingServiceMessage: state.services.updatingServiceMessage,
     }
 }
 

@@ -93,10 +93,9 @@ export const updateServiceStart = () => {
         type: actionTypes.UPDATE_SERVICE_START,
     }
 }
-export const updateServiceSuccess = (message, updatedServiceData) => {
+export const updateServiceSuccess = ( updatedServiceData) => {
     return {
         type: actionTypes.UPDATE_SERVICE_SUCCESS,
-        message: message,
         serviceData: updatedServiceData,
     }
 }
@@ -117,13 +116,16 @@ export const updateService = (data) => {
         dispatch(updateServiceStart())
         axios.post(`/vendors/services/${data.get('id')}`, data, { headers: { 'Content-Type': 'multipart/form-data' } })
             .then(response => {
-                dispatch(updateServiceSuccess(response.data, data));
+                dispatch(updateServiceSuccess(data));
                 setTimeout(() => {
                     dispatch(resetUpdateServiceSuccess())
                 }, 2000)
             })
             .catch(err => {
-                dispatch(updateServiceFailed(err.message))
+                const errs = err.response.data.errors;
+                for (let key in errs) {
+                    dispatch(updateServiceFailed(errs[key][0]))
+                }
             })
     }
 }
