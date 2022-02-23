@@ -560,9 +560,10 @@ const CreateModal = (props) => {
             formData.append('employee_ids[0]', employeeName);
         }
         formData.append('status', serviceStatus);
-        if(uploadedImages.length > 0 ) {
-            formData.append('images', uploadedImages[0].file)
+        if (uploadedImages.length > 0 && uploadedImages[0].data_url !== null && uploadedImages[0].file !== undefined) {
             formData.append('image', uploadedImages[0].file)
+        } else {
+            formData.append('image', '')
         }
         formData.append('category', selectedCategory)
         formData.append('location', selectedLocation)

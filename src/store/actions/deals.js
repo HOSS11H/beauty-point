@@ -129,10 +129,9 @@ export const createDealStart = () => {
         type: actionTypes.CREATE_DEAL_START,
     }
 }
-export const createDealSuccess = (message, createdDealData) => {
+export const createDealSuccess = ( createdDealData) => {
     return {
         type: actionTypes.CREATE_DEAL_SUCCESS,
-        message: message,
         dealData: createdDealData,
     }
 }
@@ -153,13 +152,16 @@ export const createDeal = (data) => {
         dispatch(createDealStart())
         axios.post(`/vendors/deals`, data, {headers: {'Content-Type': 'multipart/form-data'}})
             .then(response => {
-                dispatch(createDealSuccess(null, response.data));
+                dispatch(createDealSuccess(response.data));
                 setTimeout(() => {
                     dispatch(resetCreateDealSuccess())
                 }, 1000)
             })
             .catch(err => {
-                dispatch(createDealFailed(err.message))
+                const errs = err.response.data.errors;
+                for (let key in errs) {
+                    dispatch(createDealFailed(errs[key][0]))
+                }
             })
     }
 }

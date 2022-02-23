@@ -14,6 +14,7 @@ const intialState = {
     updatingDealMessage: null,
     creatingDeal: false,
     creatingDealSuccess: false,
+    creatingDealFailed: false,
     creatingDealMessage: null,
     searchingDeals: false,
     searchingDealsSuccess: false,
@@ -93,13 +94,13 @@ const reducer = ( state = intialState , action ) => {
             return updateObject(state, {
                 creatingDeal: true,
                 creatingDealSuccess: false,
+                creatingDealFailed: false,
                 creatingDealMessage: null,
             })
         case (actionTypes.CREATE_DEAL_SUCCESS):
             return updateObject(state, {
                 creatingDeal: false,
                 creatingDealSuccess: true,
-                creatingDealMessage: action.message,
             })
         case (actionTypes.RESET_CREATE_DEAL_SUCCESS):
             return updateObject(state, {
@@ -109,7 +110,7 @@ const reducer = ( state = intialState , action ) => {
         case (actionTypes.CREATE_DEAL_FAILED):
             return updateObject(state, {
                 creatingDeal: false,
-                creatingDealSuccess: false,
+                creatingDealFailed: true,
                 creatingDealMessage: action.message,
             })
         case ( actionTypes.SEARCH_DEALS_START ) :

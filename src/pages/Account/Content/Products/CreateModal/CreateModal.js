@@ -336,9 +336,10 @@ const CreateModal = (props) => {
         formData.append('location_id', locationName);
         formData.append('quantity', +productQuantity);
         formData.append('status', productStatus);
-        if(uploadedImages.length > 0 ) {
-            formData.append('images', uploadedImages[0].file) 
-            formData.append('image', uploadedImages[0].file) 
+        if (uploadedImages.length > 0 && uploadedImages[0].data_url !== null && uploadedImages[0].file !== undefined) {
+            formData.append('image', uploadedImages[0].file)
+        } else {
+            formData.append('image', '')
         }
         formData.append('unit_id', productUnit)
 

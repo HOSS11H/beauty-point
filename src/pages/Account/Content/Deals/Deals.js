@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 
 import { CustomButton } from '../../../../components/UI/Button/Button';
 import CreateModal from "./CreateModal/CreateModal";
-import CustomizedSnackbars from "../../../../components/UI/SnackBar/SnackBar";
+import { toast } from "react-toastify";
 
 
 const ActionsWrapper = styled.div`
@@ -34,18 +34,28 @@ const CreateBtn = styled(CustomButton)`
 function Deals(props) {
     const { t } = useTranslation()
 
-    const { searchDealsHandler, createDealHandler, creatingDealSuccess } = props
+    const { searchDealsHandler, createDealHandler, creatingDealSuccess, creatingDealFailed, creatingDealMessage } = props
 
     const [createModalOpened, setCreateModalOpened] = useState(false);
 
-    const [ messageShown, setMessageShown ] = useState(creatingDealSuccess);
+    useEffect(() => {
+        if ( creatingDealSuccess ) {
+            setCreateModalOpened(false);
+            toast.success(t('Deal Created'), {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [creatingDealSuccess, t])
 
     useEffect(() => {
-        setMessageShown(creatingDealSuccess )
-    }, [creatingDealSuccess])
-    const closeMessageHandler = useCallback(( ) => {
-        setMessageShown(false)
-    }, [])
+        if (creatingDealFailed && creatingDealMessage) {
+            toast.error(creatingDealMessage, {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [creatingDealFailed, creatingDealMessage])
 
     // Create Modal
     const createModalOpenHandler = useCallback((id) => {
@@ -56,7 +66,6 @@ function Deals(props) {
     }, [])
 
     const createModalConfirmHandler = useCallback((data) => {
-        setCreateModalOpened(false);
         createDealHandler(data);
     }, [createDealHandler])
 
@@ -70,7 +79,6 @@ function Deals(props) {
                     heading='create new deal' confirmText='create' />
             </ActionsWrapper>
             <DealsTable />
-            <CustomizedSnackbars show={messageShown} message={t('Deal Created')} type='success' onClose={closeMessageHandler} />
         </Fragment>
     );
 }
@@ -78,6 +86,8 @@ function Deals(props) {
 const mapStateToProps = (state) => {
     return {
         creatingDealSuccess: state.deals.creatingDealSuccess,
+        creatingDealFailed: state.deals.creatingDealFailed,
+        creatingDealMessage: state.deals.creatingDealMessage,
     }
 }
 
