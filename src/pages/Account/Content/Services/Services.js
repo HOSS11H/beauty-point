@@ -8,8 +8,8 @@ import { useTranslation } from 'react-i18next';
 import ServicesTable from './ServicesTable/ServicesTable';
 import { CustomButton } from '../../../../components/UI/Button/Button';
 import CreateModal from "./CreateModal/CreateModal";
-import CustomizedSnackbars from "../../../../components/UI/SnackBar/SnackBar";
 import SendingRequestIndicator from "../../../../components/UI/SendingRequestIndicator/SendingRequestIndicator";
+import { toast } from "react-toastify";
 
 const ActionsWrapper = styled.div`
     display: flex;
@@ -36,25 +36,26 @@ function Services(props) {
 
     const [createModalOpened, setCreateModalOpened] = useState(false);
 
-    const [ successMessageShown, setSuccessMessageShown ] = useState(false);
-    const [ failedMessageShown, setFailedMessageShown ] = useState(false);
+    useEffect(() => {
+        if ( creatingServiceSuccess ) {
+            setCreateModalOpened(false)
+            toast.success(t('Service Added'), {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [creatingServiceSuccess, t])
 
     useEffect(() => {
-        setSuccessMessageShown(creatingServiceSuccess)
-        creatingServiceSuccess && setCreateModalOpened(false)
-    }, [creatingServiceSuccess])
+        if ( creatingServiceFailed && creatingServiceMessage ) {
+            setCreateModalOpened(false)
+            toast.error(creatingServiceMessage, {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [creatingServiceFailed, creatingServiceMessage, creatingServiceSuccess, t])
 
-    const closeSuccessMessageHandler = useCallback(( ) => {
-        setSuccessMessageShown(false)
-    }, [])
-
-    useEffect(() => {
-        setFailedMessageShown(creatingServiceFailed)
-    }, [creatingServiceFailed])
-
-    const closeFailedMessageHandler = useCallback(( ) => {
-        setFailedMessageShown(false)
-    }, [])
 
     // Create Modal
     const createModalOpenHandler = useCallback((id) => {
@@ -78,8 +79,6 @@ function Services(props) {
                     heading='create new service' confirmText='create' />
             </ActionsWrapper>
             <ServicesTable />
-            <CustomizedSnackbars show={successMessageShown} message={t('Service Added')} type='success' onClose={closeSuccessMessageHandler} />
-            <CustomizedSnackbars show={failedMessageShown} message={creatingServiceMessage} type='error' onClose={closeFailedMessageHandler} />
             <SendingRequestIndicator open={creatingService} />
         </Fragment>
     );

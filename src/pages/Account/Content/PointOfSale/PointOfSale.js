@@ -185,13 +185,13 @@ const cartReducer = (state, action) => {
     }
 }
 
-const intialPerPage = 15;
+const rowsPerPage = 15;
 
 const PointOfSale = (props) => {
 
     const { t } = useTranslation()
 
-    const { filterServicesHandler, filterProductsHandler, filterDealsHandler, createBookingHandler, fetchedLocations, bookingCreated, creatingBooking } = props
+    const { filterServicesHandler, filterProductsHandler, filterDealsHandler, createBookingHandler, bookingCreated, creatingBooking } = props
 
     const themeCtx = useContext(ThemeContext)
 
@@ -206,7 +206,6 @@ const PointOfSale = (props) => {
     });
 
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(intialPerPage);
 
     const [shownType, setShownType] = useState('services');
     const [shownCategory, setShownCategory] = useState('all');
@@ -233,7 +232,7 @@ const PointOfSale = (props) => {
         } else if (shownType === 'deals') {
             filterDealsHandler(lang, shownType, shownLocation, searchWord, page, rowsPerPage);
         }
-    }, [filterDealsHandler, filterProductsHandler, filterServicesHandler, lang, page, rowsPerPage, searchWord, shownCategory, shownLocation, shownType]);
+    }, [filterDealsHandler, filterProductsHandler, filterServicesHandler, lang, page, searchWord, shownCategory, shownLocation, shownType]);
 
     const handleResultsChange = useCallback((type, category, location, search) => {
         setShownType(type);
@@ -389,9 +388,6 @@ const PointOfSale = (props) => {
         })
     }, [createBookingHandler, shownLocation])
 
-    const printBookingModalOpenHandler = useCallback((id) => {
-        setPrintBookingModalOpened(true);
-    }, [])
     const printBookingModalCloseHandler = useCallback(() => {
         setPrintBookingModalOpened(false);
     }, [])
