@@ -83,6 +83,7 @@ function ProductsTable(props) {
     useEffect(() => {
         if (updatingProductSuccess) {
             setEditModalOpened(false);
+            setSelectedProductId(null);
             fetchProductsHandler(lang, page, rowsPerPage, orderBy, order);
             toast.success(t('Product edited'), {
                 position: "bottom-right", autoClose: 4000, hideProgressBar: true,
@@ -152,7 +153,6 @@ function ProductsTable(props) {
     }, [])
 
     const editModalConfirmHandler = useCallback((data) => {
-        setSelectedProductId(null);
         updateProductHandler(data);
     }, [updateProductHandler])
 

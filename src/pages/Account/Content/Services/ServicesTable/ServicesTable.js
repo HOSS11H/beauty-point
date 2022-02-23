@@ -111,6 +111,7 @@ function ServicesTable(props) {
     useEffect(() => {
         if (updatingServiceSuccess) {
             fetchServicesHandler(lang, page, rowsPerPage, orderBy, order)
+            setSelectedServiceId(null);
             setEditModalOpened(false)
             toast.success(t('Service edited'), {
                 position: "bottom-right", autoClose: 4000, hideProgressBar: true,
@@ -200,7 +201,6 @@ function ServicesTable(props) {
     }, [])
 
     const editModalConfirmHandler = useCallback((data) => {
-        setSelectedServiceId(null);
         updateServiceHandler(data);
     }, [updateServiceHandler])
 
