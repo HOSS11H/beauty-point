@@ -714,8 +714,8 @@ const EditModal = (props) => {
                 <FormControl sx={{ width: '100%', textAlign: 'left' }} component="fieldset">
                     <FormLabel component="legend">{t('service type')}</FormLabel>
                     <RadioGroup row aria-label="type" name="row-radio-buttons-group" value={type} onChange={unitTypeChangeHandler} >
-                        <FormControlLabel value="individually" control={<Radio />} label={t('individually')} />
-                        <FormControlLabel value="multiple" control={<Radio />} label={t('multiple')} />
+                        <FormControlLabel value="individually" control={<Radio />} label={t('single')} />
+                        <FormControlLabel value="multiple" control={<Radio />} label={t('combo')} />
                     </RadioGroup>
                 </FormControl>
             </Grid>
