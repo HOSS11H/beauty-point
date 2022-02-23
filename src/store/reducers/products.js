@@ -16,6 +16,7 @@ const intialState = {
     searchingProductsSuccess: false,
     creatingProduct: false,
     creatingProductSuccess: false,
+    creatingProductFailed: false,
     creatingProductMessage: null,
     posProducts: {
         products: { data: [], meta: {} },
@@ -88,13 +89,13 @@ const reducer = (state = intialState, action) => {
             return updateObject(state, {
                 creatingProduct: true,
                 creatingProductSuccess: false,
+                creatingProductFailed: false,
                 creatingProductMessage: null,
             })
         case (actionTypes.CREATE_PRODUCT_SUCCESS):
             return updateObject(state, {
                 creatingProduct: false,
                 creatingProductSuccess: true,
-                creatingProductMessage: action.message,
             })
         case (actionTypes.RESET_CREATE_PRODUCT_SUCCESS):
             return updateObject(state, {
@@ -104,7 +105,7 @@ const reducer = (state = intialState, action) => {
         case (actionTypes.CREATE_PRODUCT_FAILED):
             return updateObject(state, {
                 creatingProduct: false,
-                creatingProductSuccess: false,
+                creatingProductFailed: true,
                 creatingProductMessage: action.message,
             })
         case (actionTypes.SEARCH_PRODUCTS_START):

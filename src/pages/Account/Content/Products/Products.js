@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 import { CustomButton } from '../../../../components/UI/Button/Button';
 import CreateModal from "./CreateModal/CreateModal";
-import CustomizedSnackbars from "../../../../components/UI/SnackBar/SnackBar";
+import { toast } from "react-toastify";
 
 
 const ActionsWrapper = styled.div`
@@ -34,18 +34,30 @@ function Products(props) {
 
     const { t } = useTranslation()
 
-    const { searchProductsHandler, createProductHandler, creatingProductSuccess } = props;
+    const { searchProductsHandler, createProductHandler, creatingProductSuccess, creatingProductFailed, creatingProductMessage } = props;
 
     const [createModalOpened, setCreateModalOpened] = useState(false);
 
-    const [ messageShown, setMessageShown ] = useState(creatingProductSuccess);
 
     useEffect(() => {
-        setMessageShown(creatingProductSuccess )
-    }, [creatingProductSuccess])
-    const closeMessageHandler = useCallback(( ) => {
-        setMessageShown(false)
-    }, [])
+        if (creatingProductSuccess) {
+            setCreateModalOpened(false);
+            toast.success(t('Product Added'), {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [creatingProductSuccess, t])
+
+    useEffect(() => {
+        if (creatingProductFailed && creatingProductMessage) {
+            toast.error(creatingProductMessage, {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [creatingProductFailed, creatingProductMessage])
+
 
     // Create Modal
     const createModalOpenHandler = useCallback((id) => {
@@ -56,7 +68,6 @@ function Products(props) {
     }, [])
 
     const createModalConfirmHandler = useCallback((data) => {
-        setCreateModalOpened(false);
         createProductHandler(data);
     }, [createProductHandler])
 
@@ -64,14 +75,13 @@ function Products(props) {
     return (
         <Fragment>
             <ActionsWrapper>
-                <SearchBar searchHandler={searchProductsHandler}/>
+                <SearchBar searchHandler={searchProductsHandler} />
                 <CreateBtn onClick={createModalOpenHandler} >{t('Add Product')}</CreateBtn>
                 <CreateModal show={createModalOpened}
                     onClose={createModalCloseHandler} onConfirm={createModalConfirmHandler}
                     heading='add new product' confirmText='add' />
             </ActionsWrapper>
             <ProductsTable />
-            <CustomizedSnackbars show={messageShown} message={t('Product Added')} type='success' onClose={closeMessageHandler} />
         </Fragment>
     );
 }
@@ -79,13 +89,15 @@ function Products(props) {
 const mapStateToProps = (state) => {
     return {
         creatingProductSuccess: state.products.creatingProductSuccess,
+        creatingProductFailed: state.products.creatingProductFailed,
+        creatingProductMessage: state.products.creatingProductMessage,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        searchProductsHandler: ( language, word ) => dispatch(searchProducts( language, word )),
-        createProductHandler: (data) => dispatch(createProduct( data ))
+        searchProductsHandler: (language, word) => dispatch(searchProducts(language, word)),
+        createProductHandler: (data) => dispatch(createProduct(data))
     }
 }
 

@@ -104,10 +104,9 @@ export const createProductStart = () => {
         type: actionTypes.CREATE_PRODUCT_START,
     }
 }
-export const createProductSuccess = (message, createdProductData) => {
+export const createProductSuccess = (createdProductData) => {
     return {
         type: actionTypes.CREATE_PRODUCT_SUCCESS,
-        message: message,
         productData: createdProductData,
     }
 }
@@ -126,16 +125,18 @@ export const createProductFailed = (message) => {
 export const createProduct = (data) => {
     return dispatch => {
         dispatch(createProductStart())
-        //console.log(data, 'excuted')
         axios.post(`/vendors/products`, data, {headers: {   'Content-Type': 'multipart/form-data'}})
             .then(response => {
-                dispatch(createProductSuccess(null, { ...data, ...response.data }));
+                dispatch(createProductSuccess({ ...data, ...response.data }));
                 setTimeout(() => {
                     dispatch(resetCreateProductSuccess())
                 })
             })
             .catch(err => {
-                dispatch(createProductFailed(err.message))
+                const errs = err.response.data.errors;
+                for (let key in errs) {
+                    dispatch(createProductFailed(errs[key][0]))
+                }
             })
     }
 }
