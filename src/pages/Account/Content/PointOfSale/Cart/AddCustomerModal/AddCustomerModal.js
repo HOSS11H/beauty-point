@@ -6,6 +6,8 @@ import { CustomModal } from '../../../../../../components/UI/Modal/Modal';
 import { Grid } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import ValidationMessage from '../../../../../../components/UI/ValidationMessage/ValidationMessage';
+import { connect } from 'react-redux';
+import { useEffect } from 'react';
 
 
 const CustomTextField = styled(TextField)`
@@ -15,7 +17,7 @@ const CustomTextField = styled(TextField)`
 
 const AddCustomerModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose  } = props;
+    const { show, heading, confirmText, onConfirm, onClose, addingCustomerSuccess  } = props;
 
     const { t } = useTranslation();
 
@@ -44,6 +46,15 @@ const AddCustomerModal = (props) => {
     const closeModalHandler = useCallback(() => {
         onClose();
     }, [onClose])
+    
+    const resetModalData = ( ) => {
+        setCustomerName('');
+        setCustomerEmail('');
+        setCustomerNumber('');
+    }
+    useEffect(() => {
+        addingCustomerSuccess && resetModalData();
+    }, [addingCustomerSuccess])
 
     const confirmAddHandler = useCallback(() => {
         if ( customerName.trim().length === 0) {
@@ -61,11 +72,6 @@ const AddCustomerModal = (props) => {
         }
 
         onConfirm(data);
-        
-        setCustomerName('');
-        setCustomerEmail('');
-        setCustomerNumber('');
-
     }, [customerEmail, customerName, customerNumber, onConfirm])
     
     return (
@@ -80,7 +86,7 @@ const AddCustomerModal = (props) => {
                     {customerEmailError && <ValidationMessage notExist>{t(`Please add email`)}</ValidationMessage>}
                 </Grid>
                 <Grid item xs={12} sm={6} >
-                    <CustomTextField id="customer-number" label={t('mobile number')} variant="outlined" value={customerNumber} onChange={customerNumberChangeHandler} />
+                    <CustomTextField id="customer-number" type='number' label={t('mobile number')} variant="outlined" value={customerNumber} onChange={customerNumberChangeHandler} />
                     {customerNumberError && <ValidationMessage notExist>{t(`Please add number`)}</ValidationMessage>}
                 </Grid>
             </Grid>
@@ -88,6 +94,11 @@ const AddCustomerModal = (props) => {
     )
 }
 
+const mapStateToProps = (state) => {
+    return {
+        addingCustomerSuccess: state.customers.addingCustomerSuccess,
+    }
+}
 
 
-export default AddCustomerModal;
+export default connect(mapStateToProps, null)(AddCustomerModal);

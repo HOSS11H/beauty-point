@@ -75,10 +75,9 @@ export const addCustomerStart = () => {
         type: actionTypes.ADD_CUSTOMER_START,
     }
 }
-export const addCustomerSuccess = (message, addedCustomerData) => {
+export const addCustomerSuccess = ( addedCustomerData) => {
     return {
         type: actionTypes.ADD_CUSTOMER_SUCCESS,
-        message: message,
         customerData: addedCustomerData,
     }
 }
@@ -97,17 +96,18 @@ export const addCustomerFailed = (message) => {
 export const addCustomer = (data) => {
     return dispatch => {
         dispatch(addCustomerStart())
-        //console.log(data)
         axios.post(`/vendors/customers`, data)
             .then(response => {
-                //console.log(response)
-                dispatch(addCustomerSuccess(null, { ...data, ...response.data }));
+                dispatch(addCustomerSuccess({ ...data, ...response.data }));
                 setTimeout(() => {
                     dispatch(resetAddCustomerSuccess());
                 }, 2000);
             })
             .catch(err => {
-                dispatch(addCustomerFailed(err.message))
+                const errs = err.response.data.errors;
+                for (let key in errs) {
+                    dispatch(addCustomerFailed(errs[key][0]))
+                }
             })
     }
 }

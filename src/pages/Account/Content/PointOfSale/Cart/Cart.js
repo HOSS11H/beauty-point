@@ -173,8 +173,9 @@ const CustomFormGroup = styled.div`
 
 const Cart = props => {
 
-    const { cartData, removeFromCart, increaseItem, decreaseItem, resetCart, reserved, reset, purchase, print, fetchedCoupons, addedCustomerData,
-        addingCustomerSuccess, fetchCouponsHandler, addCustomerHandler, fetchedEmployeesHandler,
+    const { cartData, removeFromCart, increaseItem, decreaseItem, resetCart, reserved, reset, purchase, print, fetchedCoupons,
+        fetchCouponsHandler, fetchedEmployeesHandler,
+        addCustomerHandler, addedCustomerData, addingCustomerSuccess, addingCustomerFailed, addingCustomerMessage,
         bookingCreated, creatingBookingFailed, creatingBookingMessage, priceChangeHandler, changeEmployee } = props;
 
     const { t } = useTranslation()
@@ -218,9 +219,23 @@ const Cart = props => {
 
     useEffect(() => {
         if (addedCustomerData && addingCustomerSuccess) {
+            setAddCustomerModalOpened(false);
             setCustomerData(addedCustomerData);
+            toast.success(t('Customer added'), {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
         }
-    }, [addedCustomerData, addingCustomerSuccess])
+    }, [addedCustomerData, addingCustomerSuccess, t])
+
+    useEffect(() => {
+        if ( addingCustomerFailed && addingCustomerMessage ) {
+            toast.error(addingCustomerMessage, {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [addingCustomerFailed, addingCustomerMessage, t])
 
     useEffect(() => {
         let total = 0;
@@ -259,7 +274,6 @@ const Cart = props => {
     }, [])
 
     const addCustomerModalConfirmHandler = useCallback((data) => {
-        setAddCustomerModalOpened(false);
         addCustomerHandler(data);
     }, [addCustomerHandler])
 
@@ -407,7 +421,6 @@ const Cart = props => {
         }
         purchase(data);
     }
-
 
     const purchasePrintCartHandler = (e) => {
         e.preventDefault();
@@ -666,6 +679,8 @@ const mapStateToProps = (state) => {
     return {
         addedCustomerData: state.customers.posCustmers.addedCustomerData,
         addingCustomerSuccess: state.customers.addingCustomerSuccess,
+        addingCustomerFailed: state.customers.addingCustomerFailed,
+        addingCustomerMessage: state.customers.addingCustomerMessage,
         fetchedCoupons: state.coupons.coupons,
         bookingCreated: state.bookings.bookingCreated,
         creatingBookingFailed: state.bookings.creatingBookingFailed,

@@ -453,6 +453,7 @@ const resources = {
             'payment gateway': 'طريقة الدفع',
             'add passing customer': 'إضافة عميل عابر',
             'passing customer': 'عميل عابر',
+            'Customer added': 'تم إضافة العميل',
         }
     }
 };

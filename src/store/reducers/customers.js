@@ -8,6 +8,7 @@ const intialState = {
     errorFetchingCustomers: false,
     addingCustomer: false,
     addingCustomerSuccess: false,
+    addingCustomerFailed: false,
     addingCustomerMessage: null,
     posCustmers: {
         customers: [],
@@ -62,6 +63,7 @@ const reducer = (state = intialState, action) => {
             return updateObject(state, {
                 addingCustomer: true,
                 addingCustomerSuccess: false,
+                addingCustomerFailed: false,
                 addingCustomerMessage: null,
             })
         case (actionTypes.ADD_CUSTOMER_SUCCESS):
@@ -71,7 +73,6 @@ const reducer = (state = intialState, action) => {
                 customers: upgradedCustomers,
                 addingCustomer: false,
                 addingCustomerSuccess: true,
-                addingCustomerMessage: action.message,
                 posCustmers: {
                     ...state.posCustmers,
                     addedCustomerData: action.customerData,
@@ -80,7 +81,6 @@ const reducer = (state = intialState, action) => {
         case (actionTypes.RESET_ADD_CUSTOMER_SUCCESS):
             return updateObject(state, {
                 addingCustomerSuccess: false,
-                addingCustomerMessage: null,
                 posCustmers: {
                     ...state.posCustmers,
                     addedCustomerData: null,
@@ -89,7 +89,7 @@ const reducer = (state = intialState, action) => {
         case (actionTypes.ADD_CUSTOMER_FAILED):
             return updateObject(state, {
                 addingCustomer: false,
-                addingCustomerSuccess: false,
+                addingCustomerFailed: true,
                 addingCustomerMessage: action.message,
             })
         default:
