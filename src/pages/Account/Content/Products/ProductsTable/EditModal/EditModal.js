@@ -150,7 +150,7 @@ const EditModal = (props) => {
 
     let productData = fetchedProducts.data[selectedProductIndex];
 
-    const { name, description, price, discount, discount_type, discount_price, location, status, image, quantity, unit } = productData;
+    const { name, description, price, discount, discount_type, discount_price, location, status, image, quantity, unit, sku } = productData;
 
     const [productName, setProductName] = useState(name);
     const [productNameError, setProductNameError] = useState(false);
@@ -164,6 +164,8 @@ const EditModal = (props) => {
 
     const [locationName, setLocationName] = useState(location.id);
     const [productLocationError, setProductLocationError] = useState(false);
+
+    const [ productSKU, setProductSKU] = useState(sku ? sku : '');
 
     const [productPrice, setProductPrice] = useState(price);
 
@@ -180,7 +182,7 @@ const EditModal = (props) => {
     const [productQuantityError, setProductQuantityError] = useState(false);
 
     const [allUnits, setAllUnits] = useState([]);
-    const [productUnit, setProductUnit] = useState(unit?.id);
+    const [productUnit, setProductUnit] = useState(unit ? unit.id : '');
     const [productUnitError, setProductUnitError] = useState(false);
 
     const [uploadedImages, setUploadedImages] = useState([ { data_url: image} ]);
@@ -249,6 +251,10 @@ const EditModal = (props) => {
         setProductLocationError(false);
     };
 
+    const productSKUChangeHandler = (event) => {
+        setProductSKU(event.target.value);
+    }
+
     const productPriceChangeHandler = (event) => {
         if (event.target.value >= 0) {
             setProductPrice(event.target.value);
@@ -310,6 +316,7 @@ const EditModal = (props) => {
         formData.append('discount_type', discountType);
         formData.append('discount_price', +priceAfterDiscount);
         formData.append('location_id', locationName);
+        formData.append('sku', productSKU);
         formData.append('quantity', +productQuantity);
         formData.append('status', productStatus);
         if (uploadedImages.length > 0 && uploadedImages[0].data_url !== null && uploadedImages[0].file !== undefined) {
@@ -317,11 +324,11 @@ const EditModal = (props) => {
         } else {
             formData.append('image', '')
         }
-        formData.append('unit_id', productUnit)
+        formData.append('unit_id', productUnit);
         formData.append('_method', 'PUT');
         onConfirm(formData);
 
-    }, [discountType, editorState, id, locationName, onConfirm, priceAfterDiscount, productDiscount, productName, productPrice, productPriceError, productQuantity, productStatus, productUnit, uploadedImages])
+    }, [discountType, editorState, id, locationName, onConfirm, priceAfterDiscount, productDiscount, productName, productPrice, productPriceError, productQuantity, productSKU, productStatus, productUnit, uploadedImages])
 
     let content = (
         <Grid container spacing={2}>
@@ -397,6 +404,9 @@ const EditModal = (props) => {
                     </Select>
                 </FormControl>
                 {productLocationError && <ValidationMessage notExist>{t(`Please add Location`)}</ValidationMessage>}
+            </Grid>
+            <Grid item xs={12} sm={6}>
+                <CustomTextField id="product-sku" type='text' label={t('SKU')} variant="outlined" value={productSKU} onChange={productSKUChangeHandler} />
             </Grid>
             <Grid item xs={12} sm={6}>
                 <CustomTextField id="product-quantity" type='number' label={t('quantity')} variant="outlined" value={productQuantity} onChange={productQuantityChangeHandler} />

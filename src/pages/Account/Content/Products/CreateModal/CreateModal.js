@@ -171,10 +171,11 @@ const CreateModal = (props) => {
 
     const [allUnits, setAllUnits] = useState([]);
     const [productUnit, setProductUnit] = useState('');
-    const [productUnitError, setProductUnitError] = useState(false);
 
     const [locationName, setLocationName] = useState('');
     const [productLocationError, setProductLocationError] = useState(false);
+    
+    const [ productSKU, setProductSKU] = useState('');
 
     const [productStatus, setProductStatus] = useState('active');
 
@@ -255,7 +256,6 @@ const CreateModal = (props) => {
     }
     const productUnitChangeHandler = (event) => {
         setProductUnit(event.target.value);
-        setProductUnitError(false);
     }
     const productStatusChangeHandler = (event) => {
         setProductStatus(event.target.value);
@@ -271,6 +271,11 @@ const CreateModal = (props) => {
         );
         setProductLocationError(false);
     };
+
+    const productSKUChangeHandler = (event) => {
+        setProductSKU(event.target.value);
+    }
+
     const closeModalHandler = useCallback(() => {
         onClose();
     }, [onClose])
@@ -294,7 +299,6 @@ const CreateModal = (props) => {
         setDefaultImage('');
         setDefaultImageError(false);
         setProductUnit('');
-        setProductUnitError(false);
     }, [])
 
     useEffect(() => {
@@ -321,10 +325,6 @@ const CreateModal = (props) => {
             setProductQuantityError(true);
             return;
         }
-        if (productUnit === '') {
-            setProductUnitError(true);
-            return;
-        }
 
         let formData = new FormData();
         formData.append('name', productName);
@@ -334,6 +334,7 @@ const CreateModal = (props) => {
         formData.append('discount_type', discountType);
         formData.append('discount_price', +priceAfterDiscount);
         formData.append('location_id', locationName);
+        formData.append('sku', productSKU);
         formData.append('quantity', +productQuantity);
         formData.append('status', productStatus);
         if (uploadedImages.length > 0 && uploadedImages[0].data_url !== null && uploadedImages[0].file !== undefined) {
@@ -344,7 +345,7 @@ const CreateModal = (props) => {
         formData.append('unit_id', productUnit)
 
         onConfirm(formData);
-    }, [productName, editorState, productPriceError, locationName, productQuantity, productPrice, productDiscount, discountType, priceAfterDiscount, productStatus, uploadedImages, productUnit, onConfirm])
+    }, [productName, editorState, productPriceError, locationName, productQuantity, productPrice, productDiscount, discountType, priceAfterDiscount, productSKU, productStatus, uploadedImages, productUnit, onConfirm])
 
     let content = (
         <Grid container spacing={2}>
@@ -424,6 +425,9 @@ const CreateModal = (props) => {
                 {productLocationError && <ValidationMessage notExist>{t(`Please add Location`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6}>
+                <CustomTextField id="product-sku" type='text' label={t('SKU')} variant="outlined" value={productSKU} onChange={productSKUChangeHandler} />
+            </Grid>
+            <Grid item xs={12} sm={6}>
                 <CustomTextField id="product-quantity" type='number' label={t('quantity')} variant="outlined" value={productQuantity} onChange={productQuantityChangeHandler} />
                 {productQuantityError && <ValidationMessage notExist>{t(`Please add Quantity`)}</ValidationMessage>}
             </Grid>
@@ -446,7 +450,6 @@ const CreateModal = (props) => {
                         }
                     </Select>
                 </FormControl>
-                {productUnitError && <ValidationMessage notExist>{t(`Please add Unit`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12}>
                 <ImageUploading
