@@ -450,6 +450,7 @@ const resources = {
             'your location': 'موقعك',
             'Deal Edited': 'تم تعديل العرض',
             'Booking Edited': 'تم تعديل الحجز',
+            'payment gateway': 'طريقة الدفع',
         }
     }
 };

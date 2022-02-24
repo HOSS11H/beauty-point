@@ -169,7 +169,7 @@ const BookingDataBody = styled.p`
     color: #000;
 	text-align: center;
 `
-const ServiceEmployee = styled.span`
+const ItemEmployee = styled.span`
     font-size: 12px;
     line-height:1.5;
     text-transform: capitalize;
@@ -229,10 +229,10 @@ const Invoice = React.forwardRef((props, ref) => {
 								<ClientBill>رقم الفاتورة : {bookingData.id}</ClientBill>
 							)}
 							<ClientDate>
-								تاريخ الحجز : {format(new Date(bookingData.date_time), 'dd-MM-yyyy' )}
+								تاريخ الحجز : {format(new Date(bookingData.date_time), 'dd-MM-yyyy')}
 							</ClientDate>
 							<ClientDate>
-								<span>{format(new Date(bookingData.date_time), 'hh:ii a' )}</span>
+								<span>{format(new Date(bookingData.date_time), 'hh:ii a')}</span>
 								<span> : وقت الحجز</span>
 							</ClientDate>
 							<Grid sx={{ width: '100%' }} container spacing={2}>
@@ -290,10 +290,14 @@ const Invoice = React.forwardRef((props, ref) => {
 													>
 														<CustomTableCell component="th" scope="row" align="center">
 															{<BookingDataBody>{item.item.name}</BookingDataBody>}
-															{item.item?.type === 'service' && <ServiceEmployee>( {item.employee?.name} )</ServiceEmployee> }
+															{item.employee && <ItemEmployee>( {item.employee.name} )</ItemEmployee>}
 														</CustomTableCell>
-														<CustomTableCell align="center">{<BookingDataBody>{`${item.quantity} x ${item.price}`}</BookingDataBody>}</CustomTableCell>
-														<CustomTableCell align="center">{<BookingDataBody>{formatCurrency(item.amount)}</BookingDataBody>}</CustomTableCell>
+														<CustomTableCell align="center">
+															{<BookingDataBody>{`${item.quantity} x ${item.price}`}</BookingDataBody>}
+														</CustomTableCell>
+														<CustomTableCell align="center">
+															{<BookingDataBody>{formatCurrency(item.amount)}</BookingDataBody>}
+														</CustomTableCell>
 													</TableRow>
 												)
 											})
