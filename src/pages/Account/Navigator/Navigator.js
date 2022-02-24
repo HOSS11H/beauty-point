@@ -182,8 +182,8 @@ const Navigator = (props) => {
             fetchedPermissions.forEach(permission => {
                 if (permission.name === 'read_business_service') {
                     addedRoutes.push({ id: 'services', name: 'services', icon: <FormatListBulletedIcon /> });
-                    addedRoutes.push({ id: 'products', name: 'products', icon: <ShoppingCartIcon /> });
                     addedRoutes.push({ id: 'units', name: 'units', icon: <LinearScaleIcon /> });
+                    addedRoutes.push({ id: 'products', name: 'products', icon: <ShoppingCartIcon /> });
                     addedRoutes.push({ id: 'point-of-sale', name: 'points of sales', icon: <AddShoppingCartIcon /> });
                     addedRoutes.push({ id: 'customers', name: 'customers', icon: <PeopleIcon /> });
                     module.current = <ModuleNav />;
