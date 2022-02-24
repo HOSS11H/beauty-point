@@ -345,8 +345,10 @@ const EditModal = (props) => {
         formData.append('bank_id', bankData.id);
         formData.append('cat_id', selectedCategory.value);
         formData.append('customer_id', selectedAgent.value);
-        if (uploadedImages.length > 0 && uploadedImages[0].data_url !== null) {
+        if (uploadedImages.length > 0 && uploadedImages[0].data_url !== null && uploadedImages[0].file !== undefined) {
             formData.append('image', uploadedImages[0].file)
+        } else {
+            formData.append('image', '')
         }
         formData.append('_method', 'PUT');
         onConfirm(formData);

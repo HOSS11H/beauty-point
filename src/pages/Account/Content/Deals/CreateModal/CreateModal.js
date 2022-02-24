@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useContext, useReducer } from 'react';
+import { useState, useEffect, useCallback, useContext, useReducer, Fragment } from 'react';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import ThemeContext from '../../../../../store/theme-context'
@@ -45,6 +45,7 @@ import FormLabel from '@mui/material/FormLabel';
 import FormGroup from '@mui/material/FormGroup';
 import Checkbox from '@mui/material/Checkbox';
 import { format } from 'date-fns';
+import moment from 'moment';
 
 
 const CustomTextField = styled(TextField)`
@@ -568,10 +569,10 @@ const CreateModal = (props) => {
         formData.append('deal_startDate', `${format(dateFrom, 'Y-MM-dd hh:ii a')}`);
         formData.append('deal_endDate', `${format(dateTo, 'Y-MM-dd hh:ii a')}`);
         formData.append('applied_between_dates', `${format(dateFrom, 'Y-MM-dd hh:ii a')}  ${format(dateTo, 'Y-MM-dd hh:ii a')}`);
-        formData.append('open_time', `${format(openTime, 'hh:ii a')}`);
-        formData.append('close_time', `${format(closeTime, 'hh:ii a')}`);
-        formData.append('deal_startTime',  `${format(openTime, 'hh:ii a')}`);
-        formData.append('deal_endTime', `${format(closeTime, 'hh:ii a')}`);
+        formData.append('open_time', `${moment(openTime).format("hh:mm A")}`);
+        formData.append('close_time', `${moment(closeTime).format("hh:mm A")}`);
+        formData.append('deal_startTime',  `${moment(openTime).format("hh:mm A")}`);
+        formData.append('deal_endTime', `${moment(closeTime).format("hh:mm A")}`);
         if (uploadedImages.length > 0 && uploadedImages[0].data_url !== null && uploadedImages[0].file !== undefined) {
             formData.append('image', uploadedImages[0].file)
         } else {
@@ -608,39 +609,45 @@ const CreateModal = (props) => {
                 {dealLocationError && <ValidationMessage notExist>{t(`Please add Location`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6} >
-                <FormControl sx={{ width: '100%' }}>
-                    <InputLabel id="services-label">{t('services')}</InputLabel>
-                    <Select
-                        labelId="services-label"
-                        label={t('services')}
-                        id="select-multiple-services"
-                        multiple
-                        value={selectedServices}
-                        onChange={handleServicesChange}
-                        input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
-                        renderValue={(selected) => (
-                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                {!fetchingServices && selected.map((value) => {
-                                    const selected = fetchedServices.data.find(service => service.id === value);
-                                    return (
-                                        <Chip key={selected.id} label={selected.name} />
-                                    )
-                                })}
-                            </Box>
-                        )}
-                        MenuProps={MenuProps}
-                    >
-                        {fetchedServices.data.map((service) => (
-                            <MenuItem
-                                key={service.id}
-                                value={service.id}
-                            >
-                                {service.name}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-                {selectedServicesError && <ValidationMessage notExist>{t(`Please add at least one service`)}</ValidationMessage>}
+                {
+                    dealLocation !== '' && (
+                        <Fragment>
+                            <FormControl sx={{ width: '100%' }}>
+                                <InputLabel id="services-label">{t('services')}</InputLabel>
+                                <Select
+                                    labelId="services-label"
+                                    label={t('services')}
+                                    id="select-multiple-services"
+                                    multiple
+                                    value={selectedServices}
+                                    onChange={handleServicesChange}
+                                    input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+                                    renderValue={(selected) => (
+                                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                            {!fetchingServices && selected.map((value) => {
+                                                const selected = fetchedServices.data.find(service => service.id === value);
+                                                return (
+                                                    <Chip key={selected.id} label={selected.name} />
+                                                )
+                                            })}
+                                        </Box>
+                                    )}
+                                    MenuProps={MenuProps}
+                                >
+                                    {fetchedServices.data.map((service) => (
+                                        <MenuItem
+                                            key={service.id}
+                                            value={service.id}
+                                        >
+                                            {service.name}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                            {selectedServicesError && <ValidationMessage notExist>{t(`Please add at least one service`)}</ValidationMessage>}
+                        </Fragment>
+                    )
+                }
             </Grid>
             <Grid item xs={12} >
                 {cartData.services.length > 0 && (

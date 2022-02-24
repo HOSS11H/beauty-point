@@ -47,12 +47,6 @@ const headCells = [
         label: 'deal price',
     },
     {
-        id: 'dealUsage',
-        numeric: false,
-        disablePadding: false,
-        label: 'deal usage',
-    },
-    {
         id: 'location',
         numeric: false,
         disablePadding: false,

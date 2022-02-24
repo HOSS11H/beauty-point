@@ -47,6 +47,7 @@ import FormGroup from '@mui/material/FormGroup';
 import Checkbox from '@mui/material/Checkbox';
 import { format } from 'date-fns';
 import {convertTime12to24} from '../../../../../../shared/utility';
+import moment from 'moment';
 
 
 const CustomTextField = styled(TextField)`
@@ -223,7 +224,7 @@ const EditModal = (props) => {
 
     let dealData = fetchedDeals.data[selectedDealIndex];
 
-    const { title, description, services, location, discount_value, discount_type, deal_applied_on, discount_price, status, used_time, uses_limit, image, days, start_date_time, end_date_time, open_time, close_time } = dealData;
+    const { title, description, services, location, discount_value, discount_type, discount_price, status, used_time, uses_limit, image, days, start_date_time, end_date_time, open_time, close_time } = dealData;
 
     let intialSelectedServices = [];
 
@@ -244,7 +245,7 @@ const EditModal = (props) => {
         return chosenServices;
     })
     let obj = {};
-    const appliedOnDays = days.map( item => {
+    days.forEach( item => {
         obj[item] = true;
         return obj;
     })
@@ -256,8 +257,6 @@ const EditModal = (props) => {
 
     const [dealName, setDealName] = useState(title);
     const [dealNameError, setDealNameError] = useState(false);
-
-    const [dealAppliedOn, setDealAppliedOn] = useState(deal_applied_on);
     
     const [dealLocation, setDealLocation] = useState(location.id);
     const [dealLocationError, setDealLocationError] = useState(false);
@@ -384,9 +383,6 @@ const EditModal = (props) => {
     const dealNameChangeHandler = (event) => {
         setDealName(event.target.value);
         setDealNameError(false);
-    }
-    const dealAppliedOnChangeHandler = (event) => {
-        setDealAppliedOn(event.target.value);
     }
     const handleLocationChange = (event) => {
         const {
@@ -555,7 +551,7 @@ const EditModal = (props) => {
         formData.append('discount_type', discountType);
         formData.append('discount', +dealDiscount);
         formData.append('discount_amount', +priceAfterDiscount);
-        formData.append('choice', dealAppliedOn);
+        formData.append('choice', 'location');
         formData.append('uses_time', +userLimit);
         formData.append('customer_uses_time', +usesTime);
         for ( var c = 0; c < selectedAppliedDays.length; c++) {
@@ -567,10 +563,10 @@ const EditModal = (props) => {
         formData.append('deal_startDate', `${format(dateFrom, 'Y-MM-dd hh:ii a')}`);
         formData.append('deal_endDate', `${format(dateTo, 'Y-MM-dd hh:ii a')}`);
         formData.append('applied_between_dates', `${format(dateFrom, 'Y-MM-dd hh:ii a')}  ${format(dateTo, 'Y-MM-dd hh:ii a')}`);
-        formData.append('open_time', `${format(openTime, 'hh:ii a')}`);
-        formData.append('close_time', `${format(closeTime, 'hh:ii a')}`);
-        formData.append('deal_startTime',  `${format(openTime, 'hh:ii a')}`);
-        formData.append('deal_endTime', `${format(closeTime, 'hh:ii a')}`);
+        formData.append('open_time', `${moment(openTime).format("hh:mm A")}`);
+        formData.append('close_time', `${moment(closeTime).format("hh:mm A")}`);
+        formData.append('deal_startTime',  `${moment(openTime).format("hh:mm A")}`);
+        formData.append('deal_endTime', `${moment(closeTime).format("hh:mm A")}`);
         if (uploadedImages.length > 0 && uploadedImages[0].data_url !== null && uploadedImages[0].file !== undefined) {
             formData.append('image', uploadedImages[0].file)
         } else {
@@ -578,26 +574,13 @@ const EditModal = (props) => {
         }
         formData.append('_method', 'PUT');
         onConfirm(formData);
-    }, [dealName, dealLocation, selectedServices, dateTo, dateFrom, closeTime, openTime, appliedDays, editorState, dealPriceError, id, cartData.services, discountType, dealDiscount, priceAfterDiscount, dealAppliedOn, userLimit, usesTime, dealStatus, uploadedImages, onConfirm])
+    }, [dealName, dealLocation, selectedServices, dateTo, dateFrom, closeTime, openTime, appliedDays, editorState, dealPriceError, id, cartData.services, discountType, dealDiscount, priceAfterDiscount, userLimit, usesTime, dealStatus, uploadedImages, onConfirm])
 
     let content = (
         <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
                 <CustomTextField id="deal-name" label={t('name')} variant="outlined" value={dealName} onChange={dealNameChangeHandler} />
                 {dealNameError && <ValidationMessage notExist>{t(`Please add name`)}</ValidationMessage>}
-            </Grid>
-            <Grid item xs={12} sm={6}>
-                <FormControl sx={{ width: '100%' }}>
-                    <InputLabel id="applied-on-label">{t('applied on')}</InputLabel>
-                    <Select
-                        value={dealAppliedOn}
-                        onChange={dealAppliedOnChangeHandler}
-                        inputProps={{ 'aria-label': 'Without label' }}
-                        label={t('applied on')}
-                    >
-                        <MenuItem value='location'>{t('location')}</MenuItem>
-                    </Select>
-                </FormControl>
             </Grid>
             <Grid item xs={12} sm={6}>
                 <FormControl sx={{ width: '100%' }}>

@@ -118,8 +118,6 @@ const Auth = props => {
 
     const [marker, setMarker] = useState({})
 
-    const [ pendingSignedUp, setPendingSignedUp ] = useState(false);
-
     let authIsValid;
 
     if (isLogin) {

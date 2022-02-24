@@ -4,7 +4,6 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import EventNoteIcon from '@mui/icons-material/EventNote';
-import WatchLaterIcon from '@mui/icons-material/WatchLater';
 import { TableData, TableDate, TableImg, TableStatus } from '../../../../../../components/UI/Dashboard/Table/Table';
 import { formatCurrency } from '../../../../../../shared/utility';
 import { useTranslation } from 'react-i18next';
@@ -44,13 +43,11 @@ const EnhancedTableBody = props => {
                         <TableCell align="center">
                             <TableDate>
                                 <li><EventNoteIcon sx={{ mr: 1 }} />{row.formattedDate.startDate}</li>
-                                <li><WatchLaterIcon sx={{ mr: 1 }} />{row.formattedTime.startTime}</li>
                             </TableDate>
                         </TableCell>
                         <TableCell align="center">
                             <TableDate>
                                 <li><EventNoteIcon sx={{ mr: 1 }} />{row.formattedDate.endDate}</li>
-                                <li><WatchLaterIcon sx={{ mr: 1 }} />{row.formattedTime.endTime}</li>
                             </TableDate>
                         </TableCell>
                         <TableCell align="center">
@@ -62,9 +59,6 @@ const EnhancedTableBody = props => {
                             <TableData>
                                 {formatCurrency(row.discount_price)}
                             </TableData>
-                        </TableCell>
-                        <TableCell align="center">
-                            <TableData>{row.used_time}</TableData>
                         </TableCell>
                         <TableCell align="center">
                             <TableData>

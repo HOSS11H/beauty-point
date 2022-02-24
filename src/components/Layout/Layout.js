@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { ToastContainer } from "react-toastify";
+import { StyledToastifyContainer } from '../UI/StyledToastContainer/StyledToastContainer.styled';
 import "react-toastify/dist/ReactToastify.css";
 
 
@@ -12,11 +12,21 @@ const Main = styled.main`
 `
 
 const Layout = props => {
-    
+
     return (
         <Main dir={props.dir}>
             <Wrapper>
-                <ToastContainer autoClose={3000} hideProgressBar />
+                <StyledToastifyContainer
+                    position="bottom-right"
+                    autoClose={4000}
+                    hideProgressBar={true}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnHover={false}
+                    progress={undefined}
+                    draggable={false}
+                />
                 {props.children}
             </Wrapper>
         </Main>

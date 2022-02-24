@@ -358,8 +358,10 @@ const CreateModal = (props) => {
         formData.append('bank_id', bankData.id);
         formData.append('cat_id', selectedCategory.value);
         formData.append('customer_id', selectedAgent.value);
-        if (uploadedImages.length > 0) {
+        if (uploadedImages.length > 0 && uploadedImages[0].data_url !== null && uploadedImages[0].file !== undefined) {
             formData.append('image', uploadedImages[0].file)
+        } else {
+            formData.append('image', '')
         }
         onConfirm(formData);
     }, [expenseName, bankData, selectedCategory, selectedAgent, expenseAmount, editorState, date, uploadedImages, onConfirm])
