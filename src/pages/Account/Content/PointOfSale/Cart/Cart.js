@@ -150,11 +150,15 @@ const ActionsWrapper = styled.div`
 `
 const AddCustomer = styled(CustomButton)`
     &.MuiButton-root {
+        margin-bottom: 0;
         margin-left: 20px;
         width: auto;
         padding: 0 15px;
         height: 56px;
         flex-shrink: 0;
+        &:last-child {
+            margin-left: 0;
+        }
     }
 `
 const CustomTextField = styled(TextField)`
@@ -275,6 +279,14 @@ const Cart = props => {
         }
         setResetSearchData(false)
     }, [])
+    
+    const addPassingCustomer = ( ) => {
+        setCustomerData({
+            id: '',
+            name: t('passing customer'),
+        })
+        setCustomerDataError(false)
+    }
 
     const discountTypeChangeHandler = (event) => {
         setDiscountType(event.target.value);
@@ -458,11 +470,12 @@ const Cart = props => {
                 <Grid item xs={12} md={6}>
                     <FormLabel component="legend" sx={{ textAlign: 'left', textTransform: 'capitalize', marginBottom: '8px' }} >{t('select customer')}</FormLabel>
                     <ActionsWrapper>
-                        <FormControl fullWidth sx={{ minWidth: '250px' }} >
+                        <FormControl fullWidth sx={{ minWidth: '250px', marginRight:'20px' }} >
                             <SearchCustomer selectCustomer={selectCustomer} resetSearchData={resetSearchData} />
                         </FormControl>
                         <AddCustomer onClick={addCustomerModalOpenHandler} >{t('add')}</AddCustomer>
                     </ActionsWrapper>
+                    <AddCustomer sx={ {marginTop: '20px', marginLeft: 0} } onClick={addPassingCustomer} >{t('add passing customer')}</AddCustomer>
                     {customerDataError && <ValidationMessage notExist>{t(`Please Choose Customer`)}</ValidationMessage>}
                 </Grid>
                 {
@@ -470,9 +483,13 @@ const Cart = props => {
                         <Grid item xs={12}>
                             <CustomerCard>
                                 <CustomerName>{customerData.name}</CustomerName>
-                                <CustomerInfo>
-                                    <li><PhoneAndroidIcon sx={{ mr: 1 }} />{customerData.mobile}</li>
-                                </CustomerInfo>
+                                {
+                                    customerData.mobile && (
+                                        <CustomerInfo>
+                                            <li><PhoneAndroidIcon sx={{ mr: 1 }} />{customerData.mobile}</li>
+                                        </CustomerInfo>
+                                    )
+                                }
                             </CustomerCard>
                         </Grid>
                     )

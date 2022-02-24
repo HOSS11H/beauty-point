@@ -451,6 +451,8 @@ const resources = {
             'Deal Edited': 'تم تعديل العرض',
             'Booking Edited': 'تم تعديل الحجز',
             'payment gateway': 'طريقة الدفع',
+            'add passing customer': 'إضافة عميل عابر',
+            'passing customer': 'عميل عابر',
         }
     }
 };
