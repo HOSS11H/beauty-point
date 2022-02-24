@@ -85,14 +85,13 @@ export const updateBookingStart = () => {
         type: actionTypes.UPDATE_BOOKING_START,
     }
 }
-export const updateBookingSuccess = (message, updatedBookingData) => {
+export const updateBookingSuccess = (updatedBookingData) => {
     return {
         type: actionTypes.UPDATE_BOOKING_SUCCESS,
-        message: message,
         bookingData: updatedBookingData,
     }
 }
-export const resetUpdateBookingSuccess = (message, updatedDealData) => {
+export const resetUpdateBookingSuccess = (updatedDealData) => {
     return {
         type: actionTypes.RESET_UPDATE_BOOKING_SUCCESS,
     }
@@ -109,13 +108,16 @@ export const updateBooking = (data) => {
         dispatch(updateBookingStart())
         axios.put(`/vendors/bookings/${data.customerId}`, data)
             .then(response => {
-                dispatch(updateBookingSuccess(response.data, data));
+                dispatch(updateBookingSuccess(data));
                 setTimeout(() => {
                     dispatch(resetUpdateBookingSuccess())
                 }, 1000)
             })
             .catch(err => {
-                dispatch(updateBookingFailed(err.message))
+                const errs = err.response?.data.errors;
+                for (let key in errs) {
+                    dispatch(updateBookingFailed(errs[key][0]))
+                }
             })
     }
 }
@@ -125,10 +127,9 @@ export const createBookingStart = () => {
         type: actionTypes.CREATE_BOOKING_START,
     }
 }
-export const createBookingSuccess = (message) => {
+export const createBookingSuccess = () => {
     return {
         type: actionTypes.CREATE_BOOKING_SUCCESS,
-        message: message,
     }
 }
 export const resetCreateBookingSuccess = () => {
@@ -148,13 +149,16 @@ export const createBooking = (data) => {
         dispatch(createBookingStart())
         axios.post(`/vendors/bookings`, data)
             .then(response => {
-                dispatch(createBookingSuccess(response.data));
+                dispatch(createBookingSuccess());
                 setTimeout(() => {
                     dispatch(resetCreateBookingSuccess())
                 }, 4000)
             })
             .catch(err => {
-                dispatch(createBookingFailed(err.message))
+                const errs = err.response.data.errors;
+                for (let key in errs) {
+                    dispatch(createBookingFailed(errs[key][0]))
+                }
             })
     }
 }

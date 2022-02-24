@@ -11,14 +11,17 @@ import SearchMessage from "../../../../components/Search/SearchMessage/SearchMes
 import { useTranslation } from "react-i18next";
 import v1 from '../../../../utils/axios-instance-v1'
 import TablePaginationActions from '../../../../components/UI/Dashboard/Table/TablePagination/TablePagination';
+import { toast } from "react-toastify";
 
 const rowsPerPage = 15;
 
 function Bookings(props) {
 
-    const {t} = useTranslation()
+    const { t } = useTranslation()
 
-    const { fetchedBookings, fetchBookingsHandler, fetchingBookings, deleteBookingHandler, updateBookingHandler, filteringBookings, filteringBookingsSuccess, updatingBookingSuccess, filterBookingsHandler } = props;
+    const { fetchedBookings, fetchBookingsHandler, fetchingBookings, deleteBookingHandler, updateBookingHandler, 
+            updatingBookingSuccess, updatingBookingFailed, updatingBookingMessage,
+            filteringBookings, filteringBookingsSuccess, filterBookingsHandler } = props;
 
     const themeCtx = useContext(ThemeContext)
 
@@ -36,7 +39,6 @@ function Bookings(props) {
 
     useEffect(() => {
         if (fetchedBookings.data.length === 0) {
-            console.log('fetching bookings')
             fetchBookingsHandler(lang, page, rowsPerPage);
         }
     }, [fetchBookingsHandler, fetchedBookings.data.length, lang, page]);
@@ -56,11 +58,29 @@ function Bookings(props) {
 
 
     useEffect(() => {
-        updatingBookingSuccess && fetchBookingsHandler(lang, page, rowsPerPage);
-    }, [updatingBookingSuccess, fetchBookingsHandler, lang, page]);
+        if (updatingBookingSuccess) {
+            setEditModalOpened(false);
+            setSelectedBookingId(null);
+            fetchBookingsHandler(lang, page, rowsPerPage);
+            toast.success(t('Booking Edited'), {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [updatingBookingSuccess, fetchBookingsHandler, lang, page, t]);
+
+    useEffect(() => {
+        if( updatingBookingFailed &&  updatingBookingMessage ) {
+            toast.error(updatingBookingMessage, {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [updatingBookingFailed, updatingBookingMessage, t]);
+
 
     const filterBookingHandler = useCallback((filters) => {
-        filterBookingsHandler({...filters, page: 1, per_page: rowsPerPage});
+        filterBookingsHandler({ ...filters, page: 1, per_page: rowsPerPage });
         setPage(0);
     }, [filterBookingsHandler])
 
@@ -85,9 +105,6 @@ function Bookings(props) {
     }, [deleteBookingHandler])
 
     const editModalConfirmHandler = useCallback((data) => {
-        setEditModalOpened(false);
-        setSelectedBookingId(null);
-        //console.log(data)
         updateBookingHandler(data);
     }, [updateBookingHandler])
 
@@ -113,28 +130,28 @@ function Bookings(props) {
         editModalOpenHandler(id);
     }, [editModalOpenHandler])
 
-    let content ;
+    let content;
 
     if (fetchingBookings || filteringBookings) {
         content = (
             <Fragment>
                 <Grid item xs={12} md={6}  >
-                    <BookingView loading={fetchingBookings}  />
+                    <BookingView loading={fetchingBookings} />
                 </Grid>
                 <Grid item xs={12} md={6}  >
                     <BookingView loading={fetchingBookings} />
                 </Grid>
                 <Grid item xs={12} md={6}  >
-                    <BookingView loading={fetchingBookings}  />
+                    <BookingView loading={fetchingBookings} />
                 </Grid>
                 <Grid item xs={12} md={6}  >
-                    <BookingView loading={fetchingBookings}  />
+                    <BookingView loading={fetchingBookings} />
                 </Grid>
                 <Grid item xs={12} md={6}  >
-                    <BookingView loading={fetchingBookings}  />
+                    <BookingView loading={fetchingBookings} />
                 </Grid>
                 <Grid item xs={12} md={6}  >
-                    <BookingView loading={fetchingBookings}  />
+                    <BookingView loading={fetchingBookings} />
                 </Grid>
             </Fragment>
         )
@@ -159,9 +176,9 @@ function Bookings(props) {
             <SearchFilters page={page} perPage={rowsPerPage} filterBookings={filterBookingHandler} />
             {content}
             <Grid item xs={12}>
-                { fetchedBookings.data.length !== 0 && (
+                {fetchedBookings.data.length !== 0 && (
                     <TablePaginationActions
-                        sx= {{ width: '100%'}}
+                        sx={{ width: '100%' }}
                         component="div"
                         count={fetchedBookings.data.length}
                         total={fetchedBookings.meta ? fetchedBookings.meta.total : 0}
@@ -174,9 +191,9 @@ function Bookings(props) {
             </Grid>
             {
                 viewModalOpened && (
-                    <ViewModal show={viewModalOpened} id={selectedBookingId} 
+                    <ViewModal show={viewModalOpened} id={selectedBookingId}
                         onClose={viewModalCloseHandler} onConfirm={viewModalConfirmHandler.bind(null, selectedBookingId)}
-                        heading='view booking details' confirmText='edit'  onDelete={viewModalDeleteHandler} userData={userData} />
+                        heading='view booking details' confirmText='edit' onDelete={viewModalDeleteHandler} userData={userData} />
                 )
             }
             {
@@ -197,6 +214,8 @@ const mapStateToProps = state => {
         filteringBookings: state.bookings.filteringBookings,
         filteringBookingsSuccess: state.bookings.filteringBookingsSuccess,
         updatingBookingSuccess: state.bookings.updatingBookingSuccess,
+        updatingBookingFailed: state.bookings.updatingBookingFailed,
+        updatingBookingMessage: state.bookings.updatingBookingMessage,
     }
 }
 

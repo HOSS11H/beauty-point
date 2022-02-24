@@ -14,9 +14,11 @@ const intialState = {
     deletingBookingMessage: null,
     updatingBooking: false,
     updatingBookingSuccess: false,
+    updatingBookingFailed: false,
     updatingBookingMessage: null,
     creatingBooking: false,
     bookingCreated: false,
+    creatingBookingFailed: false,
     creatingBookingMessage: null,
     filteringBookings: false,
     filteringBookingsSuccess: false,
@@ -76,6 +78,7 @@ const reducer = (state = intialState, action) => {
             return updateObject(state, {
                 updatingBooking: true,
                 updatingBookingSuccess: false,
+                updatingBookingFailed: false,
                 updatingBookingMessage: null,
             })
         case (actionTypes.UPDATE_BOOKING_SUCCESS):
@@ -94,41 +97,39 @@ const reducer = (state = intialState, action) => {
                 },
                 updatingBooking: false,
                 updatingBookingSuccess: true,
-                updatingBookingMessage: action.message,
             })
         case (actionTypes.RESET_UPDATE_BOOKING_SUCCESS):
             return updateObject(state, {
                 updatingBookingSuccess: false,
-                updatingBookingMessage: null,
             })
         case (actionTypes.UPDATE_BOOKING_FAILED):
             return updateObject(state, {
                 updatingBooking: false,
-                updatingBookingSuccess: false,
+                updatingBookingFailed: true,
                 updatingBookingMessage: action.message,
             })
         case (actionTypes.CREATE_BOOKING_START):
             return updateObject(state, {
                 creatingBooking: true,
-                creatingBookingMessage: null,
                 bookingCreated: false,
+                creatingBookingFailed: false,
+                creatingBookingMessage: null,
             })
         case (actionTypes.CREATE_BOOKING_SUCCESS):
             return updateObject(state, {
                 creatingBooking: false,
-                creatingBookingMessage: action.message,
                 bookingCreated: true,
             })
         case (actionTypes.RESET_CREATE_BOOKING_SUCCESS):
             return updateObject(state, {
-                creatingBookingMessage: null,
+                creatingBooking: false,
                 bookingCreated: false,
             })
             case (actionTypes.CREATE_BOOKING_FAILED):
                 return updateObject(state, {
                     creatingBooking: false,
+                    creatingBookingFailed: true,
                     creatingBookingMessage: action.message,
-                    bookingCreated: false,
             })
         case (actionTypes.FILTER_BOOKINGS_START):
             return updateObject(state, {

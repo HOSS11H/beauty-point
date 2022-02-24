@@ -124,6 +124,15 @@ const cartReducer = (state, action) => {
             return updateObject(state, {
                 products: changedProducts,
             })
+        case 'CHANGE_PRODUCT_EMPLOYEE':
+            const changedEmployeeProductIndex = state.products.findIndex(product => product.id === action.payload.id);
+            const changedEmployeeProduct = { ...state.products[changedEmployeeProductIndex] }
+            changedEmployeeProduct.employee_id = action.payload.employeeId
+            const changedEmployeeProducts = [...state.products]
+            changedEmployeeProducts[changedEmployeeProductIndex] = changedEmployeeProduct
+            return updateObject(state, {
+                products: changedEmployeeProducts,
+            })
         case 'ADD_TO_DEALS':
             const dealIndex = state.deals.findIndex(deal => deal.id === action.payload.id);
             const updatedDeals = [...state.deals]
@@ -173,6 +182,15 @@ const cartReducer = (state, action) => {
             return updateObject(state, {
                 deals: changedDeals,
             })
+        case 'CHANGE_DEAL_EMPLOYEE':
+            const changedEmployeeDealIndex = state.deals.findIndex(deal => deal.id === action.payload.id);
+            const changedEmployeeDeal = { ...state.deals[changedEmployeeDealIndex] }
+            changedEmployeeDeal.employee_id = action.payload.employeeId
+            const changedEmployeeDeals = [...state.deals]
+            changedEmployeeDeals[changedEmployeeDealIndex] = changedEmployeeDeal
+            return updateObject(state, {
+                deals: changedEmployeeDeals,
+            })
         case 'RESET_CART':
             const intialState = {
                 services: [],
@@ -212,17 +230,10 @@ const PointOfSale = (props) => {
     const [shownLocation, setShownLocation] = useState(city);
     const [searchWord, setSearchWord] = useState('');
 
-    const [messageShown, setMessageShown] = useState(bookingCreated);
-
     const [reservedBookingData, setReservedBookingData] = useState(null);
     const [reservingBokking, setReservingBokking] = useState(false);
 
     const [printBookingModalOpened, setPrintBookingModalOpened] = useState(false);
-
-    useEffect(() => {
-        setMessageShown(bookingCreated)
-    }, [bookingCreated, navigate])
-
 
     useEffect(() => {
         if (shownType === 'services') {
@@ -355,11 +366,28 @@ const PointOfSale = (props) => {
             })
         }
     }, [])
-    const changeServiceEmployeeHandler = useCallback((type, itemId, employeeId) => {
-        //console.log(type, itemId, employeeId);
+    const changeEmployeeHandler = useCallback((type, itemId, employeeId) => {
         if (type === 'services') {
             dispatch({
                 type: 'CHANGE_SERVICE_EMPLOYEE',
+                payload: {
+                    id: itemId,
+                    employeeId: employeeId,
+                },
+            })
+        }
+        if (type === 'products') {
+            dispatch({
+                type: 'CHANGE_PRODUCT_EMPLOYEE',
+                payload: {
+                    id: itemId,
+                    employeeId: employeeId,
+                },
+            })
+        }
+        if (type === 'deals') {
+            dispatch({
+                type: 'CHANGE_DEAL_EMPLOYEE',
                 payload: {
                     id: itemId,
                     employeeId: employeeId,
@@ -377,9 +405,6 @@ const PointOfSale = (props) => {
         setPage(newPage);
     }, []);
 
-    const closeMessageHandler = useCallback(() => {
-        setMessageShown(false)
-    }, [])
 
     const purchaseCartHandler = useCallback((purchasedData) => {
         createBookingHandler({
@@ -405,10 +430,13 @@ const PointOfSale = (props) => {
             })
             .catch(err => {
                 setReservingBokking(false);
-                toast.error(err.response.data.message, {
-                    position: "bottom-right", autoClose: 4000, hideProgressBar: true,
-                    closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
-                });
+                const errs = err.response.data.errors;
+                for (let key in errs) {
+                    toast.error(errs[key][0], {
+                        position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                        closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+                    });
+                }
             })
     }, [shownLocation])
 
@@ -429,8 +457,7 @@ const PointOfSale = (props) => {
                 <Cart cartData={cart} removeFromCart={removeFromCartHandler} increaseItem={increaseItemHandler} decreaseItem={decreaseItemHandler}
                     resetCart={resetCartHandler} reserved={reservedBookingData}
                     purchase={purchaseCartHandler} print={purchasePrintBookingHandler}
-                    priceChangeHandler={changeItemPriceHandler} changeEmployee={changeServiceEmployeeHandler} />
-                <CustomizedSnackbars show={messageShown} message={t('Booking Created')} type='success' onClose={closeMessageHandler} />
+                    priceChangeHandler={changeItemPriceHandler} changeEmployee={changeEmployeeHandler} />
             </Grid>
             <Backdrop
                 sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}

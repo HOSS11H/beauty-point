@@ -30,6 +30,7 @@ import AddCustomerModal from './AddCustomerModal/AddCustomerModal';
 import { formatCurrency } from '../../../../../shared/utility';
 import { Fragment } from 'react';
 import SearchCustomer from './SearchCustomer/SearchCustomer';
+import { toast } from 'react-toastify';
 
 
 const CustomerCard = styled.div`
@@ -168,7 +169,9 @@ const CustomFormGroup = styled.div`
 
 const Cart = props => {
 
-    const { cartData, removeFromCart, increaseItem, decreaseItem, resetCart, reserved, reset, purchase, print, fetchedCoupons, addedCustomerData, addingCustomerSuccess, fetchCouponsHandler, addCustomerHandler, fetchedEmployeesHandler, bookingCreated, priceChangeHandler, changeEmployee } = props;
+    const { cartData, removeFromCart, increaseItem, decreaseItem, resetCart, reserved, reset, purchase, print, fetchedCoupons, addedCustomerData,
+        addingCustomerSuccess, fetchCouponsHandler, addCustomerHandler, fetchedEmployeesHandler,
+        bookingCreated, creatingBookingFailed, creatingBookingMessage, priceChangeHandler, changeEmployee } = props;
 
     const { t } = useTranslation()
 
@@ -177,7 +180,7 @@ const Cart = props => {
 
     const [customerData, setCustomerData] = useState(null);
     const [customerDataError, setCustomerDataError] = useState(false)
-    const [ resetSearchData, setResetSearchData ] = useState(false)
+    const [resetSearchData, setResetSearchData] = useState(false)
 
     const [dateTime, setDateTime] = useState(new Date());
 
@@ -185,7 +188,6 @@ const Cart = props => {
 
     const [totalTaxes, setTotalTaxes] = useState(0)
 
-    const [ servicesEmployeeError , setServicesEmployeeError ] = useState(false)
     const [cartDataError, setCartDataError] = useState(false)
 
     const [coupon, setCoupon] = useState('')
@@ -211,10 +213,10 @@ const Cart = props => {
     }, [fetchCouponsHandler, fetchedEmployeesHandler, lang])
 
     useEffect(() => {
-        if ( addedCustomerData && addingCustomerSuccess ) {
+        if (addedCustomerData && addingCustomerSuccess) {
             setCustomerData(addedCustomerData);
         }
-    },[addedCustomerData, addingCustomerSuccess])
+    }, [addedCustomerData, addingCustomerSuccess])
 
     useEffect(() => {
         let total = 0;
@@ -224,17 +226,17 @@ const Cart = props => {
             }
         }
 
-        if ( discountType === 'percent' ) {
-            total = total - ((total * discount / 100) );
-        } else if ( discountType === 'fixed') {
-            total = total - discount ;
+        if (discountType === 'percent') {
+            total = total - ((total * discount / 100));
+        } else if (discountType === 'fixed') {
+            total = total - discount;
         }
         if (couponData.discountType === 'percentage') {
             total = total - ((total * couponData.amount / 100));
         } else if (couponData.discountType === 'fixed') {
             total = total - couponData.amount;
         }
-        
+
         setTotalTaxes(total - (total / 1.15))
         setTotalPrice(total);
         setPaidAmount(total);
@@ -272,7 +274,7 @@ const Cart = props => {
             setCustomerData(null);
         }
         setResetSearchData(false)
-    } , [])
+    }, [])
 
     const discountTypeChangeHandler = (event) => {
         setDiscountType(event.target.value);
@@ -300,10 +302,10 @@ const Cart = props => {
         if (value >= 0) {
             setPaidAmountError(false)
             setPaidAmount(value)
-            if ( value > totalPrice) {
-                setCashToReturn( value - totalPrice )
+            if (value > totalPrice) {
+                setCashToReturn(value - totalPrice)
                 setCashRemainig(0)
-            } else if ( value === totalPrice) {
+            } else if (value === totalPrice) {
                 setCashToReturn(0)
                 setCashRemainig(0)
             } else if (value < totalPrice) {
@@ -339,8 +341,23 @@ const Cart = props => {
 
 
     useEffect(() => {
-        bookingCreated && resetCartHandler();
-    }, [bookingCreated, resetCartHandler])
+        if (bookingCreated) {
+            resetCartHandler();
+            toast.success(t('Booking Created'), {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [bookingCreated, resetCartHandler, t])
+
+    useEffect(() => {
+        if (creatingBookingFailed && creatingBookingMessage ) {
+            toast.error(creatingBookingMessage, {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [bookingCreated, creatingBookingFailed, creatingBookingMessage, resetCartHandler, t])
 
     useEffect(() => {
         reserved && resetCartHandler();
@@ -351,9 +368,6 @@ const Cart = props => {
         e.preventDefault();
         if (cartData.services.length === 0 && cartData.products.length === 0 && cartData.deals.length === 0) {
             setCartDataError(true)
-            return;
-        } else if ( cartData.services.length > 0 && cartData.services.find( item => item.employee_id === null  ) ) {
-            setServicesEmployeeError(true)
             return;
         } else if (!customerData) {
             setCustomerDataError(true)
@@ -387,9 +401,6 @@ const Cart = props => {
         e.preventDefault();
         if (cartData.services.length === 0 && cartData.products.length === 0 && cartData.deals.length === 0) {
             setCartDataError(true)
-            return;
-        } else if ( cartData.services.length > 0 && cartData.services.find( item => item.employee_id === null  ) ) {
-            setServicesEmployeeError(true)
             return;
         } else if (!customerData) {
             setCustomerDataError(true)
@@ -484,11 +495,6 @@ const Cart = props => {
                                     </TableBody>
                                 </Table>
                             </TableContainer>
-                            {
-                                servicesEmployeeError && (
-                                    <ValidationMessage notExist>{t('Eash service must have an employee')}</ValidationMessage>
-                                )
-                            }
                         </Fragment>
                     )}
                 </Grid>
@@ -504,7 +510,7 @@ const Cart = props => {
                                 <SharedTableHead name='products' />
                                 <TableBody>
                                     {cartData.products.map((row) => (
-                                        <CartItem type='products' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} priceChangeHandler={priceChangeHandler} />
+                                        <CartItem type='products' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} priceChangeHandler={priceChangeHandler} changeEmployee={changeEmployee} />
                                     ))}
                                 </TableBody>
                             </Table>
@@ -523,7 +529,7 @@ const Cart = props => {
                                 <SharedTableHead name='deals' />
                                 <TableBody>
                                     {cartData.deals.map((row) => (
-                                        <CartItem type='deals' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} priceChangeHandler={priceChangeHandler} />
+                                        <CartItem type='deals' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} priceChangeHandler={priceChangeHandler} changeEmployee={changeEmployee} />
                                     ))}
                                 </TableBody>
                             </Table>
@@ -609,8 +615,8 @@ const Cart = props => {
                         sx={{ flexGrow: '1' }}
                         value={paidAmount}
                         onChange={paidAmountChangeHandler}
-                        />
-                    {paidAmountError &&<ValidationMessage notExist>{t(`you must add the paid Amount`)}</ValidationMessage>}
+                    />
+                    {paidAmountError && <ValidationMessage notExist>{t(`you must add the paid Amount`)}</ValidationMessage>}
                 </Grid>
                 <Grid item xs={12} sm={6}>
                     <AmountCalculator>
@@ -645,6 +651,8 @@ const mapStateToProps = (state) => {
         addingCustomerSuccess: state.customers.addingCustomerSuccess,
         fetchedCoupons: state.coupons.coupons,
         bookingCreated: state.bookings.bookingCreated,
+        creatingBookingFailed: state.bookings.creatingBookingFailed,
+        creatingBookingMessage: state.bookings.creatingBookingMessage,
     }
 }
 

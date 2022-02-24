@@ -449,6 +449,7 @@ const resources = {
             'Deal Added': 'تم إضافة العرض',
             'your location': 'موقعك',
             'Deal Edited': 'تم تعديل العرض',
+            'Booking Edited': 'تم تعديل الحجز',
         }
     }
 };

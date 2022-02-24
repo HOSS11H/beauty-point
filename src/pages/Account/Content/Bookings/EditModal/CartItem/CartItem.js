@@ -26,7 +26,7 @@ const CartItem = props => {
 
     const { row, remove, increase, decrease, type, changeEmployee, fetchedEmployees } = props;
 
-    const [employeeName, setEmployeeName] = useState(type === 'services' ? row.employee?.id : null);
+    const [employeeName, setEmployeeName] = useState( row.employee ? row.employee.id : '');
 
     const handleEmployeesChange = (event) => {
         const {
@@ -55,43 +55,39 @@ const CartItem = props => {
             <TableCell align="center">
                 <TableData>{formatCurrency(row.quantity * row.price)}</TableData>
             </TableCell>
-            {
-                type === 'services' && (
-                    <TableCell align="center" sx={{ padding: '16px 8px' }}>
-                        <FormControl sx={{ width: '100%', minWidth: '90px' }}>
-                            <InputLabel id="employee-label">{t('employee')}</InputLabel>
-                            <Select
-                                label={t('employee')}
-                                labelId="employee-label"
-                                id="select-multiple-employees"
-                                value={employeeName}
-                                onChange={handleEmployeesChange}
-                                input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
-                                renderValue={ (val) => {
-                                    if(fetchedEmployees.length > 0) {
-                                        const selected = fetchedEmployees?.find(user => user.id === val);
-                                        return (
-                                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                                <Chip key={selected.id} label={selected.name} />
-                                            </Box>
-                                        )
-                                    }
-                                }}
-                                MenuProps={MenuProps}
+            <TableCell align="center" sx={{ padding: '16px 8px' }}>
+                <FormControl sx={{ width: '100%', minWidth: '90px' }}>
+                    <InputLabel id="employee-label">{t('employee')}</InputLabel>
+                    <Select
+                        label={t('employee')}
+                        labelId="employee-label"
+                        id="select-multiple-employees"
+                        value={employeeName}
+                        onChange={handleEmployeesChange}
+                        input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+                        renderValue={ (val) => {
+                            if(fetchedEmployees.length > 0) {
+                                const selected = fetchedEmployees?.find(user => user.id === val);
+                                return (
+                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                        <Chip key={selected.id} label={selected.name} />
+                                    </Box>
+                                )
+                            }
+                        }}
+                        MenuProps={MenuProps}
+                    >
+                        {fetchedEmployees.map((employee) => (
+                            <MenuItem
+                                key={employee.id}
+                                value={employee.id}
                             >
-                                {fetchedEmployees.map((employee) => (
-                                    <MenuItem
-                                        key={employee.id}
-                                        value={employee.id}
-                                    >
-                                        {employee.name}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                    </TableCell>
-                )
-            }
+                                {employee.name}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+            </TableCell>
             <TableCell align="center">
                 <Actions remove
                     removeHandler={(id) => remove(type, row.id)}

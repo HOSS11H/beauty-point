@@ -216,6 +216,15 @@ const cartReducer = (state, action) => {
             return updateObject(state, {
                 products: decreasedProducts,
             })
+        case 'CHANGE_PRODUCT_EMPLOYEE':
+            const changedEmployeeProductIndex = state.products.findIndex(product => product.id === action.payload.id);
+            const changedEmployeeProduct = { ...state.products[changedEmployeeProductIndex] }
+            changedEmployeeProduct.employee_id = action.payload.employeeId
+            const changedEmployeeProducts = [...state.products]
+            changedEmployeeProducts[changedEmployeeProductIndex] = changedEmployeeProduct
+            return updateObject(state, {
+                products: changedEmployeeProducts,
+            })
         case 'ADD_TO_DEALS':
             const dealIndex = state.deals.findIndex(deal => deal.id === action.payload.id);
             const updatedDeals = [...state.deals]
@@ -256,6 +265,15 @@ const cartReducer = (state, action) => {
             return updateObject(state, {
                 deals: decreasedDeals,
             })
+        case 'CHANGE_DEAL_EMPLOYEE':
+            const changedEmployeeDealIndex = state.deals.findIndex(deal => deal.id === action.payload.id);
+            const changedEmployeeDeal = { ...state.deals[changedEmployeeDealIndex] }
+            changedEmployeeDeal.employee_id = action.payload.employeeId
+            const changedEmployeeDeals = [...state.deals]
+            changedEmployeeDeals[changedEmployeeDealIndex] = changedEmployeeDeal
+            return updateObject(state, {
+                deals: changedEmployeeDeals,
+            })
         default:
             return state;
     }
@@ -274,9 +292,9 @@ const EditModal = (props) => {
 
     const [bookingData, setBookingData] = useState({ items: [], user: { name: '', email: '', mobile: '' } });
 
-    
+
     const [loading, setLoading] = useState(true);
-    
+
     const [cartData, dispatch] = useReducer(cartReducer, {
         services: [],
         products: [],
@@ -297,7 +315,7 @@ const EditModal = (props) => {
     const [totalTaxes, setTotalTaxes] = useState(0)
 
     const [discount, setDiscount] = useState(0)
-    
+
     const [paymentGateway, setPaymentGateway] = useState('')
 
     const [paymentStatus, setPaymentStatus] = useState('');
@@ -335,33 +353,46 @@ const EditModal = (props) => {
                 setDateTime(new Date(responses[0].data.date_time));
                 setPaymentStatus(responses[0].data.payment_status);
                 setPaymentGateway(responses[0].data.payment_gateway);
-                const splittedItems = responses[0].data.items.map(item => {
+                const items = responses[0].data.items;
+                items.forEach(item => {
                     if (item.item.type === 'service') {
-                        bookingDataServices.push({
+                        const obj = {
                             id: item.item.id,
                             quantity: item.quantity,
                             price: item.price,
                             name: item.item.name,
-                            employee_id: item.employee ? item.employee.id : null,
-                            employee: item.employee && item.employee,
                             item: item.item,
-                        })
+                        }
+                        if (item.employee) {
+                            obj.employee_id = item.employee.id
+                            obj.employee = item.employee;
+                        }
+                        bookingDataServices.push(obj)
                     } if (item.item.type === 'product') {
-                        bookingDataProducts.push({
+                        const obj = {
                             id: item.item.id,
                             quantity: item.quantity,
                             price: item.price,
                             item: item.item,
-                        })
+                        }
+                        if (item.employee) {
+                            obj.employee_id = item.employee.id
+                            obj.employee = item.employee;
+                        }
+                        bookingDataProducts.push(obj)
                     } if (item.item.type === 'deal') {
-                        bookingDataDeals.push({
+                        const obj = {
                             id: item.item.id,
                             quantity: item.quantity,
                             price: item.price,
                             item: item.item,
-                        })
+                        }
+                        if (item.employee) {
+                            obj.employee_id = item.employee.id
+                            obj.employee = item.employee;
+                        }
+                        bookingDataDeals.push(obj)
                     }
-                    return bookingDataServices;
                 })
                 dispatch({ type: 'ADD_TO_CART', payload: { services: bookingDataServices, products: bookingDataProducts, deals: bookingDataDeals } });
                 setLoading(false);
@@ -472,10 +503,28 @@ const EditModal = (props) => {
         }
     }, [])
 
-    const changeServiceEmployeeHandler = useCallback((type, itemId, employeeId) => {
+    const changeEmployeeHandler = useCallback((type, itemId, employeeId) => {
         if (type === 'services') {
             dispatch({
                 type: 'CHANGE_SERVICE_EMPLOYEE',
+                payload: {
+                    id: itemId,
+                    employeeId: employeeId,
+                },
+            })
+        }
+        if (type === 'products') {
+            dispatch({
+                type: 'CHANGE_PRODUCT_EMPLOYEE',
+                payload: {
+                    id: itemId,
+                    employeeId: employeeId,
+                },
+            })
+        }
+        if (type === 'deals') {
+            dispatch({
+                type: 'CHANGE_DEAL_EMPLOYEE',
                 payload: {
                     id: itemId,
                     employeeId: employeeId,
@@ -692,7 +741,7 @@ const EditModal = (props) => {
                                     {cartData.services.map((row) => (
                                         <CartItem type='services' key={row.id} row={row} remove={removeFromCartHandler} increase={increaseItemHandler}
                                             decrease={decreaseItemHandler} fetchedEmployees={fetchedEmployees}
-                                            changeEmployee={changeServiceEmployeeHandler}
+                                            changeEmployee={changeEmployeeHandler}
                                         />
                                     ))}
                                 </TableBody>
@@ -733,7 +782,8 @@ const EditModal = (props) => {
                                 <SharedTableHead name='products' />
                                 <TableBody>
                                     {cartData.products.map((row) => (
-                                        <CartItem type='products' key={row.id} row={row} remove={removeFromCartHandler} increase={increaseItemHandler} decrease={decreaseItemHandler} />
+                                        <CartItem type='products' key={row.id} row={row} remove={removeFromCartHandler} increase={increaseItemHandler} decrease={decreaseItemHandler}
+                                            fetchedEmployees={fetchedEmployees} changeEmployee={changeEmployeeHandler} />
                                     ))}
                                 </TableBody>
                             </Table>
@@ -768,7 +818,8 @@ const EditModal = (props) => {
                                 <SharedTableHead name='deals' />
                                 <TableBody>
                                     {cartData.deals.map((row) => (
-                                        <CartItem type='deals' key={row.id} row={row} remove={removeFromCartHandler} increase={increaseItemHandler} decrease={decreaseItemHandler} />
+                                        <CartItem type='deals' key={row.id} row={row} remove={removeFromCartHandler} increase={increaseItemHandler} decrease={decreaseItemHandler}
+                                            fetchedEmployees={fetchedEmployees} changeEmployee={changeEmployeeHandler} />
                                     ))}
                                 </TableBody>
                             </Table>

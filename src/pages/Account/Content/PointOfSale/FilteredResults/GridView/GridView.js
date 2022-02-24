@@ -115,7 +115,6 @@ const GridView = ( props ) => {
             quantity: 1,
             type: type,
         }
-        type === 'services' && (addedItemData.employee_id = null);
         action(addedItemData);
     }
 
