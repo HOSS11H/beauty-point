@@ -152,7 +152,7 @@ const AddCustomer = styled(CustomButton)`
         margin-left: 20px;
         width: auto;
         padding: 0 15px;
-        height: 38px;
+        height: 56px;
         flex-shrink: 0;
     }
 `
@@ -363,7 +363,7 @@ const Cart = props => {
             return;
         } else if (!couponExists && coupon) {
             return;
-        } else if (paidAmount < 1) {
+        } else if (paidAmount < 0) {
             setPaidAmountError(true)
             return;
         }
@@ -399,7 +399,7 @@ const Cart = props => {
             return;
         } else if (!couponExists && coupon) {
             return;
-        } else if (paidAmount < 1) {
+        } else if (paidAmount < 0) {
             setPaidAmountError(true)
             return;
         }
