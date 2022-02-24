@@ -38,10 +38,8 @@ function Bookings(props) {
     const [userData, setUserData] = useState(null);
 
     useEffect(() => {
-        if (fetchedBookings.data.length === 0) {
-            fetchBookingsHandler(lang, page, rowsPerPage);
-        }
-    }, [fetchBookingsHandler, fetchedBookings.data.length, lang, page]);
+        fetchBookingsHandler(lang, page, rowsPerPage);
+    }, [fetchBookingsHandler, lang, page]);
 
     useEffect(() => {
         if (!userData) {
