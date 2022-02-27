@@ -455,6 +455,8 @@ const resources = {
             'passing customer': 'عميل عابر',
             'Customer added': 'تم إضافة العميل',
             'Password will be 132456': 'كلمة المرور ستكون 132456',
+            'Employee Updated': 'تم تحديث بيانات الموظف',
+            'The Password is 132456': 'كلمة المرور 132456',
         }
     }
 };

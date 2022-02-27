@@ -107,10 +107,9 @@ export const updateEmployeeDataStart = () => {
         type: actionTypes.UPDATE_EMPLOYEE_DATA_START,
     }
 }
-export const updateEmployeeDataSuccess = (message, updatedEmployeeData) => {
+export const updateEmployeeDataSuccess = ( updatedEmployeeData) => {
     return {
         type: actionTypes.UPDATE_EMPLOYEE_DATA_SUCCESS,
-        message: message,
         employeeData: updatedEmployeeData,
     }
 }
@@ -126,10 +125,13 @@ export const updateEmployeeData = (data) => {
         dispatch(updateEmployeeDataStart())
         axios.put(`/vendors/employees/${data.id}`, data)
             .then(response => {
-                dispatch(updateEmployeeDataSuccess(response.data, data));
+                dispatch(updateEmployeeDataSuccess( data));
             })
             .catch(err => {
-                dispatch(updateEmployeeDataFailed(err.message))
+                const errs = err.response.data.errors;
+                for (let key in errs) {
+                    dispatch(updateEmployeeDataFailed(errs[key][0]))
+                }
             })
     }
 }

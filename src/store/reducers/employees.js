@@ -165,6 +165,7 @@ const reducer = ( state = intialState, action ) => {
                     ...state.employeesData,
                     updatingEmployee: true,
                     updatingEmployeeSuccess: false,
+                    updatingEmployeeFailed: false,
                     updatingEmployeeMessage: null,
                 }
             });
@@ -175,13 +176,8 @@ const reducer = ( state = intialState, action ) => {
             return updateObject( state, {       
                 employeesData: {
                     ...state.employeesData,
-                    employees: {
-                        ...state.employeesData.employees,
-                        data: updatedEmployeesInfos,
-                    },
                     updatingEmployee: false,
                     updatingEmployeeSuccess: true,
-                    updatingEmployeeMessage: action.message,
                 }
             });
         case (actionTypes.UPDATE_EMPLOYEE_DATA_FAILED) :
@@ -189,7 +185,7 @@ const reducer = ( state = intialState, action ) => {
                 employeesData: {
                     ...state.employeesData,
                     updatingEmployee: false,
-                    updatingEmployeeSuccess: false,
+                    updatingEmployeeFailed: true,
                     updatingEmployeeMessage: action.message,
                 }
             });

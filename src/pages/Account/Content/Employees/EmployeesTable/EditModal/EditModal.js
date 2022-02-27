@@ -42,10 +42,6 @@ const CreateModal = (props) => {
     const [employeeNameError, setEmployeeNameError] = useState(false);
 
     const [employeeEmail, setEmployeeEmail] = useState(email);
-    const [employeeEmailError, setEmployeeEmailError] = useState(false);
-
-    const [employeePassword, setEmployeePassword] = useState('');
-    const [employeePasswordError, setEmployeePasswordError] = useState(false);
 
     const [employeeNumber, setEmployeeNumber] = useState(mobile);
     const [employeeNumberError, setEmployeeNumberError] = useState(false);
@@ -65,13 +61,7 @@ const CreateModal = (props) => {
 
     const employeeEmailChangeHandler = (event) => {
         setEmployeeEmail(event.target.value);
-        setEmployeeEmailError(false);
     }
-    const employeePasswordChangeHandler = (event) => {
-        setEmployeePassword(event.target.value);
-        setEmployeePasswordError(false);
-    }
-
     const employeeNumberChangeHandler = (event) => {
         setEmployeeNumber(event.target.value);
         setEmployeeNumberError(false);
@@ -85,17 +75,8 @@ const CreateModal = (props) => {
     }, [onClose])
 
     const confirmCreateHandler = useCallback(() => {
-        const pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if (employeeName.trim().length === 0) {
             setEmployeeNameError(true);
-            return;
-        }
-        if (pattern.test(employeeEmail) === false) {
-            setEmployeeEmailError(true);
-            return;
-        }
-        if (employeePassword.trim().length === 0) {
-            setEmployeePasswordError(true);
             return;
         }
         if (employeeRole === '') {
@@ -109,13 +90,15 @@ const CreateModal = (props) => {
         const data = {
             id: id,
             name: employeeName,
-            email: employeeEmail,
             mobile: employeeNumber,
             role_id: employeeRole,
             calling_code: '5555',
         }
+        if (employeeEmail !== '') {
+            data.email = employeeEmail;
+        }
         onConfirm(data);
-    }, [employeeEmail, employeeName, employeeNumber, employeePassword, employeeRole, id, onConfirm])
+    }, [employeeEmail, employeeName, employeeNumber, employeeRole, id, onConfirm])
 
     let content = (
         <Grid container spacing={2}>
@@ -125,20 +108,7 @@ const CreateModal = (props) => {
             </Grid>
             <Grid item xs={12} sm={6}>
                 <CustomTextField id="employee-email" label={t('email')} variant="outlined" value={employeeEmail} onChange={employeeEmailChangeHandler} />
-                {employeeEmailError && <ValidationMessage notExist>{t(`Please add email`)}</ValidationMessage>}
-            </Grid>
-            <Grid item xs={12} sm={6}>
-                <TextField id='employee-password' placeholder='******' variant="outlined" fullWidth
-                    type='password' name='employee-password' value={employeePassword} onChange={employeePasswordChangeHandler}
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <LockIcon />
-                            </InputAdornment>
-                        ),
-                    }}
-                />
-                {employeePasswordError && <ValidationMessage notExist>{t(`Please add password`)}</ValidationMessage>}
+                <ValidationMessage exist>{t(`The Password is 132456`)}</ValidationMessage>
             </Grid>
             <Grid item xs={12} sm={6}>
                 <FormControl fullWidth>

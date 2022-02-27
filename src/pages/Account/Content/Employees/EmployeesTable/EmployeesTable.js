@@ -14,6 +14,7 @@ import EditModal from './EditModal/EditModal';
 import EnhancedTableBody from './TableBody/TableBody';
 import SearchMessage from "../../../../../components/Search/SearchMessage/SearchMessage";
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
 const EmployeesTableWrapper = styled.div`
     display: flex;
@@ -40,7 +41,8 @@ function EmployeesTable(props) {
 
     const { t } = useTranslation()
 
-    const { fetchedEmployees, fetchEmployeesHandler, loadingEmployees, deleteEmployeeHandler, searchingEmployees, searchingEmployeesSuccess, updateEmployeeHandler, updatingEmployeeSuccess, addingEmployeeSuccess } = props;
+    const { fetchedEmployees, fetchEmployeesHandler, loadingEmployees, deleteEmployeeHandler, searchingEmployees, searchingEmployeesSuccess, 
+        updateEmployeeHandler, updatingEmployeeSuccess, updatingEmployeeFailed, updatingEmployeeMessage, addingEmployeeSuccess } = props;
 
     const themeCtx = useContext(ThemeContext)
 
@@ -64,16 +66,32 @@ function EmployeesTable(props) {
     }, [fetchEmployeesHandler, lang, page, orderBy, order]);
 
     useEffect(() => {
-        if (updatingEmployeeSuccess) {
-            fetchEmployeesHandler(lang, page, rowsPerPage, orderBy, order);
-        }
-    }, [updatingEmployeeSuccess, fetchEmployeesHandler, lang, page, rowsPerPage, orderBy, order]);
-
-    useEffect(() => {
         if (addingEmployeeSuccess) {
             fetchEmployeesHandler(lang, page, rowsPerPage, orderBy, order);
         }
-    }, [addingEmployeeSuccess, fetchEmployeesHandler, lang, page, rowsPerPage, orderBy, order]);
+    }, [addingEmployeeSuccess, fetchEmployeesHandler, lang, page, orderBy, order]);
+
+    useEffect(() => {
+        if (updatingEmployeeSuccess) {
+            setEditModalOpened(false);
+            setSelectedEmployeeId(null);
+            fetchEmployeesHandler(lang, page, rowsPerPage, orderBy, order);
+            toast.success(t('Employee Updated'), {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [updatingEmployeeSuccess, fetchEmployeesHandler, lang, page, orderBy, order, t]);
+    
+    useEffect(() => {
+        if (updatingEmployeeFailed && updatingEmployeeMessage) {
+            toast.error(updatingEmployeeMessage, {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [updatingEmployeeFailed, updatingEmployeeMessage])
+
 
 
     const handleRequestSort = (event, property) => {
@@ -123,8 +141,6 @@ function EmployeesTable(props) {
     }, [])
 
     const editModalConfirmHandler = useCallback((data) => {
-        setEditModalOpened(false);
-        setSelectedEmployeeId(null);
         updateEmployeeHandler(data);
     }, [updateEmployeeHandler])
 
@@ -211,6 +227,8 @@ const mapStateToProps = state => {
         searchingEmployees: state.employees.employeesData.searchingEmployees,
         searchingEmployeesSuccess: state.employees.employeesData.searchingEmployeesSuccess,
         updatingEmployeeSuccess: state.employees.employeesData.updatingEmployeeSuccess,
+        updatingEmployeeFailed: state.employees.employeesData.updatingEmployeeFailed,
+        updatingEmployeeMessage: state.employees.employeesData.updatingEmployeeMessage,
         addingEmployeeSuccess: state.employees.employeesData.addingEmployeeSuccess,
     }
 }
