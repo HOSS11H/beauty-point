@@ -11,12 +11,11 @@ import { connect } from 'react-redux';
 import { fetchRoles } from '../../../../../store/actions/index';
 import ValidationMessage from '../../../../../components/UI/ValidationMessage/ValidationMessage';
 
-import InputAdornment from '@mui/material/InputAdornment';
+
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
-import LockIcon from '@mui/icons-material/Lock';
 
 
 const CustomTextField = styled(TextField)`
@@ -25,7 +24,7 @@ const CustomTextField = styled(TextField)`
 
 const CreateModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, fetchedRoles, fetchRolesHandler, creatingEmployeeSuccess } = props;
+    const { show, heading, confirmText, onConfirm, onClose, fetchedRoles, fetchRolesHandler, addingEmployeeSuccess } = props;
 
     const { t } = useTranslation();
 
@@ -36,10 +35,6 @@ const CreateModal = (props) => {
     const [employeeNameError, setEmployeeNameError] = useState(false);
 
     const [employeeEmail, setEmployeeEmail] = useState('');
-    const [employeeEmailError, setEmployeeEmailError] = useState(false);
-
-    const [employeePassword, setEmployeePassword] = useState('');
-    const [employeePasswordError, setEmployeePasswordError] = useState(false);
 
     const [employeeNumber, setEmployeeNumber] = useState('');
     const [employeeNumberError, setEmployeeNumberError] = useState(false);
@@ -59,12 +54,8 @@ const CreateModal = (props) => {
 
     const employeeEmailChangeHandler = (event) => {
         setEmployeeEmail(event.target.value);
-        setEmployeeEmailError(false);
     }
-    const employeePasswordChangeHandler = (event) => {
-        setEmployeePassword(event.target.value);
-        setEmployeePasswordError(false);
-    }
+
 
     const employeeNumberChangeHandler = (event) => {
         setEmployeeNumber(event.target.value);
@@ -84,29 +75,17 @@ const CreateModal = (props) => {
         setEmployeeNumber(0);
         setEmployeeNumberError(false);
         setEmployeeEmail('');
-        setEmployeeEmailError(false);
-        setEmployeePassword('');
-        setEmployeePasswordError(false);
         setEmployeeRole('');
         setEmployeeRoleError(false);
     }, [])
 
     useEffect(() => {
-        creatingEmployeeSuccess && resetModalData();
-    }, [creatingEmployeeSuccess, resetModalData])
+        addingEmployeeSuccess && resetModalData();
+    }, [addingEmployeeSuccess, resetModalData])
 
     const confirmCreateHandler = useCallback(() => {
-        const pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         if (employeeName.trim().length === 0) {
             setEmployeeNameError(true);
-            return;
-        }
-        if (pattern.test(employeeEmail) === false) {
-            setEmployeeEmailError(true);
-            return;
-        }
-        if (employeePassword.trim().length === 0) {
-            setEmployeePasswordError(true);
             return;
         }
         if (employeeRole === '') {
@@ -119,13 +98,15 @@ const CreateModal = (props) => {
         }
         const data = {
             name: employeeName,
-            email: employeeEmail,
             mobile: employeeNumber,
             role_id: employeeRole,
             calling_code: '5555',
         }
+        if (employeeEmail !== '') {
+            data.email = employeeEmail;
+        }
         onConfirm(data);
-    }, [employeeEmail, employeeName, employeeNumber, employeePassword, employeeRole, onConfirm])
+    }, [employeeEmail, employeeName, employeeNumber, employeeRole, onConfirm])
 
     let content = (
         <Grid container spacing={2}>
@@ -134,21 +115,12 @@ const CreateModal = (props) => {
                 {employeeNameError && <ValidationMessage notExist>{t(`Please add name`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6}>
-                <CustomTextField id="employee-email" label={t('email')} variant="outlined" value={employeeEmail} onChange={employeeEmailChangeHandler} />
-                {employeeEmailError && <ValidationMessage notExist>{t(`Please add email`)}</ValidationMessage>}
+                <CustomTextField id="employee-email" type='email' label={t('email')} variant="outlined" value={employeeEmail} onChange={employeeEmailChangeHandler} />
+                <ValidationMessage exist>{t(`Password will be 132456`)}</ValidationMessage>
             </Grid>
             <Grid item xs={12} sm={6}>
-                <TextField id='employee-password' placeholder='******' variant="outlined" fullWidth
-                    type='password' name='employee-password' value={employeePassword} onChange={employeePasswordChangeHandler}
-                    InputProps={{
-                        startAdornment: (
-                            <InputAdornment position="start">
-                                <LockIcon />
-                            </InputAdornment>
-                        ),
-                    }}
-                />
-                {employeePasswordError && <ValidationMessage notExist>{t(`Please add password`)}</ValidationMessage>}
+                <CustomTextField id="employee-number"label={t('mobile number')} variant="outlined" value={employeeNumber} onChange={employeeNumberChangeHandler} />
+                {employeeNumberError && <ValidationMessage notExist>{t(`Please add Number`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} sm={6}>
                 <FormControl fullWidth>
@@ -169,10 +141,6 @@ const CreateModal = (props) => {
                 </FormControl>
                 {employeeRoleError && <ValidationMessage notExist>{t(`Please add a role`)}</ValidationMessage>}
             </Grid>
-            <Grid item xs={12} sm={6}>
-                <CustomTextField id="employee-number"label={t('mobile number')} variant="outlined" value={employeeNumber} onChange={employeeNumberChangeHandler} />
-                {employeeNumberError && <ValidationMessage notExist>{t(`Please add Number`)}</ValidationMessage>}
-            </Grid>
         </Grid>
     )
     return (
@@ -185,7 +153,7 @@ const CreateModal = (props) => {
 const mapStateToProps = (state) => {
     return {
         fetchedRoles: state.employees.roles,
-        creatingEmployeeSuccess: state.employees.creatingEmployeeSuccess,
+        addingEmployeeSuccess: state.employees.employeesData.addingEmployeeSuccess,
     }
 }
 

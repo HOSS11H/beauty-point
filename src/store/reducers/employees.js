@@ -15,11 +15,13 @@ const intialState = {
         deletingEmployeeMessage: null,
         updatingEmployee: false,
         updatingEmployeeSuccess: false,
+        updatingEmployeeFailed: false,
         updatingEmployeeMessage: null,
         searchingEmployees: false,
         searchingEmployeesSuccess: false,
         addingEmployee: false,
         addingEmployeeSuccess: false,
+        addingEmployeeFailed: false,
         addingEmployeeMessage: null,
     },
     roles: [],
@@ -136,34 +138,24 @@ const reducer = ( state = intialState, action ) => {
                     ...state.employeesData,
                     addingEmployee: true,
                     addingEmployeeSuccess: false,
+                    addingEmployeeFailed: false,
                     addingEmployeeMessage: null,
                 }
             });
         case ( actionTypes.ADD_EMPLOYEE_DATA_SUCCESS ) :
-            const updatedEmployeesData = [...state.employeesData.employees.data];
-            updatedEmployeesData.push(action.employeeData);
             return updateObject( state, {
                 employeesData: {
                     ...state.employeesData,
-                    employees: {
-                        ...state.employeesData.employees,
-                        data: updatedEmployeesData,
-                        meta: {
-                            ...state.employeesData.employees.meta,
-                            total: state.employeesData.employees.meta.total + 1,
-                        }
-                    },
+                    addingEmployee: false,
+                    addingEmployeeSuccess: true,
                 },
-                addingEmployee: false,
-                addingEmployeeSuccess: true,
-                addingEmployeeMessage: action.message,
             });
         case ( actionTypes.ADD_EMPLOYEE_DATA_FAILED ) :
             return updateObject( state, {
                 employeesData: {
                     ...state.employeesData,
                     addingEmployee: false,
-                    addingEmployeeSuccess: false,
+                    addingEmployeeFailed: true,
                     addingEmployeeMessage: action.message,
                 }
             });

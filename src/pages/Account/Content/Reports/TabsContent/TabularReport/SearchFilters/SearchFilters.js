@@ -7,7 +7,7 @@ import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import { useTranslation } from 'react-i18next';
 import { useContext, useEffect, useState, } from 'react';
-import { fetchServices, fetchLocations, fetchProducts, fetchCustomers, fetchEmployees, filterTabularReport } from '../../../../../../../store/actions/index';
+import { fetchServices, fetchLocations, fetchProducts, fetchEmployees, filterTabularReport } from '../../../../../../../store/actions/index';
 import { connect } from 'react-redux';
 import DateAdapter from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -61,7 +61,7 @@ const ResetButton = styled(CustomButton)`
 
 const SearchFilters = (props) => {
 
-    const { fetchedLocations, fetchLocationsHandler, fetchedProducts, fetchProductsHandler, fetchedServices, fetchServicesHandler, fetchCustomersHandler, fetchedEmployees, fetchEmployeesHandler, handleFilters } = props;
+    const { fetchedLocations, fetchLocationsHandler, fetchedProducts, fetchProductsHandler, fetchedServices, fetchServicesHandler, fetchedEmployees, fetchEmployeesHandler, handleFilters } = props;
 
     const { t } = useTranslation()
 
@@ -96,7 +96,7 @@ const SearchFilters = (props) => {
         fetchProductsHandler(lang, 1, 'all', 'name', 'desc');
         fetchServicesHandler(lang, 1, 'all', 'name', 'desc');
         fetchEmployeesHandler(lang);
-    }, [fetchCustomersHandler, fetchEmployeesHandler, fetchLocationsHandler, fetchProductsHandler, fetchServicesHandler, lang])
+    }, [ fetchEmployeesHandler, fetchLocationsHandler, fetchProductsHandler, fetchServicesHandler, lang])
 
     const handleLocationChange = (event) => {
         setLocation(event.target.value);
@@ -377,7 +377,6 @@ const mapDispatchToProps = (dispatch) => {
         fetchLocationsHandler: (lang) => dispatch(fetchLocations(lang)),
         fetchServicesHandler: (lang, page, sortBy, sortDirection, search) => dispatch(fetchServices(lang, page, sortBy, sortDirection, search)),
         fetchProductsHandler: (lang, page, sortBy, sortDirection, search) => dispatch(fetchProducts(lang, page, sortBy, sortDirection, search)),
-        fetchCustomersHandler: (lang) => dispatch(fetchCustomers(lang)),
         fetchEmployeesHandler: (language) => dispatch(fetchEmployees(language)),
         filterTabularReportHandler: (params) => dispatch(filterTabularReport(params)),
     }

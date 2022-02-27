@@ -138,10 +138,9 @@ export const addEmployeeDataStart = () => {
         type: actionTypes.ADD_EMPLOYEE_DATA_START,
     }
 }
-export const addEmployeeDataSuccess = (message, createdEmployeeData) => {
+export const addEmployeeDataSuccess = ( createdEmployeeData) => {
     return {
         type: actionTypes.ADD_EMPLOYEE_DATA_SUCCESS,
-        message: message,
         employeeData: createdEmployeeData,
     }
 }
@@ -157,10 +156,13 @@ export const addEmployeeData = (data) => {
         dispatch(addEmployeeDataStart())
         axios.post(`/vendors/employees`, data)
             .then(response => {
-                dispatch(addEmployeeDataSuccess(null, {...response.data }));
+                dispatch(addEmployeeDataSuccess({...response.data }));
             })
             .catch(err => {
-                dispatch(addEmployeeDataFailed(err.message))
+                const errs = err.response.data.errors;
+                for (let key in errs) {
+                    dispatch(addEmployeeDataFailed(errs[key][0]))
+                }
             })
     }
 }

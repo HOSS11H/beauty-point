@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 import { CustomButton } from '../../../../components/UI/Button/Button';
 import CreateModal from "./CreateModal/CreateModal";
-import CustomizedSnackbars from "../../../../components/UI/SnackBar/SnackBar";
+import { toast } from "react-toastify";
 
 
 const ActionsWrapper = styled.div`
@@ -34,18 +34,29 @@ function Employees(props) {
 
     const { t } = useTranslation()
 
-    const { searchEmployeesHandler, addEmployeeHandler, addingEmployeeSuccess } = props;
+    const { searchEmployeesHandler, addEmployeeHandler, addingEmployeeSuccess, addingEmployeeFailed, addingEmployeeMessage } = props;
 
     const [createModalOpened, setCreateModalOpened] = useState(false);
 
-    const [ messageShown, setMessageShown ] = useState(addingEmployeeSuccess);
+    useEffect(() => {
+        if ( addingEmployeeSuccess ) {
+            setCreateModalOpened(false);
+            toast.success(t('Empolyee Added'), {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [addingEmployeeSuccess, t])
 
     useEffect(() => {
-        setMessageShown(addingEmployeeSuccess )
-    }, [addingEmployeeSuccess])
-    const closeMessageHandler = useCallback(( ) => {
-        setMessageShown(false)
-    }, [])
+        if (addingEmployeeFailed && addingEmployeeMessage) {
+            toast.error(addingEmployeeMessage, {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [addingEmployeeFailed, addingEmployeeMessage])
+
 
     // Create Modal
     const createModalOpenHandler = useCallback((id) => {
@@ -56,7 +67,6 @@ function Employees(props) {
     }, [])
 
     const createModalConfirmHandler = useCallback((data) => {
-        setCreateModalOpened(false);
         addEmployeeHandler(data);
     }, [addEmployeeHandler])
 
@@ -71,7 +81,6 @@ function Employees(props) {
                     heading='add new employee' confirmText='add' />
             </ActionsWrapper>
             <EmployeesTable />
-            <CustomizedSnackbars show={messageShown} message={t('Employee Added')} type='success' onClose={closeMessageHandler} />
         </Fragment>
     );
 }
@@ -79,6 +88,8 @@ function Employees(props) {
 const mapStateToProps = (state) => {
     return {
         addingEmployeeSuccess: state.employees.employeesData.addingEmployeeSuccess,
+        addingEmployeeFailed: state.employees.employeesData.addingEmployeeFailed,
+        addingEmployeeMessage: state.employees.employeesData.addingEmployeeMessage
     }
 }
 

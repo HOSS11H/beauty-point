@@ -34,7 +34,7 @@ const EmployeesTableWrapper = styled.div`
 
 
 
-const intialRowsPerPage = 5;
+const rowsPerPage = 10;
 
 function EmployeesTable(props) {
 
@@ -51,8 +51,6 @@ function EmployeesTable(props) {
     const [order, setOrder] = useState('desc');
     const [orderBy, setOrderBy] = useState('name');
 
-    const [rowsPerPage, setRowsPerPage] = useState(intialRowsPerPage);
-
     const [deleteModalOpened, setDeleteModalOpened] = useState(false);
 
     const [viewModalOpened, setViewModalOpened] = useState(false);
@@ -63,7 +61,7 @@ function EmployeesTable(props) {
 
     useEffect(() => {
         fetchEmployeesHandler(lang, page, rowsPerPage, orderBy, order);
-    }, [fetchEmployeesHandler, lang, page, rowsPerPage, orderBy, order]);
+    }, [fetchEmployeesHandler, lang, page, orderBy, order]);
 
     useEffect(() => {
         if (updatingEmployeeSuccess) {

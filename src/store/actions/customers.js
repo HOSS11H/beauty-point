@@ -27,11 +27,9 @@ export const fetchCustomers = (language) => {
                 'Accept-Language': language
             }
         }).then(response => {
-            //console.log(response.data.data)
             dispatch(fetchCustomersSuccess(response.data.data));
         })
             .catch(err => {
-                //console.log(err)
                 dispatch(fetchCustomersFailed(err.message))
             })
     }
