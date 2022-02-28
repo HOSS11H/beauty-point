@@ -11,6 +11,7 @@ const intialState = {
     deletingExpenseMessage: null,
     updatingExpense: false,
     updatingExpenseSuccess: false,
+    updatingExpenseFailed: false,
     updatingExpenseMessage: null,
     searchingExpenses: false,
     searchingExpensesSuccess: false,
@@ -108,18 +109,18 @@ const reducer = (state = intialState, action) => {
             return updateObject(state, {
                 updatingExpense: true,
                 updatingExpenseSuccess: false,
+                updatingExpenseFailed: false,
                 updatingExpenseMessage: null,
             })
         case (actionTypes.UPDATE_EXPENSE_SUCCESS):
             return updateObject(state, {
                 updatingExpense: false,
                 updatingExpenseSuccess: true,
-                updatingExpenseMessage: action.message,
             })
         case (actionTypes.UPDATE_EXPENSE_FAILED):
             return updateObject(state, {
                 updatingExpense: false,
-                updatingExpenseSuccess: false,
+                updatingExpenseFailed: true,
                 updatingExpenseMessage: action.message,
             })
         case (actionTypes.SEARCH_EXPENSES_START):

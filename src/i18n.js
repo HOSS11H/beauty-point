@@ -458,6 +458,9 @@ const resources = {
             'Employee Updated': 'تم تحديث بيانات الموظف',
             'The Password is 132456': 'كلمة المرور 132456',
             'Expense Added': 'تم إضافة المصروف',
+            'Expense edited': 'تم تعديل المصروف',
+            'Please Choose Bank': 'يرجى اختيار البنك',
+            'Please select customer': 'يرجى اختيار العميل',
         }
     }
 };

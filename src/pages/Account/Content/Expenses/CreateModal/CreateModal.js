@@ -242,7 +242,7 @@ const CreateModal = (props) => {
 
     const [banksOptions, setBanksOptions] = useState([])
     const [selectedBank, setSelectedBank] = useState(null);
-    const [selectedBankError, setBankDataError] = useState(false)
+    const [selectedBankError, setSelectedBankError] = useState(false)
 
 
     const [categoriesOptions, setCategoriesOptions] = useState([])
@@ -343,10 +343,9 @@ const CreateModal = (props) => {
     }
 
     const handleSelectBank = (value, actions) => {
-        console.log(value)
         if (value) {
             setSelectedBank(value);
-            setBankDataError(false);
+            setSelectedBankError(false);
         }
     }
 
@@ -381,7 +380,7 @@ const CreateModal = (props) => {
 
     const resetModalData = useCallback(() => {
         setSelectedBank(null);
-        setBankDataError(false)
+        setSelectedBankError(false)
         setExpenseName('');
         setExpenseNameError(false);
         setDate(new Date());
@@ -395,7 +394,7 @@ const CreateModal = (props) => {
         setEditorState(EditorState.createEmpty());
         setUploadedImages([]);
         setSelectedBank(null);
-        setBankDataError(false)
+        setSelectedBankError(false)
         setPaymentGateway('cash')
     }, [])
 
@@ -410,7 +409,7 @@ const CreateModal = (props) => {
             return;
         }
         if (!selectedBank) {
-            setBankDataError(true)
+            setSelectedBankError(true)
             return;
         }
         if (!selectedCategory) {

@@ -72,10 +72,9 @@ export const updateExpenseStart = () => {
         type: actionTypes.UPDATE_EXPENSE_START,
     }
 }
-export const updateExpenseSuccess = (message, updatedExpenseId) => {
+export const updateExpenseSuccess = (updatedExpenseId) => {
     return {
         type: actionTypes.UPDATE_EXPENSE_SUCCESS,
-        message: message,
         expenseId: updatedExpenseId,
     }
 }
@@ -87,14 +86,16 @@ export const updateExpenseFailed = (message) => {
 }
 export const updateExpense = data => {
     return dispatch => {
-        //console.log(data);
         dispatch(updateExpenseStart())
         axios.post(`/vendors/expenses/${data.get('id')}`, data, {headers: {   'Content-Type': 'multipart/form-data'}})
             .then(response => {
-                dispatch(updateExpenseSuccess(response.data, data.id));
+                dispatch(updateExpenseSuccess(data.id));
             })
             .catch(err => {
-                dispatch(updateExpenseFailed(err.message))
+                const errs = err.response.data.errors;
+                for (let key in errs) {
+                    dispatch(updateExpenseFailed(errs[key][0]))
+                }
             })
     }
 }

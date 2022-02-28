@@ -1,12 +1,12 @@
-/* import { useState, useCallback, useContext, useEffect } from 'react';
+import { useState, useCallback, useContext, useEffect, Fragment } from 'react';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import ThemeContext from '../../../../../../store/theme-context'
 
 import { CustomModal } from '../../../../../../components/UI/Modal/Modal';
-import { Button, Grid, IconButton } from '@mui/material';
+import { Button, Grid, IconButton,  InputLabel, MenuItem, Select } from '@mui/material';
 import TextField from '@mui/material/TextField';
-import ReactSelect from 'react-select';
+import ReactSelect, { components } from 'react-select';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
 
@@ -21,12 +21,13 @@ import htmlToDraft from 'html-to-draftjs';
 import ValidationMessage from '../../../../../../components/UI/ValidationMessage/ValidationMessage';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { format } from 'date-fns';
-import axios from '../../../../../../utils/axios-instance';
+import v2 from '../../../../../../utils/axios-instance';
+import axios from 'axios'
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ImageUploading from 'react-images-uploading';
-import SearchBanks from '../../CreateModal/SearchBanks/SearchBanks';
 import AccountBalanceIcon from '@mui/icons-material/AccountBalance';
+import Loader from '../../../../../../components/UI/Loader/Loader';
 
 const UploadImageTopBar = styled.div`
     display: flex;
@@ -168,6 +169,61 @@ const BankInfo = styled.ul`
         }
     }
 `
+const BankSelectOption = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+`
+const BankSelectName = styled.h4`
+    display: block;
+    font-size: 14px;
+    line-height:1.5;
+    text-transform: capitalize;
+    font-weight: 600;
+    color: ${({ theme }) => theme.palette.primary.dark};
+    transition: 0.3s ease-in-out;
+    margin-bottom: 0px;
+`
+const BankSelectInfo = styled.ul`
+    margin: 0;
+    padding: 0;
+    li {
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        line-height:1.5;
+        text-transform: capitalize;
+        font-weight: 500;
+        color: ${({ theme }) => theme.palette.text.default};
+        margin-bottom: 5px;
+        &:last-child {
+            margin-bottom: 0px;
+        }
+        svg {
+            width: 16px;
+            height: 16px;
+            &.MuiSvgIcon-root  {
+                margin:0;
+                margin-right: 8px;
+            }
+        }
+    }
+`
+
+const Option = (props) => {
+    return (
+        <Fragment>
+            <components.Option {...props}>
+                <BankSelectOption>
+                    <BankSelectName>{props.children}</BankSelectName>
+                    <BankSelectInfo>
+                        <li><AccountBalanceIcon sx={{ mr: 1 }} />{props.data.account}</li>
+                    </BankSelectInfo>
+                </BankSelectOption>
+            </components.Option>
+        </Fragment>
+    );
+};
 
 
 const EditModal = (props) => {
@@ -190,18 +246,19 @@ const EditModal = (props) => {
 
     const [date, setDate] = useState(new Date(expense_date));
 
-    const [bankData, setBankData] = useState({ id: bank.id, name: bank.name, account: bank.account });
-    const [bankDataError, setBankDataError] = useState(false);
+    const [banksOptions, setBanksOptions] = useState([]);
+    const [selectedBank, setSelectedBank] = useState({ value: bank.id, label: bank.name, account: bank.account });
+    const [selectedBankError, setSelectedBankError] = useState(false);
 
-    const [categoriesOptions, setCategoriesOptions] = useState([{ value: category.id, label: category.name }]);
 
+    const [categoriesOptions, setCategoriesOptions] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState({ value: category.id, label: category.name });
     const [selectedCategoryError, setSelectedCategoryError] = useState(false);
 
-    const [agentsOptions, setAgentsOptions] = useState([{ value: customer.id, label: customer.name }])
 
-    const [selectedAgent, setSelectedAgent] = useState({ value: customer.id, label: customer.name });
-    const [selectedAgentError, setSelectedAgentError] = useState(false);
+    const [customersOptions, setCustomersOptions] = useState([])
+    const [selectedCustomer, setSelectedCustomer] = useState({ value: customer.id, label: customer.name });
+    const [selectedCustomerError, setSelectedCustomerError] = useState(false);
 
     const html = notes;
     const contentBlock = htmlToDraft(html);
@@ -213,17 +270,72 @@ const EditModal = (props) => {
     const [expenseAmount, setExpenseAmount] = useState(amount);
     const [expenseAmountError, setExpenseAmountError] = useState(false);
 
+    const [paymentGateway, setPaymentGateway] = useState('cash')
+
     const [uploadedImages, setUploadedImages] = useState([{ data_url: expense_image_url }]);
+
+    const [loading, setLoading] = useState(false);
 
     const maxNumber = 1;
 
     useEffect(() => {
         if (uploadedImages[0].file === undefined) {
             fetch(uploadedImages[0].data_url).then(res => res.blob()).then(blob => {
-                setUploadedImages([{ data_url: uploadedImages[0].data_url, file: new File([blob], 'image.jpg', { type: blob.type })}]);
+                setUploadedImages([{ data_url: uploadedImages[0].data_url, file: new File([blob], 'image.jpg', { type: blob.type }) }]);
             })
         }
     }, [uploadedImages])
+
+    useEffect(() => {
+        setLoading(true);
+        const headers = {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        }
+        const categoryOptionsEndpoint = `${v2.defaults.baseURL}/vendors/expenses_categories`;
+        const customersOptionsEndpoint = `${v2.defaults.baseURL}/vendors/expenses_customers`;
+        const banksOptionsEndpoint = `${v2.defaults.baseURL}/vendors/banks`;
+
+        const getCategoryOptions = axios.get(categoryOptionsEndpoint, headers);
+        const getCustomersOptions = axios.get(customersOptionsEndpoint, headers);
+        const getBanksOptions = axios.get(banksOptionsEndpoint, headers);
+
+        axios.all([getCategoryOptions, getCustomersOptions, getBanksOptions])
+            .then(axios.spread((...responses) => {
+                setLoading(false);
+                const categories = responses[0].data.data;
+                const categoryOptions = categories.map(category => {
+                    return {
+                        value: category.id,
+                        label: category.name
+                    }
+                })
+                const customers = responses[1].data.data;
+                const customersOptions = customers.map(customer => {
+                    return {
+                        value: customer.id,
+                        label: customer.name
+                    }
+                })
+                const banks = responses[2].data.data;
+                const banksOptions = banks.map(bank => {
+                    return {
+                        value: bank.id,
+                        label: bank.name,
+                        account: bank.account,
+                    }
+                })
+                setCategoriesOptions(categoryOptions);
+                setCustomersOptions(customersOptions);
+                setBanksOptions(banksOptions);
+            }))
+            .catch(error => {
+                setLoading(false);
+            });
+    }, [])
 
     const expenseNameChangeHandler = (event) => {
         setExpenseName(event.target.value);
@@ -233,15 +345,9 @@ const EditModal = (props) => {
         setDate(date);
     }
 
-    const selectBank = useCallback((value) => {
-        if (value) {
-            setBankDataError(false)
-            setBankData(value);
-        } else {
-            setBankDataError(true)
-            setBankData(null);
-        }
-    }, [])
+    const paymentGatewayChangeHandler = (event) => {
+        setPaymentGateway(event.target.value);
+    }
 
     const expenseAmountChangeHandler = (event) => {
         if (event.target.value >= 0) {
@@ -249,24 +355,14 @@ const EditModal = (props) => {
             setExpenseAmountError(false);
         }
     }
-    const handleSelectCategoryOptions = (value, actions) => {
-        if (value.length !== 0) {
-            axios.get(`/vendors/expenses_categories`)
-                .then(res => {
-                    const categories = res.data.data;
-                    const options = categories.map(category => {
-                        return {
-                            value: category.id,
-                            label: category.name
-                        }
-                    })
-                    setCategoriesOptions(options);
-                })
-                .catch(err => {
-                    //console.log(err);
-                })
+
+    const handleSelectBank = (value, actions) => {
+        if (value) {
+            setSelectedBank(value);
+            setSelectedBankError(false);
         }
     }
+
     const handleSelectCategory = (value, actions) => {
         if (value) {
             setSelectedCategory(value);
@@ -274,28 +370,10 @@ const EditModal = (props) => {
         }
     }
 
-    const handleSelectAgentOptions = (value, actions) => {
-        if (value.length !== 0) {
-            axios.get(`/vendors/expenses_customers`)
-                .then(res => {
-                    const categories = res.data.data;
-                    const options = categories.map(category => {
-                        return {
-                            value: category.id,
-                            label: category.name
-                        }
-                    })
-                    setAgentsOptions(options);
-                })
-                .catch(err => {
-                    //console.log(err);
-                })
-        }
-    }
-    const handleSelectAgent = (value, actions) => {
+    const handleSelectCustomer = (value, actions) => {
         if (value) {
-            setSelectedAgent(value);
-            setSelectedAgentError(false);
+            setSelectedCustomer(value);
+            setSelectedCustomerError(false);
         }
     }
 
@@ -320,16 +398,16 @@ const EditModal = (props) => {
             setExpenseNameError(true);
             return;
         }
-        if (!bankData) {
-            setBankDataError(true)
+        if (!selectedBank) {
+            setSelectedBankError(true)
             return;
         }
         if (!selectedCategory) {
             setSelectedCategoryError(true);
             return;
         }
-        if (!selectedAgent) {
-            setSelectedAgentError(true);
+        if (!selectedCustomer) {
+            setSelectedCustomerError(true);
             return;
         }
         if (expenseAmount === 0) {
@@ -342,135 +420,159 @@ const EditModal = (props) => {
         formData.append('note', draftToHtml(convertToRaw(editorState.getCurrentContent())));
         formData.append('amount', expenseAmount);
         formData.append('expense_date', format(date, 'Y-MM-dd hh:ii a'));
-        formData.append('bank_id', bankData.id);
+        formData.append('bank_id', selectedBank.value);
         formData.append('cat_id', selectedCategory.value);
-        formData.append('customer_id', selectedAgent.value);
+        formData.append('customer_id', selectedCustomer.value);
         if (uploadedImages.length > 0 && uploadedImages[0].data_url !== null && uploadedImages[0].file !== undefined) {
             formData.append('image', uploadedImages[0].file)
-        } else {
-            formData.append('image', '')
         }
         formData.append('_method', 'PUT');
         onConfirm(formData);
-    }, [expenseName, bankData, selectedCategory, selectedAgent, expenseAmount, id, editorState, date, uploadedImages, onConfirm])
+    }, [expenseName, selectedBank, selectedCategory, selectedCustomer, expenseAmount, id, editorState, date, uploadedImages, onConfirm])
 
-    let content = (
-        <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-                <CustomTextField id="expense-name" label={t('name')} variant="outlined" value={expenseName} onChange={expenseNameChangeHandler} />
-                {expenseNameError && <ValidationMessage notExist>{t(`Please add name`)}</ValidationMessage>}
+    let content;
+
+    if (loading) {
+        content = <Loader height='50vh' />
+    } else {
+        content = (
+            <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                    <CustomTextField id="expense-name" label={t('name')} variant="outlined" value={expenseName} onChange={expenseNameChangeHandler} />
+                    {expenseNameError && <ValidationMessage notExist>{t(`Please add name`)}</ValidationMessage>}
+                </Grid>
+                <Grid item xs={12} sm={6} >
+                    <LocalizationProvider dateAdapter={DateAdapter}>
+                        <DesktopDatePicker
+                            label={t("Date from")}
+                            inputFormat="MM/dd/yyyy"
+                            value={date}
+                            onChange={handleDateChange}
+                            renderInput={(params) => <TextField sx={{ width: '100%' }} {...params} />}
+                        />
+                    </LocalizationProvider>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <FormLabel component="legend" sx={{ textAlign: 'left', textTransform: 'capitalize', marginBottom: '8px' }} >{t('select bank')}</FormLabel>
+                    <FormControl fullWidth sx={{ minWidth: '200px' }} >
+                        <ReactSelect styles={customStyles} options={banksOptions} isClearable isRtl={lang === 'ar'}
+                            components={{ Option }} onChange={handleSelectBank} defaultValue={{ value: bank.id, label: bank.name, account: bank.account }} />
+                    </FormControl>
+                    {selectedBankError && <ValidationMessage notExist>{t(`Please Choose Bank`)}</ValidationMessage>}
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    {
+                        selectedBank && (
+                            <BankCard>
+                                <BankName>{selectedBank.label}</BankName>
+                                <BankInfo>
+                                    <li><AccountBalanceIcon sx={{ mr: 1 }} />{selectedBank.account}</li>
+                                </BankInfo>
+                            </BankCard>
+                        )
+                    }
+                </Grid>
+                <Grid item xs={12} sm={6} >
+                    <FormLabel component="legend" sx={{ textAlign: 'left', textTransform: 'capitalize', marginBottom: '8px' }} >{t('select category')}</FormLabel>
+                    <FormControl fullWidth sx={{ minWidth: '200px' }} >
+                        <ReactSelect styles={customStyles} options={categoriesOptions} isClearable isRtl={lang === 'ar'} defaultValue={{ value: category.id, label: category.name }}
+                            onChange={handleSelectCategory} />
+                    </FormControl>
+                    {selectedCategoryError && <ValidationMessage notExist>{t(`Please select category`)}</ValidationMessage>}
+                </Grid>
+                <Grid item xs={12} sm={6} >
+                    <FormLabel component="legend" sx={{ textAlign: 'left', textTransform: 'capitalize', marginBottom: '8px' }} >{t('select customer')}</FormLabel>
+                    <FormControl fullWidth sx={{ minWidth: '200px' }} >
+                        <ReactSelect styles={customStyles} options={customersOptions} isClearable isRtl={lang === 'ar'} defaultValue={{ value: customer.id, label: customer.name }}
+                            onChange={handleSelectCustomer} />
+                    </FormControl>
+                    {selectedCustomerError && <ValidationMessage notExist>{t(`Please select customer`)}</ValidationMessage>}
+                </Grid>
+                <Grid item xs={12}>
+                    <EditorWrapper>
+                        <Editor
+                            editorState={editorState}
+                            wrapperClassName="demo-wrapper"
+                            editorClassName="demo-editor"
+                            onEditorStateChange={onEditorChange}
+                            textAlignment={themeCtx.direction === 'rtl' ? 'right' : 'left'}
+                        />
+                    </EditorWrapper>
+                    {expenseDescriptionError && <ValidationMessage notExist>{t(`Please add Description`)}</ValidationMessage>}
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <CustomTextField id="expense-amount" type='number' label={t('amount')} variant="outlined" value={expenseAmount} onChange={expenseAmountChangeHandler} />
+                    {expenseAmountError && <ValidationMessage notExist>{t(`Please add amount`)}</ValidationMessage>}
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <FormControl sx={{ width: '100%' }}>
+                        <InputLabel id="payment-label">{t('payment method')}</InputLabel>
+                        <Select
+                            label={t('payment method')}
+                            labelId="payment-label"
+                            value={paymentGateway}
+                            onChange={paymentGatewayChangeHandler}
+                            inputProps={{ 'aria-label': 'Without label' }}
+                        >
+                            <MenuItem value='cash'>{t('cash')}</MenuItem>
+                            <MenuItem value='card'>{t('card')}</MenuItem>
+                            <MenuItem value='transfer'>{t('transfer')}</MenuItem>
+                            <MenuItem value='online'>{t('online')}</MenuItem>
+                        </Select>
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12}>
+                    <ImageUploading
+                        value={uploadedImages}
+                        onChange={onImageChangeHandler}
+                        maxNumber={maxNumber}
+                        dataURLKey="data_url"
+                    >
+                        {({
+                            imageList,
+                            onImageUpload,
+                            onImageRemoveAll,
+                            onImageUpdate,
+                            onImageRemove,
+                            isDragging,
+                            dragProps,
+                        }) => (
+                            // write your building UI
+                            <div className="upload__image-wrapper">
+                                <UploadImageBody>
+                                    <Grid container sx={{ width: '100%' }} spacing={2} >
+                                        {imageList.map((image, index) => (
+                                            <Grid item xs={12} sm={6} key={index} >
+                                                <div style={{ width: '100%' }} >
+                                                    <img src={image['data_url']} alt="" width="100" />
+                                                    <ImageItemBottomBar>
+                                                        <Button sx={{ mr: 1 }} size="large" variant="outlined" startIcon={<PhotoCamera />} onClick={() => onImageUpdate(index)}>
+                                                            {t('update')}
+                                                        </Button>
+                                                        <IconButton aria-label="delete" size="large" onClick={() => onImageRemove(index)}>
+                                                            <DeleteIcon />
+                                                        </IconButton>
+                                                    </ImageItemBottomBar>
+                                                </div>
+                                            </Grid>
+                                        ))}
+                                    </Grid>
+                                </UploadImageBody>
+                                <UploadImageTopBar>
+                                    <Button size="medium" sx={{ mr: 2, color: isDragging && 'red' }} variant="contained" startIcon={<PhotoCamera />} {...dragProps} onClick={onImageUpload} >
+                                        {t('photos')}
+                                    </Button>
+                                    <Button size="medium" variant="outlined" startIcon={<DeleteIcon />} onClick={onImageRemoveAll}>
+                                        {t('Remove all')}
+                                    </Button>
+                                </UploadImageTopBar>
+                            </div>
+                        )}
+                    </ImageUploading>
+                </Grid>
             </Grid>
-            <Grid item xs={12} sm={6} >
-                <LocalizationProvider dateAdapter={DateAdapter}>
-                    <DesktopDatePicker
-                        label={t("Date from")}
-                        inputFormat="MM/dd/yyyy"
-                        value={date}
-                        onChange={handleDateChange}
-                        renderInput={(params) => <TextField sx={{ width: '100%' }} {...params} />}
-                    />
-                </LocalizationProvider>
-            </Grid>
-            <Grid item xs={12} md={6}>
-                <FormLabel component="legend" sx={{ textAlign: 'left', textTransform: 'capitalize', marginBottom: '8px' }} >{t('select bank')}</FormLabel>
-                <SearchBanks selectBank={selectBank}  />
-                {bankDataError && <ValidationMessage notExist>{t(`Please Choose Bank`)}</ValidationMessage>}
-            </Grid>
-            <Grid item xs={12} md={6}>
-                {
-                    bankData && (
-                        <BankCard>
-                            <BankName>{bankData.name}</BankName>
-                            <BankInfo>
-                                <li><AccountBalanceIcon sx={{ mr: 1 }} />{bankData.account}</li>
-                            </BankInfo>
-                        </BankCard>
-                    )
-                }
-            </Grid>
-            <Grid item xs={12} sm={6} >
-                <FormLabel component="legend" sx={{ textAlign: 'left', textTransform: 'capitalize', marginBottom: '8px' }} >{t('select category')}</FormLabel>
-                <FormControl fullWidth sx={{ minWidth: '200px' }} >
-                    <ReactSelect styles={customStyles} options={categoriesOptions} isClearable isRtl={lang === 'ar'} defaultValue={{ value: category.id, label: category.name }}
-                        onChange={handleSelectCategory} onInputChange={handleSelectCategoryOptions} />
-                </FormControl>
-                {selectedCategoryError && <ValidationMessage notExist>{t(`Please select category`)}</ValidationMessage>}
-            </Grid>
-            <Grid item xs={12} sm={6} >
-                <FormLabel component="legend" sx={{ textAlign: 'left', textTransform: 'capitalize', marginBottom: '8px' }} >{t('select agent')}</FormLabel>
-                <FormControl fullWidth sx={{ minWidth: '200px' }} >
-                    <ReactSelect styles={customStyles} options={agentsOptions} isClearable isRtl={lang === 'ar'} defaultValue={{ value: customer.id, label: customer.name }}
-                        onChange={handleSelectAgent} onInputChange={handleSelectAgentOptions} />
-                </FormControl>
-                {selectedAgentError && <ValidationMessage notExist>{t(`Please select agent`)}</ValidationMessage>}
-            </Grid>
-            <Grid item xs={12}>
-                <EditorWrapper>
-                    <Editor
-                        editorState={editorState}
-                        wrapperClassName="demo-wrapper"
-                        editorClassName="demo-editor"
-                        onEditorStateChange={onEditorChange}
-                        textAlignment={themeCtx.direction === 'rtl' ? 'right' : 'left'}
-                    />
-                </EditorWrapper>
-                {expenseDescriptionError && <ValidationMessage notExist>{t(`Please add Description`)}</ValidationMessage>}
-            </Grid>
-            <Grid item xs={12} sm={6}>
-                <CustomTextField id="expense-amount" type='number' label={t('amount')} variant="outlined" value={expenseAmount} onChange={expenseAmountChangeHandler} />
-                {expenseAmountError && <ValidationMessage notExist>{t(`Please add amount`)}</ValidationMessage>}
-            </Grid>
-            <Grid item xs={12}>
-                <ImageUploading
-                    value={uploadedImages}
-                    onChange={onImageChangeHandler}
-                    maxNumber={maxNumber}
-                    dataURLKey="data_url"
-                >
-                    {({
-                        imageList,
-                        onImageUpload,
-                        onImageRemoveAll,
-                        onImageUpdate,
-                        onImageRemove,
-                        isDragging,
-                        dragProps,
-                    }) => (
-                        // write your building UI
-                        <div className="upload__image-wrapper">
-                            <UploadImageBody>
-                                <Grid container sx={{ width: '100%' }} spacing={2} >
-                                    {imageList.map((image, index) => (
-                                        <Grid item xs={12} sm={6} key={index} >
-                                            <div style={{ width: '100%' }} >
-                                                <img src={image['data_url']} alt="" width="100" />
-                                                <ImageItemBottomBar>
-                                                    <Button sx={{ mr: 1 }} size="large" variant="outlined" startIcon={<PhotoCamera />} onClick={() => onImageUpdate(index)}>
-                                                        {t('update')}
-                                                    </Button>
-                                                    <IconButton aria-label="delete" size="large" onClick={() => onImageRemove(index)}>
-                                                        <DeleteIcon />
-                                                    </IconButton>
-                                                </ImageItemBottomBar>
-                                            </div>
-                                        </Grid>
-                                    ))}
-                                </Grid>
-                            </UploadImageBody>
-                            <UploadImageTopBar>
-                                <Button size="medium" sx={{ mr: 2, color: isDragging && 'red' }} variant="contained" startIcon={<PhotoCamera />} {...dragProps} onClick={onImageUpload} >
-                                    {t('photos')}
-                                </Button>
-                                <Button size="medium" variant="outlined" startIcon={<DeleteIcon />} onClick={onImageRemoveAll}>
-                                    {t('Remove all')}
-                                </Button>
-                            </UploadImageTopBar>
-                        </div>
-                    )}
-                </ImageUploading>
-            </Grid>
-        </Grid>
-    )
+        )
+    }
     return (
         <CustomModal show={show} heading={heading} confirmText={confirmText} onConfirm={confirmCreateHandler} onClose={closeModalHandler} >
             {content}
@@ -479,4 +581,4 @@ const EditModal = (props) => {
 }
 
 
-export default EditModal; */
+export default EditModal;

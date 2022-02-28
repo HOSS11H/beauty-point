@@ -21,6 +21,7 @@ import { useCallback } from 'react';
 import TablePaginationActions from '../../../../../components/UI/Dashboard/Table/TablePagination/TablePagination';
 import DeleteModal from './DeleteModal/DeleteModal';
 import EditModal from './EditModal/EditModal';
+import { toast } from 'react-toastify';
 
 const ExpensesWrapper = styled(Card)`
     display: flex;
@@ -63,7 +64,8 @@ function Expenses(props) {
 
     const { t } = useTranslation()
 
-    const { fetchedExpenses,fetchingExpenses, fetchExpensesHandler, searchingExpensesSuccess, deleteExpenseHandler, creatingExpenseSuccess, updateExpenseHandler, updatingExpenseSuccess } = props;
+    const { fetchedExpenses, fetchingExpenses, fetchExpensesHandler, searchingExpensesSuccess, deleteExpenseHandler, creatingExpenseSuccess, 
+        updateExpenseHandler, updatingExpenseSuccess, updatingExpenseFailed, updatingExpenseMessage } = props;
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(intialPerPage);
@@ -79,15 +81,33 @@ function Expenses(props) {
     const [selectedExpense, setSelectedExpense] = useState(null);
 
     useEffect(() => {
-        fetchExpensesHandler(lang, page, rowsPerPage );
+        fetchExpensesHandler(lang, page, rowsPerPage);
     }, [lang, fetchExpensesHandler, page, rowsPerPage]);
-    
+
     useEffect(() => {
-        creatingExpenseSuccess && fetchExpensesHandler(lang, page, rowsPerPage );
+        creatingExpenseSuccess && fetchExpensesHandler(lang, page, rowsPerPage);
     }, [lang, fetchExpensesHandler, page, rowsPerPage, creatingExpenseSuccess]);
+
     useEffect(() => {
-        updatingExpenseSuccess && fetchExpensesHandler(lang, page, rowsPerPage );
-    }, [lang, fetchExpensesHandler, page, rowsPerPage, creatingExpenseSuccess, updatingExpenseSuccess]);
+        if (updatingExpenseSuccess) {
+            setEditModalOpened(false);
+            setSelectedExpense(null);
+            fetchExpensesHandler(lang, page, rowsPerPage);
+            toast.success(t('Expense edited'), {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [lang, fetchExpensesHandler, page, rowsPerPage, creatingExpenseSuccess, updatingExpenseSuccess, t]);
+
+    useEffect(() => {
+        if (updatingExpenseFailed && updatingExpenseMessage) {
+            toast.error(updatingExpenseMessage, {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [updatingExpenseFailed, updatingExpenseMessage])
 
 
     const handleChangePage = useCallback((event, newPage) => {
@@ -109,7 +129,7 @@ function Expenses(props) {
     }, [])
 
     const deleteModalConfirmHandler = useCallback((id) => {
-        deleteExpenseHandler( id);
+        deleteExpenseHandler(id);
         setDeleteModalOpened(false);
         setSelectedExpense(null);
     }, [deleteExpenseHandler])
@@ -124,14 +144,12 @@ function Expenses(props) {
     }, [])
 
     const editModalConfirmHandler = useCallback((data) => {
-        setEditModalOpened(false);
-        setSelectedExpense(null);
         updateExpenseHandler(data);
     }, [updateExpenseHandler])
 
     let content = (
         <Fragment>
-            <Paper sx={{ width: '100%', boxShadow: 'none',  }}>
+            <Paper sx={{ width: '100%', boxShadow: 'none', }}>
                 <TableContainer>
                     <TablePaginationWrapper>
                         <FormControl sx={{ minWidth: '75px', }} variant="filled" >
@@ -167,7 +185,7 @@ function Expenses(props) {
                     </Table>
                     {rowsPerPage !== 'all' && (
                         <TablePaginationActions
-                            sx= {{ width: '100%'}}
+                            sx={{ width: '100%' }}
                             component="div"
                             count={fetchedExpenses.data.length}
                             total={fetchedExpenses.meta ? fetchedExpenses.meta.total : 0}
@@ -190,8 +208,8 @@ function Expenses(props) {
                 }
             </Paper>
         </Fragment>
-    ) 
-    if ( fetchedExpenses.data.length === 0 && searchingExpensesSuccess) {
+    )
+    if (fetchedExpenses.data.length === 0 && searchingExpensesSuccess) {
         content = (
             <SearchMessage>
                 {t('no results')}
@@ -219,12 +237,14 @@ const mapStateToProps = state => {
         searchingExpensesSuccess: state.expenses.searchingExpensesSuccess,
         creatingExpenseSuccess: state.expenses.creatingExpenseSuccess,
         updatingExpenseSuccess: state.expenses.updatingExpenseSuccess,
+        updatingExpenseFailed: state.expenses.updatingExpenseFailed,
+        updatingExpenseMessage: state.expenses.updatingExpenseMessage,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchExpensesHandler: (lang, page, rowsPerPage ) => dispatch(fetchExpenses(lang, page, rowsPerPage)),
+        fetchExpensesHandler: (lang, page, rowsPerPage) => dispatch(fetchExpenses(lang, page, rowsPerPage)),
         deleteExpenseHandler: (id) => dispatch(deleteExpense(id)),
         updateExpenseHandler: (data) => dispatch(updateExpense(data)),
     }
