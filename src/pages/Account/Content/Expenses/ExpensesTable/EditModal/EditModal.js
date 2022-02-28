@@ -1,4 +1,4 @@
-import { useState, useCallback, useContext, useEffect } from 'react';
+/* import { useState, useCallback, useContext, useEffect } from 'react';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import ThemeContext from '../../../../../../store/theme-context'
@@ -220,7 +220,7 @@ const EditModal = (props) => {
     useEffect(() => {
         if (uploadedImages[0].file === undefined) {
             fetch(uploadedImages[0].data_url).then(res => res.blob()).then(blob => {
-                setUploadedImages([{ data_url: uploadedImages[0].data_url, file: new File([blob], 'image.jpg', { type: blob.type }) }]);
+                setUploadedImages([{ data_url: uploadedImages[0].data_url, file: new File([blob], 'image.jpg', { type: blob.type })}]);
             })
         }
     }, [uploadedImages])
@@ -479,4 +479,4 @@ const EditModal = (props) => {
 }
 
 
-export default EditModal;
+export default EditModal; */

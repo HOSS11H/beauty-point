@@ -16,6 +16,7 @@ const intialState = {
     searchingExpensesSuccess: false,
     creatingExpense: false,
     creatingExpenseSuccess: false,
+    creatingExpenseFailed: false,
     creatingExpenseMessage: null,
     expensesCategories: { data: [], },
     fetchingExpensesCategories: false,
@@ -146,18 +147,18 @@ const reducer = (state = intialState, action) => {
             return updateObject(state, {
                 creatingExpense: true,
                 creatingExpenseSuccess: false,
+                creatingExpenseFailed: false,
                 creatingExpenseMessage: null,
             })
         case (actionTypes.CREATE_EXPENSE_SUCCESS):
             return updateObject(state, {
                 creatingExpense: false,
                 creatingExpenseSuccess: true,
-                creatingExpenseMessage: action.message,
             })
         case (actionTypes.CREATE_EXPENSE_FAILED):
             return updateObject(state, {
                 creatingExpense: false,
-                creatingExpenseSuccess: false,
+                creatingExpenseFailed: true,
                 creatingExpenseMessage: action.message,
             })
         case (actionTypes.FETCH_EXPENSES_CATEGORIES_START):

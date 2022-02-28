@@ -54,7 +54,7 @@ function Services(props) {
                 closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
             });
         }
-    }, [creatingServiceFailed, creatingServiceMessage, creatingServiceSuccess, t])
+    }, [creatingServiceFailed, creatingServiceMessage, t])
 
 
     // Create Modal

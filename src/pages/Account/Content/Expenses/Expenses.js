@@ -1,4 +1,4 @@
-import { Fragment, useCallback, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { searchExpenses , createExpense} from '../../../../store/actions/index';
 import SearchBar from "../../../../components/Search/SearchBar/SearchBar";
@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { CustomButton } from '../../../../components/UI/Button/Button';
 import CreateModal from "./CreateModal/CreateModal";
 import { NavLink } from "react-router-dom";
+import { toast } from "react-toastify";
 
 
 const ActionsWrapper = styled.div`
@@ -63,9 +64,28 @@ function Expenses(props) {
 
     const { t } = useTranslation()
 
-    const { searchExpensesHandler, addExpenseHandler } = props;
+    const { searchExpensesHandler, addExpenseHandler, creatingExpenseSuccess, creatingExpenseFailed, creatingExpenseMessage } = props;
 
     const [createModalOpened, setCreateModalOpened] = useState(false);
+
+    useEffect(() => {
+        if ( creatingExpenseSuccess ) {
+            setCreateModalOpened(false)
+            toast.success(t('Expense Added'), {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [creatingExpenseSuccess, t])
+
+    useEffect(() => {
+        if ( creatingExpenseFailed && creatingExpenseMessage ) {
+            toast.error(creatingExpenseMessage, {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [creatingExpenseFailed, creatingExpenseMessage, t])
 
     // Create Modal
     const createModalOpenHandler = useCallback((id) => {
@@ -76,7 +96,6 @@ function Expenses(props) {
     }, [])
 
     const createModalConfirmHandler = useCallback((data) => {
-        setCreateModalOpened(false);
         addExpenseHandler(data);
     }, [addExpenseHandler])
 
@@ -100,7 +119,13 @@ function Expenses(props) {
     );
 }
 
-
+const mapStateToProps = (state) => {
+    return {
+        creatingExpenseSuccess: state.expenses.creatingExpenseSuccess,
+        creatingExpenseFailed: state.expenses.creatingExpenseFailed,
+        creatingExpenseMessage: state.expenses.creatingExpenseMessage,
+    }
+}
 
 const mapDispatchToProps = dispatch => {
     return {
@@ -109,4 +134,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(Expenses);
+export default connect(mapStateToProps, mapDispatchToProps)(Expenses);

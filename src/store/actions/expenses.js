@@ -137,10 +137,9 @@ export const createExpenseStart = () => {
         type: actionTypes.CREATE_EXPENSE_START,
     }
 }
-export const createExpenseSuccess = (message, createdExpenseData) => {
+export const createExpenseSuccess = ( createdExpenseData) => {
     return {
         type: actionTypes.CREATE_EXPENSE_SUCCESS,
-        message: message,
         expenseData: createdExpenseData,
     }
 }
@@ -156,10 +155,13 @@ export const createExpense = (data) => {
         dispatch(createExpenseStart())
         axios.post(`/vendors/expenses`, data, {headers: {   'Content-Type': 'multipart/form-data'}})
             .then(response => {
-                dispatch(createExpenseSuccess(null, { ...data, ...response.data }));
+                dispatch(createExpenseSuccess({ ...data, ...response.data }));
             })
             .catch(err => {
-                dispatch(createExpenseFailed(err.message))
+                const errs = err.response.data.errors;
+                for (let key in errs) {
+                    dispatch(createExpenseFailed(errs[key][0]))
+                }
             })
     }
 }
