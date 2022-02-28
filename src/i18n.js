@@ -461,6 +461,8 @@ const resources = {
             'Expense edited': 'تم تعديل المصروف',
             'Please Choose Bank': 'يرجى اختيار البنك',
             'Please select customer': 'يرجى اختيار العميل',
+            'Bank Added': 'تمت إضافة البنك',
+            'Bank edited': 'تم تعديل بيانات البنك'
         }
     }
 };

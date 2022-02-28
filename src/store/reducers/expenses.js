@@ -55,11 +55,13 @@ const intialState = {
     deletingExpenseBankMessage: null,
     updatingExpenseBank: false,
     updatingExpenseBankSuccess: false,
+    updatingExpenseBankFailed: false,
     updatingExpenseBankMessage: null,
     searchingExpensesBanks: false,
     searchingExpensesBanksSuccess: false,
     creatingExpenseBank: false,
     creatingExpenseBankSuccess: false,
+    creatingExpenseBankFailed: false,
     creatingExpenseBankMessage: null,
 }
 
@@ -451,6 +453,7 @@ const reducer = (state = intialState, action) => {
             return updateObject(state, {
                 updatingExpenseBank: true,
                 updatingExpenseBankSuccess: false,
+                updatingExpenseBankFailed: false,
                 updatingExpenseBankMessage: null,
             })
         case (actionTypes.UPDATE_EXPENSE_BANK_SUCCESS):
@@ -468,12 +471,11 @@ const reducer = (state = intialState, action) => {
                 },
                 updatingExpenseBank: false,
                 updatingExpenseBankSuccess: true,
-                updatingExpenseBankMessage: action.message,
             })
         case (actionTypes.UPDATE_EXPENSE_BANK_FAILED):
             return updateObject(state, {
                 updatingExpenseBank: false,
-                updatingExpenseBankSuccess: false,
+                updatingExpenseBankFailed: true,
                 updatingExpenseBankMessage: action.message,
             })
         case (actionTypes.SEARCH_EXPENSES_BANKS_START):
@@ -501,6 +503,7 @@ const reducer = (state = intialState, action) => {
             return updateObject(state, {
                 creatingExpenseBank: true,
                 creatingExpenseBankSuccess: false,
+                creatingExpenseBankFailed: false,
                 creatingExpenseBankMessage: null,
             })
         case (actionTypes.CREATE_EXPENSE_BANK_SUCCESS):
@@ -517,12 +520,11 @@ const reducer = (state = intialState, action) => {
                 },
                 creatingExpenseBank: false,
                 creatingExpenseBankSuccess: true,
-                creatingExpenseBankMessage: action.message,
             })
         case (actionTypes.CREATE_EXPENSE_BANK_FAILED):
             return updateObject(state, {
                 creatingExpenseBank: false,
-                creatingExpenseBankSuccess: false,
+                creatingExpenseBankFailed: true,
                 creatingExpenseBankMessage: action.message,
             })
         default:

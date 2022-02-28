@@ -562,10 +562,9 @@ export const updateExpenseBankStart = () => {
         type: actionTypes.UPDATE_EXPENSE_BANK_START,
     }
 }
-export const updateExpenseBankSuccess = (message, updatedExpenseBankData) => {
+export const updateExpenseBankSuccess = ( updatedExpenseBankData) => {
     return {
         type: actionTypes.UPDATE_EXPENSE_BANK_SUCCESS,
-        message: message,
         expenseBankData: updatedExpenseBankData,
     }
 }
@@ -580,10 +579,13 @@ export const updateExpenseBank = data => {
         dispatch(updateExpenseBankStart())
         axios.put(`/vendors/banks/${data.id}`, data)
             .then(response => {
-                dispatch(updateExpenseBankSuccess(response.data, data));
+                dispatch(updateExpenseBankSuccess(data));
             })
             .catch(err => {
-                dispatch(updateExpenseBankFailed(err.message))
+                const errs = err.response.data.errors;
+                for (let key in errs) {
+                    dispatch(updateExpenseBankFailed(errs[key][0]))
+                }
             })
     }
 }
@@ -626,10 +628,9 @@ export const createExpenseBankStart = () => {
         type: actionTypes.CREATE_EXPENSE_BANK_START,
     }
 }
-export const createExpenseBankSuccess = (message, createdExpenseBankData) => {
+export const createExpenseBankSuccess = (createdExpenseBankData) => {
     return {
         type: actionTypes.CREATE_EXPENSE_BANK_SUCCESS,
-        message: message,
         expenseBankData: createdExpenseBankData,
     }
 }
@@ -645,10 +646,13 @@ export const createExpenseBank = (data) => {
         dispatch(createExpenseBankStart())
         axios.post(`/vendors/banks`, data)
             .then(response => {
-                dispatch(createExpenseBankSuccess(null, { ...response.data }));
+                dispatch(createExpenseBankSuccess({ ...response.data }));
             })
             .catch(err => {
-                dispatch(createExpenseBankFailed(err.message))
+                const errs = err.response.data.errors;
+                for (let key in errs) {
+                    dispatch(createExpenseBankFailed(errs[key][0]))
+                }
             })
     }
 }

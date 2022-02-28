@@ -21,6 +21,7 @@ import { useCallback } from 'react';
 import TablePaginationActions from '../../../../../../components/UI/Dashboard/Table/TablePagination/TablePagination';
 import DeleteModal from './DeleteModal/DeleteModal';
 import EditModal from './EditModal/EditModal';
+import { toast } from "react-toastify";
 
 const ExpenseBanksWrapper = styled(Card)`
     display: flex;
@@ -63,7 +64,8 @@ function ExpenseBanksTable(props) {
 
     const { t } = useTranslation()
 
-    const { fetchedExpensesBanks,fetchingExpensesBanks, fetchExpensesBanksHandler, searchingExpensesBanksSuccess, deleteExpenseBankHandler, updateExpenseBankHandler } = props;
+    const { fetchedExpensesBanks, fetchingExpensesBanks, fetchExpensesBanksHandler, searchingExpensesBanksSuccess, deleteExpenseBankHandler, 
+        updateExpenseBankHandler, updatingExpenseBankSuccess, updatingExpenseBankFailed, updatingExpenseBankMessage } = props;
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(intialPerPage);
@@ -81,6 +83,26 @@ function ExpenseBanksTable(props) {
     useEffect(() => {
         fetchExpensesBanksHandler(lang, page, rowsPerPage );
     }, [lang, fetchExpensesBanksHandler, page, rowsPerPage]);
+
+    useEffect(() => {
+        if (updatingExpenseBankSuccess) {
+            setEditModalOpened(false);
+            setSelectedExpenseBank(null);
+            toast.success(t('Bank edited'), {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [lang, page, rowsPerPage, t, updatingExpenseBankSuccess]);
+
+    useEffect(() => {
+        if (updatingExpenseBankFailed && updatingExpenseBankMessage) {
+            toast.error(updatingExpenseBankMessage, {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [updatingExpenseBankFailed, updatingExpenseBankMessage])
 
 
     const handleChangePage = useCallback((event, newPage) => {
@@ -117,8 +139,6 @@ function ExpenseBanksTable(props) {
     }, [])
 
     const editModalConfirmHandler = useCallback((data) => {
-        setEditModalOpened(false);
-        setSelectedExpenseBank(null);
         updateExpenseBankHandler(data);
     }, [updateExpenseBankHandler])
 
@@ -210,8 +230,9 @@ const mapStateToProps = state => {
         fetchedExpensesBanks: state.expenses.expensesBanks,
         fetchingExpensesBanks: state.expenses.fetchingExpensesBanks,
         searchingExpensesBanksSuccess: state.expenses.searchingExpensesBanksSuccess,
-        creatingExpenseBankSuccess: state.expenses.creatingExpenseBankSuccess,
         updatingExpenseBankSuccess: state.expenses.updatingExpenseBankSuccess,
+        updatingExpenseBankFailed: state.expenses.updatingExpenseBankFailed,
+        updatingExpenseBankMessage: state.expenses.updatingExpenseBankMessage,
     }
 }
 

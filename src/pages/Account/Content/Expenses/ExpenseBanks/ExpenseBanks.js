@@ -10,6 +10,8 @@ import { useTranslation } from 'react-i18next';
 
 import { CustomButton } from '../../../../../components/UI/Button/Button';
 import CreateModal from "./CreateModal/CreateModal";
+import { toast } from "react-toastify";
+import { useEffect } from "react";
 
 
 const ActionsWrapper = styled.div`
@@ -33,9 +35,29 @@ function ExpenseBanks(props) {
 
     const { t } = useTranslation()
 
-    const { searchExpensesBanksHandler, addExpenseBankHandler } = props;
+    const { searchExpensesBanksHandler, addExpenseBankHandler, creatingExpenseBankSuccess, creatingExpenseBankFailed, creatingExpenseBankMessage } = props;
 
     const [createModalOpened, setCreateModalOpened] = useState(false);
+
+
+    useEffect(() => {
+        if ( creatingExpenseBankSuccess ) {
+            setCreateModalOpened(false)
+            toast.success(t('Bank Added'), {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [creatingExpenseBankSuccess, t])
+
+    useEffect(() => {
+        if ( creatingExpenseBankFailed && creatingExpenseBankMessage ) {
+            toast.error(creatingExpenseBankMessage, {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [creatingExpenseBankFailed, creatingExpenseBankMessage, t])
 
     // Create Modal
     const createModalOpenHandler = useCallback((id) => {
@@ -46,7 +68,6 @@ function ExpenseBanks(props) {
     }, [])
 
     const createModalConfirmHandler = useCallback((data) => {
-        setCreateModalOpened(false);
         addExpenseBankHandler(data);
     }, [addExpenseBankHandler])
 
@@ -65,7 +86,13 @@ function ExpenseBanks(props) {
     );
 }
 
-
+const mapStateToProps = (state) => {
+    return {
+        creatingExpenseBankSuccess: state.expenses.creatingExpenseBankSuccess,
+        creatingExpenseBankFailed: state.expenses.creatingExpenseBankFailed,
+        creatingExpenseBankMessage: state.expenses.creatingExpenseBankMessage,
+    }
+}
 
 const mapDispatchToProps = dispatch => {
     return {
@@ -74,4 +101,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(ExpenseBanks);
+export default connect(mapStateToProps, mapDispatchToProps)(ExpenseBanks);
