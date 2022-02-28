@@ -43,11 +43,13 @@ const intialState = {
     deletingExpenseCustomerMessage: null,
     updatingExpenseCustomer: false,
     updatingExpenseCustomerSuccess: false,
+    updatingExpenseCustomerFailed: false,
     updatingExpenseCustomerMessage: null,
     searchingExpensesCustomers: false,
     searchingExpensesCustomersSuccess: false,
     creatingExpenseCustomer: false,
     creatingExpenseCustomerSuccess: false,
+    creatingExpenseCustomerFailed: false,
     creatingExpenseCustomerMessage: null,
     expensesBanks: { data: [], },
     fetchingExpensesBanks: false,
@@ -334,6 +336,7 @@ const reducer = (state = intialState, action) => {
             return updateObject(state, {
                 updatingExpenseCustomer: true,
                 updatingExpenseCustomerSuccess: false,
+                updatingExpenseCustomerFailed: false,
                 updatingExpenseCustomerMessage: null,
             })
         case (actionTypes.UPDATE_EXPENSE_CUSTOMER_SUCCESS):
@@ -351,12 +354,11 @@ const reducer = (state = intialState, action) => {
                 },
                 updatingExpenseCustomer: false,
                 updatingExpenseCustomerSuccess: true,
-                updatingExpenseCustomerMessage: action.message,
             })
         case (actionTypes.UPDATE_EXPENSE_CUSTOMER_FAILED):
             return updateObject(state, {
                 updatingExpenseCustomer: false,
-                updatingExpenseCustomerSuccess: false,
+                updatingExpenseCustomerFailed: true,
                 updatingExpenseCustomerMessage: action.message,
             })
         case (actionTypes.SEARCH_EXPENSES_CUSTOMERS_START):
@@ -384,6 +386,7 @@ const reducer = (state = intialState, action) => {
             return updateObject(state, {
                 creatingExpenseCustomer: true,
                 creatingExpenseCustomerSuccess: false,
+                creatingExpenseCustomerFailed: false,
                 creatingExpenseCustomerMessage: null,
             })
         case (actionTypes.CREATE_EXPENSE_CUSTOMER_SUCCESS):
@@ -400,12 +403,11 @@ const reducer = (state = intialState, action) => {
                 },
                 creatingExpenseCustomer: false,
                 creatingExpenseCustomerSuccess: true,
-                creatingExpenseCustomerMessage: action.message,
             })
         case (actionTypes.CREATE_EXPENSE_CUSTOMER_FAILED):
             return updateObject(state, {
                 creatingExpenseCustomer: false,
-                creatingExpenseCustomerSuccess: false,
+                creatingExpenseCustomerFailed: true,
                 creatingExpenseCustomerMessage: action.message,
             })
         case (actionTypes.FETCH_EXPENSES_BANKS_START):

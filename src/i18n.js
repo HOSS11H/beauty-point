@@ -465,6 +465,8 @@ const resources = {
             'Bank edited': 'تم تعديل بيانات البنك',
             'Category Added': 'تم اضافة الفئة',
             'Category edited': 'تم تعديل الفئة',
+            'Agent Added': 'تم اضافة المورد',
+            'Agent edited': 'تم تعديل المورد'
         }
     }
 };

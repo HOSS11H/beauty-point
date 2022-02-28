@@ -405,10 +405,9 @@ export const updateExpenseCustomerStart = () => {
         type: actionTypes.UPDATE_EXPENSE_CUSTOMER_START,
     }
 }
-export const updateExpenseCustomerSuccess = (message, updatedExpenseCustomerData) => {
+export const updateExpenseCustomerSuccess = (updatedExpenseCustomerData) => {
     return {
         type: actionTypes.UPDATE_EXPENSE_CUSTOMER_SUCCESS,
-        message: message,
         expenseCustomerData: updatedExpenseCustomerData,
     }
 }
@@ -423,10 +422,13 @@ export const updateExpenseCustomer = data => {
         dispatch(updateExpenseCustomerStart())
         axios.put(`/vendors/expenses_customers/${data.id}`, data)
             .then(response => {
-                dispatch(updateExpenseCustomerSuccess(response.data, data));
+                dispatch(updateExpenseCustomerSuccess(data));
             })
             .catch(err => {
-                dispatch(updateExpenseCustomerFailed(err.message))
+                const errs = err.response.data.errors;
+                for (let key in errs) {
+                    dispatch(updateExpenseCustomerFailed(errs[key][0]))
+                }
             })
     }
 }
@@ -469,10 +471,9 @@ export const createExpenseCustomerStart = () => {
         type: actionTypes.CREATE_EXPENSE_CUSTOMER_START,
     }
 }
-export const createExpenseCustomerSuccess = (message, createdExpenseCustomerData) => {
+export const createExpenseCustomerSuccess = (createdExpenseCustomerData) => {
     return {
         type: actionTypes.CREATE_EXPENSE_CUSTOMER_SUCCESS,
-        message: message,
         expenseCustomerData: createdExpenseCustomerData,
     }
 }
@@ -488,10 +489,13 @@ export const createExpenseCustomer = (data) => {
         dispatch(createExpenseCustomerStart())
         axios.post(`/vendors/expenses_customers`, data)
             .then(response => {
-                dispatch(createExpenseCustomerSuccess(null, { ...response.data }));
+                dispatch(createExpenseCustomerSuccess({ ...response.data }));
             })
             .catch(err => {
-                dispatch(createExpenseCustomerFailed(err.message))
+                const errs = err.response.data.errors;
+                for (let key in errs) {
+                    dispatch(createExpenseCustomerFailed(errs[key][0]))
+                }
             })
     }
 }

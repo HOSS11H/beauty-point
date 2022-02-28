@@ -21,6 +21,7 @@ import { useCallback } from 'react';
 import TablePaginationActions from '../../../../../../components/UI/Dashboard/Table/TablePagination/TablePagination';
 import DeleteModal from './DeleteModal/DeleteModal';
 import EditModal from './EditModal/EditModal';
+import { toast } from 'react-toastify';
 
 const ExpenseCustomersWrapper = styled(Card)`
     display: flex;
@@ -63,7 +64,8 @@ function ExpenseCustomersTable(props) {
 
     const { t } = useTranslation()
 
-    const { fetchedExpensesCustomers,fetchingExpensesCustomers, fetchExpensesCustomersHandler, searchingExpensesCustomersSuccess, deleteExpenseCustomerHandler, updateExpenseCustomerHandler } = props;
+    const { fetchedExpensesCustomers,fetchingExpensesCustomers, fetchExpensesCustomersHandler, searchingExpensesCustomersSuccess, deleteExpenseCustomerHandler, 
+        updateExpenseCustomerHandler, updatingExpenseCustomerSuccess, updatingExpenseCustomerFailed, updatingExpenseCustomerMessage } = props;
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(intialPerPage);
@@ -81,6 +83,26 @@ function ExpenseCustomersTable(props) {
     useEffect(() => {
         fetchExpensesCustomersHandler(lang, page, rowsPerPage );
     }, [lang, fetchExpensesCustomersHandler, page, rowsPerPage]);
+
+    useEffect(() => {
+        if (updatingExpenseCustomerSuccess) {
+            setEditModalOpened(false);
+            setSelectedExpenseCustomer(null);
+            toast.success(t('Agent edited'), {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [t, updatingExpenseCustomerSuccess]);
+
+    useEffect(() => {
+        if (updatingExpenseCustomerFailed && updatingExpenseCustomerMessage) {
+            toast.error(updatingExpenseCustomerMessage, {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [updatingExpenseCustomerFailed, updatingExpenseCustomerMessage])
 
 
     const handleChangePage = useCallback((event, newPage) => {
@@ -117,8 +139,6 @@ function ExpenseCustomersTable(props) {
     }, [])
 
     const editModalConfirmHandler = useCallback((data) => {
-        setEditModalOpened(false);
-        setSelectedExpenseCustomer(null);
         updateExpenseCustomerHandler(data);
     }, [updateExpenseCustomerHandler])
 
@@ -210,8 +230,9 @@ const mapStateToProps = state => {
         fetchedExpensesCustomers: state.expenses.expensesCustomers,
         fetchingExpensesCustomers: state.expenses.fetchingExpensesCustomers,
         searchingExpensesCustomersSuccess: state.expenses.searchingExpensesCustomersSuccess,
-        creatingExpenseCustomerSuccess: state.expenses.creatingExpenseCustomerSuccess,
         updatingExpenseCustomerSuccess: state.expenses.updatingExpenseCustomerSuccess,
+        updatingExpenseCustomerFailed: state.expenses.updatingExpenseCustomerFailed,
+        updatingExpenseCustomerMessage: state.expenses.updatingExpenseCustomerMessage,
     }
 }
 

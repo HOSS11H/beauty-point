@@ -17,7 +17,7 @@ const CustomTextField = styled(TextField)`
 
 const CreateModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, creatingExpenseCategorySuccess } = props;
+    const { show, heading, confirmText, onConfirm, onClose, creatingExpenseCustomerSuccess } = props;
 
     const { t } = useTranslation();
 
@@ -54,8 +54,8 @@ const CreateModal = (props) => {
     }, [])
 
     useEffect(() => {
-        creatingExpenseCategorySuccess && resetModalData();
-    }, [creatingExpenseCategorySuccess, resetModalData])
+        creatingExpenseCustomerSuccess && resetModalData();
+    }, [creatingExpenseCustomerSuccess, resetModalData])
 
     const confirmCreateHandler = useCallback(() => {
 
@@ -96,7 +96,7 @@ const CreateModal = (props) => {
 
 const mapStateToProps = (state) => {
     return {
-        creatingExpenseCategorySuccess: state.expenses.creatingExpenseCategorySuccess,
+        creatingExpenseCustomerSuccess: state.expenses.creatingExpenseCustomerSuccess,
     }
 }
 

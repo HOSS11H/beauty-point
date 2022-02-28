@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 import { CustomButton } from '../../../../../components/UI/Button/Button';
 import CreateModal from "./CreateModal/CreateModal";
+import { toast } from "react-toastify";
 
 
 const ActionsWrapper = styled.div`
@@ -33,9 +34,28 @@ function ExpenseCustomers(props) {
 
     const { t } = useTranslation()
 
-    const { searchExpensesCustomersHandler, addExpenseCustomerHandler } = props;
+    const { searchExpensesCustomersHandler, addExpenseCustomerHandler, creatingExpenseCustomerSuccess, creatingExpenseCustomerFailed, creatingExpenseCustomerMessage } = props;
 
     const [createModalOpened, setCreateModalOpened] = useState(false);
+
+    useEffect(() => {
+        if ( creatingExpenseCustomerSuccess ) {
+            setCreateModalOpened(false)
+            toast.success(t('Agent Added'), {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [creatingExpenseCustomerSuccess, t])
+
+    useEffect(() => {
+        if ( creatingExpenseCustomerFailed && creatingExpenseCustomerMessage ) {
+            toast.error(creatingExpenseCustomerMessage, {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [creatingExpenseCustomerFailed, creatingExpenseCustomerMessage, t])
 
     // Create Modal
     const createModalOpenHandler = useCallback((id) => {
@@ -46,7 +66,6 @@ function ExpenseCustomers(props) {
     }, [])
 
     const createModalConfirmHandler = useCallback((data) => {
-        setCreateModalOpened(false);
         addExpenseCustomerHandler(data);
     }, [addExpenseCustomerHandler])
 
@@ -65,7 +84,13 @@ function ExpenseCustomers(props) {
     );
 }
 
-
+const mapStateToProps = (state) => {
+    return {
+        creatingExpenseCustomerSuccess: state.expenses.creatingExpenseCustomerSuccess,
+        creatingExpenseCustomerFailed: state.expenses.creatingExpenseCustomerFailed,
+        creatingExpenseCustomerMessage: state.expenses.creatingExpenseCustomerMessage,
+    }
+}
 
 const mapDispatchToProps = dispatch => {
     return {
@@ -74,4 +99,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(ExpenseCustomers);
+export default connect(mapStateToProps, mapDispatchToProps)(ExpenseCustomers);
