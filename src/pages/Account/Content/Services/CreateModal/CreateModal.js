@@ -496,7 +496,7 @@ const CreateModal = (props) => {
         setServiceDiscount(0);
         setDiscountType('percent');
         setPriceAfterDiscount(0);
-        setEmployeeName([]);
+        setEmployeeName('');
         setLocationName('');
         setServiceLocationError(false);
         setCategoryName('');
@@ -505,7 +505,7 @@ const CreateModal = (props) => {
         setServiceTimeError(false);
         setTimeType('minutes');
         setServiceStatus('active');
-        setType('single');
+        setType('individually');
         setUploadedImages([]);
         setDefaultImage('');
         setDefaultImageError(false);
