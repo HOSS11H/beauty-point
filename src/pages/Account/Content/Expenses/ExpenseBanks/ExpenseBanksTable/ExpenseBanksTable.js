@@ -93,7 +93,7 @@ function ExpenseBanksTable(props) {
                 closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
             });
         }
-    }, [lang, page, rowsPerPage, t, updatingExpenseBankSuccess]);
+    }, [t, updatingExpenseBankSuccess]);
 
     useEffect(() => {
         if (updatingExpenseBankFailed && updatingExpenseBankMessage) {

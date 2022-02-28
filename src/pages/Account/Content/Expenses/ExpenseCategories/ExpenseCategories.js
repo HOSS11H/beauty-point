@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 import { CustomButton } from '../../../../../components/UI/Button/Button';
 import CreateModal from "./CreateModal/CreateModal";
+import { toast } from "react-toastify";
 
 
 const ActionsWrapper = styled.div`
@@ -33,9 +34,28 @@ function ExpenseCategories(props) {
 
     const { t } = useTranslation()
 
-    const { searchExpensesCategoriesHandler, addExpenseCategoryHandler } = props;
+    const { searchExpensesCategoriesHandler, addExpenseCategoryHandler, creatingExpenseCategorySuccess, creatingExpenseCategoryFailed, creatingExpenseCategoryMessage } = props;
 
     const [createModalOpened, setCreateModalOpened] = useState(false);
+
+    useEffect(() => {
+        if ( creatingExpenseCategorySuccess ) {
+            setCreateModalOpened(false)
+            toast.success(t('Category Added'), {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [creatingExpenseCategorySuccess, t])
+
+    useEffect(() => {
+        if ( creatingExpenseCategoryFailed && creatingExpenseCategoryMessage ) {
+            toast.error(creatingExpenseCategoryMessage, {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [creatingExpenseCategoryFailed, creatingExpenseCategoryMessage, t])
 
     // Create Modal
     const createModalOpenHandler = useCallback((id) => {
@@ -46,7 +66,6 @@ function ExpenseCategories(props) {
     }, [])
 
     const createModalConfirmHandler = useCallback((data) => {
-        setCreateModalOpened(false);
         addExpenseCategoryHandler(data);
     }, [addExpenseCategoryHandler])
 
@@ -65,7 +84,13 @@ function ExpenseCategories(props) {
     );
 }
 
-
+const mapStateToProps = (state) => {
+    return {
+        creatingExpenseCategorySuccess: state.expenses.creatingExpenseCategorySuccess,
+        creatingExpenseCategoryFailed: state.expenses.creatingExpenseCategoryFailed,
+        creatingExpenseCategoryMessage: state.expenses.creatingExpenseCategoryMessage,
+    }
+}
 
 const mapDispatchToProps = dispatch => {
     return {
@@ -74,4 +99,4 @@ const mapDispatchToProps = dispatch => {
     }
 }
 
-export default connect(null, mapDispatchToProps)(ExpenseCategories);
+export default connect(mapStateToProps, mapDispatchToProps)(ExpenseCategories);

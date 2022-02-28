@@ -462,7 +462,9 @@ const resources = {
             'Please Choose Bank': 'يرجى اختيار البنك',
             'Please select customer': 'يرجى اختيار العميل',
             'Bank Added': 'تمت إضافة البنك',
-            'Bank edited': 'تم تعديل بيانات البنك'
+            'Bank edited': 'تم تعديل بيانات البنك',
+            'Category Added': 'تم اضافة الفئة',
+            'Category edited': 'تم تعديل الفئة',
         }
     }
 };

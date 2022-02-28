@@ -21,6 +21,7 @@ import { useCallback } from 'react';
 import TablePaginationActions from '../../../../../../components/UI/Dashboard/Table/TablePagination/TablePagination';
 import DeleteModal from './DeleteModal/DeleteModal';
 import EditModal from './EditModal/EditModal';
+import { toast } from 'react-toastify';
 
 const ExpenseCategoriesWrapper = styled(Card)`
     display: flex;
@@ -63,7 +64,8 @@ function ExpenseCategoriesTable(props) {
 
     const { t } = useTranslation()
 
-    const { fetchedExpensesCategories,fetchingExpensesCategories, fetchExpensesCategoriesHandler, searchingExpensesCategoriesSuccess, deleteExpenseCategoryHandler, updateExpenseCategoryHandler } = props;
+    const { fetchedExpensesCategories,fetchingExpensesCategories, fetchExpensesCategoriesHandler, searchingExpensesCategoriesSuccess, deleteExpenseCategoryHandler, 
+        updateExpenseCategoryHandler, updatingExpenseCategorySuccess, updatingExpenseCategoryFailed, updatingExpenseCategoryMessage } = props;
 
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(intialPerPage);
@@ -81,6 +83,26 @@ function ExpenseCategoriesTable(props) {
     useEffect(() => {
         fetchExpensesCategoriesHandler(lang, page, rowsPerPage );
     }, [lang, fetchExpensesCategoriesHandler, page, rowsPerPage]);
+
+    useEffect(() => {
+        if (updatingExpenseCategorySuccess) {
+            setEditModalOpened(false);
+            setSelectedExpenseCategory(null);
+            toast.success(t('Category edited'), {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [t, updatingExpenseCategorySuccess]);
+
+    useEffect(() => {
+        if (updatingExpenseCategoryFailed && updatingExpenseCategoryMessage) {
+            toast.error(updatingExpenseCategoryMessage, {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [updatingExpenseCategoryFailed, updatingExpenseCategoryMessage])
 
 
     const handleChangePage = useCallback((event, newPage) => {
@@ -117,8 +139,6 @@ function ExpenseCategoriesTable(props) {
     }, [])
 
     const editModalConfirmHandler = useCallback((data) => {
-        setEditModalOpened(false);
-        setSelectedExpenseCategory(null);
         updateExpenseCategoryHandler(data);
     }, [updateExpenseCategoryHandler])
 
@@ -210,8 +230,9 @@ const mapStateToProps = state => {
         fetchedExpensesCategories: state.expenses.expensesCategories,
         fetchingExpensesCategories: state.expenses.fetchingExpensesCategories,
         searchingExpensesCategoriesSuccess: state.expenses.searchingExpensesCategoriesSuccess,
-        creatingExpenseCategorySuccess: state.expenses.creatingExpenseCategorySuccess,
         updatingExpenseCategorySuccess: state.expenses.updatingExpenseCategorySuccess,
+        updatingExpenseCategoryFailed: state.expenses.updatingExpenseCategoryFailed,
+        updatingExpenseCategoryMessage: state.expenses.updatingExpenseCategoryMessage,
     }
 }
 

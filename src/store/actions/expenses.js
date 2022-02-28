@@ -238,10 +238,9 @@ export const updateExpenseCategoryStart = () => {
         type: actionTypes.UPDATE_EXPENSE_CATEGORY_START,
     }
 }
-export const updateExpenseCategorySuccess = (message, updatedExpenseCategoryData) => {
+export const updateExpenseCategorySuccess = (updatedExpenseCategoryData) => {
     return {
         type: actionTypes.UPDATE_EXPENSE_CATEGORY_SUCCESS,
-        message: message,
         expenseCategoryData: updatedExpenseCategoryData,
     }
 }
@@ -257,10 +256,13 @@ export const updateExpenseCategory = data => {
         dispatch(updateExpenseCategoryStart())
         axios.put(`/vendors/expenses_categories/${data.id}`, data)
             .then(response => {
-                dispatch(updateExpenseCategorySuccess(response.data, data));
+                dispatch(updateExpenseCategorySuccess(data));
             })
             .catch(err => {
-                dispatch(updateExpenseCategoryFailed(err.message))
+                const errs = err.response.data.errors;
+                for (let key in errs) {
+                    dispatch(updateExpenseCategoryFailed(errs[key][0]))
+                }
             })
     }
 }
@@ -303,10 +305,9 @@ export const createExpenseCategoryStart = () => {
         type: actionTypes.CREATE_EXPENSE_CATEGORY_START,
     }
 }
-export const createExpenseCategorySuccess = (message, createdExpenseCategoryData) => {
+export const createExpenseCategorySuccess = (createdExpenseCategoryData) => {
     return {
         type: actionTypes.CREATE_EXPENSE_CATEGORY_SUCCESS,
-        message: message,
         expenseCategoryData: createdExpenseCategoryData,
     }
 }
@@ -322,10 +323,13 @@ export const createExpenseCategory = (data) => {
         dispatch(createExpenseCategoryStart())
         axios.post(`/vendors/expenses_categories`, data)
             .then(response => {
-                dispatch(createExpenseCategorySuccess(null, { ...response.data }));
+                dispatch(createExpenseCategorySuccess({ ...response.data }));
             })
             .catch(err => {
-                dispatch(createExpenseCategoryFailed(err.message))
+                const errs = err.response.data.errors;
+                for (let key in errs) {
+                    dispatch(createExpenseCategoryFailed(errs[key][0]))
+                }
             })
     }
 }

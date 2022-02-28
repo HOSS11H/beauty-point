@@ -27,11 +27,13 @@ const intialState = {
     deletingExpenseCategoryMessage: null,
     updatingExpenseCategory: false,
     updatingExpenseCategorySuccess: false,
+    updatingExpenseCategoryFailed: false,
     updatingExpenseCategoryMessage: null,
     searchingExpensesCategories: false,
     searchingExpensesCategoriesSuccess: false,
     creatingExpenseCategory: false,
     creatingExpenseCategorySuccess: false,
+    creatingExpenseCategoryFailed: false,
     creatingExpenseCategoryMessage: null,
     expensesCustomers: { data: [], },
     fetchingExpensesCustomers: false,
@@ -211,6 +213,7 @@ const reducer = (state = intialState, action) => {
             return updateObject(state, {
                 updatingExpenseCategory: true,
                 updatingExpenseCategorySuccess: false,
+                updatingExpenseCategoryFailed: false,
                 updatingExpenseCategoryMessage: null,
             })
         case (actionTypes.UPDATE_EXPENSE_CATEGORY_SUCCESS):
@@ -228,12 +231,11 @@ const reducer = (state = intialState, action) => {
                 },
                 updatingExpenseCategory: false,
                 updatingExpenseCategorySuccess: true,
-                updatingExpenseCategoryMessage: action.message,
             })
         case (actionTypes.UPDATE_EXPENSE_CATEGORY_FAILED):
             return updateObject(state, {
                 updatingExpenseCategory: false,
-                updatingExpenseCategorySuccess: false,
+                updatingExpenseCategoryFailed: true,
                 updatingExpenseCategoryMessage: action.message,
             })
         case (actionTypes.SEARCH_EXPENSES_CATEGORIES_START):
@@ -261,6 +263,7 @@ const reducer = (state = intialState, action) => {
             return updateObject(state, {
                 creatingExpenseCategory: true,
                 creatingExpenseCategorySuccess: false,
+                creatingExpenseCategoryFailed: false,
                 creatingExpenseCategoryMessage: null,
             })
         case (actionTypes.CREATE_EXPENSE_CATEGORY_SUCCESS):
@@ -277,12 +280,11 @@ const reducer = (state = intialState, action) => {
                 },
                 creatingExpenseCategory: false,
                 creatingExpenseCategorySuccess: true,
-                creatingExpenseCategoryMessage: action.message,
             })
         case (actionTypes.CREATE_EXPENSE_CATEGORY_FAILED):
             return updateObject(state, {
                 creatingExpenseCategory: false,
-                creatingExpenseCategorySuccess: false,
+                creatingExpenseCategoryFailed: true,
                 creatingExpenseCategoryMessage: action.message,
             })
         case (actionTypes.FETCH_EXPENSES_CUSTOMERS_START):
