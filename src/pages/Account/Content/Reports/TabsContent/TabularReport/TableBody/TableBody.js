@@ -85,7 +85,7 @@ const EnhancedTableBody = props => {
                     <TableRow
                         hover
                         tabIndex={-1}
-                        key={index}
+                        key={row.id}
                     >
                         <TableCell align="center">
                             <TableData>

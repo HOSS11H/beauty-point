@@ -49,7 +49,7 @@ const headCells = [
         label: 'total taxes',
     },
     {
-        id: 'taxes',
+        id: 'payment_gateway',
         numeric: false,
         disablePadding: false,
         label: 'payment gateway',
