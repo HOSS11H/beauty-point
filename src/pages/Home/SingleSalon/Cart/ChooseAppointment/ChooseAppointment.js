@@ -91,6 +91,7 @@ const ChooseAppointment = props => {
                                     setDate(newValue);
                                 }}
                                 renderInput={(params) => <TextField {...params} />}
+                                sx={{ zIndex: 9999 }}
                             />
                         </MobilePickerWrapper>
                     ) : (

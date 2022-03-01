@@ -234,7 +234,9 @@ const EditModal = (props) => {
 
     let expenseData = fetchedExpenses.data[selectedExpenseIndex];
 
-    const { name, notes, amount, expense_date, bank, category, customer, expense_image_url } = expenseData;
+    const { name, notes, amount, expense_date, bank, category, customer, expense_image_url, payment_gateway } = expenseData;
+
+    console.log(expenseData);
 
     const { t } = useTranslation();
 
@@ -270,7 +272,7 @@ const EditModal = (props) => {
     const [expenseAmount, setExpenseAmount] = useState(amount);
     const [expenseAmountError, setExpenseAmountError] = useState(false);
 
-    const [paymentGateway, setPaymentGateway] = useState('cash')
+    const [paymentGateway, setPaymentGateway] = useState(payment_gateway);
 
     const [uploadedImages, setUploadedImages] = useState([{ data_url: expense_image_url }]);
 
@@ -423,12 +425,13 @@ const EditModal = (props) => {
         formData.append('bank_id', selectedBank.value);
         formData.append('cat_id', selectedCategory.value);
         formData.append('customer_id', selectedCustomer.value);
+        formData.append('payment_gateway', paymentGateway);
         if (uploadedImages.length > 0 && uploadedImages[0].data_url !== null && uploadedImages[0].file !== undefined) {
             formData.append('image', uploadedImages[0].file)
         }
         formData.append('_method', 'PUT');
         onConfirm(formData);
-    }, [expenseName, selectedBank, selectedCategory, selectedCustomer, expenseAmount, id, editorState, date, uploadedImages, onConfirm])
+    }, [expenseName, selectedBank, selectedCategory, selectedCustomer, expenseAmount, id, editorState, date, paymentGateway, uploadedImages, onConfirm])
 
     let content;
 

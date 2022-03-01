@@ -57,6 +57,10 @@ const CardBody = styled.div`
         font-family: ${({ theme }) => theme.fonts.ar};
         margin-bottom: 5px;
         color: ${({ theme }) => theme.vars.theme};
+        overflow: hidden;
+        @media screen and (max-width: 500px) {
+            max-height: 42px;
+        }
     }
     h4 {
         font-size: 15px;
@@ -64,7 +68,6 @@ const CardBody = styled.div`
         font-weight: 600;
         font-family: ${({ theme }) => theme.fonts.ar};
         color: ${({ theme }) => theme.palette.text.primary};
-        text-overflow: ellipsis;
         max-height: 63px;
         overflow: hidden;
         @media screen and (max-width: 500px) {

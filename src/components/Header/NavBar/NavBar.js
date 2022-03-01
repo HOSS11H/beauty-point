@@ -99,7 +99,7 @@ const Nav = styled.nav`
             background: ${({ theme }) => theme.palette.background.default};
             animation :  ${fadeInDown} 1s ease-in-out;
             box-shadow: 0 2px 4px rgba(3, 27, 78, 0.1);
-            z-index: 5554;
+            z-index: 1250;
             & ${Logo} {
                 img {
                     &.logo-light {

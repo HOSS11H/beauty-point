@@ -108,7 +108,7 @@ const CatButton = styled.div`
     transform: translateX(50%);
     animation: ${Bounce} 1s ease-in-out infinite;
     cursor: pointer;
-    z-index: 1500;
+    z-index: 1200;
     @media screen and ( max-width: 899.98px) {
         width           : 50px;
         height          : 50px;

@@ -39,7 +39,7 @@ const options = {
 
 const SliderWrapper = styled.div`
     position: absolute;
-    bottom: 40px;
+    bottom: 25px;
     left: 0;
     right: 0;
 `

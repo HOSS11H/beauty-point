@@ -30,6 +30,7 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import ServicePanel from "../../../components/UI/ServicePanel/ServicePanel";
 import Map from "./Map/Map";
 import Loader from "../../../components/UI/Loader/Loader";
+import EventIcon from '@mui/icons-material/Event';
 
 
 
@@ -175,7 +176,7 @@ const SingleSalon = props => {
                     </Grid>
                     <Grid item xs={12} sm={12} md={4} >
                         <ActionsWrapper>
-                            <ActionButton onClick={openShowModalHandler}>{t('book')}</ActionButton>
+                            <ActionButton onClick={openShowModalHandler}><EventIcon sx={{ mr: '5px' }} />{t('book')}</ActionButton>
                             <ActionButton onClick={copySalonUrlHandler}><ShareIcon sx={{ mr: '5px' }} /> {t('share')}</ActionButton>
                             <ActionButton onClick={copySalonLocationHandler}><LocationOnIcon sx={{ mr: '5px' }} /> {t('location')}</ActionButton>
                         </ActionsWrapper>

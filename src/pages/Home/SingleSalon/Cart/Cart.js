@@ -32,7 +32,7 @@ const CustomCardMui = styled(Card)`
         box-shadow: none;
         border-radius:20px;
         background-color: ${({ theme }) => theme.palette.background.default};
-        z-index:9999;
+        z-index:1290;
         width: 70%;
         @media screen and (max-width: 1399.98px) {
             width: 90%;
@@ -385,7 +385,7 @@ const Cart = props => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                zIndex: '9999',
+                zIndex: '1299',
             }}
         >
             <Fade in={show}>
