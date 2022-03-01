@@ -106,7 +106,7 @@ export const updateBookingFailed = (message) => {
 export const updateBooking = (data) => {
     return dispatch => {
         dispatch(updateBookingStart())
-        axios.put(`/vendors/bookings/${data.customerId}`, data)
+        axios.put(`/vendors/bookings/${data.id}`, data)
             .then(response => {
                 dispatch(updateBookingSuccess(data));
                 setTimeout(() => {

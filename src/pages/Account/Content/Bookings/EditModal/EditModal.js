@@ -355,6 +355,7 @@ const EditModal = (props) => {
                 setDateTime(new Date(responses[0].data.date_time));
                 setPaymentStatus(responses[0].data.payment_status);
                 setPaymentGateway(responses[0].data.payment_gateway);
+                setHasVat(responses[0].data.has_vat);
                 const items = responses[0].data.items;
                 items.forEach(item => {
                     if (item.item.type === 'service') {
@@ -619,6 +620,7 @@ const EditModal = (props) => {
             return;
         }
         const booking = {
+            id: id,
             customerId: bookingData.user.id,
             dateTime: dateTime,
             payment_gateway: paymentGateway,
@@ -641,7 +643,7 @@ const EditModal = (props) => {
             has_vat: hasVat,
         }
         onConfirm(booking);
-    }, [bookingData.coupon, bookingData.user.id, bookingStatus, cartData.deals, cartData.products, cartData.services, dateTime, discount, hasVat, onConfirm, paymentGateway, paymentStatus])
+    }, [bookingData.coupon, bookingData.user.id, bookingStatus, cartData.deals, cartData.products, cartData.services, dateTime, discount, hasVat, id, onConfirm, paymentGateway, paymentStatus])
 
 
     let content;
