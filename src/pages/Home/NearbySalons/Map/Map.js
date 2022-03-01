@@ -39,9 +39,12 @@ const options = {
 
 const SliderWrapper = styled.div`
     position: absolute;
-    bottom: 25px;
+    bottom: 40px;
     left: 0;
     right: 0;
+    @media screen and (max-width: 500px) {
+        bottom: 25px;
+    }
 `
 
 const InfoBody = styled.div`
