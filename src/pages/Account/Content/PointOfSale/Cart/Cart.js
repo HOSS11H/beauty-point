@@ -211,7 +211,7 @@ const Cart = props => {
 
     const [addCustomerModalOpened, setAddCustomerModalOpened] = useState(false);
 
-    const [hasVat, setHasVat] = useState(false)
+    const [hasVat, setHasVat] = useState(true)
 
     useEffect(() => {
         fetchCouponsHandler(lang);
