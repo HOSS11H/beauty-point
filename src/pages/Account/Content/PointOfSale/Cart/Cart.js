@@ -394,7 +394,6 @@ const Cart = props => {
         setHasVat(event.target.checked);
     };
 
-
     const purchaseCartHandler = (e) => {
         e.preventDefault();
         if (cartData.services.length === 0 && cartData.products.length === 0 && cartData.deals.length === 0) {

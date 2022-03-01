@@ -1,7 +1,7 @@
 import { CustomModal } from '../../../../../components/UI/Modal/Modal';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import { Grid } from '@mui/material';
+import { FormControlLabel, FormGroup, Grid, Switch } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import TimePicker from '@mui/lab/TimePicker';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
@@ -322,6 +322,8 @@ const EditModal = (props) => {
 
     const [servicesEmployeeError, setServicesEmployeeError] = useState(false)
 
+    const [hasVat, setHasVat] = useState(false)
+
     useEffect(() => {
         fetchEmployeesHandler(lang);
         fetchProductsHandler(lang, 1, 'all', 'name', 'desc');
@@ -533,6 +535,10 @@ const EditModal = (props) => {
         }
     }, [])
 
+    const handleHasVatChange = (event) => {
+        setHasVat(event.target.checked);
+    };
+
 
     const handleDateChange = (newValue) => {
         setDateTime(newValue);
@@ -613,7 +619,7 @@ const EditModal = (props) => {
             return;
         }
         const booking = {
-            customerId: id,
+            customerId: bookingData.user.id,
             dateTime: dateTime,
             payment_gateway: paymentGateway,
             payment_status: paymentStatus,
@@ -632,9 +638,10 @@ const EditModal = (props) => {
             couponId: bookingData.coupon && bookingData.coupon.id,
             discount: +discount,
             discount_type: 'percent',
+            has_vat: hasVat,
         }
         onConfirm(booking);
-    }, [bookingData.coupon, bookingStatus, cartData.deals, cartData.products, cartData.services, dateTime, discount, id, onConfirm, paymentGateway, paymentStatus])
+    }, [bookingData.coupon, bookingData.user.id, bookingStatus, cartData.deals, cartData.products, cartData.services, dateTime, discount, hasVat, onConfirm, paymentGateway, paymentStatus])
 
 
     let content;
@@ -894,11 +901,20 @@ const EditModal = (props) => {
                     />
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <BookingData>
-                        <BookingDataHeading>{t('taxes ( 15% )')}</BookingDataHeading>
-                        <BookingDataInfo>{formatCurrency(totalTaxes)}</BookingDataInfo>
-                    </BookingData>
+                    <FormGroup>
+                        <FormControlLabel control={<Switch checked={hasVat} onChange={handleHasVatChange} />} label={t("has Taxes")} />
+                    </FormGroup>
                 </Grid>
+                {
+                    hasVat && (
+                        <Grid item xs={12} md={6}>
+                            <BookingData>
+                                <BookingDataHeading>{t('taxes ( 15% )')}</BookingDataHeading>
+                                <BookingDataInfo>{formatCurrency(totalTaxes)}</BookingDataInfo>
+                            </BookingData>
+                        </Grid>
+                    )
+                }
                 <Grid item xs={12} md={6}>
                     <BookingData>
                         <BookingDataHeading>{t('total')}</BookingDataHeading>

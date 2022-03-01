@@ -183,7 +183,7 @@ const ViewModal = (props) => {
 
     const { t } = useTranslation();
 
-    const [ bookingData, setBookingData ] = useState(null);
+    const [bookingData, setBookingData] = useState(null);
     const [loading, setLoading] = useState(false);
 
     const [qrCode, setQrCode] = useState(null);
@@ -213,7 +213,7 @@ const ViewModal = (props) => {
                 setLoading(false);
             });
     }, [id])
-    
+
     useEffect(() => {
         if (id) {
             fetchData();
@@ -230,7 +230,7 @@ const ViewModal = (props) => {
 
     if (loading) {
         content = (
-            <Loader  height='50vh' />
+            <Loader height='50vh' />
         )
     }
 
@@ -310,9 +310,9 @@ const ViewModal = (props) => {
                                                     <TableCell align="center">
                                                         {
                                                             item.employee && (
-                                                                    <ServiceEmployee>
-                                                                        <span>{item.employee.name}</span>
-                                                                    </ServiceEmployee>
+                                                                <ServiceEmployee>
+                                                                    <span>{item.employee.name}</span>
+                                                                </ServiceEmployee>
                                                             )
                                                         }
                                                     </TableCell>
@@ -349,7 +349,7 @@ const ViewModal = (props) => {
                         <BookingDataHeading>{t('payment status')}</BookingDataHeading>
                         <BookingList>
                             <li>
-                                {bookingData.payment_status === 'completed' && <CheckCircleIcon sx={{ mr: 1, color: '#568d00' }} /> } 
+                                {bookingData.payment_status === 'completed' && <CheckCircleIcon sx={{ mr: 1, color: '#568d00' }} />}
                                 {bookingData.payment_status === 'pending' && <CloseIcon sx={{ mr: 1, color: 'rgb(187 163 46)' }} />}
                                 {bookingData.payment_status === 'refunded' && <CloseIcon sx={{ mr: 1, color: '#f00' }} />}
                                 {t(bookingData.payment_status)}
@@ -380,7 +380,7 @@ const ViewModal = (props) => {
                 <Grid item xs={12}>
                     <BookingActions>
                         <ActionButton onClick={() => qrCode && printBookingHandler()}  ><PrintIcon />{t('print')}</ActionButton>
-                        {bookingData.payment_status === 'refunded' && <ActionButton onClick={() => qrCode && printBookingHandler()}  ><PrintIcon />{t('print refunded invoice')}</ActionButton> }
+                        {bookingData.payment_status === 'refunded' && <ActionButton onClick={() => qrCode && printBookingHandler()}  ><PrintIcon />{t('print refunded invoice')}</ActionButton>}
                     </BookingActions>
                 </Grid>
                 {qrCode && <Invoice userData={userData} ref={invoiceRef} bookingData={bookingData} qrCode={qrCode} />}
