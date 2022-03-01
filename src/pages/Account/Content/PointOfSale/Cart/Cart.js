@@ -32,6 +32,9 @@ import { Fragment } from 'react';
 import SearchCustomer from './SearchCustomer/SearchCustomer';
 import { toast } from 'react-toastify';
 
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
 
 const CustomerCard = styled.div`
     padding: 20px;
@@ -151,14 +154,10 @@ const ActionsWrapper = styled.div`
 const AddCustomer = styled(CustomButton)`
     &.MuiButton-root {
         margin-bottom: 0;
-        margin-left: 20px;
+        margin-left: 0px;
         width: auto;
         padding: 0 15px;
         height: 56px;
-        flex-shrink: 0;
-        &:last-child {
-            margin-left: 0;
-        }
     }
 `
 const CustomTextField = styled(TextField)`
@@ -212,6 +211,8 @@ const Cart = props => {
 
     const [addCustomerModalOpened, setAddCustomerModalOpened] = useState(false);
 
+    const [hasVat, setHasVat] = useState(false)
+
     useEffect(() => {
         fetchCouponsHandler(lang);
         fetchedEmployeesHandler(lang);
@@ -229,7 +230,7 @@ const Cart = props => {
     }, [addedCustomerData, addingCustomerSuccess, t])
 
     useEffect(() => {
-        if ( addingCustomerFailed && addingCustomerMessage ) {
+        if (addingCustomerFailed && addingCustomerMessage) {
             toast.error(addingCustomerMessage, {
                 position: "bottom-right", autoClose: 4000, hideProgressBar: true,
                 closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
@@ -293,8 +294,8 @@ const Cart = props => {
         }
         setResetSearchData(false)
     }, [])
-    
-    const addPassingCustomer = ( ) => {
+
+    const addPassingCustomer = () => {
         setCustomerData({
             id: '',
             name: t('passing customer'),
@@ -377,7 +378,7 @@ const Cart = props => {
     }, [bookingCreated, resetCartHandler, t])
 
     useEffect(() => {
-        if (creatingBookingFailed && creatingBookingMessage ) {
+        if (creatingBookingFailed && creatingBookingMessage) {
             toast.error(creatingBookingMessage, {
                 position: "bottom-right", autoClose: 4000, hideProgressBar: true,
                 closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
@@ -388,6 +389,10 @@ const Cart = props => {
     useEffect(() => {
         reserved && resetCartHandler();
     }, [reserved, reset, resetCartHandler])
+
+    const handleHasVatChange = (event) => {
+        setHasVat(event.target.checked);
+    };
 
 
     const purchaseCartHandler = (e) => {
@@ -412,12 +417,12 @@ const Cart = props => {
             dateTime: dateTime,
             cart: cartData,
             totalPrice: totalPrice,
-            totalTaxes: totalTaxes,
             couponId: couponData.id ? couponData.id : null,
             discount: discount,
             discount_type: discountType,
             payment_gateway: paymentGateway,
             paid_amount: paidAmount,
+            has_vat: hasVat,
         }
         purchase(data);
     }
@@ -444,12 +449,12 @@ const Cart = props => {
             dateTime: dateTime,
             cart: cartData,
             totalPrice: totalPrice,
-            totalTaxes: totalTaxes,
             couponId: couponData.id ? couponData.id : null,
             discount: discount,
             discount_type: discountType,
             payment_gateway: paymentGateway,
             paid_amount: paidAmount,
+            has_vat: hasVat,
         }
         print(data);
     }
@@ -483,12 +488,12 @@ const Cart = props => {
                 <Grid item xs={12} md={6}>
                     <FormLabel component="legend" sx={{ textAlign: 'left', textTransform: 'capitalize', marginBottom: '8px' }} >{t('select customer')}</FormLabel>
                     <ActionsWrapper>
-                        <FormControl fullWidth sx={{ minWidth: '250px', marginRight:'20px' }} >
+                        <FormControl fullWidth sx={{ minWidth: '250px', marginRight: '20px' }} >
                             <SearchCustomer selectCustomer={selectCustomer} resetSearchData={resetSearchData} />
                         </FormControl>
                         <AddCustomer onClick={addCustomerModalOpenHandler} >{t('add')}</AddCustomer>
                     </ActionsWrapper>
-                    <AddCustomer sx={ {marginTop: '20px', marginLeft: 0} } onClick={addPassingCustomer} >{t('add passing customer')}</AddCustomer>
+                    <AddCustomer sx={{ marginTop: '20px', marginLeft: 0 }} onClick={addPassingCustomer} >{t('add passing customer')}</AddCustomer>
                     {customerDataError && <ValidationMessage notExist>{t(`Please Choose Customer`)}</ValidationMessage>}
                 </Grid>
                 {
@@ -625,11 +630,18 @@ const Cart = props => {
                     </CouponWrapper>
                 </Grid>
                 <Grid item xs={12}>
-                    <PriceCalculation>
-                        <p>{t('total taxes')}</p>
-                        <p>{formatCurrency(totalTaxes)}</p>
-                    </PriceCalculation>
+                    <FormGroup>
+                        <FormControlLabel control={<Switch checked={hasVat} onChange={handleHasVatChange} />} label={t("has Taxes")} />
+                    </FormGroup>
                 </Grid>
+                { hasVat && (
+                    <Grid item xs={12}>
+                        <PriceCalculation>
+                            <p>{t('total taxes')}</p>
+                            <p>{formatCurrency(totalTaxes)}</p>
+                        </PriceCalculation>
+                    </Grid>
+                )}
                 <Grid item xs={12}>
                     <PriceCalculation>
                         <p>{t('price after discount')}</p>

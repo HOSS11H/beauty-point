@@ -8,9 +8,6 @@ import { filterServices, filterProducts, filterDeals, createBooking } from '../.
 import ThemeContext from '../../../../store/theme-context';
 import Cart from './Cart/Cart';
 import { updateObject } from '../../../../shared/utility';
-import CustomizedSnackbars from '../../../../components/UI/SnackBar/SnackBar';
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
 import axios from '../../../../utils/axios-instance';
 import PrintBookingModal from './PrintBookingModal/PrintBookingModal';
 import { toast } from 'react-toastify';
@@ -207,14 +204,9 @@ const rowsPerPage = 15;
 
 const PointOfSale = (props) => {
 
-    const { t } = useTranslation()
-
-    const { filterServicesHandler, filterProductsHandler, filterDealsHandler, createBookingHandler, bookingCreated, creatingBooking } = props
+    const { filterServicesHandler, filterProductsHandler, filterDealsHandler, createBookingHandler, creatingBooking } = props
 
     const themeCtx = useContext(ThemeContext)
-
-    const navigate = useNavigate()
-
     const { lang, city } = themeCtx
 
     const [cart, dispatch] = useReducer(cartReducer, {

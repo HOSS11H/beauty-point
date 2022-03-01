@@ -466,7 +466,8 @@ const resources = {
             'Category Added': 'تم اضافة الفئة',
             'Category edited': 'تم تعديل الفئة',
             'Agent Added': 'تم اضافة المورد',
-            'Agent edited': 'تم تعديل المورد'
+            'Agent edited': 'تم تعديل المورد',
+            'has Taxes': 'لديه القيمة المضافة (15%)',
         }
     }
 };
