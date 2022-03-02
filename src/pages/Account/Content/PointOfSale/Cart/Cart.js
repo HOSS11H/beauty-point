@@ -26,6 +26,7 @@ import ValidationMessage from '../../../../../components/UI/ValidationMessage/Va
 import { connect } from 'react-redux';
 import { fetchCoupons, addCustomer, fetchEmployees } from '../../../../../store/actions/index';
 import ThemeContext from '../../../../../store/theme-context';
+import VatContext from '../../../../../store/vat-context';
 import AddCustomerModal from './AddCustomerModal/AddCustomerModal';
 import { formatCurrency } from '../../../../../shared/utility';
 import { Fragment } from 'react';
@@ -182,6 +183,9 @@ const Cart = props => {
     const themeCtx = useContext(ThemeContext);
     const { lang } = themeCtx;
 
+    const vatCtx = useContext(VatContext);
+    const {vat, toggleVat} = vatCtx;
+
     const [customerData, setCustomerData] = useState(null);
     const [customerDataError, setCustomerDataError] = useState(false)
     const [resetSearchData, setResetSearchData] = useState(false)
@@ -210,8 +214,6 @@ const Cart = props => {
     const [cashRemainig, setCashRemainig] = useState(0)
 
     const [addCustomerModalOpened, setAddCustomerModalOpened] = useState(false);
-
-    const [hasVat, setHasVat] = useState(true)
 
     useEffect(() => {
         fetchCouponsHandler(lang);
@@ -391,7 +393,7 @@ const Cart = props => {
     }, [reserved, reset, resetCartHandler])
 
     const handleHasVatChange = (event) => {
-        setHasVat(event.target.checked);
+        toggleVat();
     };
 
     const purchaseCartHandler = (e) => {
@@ -421,7 +423,7 @@ const Cart = props => {
             discount_type: discountType,
             payment_gateway: paymentGateway,
             paid_amount: paidAmount,
-            has_vat: hasVat,
+            has_vat: vat,
         }
         purchase(data);
     }
@@ -453,7 +455,7 @@ const Cart = props => {
             discount_type: discountType,
             payment_gateway: paymentGateway,
             paid_amount: paidAmount,
-            has_vat: hasVat,
+            has_vat: vat,
         }
         print(data);
     }
@@ -630,10 +632,10 @@ const Cart = props => {
                 </Grid>
                 <Grid item xs={12}>
                     <FormGroup>
-                        <FormControlLabel control={<Switch checked={hasVat} onChange={handleHasVatChange} />} label={t("has Taxes")} />
+                        <FormControlLabel control={<Switch checked={vat} onChange={handleHasVatChange} />} label={t("has Taxes")} />
                     </FormGroup>
                 </Grid>
-                { hasVat && (
+                { vat && (
                     <Grid item xs={12}>
                         <PriceCalculation>
                             <p>{t('total taxes')}</p>

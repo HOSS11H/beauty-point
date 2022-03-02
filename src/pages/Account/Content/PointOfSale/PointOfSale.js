@@ -1,5 +1,5 @@
 import { Backdrop, CircularProgress, Grid } from '@mui/material';
-import { useContext, useState, useEffect, useCallback, useReducer } from 'react';
+import { useContext, useState, useEffect, useCallback, useReducer, Fragment } from 'react';
 import CustomCard from '../../../../components/UI/Card/Card';
 import FilteredResults from './FilteredResults/FilteredResults';
 import SearchFilters from './SearchFilters/SearchFilters';
@@ -11,6 +11,7 @@ import { updateObject } from '../../../../shared/utility';
 import axios from '../../../../utils/axios-instance';
 import PrintBookingModal from './PrintBookingModal/PrintBookingModal';
 import { toast } from 'react-toastify';
+import { VatContextProvider } from '../../../../store/vat-context';
 
 const cartReducer = (state, action) => {
     switch (action.type) {
@@ -438,31 +439,35 @@ const PointOfSale = (props) => {
     }, [])
 
     return (
-        <Grid container spacing={2}>
-            <Grid item xs={12} md={6}>
-                <CustomCard heading='view items' >
-                    <SearchFilters handleChangePage={handleChangePage} resultsHandler={handleResultsChange} />
-                    <FilteredResults rowsPerPage={rowsPerPage} page={page} onPageChange={handleChangePage} results={shownType} addToCart={addToCartHandler} />
-                </CustomCard>
-            </Grid>
-            <Grid item xs={12} md={6}>
-                <Cart cartData={cart} removeFromCart={removeFromCartHandler} increaseItem={increaseItemHandler} decreaseItem={decreaseItemHandler}
-                    resetCart={resetCartHandler} reserved={reservedBookingData}
-                    purchase={purchaseCartHandler} print={purchasePrintBookingHandler}
-                    priceChangeHandler={changeItemPriceHandler} changeEmployee={changeEmployeeHandler} />
-            </Grid>
-            <Backdrop
-                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                open={creatingBooking || reservingBokking}
-            >
-                <CircularProgress color="secondary" />
-            </Backdrop>
-            {
-                printBookingModalOpened && (
-                    <PrintBookingModal show={printBookingModalOpened} onClose={printBookingModalCloseHandler} bookingData={reservedBookingData} reset={resetPrintedBookingData} />
-                )
-            }
-        </Grid>
+        <Fragment>
+            <VatContextProvider>
+                <Grid container spacing={2}>
+                    <Grid item xs={12} md={6}>
+                        <CustomCard heading='view items' >
+                            <SearchFilters handleChangePage={handleChangePage} resultsHandler={handleResultsChange} />
+                            <FilteredResults rowsPerPage={rowsPerPage} page={page} onPageChange={handleChangePage} results={shownType} addToCart={addToCartHandler} />
+                        </CustomCard>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <Cart cartData={cart} removeFromCart={removeFromCartHandler} increaseItem={increaseItemHandler} decreaseItem={decreaseItemHandler}
+                            resetCart={resetCartHandler} reserved={reservedBookingData}
+                            purchase={purchaseCartHandler} print={purchasePrintBookingHandler}
+                            priceChangeHandler={changeItemPriceHandler} changeEmployee={changeEmployeeHandler} />
+                    </Grid>
+                    <Backdrop
+                        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                        open={creatingBooking || reservingBokking}
+                    >
+                        <CircularProgress color="secondary" />
+                    </Backdrop>
+                    {
+                        printBookingModalOpened && (
+                            <PrintBookingModal show={printBookingModalOpened} onClose={printBookingModalCloseHandler} bookingData={reservedBookingData} reset={resetPrintedBookingData} />
+                        )
+                    }
+                </Grid>
+            </VatContextProvider>
+        </Fragment>
     )
 }
 
