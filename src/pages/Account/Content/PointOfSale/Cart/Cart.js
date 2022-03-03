@@ -150,7 +150,6 @@ const CardActions = styled.div`
 `
 const ActionsWrapper = styled.div`
     display: flex;
-    align-items: center;
 `
 const AddCustomer = styled(CustomButton)`
     &.MuiButton-root {

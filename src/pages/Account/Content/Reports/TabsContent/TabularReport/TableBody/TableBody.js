@@ -134,7 +134,7 @@ const EnhancedTableBody = props => {
                             <TableData>{row.tax}</TableData>
                         </TableCell>
                         <TableCell align="center">
-                            <TableData>{row.payment_gateway}</TableData>
+                            <TableData>{t(row.payment_gateway)}</TableData>
                         </TableCell>
                         <TableCell align="center">
                             <TableData style= { {display: 'flex'} } >{row.payment_status === 'completed' ? <CheckCircleIcon sx={{ mr: 1, color: '#568d00' }} /> : <PendingIcon sx={{ mr: 1, color: '#f9b904' }} />}{row.amount}</TableData>

@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import ValidationMessage from '../../../../../../components/UI/ValidationMessage/ValidationMessage';
 
 const customStyles = {
     option: (provided, state) => ({
@@ -78,7 +79,7 @@ const Option = (props) => {
 
 const SearchCustomer = props => {
 
-    const {t} = useTranslation();
+    const { t } = useTranslation();
 
     const { selectCustomer, resetSearchData } = props;
 
@@ -124,7 +125,7 @@ const SearchCustomer = props => {
     }
 
     useEffect(() => {
-        if (customerInput.length !== 0) {
+        if (customerInput.length !== 0 && customerInput.length >= 3) {
             const searchTimeout = setTimeout(() => {
                 axios.get(`vendors/customers?term=${customerInput}`, {
                     headers: {
@@ -162,9 +163,12 @@ const SearchCustomer = props => {
     }
 
     return (
-        <ReactSelect styles={customStyles} options={options} isClearable isRtl={lang === 'ar'} 
-            placeholder={t('select customer')} filterOption={filterOption} components={{ Option }}
-            value={customer} onChange={handleSelectCustomer} onInputChange={handleSelectOptions} />
+        <Fragment>
+            <ReactSelect styles={customStyles} options={options} isClearable isRtl={lang === 'ar'}
+                placeholder={t('select customer')} filterOption={filterOption} components={{ Option }}
+                value={customer} onChange={handleSelectCustomer} onInputChange={handleSelectOptions} />
+            <ValidationMessage exist>{t('write at least 3 chars')}</ValidationMessage>
+        </Fragment>
     )
 }
 
