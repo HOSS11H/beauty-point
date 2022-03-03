@@ -196,7 +196,7 @@ export const filterProductsFailed = (errorMessage) => {
 export const filterProducts = (language, type, location, search, page, perPage) => {
     return dispatch => {
         dispatch(filterProductsStart())
-        axios.get(`/vendors/${type}?page=${page + 1}&per_page=${perPage}&term=${search}&location_id=${location}&include[]=location`, {
+        axios.get(`/vendors/${type}?page=${page + 1}&per_page=${perPage}&term=${search}&location_id=${location}`, {
             headers: {
                 'Accept-Language': language
             }

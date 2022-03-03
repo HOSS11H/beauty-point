@@ -224,7 +224,7 @@ export const filterServicesFailed = (errorMessage) => {
 export const filterServices = (language, type, category, location, search, page, perPage) => {
     return dispatch => {
         dispatch(filterServicesStart())
-        axios.get(`/vendors/${type}?page=${page + 1}&per_page=${perPage}&term=${search}&location_id=${location}&category_id=${category}&include[]=category&include[]=location&include[]=users&include[]=bookingItems&include[]=company`, {
+        axios.get(`/vendors/${type}?page=${page + 1}&per_page=${perPage}&term=${search}&location_id=${location}&category_id=${category}`, {
             headers: {
                 'Accept-Language': language
             }
