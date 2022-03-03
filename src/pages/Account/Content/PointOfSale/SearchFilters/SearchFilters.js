@@ -10,7 +10,8 @@ import { useContext, useEffect, useState, } from 'react';
 import { fetchCategories, fetchLocations } from '../../../../../store/actions/index';
 import { connect } from 'react-redux';
 import ThemeContext from '../../../../../store/theme-context';
-import { useRef } from 'react';
+import { DebounceInput } from 'react-debounce-input';
+import ValidationMessage from '../../../../../components/UI/ValidationMessage/ValidationMessage';
 
 const CustomTextField = styled(TextField)`
     width: 100%;
@@ -22,8 +23,6 @@ const FiltersWrapper = styled.div`
 const SearchFilters = (props) => {
 
     const { resultsHandler, fetchedLocations, fetchedCategories, fetchCategoriesHandler, fetchLocationsHandler } = props;
-
-    const notIntialRender = useRef(false);
 
     const { t } = useTranslation()
 
@@ -44,29 +43,26 @@ const SearchFilters = (props) => {
             fetchCategoriesHandler(lang);
         }
     }, [fetchedLocations, fetchedCategories, fetchCategoriesHandler, fetchLocationsHandler, lang])
-
-    useEffect(() => {
-        if ( notIntialRender.current ) {
-            const searchTimeout = setTimeout(() => {
-                resultsHandler(type, category, location, search);
-            }, 500)
-            return () => clearTimeout(searchTimeout);
-        } else {
-            notIntialRender.current = true;
-        }
-    }, [resultsHandler, type, category, location, search])
-
+    
     const handleTypeChange = (event) => {
         setType(event.target.value);
+        resultsHandler(event.target.value, category, location, search);
     };
     const handleCategoryChange = (event) => {
         setCategory(event.target.value);
+        resultsHandler(type, event.target.value, location, search);
     };
     const handleLocationChange = (event) => {
         setLocation(event.target.value);
+        resultsHandler(type, category, event.target.value, search);
     };
     const handleSearchChange = (event) => {
-        setSearch(event.target.value);
+        if (event.target.value.length < 3 && event.target.value.length > 0) {
+            return;
+        } else {
+            setSearch(event.target.value);
+            resultsHandler(type, category, location, event.target.value);
+        }
     }
 
     return (
@@ -93,9 +89,9 @@ const SearchFilters = (props) => {
                         <InputLabel id="item-location">{t('location')}</InputLabel>
                         <Select
                             labelId="item-location"
+                            label={t('location')}
                             id="item-location-select"
                             value={location}
-                            label={t("Location")}
                             onChange={handleLocationChange}
                         >
                             {
@@ -115,7 +111,7 @@ const SearchFilters = (props) => {
                                     labelId="item-category"
                                     id="item-category-select"
                                     value={category}
-                                    label={t('"Category"')}
+                                    label={t('Category')}
                                     onChange={handleCategoryChange}
                                 >
                                     <MenuItem value=''>{t('ALL')}</MenuItem>
@@ -130,7 +126,8 @@ const SearchFilters = (props) => {
                     )
                 }
                 <Grid item xs={12} sm={6}>
-                    <CustomTextField id="item-search" label={t('search')} variant="outlined" value={search} onChange={handleSearchChange} />
+                    <DebounceInput element={CustomTextField} debounceTimeout={500} id="item-search" label={t('search')} variant="outlined" value={search} onChange={handleSearchChange} />
+                    <ValidationMessage exist>{t('write at least 3 chars')}</ValidationMessage>
                 </Grid>
             </Grid>
         </FiltersWrapper>
