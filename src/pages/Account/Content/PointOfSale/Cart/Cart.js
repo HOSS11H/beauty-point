@@ -175,7 +175,7 @@ const Cart = props => {
     const { cartData, removeFromCart, increaseItem, decreaseItem, resetCart, reserved, reset, purchase, print, fetchedCoupons,
         fetchCouponsHandler, fetchedEmployeesHandler,
         addCustomerHandler, addedCustomerData, addingCustomerSuccess, addingCustomerFailed, addingCustomerMessage,
-        bookingCreated, creatingBookingFailed, creatingBookingMessage, priceChangeHandler, changeEmployee } = props;
+        creatingBooking, bookingCreated, creatingBookingFailed, creatingBookingMessage, priceChangeHandler, changeEmployee } = props;
 
     const { t } = useTranslation()
 
@@ -675,8 +675,8 @@ const Cart = props => {
                 <Grid item xs={12}>
                     <CardActions>
                         <ButtonText variant='text' onClick={resetCartHandler}>{t('reset cart')}</ButtonText>
-                        <ButtonConfirm variant='contained' onClick={purchaseCartHandler}>{t('book')}</ButtonConfirm>
-                        <ButtonConfirm variant='contained' onClick={purchasePrintCartHandler}>{t('book & print')}</ButtonConfirm>
+                        <ButtonConfirm disabled={creatingBooking} variant='contained' onClick={purchaseCartHandler}>{t('book')}</ButtonConfirm>
+                        <ButtonConfirm disabled={creatingBooking} variant='contained' onClick={purchasePrintCartHandler}>{t('book & print')}</ButtonConfirm>
                     </CardActions>
                 </Grid>
             </Grid>
@@ -694,6 +694,7 @@ const mapStateToProps = (state) => {
         addingCustomerFailed: state.customers.addingCustomerFailed,
         addingCustomerMessage: state.customers.addingCustomerMessage,
         fetchedCoupons: state.coupons.coupons,
+        creatingBooking: state.bookings.creatingBooking,
         bookingCreated: state.bookings.bookingCreated,
         creatingBookingFailed: state.bookings.creatingBookingFailed,
         creatingBookingMessage: state.bookings.creatingBookingMessage,
