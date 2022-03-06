@@ -50,7 +50,7 @@ const Role = props => {
     const [open, setOpen] = useState(false);
     const [success, setSuccess] = useState(false)
 
-    const { t } = useTranslation()
+    const { t } = useTranslation() 
 
     useEffect(() => {
         v1.get(`/vendors/settings/modules-permissions`)

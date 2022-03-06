@@ -1,21 +1,18 @@
 import { Fragment, useEffect, useState, useCallback } from "react";
 import v1 from '../../../../../utils/axios-instance-v1'
-import { useTranslation } from 'react-i18next';
 import CssBaseline from '@mui/material/CssBaseline';
 import Stack from '@mui/material/Stack';
-import { Alert, Backdrop, CircularProgress, Grid, Skeleton, Snackbar } from "@mui/material";
+import {Grid, Skeleton } from "@mui/material";
 import Role from "./Role/Role";
 import MembersModal from "./MembersModal/MembersModal";
 
 
 
 export default function RolesPermissions(props) {
-    const { t } = useTranslation()
     const [show, setShow] = useState(true);
     const [ roles , setRoles ] = useState([])
     const [ membersModalOpened, setMembersModalOpened ] = useState(false);
     const [ selectedRoleId, setSelectedRoleId ] = useState(null);
-    const [ successRefetch, setSuccessRefetch ] = useState(false);
     useEffect(() => {
         v1.get('/vendors/settings/roles')
             .then(res => {

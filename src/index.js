@@ -29,6 +29,9 @@ import { ThemeContextProvider } from './store/theme-context';
 import GlobalStyle from './styles/globalStyles';
 import { AuthContextProvider } from './store/auth-context';
 
+import * as Sentry from "@sentry/react";
+import { BrowserTracing } from "@sentry/tracing";
+
 const rootReducer = combineReducers({
 	bookings: bookingsReducer,
 	services: servicesReducer,
@@ -61,6 +64,15 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(logger, thunk)));
 
+Sentry.init({
+	dsn: "https://fb555ff874f94eca8cbb35e05f8d3064@o1160438.ingest.sentry.io/6244915",
+	integrations: [new BrowserTracing()],
+
+	// Set tracesSampleRate to 1.0 to capture 100%
+	// of transactions for performance monitoring.
+	// We recommend adjusting this value in production
+	tracesSampleRate: 1.0,
+});
 
 
 const app = (
