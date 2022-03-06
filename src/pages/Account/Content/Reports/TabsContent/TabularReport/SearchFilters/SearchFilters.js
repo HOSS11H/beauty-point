@@ -126,9 +126,6 @@ const SearchFilters = (props) => {
     const handleEmplloyeeChange = (event) => {
         setEmployee(event.target.value);
     }
-    const handleBookingTypeChange = (event) => {
-        setBookingType(event.target.value);
-    }
     const handleBookingStatusChange = (event) => {
         setBookingStatus(event.target.value);
     }

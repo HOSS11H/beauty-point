@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 function TabPanel(props) {

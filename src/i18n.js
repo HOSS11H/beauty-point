@@ -469,6 +469,7 @@ const resources = {
             'Agent edited': 'تم تعديل المورد',
             'has Taxes': 'لديه القيمة المضافة (15%)',
             'write at least 3 chars': 'اكتب على الأقل 3 أحرف أو أرقام',
+            'Earning Report': 'تقرير الأرباح',
         }
     }
 };
