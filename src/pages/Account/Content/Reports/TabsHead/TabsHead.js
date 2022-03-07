@@ -22,6 +22,7 @@ const TabsHead = props => {
             <Tabs value={current} onChange={onChange} aria-label="basic tabs example">
                 <Tab label={t("Tabular Report")} {...a11yProps(0)} />
                 <Tab label={t("Earning Report")} {...a11yProps(1)} />
+                <Tab label={t("Sales Report")} {...a11yProps(2)} />
             </Tabs>
         </Box>
     )

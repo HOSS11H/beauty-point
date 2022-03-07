@@ -470,6 +470,9 @@ const resources = {
             'has Taxes': 'لديه القيمة المضافة (15%)',
             'write at least 3 chars': 'اكتب على الأقل 3 أحرف أو أرقام',
             'Earning Report': 'تقرير الأرباح',
+            'Sales Report': 'تقرير المبيعات',
+            'sales': 'المبيعات',
+            'paid on': 'دفعت في',
         }
     }
 };
