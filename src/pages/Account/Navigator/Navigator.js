@@ -189,7 +189,7 @@ const Navigator = (props) => {
                     module.current = <ModuleNav />;
                 }
                 if (permission.name === 'read_customer') {
-
+                    addedRoutes.push({ id: 'customers', name: 'customers', icon: <PeopleIcon /> });
                 }
                 if (permission.name === 'read_employee') {
                     addedRoutes.push({ id: 'employees', name: 'employees', icon: <PersonIcon /> },);
