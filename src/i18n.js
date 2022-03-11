@@ -475,7 +475,8 @@ const resources = {
             'paid on': 'دفعت في',
             'welcome to beauty point family': 'مرحبا بك في عائلة بيوتي بوينت',
             'as a first step, we need you to add your details and settings, this will help us to serve you better': 'كخطوة أولى، نحن نحتاج منك إضافة بياناتك وإعداداتك، هذا سوف يساعدنا على تحسين خدماتنا',
-            'go': 'الانتقال'
+            'go': 'الانتقال',
+            'Please add at least one service in this location': 'يرجى إضافة خدمة واحدة على الأقل في هذا الموقع',
         }
     }
 };
