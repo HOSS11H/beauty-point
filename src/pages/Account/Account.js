@@ -7,6 +7,8 @@ import Header from './Header/Header';
 import { Outlet } from 'react-router';
 import ThemeContext from '../../store/theme-context';
 import { connect } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
+import WelcomeModal from './WelcomeModal/WelcomeModal';
 
 const drawerWidth = 256;
 
@@ -15,6 +17,10 @@ const Account = (props) => {
 	const themeCtx = useContext(ThemeContext)
 
 	const { theme } = themeCtx;
+
+	const [searchParams] = useSearchParams();
+    const hasWelcomeModal = searchParams.get('welcome') === 'true';
+	const [welcomeModal, setWelcomeModal] = useState(hasWelcomeModal);
 
 	const customTheme = React.useMemo(
 		() =>
@@ -97,23 +103,29 @@ const Account = (props) => {
 	const handleDrawerToggle = useCallback(() => {
 		setMobileOpen(!mobileOpen);
 	}, [mobileOpen]);
+
+	const handleWelcomeModalClose = useCallback(() => {
+		setWelcomeModal(false);
+	}, []);
+
 	let content = (
 		<Fragment>
-				<Box
-					component="nav"
-					sx={{ flexShrink: { sm: 0 }, }}
-						>
-					<Navigator
-						open={mobileOpen}
-						variant="permanent"
-					/>
+			<Box
+				component="nav"
+				sx={{ flexShrink: { sm: 0 }, }}
+			>
+				<Navigator
+					open={mobileOpen}
+					variant="permanent"
+				/>
+			</Box>
+			<Box sx={{ flexGrow: 1, maxWidth: mobileOpen ? `calc( 100% - ${drawerWidth}px)` : `calc( 100% - 57px)` }} >
+				<Header onDrawerToggle={handleDrawerToggle} />
+				<Box component="main" sx={{ py: 4, px: 3, bgcolor: theme.palette.background.default }}>
+					<Outlet />
 				</Box>
-				<Box sx={{ flexGrow: 1, maxWidth: mobileOpen ? `calc( 100% - ${drawerWidth}px)` : `calc( 100% - 57px)` }} >
-					<Header onDrawerToggle={handleDrawerToggle} />
-					<Box component="main" sx={{ py: 4, px: 3, bgcolor: theme.palette.background.default }}>
-						<Outlet />
-					</Box>
-				</Box>
+			</Box>
+			<WelcomeModal show={welcomeModal} onClose={handleWelcomeModalClose} />
 		</Fragment>
 	)
 	return (

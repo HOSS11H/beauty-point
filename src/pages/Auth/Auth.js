@@ -127,8 +127,9 @@ const Auth = props => {
     }
 
     useEffect(() => {
-        isLoggedIn && navigate('/account/dashboard', { replace: true })
-    }, [isLoggedIn, navigate])
+        isLoggedIn && isLogin && navigate('/account/dashboard', { replace: true })
+        isLoggedIn && !isLogin && navigate('/account/settings?welcome=true', { replace: true })
+    }, [isLoggedIn, isLogin, navigate])
 
     const switchAuthModeHandler = () => {
         setIsLogin(prevState => !prevState);
@@ -146,7 +147,7 @@ const Auth = props => {
         let authData;
         if (isLogin) {
             url = `/auth/sign-in`;
-            const pattern = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             if (pattern.test(loginData.email.value)) {
                 authData = {
                     email: loginData.email.value,
