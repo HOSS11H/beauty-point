@@ -114,31 +114,7 @@ const CustomNavLink = styled(NavLink)`
 `
 const CustomListItemIcon = styled(ListItemIcon)`
     margin-right: 16px;
-    `
-
-/* const categories = [
-    {
-        id: 'dashboard',
-        children: [
-            {
-                id: 'dashboard',
-                name: 'dashboard',
-                icon: <DashboardIcon />,
-            },
-            { id: 'services', name: 'services', icon: <FormatListBulletedIcon /> },
-            { id: 'products', name: 'products', icon: <ShoppingCartIcon /> },
-            { id: 'expenses', name: 'expenses', icon: <MonetizationOnIcon /> },
-            { id: 'units', name: 'units', icon: <LinearScaleIcon /> },
-            { id: 'employees', name: 'employees', icon: <PersonIcon /> },
-            { id: 'deals', name: 'deals', icon: <LocalOfferIcon /> },
-            { id: 'point-of-sale', name: 'points of sales', icon: <AddShoppingCartIcon /> },
-            { id: 'bookings', name: 'bookings', icon: <BookIcon /> },
-            { id: 'booking-calendar', name: 'booking calendar', icon: <EventIcon /> },
-            { id: 'reports', name: 'reports', icon: <InsertChartIcon /> },
-            { id: 'settings', name: 'settings', icon: <SettingsIcon /> },
-        ],
-    },
-]; */
+`
 
 const Navigator = (props) => {
 
@@ -185,7 +161,6 @@ const Navigator = (props) => {
                     addedRoutes.push({ id: 'units', name: 'units', icon: <LinearScaleIcon /> });
                     addedRoutes.push({ id: 'products', name: 'products', icon: <ShoppingCartIcon /> });
                     addedRoutes.push({ id: 'point-of-sale', name: 'points of sales', icon: <AddShoppingCartIcon /> });
-                    addedRoutes.push({ id: 'customers', name: 'customers', icon: <PeopleIcon /> });
                     module.current = <ModuleNav />;
                 }
                 if (permission.name === 'read_customer') {

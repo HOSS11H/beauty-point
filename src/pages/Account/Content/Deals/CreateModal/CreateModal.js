@@ -296,8 +296,6 @@ const CreateModal = (props) => {
     }, 0);
 
 
-
-
     useEffect(() => {
         let netPrice;
         if (discountType === 'percentage') {
@@ -682,7 +680,7 @@ const CreateModal = (props) => {
                                     input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
                                     renderValue={(selected) => (
                                         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                            {!loading && selected.map((value) => {
+                                            { selected.map((value) => {
                                                 const selected = servicesOptions.find(service => service.id === value);
                                                 return (
                                                     <Chip key={selected.id} label={selected.name} />
@@ -944,7 +942,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         fetchLocationsHandler: (lang) => dispatch(fetchLocations(lang)),
-        fetchServicesHandler: (lang, location) => dispatch(fetchServicesByLocation(lang, location)),
     }
 }
 

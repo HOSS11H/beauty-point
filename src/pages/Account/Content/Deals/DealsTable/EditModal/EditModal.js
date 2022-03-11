@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useContext, useReducer } from 'react';
+import { useState, useEffect, useCallback, useContext, useReducer, useRef } from 'react';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import ThemeContext from '../../../../../../store/theme-context'
@@ -27,7 +27,7 @@ import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 import { connect } from 'react-redux';
-import { fetchServicesByLocation } from '../../../../../../store/actions/index';
+import { fetchLocations } from '../../../../../../store/actions/index';
 import { formatCurrency, updateObject } from '../../../../../../shared/utility';
 import ValidationMessage from '../../../../../../components/UI/ValidationMessage/ValidationMessage';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -46,7 +46,8 @@ import FormLabel from '@mui/material/FormLabel';
 import FormGroup from '@mui/material/FormGroup';
 import Checkbox from '@mui/material/Checkbox';
 import { format } from 'date-fns';
-import {convertTime12to24} from '../../../../../../shared/utility';
+import { convertTime12to24 } from '../../../../../../shared/utility';
+import axios from '../../../../../../utils/axios-instance';
 import moment from 'moment';
 
 
@@ -212,7 +213,7 @@ const cartReducer = (state, action) => {
 
 const EditModal = (props) => {
 
-    const { show, heading, id, fetchedDeals, confirmText, onConfirm, onClose, fetchedLocations, fetchedServices, fetchingServices, fetchServicesHandler } = props;
+    const { show, heading, id, fetchedDeals, confirmText, onConfirm, onClose, fetchedLocations, fetchLocationsHandler } = props;
 
     const { t } = useTranslation();
 
@@ -225,14 +226,8 @@ const EditModal = (props) => {
 
     const { title, description, services, location, discount_value, discount_type, discount_price, status, used_time, uses_limit, image, days, start_date_time, end_date_time, open_time, close_time } = dealData;
 
-    let intialSelectedServices = [];
-
-    services.map( service => {
-        intialSelectedServices.push(service.service.id)
-        return intialSelectedServices
-    })
     let chosenServices = [];
-    services.map(service => {
+    services.forEach(service => {
         const serviceData = {
             id: service.service.id,
             quantity: service.quantity,
@@ -241,10 +236,9 @@ const EditModal = (props) => {
             discount: service.discount_amount,
         }
         chosenServices.push(serviceData);
-        return chosenServices;
     })
     let obj = {};
-    days.forEach( item => {
+    days.forEach(item => {
         obj[item] = true;
         return obj;
     })
@@ -256,17 +250,25 @@ const EditModal = (props) => {
 
     const [dealName, setDealName] = useState(title);
     const [dealNameError, setDealNameError] = useState(false);
-    
+
     const [dealLocation, setDealLocation] = useState(location.id);
     const [dealLocationError, setDealLocationError] = useState(false);
 
-    const [selectedServices, setSelectedServices] = useState(intialSelectedServices);
+    const [lastPage, setLastPage] = useState(false)
+    const [loading, setLoading] = useState(true)
+
+    // tracking on which page we currently are
+    const [page, setPage] = useState(1)
+
+    const [servicesOptions, setServicesOptions] = useState([]);
+
+    const [selectedServices, setSelectedServices] = useState(chosenServices.map( service => service.id ));
     const [selectedServicesError, setSelectedServicesError] = useState(false);
 
     const [dealDiscount, setDealDiscount] = useState(discount_value);
 
     const [discountType, setDiscountType] = useState(discount_type);
-    
+
     const [priceAfterDiscount, setPriceAfterDiscount] = useState(discount_price);
     const [dealPriceError, setDealPriceError] = useState(false);
 
@@ -277,15 +279,15 @@ const EditModal = (props) => {
     const [userLimit, setUserLimit] = useState(used_time);
 
     const [dateFrom, setDateFrom] = useState(new Date(start_date_time));
-    
+
     const [dateTo, setDateTo] = useState(new Date(end_date_time));
     const [dateToError, setDateToError] = useState(false);
-    
+
     const [openTime, setOpenTime] = useState(new Date(`2021-02-03 ${convertTime12to24(open_time)}`));
 
     const [closeTime, setCloseTime] = useState(new Date(`2021-02-03 ${convertTime12to24(close_time)}`));
     const [closeTimeError, setCloseTimeError] = useState(false);
-    
+
     const [appliedDays, setAppliedDays] = useState({
         saturday: false,
         sunday: false,
@@ -296,10 +298,10 @@ const EditModal = (props) => {
         friday: false,
         ...obj,
     });
-    const { saturday, sunday, monday, tuesday, wednesday, thursday, friday} = appliedDays;
+    const { saturday, sunday, monday, tuesday, wednesday, thursday, friday } = appliedDays;
     const [appliedDaysError, setAppliedDaysError] = useState(false);
 
-    
+
     const html = description;
     const contentBlock = htmlToDraft(html);
     const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
@@ -307,7 +309,7 @@ const EditModal = (props) => {
 
     const [dealDescriptionError, setDealDescriptionError] = useState(false);
 
-    const [uploadedImages, setUploadedImages] = useState([ { data_url: image } ]);
+    const [uploadedImages, setUploadedImages] = useState([{ data_url: image }]);
 
     const [defaultImage, setDefaultImage] = useState(image);
     const [defaultImageError, setDefaultImageError] = useState(false);
@@ -318,13 +320,50 @@ const EditModal = (props) => {
         return sum + curr.price * curr.quantity
     }, 0);
 
+    const ovserver = useRef()
+
+    const lastElementRef = useCallback((node) => {
+        if (loading) return;
+        if (ovserver.current) ovserver.current.disconnect()
+        ovserver.current = new IntersectionObserver(entries => {
+            if (entries[0].isIntersecting && !lastPage) {
+                setPage(_page => _page + 1)
+            }
+        })
+        if (node) ovserver.current.observe(node)
+    }, [lastPage, loading])
+
+    useEffect(() => {
+        setLoading(true)
+        axios.get(`/vendors/services?page=${page}&per_page=10&location_id=${dealLocation}`, {
+            headers: {
+                'Accept-Language': lang,
+            }
+        }).then(res => {
+            setLoading(false)
+            setServicesOptions(currentServices => {
+                return [...currentServices, ...res.data.data]
+            });
+            if (res.data.meta.last_page === page) {
+                setLastPage(true)
+            }
+        })
+            .catch(err => {
+                setLoading(false)
+            })
+    }, [dealLocation, lang, page])
+
     useEffect(() => {
         if (uploadedImages[0].file === undefined) {
             fetch(uploadedImages[0].data_url).then(res => res.blob()).then(blob => {
-                setUploadedImages([{ data_url: uploadedImages[0].data_url, file: new File([blob], 'image.jpg', { type: blob.type })}]);
+                setUploadedImages([{ data_url: uploadedImages[0].data_url, file: new File([blob], 'image.jpg', { type: blob.type }) }]);
             })
         }
     }, [uploadedImages])
+
+    useEffect(() => {
+        fetchLocationsHandler(lang);
+    }, [fetchLocationsHandler, lang])
 
 
 
@@ -392,9 +431,9 @@ const EditModal = (props) => {
             typeof value === 'string' ? value.split(',') : value,
         );
         setDealLocationError(false);
-        fetchServicesHandler(lang, value);
         resetCartHandler();
         setSelectedServices([]);
+        setServicesOptions([]);
     };
     const handleServicesChange = (event) => {
         const {
@@ -406,8 +445,8 @@ const EditModal = (props) => {
         );
         let chosenServices = [];
         value.forEach(serviceId => {
-            const selectedServiceIndex = fetchedServices.data.findIndex(service => service.id === serviceId);
-            const selectedServiceData = { ...fetchedServices.data[selectedServiceIndex] }
+            const selectedServiceIndex = servicesOptions.findIndex(service => service.id === serviceId);
+            const selectedServiceData = { ...servicesOptions[selectedServiceIndex] }
             let discountVal;
             if (selectedServiceData.discount_type === 'percent') {
                 discountVal = (selectedServiceData.price * (selectedServiceData.discount / 100));
@@ -500,19 +539,19 @@ const EditModal = (props) => {
             setDealLocationError(true);
             return;
         }
-        if ( selectedServices.length === 0) {
+        if (selectedServices.length === 0) {
             setSelectedServicesError(true);
             return;
         }
-        if ( dateTo < dateFrom) {
+        if (dateTo < dateFrom) {
             setDateToError(true);
             return;
         }
-        if ( closeTime < openTime) {
+        if (closeTime < openTime) {
             setCloseTimeError(true);
             return;
         }
-        if ( Object.values(appliedDays).includes(true) ) {
+        if (Object.values(appliedDays).includes(true)) {
             setAppliedDaysError(false);
         } else {
             setAppliedDaysError(true);
@@ -526,11 +565,11 @@ const EditModal = (props) => {
 
         const selectedAppliedDays = [];
         Object.keys(appliedDays).forEach(day => {
-            if (appliedDays[day]) { 
+            if (appliedDays[day]) {
                 selectedAppliedDays.push(day);
             }
         })
-    
+
         let formData = new FormData();
         formData.append('id', id);
         formData.append('title', dealName);
@@ -553,7 +592,7 @@ const EditModal = (props) => {
         formData.append('choice', 'location');
         formData.append('uses_time', +userLimit);
         formData.append('customer_uses_time', +usesTime);
-        for ( var c = 0; c < selectedAppliedDays.length; c++) {
+        for (var c = 0; c < selectedAppliedDays.length; c++) {
             formData.append(`days[${c}]`, selectedAppliedDays[c]);
         }
 
@@ -564,7 +603,7 @@ const EditModal = (props) => {
         formData.append('applied_between_dates', `${format(dateFrom, 'Y-MM-dd hh:ii a')}  ${format(dateTo, 'Y-MM-dd hh:ii a')}`);
         formData.append('open_time', `${moment(openTime).format("hh:mm A")}`);
         formData.append('close_time', `${moment(closeTime).format("hh:mm A")}`);
-        formData.append('deal_startTime',  `${moment(openTime).format("hh:mm A")}`);
+        formData.append('deal_startTime', `${moment(openTime).format("hh:mm A")}`);
         formData.append('deal_endTime', `${moment(closeTime).format("hh:mm A")}`);
         if (uploadedImages.length > 0 && uploadedImages[0].data_url !== null && uploadedImages[0].file !== undefined) {
             formData.append('image', uploadedImages[0].file)
@@ -574,6 +613,22 @@ const EditModal = (props) => {
         formData.append('_method', 'PUT');
         onConfirm(formData);
     }, [dealName, dealLocation, selectedServices, dateTo, dateFrom, closeTime, openTime, appliedDays, editorState, dealPriceError, id, cartData.services, discountType, dealDiscount, priceAfterDiscount, userLimit, usesTime, dealStatus, uploadedImages, onConfirm])
+
+    let servicesOptionsContent;
+
+    if (servicesOptions.length > 0) {
+        servicesOptionsContent = servicesOptions.map((service, index) => {
+            if (servicesOptions.length === (index + 1)) {
+                return (
+                    <MenuItem key={service.id} value={service.id} ref={lastElementRef} >{service.name}</MenuItem>
+                )
+            } else {
+                return (
+                    <MenuItem key={service.id} value={service.id} >{service.name}</MenuItem>
+                )
+            }
+        })
+    }
 
     let content = (
         <Grid container spacing={2}>
@@ -614,8 +669,9 @@ const EditModal = (props) => {
                         input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
                         renderValue={(selected) => (
                             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                { !fetchingServices && selected.map((value) => {
-                                    const item = fetchedServices.data.find(service => service.id === value);
+                                { selected.map((value) => {
+                                    const item = cartData.services.find(service => service.id === value);
+                                    console.log(cartData.services, value, item)
                                     return (
                                         <Chip key={item.id} label={item.name} />
                                     )
@@ -624,14 +680,7 @@ const EditModal = (props) => {
                         )}
                         MenuProps={MenuProps}
                     >
-                        {fetchedServices.data.map((service) => (
-                            <MenuItem
-                                key={service.id}
-                                value={service.id}
-                            >
-                                {service.name}
-                            </MenuItem>
-                        ))}
+                        {servicesOptionsContent}
                     </Select>
                 </FormControl>
                 {selectedServicesError && <ValidationMessage notExist>{t(`Please add at least one service`)}</ValidationMessage>}
@@ -698,28 +747,28 @@ const EditModal = (props) => {
             <Grid item xs={12}>
             </Grid>
             <Grid item xs={12} sm={6} >
-                    <LocalizationProvider dateAdapter={DateAdapter}>
-                        <DesktopDatePicker
-                            label={t("Date from")}
-                            inputFormat="MM/dd/yyyy"
-                            value={dateFrom}
-                            onChange={handleDateFromChange}
-                            renderInput={(params) => <TextField sx={{ width: '100%' }} {...params} />}
-                        />
-                    </LocalizationProvider>
-                </Grid>
-                <Grid item xs={12} sm={6} >
-                    <LocalizationProvider dateAdapter={DateAdapter}>
-                        <DesktopDatePicker
-                            label={t("Date to")}
-                            inputFormat="MM/dd/yyyy"
-                            value={dateTo}
-                            onChange={handleDateToChange}
-                            renderInput={(params) => <TextField sx={{ width: '100%' }} {...params} />}
-                        />
-                    </LocalizationProvider>
-                    {dateToError &&  <ValidationMessage notExist>{t('date to must be after date from')}</ValidationMessage> }
-                </Grid>
+                <LocalizationProvider dateAdapter={DateAdapter}>
+                    <DesktopDatePicker
+                        label={t("Date from")}
+                        inputFormat="MM/dd/yyyy"
+                        value={dateFrom}
+                        onChange={handleDateFromChange}
+                        renderInput={(params) => <TextField sx={{ width: '100%' }} {...params} />}
+                    />
+                </LocalizationProvider>
+            </Grid>
+            <Grid item xs={12} sm={6} >
+                <LocalizationProvider dateAdapter={DateAdapter}>
+                    <DesktopDatePicker
+                        label={t("Date to")}
+                        inputFormat="MM/dd/yyyy"
+                        value={dateTo}
+                        onChange={handleDateToChange}
+                        renderInput={(params) => <TextField sx={{ width: '100%' }} {...params} />}
+                    />
+                </LocalizationProvider>
+                {dateToError && <ValidationMessage notExist>{t('date to must be after date from')}</ValidationMessage>}
+            </Grid>
             <Grid item xs={12} sm={6}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <TimePicker
@@ -736,15 +785,15 @@ const EditModal = (props) => {
                         label={t('close time')}
                         value={closeTime}
                         onChange={closeTimeChangeHandler}
-                        renderInput={(params) => <TextField  sx={{ width: '100%' }} {...params} />}
+                        renderInput={(params) => <TextField sx={{ width: '100%' }} {...params} />}
                     />
                 </LocalizationProvider>
-                { closeTimeError && <ValidationMessage notExist>{t('close time must be after open time')}</ValidationMessage>}
+                {closeTimeError && <ValidationMessage notExist>{t('close time must be after open time')}</ValidationMessage>}
             </Grid>
             <Grid item xs={12}>
                 <FormControl sx={{ width: '100%' }} component="fieldset" variant="standard">
-                    <FormLabel component="legend"  sx={{ textAlign: 'left' }} >{t('applied days')}</FormLabel>
-                    <FormGroup sx={{ flexDirection: 'row', textTransform: 'capitalize' } }>
+                    <FormLabel component="legend" sx={{ textAlign: 'left' }} >{t('applied days')}</FormLabel>
+                    <FormGroup sx={{ flexDirection: 'row', textTransform: 'capitalize' }}>
                         <FormControlLabel
                             control={
                                 <Checkbox checked={saturday} onChange={handleDaysChange} name="saturday" />
@@ -789,7 +838,7 @@ const EditModal = (props) => {
                         />
                     </FormGroup>
                 </FormControl>
-                { appliedDaysError && <ValidationMessage notExist>{t('applied days must be selected')}</ValidationMessage>}
+                {appliedDaysError && <ValidationMessage notExist>{t('applied days must be selected')}</ValidationMessage>}
             </Grid>
             <Grid item xs={12}>
                 <EditorWrapper>
@@ -872,14 +921,12 @@ const EditModal = (props) => {
 const mapStateToProps = (state) => {
     return {
         fetchedLocations: state.locations.locations,
-        fetchedServices: state.services.servicesByLocation.services,
-        fetchingServices: state.services.servicesByLocation.fetchingServices,
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchServicesHandler: (lang, location) => dispatch(fetchServicesByLocation(lang, location)),
+        fetchLocationsHandler: (lang) => dispatch(fetchLocations(lang)),
     }
 }
 
