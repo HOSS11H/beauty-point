@@ -482,6 +482,7 @@ const resources = {
             'Unit edited': 'تم تعديل الوحدة',
             'Please add a unit before if you want to add combo product': 'يرجى إضافة وحدة قبل إضافة منتجات كومبو',
             'SKU': 'باركود',
+            'Employee Report': 'تقرير الموظفين',
         }
     }
 };

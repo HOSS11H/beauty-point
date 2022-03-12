@@ -3,6 +3,7 @@ import EarningReport from './EarningReport/EarningReport';
 import SalesReport from './SalesReport/SalesReport';
 import TabPanel from './TabPanel/TabPanel';
 import TabularReport from './TabularReport/TabularReport';
+import EmployeeReport from './EmployeeReport/EmployeeReport';
 
 const TabsContent = props => {
 
@@ -18,6 +19,9 @@ const TabsContent = props => {
             </TabPanel>
             <TabPanel value={current} index={2}>
                 <SalesReport />
+            </TabPanel>
+            <TabPanel value={current} index={3}>
+                <EmployeeReport />
             </TabPanel>
         </Fragment>
     )

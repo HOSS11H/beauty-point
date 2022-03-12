@@ -23,6 +23,7 @@ const TabsHead = props => {
                 <Tab label={t("Tabular Report")} {...a11yProps(0)} />
                 <Tab label={t("Earning Report")} {...a11yProps(1)} />
                 <Tab label={t("Sales Report")} {...a11yProps(2)} />
+                <Tab label={t("Employee Report")} {...a11yProps(3)} />
             </Tabs>
         </Box>
     )
