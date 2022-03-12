@@ -169,6 +169,7 @@ const CreateModal = (props) => {
     const [productQuantity, setProductQuantity] = useState(0);
     const [productQuantityError, setProductQuantityError] = useState(false);
 
+    const [loading, setLoading] = useState(false);
     const [allUnits, setAllUnits] = useState([]);
     const [productUnit, setProductUnit] = useState('');
 
@@ -203,9 +204,14 @@ const CreateModal = (props) => {
         fetchLocationsHandler(lang);
     }, [fetchLocationsHandler, lang])
     useEffect(() => {
+        setLoading(false);
         axios.get(`/vendors/units`)
             .then(res => {
+                setLoading(false);
                 setAllUnits(res.data.data);
+            })
+            .catch(err => {
+                setLoading(false);
             })
     }, [])
 
@@ -450,6 +456,7 @@ const CreateModal = (props) => {
                         }
                     </Select>
                 </FormControl>
+                {allUnits.length === 0 && !loading && <ValidationMessage exist>{t(`Please add a unit before if you want to add combo product`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12}>
                 <ImageUploading

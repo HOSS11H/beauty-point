@@ -480,6 +480,8 @@ const resources = {
             'Please add main unit': 'يرجى إضافة وحدة رئيسية',
             'Unit Added': 'تمت إضافة الوحدة',
             'Unit edited': 'تم تعديل الوحدة',
+            'Please add a unit before if you want to add combo product': 'يرجى إضافة وحدة قبل إضافة منتجات كومبو',
+            'SKU': 'باركود',
         }
     }
 };

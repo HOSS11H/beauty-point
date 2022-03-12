@@ -181,9 +181,9 @@ const EditModal = (props) => {
     const [productQuantity, setProductQuantity] = useState(quantity);
     const [productQuantityError, setProductQuantityError] = useState(false);
 
+    const [loading, setLoading] = useState(false);
     const [allUnits, setAllUnits] = useState([]);
     const [productUnit, setProductUnit] = useState(unit ? unit.id : '');
-    const [productUnitError, setProductUnitError] = useState(false);
 
     const [uploadedImages, setUploadedImages] = useState([ { data_url: image} ]);
 
@@ -213,9 +213,14 @@ const EditModal = (props) => {
     }, [discountType, productDiscount, productPrice])
 
     useEffect(() => {
+        setLoading(true);
         axios.get(`/vendors/units`)
             .then(res => {
+                setLoading(false);
                 setAllUnits(res.data.data);
+            })
+            .catch(err => {
+                setLoading(false);
             })
     }, [])
 
@@ -279,7 +284,6 @@ const EditModal = (props) => {
     }
     const productUnitChangeHandler = (event) => {
         setProductUnit(event.target.value);
-        setProductUnitError(false);
     }
 
     const closeModalHandler = useCallback(() => {
@@ -431,7 +435,7 @@ const EditModal = (props) => {
                         }
                     </Select>
                 </FormControl>
-                {productUnitError && <ValidationMessage notExist>{t(`Please add Unit`)}</ValidationMessage>}
+                {allUnits.length === 0 && !loading && <ValidationMessage exist>{t(`Please add a unit before if you want to add combo product`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12}>
                 <ImageUploading
