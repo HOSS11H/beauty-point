@@ -856,7 +856,7 @@ const CreateModal = (props) => {
                                                 <div style={{ width: '100%' }} >
                                                     <img src={image['data_url']} alt="" width="100" />
                                                     <ImageItemBottomBar>
-                                                        <FormControlLabel value={image['data_url']} control={<Radio />} label="Default" />
+                                                        <FormControlLabel value={image['data_url']} control={<Radio />} label={t("Default")} />
                                                         <Button sx={{ mr: 1 }} size="large" variant="outlined" startIcon={<PhotoCamera />} onClick={() => onImageUpdate(index)}>
                                                             {t('update')}
                                                         </Button>

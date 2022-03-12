@@ -1,10 +1,9 @@
-import { useState, useEffect, useCallback, useContext, Fragment } from 'react';
+import { useState, useEffect, useCallback, Fragment } from 'react';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import ThemeContext from '../../../../../store/theme-context'
 
 import { CustomModal } from '../../../../../components/UI/Modal/Modal';
-import { Grid, InputAdornment, MenuItem, Select, Typography } from '@mui/material';
+import {  Grid, InputAdornment, MenuItem, Select, Typography } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import ValidationMessage from '../../../../../components/UI/ValidationMessage/ValidationMessage';
 
@@ -15,6 +14,7 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import { connect } from 'react-redux';
 import axios from '../../../../../utils/axios-instance';
+import Loader from '../../../../../components/UI/Loader/Loader';
 
 
 
@@ -32,9 +32,6 @@ const CreateModal = (props) => {
 
     const { t } = useTranslation();
 
-    const themeCtx = useContext(ThemeContext)
-    const { lang } = themeCtx;
-
     const [unitName, setUnitName] = useState('');
     const [unitNameError, setUnitNameError] = useState(false);
 
@@ -42,10 +39,10 @@ const CreateModal = (props) => {
 
     const [unitQuantity, setProductQuantity] = useState(0);
     const [unitQuantityError, setProductQuantityError] = useState(false);
-    
-    
-    const [ allUnits, setAllUnits ] = useState([]);
-    
+
+    const [loading, setLoading] = useState(false);
+    const [allUnits, setAllUnits] = useState([]);
+
     const [parentUnit, setParentUnit] = useState('');
     const [parentUnitError, setParentUnitError] = useState(false);
 
@@ -80,19 +77,24 @@ const CreateModal = (props) => {
         setProductQuantityError(false);
         setParentUnit('');
         setParentUnitError(false);
+        setType('main');
     }, [])
 
     useEffect(() => {
-        if ( type === 'sub' ) {
+        if (type === 'sub') {
+            setLoading(true);
             axios.get('/vendors/units')
                 .then(res => {
+                    setLoading(false);
                     setAllUnits(res.data.data);
+                })
+                .catch(err => {
+                    setLoading(false);
                 })
         }
     }, [type])
 
     useEffect(() => {
-        //console.log(addingUnitSuccess)
         addingUnitSuccess && resetModalData();
     }, [addingUnitSuccess, resetModalData])
 
@@ -101,7 +103,7 @@ const CreateModal = (props) => {
             setUnitNameError(true);
             return;
         }
-        if ( type === 'sub' && parentUnit === '' ) {
+        if (type === 'sub' && parentUnit === '') {
             setParentUnitError(true);
             return;
         }
@@ -110,7 +112,7 @@ const CreateModal = (props) => {
             return;
         }
         let data;
-        if ( type === 'main' ) {
+        if (type === 'main') {
             data = {
                 name: unitName,
                 type: type,
@@ -118,7 +120,7 @@ const CreateModal = (props) => {
                 parent_id: null,
             }
         }
-        if ( type === 'sub' ) {
+        if (type === 'sub') {
             data = {
                 name: unitName,
                 type: type,
@@ -153,7 +155,12 @@ const CreateModal = (props) => {
                 )
             }
             {
-                type === 'sub' && (
+                type === 'sub' && loading && (
+                    <Loader height='50px' />
+                )
+            }
+            {
+                type === 'sub' && !loading && (
                     <Fragment>
                         <Grid item xs={12} sm={6}>
                             <FormControl sx={{ width: '100%' }}>
@@ -171,12 +178,12 @@ const CreateModal = (props) => {
                                     }
                                 </Select>
                             </FormControl>
-                            {parentUnitError && <ValidationMessage notExist>{t(`Please add parent unit`)}</ValidationMessage>}
+                            {(allUnits.length === 0 || parentUnitError) && <ValidationMessage notExist>{t(`Please add parent unit`)}</ValidationMessage>}
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <CustomWrapper>
-                                <Typography sx={ { display: 'inline-flex', marginRight: '5px' } } variant="h6">=</Typography>
-                                <CustomTextField id="unit-quantity" type='number' label={t('quantity')} 
+                                <Typography sx={{ display: 'inline-flex', marginRight: '5px' }} variant="h6">=</Typography>
+                                <CustomTextField id="unit-quantity" type='number' label={t('quantity')}
                                     variant="outlined" value={unitQuantity} onChange={unitQuantityChangeHandler}
                                     InputProps={{
                                         startAdornment: <InputAdornment position="start">{t(parentUnit.name)} </InputAdornment>,

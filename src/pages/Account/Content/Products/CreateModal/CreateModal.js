@@ -174,8 +174,8 @@ const CreateModal = (props) => {
 
     const [locationName, setLocationName] = useState('');
     const [productLocationError, setProductLocationError] = useState(false);
-    
-    const [ productSKU, setProductSKU] = useState('');
+
+    const [productSKU, setProductSKU] = useState('');
 
     const [productStatus, setProductStatus] = useState('active');
 
@@ -328,7 +328,7 @@ const CreateModal = (props) => {
 
         let formData = new FormData();
         formData.append('name', productName);
-        formData.append('description', draftToHtml(convertToRaw(editorState.getCurrentContent())) );
+        formData.append('description', draftToHtml(convertToRaw(editorState.getCurrentContent())));
         formData.append('price', +productPrice);
         formData.append('discount', +productDiscount);
         formData.append('discount_type', discountType);
@@ -484,7 +484,7 @@ const CreateModal = (props) => {
                                                 <div style={{ width: '100%' }} >
                                                     <img src={image['data_url']} alt="" width="100" />
                                                     <ImageItemBottomBar>
-                                                        <FormControlLabel value={image['data_url']} control={<Radio />} label="Default" />
+                                                        <FormControlLabel value={image['data_url']} control={<Radio />} label={t("Default")} />
                                                         <Button sx={{ mr: 1 }} size="large" variant="outlined" startIcon={<PhotoCamera />} onClick={() => onImageUpdate(index)}>
                                                             {t('update')}
                                                         </Button>

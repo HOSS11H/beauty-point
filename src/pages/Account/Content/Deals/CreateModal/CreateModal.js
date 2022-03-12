@@ -26,7 +26,7 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { EditorState, convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
 import { connect } from 'react-redux';
-import { fetchLocations, fetchServicesByLocation } from '../../../../../store/actions/index';
+import { fetchLocations } from '../../../../../store/actions/index';
 import { formatCurrency, updateObject } from '../../../../../shared/utility';
 import ValidationMessage from '../../../../../components/UI/ValidationMessage/ValidationMessage';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -693,8 +693,7 @@ const CreateModal = (props) => {
                                     {servicesOptionsContent}
                                 </Select>
                             </FormControl>
-                            {servicesOptions.length === 0 && <ValidationMessage notExist>{t(`Please add at least one service in this location`)}</ValidationMessage>}
-                            {selectedServicesError && <ValidationMessage notExist>{t(`Please add at least one service`)}</ValidationMessage>}
+                            {(servicesOptions.length === 0 || selectedServicesError) && <ValidationMessage notExist>{t(`Please add at least one service`)}</ValidationMessage>}
                         </Fragment>
                     )
                 }
@@ -899,7 +898,7 @@ const CreateModal = (props) => {
                                                 <div style={{ width: '100%' }} >
                                                     <img src={image['data_url']} alt="" width="100" />
                                                     <ImageItemBottomBar>
-                                                        <FormControlLabel value={image['data_url']} control={<Radio />} label="Default" />
+                                                        <FormControlLabel value={image['data_url']} control={<Radio />} label={t("Default")} />
                                                         <Button sx={{ mr: 1 }} size="large" variant="outlined" startIcon={<PhotoCamera />} onClick={() => onImageUpdate(index)}>
                                                             {t('update')}
                                                         </Button>

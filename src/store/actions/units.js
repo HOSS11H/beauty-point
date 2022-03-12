@@ -112,10 +112,9 @@ export const addUnitStart = () => {
         type: actionTypes.ADD_UNIT_START,
     }
 }
-export const addUnitSuccess = (message, createdUnit) => {
+export const addUnitSuccess = (createdUnit) => {
     return {
         type: actionTypes.ADD_UNIT_SUCCESS,
-        message: message,
         unitData: createdUnit,
     }
 }
@@ -136,13 +135,16 @@ export const addUnit = (data) => {
         dispatch(addUnitStart())
         axios.post(`/vendors/units`, data)
             .then(response => {
-                dispatch(addUnitSuccess(null, {...response.data, ...data }));
+                dispatch(addUnitSuccess({...response.data, ...data }));
                 setTimeout(() =>{
                     dispatch(resetAddUnitSuccess());
                 }, 2000)
             })
             .catch(err => {
-                dispatch(addUnitFailed(err.message))
+                const errs = err.response.data.errors;
+                for (let key in errs) {
+                    dispatch(addUnitFailed(errs[key][0]))
+                }
             })
     }
 }

@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 
 import { CustomButton } from '../../../../components/UI/Button/Button';
 import CreateModal from "./CreateModal/CreateModal";
-import CustomizedSnackbars from "../../../../components/UI/SnackBar/SnackBar";
+import { toast } from "react-toastify";
 
 
 const ActionsWrapper = styled.div`
@@ -34,18 +34,29 @@ function Units(props) {
 
     const { t } = useTranslation()
 
-    const { searchUnitsHandler, addUnitHandler, addingUnitSuccess } = props;
+    const { searchUnitsHandler, addUnitHandler, addingUnitSuccess, addingUnitFailed, addingUnitMessage } = props;
 
     const [createModalOpened, setCreateModalOpened] = useState(false);
 
-    const [ messageShown, setMessageShown ] = useState(addingUnitSuccess);
 
+    useEffect( () => {
+        if( addingUnitSuccess ) {
+            setCreateModalOpened(false);
+            toast.success(t('Unit Added'), {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [addingUnitSuccess, t])
+    
     useEffect(() => {
-        setMessageShown(addingUnitSuccess )
-    }, [addingUnitSuccess])
-    const closeMessageHandler = useCallback(( ) => {
-        setMessageShown(false)
-    }, [])
+        if (addingUnitFailed && addingUnitMessage) {
+            toast.error(addingUnitMessage, {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [addingUnitFailed, addingUnitMessage])
 
     // Create Modal
     const createModalOpenHandler = useCallback((id) => {
@@ -56,7 +67,6 @@ function Units(props) {
     }, [])
 
     const createModalConfirmHandler = useCallback((data) => {
-        setCreateModalOpened(false);
         addUnitHandler(data);
     }, [addUnitHandler])
 
@@ -71,7 +81,6 @@ function Units(props) {
                     heading='add new unit' confirmText='add' />
             </ActionsWrapper>
             <UnitsTable />
-            <CustomizedSnackbars show={messageShown} message={t('Unit Added')} type='success' onClose={closeMessageHandler} />
         </Fragment>
     );
 }
@@ -79,6 +88,8 @@ function Units(props) {
 const mapStateToProps = (state) => {
     return {
         addingUnitSuccess: state.units.units.addingUnitSuccess,
+        addingUnitFailed: state.units.units.addingUnitFailed,
+        addingUnitMessage: state.units.units.addingUnitMessage
     }
 }
 

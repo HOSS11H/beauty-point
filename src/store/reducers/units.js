@@ -17,6 +17,7 @@ const intialState = {
         searchingUnitsSuccess: false,
         addingUnit: false,
         addingUnitSuccess: false,
+        addingUnitFailed: false,
         addingUnitMessage: null,
     },
 }
@@ -110,6 +111,7 @@ const reducer = (state = intialState, action) => {
                     ...state.units,
                     addingUnit: true,
                     addingUnitSuccess: false,
+                    addingUnitFailed: false,
                     addingUnitMessage: null,
                 }
             });
@@ -119,17 +121,8 @@ const reducer = (state = intialState, action) => {
             return updateObject(state, {
                 units: {
                     ...state.units,
-                    units: {
-                        ...state.units.units,
-                        data: updatedUnitsData,
-                        meta: {
-                            ...state.units.units.meta,
-                            total: state.units.units.meta.total + 1,
-                        }
-                    },
                     addingUnit: false,
                     addingUnitSuccess: true,
-                    addingUnitMessage: action.message,
                 },
             });
         case (actionTypes.RESET_ADD_UNIT_SUCCESS):
@@ -137,7 +130,6 @@ const reducer = (state = intialState, action) => {
                 units: {
                     ...state.units,
                     addingUnitSuccess: false,
-                    addingUnitMessage: null,
                 }
             });
         case (actionTypes.ADD_UNIT_FAILED):
@@ -145,7 +137,7 @@ const reducer = (state = intialState, action) => {
                 units: {
                     ...state.units,
                     addingUnit: false,
-                    addingUnitSuccess: false,
+                    addingUnitFailed: true,
                     addingUnitMessage: action.message,
                 }
             });

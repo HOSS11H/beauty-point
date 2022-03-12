@@ -34,13 +34,13 @@ const UnitsTableWrapper = styled.div`
 
 
 
-const intialRowsPerPage = 5;
+const rowsPerPage = 5;
 
 function UnitsTable(props) {
 
     const { t } = useTranslation()
 
-    const { fetchedUnits, fetchUnitsHandler, loadingUnits, deleteUnitHandler, searchingUnits, searchingUnitsSuccess, updateUnitHandler } = props;
+    const { fetchedUnits, fetchUnitsHandler, loadingUnits, deleteUnitHandler, searchingUnits, searchingUnitsSuccess, updateUnitHandler, addingUnitSuccess } = props;
 
     const themeCtx = useContext(ThemeContext)
 
@@ -51,7 +51,6 @@ function UnitsTable(props) {
     const [order, setOrder] = useState('desc');
     const [orderBy, setOrderBy] = useState('name');
 
-    const [rowsPerPage, setRowsPerPage] = useState(intialRowsPerPage);
 
     const [deleteModalOpened, setDeleteModalOpened] = useState(false);
 
@@ -61,7 +60,11 @@ function UnitsTable(props) {
 
     useEffect(() => {
         fetchUnitsHandler(lang, page, rowsPerPage, orderBy, order);
-    }, [fetchUnitsHandler, lang, page, rowsPerPage, orderBy, order]);
+    }, [fetchUnitsHandler, lang, page, orderBy, order]);
+
+    useEffect(() => {
+        addingUnitSuccess && fetchUnitsHandler(lang, page, rowsPerPage, orderBy, order);
+    }, [fetchUnitsHandler, lang, page, orderBy, order, addingUnitSuccess]);
 
 
     const handleRequestSort = (event, property) => {
@@ -180,6 +183,7 @@ const mapStateToProps = state => {
         loadingUnits: state.units.units.fetchingUnits,
         searchingUnits: state.units.units.searchingUnits,
         searchingUnitsSuccess: state.units.units.searchingUnitsSuccess,
+        addingUnitSuccess: state.units.units.addingUnitSuccess,
     }
 }
 
