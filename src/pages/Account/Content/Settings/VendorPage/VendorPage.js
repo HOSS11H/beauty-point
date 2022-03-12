@@ -6,9 +6,11 @@ import TagsInput from 'react-tagsinput'
 import 'react-tagsinput/react-tagsinput.css'
 import v1 from '../../../../../utils/axios-instance-v1';
 import Map from "./Map/Map";
+import { useOutletContext } from "react-router-dom";
 
 
 export default function VendorPage(props) {
+    const [ formIsDirty, handleformIsDirty ] = useOutletContext()
     const { t } = useTranslation()
     const [primary_contact, setPrimaryContact] = useState('');
     const [secondary_contact, setSecondaryContact] = useState('');
@@ -39,6 +41,7 @@ export default function VendorPage(props) {
     }, [])
     function handleTagChange(input) {
         setTags(input)
+        handleformIsDirty(true)
         setKeywords(input.toString())
     }
     function submitForm() {
@@ -55,20 +58,44 @@ export default function VendorPage(props) {
         }).then(res => {
             setSuccess(true)
             setOpen(false)
+            handleformIsDirty(false)
         }).catch(err => {
             //console.log(err.message)
             setOpen(false)
+            handleformIsDirty(true)
         })
     }
     function handleClose() {
         setSuccess(false)
     }
     const assignCoords = (lat, lng) => {
+        handleformIsDirty(true)
         setMarker({
             lat: lat,
             lng: lng,
             defaultAnimation: 2,
         })
+    }
+
+    const primaryContactChangeHandler = (e) => {
+        handleformIsDirty(true)
+        setPrimaryContact(e.target.value)
+    }
+    const secondaryContactChangeHandler = (e) => {
+        handleformIsDirty(true)
+        setSecondaryContact(e.target.value)
+    }
+    const addressChangeHandler = (e) => {
+        handleformIsDirty(true)
+        setAddress(e.target.value)
+    }
+    const descriptionChangeHandler = (e) => {
+        handleformIsDirty(true)
+        setDescription(e.target.value)
+    }
+    const seoChangeHandler = (e) => {
+        handleformIsDirty(true)
+        setSeoDescription(e.target.value)
     }
 
     return (
@@ -81,22 +108,22 @@ export default function VendorPage(props) {
                         <CssBaseline />
                         <Grid container spacing={2}>
                             <Grid item xs={12} md={6}>
-                                <TextField value={primary_contact} onChange={(e) => setPrimaryContact(e.target.value)} fullWidth label={t('Primary Phone')} variant="outlined" required />
+                                <TextField value={primary_contact} onChange={primaryContactChangeHandler} fullWidth label={t('Primary Phone')} variant="outlined" required />
                             </Grid>
                             <Grid item xs={12} md={6}>
-                                <TextField value={secondary_contact} onChange={(e) => setSecondaryContact(e.target.value)} fullWidth label={t('Secondary Phone')} variant="outlined" required />
+                                <TextField value={secondary_contact} onChange={secondaryContactChangeHandler} fullWidth label={t('Secondary Phone')} variant="outlined" required />
                             </Grid>
                             <Grid item xs={12} md={6}>
-                                <TextField value={address} onChange={(e) => setAddress(e.target.value)} multiline minRows={4} fullWidth label={t('Address')} variant="outlined" required />
+                                <TextField value={address} onChange={addressChangeHandler} multiline minRows={4} fullWidth label={t('Address')} variant="outlined" required />
                             </Grid>
                             <Grid item xs={12} md={6}>
-                                <TextField value={description} onChange={(e) => setDescription(e.target.value)} multiline minRows={4} fullWidth label={t('Description')} variant="outlined" />
+                                <TextField value={description} onChange={descriptionChangeHandler} multiline minRows={4} fullWidth label={t('Description')} variant="outlined" />
                             </Grid>
                             <Grid item xs={12}>
                                 <TagsInput value={tags} onChange={handleTagChange} inputProps={{ placeholder: t("Keywords") }} />
                             </Grid>
                             <Grid item xs={12}>
-                                <TextField value={seo_description} onChange={(e) => setSeoDescription(e.target.value)} multiline minRows={4} fullWidth label={t('SEO Description')} variant="outlined" />
+                                <TextField value={seo_description} onChange={seoChangeHandler} multiline minRows={4} fullWidth label={t('SEO Description')} variant="outlined" />
                             </Grid>
                             <Grid item xs={12}>
                                 <Map assignCoords={assignCoords} marker={marker} />

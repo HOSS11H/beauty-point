@@ -1,27 +1,19 @@
-import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { Card } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
-export default function Sidebar() {
+export default function Sidebar(props) {
 
     const {t} = useTranslation()
 
-    const params = useParams();
-    //console.log(params)
-    const [value, setValue] = useState(params['*'])
-    const navigate = useNavigate();
-    useEffect(() => {
-        setValue(params['*'])
-    }, [params])
+    const { value, onChange } = props;
 
     const handleChange = (event, newValue) => {
-        setValue(newValue)
-        navigate(newValue)
+        onChange(newValue)
     };
+    
 
     return (
         <Card>

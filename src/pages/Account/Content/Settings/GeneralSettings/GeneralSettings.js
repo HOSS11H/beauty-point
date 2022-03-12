@@ -8,6 +8,7 @@ import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import styled from 'styled-components';
 
 import ImageUploading from 'react-images-uploading';
+import { useOutletContext } from "react-router-dom";
 
 
 const UploadImageTopBar = styled.div`
@@ -37,6 +38,8 @@ const ImageItemBottomBar = styled.div`
 `
 
 export default function GeneralSettings(props) {
+    const [ formIsDirty, handleformIsDirty ] = useOutletContext()
+
     const { t } = useTranslation()
     const [uploadedLogo, setUploadedLogo] = useState([{ data_url: '' }]);
     const [name, setName] = useState('');
@@ -77,21 +80,23 @@ export default function GeneralSettings(props) {
         formData.append('address', address);
         formData.append('website', website);
         formData.append('invoice_notes', notes);
-        v1.post('/vendors/settings/company', formData, {headers: {'Content-Type': 'multipart/form-data'}})
-            .then(res => {
-                if (res.status === 204) {
+        v1.post('/vendors/settings/company', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
+        .then(res => {
+            if (res.status === 204) {
                     setSuccess(true)
                 }
                 setOpen(false)
+                handleformIsDirty(false)
             }).catch(err => {
                 setOpen(false)
-                //console.log(err.message)
+                handleformIsDirty(true)
             })
     }
     function handleClose() {
         setSuccess(false)
     }
     const onImageChangeHandler = (imageList, addUpdateIndex) => {
+        handleformIsDirty(true)
         // data for submit
         setUploadedLogo(imageList);
         /* if (imageList.length === 1) {
@@ -100,7 +105,34 @@ export default function GeneralSettings(props) {
             setDefaultImage(image);
         } */
     };
-
+    const nameChangeHandler = (e) => {
+        handleformIsDirty(true)
+        setName(e.target.value)
+    }
+    const emailChangeHandler = (e) => {
+        handleformIsDirty(true)
+        setEmail(e.target.value)
+    }
+    const taxChangeHandler = (e) => {
+        handleformIsDirty(true)
+        setTax(e.target.value)
+    }
+    const addressChangeHandler = (e) => {
+        handleformIsDirty(true)
+        setAddress(e.target.value)
+    }
+    const notesChengeHandler = (e) => {
+        handleformIsDirty(true)
+        setNotes(e.target.value)
+    }
+    const websiteChangeHandler = (e) => {
+        handleformIsDirty(true)
+        setWebsite(e.target.value)
+    }
+    const phoneChangeHandler = (e) => {
+        handleformIsDirty(true)
+        setPhone(e.target.value)
+    }
 
     return (
         <>
@@ -163,29 +195,29 @@ export default function GeneralSettings(props) {
                                         <Grid item xs={12} sm={6}>
                                             <Grid container spacing={3}>
                                                 <Grid item xs={12}>
-                                                    <TextField value={name} onChange={(e) => setName(e.target.value)} fullWidth label={t('Business Name')} variant="outlined" required />
+                                                    <TextField value={name} onChange={nameChangeHandler} fullWidth label={t('Business Name')} variant="outlined" required />
                                                 </Grid>
                                                 <Grid item xs={12}>
-                                                    <TextField value={email} onChange={(e) => setEmail(e.target.value)} fullWidth label={t('Business Email')} variant="outlined" required />
+                                                    <TextField value={email} onChange={emailChangeHandler} fullWidth label={t('Business Email')} variant="outlined" required />
                                                 </Grid>
                                                 <Grid item xs={12} >
-                                                    <TextField value={tax} onChange={(e) => setTax(e.target.value)} fullWidth label={t("Tax Record")} variant="outlined" required />
+                                                    <TextField value={tax} onChange={taxChangeHandler} fullWidth label={t("Tax Record")} variant="outlined" required />
                                                 </Grid>
                                             </Grid>
                                         </Grid>
                                     </Grid>
                                 </Grid>
                                 <Grid item xs={12} md={6}>
-                                    <TextField value={address} onChange={(e) => setAddress(e.target.value)} multiline minRows={4} fullWidth label={t('Address')} variant="outlined" required />
+                                    <TextField value={address} onChange={addressChangeHandler} multiline minRows={4} fullWidth label={t('Address')} variant="outlined" required />
                                 </Grid>
                                 <Grid item xs={12} md={6}>
-                                    <TextField value={notes} onChange={(e) => setNotes(e.target.value)} multiline minRows={4} fullWidth label={t('Invoice Notes')} variant="outlined" />
+                                    <TextField value={notes} onChange={notesChengeHandler} multiline minRows={4} fullWidth label={t('Invoice Notes')} variant="outlined" />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
-                                    <TextField value={website} onChange={(e) => setWebsite(e.target.value)} fullWidth label={t('Website')} variant="outlined" required />
+                                    <TextField value={website} onChange={websiteChangeHandler} fullWidth label={t('Website')} variant="outlined" required />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
-                                    <TextField value={phone} onChange={(e) => setPhone(e.target.value)} fullWidth label={t("Business Phone")} variant="outlined" required />
+                                    <TextField value={phone} onChange={phoneChangeHandler} fullWidth label={t("Business Phone")} variant="outlined" required />
                                 </Grid>
                                 <Grid item xs={12} md={12} sx={{ textAlign: 'center' }}>
                                     <Button variant="contained" color="secondary" sx={{ minWidth: '30%' }} size="large" onClick={submitForm}>{t('Save')}</Button>

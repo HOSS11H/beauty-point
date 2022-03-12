@@ -484,6 +484,8 @@ const resources = {
             'SKU': 'باركود',
             'Employee Report': 'تقرير الموظفين',
             'close time must be after open time': 'يجب أن يكون أوقات الإغلاق بعد أوقات الفتح',
+            'please choose an employee': 'يرجى اختيار موظف',
+            'Are you sure you want to leave this page?': 'هل أنت متأكد من أنك تريد ترك هذه الصفحة؟',
         }
     }
 };

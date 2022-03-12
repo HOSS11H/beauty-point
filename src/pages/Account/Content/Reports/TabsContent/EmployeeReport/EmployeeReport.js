@@ -55,13 +55,13 @@ const EmployeeReport = props => {
             })
     }, [lang])
 
-    const searchHandler = useCallback((location, year, month, page = pages, perPage = rowsPerPage) => {
+    const searchHandler = useCallback((employeeId, from, to, page = pages, perPage = rowsPerPage) => {
         setLoading(true);
 
         const employeeTableParams = {
-            location,
-            year: year,
-            month: month,
+            employeeId,
+            from,
+            to,
             page: page,
             per_page: perPage,
         }
@@ -80,7 +80,7 @@ const EmployeeReport = props => {
         axios.all([getEmployeeTableData])
             .then(axios.spread((...responses) => {
                 setLoading(false);
-                setEmployeeTableData(responses[1].data);
+                setEmployeeTableData(responses[0].data.data);
             }))
             .catch(error => {
                 setLoading(false);
@@ -110,7 +110,6 @@ const EmployeeReport = props => {
     }
 
     if (EmployeeTableData && !loading) {
-
         content = (
             <Fragment>
                 <TablePaginationWrapper>
@@ -134,8 +133,8 @@ const EmployeeReport = props => {
                         <TablePaginationActions
                             sx={{ width: '100%' }}
                             component="div"
-                            count={EmployeeTableData.data ? EmployeeTableData.data.length : EmployeeTableData.length}
-                            total={EmployeeTableData.meta ? EmployeeTableData.meta.total : EmployeeTableData.length}
+                            count={EmployeeTableData.data.length}
+                            total={EmployeeTableData.meta.total}
                             rowsPerPage={+rowsPerPage}
                             page={pages}
                             onPageChange={handleChangePage}
@@ -143,7 +142,7 @@ const EmployeeReport = props => {
                         />
                     )}
                 </TablePaginationWrapper>
-                <EmployeeTable data={EmployeeTableData} />
+                <EmployeeTable data={EmployeeTableData.data} />
             </Fragment>
         )
     }
