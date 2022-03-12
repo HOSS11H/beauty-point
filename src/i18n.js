@@ -483,6 +483,7 @@ const resources = {
             'Please add a unit before if you want to add combo product': 'يرجى إضافة وحدة قبل إضافة منتجات كومبو',
             'SKU': 'باركود',
             'Employee Report': 'تقرير الموظفين',
+            'close time must be after open time': 'يجب أن يكون أوقات الإغلاق بعد أوقات الفتح',
         }
     }
 };
