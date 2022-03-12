@@ -11,6 +11,7 @@ import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import TablePaginationActions from "../../../../../../components/UI/Dashboard/Table/TablePagination/TablePagination";
 import { useTranslation } from "react-i18next";
 import EmployeeTable from "./EmployeeTable/EmployeeTable";
+import { formatCurrency } from "../../../../../../shared/utility";
 
 const TablePaginationWrapper = styled.div`
     display: flex;
@@ -19,7 +20,23 @@ const TablePaginationWrapper = styled.div`
     margin-top: 80px; 
     margin-bottom: 40px; 
 `
-
+const PriceCalculation = styled.div`
+    display: flex;
+    align-items: center;
+    margin-top: 25px;
+    padding: 10px 20px;
+    p {
+        font-size: 20px;
+        line-height:1.5;
+        text-transform: uppercase;
+        font-weight: 600;
+        color: ${({ theme }) => theme.palette.text.primary};
+        margin-right: 20px;
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+`
 
 
 const EmployeeReport = props => {
@@ -33,6 +50,7 @@ const EmployeeReport = props => {
     const [fetchingEmployees, setFetchingEmployees] = useState(false)
 
     const [EmployeeTableData, setEmployeeTableData] = useState(null)
+    const [total, setTotal] = useState(0)
 
     const [pages, setPages] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -81,6 +99,7 @@ const EmployeeReport = props => {
             .then(axios.spread((...responses) => {
                 setLoading(false);
                 setEmployeeTableData(responses[0].data.data);
+                setTotal(responses[0].data.total);
             }))
             .catch(error => {
                 setLoading(false);
@@ -143,6 +162,10 @@ const EmployeeReport = props => {
                     )}
                 </TablePaginationWrapper>
                 <EmployeeTable data={EmployeeTableData.data} />
+                <PriceCalculation>
+                    <p>{t('total amount')}</p>
+                    <p>{formatCurrency(total)}</p>
+                </PriceCalculation>
             </Fragment>
         )
     }
