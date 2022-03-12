@@ -72,10 +72,9 @@ export const updateUnitStart = () => {
         type: actionTypes.UPDATE_UNIT_START,
     }
 }
-export const updateUnitSuccess = (message, updatedUnit) => {
+export const updateUnitSuccess = (updatedUnit) => {
     return {
         type: actionTypes.UPDATE_UNIT_SUCCESS,
-        message: message,
         unitData: updatedUnit,
     }
 }
@@ -94,16 +93,18 @@ export const updateUnitFailed = (message) => {
 export const updateUnit = (data) => {
     return dispatch => {
         dispatch(updateUnitStart())
-        //console.log('edit start')
         axios.put(`/vendors/units/${data.id}`, data)
         .then(response => {
-                dispatch(updateUnitSuccess(response.data, {...data}));
+                dispatch(updateUnitSuccess({...data}));
                 setTimeout(() => {
                     dispatch(resetUpdateUnitSuccess());
                 }, 2000);
             })
             .catch(err => {
-                dispatch(updateUnitFailed(err.message))
+                const errs = err.response.data.errors;
+                for (let key in errs) {
+                    dispatch(updateUnitFailed(errs[key][0]))
+                }
             })
     }
 }

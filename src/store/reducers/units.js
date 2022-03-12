@@ -12,6 +12,7 @@ const intialState = {
         deletingUnitMessage: null,
         updatingUnit: false,
         updatingUnitSuccess: false,
+        updatingUnitFailed: false,
         updatingUnitMessage: null,
         searchingUnits: false,
         searchingUnitsSuccess: false,
@@ -116,8 +117,6 @@ const reducer = (state = intialState, action) => {
                 }
             });
         case (actionTypes.ADD_UNIT_SUCCESS):
-            const updatedUnitsData = [...state.units.units.data];
-            updatedUnitsData.push(action.unitData);
             return updateObject(state, {
                 units: {
                     ...state.units,
@@ -147,23 +146,16 @@ const reducer = (state = intialState, action) => {
                     ...state.units,
                     updatingUnit: true,
                     updatingUnitSuccess: false,
+                    updatingUnitFailed: false,
                     updatingUnitMessage: null,
                 }
             });
         case (actionTypes.UPDATE_UNIT_SUCCESS):
-            const updatedUnitsInfos = [...state.units.units.data];
-            const updatedUnitIndex = updatedUnitsInfos.findIndex(unit => unit.id === action.unitData.id);
-            updatedUnitsInfos[updatedUnitIndex] = action.unitData;
             return updateObject(state, {
                 units: {
                     ...state.units,
-                    units: {
-                        ...state.units.units,
-                        data: updatedUnitsInfos,
-                    },
                     updatingUnit: false,
                     updatingUnitSuccess: true,
-                    updatingUnitMessage: action.message,
                 }
             });
         case (actionTypes.RESET_UPDATE_UNIT_SUCCESS):
@@ -171,7 +163,6 @@ const reducer = (state = intialState, action) => {
                 units: {
                     ...state.units,
                     updatingUnitSuccess: false,
-                    updatingUnitMessage: null,
                 }
             });
         case (actionTypes.UPDATE_UNIT_FAILED):
@@ -179,7 +170,7 @@ const reducer = (state = intialState, action) => {
                 units: {
                     ...state.units,
                     updatingUnit: false,
-                    updatingUnitSuccess: false,
+                    updatingUnitFailed: true,
                     updatingUnitMessage: action.message,
                 }
             });

@@ -1,7 +1,6 @@
-import { useState, useEffect, useCallback, useContext, Fragment } from 'react';
+import { useState, useEffect, useCallback, Fragment } from 'react';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import ThemeContext from '../../../../../../store/theme-context'
 
 import { CustomModal } from '../../../../../../components/UI/Modal/Modal';
 import { Grid, Typography } from '@mui/material';
@@ -18,6 +17,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import axios from '../../../../../../utils/axios-instance';
+import Loader from '../../../../../../components/UI/Loader/Loader';
 
 
 const CustomTextField = styled(TextField)`
@@ -34,9 +34,6 @@ const CreateModal = (props) => {
 
     const { t } = useTranslation();
 
-    const themeCtx = useContext(ThemeContext)
-    const { lang } = themeCtx;
-
     const selectedUnitIndex = fetchedUnits.data.findIndex(unit => unit.id === id);
 
     let unitData = fetchedUnits.data[selectedUnitIndex];
@@ -51,7 +48,7 @@ const CreateModal = (props) => {
     const [unitQuantity, setProductQuantity] = useState(unit_quantity);
     const [unitQuantityError, setProductQuantityError] = useState(false);
     
-    
+    const [loading, setLoading] = useState(false);
     const [ allUnits, setAllUnits ] = useState([]);
     
     const [parentUnit, setParentUnit] = useState('');
@@ -79,10 +76,15 @@ const CreateModal = (props) => {
 
     useEffect(() => {
         if ( type === 'sub' ) {
+            setLoading(true);
             axios.get('/vendors/units')
                 .then(res => {
+                    setLoading(false)
                     setAllUnits(res.data.data);
                     setParentUnit(res.data.data.find( item => item.id === parent_id));
+                })
+                .catch(err => {
+                    setLoading(false)
                 })
         }
     }, [parent_id, type])
@@ -150,7 +152,12 @@ const CreateModal = (props) => {
                 )
             }
             {
-                type === 'sub' && (
+                type === 'sub' && loading && (
+                    <Loader height='50px' />
+                )
+            }
+            {
+                type === 'sub' && !loading && (
                     <Fragment>
                         <Grid item xs={12} sm={6}>
                             <FormControl sx={{ width: '100%' }}>

@@ -13,6 +13,7 @@ import EditModal from './EditModal/EditModal';
 import EnhancedTableBody from './TableBody/TableBody';
 import SearchMessage from "../../../../../components/Search/SearchMessage/SearchMessage";
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
 const UnitsTableWrapper = styled.div`
     display: flex;
@@ -40,7 +41,7 @@ function UnitsTable(props) {
 
     const { t } = useTranslation()
 
-    const { fetchedUnits, fetchUnitsHandler, loadingUnits, deleteUnitHandler, searchingUnits, searchingUnitsSuccess, updateUnitHandler, addingUnitSuccess } = props;
+    const { fetchedUnits, fetchUnitsHandler, loadingUnits, deleteUnitHandler, searchingUnits, searchingUnitsSuccess, updateUnitHandler, addingUnitSuccess, updatingUnitSuccess, updatingUnitFailed, updatingUnitMessage } = props;
 
     const themeCtx = useContext(ThemeContext)
 
@@ -61,10 +62,32 @@ function UnitsTable(props) {
     useEffect(() => {
         fetchUnitsHandler(lang, page, rowsPerPage, orderBy, order);
     }, [fetchUnitsHandler, lang, page, orderBy, order]);
+    
+    useEffect(() => {
+        addingUnitSuccess && fetchUnitsHandler(lang, page, rowsPerPage, 'id', 'desc');
+    }, [fetchUnitsHandler, lang, page, orderBy, order, addingUnitSuccess]);
+
 
     useEffect(() => {
-        addingUnitSuccess && fetchUnitsHandler(lang, page, rowsPerPage, orderBy, order);
-    }, [fetchUnitsHandler, lang, page, orderBy, order, addingUnitSuccess]);
+        if (updatingUnitSuccess) {
+            fetchUnitsHandler(lang, page, rowsPerPage, orderBy, order)
+            setEditModalOpened(false);
+            setSelectedUnitId(null);
+            toast.success(t('Unit edited'), {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [fetchUnitsHandler, lang, order, orderBy, page, t, updatingUnitSuccess])
+
+    useEffect(() => {
+        if (updatingUnitFailed && updatingUnitMessage) {
+            toast.error(updatingUnitMessage, {
+                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+            });
+        }
+    }, [updatingUnitFailed, updatingUnitMessage])
 
 
     const handleRequestSort = (event, property) => {
@@ -99,8 +122,6 @@ function UnitsTable(props) {
     }, [])
 
     const editModalConfirmHandler = useCallback((data) => {
-        setEditModalOpened(false);
-        setSelectedUnitId(null);
         updateUnitHandler(data);
     }, [updateUnitHandler])
 
@@ -184,6 +205,9 @@ const mapStateToProps = state => {
         searchingUnits: state.units.units.searchingUnits,
         searchingUnitsSuccess: state.units.units.searchingUnitsSuccess,
         addingUnitSuccess: state.units.units.addingUnitSuccess,
+        updatingUnitSuccess: state.units.units.updatingUnitSuccess,
+        updatingUnitFailed: state.units.units.updatingUnitFailed,
+        updatingUnitMessage: state.units.units.updatingUnitMessage
     }
 }
 

@@ -479,6 +479,7 @@ const resources = {
             'Please add at least one service in this location': 'يرجى إضافة خدمة واحدة على الأقل في هذا الموقع',
             'Please add main unit': 'يرجى إضافة وحدة رئيسية',
             'Unit Added': 'تمت إضافة الوحدة',
+            'Unit edited': 'تم تعديل الوحدة',
         }
     }
 };
