@@ -195,7 +195,6 @@ const Invoice = React.forwardRef((props, ref) => {
 
 	const { bookingData, userData, qrCode } = props
 
-
 	return (
 		<div style={{ display: 'none' }} >
 			<Wrapper ref={ref} >
@@ -352,12 +351,18 @@ const Invoice = React.forwardRef((props, ref) => {
 										</BillTotal>
 									</Grid>
 								)}
-								<Grid item xs={12} md={6} >
-									<BillTotal>
-										<span>طريقة الدفع : </span>
-										<span>{t(bookingData.payment_gateway)}</span>
-									</BillTotal>
-								</Grid>
+								{
+									bookingData.payments.map(payment => {
+										return (
+											<Grid item xs={12} md={6} key={payment.id}>
+												<BillTotal>
+													<span>طريقة الدفع : </span>
+													<span>{formatCurrency(payment.amount)} {t(payment.gateway)}</span>
+												</BillTotal>
+											</Grid>
+										)
+									})
+								}
 							</Grid>
 							<QrWrapper>
 								{<QRCode value={qrCode} />}
