@@ -28,8 +28,9 @@ import axios from 'axios';
 import v2 from '../../../../../utils/axios-instance';
 import { useCallback } from 'react';
 import Loader from '../../../../../components/UI/Loader/Loader';
-import { format } from 'date-fns/esm';
 import AddPaymentModal from './AddPaymentModal/AddPaymentModal';
+import moment from 'moment';
+import { format } from 'date-fns';
 
 const ClientDetails = styled.div`
     display: flex;
@@ -417,7 +418,7 @@ const ViewModal = (props) => {
                                         >
                                             <TableCell component="th" scope="row">
                                                 <ItemInfo>
-                                                    {item.paid_on}
+                                                    {moment(item.paid_on).format('DD/MM/YYYY')}
                                                 </ItemInfo>
                                             </TableCell>
                                             <TableCell align="center">{formatCurrency(item.amount)}</TableCell>
