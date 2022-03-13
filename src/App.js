@@ -8,6 +8,8 @@ import AuthContext from './store/auth-context';
 
 import Layout from './components/Layout/Layout';
 import Loader from "./components/UI/Loader/Loader";
+import { connect } from "react-redux";
+import { PermissibleRender } from '@brainhubeu/react-permissible';
 
 
 const Auth = React.lazy(() => import('./pages/Auth/Auth'));
@@ -56,15 +58,15 @@ const AboutUs = React.lazy(() => import('./pages/Home/AboutUs/AboutUs'));
 
 const Landing = React.lazy(() => import('./pages/Landing/Landing'));
 
-function App() {
+function App(props) {
+
+    const { fetchedPermissions } = props;
 
     const themeCtx = useContext(ThemeContext)
 
     const authCtx = useContext(AuthContext);
 
     const { isLoggedIn } = authCtx;
-
-
 
     let routes = (
         <Routes>
@@ -94,7 +96,14 @@ function App() {
             <Routes>
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/account/*" element={<Account />} >
-                    <Route path="services" element={<Services />} />
+                    <Route path="services" element={
+                        <PermissibleRender
+                            //userPermissions={permissions}
+                            //requiredPermissions={requiredPermissions}
+                        >
+                            <Services />
+                        </PermissibleRender>
+                    } />
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="products" element={<Products />} />
                     <Route path="expenses" element={<Expenses />} />
@@ -152,4 +161,10 @@ function App() {
     );
 }
 
-export default App;
+const mapStateToProps = (state) => {
+    return {
+        fetchedPermissions: state.permissions.permissions,
+    }
+}
+
+export default connect(mapStateToProps, null)(App);

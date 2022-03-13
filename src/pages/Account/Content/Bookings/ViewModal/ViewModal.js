@@ -23,12 +23,13 @@ import { CustomButton } from '../../../../../components/UI/Button/Button';
 import PrintIcon from '@mui/icons-material/Print';
 import Invoice from './Invoice/Invoice';
 import { useReactToPrint } from 'react-to-print';
-import { useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import v2 from '../../../../../utils/axios-instance';
 import { useCallback } from 'react';
 import Loader from '../../../../../components/UI/Loader/Loader';
 import { format } from 'date-fns/esm';
+import AddPaymentModal from './AddPaymentModal/AddPaymentModal';
 
 const ClientDetails = styled.div`
     display: flex;
@@ -188,6 +189,8 @@ const ViewModal = (props) => {
 
     const [qrCode, setQrCode] = useState(null);
 
+    const [paymentModalOpened, setPaymentModalOpened] = useState(false);
+
     const fetchData = useCallback(() => {
         setLoading(true);
         const headers = {
@@ -197,7 +200,7 @@ const ViewModal = (props) => {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
         }
-        const bookingDataEndpoint = `${v2.defaults.baseURL}/vendors/bookings/${id}?include[]=user&include[]=items`;
+        const bookingDataEndpoint = `${v2.defaults.baseURL}/vendors/bookings/${id}?include[]=user&include[]=items&include[]=payments`;
         const qrCodeEndpoint = `${v2.defaults.baseURL}/vendors/bookings/${id}/qr`;
 
         const getUserData = axios.get(bookingDataEndpoint, headers);
@@ -226,6 +229,17 @@ const ViewModal = (props) => {
         content: () => invoiceRef.current,
     });
 
+    const handlePaymentModalOpen = useCallback(() => {
+        setPaymentModalOpened(true);
+    }, [])
+    const handlePaymentModalClose = useCallback(() => {
+        setPaymentModalOpened(false);
+    }, [])
+    const handlePaymentModalConfirm = useCallback(() => {
+        setPaymentModalOpened(false);
+        fetchData();
+    }, [fetchData])
+
     let content;
 
     if (loading) {
@@ -234,162 +248,204 @@ const ViewModal = (props) => {
         )
     }
 
-    if (bookingData) {
+    if (bookingData && !loading) {
         content = (
-            <Grid container spacing={3}>
-                <Grid item xs={12}>
-                    <ClientDetails>
-                        <ClientImg >
-                            <PersonIcon />
-                        </ClientImg>
-                        <ClientName>{bookingData.user.name}</ClientName>
-                    </ClientDetails>
-                </Grid>
-                {bookingData.user.email && (
+            <Fragment>
+                <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                        <ClientDetails>
+                            <ClientImg >
+                                <PersonIcon />
+                            </ClientImg>
+                            <ClientName>{bookingData.user.name}</ClientName>
+                        </ClientDetails>
+                    </Grid>
+                    {bookingData.user.email && (
+                        <Grid item xs={12} md={6}>
+                            <BookingData>
+                                <BookingDataHeading>{t('email')}</BookingDataHeading>
+                                <BookingList>
+                                    <li><MailIcon sx={{ mr: 1 }} />{bookingData.user.email}</li>
+                                </BookingList>
+                            </BookingData>
+                        </Grid>
+                    )}
                     <Grid item xs={12} md={6}>
                         <BookingData>
-                            <BookingDataHeading>{t('email')}</BookingDataHeading>
+                            <BookingDataHeading>{t('phone')}</BookingDataHeading>
                             <BookingList>
-                                <li><MailIcon sx={{ mr: 1 }} />{bookingData.user.email}</li>
+                                <li><PhoneAndroidIcon sx={{ mr: 1 }} />{bookingData.user.mobile}</li>
                             </BookingList>
                         </BookingData>
                     </Grid>
-                )}
-                <Grid item xs={12} md={6}>
-                    <BookingData>
-                        <BookingDataHeading>{t('phone')}</BookingDataHeading>
-                        <BookingList>
-                            <li><PhoneAndroidIcon sx={{ mr: 1 }} />{bookingData.user.mobile}</li>
-                        </BookingList>
-                    </BookingData>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <BookingData>
-                        <BookingDataHeading>{t('booking date')}</BookingDataHeading>
-                        <BookingList>
-                            <li><EventNoteIcon sx={{ mr: 1 }} />{format(new Date(bookingData.date_time), 'Y-MM-dd')}</li>
-                        </BookingList>
-                    </BookingData>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <BookingData>
-                        <BookingDataHeading>{t('booking time')}</BookingDataHeading>
-                        <BookingList>
-                            <li><WatchLaterIcon sx={{ mr: 1 }} />{format(new Date(bookingData.date_time), 'hh:ii a')}</li>
-                        </BookingList>
-                    </BookingData>
-                </Grid>
-                {
-                    (bookingData.items.length > 0) && (
-                        <Grid item xs={12}>
-                            <BookingData>
-                                <BookingDataHeading>{t('booking items')}</BookingDataHeading>
-                                <TableContainer component={Paper} sx={{ my: 2 }}>
-                                    <Table aria-label="simple table">
-                                        <TableHead>
-                                            <TableRow>
-                                                <TableCell align="center">{t('item')}</TableCell>
-                                                <TableCell align="center">{t('employee')}</TableCell>
-                                                <TableCell align="center">{t('price')}</TableCell>
-                                                <TableCell align="center">{t('quantity')}</TableCell>
-                                                <TableCell align="center">{t('total')}</TableCell>
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {bookingData.items.map((item) => (
-                                                <TableRow
-                                                    key={item.id}
-                                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                                >
-                                                    <TableCell component="th" scope="row">
-                                                        <ItemInfo>
-                                                            {item.item.name}
-                                                            <ItemType className={item.item.type}>{t(item.item.type)}</ItemType>
-                                                        </ItemInfo>
-                                                    </TableCell>
-                                                    <TableCell align="center">
-                                                        {
-                                                            item.employee && (
-                                                                <ServiceEmployee>
-                                                                    <span>{item.employee.name}</span>
-                                                                </ServiceEmployee>
-                                                            )
-                                                        }
-                                                    </TableCell>
-                                                    <TableCell align="center">{item.price}</TableCell>
-                                                    <TableCell align="center">{item.quantity}</TableCell>
-                                                    <TableCell align="center">{item.amount}</TableCell>
-                                                </TableRow>
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                </TableContainer>
-                            </BookingData>
-                        </Grid>
-                    )
-                }
-                <Grid item xs={12} sm={6} md={6}>
-                    <BookingData>
-                        <BookingDataHeading>{t('payment method')}</BookingDataHeading>
-                        <BookingList>
-                            <li><MoneyIcon sx={{ mr: 1 }} />{t(bookingData.payment_gateway)}</li>
-                        </BookingList>
-                    </BookingData>
-                </Grid>
-                <Grid item xs={12} sm={6} md={6}>
-                    <BookingData>
-                        <BookingDataHeading>{t('booking status')}</BookingDataHeading>
-                        <BookingList>
-                            <li>{t(bookingData.status)}</li>
-                        </BookingList>
-                    </BookingData>
-                </Grid>
-                <Grid item xs={12} sm={6} md={6}>
-                    <BookingData>
-                        <BookingDataHeading>{t('payment status')}</BookingDataHeading>
-                        <BookingList>
-                            <li>
-                                {bookingData.payment_status === 'completed' && <CheckCircleIcon sx={{ mr: 1, color: '#568d00' }} />}
-                                {bookingData.payment_status === 'pending' && <CloseIcon sx={{ mr: 1, color: 'rgb(187 163 46)' }} />}
-                                {bookingData.payment_status === 'refunded' && <CloseIcon sx={{ mr: 1, color: '#f00' }} />}
-                                {t(bookingData.payment_status)}
-                            </li>
-                        </BookingList>
-                    </BookingData>
-                </Grid>
-                {bookingData.remaining_amount > 0 && (
-                    <Grid item xs={12} sm={6} md={6}>
+                    <Grid item xs={12} md={6}>
                         <BookingData>
-                            <BookingDataHeading>{t('remaining amount')}</BookingDataHeading>
-                            <BookingDataInfo>{formatCurrency(bookingData.remaining_amount)}</BookingDataInfo>
+                            <BookingDataHeading>{t('booking date')}</BookingDataHeading>
+                            <BookingList>
+                                <li><EventNoteIcon sx={{ mr: 1 }} />{format(new Date(bookingData.date_time), 'Y-MM-dd')}</li>
+                            </BookingList>
                         </BookingData>
                     </Grid>
-                )}
-                <Grid item xs={12} md={6}>
-                    <BookingData>
-                        <BookingDataHeading>{t('taxes ( 15% )')}</BookingDataHeading>
-                        <BookingDataInfo>{formatCurrency(bookingData.vat)}</BookingDataInfo>
-                    </BookingData>
+                    <Grid item xs={12} md={6}>
+                        <BookingData>
+                            <BookingDataHeading>{t('booking time')}</BookingDataHeading>
+                            <BookingList>
+                                <li><WatchLaterIcon sx={{ mr: 1 }} />{format(new Date(bookingData.date_time), 'hh:ii a')}</li>
+                            </BookingList>
+                        </BookingData>
+                    </Grid>
+                    {
+                        (bookingData.items.length > 0) && (
+                            <Grid item xs={12}>
+                                <BookingData>
+                                    <BookingDataHeading>{t('booking items')}</BookingDataHeading>
+                                    <TableContainer component={Paper} sx={{ my: 2 }}>
+                                        <Table aria-label="simple table">
+                                            <TableHead>
+                                                <TableRow>
+                                                    <TableCell align="center">{t('item')}</TableCell>
+                                                    <TableCell align="center">{t('employee')}</TableCell>
+                                                    <TableCell align="center">{t('price')}</TableCell>
+                                                    <TableCell align="center">{t('quantity')}</TableCell>
+                                                    <TableCell align="center">{t('total')}</TableCell>
+                                                </TableRow>
+                                            </TableHead>
+                                            <TableBody>
+                                                {bookingData.items.map((item) => (
+                                                    <TableRow
+                                                        key={item.id}
+                                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                                    >
+                                                        <TableCell component="th" scope="row">
+                                                            <ItemInfo>
+                                                                {item.item.name}
+                                                                <ItemType className={item.item.type}>{t(item.item.type)}</ItemType>
+                                                            </ItemInfo>
+                                                        </TableCell>
+                                                        <TableCell align="center">
+                                                            {
+                                                                item.employee && (
+                                                                    <ServiceEmployee>
+                                                                        <span>{item.employee.name}</span>
+                                                                    </ServiceEmployee>
+                                                                )
+                                                            }
+                                                        </TableCell>
+                                                        <TableCell align="center">{item.price}</TableCell>
+                                                        <TableCell align="center">{item.quantity}</TableCell>
+                                                        <TableCell align="center">{item.amount}</TableCell>
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                    </TableContainer>
+                                </BookingData>
+                            </Grid>
+                        )
+                    }
+                    <Grid item xs={12} sm={6} md={6}>
+                        <BookingData>
+                            <BookingDataHeading>{t('payment method')}</BookingDataHeading>
+                            <BookingList>
+                                <li><MoneyIcon sx={{ mr: 1 }} />{t(bookingData.payment_gateway)}</li>
+                            </BookingList>
+                        </BookingData>
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={6}>
+                        <BookingData>
+                            <BookingDataHeading>{t('booking status')}</BookingDataHeading>
+                            <BookingList>
+                                <li>{t(bookingData.status)}</li>
+                            </BookingList>
+                        </BookingData>
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={6}>
+                        <BookingData>
+                            <BookingDataHeading>{t('payment status')}</BookingDataHeading>
+                            <BookingList>
+                                <li>
+                                    {bookingData.payment_status === 'completed' && <CheckCircleIcon sx={{ mr: 1, color: '#568d00' }} />}
+                                    {bookingData.payment_status === 'pending' && <CloseIcon sx={{ mr: 1, color: 'rgb(187 163 46)' }} />}
+                                    {bookingData.payment_status === 'refunded' && <CloseIcon sx={{ mr: 1, color: '#f00' }} />}
+                                    {t(bookingData.payment_status)}
+                                </li>
+                            </BookingList>
+                        </BookingData>
+                    </Grid>
+                    {bookingData.remaining_amount > 0 && (
+                        <Grid item xs={12} sm={6} md={6}>
+                            <BookingData>
+                                <BookingDataHeading>{t('remaining amount')}</BookingDataHeading>
+                                <BookingDataInfo>{formatCurrency(bookingData.remaining_amount)}</BookingDataInfo>
+                            </BookingData>
+                        </Grid>
+                    )}
+                    <Grid item xs={12} md={6}>
+                        <BookingData>
+                            <BookingDataHeading>{t('taxes ( 15% )')}</BookingDataHeading>
+                            <BookingDataInfo>{formatCurrency(bookingData.vat)}</BookingDataInfo>
+                        </BookingData>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <BookingData>
+                            <BookingDataHeading>{t('total')}</BookingDataHeading>
+                            <BookingDataInfo>{formatCurrency(bookingData.price)}</BookingDataInfo>
+                        </BookingData>
+                    </Grid>
+                    {bookingData.payment_status === 'pending' && (
+                        <Grid item xs={12}>
+                            <BookingActions>
+                                <ActionButton onClick={handlePaymentModalOpen}  ><MoneyIcon />{t('add payment')}</ActionButton>
+                            </BookingActions>
+                        </Grid>
+                    )}
+                    <Grid item xs={12}>
+                        <TableContainer component={Paper} sx={{ my: 2 }}>
+                            <Table aria-label="simple table">
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell align="center">{t('date')}</TableCell>
+                                        <TableCell align="center">{t('amount')}</TableCell>
+                                        <TableCell align="center">{t('payment method')}</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {bookingData.payments.map((item) => (
+                                        <TableRow
+                                            key={item.id}
+                                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                        >
+                                            <TableCell component="th" scope="row">
+                                                <ItemInfo>
+                                                    {item.payed_on}
+                                                </ItemInfo>
+                                            </TableCell>
+                                            <TableCell align="center">{formatCurrency(item.amount)}</TableCell>
+                                            <TableCell align="center">{t(item.gateway)}</TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <BookingActions>
+                            <ActionButton onClick={() => qrCode && printBookingHandler()}  ><PrintIcon />{t('print')}</ActionButton>
+                            {bookingData.payment_status === 'refunded' && <ActionButton onClick={() => qrCode && printBookingHandler()}  ><PrintIcon />{t('print refunded invoice')}</ActionButton>}
+                        </BookingActions>
+                    </Grid>
+                    {qrCode && <Invoice userData={userData} ref={invoiceRef} bookingData={bookingData} qrCode={qrCode} />}
+                    {/*<Grid item xs={12}>
+                        {/* <BookingActions>
+                            <DeleteButton onClick={(id) => onDelete(bookingData.id)} >{t('Delete')}</DeleteButton>
+                        </BookingActions> 
+                    </Grid>*/}
                 </Grid>
-                <Grid item xs={12} md={6}>
-                    <BookingData>
-                        <BookingDataHeading>{t('total')}</BookingDataHeading>
-                        <BookingDataInfo>{formatCurrency(bookingData.price)}</BookingDataInfo>
-                    </BookingData>
-                </Grid>
-                <Grid item xs={12}>
-                    <BookingActions>
-                        <ActionButton onClick={() => qrCode && printBookingHandler()}  ><PrintIcon />{t('print')}</ActionButton>
-                        {bookingData.payment_status === 'refunded' && <ActionButton onClick={() => qrCode && printBookingHandler()}  ><PrintIcon />{t('print refunded invoice')}</ActionButton>}
-                    </BookingActions>
-                </Grid>
-                {qrCode && <Invoice userData={userData} ref={invoiceRef} bookingData={bookingData} qrCode={qrCode} />}
-                <Grid item xs={12}>
-                    {/* <BookingActions>
-                        <DeleteButton onClick={(id) => onDelete(bookingData.id)} >{t('Delete')}</DeleteButton>
-                    </BookingActions> */}
-                </Grid>
-            </Grid>
+                <AddPaymentModal show={paymentModalOpened} id={id} 
+                    remainingAmount={bookingData.remaining_amount} 
+                    onClose={handlePaymentModalClose} onConfirm={handlePaymentModalConfirm}
+                    heading='add new payment' confirmText='add' />
+            </Fragment>
         )
     }
 

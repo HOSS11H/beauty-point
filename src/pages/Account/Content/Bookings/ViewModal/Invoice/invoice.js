@@ -324,6 +324,14 @@ const Invoice = React.forwardRef((props, ref) => {
 										<span>{formatCurrency(bookingData.discount)}</span>
 									</BillTotal>
 								</Grid>
+								{bookingData.remaining_amount > 0 && (
+									<Grid item xs={12} md={6} >
+										<BillTotal>
+											<span>المبلغ المتبقي : </span>
+											<span>{formatCurrency(bookingData.remaining_amount)}</span>
+										</BillTotal>
+									</Grid>
+								)}
 								<Grid item xs={12} md={6} >
 									<BillTotal>
 										<span>المجموع الكلي : </span>

@@ -487,6 +487,11 @@ const resources = {
             'please choose an employee': 'يرجى اختيار موظف',
             'Are you sure you want to leave this page?': 'هل أنت متأكد من أنك تريد ترك هذه الصفحة؟',
             'add new booking': 'إضافة حجز جديد',
+            'go on tour': 'تعرف علي النظام',
+            'add new payment': 'إضافة دفعة جديدة',
+            'the amount is greater than remaining amount': 'المبلغ أكبر من المبلغ المتبقي',
+            'add payment': 'إضافة دفعة',
+            'remaining amount: ': 'المبلغ المتبقي: ',
         }
     }
 };
