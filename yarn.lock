@@ -4822,6 +4822,11 @@
   "resolved" "https://registry.npmjs.org/dedent/-/dedent-0.7.0.tgz"
   "version" "0.7.0"
 
+"deep-diff@^1.0.2":
+  "integrity" "sha512-aWS3UIVH+NPGCD1kki+DCU9Dua032iSsO43LqQpcs4R3+dVv7tX0qBGjiVHJHjplsoUM2XRO/KB92glqc68awg=="
+  "resolved" "https://registry.npmjs.org/deep-diff/-/deep-diff-1.0.2.tgz"
+  "version" "1.0.2"
+
 "deep-equal@^1.0.1":
   "integrity" "sha512-yd9c5AdiqVcR+JjcwUQb9DkhJc8ngNr0MahEBGvDiJw8puWab2yZlh+nkasOnZP+EGTAP6rRp2JzJhJZzvNF8g=="
   "resolved" "https://registry.npmjs.org/deep-equal/-/deep-equal-1.1.1.tgz"
@@ -5721,6 +5726,11 @@
     "onetime" "^5.1.0"
     "signal-exit" "^3.0.2"
     "strip-final-newline" "^2.0.0"
+
+"exenv@^1.2.2":
+  "integrity" "sha1-KueOhdmJQVhnCwPUe+wfA72Ru50="
+  "resolved" "https://registry.npmjs.org/exenv/-/exenv-1.2.2.tgz"
+  "version" "1.2.2"
 
 "exit@^0.1.2":
   "integrity" "sha1-BjJjj42HfMghB9MKD/8aF8uhzQw="
@@ -7031,6 +7041,11 @@
   "version" "4.0.3"
   dependencies:
     "is-extglob" "^2.1.1"
+
+"is-lite@^0.8.1":
+  "integrity" "sha512-ekSwuewzOmwFnzzAOWuA5fRFPqOeTrLIL3GWT7hdVVi+oLuD+Rau8gCmkb94vH5hjXc1Q/CfIW/y/td1RrNQIg=="
+  "resolved" "https://registry.npmjs.org/is-lite/-/is-lite-0.8.1.tgz"
+  "version" "0.8.1"
 
 "is-module@^1.0.0":
   "integrity" "sha1-Mlj7afeMFNW4FdZkM2tM/7ZEFZE="
@@ -8531,6 +8546,16 @@
   "resolved" "https://registry.npmjs.org/neo-async/-/neo-async-2.6.2.tgz"
   "version" "2.6.2"
 
+"nested-property@^4.0.0":
+  "integrity" "sha512-yFehXNWRs4cM0+dz7QxCd06hTbWbSkV0ISsqBfkntU6TOY4Qm3Q88fRRLOddkGh2Qq6dZvnKVAahfhjcUvLnyA=="
+  "resolved" "https://registry.npmjs.org/nested-property/-/nested-property-4.0.0.tgz"
+  "version" "4.0.0"
+
+"nested-property@1.0.1":
+  "integrity" "sha512-BnBBoo/8bBNRdAnJc7+m79oWk7dXwW1+vCesaEQhfDGVwXGLMvmI4NwYgLTW94R/x+R2s/yr2g/hB/4w/YSAvA=="
+  "resolved" "https://registry.npmjs.org/nested-property/-/nested-property-1.0.1.tgz"
+  "version" "1.0.1"
+
 "next-tick@~1.0.0":
   "integrity" "sha1-yobR/ogoFpsBICCOPchCS524NCw="
   "resolved" "https://registry.npmjs.org/next-tick/-/next-tick-1.0.0.tgz"
@@ -9208,6 +9233,11 @@
   "version" "1.6.4"
   dependencies:
     "ts-pnp" "^1.1.6"
+
+"popper.js@^1.16.0":
+  "integrity" "sha512-Wb4p1J4zyFTbM+u6WuO4XstYx4Ky9Cewe4DWrel7B0w6VVICvPwdOpotjzcf6eD8TsckVnIMNONQyPIUFOUbCQ=="
+  "resolved" "https://registry.npmjs.org/popper.js/-/popper.js-1.16.1.tgz"
+  "version" "1.16.1"
 
 "portfinder@^1.0.26":
   "integrity" "sha512-Se+2isanIcEqf2XMHjyUKskczxbPH7dQnlMjXX6+dybayyHvAf/TCgyMRlzf/B6QDhAEFOGes0pzRo3by4AbMA=="
@@ -9988,7 +10018,7 @@
     "kleur" "^3.0.3"
     "sisteransi" "^1.0.5"
 
-"prop-types@^15.6.0", "prop-types@^15.6.2", "prop-types@^15.7.2":
+"prop-types@^15.0.0", "prop-types@^15.6.0", "prop-types@^15.6.2", "prop-types@^15.7.2":
   "integrity" "sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ=="
   "resolved" "https://registry.npmjs.org/prop-types/-/prop-types-15.7.2.tgz"
   "version" "15.7.2"
@@ -10241,6 +10271,18 @@
   "resolved" "https://registry.npmjs.org/react-error-overlay/-/react-error-overlay-6.0.9.tgz"
   "version" "6.0.9"
 
+"react-floater@^0.7.3":
+  "integrity" "sha512-d1wAEph+xRxQ0RJ3woMmYLlZHTaCIsja7Bv6JNo2ezsVUgdMan4CxOR4Do4/xgpmRFfsQMdlygexLAZZypWirw=="
+  "resolved" "https://registry.npmjs.org/react-floater/-/react-floater-0.7.3.tgz"
+  "version" "0.7.3"
+  dependencies:
+    "deepmerge" "^4.2.2"
+    "exenv" "^1.2.2"
+    "is-lite" "^0.8.1"
+    "popper.js" "^1.16.0"
+    "react-proptype-conditional-require" "^1.0.4"
+    "tree-changes" "^0.5.1"
+
 "react-i18next@^11.14.0":
   "integrity" "sha512-2xuQgd+Arzl3uZKkcKVk1V3rdiyXJrDkVAMxVtX2i3o+sDc+g+YjWoHh7Hw336wd+UGTI+F30ZCkb3X2VCixEQ=="
   "resolved" "https://registry.npmjs.org/react-i18next/-/react-i18next-11.14.0.tgz"
@@ -10253,6 +10295,11 @@
   "integrity" "sha512-Ak9uaHTsCM6JboEo5JU0esx13IxQuZ1ZxgWgdqVIsK5ZSty88lcf1CTxpMTZFZVVuIxWOm9VsRvs6cyMUDTWeg=="
   "resolved" "https://registry.npmjs.org/react-images-uploading/-/react-images-uploading-3.1.3.tgz"
   "version" "3.1.3"
+
+"react-is@^16.13.1":
+  "integrity" "sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ=="
+  "resolved" "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz"
+  "version" "16.13.1"
 
 "react-is@^16.7.0":
   "integrity" "sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ=="
@@ -10268,6 +10315,27 @@
   "integrity" "sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w=="
   "resolved" "https://registry.npmjs.org/react-is/-/react-is-17.0.2.tgz"
   "version" "17.0.2"
+
+"react-joyride@^2.3.2":
+  "integrity" "sha512-MPYvHdxF/ylBZXJkKzyR3nTd+jydPeTKVwQDg8y7Ctl5H0UPgvF3uCzfieyJqE/JnK2wJU4QcjkontqBU1g7Xg=="
+  "resolved" "https://registry.npmjs.org/react-joyride/-/react-joyride-2.3.2.tgz"
+  "version" "2.3.2"
+  dependencies:
+    "deep-diff" "^1.0.2"
+    "deepmerge" "^4.2.2"
+    "exenv" "^1.2.2"
+    "is-lite" "^0.8.1"
+    "nested-property" "^4.0.0"
+    "react-floater" "^0.7.3"
+    "react-is" "^16.13.1"
+    "scroll" "^3.0.1"
+    "scrollparent" "^2.0.1"
+    "tree-changes" "^0.7.1"
+
+"react-proptype-conditional-require@^1.0.4":
+  "integrity" "sha1-acLVdB5t9eCPIw82u8KUTuEiJVU="
+  "resolved" "https://registry.npmjs.org/react-proptype-conditional-require/-/react-proptype-conditional-require-1.0.4.tgz"
+  "version" "1.0.4"
 
 "react-redux@^7.2.6":
   "integrity" "sha512-10RPdsz0UUrRL1NZE0ejTkucnclYSgXp5q+tB5SWx2qeG2ZJQJyymgAhwKy73yiL/13btfB6fPr+rgbMAaZIAQ=="
@@ -10965,6 +11033,16 @@
     "@types/json-schema" "^7.0.8"
     "ajv" "^6.12.5"
     "ajv-keywords" "^3.5.2"
+
+"scroll@^3.0.1":
+  "integrity" "sha512-pz7y517OVls1maEzlirKO5nPYle9AXsFzTMNJrRGmT951mzpIBy7sNHOg5o/0MQd/NqliCiWnAi0kZneMPFLcg=="
+  "resolved" "https://registry.npmjs.org/scroll/-/scroll-3.0.1.tgz"
+  "version" "3.0.1"
+
+"scrollparent@^2.0.1":
+  "integrity" "sha1-cV1bnMV3YPsivczDvvtb/gaxoxc="
+  "resolved" "https://registry.npmjs.org/scrollparent/-/scrollparent-2.0.1.tgz"
+  "version" "2.0.1"
 
 "select-hose@^2.0.0":
   "integrity" "sha1-Yl2GWPhlr0Psliv8N2o3NZpJlMo="
@@ -12015,6 +12093,22 @@
   "version" "2.1.0"
   dependencies:
     "punycode" "^2.1.1"
+
+"tree-changes@^0.5.1":
+  "integrity" "sha512-O873xzV2xRZ6N059Mn06QzmGKEE21LlvIPbsk2G+GS9ZX5OCur6PIwuuh0rWpAPvLWQZPj0XObyG27zZyLHUzw=="
+  "resolved" "https://registry.npmjs.org/tree-changes/-/tree-changes-0.5.1.tgz"
+  "version" "0.5.1"
+  dependencies:
+    "deep-diff" "^1.0.2"
+    "nested-property" "1.0.1"
+
+"tree-changes@^0.7.1":
+  "integrity" "sha512-sPIt8PKDi0OQTglr7lsetcB9DU19Ls/ZgFSjFvK6DWJGisAn4sOxtjpmQfuqjexQE4UU9U53LNmataL1kRJ3Uw=="
+  "resolved" "https://registry.npmjs.org/tree-changes/-/tree-changes-0.7.1.tgz"
+  "version" "0.7.1"
+  dependencies:
+    "fast-deep-equal" "^3.1.3"
+    "is-lite" "^0.8.1"
 
 "tryer@^1.0.1":
   "integrity" "sha512-c3zayb8/kWWpycWYg87P71E1S1ZL6b6IJxfb5fvsUgsf0S2MVGaDhDXXjDMpdCpfWXqptc+4mXwmiy1ypXqRAA=="

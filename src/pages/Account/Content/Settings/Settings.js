@@ -23,6 +23,9 @@ export default function Settings() {
     usePrompt(
         t('Are you sure you want to leave this page?'),
         formIsDirty,
+        () => {
+            setFormIsDirty(false)
+        }
     );
 
     useEffect(() => {

@@ -64,6 +64,7 @@ function Header(props) {
                     <Grid container spacing={1} alignItems="center">
                         <Grid sx={{ display: { lg: 'block', xs: 'block' } }} item>
                             <IconButton
+                                id='menu-button'
                                 color="inherit"
                                 aria-label="open drawer"
                                 onClick={onDrawerToggle}
@@ -81,7 +82,7 @@ function Header(props) {
                         <Grid item xs />
                         <Grid item>
                             <HomeBtn onClick={ ( ) => navigate('/')   }>{t('visit store')}</HomeBtn>
-                            <HomeBtn href='https://old.beautypoint.sa/home' >{t('visit old version')}</HomeBtn>
+                            <HomeBtn href='https://old.beautypoint.sa/home' >{t('add new booking')}</HomeBtn>
                             <LogoutBtn variant='text' onClick={logoutHandler}>{t('log out')}</LogoutBtn>
                         </Grid>
                     </Grid>

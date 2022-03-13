@@ -25,11 +25,9 @@ import LinearScaleIcon from '@mui/icons-material/LinearScale';
 import { useTranslation } from 'react-i18next';
 import { useContext, useEffect, useRef } from 'react';
 import AuthContext from '../../../store/auth-context';
-import ThemeContext from '../../../store/theme-context';
 import PeopleIcon from '@mui/icons-material/People';
 import { useState } from 'react';
 import { connect } from 'react-redux';
-import { fetchPermissions } from '../../../store/actions/index';
 import ModuleNav from './ModuleNav/ModuleNav';
 import { Fragment } from 'react';
 
@@ -118,10 +116,7 @@ const CustomListItemIcon = styled(ListItemIcon)`
 
 const Navigator = (props) => {
 
-    const { open, getPermissions, fetchedPermissions, ...other } = props;
-
-    const themeCtx = useContext(ThemeContext);
-    const { lang } = themeCtx;
+    const { open, fetchedPermissions, ...other } = props;
 
     const authCtx = useContext(AuthContext)
     const { roleId } = authCtx;
@@ -131,10 +126,6 @@ const Navigator = (props) => {
 
     const [categories, setCategories] = useState([]);
 
-
-    useEffect(() => {
-        getPermissions(roleId, lang);
-    }, [getPermissions, lang, roleId])
 
     let module = useRef();
 
@@ -212,7 +203,7 @@ const Navigator = (props) => {
                                     <CustomNavLink
                                         to={`${childId}`}
                                     >
-                                        <CustomListItemButton open={open} selected={params === childId}>
+                                        <CustomListItemButton id={childId} open={open} selected={params === childId}>
                                             <CustomListItemIcon>{icon}</CustomListItemIcon>
                                             <ListItemText >{t(name)}</ListItemText>
                                         </CustomListItemButton>
@@ -236,10 +227,5 @@ const mapStateToProps = (state) => {
     }
 }
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        getPermissions: (roleId, lang) => dispatch(fetchPermissions(roleId, lang)),
-    }
-}
 
-export default connect(mapStateToProps, mapDispatchToProps)(Navigator);
+export default connect(mapStateToProps, null)(Navigator);

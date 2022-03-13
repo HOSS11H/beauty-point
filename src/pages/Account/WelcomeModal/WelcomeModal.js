@@ -4,7 +4,9 @@ import Fade from '@mui/material/Fade';
 import Card from '@mui/material/Card';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import { ButtonConfirm, ButtonText } from '../../../components/UI/Button/Button';
+import { ButtonConfirm } from '../../../components/UI/Button/Button';
+import Tour from '../Tour/Tour';
+import { Fragment, useState } from 'react';
 
 const CustomCardMui = styled(Card)`
     &.MuiPaper-root {
@@ -60,32 +62,42 @@ const WelcomeModal = props => {
 
     const { t } = useTranslation();
 
+    const [ startTour, setStartTour ] = useState(false);
+
+    const clickHandler = () => {
+        setStartTour(true);
+        onClose();
+    }
+
     return (
-        <Modal
-            aria-labelledby="transition-modal-title"
-            aria-describedby="transition-modal-description"
-            open={show}
-            onClose={onClose}
-            closeAfterTransition
-            BackdropComponent={Backdrop}
-            BackdropProps={{
-                timeout: 500,
-            }}
-        >
-            <Fade in={show}>
-                <CustomCardMui>
-                    <CardHeading>
-                        {t('welcome to beauty point family')}
-                    </CardHeading>
-                    <CardBody>
-                        {t('as a first step, we need you to add your details and settings, this will help us to serve you better')}
-                    </CardBody>
-                    <CardActions>
-                        <ButtonConfirm variant='text' onClick={onClose}>{t('go')}</ButtonConfirm>
-                    </CardActions>
-                </CustomCardMui>
-            </Fade>
-        </Modal>
+        <Fragment>
+            <Modal
+                aria-labelledby="transition-modal-title"
+                aria-describedby="transition-modal-description"
+                open={show}
+                onClose={onClose}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+                BackdropProps={{
+                    timeout: 500,
+                }}
+            >
+                <Fade in={show}>
+                    <CustomCardMui>
+                        <CardHeading>
+                            {t('welcome to beauty point family')}
+                        </CardHeading>
+                        <CardBody>
+                            {t('as a first step, we need you to add your details and settings, this will help us to serve you better')}
+                        </CardBody>
+                        <CardActions>
+                            <ButtonConfirm variant='text' onClick={clickHandler}>{t('go on tour')}</ButtonConfirm>
+                        </CardActions>
+                    </CustomCardMui>
+                </Fade>
+            </Modal>
+            {startTour && <Tour />}
+        </Fragment>
     );
 }
 export default WelcomeModal;

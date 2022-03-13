@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useContext, Fragment } from 'react';
+import React, { useState, useCallback, useContext, Fragment, useEffect } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
@@ -6,17 +6,24 @@ import Navigator from './Navigator/Navigator';
 import Header from './Header/Header';
 import { Outlet } from 'react-router';
 import ThemeContext from '../../store/theme-context';
+import AuthContext from '../../store/auth-context';
 import { connect } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import WelcomeModal from './WelcomeModal/WelcomeModal';
+import { fetchPermissions } from '../../store/actions/index';
+import Loader from '../../components/UI/Loader/Loader';
 
 const drawerWidth = 256;
 
 const Account = (props) => {
 
-	const themeCtx = useContext(ThemeContext)
+	const { getPermissions, fetchingPermissions, fetchedPermissions } = props;
 
-	const { theme } = themeCtx;
+	const themeCtx = useContext(ThemeContext)
+	const { theme, lang } = themeCtx;
+
+	const authCtx = useContext(AuthContext)
+    const { roleId } = authCtx;
 
 	const [searchParams] = useSearchParams();
     const hasWelcomeModal = searchParams.get('welcome') === 'true';
@@ -99,6 +106,9 @@ const Account = (props) => {
 
 	const [mobileOpen, setMobileOpen] = useState(false);
 
+	useEffect(() => {
+        getPermissions(roleId, lang);
+    }, [getPermissions, lang, roleId])
 
 	const handleDrawerToggle = useCallback(() => {
 		setMobileOpen(!mobileOpen);
@@ -108,26 +118,34 @@ const Account = (props) => {
 		setWelcomeModal(false);
 	}, []);
 
-	let content = (
-		<Fragment>
-			<Box
-				component="nav"
-				sx={{ flexShrink: { sm: 0 }, }}
-			>
-				<Navigator
-					open={mobileOpen}
-					variant="permanent"
-				/>
-			</Box>
-			<Box sx={{ flexGrow: 1, maxWidth: mobileOpen ? `calc( 100% - ${drawerWidth}px)` : `calc( 100% - 57px)` }} >
-				<Header onDrawerToggle={handleDrawerToggle} />
-				<Box component="main" sx={{ py: 4, px: 3, bgcolor: theme.palette.background.default }}>
-					<Outlet />
+	let content ;
+
+	if (fetchingPermissions) {
+		content = <Loader height='100vh' />
+	} 
+	if ( fetchedPermissions.length > 0 && !fetchingPermissions) {
+		content = (
+			<Fragment>
+				<Box
+					component="nav"
+					sx={{ flexShrink: { sm: 0 }, }}
+				>
+					<Navigator
+						open={mobileOpen}
+						variant="permanent"
+					/>
 				</Box>
-			</Box>
-			<WelcomeModal show={welcomeModal} onClose={handleWelcomeModalClose} />
-		</Fragment>
-	)
+				<Box sx={{ flexGrow: 1, maxWidth: mobileOpen ? `calc( 100% - ${drawerWidth}px)` : `calc( 100% - 57px)` }} >
+					<Header onDrawerToggle={handleDrawerToggle} />
+					<Box component="main" sx={{ py: 4, px: 3, bgcolor: theme.palette.background.default }}>
+						<Outlet />
+					</Box>
+				</Box>
+				<WelcomeModal show={welcomeModal} onClose={handleWelcomeModalClose} />
+			</Fragment>
+		)
+	}
+
 	return (
 		<Fragment>
 			<ThemeProvider theme={customTheme}>
@@ -139,9 +157,18 @@ const Account = (props) => {
 		</Fragment>
 	)
 }
+
 const mapStateToProps = (state) => {
 	return {
+		fetchedPermissions: state.permissions.permissions,
 		fetchingPermissions: state.permissions.fetchingPermissions,
-	}
+    }
 }
-export default connect(mapStateToProps, null)(Account);
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        getPermissions: (roleId, lang) => dispatch(fetchPermissions(roleId, lang)),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Account);

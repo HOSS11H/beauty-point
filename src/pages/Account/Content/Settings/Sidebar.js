@@ -19,10 +19,10 @@ export default function Sidebar(props) {
         <Card>
             <Box sx={{ width: '100%', bgcolor: 'background.paper' }}>
                 <Tabs value={value} onChange={handleChange} scrollButtons="auto" variant="scrollable" indicatorColor="secondary" textColor="secondary">
-                    <Tab value="" label={t("General")} />
-                    <Tab value="vendor-page" label={t("Vendor page Settings")} />
-                    <Tab value="booking-settings" label={t("Booking Settings")} />
-                    <Tab value="roles-permissions" label={t("roles & permissions")} />
+                    <Tab id='general-settings' value="" label={t("General")} />
+                    <Tab id='vendor-settings' value="vendor-page" label={t("Vendor page Settings")} />
+                    <Tab id='booking-settings' value="booking-settings" label={t("Booking Settings")} />
+                    <Tab id='roles-settings' value="roles-permissions" label={t("roles & permissions")} />
                     {/* <Tab value="employee-settings" label={t("Employee Settings")} /> */}
                 </Tabs>
             </Box>
