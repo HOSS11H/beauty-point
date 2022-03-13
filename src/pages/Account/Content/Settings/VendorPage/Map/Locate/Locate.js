@@ -17,8 +17,6 @@ const LocateBtnImg = styled.img`
 `
 
 const  Locate = ( { panTo } ) => {
-
-    const notIntialRender = useRef(false);
     
     const locateMe = useCallback(() => {
         navigator.geolocation.getCurrentPosition( ( position ) => {
@@ -26,14 +24,6 @@ const  Locate = ( { panTo } ) => {
         } );
     }, [panTo])
     
-    useEffect(() => {
-        if ( notIntialRender.current ) {
-            return;
-        } else {
-            locateMe()
-            notIntialRender.current = true;
-        }
-    }, [locateMe])
     return (
         <LocateBtn onClick={ ( ) => locateMe() }>
             <LocateBtnImg src={ compassImg } alt="Locate" />
