@@ -4,6 +4,8 @@ import {
     Marker,
 } from "@react-google-maps/api";
 import { mapStyles } from "./mapStyles";
+import Locate from "./Locate/Locate";
+import { useCallback, useEffect, useRef } from "react";
 
 const libraries = ["places"];
 
@@ -24,21 +26,31 @@ const Map = props => {
     const { assignCoords, marker } = props;
 
     const { isLoaded, loadError } = useLoadScript({
-        googleMapsApiKey: 'AIzaSyC3k16YcaG8bZDLFUMEdwoXglBiO6fQRA0',
+        googleMapsApiKey: 'AIzaSyACkX743dyrtKRVCC1I82cY8eFcmWftg2w',
         libraries,
     });
 
-    if (loadError) return "Error loading maps";
-    if (!isLoaded) return "Loading Maps";
-
+    
+    const mapRef = useRef();
+    
+    const onMapLoad = useCallback((map) => {
+        mapRef.current = map;
+    }, []);
 
     const handleClick = e => {
         assignCoords(e.latLng.lat(), e.latLng.lng());
     }
+    const panTo = useCallback(({ lat, lng }) => {
+        mapRef.current.panTo({ lat, lng });
+        mapRef.current.setZoom(14);
+    }, []);
+    
+    if (loadError) return "Error loading maps";
+    if (!isLoaded) return "Loading Maps";
 
     return (
         <div>
-            <GoogleMap mapContainerStyle={mapContainerStyle} 
+            <GoogleMap mapContainerStyle={mapContainerStyle} onLoad={ onMapLoad }
                 onClick={ handleClick } options={options}
                 zoom={8} center={ marker.lat ? { lat: marker.lat, lng: marker.lng } : { lat: 24.635588, lng: 46.724565 }}>
                     {
@@ -48,6 +60,7 @@ const Map = props => {
                                 position={{ lat: marker.lat, lng: marker.lng }} />
                         )
                     }
+                    <Locate panTo={panTo} />
             </GoogleMap>
         </div>
     )

@@ -308,8 +308,8 @@ const Invoice = React.forwardRef((props, ref) => {
 							<Grid sx={{ width: '100%' }} container spacing={2}>
 								<Grid item xs={12} md={6} >
 									<BillTotal>
-										<i>الاجمالي قبل الضريبة :</i>
-										<span>{formatCurrency((bookingData.price - bookingData.vat))}</span>
+										<i>المجموع قبل الضريبة :</i>
+										<span>{formatCurrency((bookingData.price + bookingData.discount - bookingData.vat))}</span>
 									</BillTotal>
 								</Grid>
 								<Grid item xs={12} md={6} >
@@ -320,10 +320,30 @@ const Invoice = React.forwardRef((props, ref) => {
 								</Grid>
 								<Grid item xs={12} md={6} >
 									<BillTotal>
+										<span>المجموع : </span>
+										<span>{formatCurrency(bookingData.price + bookingData.discount)}</span>
+									</BillTotal>
+								</Grid>
+								<Grid item xs={12} md={6} >
+									<BillTotal>
 										<span>قيمة الخصم : </span>
 										<span>{formatCurrency(bookingData.discount)}</span>
 									</BillTotal>
 								</Grid>
+								<Grid item xs={12} md={6} >
+									<BillTotal>
+										<span>الاجمالي : </span>
+										<span>{formatCurrency(bookingData.price)}</span>
+									</BillTotal>
+								</Grid>
+								{bookingData.remaining_amount > 0 && (
+									<Grid item xs={12} md={6} >
+										<BillTotal>
+											<span>المبلغ المدفوع : </span>
+											<span>{formatCurrency(bookingData.price - bookingData.remaining_amount)}</span>
+										</BillTotal>
+									</Grid>
+								)}
 								{bookingData.remaining_amount > 0 && (
 									<Grid item xs={12} md={6} >
 										<BillTotal>
@@ -332,12 +352,6 @@ const Invoice = React.forwardRef((props, ref) => {
 										</BillTotal>
 									</Grid>
 								)}
-								<Grid item xs={12} md={6} >
-									<BillTotal>
-										<span>المجموع الكلي : </span>
-										<span>{formatCurrency(bookingData.price)}</span>
-									</BillTotal>
-								</Grid>
 								<Grid item xs={12} md={6} >
 									<BillTotal>
 										<span>طريقة الدفع : </span>

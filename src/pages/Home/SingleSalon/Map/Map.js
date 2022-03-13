@@ -24,7 +24,7 @@ const Map = props => {
     const { marker } = props;
 
     const { isLoaded, loadError } = useLoadScript({
-        googleMapsApiKey: 'AIzaSyC3k16YcaG8bZDLFUMEdwoXglBiO6fQRA0',
+        googleMapsApiKey: 'AIzaSyACkX743dyrtKRVCC1I82cY8eFcmWftg2w',
         libraries,
     });
 
