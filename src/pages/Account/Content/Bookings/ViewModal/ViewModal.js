@@ -417,7 +417,7 @@ const ViewModal = (props) => {
                                         >
                                             <TableCell component="th" scope="row">
                                                 <ItemInfo>
-                                                    {item.payed_on}
+                                                    {item.paid_on}
                                                 </ItemInfo>
                                             </TableCell>
                                             <TableCell align="center">{formatCurrency(item.amount)}</TableCell>
