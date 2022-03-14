@@ -19,6 +19,43 @@ export const fetchServicesFailed = (errorMessage) => {
         error: errorMessage,
     }
 }
+export const fetchServicesTable = (language, page, perPage, orderBy, orderDir) => {
+    return dispatch => {
+        dispatch(fetchServicesStart())
+        axios.get(`/vendors/services?page=${page + 1}&per_page=${perPage}&order_by=${orderBy}&order_dir=${orderDir}&include[]=category&include[]=location&include[]=users`, {
+            headers: {
+                'Accept-Language': language
+            }
+        }).then(response => {
+            const servicesData = response.data.data;
+            const convertedServicesData = servicesData.map((service) => {
+                let formattedImages = []
+                if (typeof service.images !== 'string') {
+                    service.images.map((image, index) => {
+                        let imageUrl = {
+                            'data_url': `https://testbeauty.beautypoint.sa/user-uploads/service/${service.id}/${image}`,
+                        }
+                        formattedImages.push(imageUrl)
+                        return formattedImages;
+                    })
+                } else if (typeof service.images === 'string') {
+                    let imageUrl = {
+                        'data_url': `${service.images}`,
+                    }
+                    formattedImages.push(imageUrl)
+                }
+                return {
+                    ...service,
+                    images: formattedImages
+                };
+            })
+            dispatch(fetchServicesSuccess({ ...response.data, data: convertedServicesData }));
+        })
+            .catch(err => {
+                dispatch(fetchServicesFailed(err.message))
+            })
+    }
+}
 export const fetchServices = (language, page, perPage, orderBy, orderDir) => {
     return dispatch => {
         dispatch(fetchServicesStart())

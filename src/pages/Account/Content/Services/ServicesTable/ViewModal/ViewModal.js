@@ -3,6 +3,11 @@ import DOMPurify from "dompurify";
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { Grid } from '@mui/material';
+import axios from '../../../../../../utils/axios-instance';
+import ThemeContext from '../../../../../../store/theme-context';
+import { useCallback, useContext, useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
+import Loader from '../../../../../../components/UI/Loader/Loader';
 
 const ServiceImg = styled.div`
     width: 100%;
@@ -60,17 +65,48 @@ const ServiceDesc = styled.div`
 
 const ViewModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, id, fetchedServices } = props;
+    const { show, heading, confirmText, onConfirm, onClose, id } = props;
 
     const { t } = useTranslation();
 
-    const serviceIndex = fetchedServices.data.findIndex(service => service.id === id);
+    const themeCtx = useContext(ThemeContext)
+    const { lang } = themeCtx;
 
-    const serviceData = fetchedServices.data[serviceIndex];
+    const [loading, setLoading] = useState(false);
+    const [serviceData, setServiceData] = useState(null);
+    
+    const fetchData = useCallback(( ) => {
+        setLoading(true);
+        axios.get(`/vendors/services/${id}?&include[]=category&include[]=location`, {
+            headers: {
+                'Accept-Language': lang
+            }
+        }).then(response => {
+            setServiceData(response.data);
+            setLoading(false);
+        })
+            .catch(err => {
+                setLoading(false);
+                toast.error(t('Error Happened'), {
+                    position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                    closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+                });
+            })
+    }, [id, lang, t])
+
+    useEffect(() => {
+        if (id) {
+            fetchData();
+        }
+    }, [fetchData, id]);
 
     let content;
 
-    if (serviceData) {
+    if (loading) {
+        content = <Loader height='50vh' />
+    }
+
+    if (serviceData && !loading) {
         const mySafeHTML = DOMPurify.sanitize(serviceData.description);
         content = (
             <Grid container  spacing={2}>

@@ -10,6 +10,7 @@ export {
 } from './bookings'
 export {
     fetchServices,
+    fetchServicesTable,
     deleteService,
     searchServices,
     filterServices,

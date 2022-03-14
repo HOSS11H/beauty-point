@@ -83,7 +83,7 @@ const SalesReport = props => {
         })
             .catch(err => {
                 setFetchingLocations(false)
-                toast.error(err.response.data.message)
+                toast.error(t('Error Happened'))
             })
     }, [lang])
 

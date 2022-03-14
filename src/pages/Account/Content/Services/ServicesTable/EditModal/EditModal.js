@@ -36,6 +36,8 @@ import { useReducer } from 'react';
 import axios from '../../../../../../utils/axios-instance';
 import { Fragment } from 'react';
 import Actions from '../../../../../../components/UI/Dashboard/Actions/Actions';
+import Loader from '../../../../../../components/UI/Loader/Loader';
+import { toast } from 'react-toastify';
 
 
 const CustomTextField = styled(TextField)`
@@ -186,6 +188,10 @@ const MenuProps = {
 
 const cartReducer = (state, action) => {
     switch (action.type) {
+        case 'SET_PRODUCTS':
+            return updateObject(state, {
+                products: action.payload
+            })
         case 'ADD_TO_PRODUCTS':
             const updatedProducts = [...state.products]
             updatedProducts.push(action.payload)
@@ -241,18 +247,17 @@ const cartReducer = (state, action) => {
     }
 }
 
-
 const EditModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, id, fetchedServices, fetchedEmployees, fetchedLocations, fetchedCategories } = props;
+    const { show, heading, confirmText, onConfirm, onClose, id, fetchedEmployees, fetchedLocations, fetchedCategories } = props;
+
     const { t } = useTranslation();
+
     const themeCtx = useContext(ThemeContext)
+    const { lang } = themeCtx;
 
-    const selectedServiceIndex = fetchedServices.data.findIndex(service => service.id === id);
-
-    let serviceData = fetchedServices.data[selectedServiceIndex];
-
-    const { name, description, price, discount, discount_type, discount_price, users = [], status, image, location, category, time, time_type, products } = serviceData;
+    const [loading, setLoading] = useState(false);
+    const [serviceData, setServiceData] = useState(null);
 
     let intialCart = [
         {
@@ -266,66 +271,107 @@ const EditModal = (props) => {
 
     const [allUnits, setAllUnits] = useState([]);
 
-    if (products.length > 0) {
-        intialCart = products.map(product => {
-            return {
-                id: product.pivot.products_id,
-                name: product.name,
-                quantity: product.pivot.product_quantity,
-                unit_id: product.pivot.unit_id,
-            }
-        })
-    }
-
     const [cart, dispatch] = useReducer(cartReducer, {
         products: intialCart
     });
 
-    const [serviceName, setServiceName] = useState(name);
+    const [serviceName, setServiceName] = useState('');
     const [serviceNameError, setServiceNameError] = useState(false);
 
-    const html = description;
-    const contentBlock = htmlToDraft(html);
-    const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
-
-    const [editorState, setEditorState] = useState(EditorState.createWithContent(contentState))
+    const [editorState, setEditorState] = useState(
+        EditorState.createEmpty()
+    )
     const [serviceDescriptionError, setServiceDescriptionError] = useState(false);
 
 
-    const [servicePrice, setServicePrice] = useState(price);
+    const [servicePrice, setServicePrice] = useState('');
 
-    const [serviceDiscount, setServiceDiscount] = useState(discount);
+    const [serviceDiscount, setServiceDiscount] = useState('');
 
-    const [discountType, setDiscountType] = useState(discount_type);
+    const [discountType, setDiscountType] = useState('');
 
-    const [priceAfterDiscount, setPriceAfterDiscount] = useState(discount_price);
+    const [priceAfterDiscount, setPriceAfterDiscount] = useState('');
     const [servicePriceError, setServicePriceError] = useState(false);
 
-    const [employeeName, setEmployeeName] = useState(users[0] ? users[0].id : '');
+    const [employeeName, setEmployeeName] = useState('');
     const [ employeeNameError, setEmployeeNameError ] = useState(false);
 
-    const [locationName, setLocationName] = useState(location.id);
+    const [locationName, setLocationName] = useState('');
     const [serviceLocationError, setServiceLocationError] = useState(false);
 
-    const [categoryName, setCategoryName] = useState(category.id);
+    const [categoryName, setCategoryName] = useState('');
     const [serviceCategoryError, setServiceCategoryError] = useState(false);
 
-    const [timeRequired, setTimeRequired] = useState(time);
+    const [timeRequired, setTimeRequired] = useState('');
     const [serviceTimeError, setServiceTimeError] = useState(false);
 
-    const [timeType, setTimeType] = useState(time_type);
+    const [timeType, setTimeType] = useState('');
 
-    const [serviceStatus, setServiceStatus] = useState(status);
+    const [serviceStatus, setServiceStatus] = useState('');
 
-    const [type, setType] = useState(products.length > 0 ? 'multiple' : 'individually');
+    const [type, setType] = useState('');
 
     const [allProducts, setAllProducts] = useState([]);
 
-    const [uploadedImages, setUploadedImages] = useState([{ data_url: image }]);
+    const [uploadedImages, setUploadedImages] = useState([{ data_url: '' }]);
 
-    const [defaultImage, setDefaultImage] = useState(image);
+    const [defaultImage, setDefaultImage] = useState('');
 
     const maxNumber = 1;
+
+    const fetchData = useCallback(( ) => {
+        setLoading(true);
+        axios.get(`/vendors/services/${id}?&include[]=category&include[]=location&include[]=users&include[]=company&include[]=products`, {
+            headers: {
+                'Accept-Language': lang
+            }
+        }).then(response => {
+            setServiceData(response.data);
+            setServiceName(response.data.name);
+            const html = response.data.description;
+            const contentBlock = htmlToDraft(html);
+            const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
+            setEditorState(EditorState.createWithContent(contentState))
+            setServicePrice(response.data.price);
+            setServiceDiscount(response.data.discount);
+            setDiscountType(response.data.discount_type);
+            setPriceAfterDiscount(response.data.discount_price);
+            setEmployeeName(response.data.users[0] ? response.data.users[0].id : '');
+            setServiceStatus(response.data.status);
+            setUploadedImages([{ data_url: response.data.image }]);
+            setDefaultImage(response.data.image);
+            setLocationName(response.data.location.id);
+            setCategoryName(response.data.category.id);
+            setTimeRequired(response.data.time);
+            setTimeType(response.data.time_type);
+            setType(response.data.products.length > 0 ? 'multiple' : 'individually');
+            if (response.data.products.length > 0) {
+                let fetchedProducts = response.data.products.map(product => {
+                    return {
+                        id: product.pivot.products_id,
+                        name: product.name,
+                        quantity: product.pivot.product_quantity,
+                        unit_id: product.pivot.unit_id,
+                    }
+                })
+                dispatch({ type: 'SET_PRODUCTS', payload: fetchedProducts })
+            }
+            setLoading(false);
+        })
+            .catch(err => {
+                setLoading(false);
+                toast.error(t('Error Happened'), {
+                    position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                    closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+                });
+            })
+    }, [id, lang, t])
+
+    useEffect(() => {
+        if (id) {
+            fetchData();
+        }
+    }, [fetchData, id]);
 
     useEffect(() => {
         if (uploadedImages[0].file === undefined) {
@@ -564,307 +610,317 @@ const EditModal = (props) => {
         onConfirm(formData);
     }, [cart.products, categoryName, discountType, editorState, employeeName, fetchedCategories, fetchedLocations, id, locationName, onConfirm, priceAfterDiscount, serviceDiscount, serviceName, servicePrice, servicePriceError, serviceStatus, timeRequired, timeType, type, uploadedImages])
 
-    let content = (
-        <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-                <CustomTextField id="service-name" label={t('name')} variant="outlined" value={serviceName} onChange={serviceNameChangeHandler} />
-                {serviceNameError && <ValidationMessage notExist>{t(`Please add name`)}</ValidationMessage>}
-            </Grid>
-            <Grid item xs={12} sm={6}>
-                <FormControl sx={{ width: '100%' }}>
-                    <Select
-                        value={serviceStatus}
-                        onChange={serviceStatusChangeHandler}
-                        inputProps={{ 'aria-label': 'Without label' }}
-                    >
-                        <MenuItem value='active'>{t('active')}</MenuItem>
-                        <MenuItem value='inactive'>{t('inactive')}</MenuItem>
-                    </Select>
-                </FormControl>
-            </Grid>
-            <Grid item xs={12}>
-                <EditorWrapper>
-                    <Editor
-                        editorState={editorState}
-                        wrapperClassName="demo-wrapper"
-                        editorClassName="demo-editor"
-                        onEditorStateChange={onEditorChange}
-                        textAlignment={themeCtx.direction === 'rtl' ? 'right' : 'left'}
-                    />
-                </EditorWrapper>
-                {serviceDescriptionError && <ValidationMessage notExist>{t(`Please add Description`)}</ValidationMessage>}
-            </Grid>
-            <Grid item xs={12} sm={6}>
-                <CustomTextField id="service-price" type='number' label={t('price')} variant="outlined" value={servicePrice} onChange={servicePriceChangeHandler} />
-                {servicePriceError && <ValidationMessage notExist>{t(`Please add Price`)}</ValidationMessage>}
-            </Grid>
-            <Grid item xs={12} sm={6}>
-                <CustomFormGroup>
-                    <CustomTextField id="service-discount" type='number' label={t('discount')} variant="outlined" value={serviceDiscount} onChange={serviceDiscountChangeHandler} />
-                    <FormControl sx={{ minWidth: 120, ml: 1 }}>
+
+    let content;
+
+    if (loading) {
+        content = <Loader height='50vh' />
+    }
+
+    if (serviceData && !loading) {
+        content = (
+            <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                    <CustomTextField id="service-name" label={t('name')} variant="outlined" value={serviceName} onChange={serviceNameChangeHandler} />
+                    {serviceNameError && <ValidationMessage notExist>{t(`Please add name`)}</ValidationMessage>}
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <FormControl sx={{ width: '100%' }}>
                         <Select
-                            value={discountType}
-                            onChange={discountTypeChangeHandler}
+                            value={serviceStatus}
+                            onChange={serviceStatusChangeHandler}
                             inputProps={{ 'aria-label': 'Without label' }}
                         >
-                            <MenuItem value='percent'>{t('percent')}</MenuItem>
-                            <MenuItem value='fixed'>{t('Fixed')}</MenuItem>
+                            <MenuItem value='active'>{t('active')}</MenuItem>
+                            <MenuItem value='inactive'>{t('inactive')}</MenuItem>
                         </Select>
                     </FormControl>
-                </CustomFormGroup>
-            </Grid>
-            <Grid item xs={12}>
-                <PriceCalculation>
-                    <p>{t('price after discount')}</p>
-                    <p>{formatCurrency(priceAfterDiscount)}</p>
-                </PriceCalculation>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-                <FormControl sx={{ width: '100%' }}>
-                    <InputLabel id="location-label">{t('location')}</InputLabel>
-                    <Select
-                        value={locationName}
-                        onChange={handleLocationChange}
-                        inputProps={{ 'aria-label': 'Without label' }}
-                        label={t('location')}
-                    >
-                        {fetchedLocations.map((location) => (
-                            <MenuItem
-                                key={location.id}
-                                value={location.id}
+                </Grid>
+                <Grid item xs={12}>
+                    <EditorWrapper>
+                        <Editor
+                            editorState={editorState}
+                            wrapperClassName="demo-wrapper"
+                            editorClassName="demo-editor"
+                            onEditorStateChange={onEditorChange}
+                            textAlignment={themeCtx.direction === 'rtl' ? 'right' : 'left'}
+                        />
+                    </EditorWrapper>
+                    {serviceDescriptionError && <ValidationMessage notExist>{t(`Please add Description`)}</ValidationMessage>}
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <CustomTextField id="service-price" type='number' label={t('price')} variant="outlined" value={servicePrice} onChange={servicePriceChangeHandler} />
+                    {servicePriceError && <ValidationMessage notExist>{t(`Please add Price`)}</ValidationMessage>}
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <CustomFormGroup>
+                        <CustomTextField id="service-discount" type='number' label={t('discount')} variant="outlined" value={serviceDiscount} onChange={serviceDiscountChangeHandler} />
+                        <FormControl sx={{ minWidth: 120, ml: 1 }}>
+                            <Select
+                                value={discountType}
+                                onChange={discountTypeChangeHandler}
+                                inputProps={{ 'aria-label': 'Without label' }}
                             >
-                                {location.name}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-                {serviceLocationError && <ValidationMessage notExist>{t(`Please add Location`)}</ValidationMessage>}
-            </Grid>
-            <Grid item xs={12} sm={6}>
-                <FormControl sx={{ width: '100%' }}>
-                    <InputLabel id="categories-label">{t('categories')}</InputLabel>
-                    <Select
-                        label={t('categories')}
-                        value={categoryName}
-                        onChange={handleCategoryChange}
-                        inputProps={{ 'aria-label': 'Without label' }}
-                    >
-                        {fetchedCategories.map((category) => (
-                            <MenuItem
-                                key={category.id}
-                                value={category.id}
-                            >
-                                {category.name}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-                {serviceCategoryError && <ValidationMessage notExist>{t(`Please add Category`)}</ValidationMessage>}
-            </Grid>
-            <Grid item xs={12} sm={6}>
-                <CustomFormGroup>
-                    <CustomTextField id="service-time" type='number' label={t('time')} variant="outlined" value={timeRequired} onChange={serviceTimeChangeHandler} />
-                    <FormControl sx={{ minWidth: 120, ml: 1 }}>
+                                <MenuItem value='percent'>{t('percent')}</MenuItem>
+                                <MenuItem value='fixed'>{t('Fixed')}</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </CustomFormGroup>
+                </Grid>
+                <Grid item xs={12}>
+                    <PriceCalculation>
+                        <p>{t('price after discount')}</p>
+                        <p>{formatCurrency(priceAfterDiscount)}</p>
+                    </PriceCalculation>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <FormControl sx={{ width: '100%' }}>
+                        <InputLabel id="location-label">{t('location')}</InputLabel>
                         <Select
-                            value={timeType}
-                            onChange={timeTypeChangeHandler}
+                            value={locationName}
+                            onChange={handleLocationChange}
                             inputProps={{ 'aria-label': 'Without label' }}
+                            label={t('location')}
                         >
-                            <MenuItem value='minutes'>{t('minutes')}</MenuItem>
-                            <MenuItem value='hours'>{t('hours')}</MenuItem>
-                            <MenuItem value='days'>{t('days')}</MenuItem>
-                        </Select>
-                    </FormControl>
-                </CustomFormGroup>
-                {serviceTimeError && <ValidationMessage notExist>{t(`Please add Time`)}</ValidationMessage>}
-            </Grid>
-            <Grid item xs={12} sm={6} >
-                <FormControl sx={{ width: '100%' }}>
-                    <InputLabel id="employee-label">{t('employee')}</InputLabel>
-                    <Select
-                        label={t('employee')}
-                        labelId="employee-label"
-                        id="select-multiple-employees"
-                        value={employeeName}
-                        onChange={handleEmployeesChange}
-                        input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
-                        MenuProps={MenuProps}
-                        renderValue={(val) => {
-                            const selected = fetchedEmployees?.find(employee => employee.id === val)
-                            return (
-                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                    <Chip key={selected.id} label={selected.name} />
-                                </Box>
-                            )
-                        }}
-                    >
-                        {fetchedEmployees.map((employee) => (
-                            <MenuItem
-                                key={employee.id}
-                                value={employee.id}
-                            >
-                                {employee.name}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-                {employeeNameError && <ValidationMessage notExist>{t(`Please add Employee`)}</ValidationMessage>}
-            </Grid>
-            <Grid item xs={12} sm={6}>
-                <FormControl sx={{ width: '100%', textAlign: 'left' }} component="fieldset">
-                    <FormLabel component="legend">{t('service type')}</FormLabel>
-                    <RadioGroup row aria-label="type" name="row-radio-buttons-group" value={type} onChange={unitTypeChangeHandler} >
-                        <FormControlLabel value="individually" control={<Radio />} label={t('single')} />
-                        <FormControlLabel value="multiple" control={<Radio />} label={t('combo')} />
-                    </RadioGroup>
-                </FormControl>
-            </Grid>
-            <Grid item xs={12}>
-                {
-                    type === 'multiple' && (
-                        <Fragment>
-                            <Grid item xs={12}>
-                                <BookingActions>
-                                    <ActionButton onClick={addToCartHandler}  >{t('add item')}</ActionButton>
-                                    <ActionButton onClick={resetCartHandler}  >{t('clear all')}</ActionButton>
-                                </BookingActions>
-                            </Grid>
-                            <TableContainer component={Paper} sx={{ my: 2 }}>
-                                <Table aria-label="products table">
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell sx={{ padding: '16px 8px' }} align="center">{t('product')}</TableCell>
-                                            <TableCell sx={{ padding: '16px 8px' }} align="center">{t('unit')}</TableCell>
-                                            <TableCell sx={{ padding: '16px 8px' }} align="center">{t('quantity')}</TableCell>
-                                            <TableCell sx={{ padding: '16px 8px' }} align="center">{t('action')}</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {cart.products.map(( row, index) => (
-                                            <TableRow
-                                                key={index}
-                                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                            >
-                                                <TableCell component="th" sx={{ padding: '16px 8px' }} scope="row">
-                                                    <FormControl sx={{ width: '100%' }}>
-                                                        <InputLabel id="product-label">{t('product')}</InputLabel>
-                                                        <Select
-                                                            label={t('product')}
-                                                            labelId="product-label"
-                                                            value={row.id}
-                                                            onChange={ ( e ) =>productNameChangeHandler( e.target.value, index )}
-                                                            inputProps={{ 'aria-label': 'Without label' }}
-                                                        >
-                                                            {
-                                                                allProducts.map(product => {
-                                                                    return (
-                                                                        <MenuItem key={product.id} value={product.id}>{product.name}</MenuItem>
-                                                                    )
-                                                                })
-                                                            }
-                                                        </Select>
-                                                    </FormControl>
-                                                </TableCell>
-                                                <TableCell align="center" sx={{ padding: '16px 8px' }}>
-                                                    <FormControl sx={{ width: '100%' }}>
-                                                        <InputLabel id="unit-label">{t('unit')}</InputLabel>
-                                                        <Select
-                                                            label={t('unit')}
-                                                            labelId="unit-label"
-                                                            value={row.unit_id}
-                                                            onChange={ ( e ) =>  productUnitChangeHandler( e.target.value, index )}
-                                                            inputProps={{ 'aria-label': 'Without label' }}
-                                                        >
-                                                            {
-                                                                allUnits.map(unit => {
-                                                                    return (
-                                                                        <MenuItem key={unit.id} value={unit.id}>{unit.name}</MenuItem>
-                                                                    )
-                                                                })
-                                                            }
-                                                        </Select>
-                                                    </FormControl>
-                                                </TableCell>
-                                                <TableCell align="center" sx={{ padding: '16px 8px' }}>
-                                                    <CustomTextField id="unit-quantity" type='number' label={t('quantity')}  sx={{ minWidth: '80px' }}
-                                                        variant="outlined" value={row.quantity} onChange={ ( e ) => productQuantityChangeHandler( e.target.value, index ) }
-                                                        InputProps={{
-                                                            startAdornment: <InputAdornment position="start">{t(row.unitName)} </InputAdornment>,
-                                                        }}
-                                                    />
-                                                </TableCell>
-                                                <TableCell align="center" sx={{ padding: '16px 8px' }}>
-                                                    <Actions remove
-                                                            removeHandler={(id) => removeFromCartHandler(index)}
-                                                        />
-                                                </TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        </Fragment>
-                    )
-                }
-            </Grid>
-            <Grid item xs={12}>
-                <ImageUploading
-                    multiple
-                    value={uploadedImages}
-                    onChange={onImageChangeHandler}
-                    maxNumber={maxNumber}
-                    dataURLKey="data_url"
-                >
-                    {({
-                        imageList,
-                        onImageUpload,
-                        onImageRemoveAll,
-                        onImageUpdate,
-                        onImageRemove,
-                        isDragging,
-                        dragProps,
-                    }) => (
-                        // write your building UI
-                        <div className="upload__image-wrapper">
-                            <UploadImageBody>
-                                <RadioGroup
-                                    aria-label="gender"
-                                    name="controlled-radio-buttons-group"
-                                    value={defaultImage}
-                                    onChange={defaultImageHandler}
-                                    sx={{ width: '100%' }}
+                            {fetchedLocations.map((location) => (
+                                <MenuItem
+                                    key={location.id}
+                                    value={location.id}
                                 >
-                                    <Grid container sx={{ width: '100%' }} spacing={2} >
-                                        {imageList.map((image, index) => (
-                                            <Grid item xs={12} sm={6} key={index} >
-                                                <div style={{ width: '100%' }} >
-                                                    <img src={image['data_url']} alt="" width="100" />
-                                                    <ImageItemBottomBar>
-                                                        <FormControlLabel value={image['data_url']} control={<Radio />} label={t("Default")} />
-                                                        <Button sx={{ mr: 1 }} size="large" variant="outlined" startIcon={<PhotoCamera />} onClick={() => onImageUpdate(index)}>
-                                                            {t('update')}
-                                                        </Button>
-                                                        <IconButton aria-label="delete" size="large" onClick={() => onImageRemove(index)}>
-                                                            <DeleteIcon />
-                                                        </IconButton>
-                                                    </ImageItemBottomBar>
-                                                </div>
-                                            </Grid>
-                                        ))}
-                                    </Grid>
-                                </RadioGroup>
-                            </UploadImageBody>
-                            <UploadImageTopBar>
-                                <Button size="medium" sx={{ mr: 2, color: isDragging && 'red' }} variant="contained" startIcon={<PhotoCamera />} {...dragProps} onClick={onImageUpload} >
-                                    {t('photos')}
-                                </Button>
-                            </UploadImageTopBar>
-                        </div>
-                    )}
-                </ImageUploading>
-            </Grid>
-        </Grid >
-    )
+                                    {location.name}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                    {serviceLocationError && <ValidationMessage notExist>{t(`Please add Location`)}</ValidationMessage>}
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <FormControl sx={{ width: '100%' }}>
+                        <InputLabel id="categories-label">{t('categories')}</InputLabel>
+                        <Select
+                            label={t('categories')}
+                            value={categoryName}
+                            onChange={handleCategoryChange}
+                            inputProps={{ 'aria-label': 'Without label' }}
+                        >
+                            {fetchedCategories.map((category) => (
+                                <MenuItem
+                                    key={category.id}
+                                    value={category.id}
+                                >
+                                    {category.name}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                    {serviceCategoryError && <ValidationMessage notExist>{t(`Please add Category`)}</ValidationMessage>}
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <CustomFormGroup>
+                        <CustomTextField id="service-time" type='number' label={t('time')} variant="outlined" value={timeRequired} onChange={serviceTimeChangeHandler} />
+                        <FormControl sx={{ minWidth: 120, ml: 1 }}>
+                            <Select
+                                value={timeType}
+                                onChange={timeTypeChangeHandler}
+                                inputProps={{ 'aria-label': 'Without label' }}
+                            >
+                                <MenuItem value='minutes'>{t('minutes')}</MenuItem>
+                                <MenuItem value='hours'>{t('hours')}</MenuItem>
+                                <MenuItem value='days'>{t('days')}</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </CustomFormGroup>
+                    {serviceTimeError && <ValidationMessage notExist>{t(`Please add Time`)}</ValidationMessage>}
+                </Grid>
+                <Grid item xs={12} sm={6} >
+                    <FormControl sx={{ width: '100%' }}>
+                        <InputLabel id="employee-label">{t('employee')}</InputLabel>
+                        <Select
+                            label={t('employee')}
+                            labelId="employee-label"
+                            id="select-multiple-employees"
+                            value={employeeName}
+                            onChange={handleEmployeesChange}
+                            input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
+                            MenuProps={MenuProps}
+                            renderValue={(val) => {
+                                const selected = fetchedEmployees?.find(employee => employee.id === val)
+                                return (
+                                    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                        <Chip key={selected.id} label={selected.name} />
+                                    </Box>
+                                )
+                            }}
+                        >
+                            {fetchedEmployees.map((employee) => (
+                                <MenuItem
+                                    key={employee.id}
+                                    value={employee.id}
+                                >
+                                    {employee.name}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                    {employeeNameError && <ValidationMessage notExist>{t(`Please add Employee`)}</ValidationMessage>}
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                    <FormControl sx={{ width: '100%', textAlign: 'left' }} component="fieldset">
+                        <FormLabel component="legend">{t('service type')}</FormLabel>
+                        <RadioGroup row aria-label="type" name="row-radio-buttons-group" value={type} onChange={unitTypeChangeHandler} >
+                            <FormControlLabel value="individually" control={<Radio />} label={t('single')} />
+                            <FormControlLabel value="multiple" control={<Radio />} label={t('combo')} />
+                        </RadioGroup>
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12}>
+                    {
+                        type === 'multiple' && (
+                            <Fragment>
+                                <Grid item xs={12}>
+                                    <BookingActions>
+                                        <ActionButton onClick={addToCartHandler}  >{t('add item')}</ActionButton>
+                                        <ActionButton onClick={resetCartHandler}  >{t('clear all')}</ActionButton>
+                                    </BookingActions>
+                                </Grid>
+                                <TableContainer component={Paper} sx={{ my: 2 }}>
+                                    <Table aria-label="products table">
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell sx={{ padding: '16px 8px' }} align="center">{t('product')}</TableCell>
+                                                <TableCell sx={{ padding: '16px 8px' }} align="center">{t('unit')}</TableCell>
+                                                <TableCell sx={{ padding: '16px 8px' }} align="center">{t('quantity')}</TableCell>
+                                                <TableCell sx={{ padding: '16px 8px' }} align="center">{t('action')}</TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {cart.products.map(( row, index) => (
+                                                <TableRow
+                                                    key={index}
+                                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                                >
+                                                    <TableCell component="th" sx={{ padding: '16px 8px' }} scope="row">
+                                                        <FormControl sx={{ width: '100%' }}>
+                                                            <InputLabel id="product-label">{t('product')}</InputLabel>
+                                                            <Select
+                                                                label={t('product')}
+                                                                labelId="product-label"
+                                                                value={row.id}
+                                                                onChange={ ( e ) =>productNameChangeHandler( e.target.value, index )}
+                                                                inputProps={{ 'aria-label': 'Without label' }}
+                                                            >
+                                                                {
+                                                                    allProducts.map(product => {
+                                                                        return (
+                                                                            <MenuItem key={product.id} value={product.id}>{product.name}</MenuItem>
+                                                                        )
+                                                                    })
+                                                                }
+                                                            </Select>
+                                                        </FormControl>
+                                                    </TableCell>
+                                                    <TableCell align="center" sx={{ padding: '16px 8px' }}>
+                                                        <FormControl sx={{ width: '100%' }}>
+                                                            <InputLabel id="unit-label">{t('unit')}</InputLabel>
+                                                            <Select
+                                                                label={t('unit')}
+                                                                labelId="unit-label"
+                                                                value={row.unit_id}
+                                                                onChange={ ( e ) =>  productUnitChangeHandler( e.target.value, index )}
+                                                                inputProps={{ 'aria-label': 'Without label' }}
+                                                            >
+                                                                {
+                                                                    allUnits.map(unit => {
+                                                                        return (
+                                                                            <MenuItem key={unit.id} value={unit.id}>{unit.name}</MenuItem>
+                                                                        )
+                                                                    })
+                                                                }
+                                                            </Select>
+                                                        </FormControl>
+                                                    </TableCell>
+                                                    <TableCell align="center" sx={{ padding: '16px 8px' }}>
+                                                        <CustomTextField id="unit-quantity" type='number' label={t('quantity')}  sx={{ minWidth: '80px' }}
+                                                            variant="outlined" value={row.quantity} onChange={ ( e ) => productQuantityChangeHandler( e.target.value, index ) }
+                                                            InputProps={{
+                                                                startAdornment: <InputAdornment position="start">{t(row.unitName)} </InputAdornment>,
+                                                            }}
+                                                        />
+                                                    </TableCell>
+                                                    <TableCell align="center" sx={{ padding: '16px 8px' }}>
+                                                        <Actions remove
+                                                                removeHandler={(id) => removeFromCartHandler(index)}
+                                                            />
+                                                    </TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                            </Fragment>
+                        )
+                    }
+                </Grid>
+                <Grid item xs={12}>
+                    <ImageUploading
+                        multiple
+                        value={uploadedImages}
+                        onChange={onImageChangeHandler}
+                        maxNumber={maxNumber}
+                        dataURLKey="data_url"
+                    >
+                        {({
+                            imageList,
+                            onImageUpload,
+                            onImageRemoveAll,
+                            onImageUpdate,
+                            onImageRemove,
+                            isDragging,
+                            dragProps,
+                        }) => (
+                            // write your building UI
+                            <div className="upload__image-wrapper">
+                                <UploadImageBody>
+                                    <RadioGroup
+                                        aria-label="gender"
+                                        name="controlled-radio-buttons-group"
+                                        value={defaultImage}
+                                        onChange={defaultImageHandler}
+                                        sx={{ width: '100%' }}
+                                    >
+                                        <Grid container sx={{ width: '100%' }} spacing={2} >
+                                            {imageList.map((image, index) => (
+                                                <Grid item xs={12} sm={6} key={index} >
+                                                    <div style={{ width: '100%' }} >
+                                                        <img src={image['data_url']} alt="" width="100" />
+                                                        <ImageItemBottomBar>
+                                                            <FormControlLabel value={image['data_url']} control={<Radio />} label={t("Default")} />
+                                                            <Button sx={{ mr: 1 }} size="large" variant="outlined" startIcon={<PhotoCamera />} onClick={() => onImageUpdate(index)}>
+                                                                {t('update')}
+                                                            </Button>
+                                                            <IconButton aria-label="delete" size="large" onClick={() => onImageRemove(index)}>
+                                                                <DeleteIcon />
+                                                            </IconButton>
+                                                        </ImageItemBottomBar>
+                                                    </div>
+                                                </Grid>
+                                            ))}
+                                        </Grid>
+                                    </RadioGroup>
+                                </UploadImageBody>
+                                <UploadImageTopBar>
+                                    <Button size="medium" sx={{ mr: 2, color: isDragging && 'red' }} variant="contained" startIcon={<PhotoCamera />} {...dragProps} onClick={onImageUpload} >
+                                        {t('photos')}
+                                    </Button>
+                                </UploadImageTopBar>
+                            </div>
+                        )}
+                    </ImageUploading>
+                </Grid>
+            </Grid >
+        )
+    }
+
 return (
     <CustomModal show={show} heading={heading} confirmText={confirmText} onConfirm={confirmEditHandler} onClose={closeModalHandler} >
         {content}

@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import ThemeContext from '../../../../../store/theme-context';
 import EnhancedTableHead from './TableHead/TableHead';
-import { fetchServices, deleteService, updateService } from '../../../../../store/actions/index';
+import { fetchServicesTable, deleteService, updateService } from '../../../../../store/actions/index';
 import EnhancedTableBody from './TableBody/TableBody';
 import TablePaginationActions from '../../../../../components/UI/Dashboard/Table/TablePagination/TablePagination';
 import DeleteModal from './DeleteModal/DeleteModal';
@@ -283,9 +283,13 @@ function ServicesTable(props) {
                 <DeleteModal show={deleteModalOpened} id={selectedServiceId}
                     onClose={deleteModalCloseHandler} onConfirm={deleteModalConfirmHandler.bind(null, selectedServiceId)}
                     heading='Do you want To delete this service?' confirmText='delete' />
-                <ViewModal show={viewModalOpened} id={selectedServiceId} fetchedServices={fetchedServices}
-                    onClose={viewModalCloseHandler} onConfirm={viewModalConfirmHandler.bind(null, selectedServiceId)}
-                    heading='view service details' confirmText='edit' />
+                {
+                    viewModalOpened && (
+                        <ViewModal show={viewModalOpened} id={selectedServiceId} fetchedServices={fetchedServices}
+                            onClose={viewModalCloseHandler} onConfirm={viewModalConfirmHandler.bind(null, selectedServiceId)}
+                            heading='view service details' confirmText='edit' />
+                    )
+                }
                 {
                     editModalOpened && (
                         <EditModal show={editModalOpened} id={selectedServiceId} fetchedServices={fetchedServices}
@@ -321,7 +325,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchServicesHandler: (language, page, perPage, orderBy, order) => dispatch(fetchServices(language, page, perPage, orderBy, order)),
+        fetchServicesHandler: (language, page, perPage, orderBy, order) => dispatch(fetchServicesTable(language, page, perPage, orderBy, order)),
         deleteServiceHandler: (id) => dispatch(deleteService(id)),
         updateServiceHandler: (data) => dispatch(updateService(data)),
     }

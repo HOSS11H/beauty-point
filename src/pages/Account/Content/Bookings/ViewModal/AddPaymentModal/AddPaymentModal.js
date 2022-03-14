@@ -64,7 +64,7 @@ const AddPaymentModal = props => {
             .catch(err => {
                 setSending(false);
                 setSuccess(false);
-                toast.error(err.response.data.message, {
+                toast.error(t('Error Happened'), {
                     position: "bottom-right", autoClose: 4000, hideProgressBar: true,
                     closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
                 });
