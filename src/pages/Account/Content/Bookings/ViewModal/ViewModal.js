@@ -445,7 +445,7 @@ const ViewModal = (props) => {
                         <BookingData>
                             <BookingDataHeading>{t('booking time')}</BookingDataHeading>
                             <BookingList>
-                                <li><WatchLaterIcon sx={{ mr: 1 }} />{format(new Date(bookingData.date_time), 'hh:ii a')}</li>
+                                <li><WatchLaterIcon sx={{ mr: 1 }} />{moment.utc(bookingData.date_time).format('hh:mm A')}</li>
                             </BookingList>
                         </BookingData>
                     </Grid>

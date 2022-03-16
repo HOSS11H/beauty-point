@@ -11,7 +11,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { useTranslation } from 'react-i18next';
 import { formatCurrency } from '../../../../../../shared/utility';
-import { format } from 'date-fns/esm';
+import moment from 'moment'
 
 const Wrapper = styled.div`
 	max-width: 95%;
@@ -228,10 +228,10 @@ const BookingInvoice = React.forwardRef((props, ref) => {
 								<ClientBill>رقم الفاتورة : {bookingData.id}</ClientBill>
 							)}
 							<ClientDate>
-								تاريخ الحجز : {format(new Date(bookingData.date_time), 'dd-MM-yyyy')}
+								تاريخ الحجز : {moment.utc(bookingData.date_time).format('YYYY-MM-DD')}
 							</ClientDate>
 							<ClientDate>
-								<span>{format(new Date(bookingData.date_time), 'hh:ii a')}</span>
+								<span>{moment.utc(bookingData.date_time).format('hh:mm a')}</span>
 								<span> : وقت الحجز</span>
 							</ClientDate>
 							<Grid sx={{ width: '100%' }} container spacing={2}>

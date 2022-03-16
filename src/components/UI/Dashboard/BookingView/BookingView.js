@@ -10,6 +10,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { Fragment } from 'react';
 import { useTranslation } from "react-i18next";
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
+import moment from 'moment';
 
 const CustomCardMui = styled(Card)`
     &.MuiPaper-root {
@@ -193,7 +194,7 @@ const BookingView = props => {
                         <ul>
                             <li className="id" >{`# ${booking.id}`}</li>
                             <li><EventNoteIcon sx={{ mr: 1 }} />{booking.date}</li>
-                            <li><WatchLaterIcon sx={{ mr: 1 }} />{booking.time}</li>
+                            <li><WatchLaterIcon sx={{ mr: 1 }} />{moment.utc(booking.date_time).format('hh:mm A')}</li>
                         </ul>
                     </BookingAppointment>
                     <BookingStatus className={booking.status}>

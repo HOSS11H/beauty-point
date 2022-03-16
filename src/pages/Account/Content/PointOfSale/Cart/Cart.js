@@ -32,10 +32,11 @@ import { formatCurrency } from '../../../../../shared/utility';
 import { Fragment } from 'react';
 import SearchCustomer from './SearchCustomer/SearchCustomer';
 import { toast } from 'react-toastify';
-
+import moment from 'moment'
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
+import { format } from 'date-fns';
 
 const CustomerCard = styled.div`
     padding: 20px;
@@ -414,7 +415,7 @@ const Cart = props => {
         }
         const data = {
             customerId: customerData.id,
-            dateTime: dateTime,
+            dateTime: format(dateTime, 'yyyy-MM-dd hh:mm a'),
             cart: cartData,
             totalPrice: totalPrice,
             couponId: couponData.id ? couponData.id : null,
@@ -446,7 +447,7 @@ const Cart = props => {
         }
         const data = {
             customerId: customerData.id,
-            dateTime: dateTime,
+            dateTime: format(dateTime, 'yyyy-MM-dd hh:mm a'),
             cart: cartData,
             totalPrice: totalPrice,
             couponId: couponData.id ? couponData.id : null,

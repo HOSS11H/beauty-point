@@ -323,13 +323,13 @@ const Cart = props => {
 
     const handleChoosePayment = useCallback((payment) => {
         setPaymentMethod(payment);
-        const chosenDate = format(appointment, 'yyyy/MM/dd');
+        const chosenDate = format(appointment, 'yyyy-MM-dd');
         const combined = chosenDate + " " + slot;
-        const toDate = new Date(combined).toISOString()
         if (payment === 'cash') {
             let data = {
                 company_id: salonData.id,
-                dateTime: toDate,
+                dateTime: combined,
+                //dateTime: format(dateTime, 'yyyy-MM-dd hh:mm a'),
                 payment_gateway: payment,
                 cart: cart,
                 couponId: couponId,

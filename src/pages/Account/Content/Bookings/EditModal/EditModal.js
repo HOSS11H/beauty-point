@@ -35,6 +35,8 @@ import ValidationMessage from '../../../../../components/UI/ValidationMessage/Va
 import Loader from '../../../../../components/UI/Loader/Loader';
 import axios from 'axios';
 import v2 from '../../../../../utils/axios-instance'
+import moment from 'moment'
+import { format } from 'date-fns';
 
 const ClientDetails = styled.div`
     display: flex;
@@ -352,7 +354,7 @@ const EditModal = (props) => {
             .then(axios.spread((...responses) => {
                 setBookingData(responses[0].data);
                 setBookingStatus(responses[0].data.status);
-                setDateTime(new Date(responses[0].data.date_time));
+                setDateTime(moment.utc(responses[0].data.date_time).format('YYYY-MM-DD HH:mm a'));
                 setPaymentStatus(responses[0].data.payment_status);
                 setPaymentGateway(responses[0].data.payment_gateway);
                 setHasVat(responses[0].data.has_vat);
@@ -622,7 +624,7 @@ const EditModal = (props) => {
         const booking = {
             id: id,
             customerId: bookingData.user.id,
-            dateTime: dateTime,
+            dateTime: format(dateTime, 'yyyy-MM-dd hh:mm a'),
             payment_gateway: paymentGateway,
             payment_status: paymentStatus,
             status: bookingStatus,
