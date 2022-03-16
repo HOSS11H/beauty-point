@@ -32,6 +32,7 @@ import AddPaymentModal from './AddPaymentModal/AddPaymentModal';
 import moment from 'moment';
 import { format } from 'date-fns';
 import { LoadingButton } from '@mui/lab';
+import BookingInvoice from './BookingInvoice/BookingInvoice';
 
 const ClientDetails = styled.div`
     display: flex;
@@ -188,12 +189,42 @@ const ViewModal = (props) => {
 
     const [loading, setLoading] = useState(false);
     const [bookingData, setBookingData] = useState(null);
+
+    const [loadingIntialItems, setLoadingIntialItems] = useState(false);
+
     const [loadingItems, setLoadingItems] = useState(false);
-    const [ items, setItems ] = useState({ meta: {current_page: 1, last_page: 2,}, links: { next: null } });
+    const [items, setItems] = useState({ data: [], meta: { current_page: 1, last_page: 2, }, links: { next: null } });
+
+    const [loadingAllItems, setLoadingAllItems] = useState(null);
+    const [allItems, setAllItems] = useState(null)
 
     const [qrCode, setQrCode] = useState(null);
 
     const [paymentModalOpened, setPaymentModalOpened] = useState(false);
+
+    const getItems = useCallback(() => {
+        setLoadingIntialItems(true)
+        const headers = {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        }
+        const bookingItemsEndpoint = `${v2.defaults.baseURL}/vendors/bookings/${id}/items`;
+
+        const getItemsData = axios.get(bookingItemsEndpoint, headers);
+
+        axios.all([getItemsData])
+            .then(axios.spread((...responses) => {
+                setLoadingIntialItems(false)
+                setItems(responses[0].data)
+            }))
+            .catch(error => {
+                setLoadingIntialItems(false)
+                console.log(error);
+            });
+    }, [id])
 
     const fetchData = useCallback(() => {
         setLoading(true);
@@ -206,26 +237,24 @@ const ViewModal = (props) => {
         }
         const bookingDataEndpoint = `${v2.defaults.baseURL}/vendors/bookings/${id}?include[]=user&include[]=payments`;
         const qrCodeEndpoint = `${v2.defaults.baseURL}/vendors/bookings/${id}/qr`;
-        const bookingItemsEndpoint = `${v2.defaults.baseURL}/vendors/bookings/${id}/items`;
 
         const getBookingData = axios.get(bookingDataEndpoint, headers);
         const getQrCode = axios.get(qrCodeEndpoint, headers);
-        const getItemsData = axios.get(bookingItemsEndpoint, headers);
 
-        axios.all([getBookingData, getQrCode, getItemsData])
+        axios.all([getBookingData, getQrCode])
             .then(axios.spread((...responses) => {
                 setBookingData(responses[0].data);
                 setQrCode(responses[1].data.data);
-                setItems(responses[2].data)
                 setLoading(false);
+                getItems()
             }))
             .catch(error => {
                 setLoading(false);
             });
-    }, [id])
+    }, [getItems, id])
 
-    const getMoreItems = useCallback(( ) => {
-        if ( items.meta.current_page  === items.meta.last_page ) {
+    const getMoreItems = useCallback(() => {
+        if (items.meta.current_page === items.meta.last_page) {
             return;
         }
         const nextPage = items.links.next.slice(-1);
@@ -243,10 +272,10 @@ const ViewModal = (props) => {
         setLoadingItems(true)
         axios.all([getItemsData])
             .then(axios.spread((...responses) => {
-                setItems( prevItems =>{
+                setItems(prevItems => {
                     return {
                         ...responses[0].data,
-                        data: [ ...prevItems.data, ...responses[0].data.data ]
+                        data: [...prevItems.data, ...responses[0].data.data]
                     }
                 })
                 setLoadingItems(false);
@@ -279,15 +308,102 @@ const ViewModal = (props) => {
         fetchData();
     }, [fetchData])
 
+    const getAllItems = useCallback(() => {
+        const headers = {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        }
+
+        const bookingItemsEndpoint = `${v2.defaults.baseURL}/vendors/bookings/${id}/items?per_page=${items.meta.total}`;
+
+        const getAllItemsData = axios.get(bookingItemsEndpoint, headers);
+        setLoadingAllItems(true)
+        axios.all([getAllItemsData])
+            .then(axios.spread((...responses) => {
+                setAllItems(responses[0].data.data)
+                setLoadingAllItems(false);
+                if (qrCode) {
+                    printBookingHandler();
+                }
+            }))
+            .catch(error => {
+                setLoadingAllItems(false);
+            });
+    }, [id, items.meta.total, printBookingHandler, qrCode])
+
+    const printHandler = useCallback(() => {
+        getAllItems()
+    }, [getAllItems])
+
     let content;
+    let viewedItems;
 
     if (loading) {
         content = (
             <Loader height='50vh' />
         )
     }
+    if (loadingIntialItems) {
+        viewedItems = (
+            <Loader height='150px' />
+        )
+    }
 
-    if (bookingData && !loading && items) {
+    if (items && !loadingIntialItems && items.data.length > 0) {
+        viewedItems = (
+            <Grid item xs={12}>
+                <BookingData>
+                    <BookingDataHeading>{t('booking items')}</BookingDataHeading>
+                    <TableContainer component={Paper} sx={{ my: 2 }}>
+                        <Table aria-label="simple table">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell align="center">{t('item')}</TableCell>
+                                    <TableCell align="center">{t('employee')}</TableCell>
+                                    <TableCell align="center">{t('price')}</TableCell>
+                                    <TableCell align="center">{t('quantity')}</TableCell>
+                                    <TableCell align="center">{t('total')}</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {items.data.map((item) => (
+                                    <TableRow
+                                        key={item.id}
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <TableCell component="th" scope="row">
+                                            <ItemInfo>
+                                                {item.item.name}
+                                                <ItemType className={item.item.type}>{t(item.item.type)}</ItemType>
+                                            </ItemInfo>
+                                        </TableCell>
+                                        <TableCell align="center">
+                                            {
+                                                item.employee && (
+                                                    <ServiceEmployee>
+                                                        <span>{item.employee.name}</span>
+                                                    </ServiceEmployee>
+                                                )
+                                            }
+                                        </TableCell>
+                                        <TableCell align="center">{item.price}</TableCell>
+                                        <TableCell align="center">{item.quantity}</TableCell>
+                                        <TableCell align="center">{formatCurrency(item.amount)}</TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                </BookingData>
+                {items.meta.current_page !== items.meta.last_page && <LoadingButton loading={loadingItems} onClick={getMoreItems} variant='text'>{t('Show more')}</LoadingButton>}
+            </Grid>
+        )
+    }
+
+    if (bookingData && !loading) {
         content = (
             <Fragment>
                 <Grid container spacing={3}>
@@ -333,56 +449,7 @@ const ViewModal = (props) => {
                             </BookingList>
                         </BookingData>
                     </Grid>
-                    {
-                        (items.data.length > 0) && (
-                            <Grid item xs={12}>
-                                <BookingData>
-                                    <BookingDataHeading>{t('booking items')}</BookingDataHeading>
-                                    <TableContainer component={Paper} sx={{ my: 2 }}>
-                                        <Table aria-label="simple table">
-                                            <TableHead>
-                                                <TableRow>
-                                                    <TableCell align="center">{t('item')}</TableCell>
-                                                    <TableCell align="center">{t('employee')}</TableCell>
-                                                    <TableCell align="center">{t('price')}</TableCell>
-                                                    <TableCell align="center">{t('quantity')}</TableCell>
-                                                    <TableCell align="center">{t('total')}</TableCell>
-                                                </TableRow>
-                                            </TableHead>
-                                            <TableBody>
-                                                {items.data.map((item) => (
-                                                    <TableRow
-                                                        key={item.id}
-                                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                                    >
-                                                        <TableCell component="th" scope="row">
-                                                            <ItemInfo>
-                                                                {item.item.name}
-                                                                <ItemType className={item.item.type}>{t(item.item.type)}</ItemType>
-                                                            </ItemInfo>
-                                                        </TableCell>
-                                                        <TableCell align="center">
-                                                            {
-                                                                item.employee && (
-                                                                    <ServiceEmployee>
-                                                                        <span>{item.employee.name}</span>
-                                                                    </ServiceEmployee>
-                                                                )
-                                                            }
-                                                        </TableCell>
-                                                        <TableCell align="center">{item.price}</TableCell>
-                                                        <TableCell align="center">{item.quantity}</TableCell>
-                                                        <TableCell align="center">{formatCurrency(item.amount)}</TableCell>
-                                                    </TableRow>
-                                                ))}
-                                            </TableBody>
-                                        </Table>
-                                    </TableContainer>
-                                </BookingData>
-                                {items.meta.current_page  !== items.meta.last_page && <LoadingButton loading={loadingItems} onClick={getMoreItems} variant='text'>{t('Show more')}</LoadingButton>}
-                            </Grid>
-                        )
-                    }
+                    {viewedItems}
                     <Grid item xs={12} sm={6} md={6}>
                         <BookingData>
                             <BookingDataHeading>{t('payment method')}</BookingDataHeading>
@@ -470,19 +537,19 @@ const ViewModal = (props) => {
                     </Grid>
                     <Grid item xs={12}>
                         <BookingActions>
-                            <ActionButton onClick={() => qrCode && printBookingHandler()}  ><PrintIcon />{t('print')}</ActionButton>
-                            {bookingData.payment_status === 'refunded' && <ActionButton onClick={() => qrCode && printBookingHandler()}  ><PrintIcon />{t('print refunded invoice')}</ActionButton>}
+                            <ActionButton loading={loadingAllItems} onClick={printHandler}  ><PrintIcon />{t('print')}</ActionButton>
+                            {bookingData.payment_status === 'refunded' && <ActionButton loading={loadingAllItems} onClick={printHandler}  ><PrintIcon />{t('print refunded invoice')}</ActionButton>}
                         </BookingActions>
                     </Grid>
-                    {qrCode && <Invoice userData={userData} ref={invoiceRef} bookingData={bookingData} qrCode={qrCode} />}
+                    {qrCode && <BookingInvoice userData={userData} ref={invoiceRef} bookingData={bookingData} items={allItems} qrCode={qrCode} />}
                     {/*<Grid item xs={12}>
                         {/* <BookingActions>
                             <DeleteButton onClick={(id) => onDelete(bookingData.id)} >{t('Delete')}</DeleteButton>
                         </BookingActions> 
                     </Grid>*/}
                 </Grid>
-                <AddPaymentModal show={paymentModalOpened} id={id} 
-                    remainingAmount={bookingData.remaining_amount} 
+                <AddPaymentModal show={paymentModalOpened} id={id}
+                    remainingAmount={bookingData.remaining_amount}
                     onClose={handlePaymentModalClose} onConfirm={handlePaymentModalConfirm}
                     heading='add new payment' confirmText='add' />
             </Fragment>

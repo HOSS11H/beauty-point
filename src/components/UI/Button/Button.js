@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import { Button } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 
-export const CustomButton = styled(Button)`
+export const CustomButton = styled(LoadingButton)`
     &.MuiButton-root {
         font-size: 18px;
         padding:0 20px;
