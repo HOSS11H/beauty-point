@@ -22,7 +22,13 @@ export const fetchPermissionsFailed = ( errorMessage ) => {
 export const fetchPermissions = ( roleId, lang ) => {
     return dispatch => {
         dispatch( fetchPermissionsStart( ) )
-        v1.get(`/vendors/settings/roles/${roleId}/permissions`, { 
+        let url ;
+        if ( roleId === 'customer') {
+            url = `/vendors/settings/roles/2/permissions`
+        } else {
+            url = `/vendors/settings/roles/${roleId}/permissions`
+        }
+        v1.get(url, { 
             headers: {
                 'Accept-Language': lang
             }
