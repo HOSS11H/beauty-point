@@ -354,7 +354,7 @@ const EditModal = (props) => {
             .then(axios.spread((...responses) => {
                 setBookingData(responses[0].data);
                 setBookingStatus(responses[0].data.status);
-                setDateTime(moment.utc(responses[0].data.date_time).format('YYYY-MM-DD HH:mm a'));
+                setDateTime(new Date(moment.utc(responses[0].data.date_time).format('YYYY-MM-DD HH:mm a')));
                 setPaymentStatus(responses[0].data.payment_status);
                 setPaymentGateway(responses[0].data.payment_gateway);
                 setHasVat(responses[0].data.has_vat);
@@ -621,6 +621,7 @@ const EditModal = (props) => {
             setServicesEmployeeError(true)
             return;
         }
+        console.log(dateTime)
         const booking = {
             id: id,
             customerId: bookingData.user.id,
