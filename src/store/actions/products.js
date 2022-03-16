@@ -93,7 +93,7 @@ export const updateProduct = (data) => {
                 dispatch(updateProductSuccess( data));
             })
             .catch(err => {
-                const errs = err.response.data.errors;
+                const errs = err.response.data ? err.response.data.errors : { message : [ err.response.data.message ] };
                 for (let key in errs) {
                     dispatch(updateProductFailed(errs[key][0]))
                 }
@@ -134,7 +134,7 @@ export const createProduct = (data) => {
                 })
             })
             .catch(err => {
-                const errs = err.response.data.errors;
+                const errs = err.response.data ? err.response.data.errors : { message : [ err.response.data.message ] };
                 for (let key in errs) {
                     dispatch(createProductFailed(errs[key][0]))
                 }

@@ -159,7 +159,7 @@ export const updateService = (data) => {
                 }, 2000)
             })
             .catch(err => {
-                const errs = err.response.data.errors;
+                const errs = err.response.data ? err.response.data.errors : { message : [ err.response.data.message ] };
                 for (let key in errs) {
                     dispatch(updateServiceFailed(errs[key][0]))
                 }
@@ -200,7 +200,7 @@ export const createService = (data) => {
                 }, 2000)
             })
             .catch(err => {
-                const errs = err.response.data.errors;
+                const errs = err.response.data ? err.response.data.errors : { message : [ err.response.data.message ] };
                 for (let key in errs) {
                     dispatch(createServiceFailed(errs[key][0]))
                 }

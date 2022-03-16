@@ -423,7 +423,7 @@ const PointOfSale = (props) => {
             })
             .catch(err => {
                 setReservingBokking(false);
-                const errs = err.response.data.errors;
+                const errs = err.response.data ? err.response.data.errors : { message : [ err.response.data.message ] };
                 for (let key in errs) {
                     toast.error(errs[key][0], {
                         position: "bottom-right", autoClose: 4000, hideProgressBar: true,

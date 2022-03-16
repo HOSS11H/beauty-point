@@ -92,7 +92,7 @@ export const updateExpense = data => {
                 dispatch(updateExpenseSuccess(data.id));
             })
             .catch(err => {
-                const errs = err.response.data.errors;
+                const errs = err.response.data ? err.response.data.errors : { message : [ err.response.data.message ] };
                 for (let key in errs) {
                     dispatch(updateExpenseFailed(errs[key][0]))
                 }
@@ -159,7 +159,7 @@ export const createExpense = (data) => {
                 dispatch(createExpenseSuccess({ ...data, ...response.data }));
             })
             .catch(err => {
-                const errs = err.response.data.errors;
+                const errs = err.response.data ? err.response.data.errors : { message : [ err.response.data.message ] };
                 for (let key in errs) {
                     dispatch(createExpenseFailed(errs[key][0]))
                 }
@@ -259,7 +259,7 @@ export const updateExpenseCategory = data => {
                 dispatch(updateExpenseCategorySuccess(data));
             })
             .catch(err => {
-                const errs = err.response.data.errors;
+                const errs = err.response.data ? err.response.data.errors : { message : [ err.response.data.message ] };
                 for (let key in errs) {
                     dispatch(updateExpenseCategoryFailed(errs[key][0]))
                 }
@@ -326,7 +326,7 @@ export const createExpenseCategory = (data) => {
                 dispatch(createExpenseCategorySuccess({ ...response.data }));
             })
             .catch(err => {
-                const errs = err.response.data.errors;
+                const errs = err.response.data ? err.response.data.errors : { message : [ err.response.data.message ] };
                 for (let key in errs) {
                     dispatch(createExpenseCategoryFailed(errs[key][0]))
                 }
@@ -425,7 +425,7 @@ export const updateExpenseCustomer = data => {
                 dispatch(updateExpenseCustomerSuccess(data));
             })
             .catch(err => {
-                const errs = err.response.data.errors;
+                const errs = err.response.data ? err.response.data.errors : { message : [ err.response.data.message ] };
                 for (let key in errs) {
                     dispatch(updateExpenseCustomerFailed(errs[key][0]))
                 }
@@ -492,7 +492,7 @@ export const createExpenseCustomer = (data) => {
                 dispatch(createExpenseCustomerSuccess({ ...response.data }));
             })
             .catch(err => {
-                const errs = err.response.data.errors;
+                const errs = err.response.data ? err.response.data.errors : { message : [ err.response.data.message ] };
                 for (let key in errs) {
                     dispatch(createExpenseCustomerFailed(errs[key][0]))
                 }
@@ -590,7 +590,7 @@ export const updateExpenseBank = data => {
                 dispatch(updateExpenseBankSuccess(data));
             })
             .catch(err => {
-                const errs = err.response.data.errors;
+                const errs = err.response.data ? err.response.data.errors : { message : [ err.response.data.message ] };
                 for (let key in errs) {
                     dispatch(updateExpenseBankFailed(errs[key][0]))
                 }
@@ -657,7 +657,7 @@ export const createExpenseBank = (data) => {
                 dispatch(createExpenseBankSuccess({ ...response.data }));
             })
             .catch(err => {
-                const errs = err.response.data.errors;
+                const errs = err.response.data ? err.response.data.errors : { message : [ err.response.data.message ] };
                 for (let key in errs) {
                     dispatch(createExpenseBankFailed(errs[key][0]))
                 }
