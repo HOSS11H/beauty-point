@@ -492,6 +492,7 @@ const resources = {
             'the amount is greater than remaining amount': 'المبلغ أكبر من المبلغ المتبقي',
             'add payment': 'إضافة دفعة',
             'remaining amount: ': 'المبلغ المتبقي: ',
+            'Show more': 'اظهار المزيد',
         }
     }
 };

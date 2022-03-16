@@ -1,7 +1,7 @@
 import { CustomModal } from '../../../../../components/UI/Modal/Modal';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
-import { Grid } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import EventNoteIcon from '@mui/icons-material/EventNote';
 import MailIcon from '@mui/icons-material/Mail';
@@ -31,6 +31,7 @@ import Loader from '../../../../../components/UI/Loader/Loader';
 import AddPaymentModal from './AddPaymentModal/AddPaymentModal';
 import moment from 'moment';
 import { format } from 'date-fns';
+import { LoadingButton } from '@mui/lab';
 
 const ClientDetails = styled.div`
     display: flex;
@@ -185,8 +186,10 @@ const ViewModal = (props) => {
 
     const { t } = useTranslation();
 
-    const [bookingData, setBookingData] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [bookingData, setBookingData] = useState(null);
+    const [loadingItems, setLoadingItems] = useState(false);
+    const [ items, setItems ] = useState({ meta: {current_page: 1, last_page: 2,}, links: { next: null } });
 
     const [qrCode, setQrCode] = useState(null);
 
@@ -201,22 +204,57 @@ const ViewModal = (props) => {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
         }
-        const bookingDataEndpoint = `${v2.defaults.baseURL}/vendors/bookings/${id}?include[]=user&include[]=items&include[]=payments`;
+        const bookingDataEndpoint = `${v2.defaults.baseURL}/vendors/bookings/${id}?include[]=user&include[]=payments`;
         const qrCodeEndpoint = `${v2.defaults.baseURL}/vendors/bookings/${id}/qr`;
+        const bookingItemsEndpoint = `${v2.defaults.baseURL}/vendors/bookings/${id}/items`;
 
-        const getUserData = axios.get(bookingDataEndpoint, headers);
+        const getBookingData = axios.get(bookingDataEndpoint, headers);
         const getQrCode = axios.get(qrCodeEndpoint, headers);
+        const getItemsData = axios.get(bookingItemsEndpoint, headers);
 
-        axios.all([getUserData, getQrCode])
+        axios.all([getBookingData, getQrCode, getItemsData])
             .then(axios.spread((...responses) => {
                 setBookingData(responses[0].data);
                 setQrCode(responses[1].data.data);
+                setItems(responses[2].data)
                 setLoading(false);
             }))
             .catch(error => {
                 setLoading(false);
             });
     }, [id])
+
+    const getMoreItems = useCallback(( ) => {
+        if ( items.meta.current_page  === items.meta.last_page ) {
+            return;
+        }
+        const nextPage = items.links.next.slice(-1);
+        const headers = {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        }
+
+        const bookingItemsEndpoint = `${v2.defaults.baseURL}/vendors/bookings/${id}/items?page=${nextPage}`;
+
+        const getItemsData = axios.get(bookingItemsEndpoint, headers);
+        setLoadingItems(true)
+        axios.all([getItemsData])
+            .then(axios.spread((...responses) => {
+                setItems( prevItems =>{
+                    return {
+                        ...responses[0].data,
+                        data: [ ...prevItems.data, ...responses[0].data.data ]
+                    }
+                })
+                setLoadingItems(false);
+            }))
+            .catch(error => {
+                setLoadingItems(false);
+            });
+    }, [id, items.links.next, items.meta.current_page, items.meta.last_page])
 
     useEffect(() => {
         if (id) {
@@ -249,7 +287,7 @@ const ViewModal = (props) => {
         )
     }
 
-    if (bookingData && !loading) {
+    if (bookingData && !loading && items) {
         content = (
             <Fragment>
                 <Grid container spacing={3}>
@@ -296,7 +334,7 @@ const ViewModal = (props) => {
                         </BookingData>
                     </Grid>
                     {
-                        (bookingData.items.length > 0) && (
+                        (items.data.length > 0) && (
                             <Grid item xs={12}>
                                 <BookingData>
                                     <BookingDataHeading>{t('booking items')}</BookingDataHeading>
@@ -312,7 +350,7 @@ const ViewModal = (props) => {
                                                 </TableRow>
                                             </TableHead>
                                             <TableBody>
-                                                {bookingData.items.map((item) => (
+                                                {items.data.map((item) => (
                                                     <TableRow
                                                         key={item.id}
                                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -334,13 +372,14 @@ const ViewModal = (props) => {
                                                         </TableCell>
                                                         <TableCell align="center">{item.price}</TableCell>
                                                         <TableCell align="center">{item.quantity}</TableCell>
-                                                        <TableCell align="center">{item.amount}</TableCell>
+                                                        <TableCell align="center">{formatCurrency(item.amount)}</TableCell>
                                                     </TableRow>
                                                 ))}
                                             </TableBody>
                                         </Table>
                                     </TableContainer>
                                 </BookingData>
+                                {items.meta.current_page  !== items.meta.last_page && <LoadingButton loading={loadingItems} onClick={getMoreItems} variant='text'>{t('Show more')}</LoadingButton>}
                             </Grid>
                         )
                     }
