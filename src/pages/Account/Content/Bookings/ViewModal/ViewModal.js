@@ -375,8 +375,8 @@ const ViewModal = (props) => {
                                     >
                                         <TableCell component="th" scope="row">
                                             <ItemInfo>
-                                                {item.item.name}
-                                                <ItemType className={item.item.type}>{t(item.item.type)}</ItemType>
+                                                {item.name}
+                                                <ItemType className={item.type}>{t(item.type)}</ItemType>
                                             </ItemInfo>
                                         </TableCell>
                                         <TableCell align="center">

@@ -11,7 +11,7 @@ import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import MailIcon from '@mui/icons-material/Mail';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
-import DateAdapter from '@mui/lab/AdapterDateFns';
+import DateAdapter from '@mui/lab/AdapterMoment';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import TextField from '@mui/material/TextField';
 import Table from '@mui/material/Table';
@@ -354,43 +354,41 @@ const EditModal = (props) => {
             .then(axios.spread((...responses) => {
                 setBookingData(responses[0].data);
                 setBookingStatus(responses[0].data.status);
-                setDateTime(new Date(moment.utc(responses[0].data.date_time).format('YYYY-MM-DD HH:mm a')));
+                setDateTime(new Date(moment.utc(responses[0].data.date_time).format('YYYY-MM-DD HH:mm:ss')));
+                console.log(new Date(moment.utc(responses[0].data.date_time).format('YYYY-MM-DD HH:mm:ss')))
                 setPaymentStatus(responses[0].data.payment_status);
                 setPaymentGateway(responses[0].data.payment_gateway);
                 setHasVat(responses[0].data.has_vat);
                 const items = responses[0].data.items;
                 items.forEach(item => {
-                    if (item.item.type === 'service') {
+                    if (item.type === 'service') {
                         const obj = {
-                            id: item.item.id,
+                            id: item.item_id,
                             quantity: item.quantity,
                             price: item.price,
-                            name: item.item.name,
-                            item: item.item,
+                            name: item.name,
                         }
                         if (item.employee) {
                             obj.employee_id = item.employee.id
                             obj.employee = item.employee;
                         }
                         bookingDataServices.push(obj)
-                    } if (item.item.type === 'product') {
+                    } if (item.type === 'product') {
                         const obj = {
-                            id: item.item.id,
+                            id: item.item_id,
                             quantity: item.quantity,
                             price: item.price,
-                            item: item.item,
                         }
                         if (item.employee) {
                             obj.employee_id = item.employee.id
                             obj.employee = item.employee;
                         }
                         bookingDataProducts.push(obj)
-                    } if (item.item.type === 'deal') {
+                    } if (item.type === 'deal') {
                         const obj = {
-                            id: item.item.id,
+                            id: item.item_id,
                             quantity: item.quantity,
                             price: item.price,
-                            item: item.item,
                         }
                         if (item.employee) {
                             obj.employee_id = item.employee.id
@@ -621,7 +619,6 @@ const EditModal = (props) => {
             setServicesEmployeeError(true)
             return;
         }
-        console.log(dateTime)
         const booking = {
             id: id,
             customerId: bookingData.user.id,

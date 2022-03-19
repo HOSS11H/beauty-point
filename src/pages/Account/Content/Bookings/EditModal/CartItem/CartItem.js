@@ -44,7 +44,7 @@ const CartItem = props => {
             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
         >
             <TableCell component="th" scope="row">
-                <TableData>{row.item.name}</TableData>
+                <TableData>{row.name}</TableData>
             </TableCell>
             <TableCell align="center">
                 <TableData>{formatCurrency(row.price)}</TableData>

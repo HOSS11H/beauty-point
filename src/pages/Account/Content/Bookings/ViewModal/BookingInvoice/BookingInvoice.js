@@ -288,7 +288,7 @@ const BookingInvoice = React.forwardRef((props, ref) => {
 														sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
 													>
 														<CustomTableCell component="th" scope="row" align="center">
-															{<BookingDataBody>{item.item.name}</BookingDataBody>}
+															{<BookingDataBody>{item.name}</BookingDataBody>}
 															{item.employee && <ItemEmployee>( {item.employee.name} )</ItemEmployee>}
 														</CustomTableCell>
 														<CustomTableCell align="center">

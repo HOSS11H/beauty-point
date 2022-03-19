@@ -19,6 +19,8 @@ import PersonIcon from '@mui/icons-material/Person';
 import { useState } from 'react';
 
 import axios from '../../../../../utils/axios-instance'
+import { format } from 'date-fns';
+import moment from 'moment'
 
 const Booking = styled.div`
     display: flex;
@@ -146,19 +148,8 @@ const RecentBookings = props => {
             }
         })
             .then(response => {
-                let editedData = response.data.data.map(item => {
-                    const formattedTime = new Date(item.date_time).toLocaleString()
-                    const arr = formattedTime.replace(/:.. /, " ").split(", ");
-                    let date = arr[0]
-                    let time = arr[1]
-                    return {
-                        ...item,
-                        date: date,
-                        time: time,
-                    }
-                })
                 setLoading(false);
-                setBookings({ ...response.data, data: editedData });
+                setBookings({ ...response.data, data: response.data.data });
             })
             .catch(err => {
                 setLoading(false);
@@ -191,8 +182,8 @@ const RecentBookings = props => {
                     </TableCell>
                     <TableCell align="right">
                         <BookingAppointment>
-                            <li><EventNoteIcon sx={{ mr: 1 }} />{booking.date}</li>
-                            <li><WatchLaterIcon sx={{ mr: 1 }} />{booking.time}</li>
+                            <li><EventNoteIcon sx={{ mr: 1 }} />{format(new Date(booking.date_time), 'Y-MM-dd')}</li>
+                            <li><WatchLaterIcon sx={{ mr: 1 }} />{moment.utc(booking.date_time).format('hh:mm A')}</li>
                         </BookingAppointment>
                     </TableCell>
                     <TableCell align="right">

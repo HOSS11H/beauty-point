@@ -12,6 +12,7 @@ import v1 from '../../../../utils/axios-instance-v1';
 import ViewModal from '../Bookings/ViewModal/ViewModal';
 import { format } from 'date-fns';
 import { useRef } from 'react';
+import moment from 'moment'
 
 const BookingCalendarWrapper = styled.div`
     & .fc-h-event {
@@ -119,7 +120,7 @@ const BookingCalendar = props => {
     const formattedBookingsData = fetchedBookings.data.map(booking => {
         const formattedTime = booking.date_time.split('T')
         let date = formattedTime[0];
-        let time = booking.time;
+        let time = moment.utc(booking.date_time).format('hh:mm A');
         return {
             bookingId: booking.id,
             title: booking.user.name,
