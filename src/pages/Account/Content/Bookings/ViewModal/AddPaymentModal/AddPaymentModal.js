@@ -18,7 +18,7 @@ const AddPaymentModal = props => {
 
     const { t } = useTranslation();
 
-    const [paidAmount, setPaidAmount] = useState(0)
+    const [paidAmount, setPaidAmount] = useState(0.0)
     const [paidAmountError, setPaidAmountError] = useState(false)
 
     const [paymentGateway, setPaymentGateway] = useState('cash')
@@ -28,7 +28,7 @@ const AddPaymentModal = props => {
 
     const paidAmountChangeHandler = (event) => {
         const value = +event.target.value;
-        if (value >= 0) {
+        if (value >= 0.0) {
             setPaidAmountError(false)
             setPaidAmount(value)
         }
@@ -89,7 +89,7 @@ const AddPaymentModal = props => {
         <CustomModal show={show} heading={heading} confirmText={confirmText} onConfirm={confirmAddHandler} onClose={closeModalHandler} >
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
-                    <CustomTextField id="customer-name" label={t('amount')} variant="outlined" value={paidAmount} onChange={paidAmountChangeHandler} />
+                    <CustomTextField id="customer-name" label={t('amount')} variant="outlined" type="number" value={paidAmount} onChange={paidAmountChangeHandler} />
                     {<ValidationMessage exist>{t('remaining amount: ')}{formatCurrency(remainingAmount)}</ValidationMessage>}
                     {paidAmountError && <ValidationMessage notExist>{t(`the amount is greater than remaining amount`)}</ValidationMessage>}
                 </Grid>

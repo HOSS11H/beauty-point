@@ -109,11 +109,11 @@ const EmployeeTable = props => {
                             </TableCell>
                             <TableCell align="center">
                                 <TableData>
-                                    {row.item.name}
+                                    {row.name}
                                 </TableData>
                             </TableCell>
                             <TableCell align="center">
-                                <ItemType className={row.item.type}>{t(row.item.type)}</ItemType>
+                                <ItemType className={row.type}>{t(row.type)}</ItemType>
                             </TableCell>
                             <TableCell align="center">
                                 <TableData>{row.quantity}</TableData>

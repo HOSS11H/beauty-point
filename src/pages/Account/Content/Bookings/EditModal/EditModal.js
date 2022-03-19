@@ -620,7 +620,7 @@ const EditModal = (props) => {
         const booking = {
             id: id,
             customerId: bookingData.user.id,
-            dateTime: dateTime.format('YYYY-MM-DD HH:mm A'),
+            dateTime: dateTime.format('YYYY-MM-DD hh:mm A'),
             payment_gateway: paymentGateway,
             payment_status: paymentStatus,
             status: bookingStatus,
