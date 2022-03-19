@@ -13,7 +13,7 @@ import Brightness2Icon from '@mui/icons-material/Brightness2';
 import { ButtonSmall, ButtonText } from '../../../components/UI/Button/Button';
 import AuthContext from '../../../store/auth-context';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const SwitchBtn = styled(ButtonSmall)`
     &.MuiButton-root {
@@ -82,7 +82,9 @@ function Header(props) {
                         <Grid item xs />
                         <Grid item>
                             <HomeBtn onClick={ ( ) => navigate('/')   }>{t('visit store')}</HomeBtn>
-                            <HomeBtn href='https://old.beautypoint.sa/home' >{t('add new booking')}</HomeBtn>
+                            <NavLink to='point-of-sale'>
+                                <HomeBtn  >{t('add new booking')}</HomeBtn>
+                            </NavLink>
                             <LogoutBtn variant='text' onClick={logoutHandler}>{t('log out')}</LogoutBtn>
                         </Grid>
                     </Grid>

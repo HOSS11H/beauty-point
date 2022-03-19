@@ -87,7 +87,6 @@ const reducer = (state = intialState, action) => {
             const updatedEditedBooking = updateObject(editedBooking, {
                 ...action.bookingData,
             })
-            //console.log(updatedEditedBooking);
             const editedBookings = [...state.bookings.data]
             editedBookings[editedBookingIndex] = updatedEditedBooking
             return updateObject(state, {
