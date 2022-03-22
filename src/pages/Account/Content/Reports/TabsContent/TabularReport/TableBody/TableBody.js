@@ -104,7 +104,7 @@ const EnhancedTableBody = props => {
                         </TableCell>
                         <TableCell align="center">
                             <TableData>
-                                {moment(row.booking_time).format("hh:mm a")}
+                                {moment.utc(row.booking_time).format("hh:mm A")}
                             </TableData>
                         </TableCell>
                         <TableCell align="center">
