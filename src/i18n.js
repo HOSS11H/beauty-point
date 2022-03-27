@@ -493,6 +493,11 @@ const resources = {
             'add payment': 'إضافة دفعة',
             'remaining amount: ': 'المبلغ المتبقي: ',
             'Show more': 'اظهار المزيد',
+            'Your Current Plan is : ': ' الباقة الحالية لديك: ',
+            'monthly price': 'الاشتراك الشهري',
+            'annual price': 'الاشتراك السنوي',
+            'hide all plans': 'إخفاء كل الباقات',
+            'show all plans': 'عرض كل الباقات',
         }
     }
 };

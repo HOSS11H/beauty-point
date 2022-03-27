@@ -16,6 +16,7 @@ import SettingsIcon from '@mui/icons-material/Settings'
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
+import CreditCardIcon from '@mui/icons-material/CreditCard';
 import EventIcon from '@mui/icons-material/Event';
 import InsertChartIcon from '@mui/icons-material/InsertChart';
 import openedLogo from '../../../images/logo/logo_dark.png'
@@ -161,13 +162,13 @@ const Navigator = (props) => {
                     addedRoutes.push({ id: 'employees', name: 'employees', icon: <PersonIcon /> },);
                 }
                 if (permission.name === 'read_employee_group') {
-
+                    
                 }
                 if (permission.name === 'read_employee_leave') {
 
                 }
                 if (permission.name === 'read_employee_schedule') {
-
+                    
                 }
                 if (permission.name === 'read_deal') {
                     addedRoutes.push({ id: 'deals', name: 'deals', icon: <LocalOfferIcon /> });
@@ -178,6 +179,7 @@ const Navigator = (props) => {
                 }
                 if (permission.name === 'manage_settings') {
                     addedRoutes.push({ id: 'settings', name: 'settings', icon: <SettingsIcon /> });
+                    addedRoutes.push({ id: 'plans', name: 'plans', icon: <CreditCardIcon /> });
                 }
             })
             fetchedCategories[0].children = fetchedCategories[0].children.concat(addedRoutes);
