@@ -1,12 +1,16 @@
 import { Container, Card, Button, Stack, Switch, Grid } from '@mui/material';
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
-import axios from '../../../../../utils/axios-instance';
+import v1 from '../../../../../utils/axios-instance-v1';
+import v2 from '../../../../../utils/axios-instance';
+import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import { formatCurrency } from '../../../../../shared/utility';
-import { NavLink } from 'react-router-dom';
+import config from '../configuration.json';
+import { v4 as uuidv4 } from 'uuid';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Loader from '../../../../../components/UI/Loader/Loader';
+import CryptoJS from "crypto-js"
 
 const PackagesWrapper = styled.div`
     padding: 30px 0 70px;
@@ -108,77 +112,149 @@ const SwitcherLabel = styled.p`
     color: ${props => props.theme.palette.text.primary};
 `
 
-const AllPlans = ({ currentPlan }) => {
+const generateHashSHA256 = (hashSequence) => {
+    // hashSequence = trackid | terminalId | password | secret | amount | currency
+    let hash = CryptoJS.SHA256(hashSequence).toString()
+    return hash;
+}
+
+const AllPlans = ({ currentPlanId }) => {
 
     const [isMonthly, setIsMonthly] = useState(true);
 
     const { t } = useTranslation();
     const [packages, setPackages] = useState(null);
+    const [companyData, setCompanyData] = useState(null);
 
     useEffect(() => {
         const controller = new AbortController();
-        axios.get('/packages', {
+        const getCompanyData = v1.get('/vendors/settings/company')
+        const getPackages = v2.get('/packages');
+        axios.all([getCompanyData, getPackages], {
             signal: controller.signal
         })
-            .then(res => {
-                setPackages(res.data.data);
-            })
-            .catch(err => {
-                //console.log(err);
-            })
+            .then(axios.spread((companyData, packagesData) => {
+                setPackages(packagesData.data.data);
+                setCompanyData(companyData.data);
+            }))
+            .catch(error => {
+                console.log(error);
+            });
         return () => {
             controller.abort();
         }
-    }, [])
+    }, []);
 
     const handleChange = (event) => {
         setIsMonthly(event.target.checked);
     };
 
+    const handleSubscribe = (planInfo) => {
+
+        const currency = 'SAR';
+        const amount = isMonthly ? parseFloat(planInfo.monthly_price) : parseFloat(planInfo.annual_price)
+        const trackId = uuidv4()
+        let hashSequence=generateHashSHA256(trackId+"|"+config.terminalId+"|"+config.password+"|"+config.merchantkey+"|"+amount+"|"+currency)
+        const data = {
+            firstName: companyData.companyName,
+            lastName: "",
+            address: companyData.address,
+            city: "",
+            state: "",
+            zipCode: "",
+            phoneNumber: companyData.companyPhone,
+            trackid: trackId,
+            terminalId: config.terminalId,
+            customerEmail: companyData.companyEmail,
+            action: "1",
+            merchantIp: "209.97.140.182",
+            password: config.password,
+            currency: currency,
+            country: "SA",
+            transid: "",
+            amount: amount,
+            tokenOperation: "",
+            cardToken: "",
+            tokenizationType: "0",
+            requestHash: hashSequence,
+            udf1: planInfo.id,
+            udf2: "http://localhost:3000/account/plans/status",
+            udf3: isMonthly ? "monthly" : "annual",
+            udf4: "",
+            udf5: "",
+        }
+        axios.post(config.service_url, data)
+            .then(res => {
+                let index=0;
+                let count=0;
+                let queryParam="";
+                let resParameter = res.data;
+                if (resParameter.targetUrl + "" === "null") {
+                    for (let [key, value] of Object.entries(resParameter)) {
+                        index = ++index;
+                        console.log(`${key} ${value}`);
+                    }
+                    for (let [key, value] of Object.entries(resParameter)) {
+                        count = ++count;
+                        queryParam = queryParam + key + "=" + value;
+                        if (count < index)
+                            queryParam = queryParam + "&"
+                    }
+                    window.location.assign(window.location.origin.toString() + '/status?' + queryParam)
+                } else {
+                    window.location.assign(res.data.targetUrl.replace('?', '') + "?paymentid=" + res.data.payid);
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            }
+            );
+    }
+
 
     let content = (
         <Loader height='200px' />
     );
-    if (packages) {
+    if (packages && companyData) {
         let fetchedPackages = [...packages];
         content = (
             <Container maxWidth="lg">
                 <Grid container spacing={4}>
                     {
-                        fetchedPackages.map((item, index) => {
+                        fetchedPackages.map((plan, index) => {
                             return (
-                                <Grid item key={item.id} xs={12} sm={6} md={4}>
+                                <Grid item key={plan.id} xs={12} sm={6} md={6}  lg={4} >
                                     <PricingPanel>
                                         <div className="pricing-head">
-                                            <div className="pricing-name">{t(item.name)}</div>
+                                            <div className="pricing-name">{t(plan.name)}</div>
                                             <div className="pricing-type">
-                                                <div className="price">{formatCurrency(isMonthly ? item.monthly_price : item.annual_price)}</div>
+                                                <div className="price">{formatCurrency(isMonthly ? plan.monthly_price : plan.annual_price)}</div>
                                                 <div className="per">{isMonthly ? t('per month') : t('per year')}</div>
                                             </div>
                                         </div>
                                         <div className="pricing-body">
                                             <div>
                                                 <ul className="pricing-list">
-                                                    <li>{`${t('max employees')} : ${item.max_employees}`}</li>
-                                                    <li>{`${t('max services')} : ${item.max_services}`}</li>
-                                                    <li>{`${t('max deals')} : ${item.max_services}`}</li>
-                                                    <li>{`${t('max roles')} : ${item.max_services}`}</li>
+                                                    <li>{`${t('max employees')} : ${plan.max_employees}`}</li>
+                                                    <li>{`${t('max services')} : ${plan.max_services}`}</li>
+                                                    <li>{`${t('max deals')} : ${plan.max_services}`}</li>
+                                                    <li>{`${t('max roles')} : ${plan.max_services}`}</li>
                                                 </ul>
-                                                {item.package_modules && <h6 className="list-heading">{t('modules')}</h6>}
+                                                {plan.package_modules && <h6 className="list-heading">{t('modules')}</h6>}
                                                 <ul className="pricing-list">
                                                     {
-                                                        item.package_modules?.map((feature, index) => {
+                                                        plan.package_modules?.map((feature, index) => {
                                                             return (
                                                                 <li key={index}>{t(feature)}</li>
                                                             )
                                                         })
                                                     }
                                                 </ul>
-                                                {item.id === currentPlan.id && (
+                                                {plan.id === currentPlanId && (
                                                     <RecomendedSign><CheckCircleIcon color="success" /></RecomendedSign>
                                                 )}
                                             </div>
-                                            {item.id !== currentPlan.id && <Button variant='outlined' color="secondary">{t('Subscribe')}</Button>}
+                                            {plan.id !== currentPlanId && <Button onClick={handleSubscribe.bind(null, plan)} variant='outlined' color="secondary">{t('Subscribe')}</Button>}
                                         </div>
                                     </PricingPanel>
                                 </Grid>

@@ -178,8 +178,8 @@ const Navigator = (props) => {
                     addedRoutes.push({ id: 'expenses', name: 'expenses', icon: <MonetizationOnIcon /> });
                 }
                 if (permission.name === 'manage_settings') {
-                    addedRoutes.push({ id: 'settings', name: 'settings', icon: <SettingsIcon /> });
                     addedRoutes.push({ id: 'plans', name: 'plans', icon: <CreditCardIcon /> });
+                    addedRoutes.push({ id: 'settings', name: 'settings', icon: <SettingsIcon /> });
                 }
             })
             fetchedCategories[0].children = fetchedCategories[0].children.concat(addedRoutes);

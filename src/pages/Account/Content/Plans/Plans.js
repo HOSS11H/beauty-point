@@ -45,7 +45,7 @@ const Plans = props => {
                 <Box sx={{  margin: '40px auto', textAlign: 'center' }}>
                     <Button onClick={toggleShowPackages} variant='contained' color='secondary'>{t(`${showAllPlans ? 'hide all plans' : 'show all plans'}`)}</Button>
                 </Box>
-                {showAllPlans && <AllPlans  currentPlan={currentPlan} />}
+                {showAllPlans && <AllPlans  currentPlanId={currentPlan.id} />}
             </Fragment>
         )
     }
