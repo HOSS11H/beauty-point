@@ -153,7 +153,7 @@ const AllPlans = ({ currentPlanId }) => {
 
         const currency = 'SAR';
         const amount = isMonthly ? parseFloat(planInfo.monthly_price) : parseFloat(planInfo.annual_price)
-        const trackId = uuidv4()
+        const trackId = Math.floor(Math.random() * 999999);
         let hashSequence=generateHashSHA256(trackId+"|"+config.terminalId+"|"+config.password+"|"+config.merchantkey+"|"+amount+"|"+currency)
         const data = {
             firstName: companyData.companyName,
@@ -167,20 +167,20 @@ const AllPlans = ({ currentPlanId }) => {
             terminalId: config.terminalId,
             customerEmail: companyData.companyEmail,
             action: "1",
-            merchantIp: "209.97.140.182",
+            merchantIp: "197.54.136.206",
             password: config.password,
             currency: currency,
             country: "SA",
             transid: "",
             amount: amount,
-            tokenOperation: "",
+            tokenOperation: null,
             cardToken: "",
             tokenizationType: "0",
             requestHash: hashSequence,
-            udf1: planInfo.id,
+            udf1: "",
             udf2: "http://localhost:3000/account/plans/status",
             udf3: isMonthly ? "monthly" : "annual",
-            udf4: "",
+            udf4: planInfo.id,
             udf5: "",
         }
         axios.post(config.service_url, data)
@@ -200,7 +200,7 @@ const AllPlans = ({ currentPlanId }) => {
                         if (count < index)
                             queryParam = queryParam + "&"
                     }
-                    window.location.assign(window.location.origin.toString() + '/status?' + queryParam)
+                    window.history.push('/status?' + queryParam)
                 } else {
                     window.location.assign(res.data.targetUrl.replace('?', '') + "?paymentid=" + res.data.payid);
                 }
