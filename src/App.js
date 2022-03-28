@@ -61,6 +61,10 @@ const Plans = React.lazy(() =>
   import('./pages/Account/Content/Plans/Plans')
 );
 
+const PaymentStatus = React.lazy(() =>
+  import('./pages/Account/Content/Plans/PaymentStatus/PaymentStatus')
+);
+
 const Settings = React.lazy(() =>
   import('./pages/Account/Content/Settings/Settings')
 );
@@ -174,7 +178,13 @@ function App(props) {
           <Route path="reports" element={<Reports />} />
           <Route path="employees" element={<Employees />} />
           <Route path="customers" element={<Customers />} />
-          <Route path="plans" element={<Plans />} />
+          <Route path="plans/*" element={
+            <Routes>
+              <Route index element={<Plans />} />
+              <Route path="status" element={<PaymentStatus />} />
+            </Routes>
+          }
+          />
           <Route path="settings/*" element={<Settings />}>
             <Route index element={<GeneralSettings />} />
             <Route path="vendor-page" element={<VendorPage />} />

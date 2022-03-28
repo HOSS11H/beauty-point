@@ -153,7 +153,7 @@ const AllPlans = ({ currentPlanId }) => {
 
         const currency = 'SAR';
         const amount = isMonthly ? parseFloat(planInfo.monthly_price) : parseFloat(planInfo.annual_price)
-        const trackId = Math.floor(Math.random() * 999999);
+        const trackId = Date.now();
         let hashSequence=generateHashSHA256(trackId+"|"+config.terminalId+"|"+config.password+"|"+config.merchantkey+"|"+amount+"|"+currency)
         const data = {
             firstName: companyData.companyName,

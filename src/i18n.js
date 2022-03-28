@@ -498,6 +498,12 @@ const resources = {
             'annual price': 'الاشتراك السنوي',
             'hide all plans': 'إخفاء كل الباقات',
             'show all plans': 'عرض كل الباقات',
+            'Package': 'الباقة',
+            'Amount': 'المبلغ',
+            'Next payment Date': 'تاريخ الدفع القادم',
+            'Invoices': 'الفواتير',
+            'Paid Failed': 'فشل الدفع',
+            'Paid Successfully': 'تم الدفع بنجاح',
         }
     }
 };

@@ -1,11 +1,13 @@
 import { Fragment, useEffect, useState } from "react"
 import AllPlans from "./AllPlans/AllPlans"
 import CurrentPlan from "./CurrentPlan/CurrentPlan"
-import axios from '../../../../utils/axios-instance-v1';
+import v1 from '../../../../utils/axios-instance-v1';
+import axios from 'axios';
 import Loader from "../../../../components/UI/Loader/Loader";
 import { Button } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { Box } from "@mui/material";
+import PlansInvoices from "./PlansInvoices/PlansInvoices";
 
 const Plans = props => {
 
@@ -18,13 +20,18 @@ const Plans = props => {
 
     useEffect(() => {
         setLoading(true)
-        axios.get('/vendors/package')
-            .then(res => {
+        const controller = new AbortController();
+        const getCurrentPlanData = v1.get('/vendors/package')
+        axios.all([getCurrentPlanData], {
+            signal: controller.signal
+        })
+            .then(axios.spread((currentPlan) => {
+                setCurrentPlan(currentPlan.data.data)
                 setLoading(false)
-                setCurrentPlan(res.data.data);
-            })
+            }))
             .catch(err => {
-                //console.log(err);
+                console.log(err)
+                setLoading(false)
             })
     }, [])
 
@@ -42,6 +49,7 @@ const Plans = props => {
         content = (
             <Fragment>
                 <CurrentPlan plan={currentPlan} />
+                <PlansInvoices />
                 <Box sx={{  margin: '40px auto', textAlign: 'center' }}>
                     <Button onClick={toggleShowPackages} variant='contained' color='secondary'>{t(`${showAllPlans ? 'hide all plans' : 'show all plans'}`)}</Button>
                 </Box>
