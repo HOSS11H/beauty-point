@@ -23,7 +23,7 @@ export default function Sidebar(props) {
                     <Tab id='vendor-settings' value="vendor-page" label={t("Vendor page Settings")} />
                     <Tab id='booking-settings' value="booking-settings" label={t("Booking Settings")} />
                     <Tab id='roles-settings' value="roles-permissions" label={t("roles & permissions")} />
-                    {/* <Tab value="employee-settings" label={t("Employee Settings")} /> */}
+                    <Tab value="employee-settings" label={t("Employee Settings")} />
                 </Tabs>
             </Box>
         </Card>

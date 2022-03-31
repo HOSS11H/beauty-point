@@ -36,7 +36,7 @@ const PlansInvoices = (props) => {
     useEffect(() => {
         setLoading(true)
         const controller = new AbortController();
-        const getInvoicesData = v2.get(`/vendors/invoices?order_by=id&order_dir=desc&per_page=${rowsPerPage}&page=${page}`)
+        const getInvoicesData = v2.get(`/vendors/invoices?order_by=id&order_dir=desc&per_page=${rowsPerPage}&page=${page + 1}`)
         axios.all([getInvoicesData], {
             signal: controller.signal
         })

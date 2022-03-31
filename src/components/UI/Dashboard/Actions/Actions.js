@@ -10,7 +10,7 @@ const ActionsWrapper = styled.div`
     align-items: center;
     justify-content: center;
 `
-const ActionButton = styled.button`
+export const ActionButton = styled.button`
     display: flex;
     align-items: center;
     justify-content: center;

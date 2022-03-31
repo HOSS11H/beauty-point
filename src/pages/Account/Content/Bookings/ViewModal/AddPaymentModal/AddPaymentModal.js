@@ -69,7 +69,7 @@ const AddPaymentModal = props => {
                     closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
                 });
             })
-    }, [onConfirm])
+    }, [onConfirm, t])
 
     const confirmAddHandler = useCallback(() => {
         if (sending) return;

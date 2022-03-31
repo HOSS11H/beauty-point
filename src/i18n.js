@@ -504,6 +504,15 @@ const resources = {
             'Invoices': 'الفواتير',
             'Paid Failed': 'فشل الدفع',
             'Paid Successfully': 'تم الدفع بنجاح',
+            'start Time': 'وقت البدء',
+            'end Time': 'وقت الاغلاق',
+            'employee name': 'اسم الموظف',
+            'working': 'يعمل',
+            'Employee Settings': 'إعدادات الموظفين',
+            'Error updating info': 'خطأ في تحديث البيانات',
+            'view employee': 'عرض الموظف',
+            'view employee times': 'عرض أوقات الموظف',
+            'edit employee times': 'تعديل أوقات الموظف',
         }
     }
 };
