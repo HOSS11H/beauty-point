@@ -1,8 +1,7 @@
 import { useEffect, useState, Fragment, useCallback } from "react";
 import v2 from '../../../../../utils/axios-instance'
 import { useTranslation } from 'react-i18next';
-import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, Switch, Button, Backdrop, CircularProgress, Snackbar, Alert, FormControl, InputLabel, Select, MenuItem, Box } from "@mui/material";
-import EditModal from "./EditModal/EditModal";
+import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, FormControl, InputLabel, Select, MenuItem, Box } from "@mui/material";
 import styled from "styled-components";
 import Tooltip from '@mui/material/Tooltip';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -29,7 +28,6 @@ export default function EmployeeSettings(props) {
 
     const [selectedEmployeeId, setSelectedEmployeeId] = useState(null);
     const [viewModalOpened, setViewModalOpened] = useState(false);
-    const [editModalOpened, setEditModalOpened] = useState(false);
 
     useEffect(() => {
         setLoading(true)
@@ -58,18 +56,6 @@ export default function EmployeeSettings(props) {
     const viewModalCloseHandler = useCallback(() => {
         setViewModalOpened(false);
         setSelectedEmployeeId(null);
-    }, [])
-    const viewModalConfirmHandler = useCallback(() => {
-        setViewModalOpened(false);
-        setEditModalOpened(true);
-    }, [])
-
-    const editModalCloseHandler = useCallback(() => {
-        setEditModalOpened(false);
-        setSelectedEmployeeId(null);
-    }, [])
-    const editModalConfirmHandler = useCallback(() => {
-        setEditModalOpened(false);
     }, [])
 
 
@@ -198,7 +184,7 @@ export default function EmployeeSettings(props) {
                 {
                     viewModalOpened && (
                         <ViewModal show={viewModalOpened} id={selectedEmployeeId} 
-                            closeHandler={viewModalCloseHandler} confirmHandler={viewModalConfirmHandler}
+                            closeHandler={viewModalCloseHandler}
                             heading='view employee times' />
                     )
                 }

@@ -1,8 +1,7 @@
 import styled from 'styled-components';
 import { Button } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
 
-export const CustomButton = styled(LoadingButton)`
+export const CustomButton = styled(Button)`
     &.MuiButton-root {
         font-size: 18px;
         padding:0 20px;
@@ -27,7 +26,7 @@ export const CustomButton = styled(LoadingButton)`
             box-shadow: none;
         }
         &:hover {
-            background: ${ ( { theme } ) => theme.palette.secondary.dark};
+            background: ${ ( { theme } ) => theme.vars.theme};
         }
         &:last-child {
             margin-bottom: 0;
