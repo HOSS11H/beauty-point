@@ -59,7 +59,7 @@ export const fetchServicesTable = (language, page, perPage, orderBy, orderDir) =
 export const fetchServices = (language, page, perPage, orderBy, orderDir) => {
     return dispatch => {
         dispatch(fetchServicesStart())
-        axios.get(`/vendors/services?page=${page + 1}&per_page=${perPage}&order_by=${orderBy}&order_dir=${orderDir}&include[]=category&include[]=location&include[]=users&include[]=bookingItems&include[]=company&include[]=products`, {
+        axios.get(`/vendors/services?page=${page + 1}&per_page=${perPage}&order_by=${orderBy}&order_dir=${orderDir}&include[]=category&include[]=location&include[]=users&include[]=company&include[]=products`, {
             headers: {
                 'Accept-Language': language
             }
