@@ -30,7 +30,9 @@ export const CustomCardMui = styled(Card)`
                 height: 100%;
                 z-index: ${({ theme }) => theme.zIndex.modal};
                 border-radius:0;
-                transform: translateX(-100%);
+                transform: translateX(100%);
+                transition: 0.3s ease-in-out;
+                margin-bottom: 0px;
                 ${({ open }) => open && css`
                     transform: translateX(0%);
                 `}
@@ -111,7 +113,7 @@ export default function CustomCard(props) {
     const { t } = useTranslation();
 
     return (
-        <CustomCardMui isMobileModal={isMobileModal} open={true} >
+        <CustomCardMui isMobileModal={isMobileModal} open={open} >
             <CardHeading>
                 <h4>{t(props.heading)}{props.total}</h4>
                 {isMobileModal && isMobile && <IconButton onClick={handleClose}><CloseIcon /></IconButton>}
