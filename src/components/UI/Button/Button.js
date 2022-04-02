@@ -50,5 +50,9 @@ export const ButtonConfirm = styled(CustomButton)`
         width: auto;
         padding: 0 25px;
         height: 50px;
+        @media screen and (max-width: ${({ theme }) => theme.breakpoints.values.md - 1}px) {
+            min-width: unset;
+            padding: 0 10px
+        }
     }
 `

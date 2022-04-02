@@ -12,8 +12,18 @@ import { useSearchParams } from 'react-router-dom';
 import WelcomeModal from './WelcomeModal/WelcomeModal';
 import { fetchPermissions } from '../../store/actions/index';
 import Loader from '../../components/UI/Loader/Loader';
+import styled from 'styled-components';
 
 const drawerWidth = 256;
+
+const ContentWrapper = styled.main`
+	padding: 32px 24px;
+	background-color: ${({ theme }) => theme.palette.background.default};
+	@media screen and (max-width: ${({ theme }) => theme.breakpoints.values.md - 1}px) {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+`
 
 const Account = (props) => {
 
@@ -137,9 +147,9 @@ const Account = (props) => {
 				</Box>
 				<Box sx={{ flexGrow: 1, maxWidth: mobileOpen ? `calc( 100% - ${drawerWidth}px)` : `calc( 100% - 57px)` }} >
 					<Header onDrawerToggle={handleDrawerToggle} />
-					<Box component="main" sx={{ py: 4, px: 3, bgcolor: theme.palette.background.default }}>
+					<ContentWrapper>
 						<Outlet />
-					</Box>
+					</ContentWrapper>
 				</Box>
 				<WelcomeModal show={welcomeModal} onClose={handleWelcomeModalClose} />
 			</Fragment>

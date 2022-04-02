@@ -2,7 +2,7 @@ import CustomCard from '../../../../../components/UI/Card/Card';
 import TextField from '@mui/material/TextField';
 import TimePicker from '@mui/lab/TimePicker';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
-import { Grid } from '@mui/material';
+import { Box, Grid, useMediaQuery } from '@mui/material';
 import styled from 'styled-components';
 import Paper from '@mui/material/Paper';
 import FormControl from '@mui/material/FormControl';
@@ -32,11 +32,11 @@ import { formatCurrency } from '../../../../../shared/utility';
 import { Fragment } from 'react';
 import SearchCustomer from './SearchCustomer/SearchCustomer';
 import { toast } from 'react-toastify';
-import moment from 'moment'
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import { format } from 'date-fns';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
 const CustomerCard = styled.div`
     padding: 20px;
@@ -137,7 +137,7 @@ const AmountCalculator = styled.div`
         }
     }
 `
-const CardActions = styled.div`
+const CartActions = styled.div`
     width: 100%;
     display: flex;
     align-items: center;
@@ -147,6 +147,11 @@ const CardActions = styled.div`
         &:last-child {
             margin-right: 0;
         }
+    }
+    @media screen and (max-width: ${({ theme }) => theme.breakpoints.values.sm - 1}px) {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 10px;
     }
 `
 const ActionsWrapper = styled.div`
@@ -159,8 +164,24 @@ const AddCustomer = styled(CustomButton)`
         width: auto;
         padding: 0 15px;
         height: 56px;
+        min-width: unset;
+        margin-left: 20px;
+        @media screen and (max-width: ${({ theme }) => theme.breakpoints.values.md - 1}px) {
+            margin-left: 10px;
+            padding: 0 10px;
+        }
     }
 `
+const AddPassingCustomer = styled(AddCustomer)`
+    &.MuiButton-root {
+        margin-left:0;
+        margin-top: 20px;
+        @media screen and (max-width: ${({ theme }) => theme.breakpoints.values.md - 1}px) {
+            margin-top: 10px;
+        }
+    }
+`
+
 const CustomTextField = styled(TextField)`
     width: 100%;
 `
@@ -181,10 +202,12 @@ const Cart = props => {
     const { t } = useTranslation()
 
     const themeCtx = useContext(ThemeContext);
-    const { lang } = themeCtx;
+    const { lang, theme } = themeCtx;
+
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'), { noSsr: true });
 
     const vatCtx = useContext(VatContext);
-    const {vat, toggleVat} = vatCtx;
+    const { vat, toggleVat } = vatCtx;
 
     const [customerData, setCustomerData] = useState(null);
     const [customerDataError, setCustomerDataError] = useState(false)
@@ -283,7 +306,6 @@ const Cart = props => {
     const handleDateChange = (newValue) => {
         setDateTime(newValue);
     };
-
 
 
     const selectCustomer = useCallback((value) => {
@@ -461,226 +483,267 @@ const Cart = props => {
     }
 
     return (
-        <CustomCard heading='Add To Cart' >
-            <Grid container spacing={3}>
-                <Grid item xs={12} >
-                    <LocalizationProvider dateAdapter={DateAdapter}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12} md={6}>
-                                <DesktopDatePicker
-                                    label={t("Date desktop")}
-                                    inputFormat="MM/dd/yyyy"
-                                    value={dateTime}
-                                    onChange={handleDateChange}
-                                    renderInput={(params) => <TextField sx={{ width: '100%' }} {...params} />}
-                                />
+        <CustomCard heading='Add To Cart' isMobileModal >
+            <Box>
+                <Grid container spacing={{ xs: 2, md: 3 }} >
+                    <Grid item xs={12} >
+                        <LocalizationProvider dateAdapter={DateAdapter}>
+                            <Grid container spacing={2}>
+                                <Grid item xs={6} md={6}>
+                                    <DesktopDatePicker
+                                        label={t("Date desktop")}
+                                        inputFormat="MM/dd/yyyy"
+                                        value={dateTime}
+                                        onChange={handleDateChange}
+                                        renderInput={(params) => <TextField sx={{ width: '100%' }} {...params} />}
+                                    />
+                                </Grid>
+                                <Grid item xs={6} md={6}>
+                                    <TimePicker
+                                        label={t("Time")}
+                                        value={dateTime}
+                                        onChange={handleDateChange}
+                                        renderInput={(params) => <TextField sx={{ width: '100%' }}  {...params} />}
+                                    />
+                                </Grid>
                             </Grid>
-                            <Grid item xs={12} md={6}>
-                                <TimePicker
-                                    label={t("Time")}
-                                    value={dateTime}
-                                    onChange={handleDateChange}
-                                    renderInput={(params) => <TextField sx={{ width: '100%' }}  {...params} />}
-                                />
+                        </LocalizationProvider>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <FormLabel component="legend" sx={{ textAlign: 'left', textTransform: 'capitalize', marginBottom: '8px' }} >{t('select customer')}</FormLabel>
+                        <ActionsWrapper>
+                            <FormControl fullWidth sx={{ minWidth: '250px' }} >
+                                <SearchCustomer selectCustomer={selectCustomer} resetSearchData={resetSearchData} />
+                            </FormControl>
+                            <AddCustomer onClick={addCustomerModalOpenHandler} >{isMobile ? <PersonAddIcon /> : t('add')}</AddCustomer>
+                        </ActionsWrapper>
+                        <AddPassingCustomer sx={{ marginLeft: 0 }} onClick={addPassingCustomer} >{t('add passing customer')}</AddPassingCustomer>
+                        {customerDataError && <ValidationMessage notExist>{t(`Please Choose Customer`)}</ValidationMessage>}
+                    </Grid>
+                    {
+                        customerData && (
+                            <Grid item xs={12}>
+                                <CustomerCard>
+                                    <CustomerName>{customerData.name}</CustomerName>
+                                    {
+                                        customerData.mobile && (
+                                            <CustomerInfo>
+                                                <li><PhoneAndroidIcon sx={{ mr: 1 }} />{customerData.mobile}</li>
+                                            </CustomerInfo>
+                                        )
+                                    }
+                                </CustomerCard>
                             </Grid>
-                        </Grid>
-                    </LocalizationProvider>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <FormLabel component="legend" sx={{ textAlign: 'left', textTransform: 'capitalize', marginBottom: '8px' }} >{t('select customer')}</FormLabel>
-                    <ActionsWrapper>
-                        <FormControl fullWidth sx={{ minWidth: '250px', marginRight: '20px' }} >
-                            <SearchCustomer selectCustomer={selectCustomer} resetSearchData={resetSearchData} />
-                        </FormControl>
-                        <AddCustomer onClick={addCustomerModalOpenHandler} >{t('add')}</AddCustomer>
-                    </ActionsWrapper>
-                    <AddCustomer sx={{ marginTop: '20px', marginLeft: 0 }} onClick={addPassingCustomer} >{t('add passing customer')}</AddCustomer>
-                    {customerDataError && <ValidationMessage notExist>{t(`Please Choose Customer`)}</ValidationMessage>}
-                </Grid>
-                {
-                    customerData && (
-                        <Grid item xs={12}>
-                            <CustomerCard>
-                                <CustomerName>{customerData.name}</CustomerName>
-                                {
-                                    customerData.mobile && (
-                                        <CustomerInfo>
-                                            <li><PhoneAndroidIcon sx={{ mr: 1 }} />{customerData.mobile}</li>
-                                        </CustomerInfo>
-                                    )
-                                }
-                            </CustomerCard>
-                        </Grid>
-                    )
-                }
-                <Grid item xs={12}>
-                    {cartData.services.length === 0 && (
-                        <CustomMessage>
-                            <p>{t('No Services')}</p>
-                        </CustomMessage>
-                    )}
-                    {cartData.services.length > 0 && (
-                        <Fragment>
+                        )
+                    }
+                    <Grid item xs={12}>
+                        {cartData.services.length === 0 && (
+                            <CustomMessage>
+                                <p>{t('No Services')}</p>
+                            </CustomMessage>
+                        )}
+                        {cartData.services.length > 0 && !isMobile && (
+                            <Fragment>
+                                <TableContainer component={Paper} sx={{ my: 2 }}>
+                                    <Table aria-label="services table">
+                                        <SharedTableHead name='services' />
+                                        <TableBody>
+                                            {cartData.services.map((row) => (
+                                                <CartItem type='services' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} priceChangeHandler={priceChangeHandler} changeEmployee={changeEmployee} />
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                            </Fragment>
+                        )}
+                        {cartData.services.length > 0 && isMobile && (
+                            <Grid container spacing={2}>
+                                {cartData.services.map((row) => (
+                                    <Grid item xs={12} key={row.id}>
+                                        <CartItem type='services' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} priceChangeHandler={priceChangeHandler} changeEmployee={changeEmployee} />
+                                    </Grid>
+                                ))}
+                            </Grid>
+                        )}
+                    </Grid>
+                    <Grid item xs={12}>
+                        {cartData.products.length === 0 && (
+                            <CustomMessage>
+                                <p>{t('No Products')}</p>
+                            </CustomMessage>
+                        )}
+                        {cartData.products.length > 0 && (
                             <TableContainer component={Paper} sx={{ my: 2 }}>
-                                <Table aria-label="services table">
-                                    <SharedTableHead name='services' />
+                                <Table aria-label="products table">
+                                    <SharedTableHead name='products' />
                                     <TableBody>
-                                        {cartData.services.map((row) => (
-                                            <CartItem type='services' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} priceChangeHandler={priceChangeHandler} changeEmployee={changeEmployee} />
+                                        {cartData.products.map((row) => (
+                                            <CartItem type='products' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} priceChangeHandler={priceChangeHandler} changeEmployee={changeEmployee} />
                                         ))}
                                     </TableBody>
                                 </Table>
                             </TableContainer>
-                        </Fragment>
-                    )}
-                </Grid>
-                <Grid item xs={12}>
-                    {cartData.products.length === 0 && (
-                        <CustomMessage>
-                            <p>{t('No Products')}</p>
-                        </CustomMessage>
-                    )}
-                    {cartData.products.length > 0 && (
-                        <TableContainer component={Paper} sx={{ my: 2 }}>
-                            <Table aria-label="products table">
-                                <SharedTableHead name='products' />
-                                <TableBody>
-                                    {cartData.products.map((row) => (
+                        )}
+                        {cartData.products.length > 0 && !isMobile && (
+                            <TableContainer component={Paper} sx={{ my: 2 }}>
+                                <Table aria-label="products table">
+                                    <SharedTableHead name='products' />
+                                    <TableBody>
+                                        {cartData.products.map((row) => (
+                                            <CartItem type='products' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} priceChangeHandler={priceChangeHandler} changeEmployee={changeEmployee} />
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        )}
+                        {cartData.products.length > 0 && isMobile && (
+                            <Grid container spacing={2}>
+                                {cartData.products.map((row) => (
+                                    <Grid item xs={12} key={row.id}>
                                         <CartItem type='products' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} priceChangeHandler={priceChangeHandler} changeEmployee={changeEmployee} />
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    )}
-                </Grid>
-                <Grid item xs={12}>
-                    {cartData.deals.length === 0 && (
-                        <CustomMessage>
-                            <p>{t('No Deals')}</p>
-                        </CustomMessage>
-                    )}
-                    {cartData.deals.length > 0 && (
-                        <TableContainer component={Paper} sx={{ my: 2 }}>
-                            <Table aria-label="deals table">
-                                <SharedTableHead name='deals' />
-                                <TableBody>
-                                    {cartData.deals.map((row) => (
+                                    </Grid>
+                                ))}
+                            </Grid>
+                        )}
+                    </Grid>
+                    <Grid item xs={12}>
+                        {cartData.deals.length === 0 && (
+                            <CustomMessage>
+                                <p>{t('No Deals')}</p>
+                            </CustomMessage>
+                        )}
+                        {cartData.deals.length > 0 && !isMobile && (
+                            <TableContainer component={Paper} sx={{ my: 2 }}>
+                                <Table aria-label="deals table">
+                                    <SharedTableHead name='deals' />
+                                    <TableBody>
+                                        {cartData.deals.map((row) => (
+                                            <CartItem type='deals' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} priceChangeHandler={priceChangeHandler} changeEmployee={changeEmployee} />
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        )}
+                        {cartData.deals.length > 0 && isMobile && (
+                            <Grid container spacing={2}>
+                                {cartData.deals.map((row) => (
+                                    <Grid item xs={12} key={row.id}>
                                         <CartItem type='deals' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} priceChangeHandler={priceChangeHandler} changeEmployee={changeEmployee} />
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    )}
-                    {cartDataError && (
-                        <ValidationMessage notExist>{t('Please Add Something')}</ValidationMessage>
-                    )}
-                </Grid>
-                <Grid item xs={12} sm={6} >
-                    <CustomFormGroup>
-                        <CustomTextField
-                            type="number"
-                            label={t('Discount')}
-                            id="discount-value"
-                            sx={{ width: '100%' }}
-                            value={discount}
-                            onChange={discountChangeHandler}
-                        />
-                        <FormControl sx={{ minWidth: 120, ml: 1 }}>
+                                    </Grid>
+                                ))}
+                            </Grid>
+                        )}
+                        {cartDataError && (
+                            <ValidationMessage notExist>{t('Please Add Something')}</ValidationMessage>
+                        )}
+                    </Grid>
+                    <Grid item xs={12} sm={6} >
+                        <CustomFormGroup>
+                            <CustomTextField
+                                type="number"
+                                label={t('Discount')}
+                                id="discount-value"
+                                sx={{ width: '100%' }}
+                                value={discount}
+                                onChange={discountChangeHandler}
+                            />
+                            <FormControl sx={{ minWidth: 120, ml: 1 }}>
+                                <Select
+                                    value={discountType}
+                                    onChange={discountTypeChangeHandler}
+                                    inputProps={{ 'aria-label': 'Without label' }}
+                                >
+                                    <MenuItem value='percent'>{t('percent')}</MenuItem>
+                                    <MenuItem value='fixed'>{t('Fixed')}</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </CustomFormGroup>
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <FormControl sx={{ width: '100%' }}>
+                            <InputLabel id="payment-label">{t('payment method')}</InputLabel>
                             <Select
-                                value={discountType}
-                                onChange={discountTypeChangeHandler}
+                                label={t('payment method')}
+                                labelId="payment-label"
+                                value={paymentGateway}
+                                onChange={paymentGatewayChangeHandler}
                                 inputProps={{ 'aria-label': 'Without label' }}
                             >
-                                <MenuItem value='percent'>{t('percent')}</MenuItem>
-                                <MenuItem value='fixed'>{t('Fixed')}</MenuItem>
+                                <MenuItem value='cash'>{t('cash')}</MenuItem>
+                                <MenuItem value='card'>{t('card')}</MenuItem>
+                                <MenuItem value='transfer'>{t('transfer')}</MenuItem>
+                                <MenuItem value='online'>{t('online')}</MenuItem>
                             </Select>
                         </FormControl>
-                    </CustomFormGroup>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <FormControl sx={{ width: '100%' }}>
-                        <InputLabel id="payment-label">{t('payment method')}</InputLabel>
-                        <Select
-                            label={t('payment method')}
-                            labelId="payment-label"
-                            value={paymentGateway}
-                            onChange={paymentGatewayChangeHandler}
-                            inputProps={{ 'aria-label': 'Without label' }}
-                        >
-                            <MenuItem value='cash'>{t('cash')}</MenuItem>
-                            <MenuItem value='card'>{t('card')}</MenuItem>
-                            <MenuItem value='transfer'>{t('transfer')}</MenuItem>
-                            <MenuItem value='online'>{t('online')}</MenuItem>
-                        </Select>
-                    </FormControl>
-                    {paymentGatewayError && (
-                        <ValidationMessage notExist>{t('Please choose method')}</ValidationMessage>
+                        {paymentGatewayError && (
+                            <ValidationMessage notExist>{t('Please choose method')}</ValidationMessage>
+                        )}
+                    </Grid>
+                    <Grid item xs={12}>
+                        <CouponWrapper>
+                            <TextField
+                                label={t('Discount Coupon')}
+                                id="coupon-value"
+                                sx={{ flexGrow: '1' }}
+                                value={coupon}
+                                onChange={couponChangeHandler}
+                            />
+                            {couponExists && <ValidationMessage exist>{t('Coupon Exists')}</ValidationMessage>}
+                            {!couponExists && coupon !== '' ? <ValidationMessage notExist>{t(`Coupon Doesn't Exist`)}</ValidationMessage> : null}
+                        </CouponWrapper>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <FormGroup>
+                            <FormControlLabel control={<Switch checked={vat} onChange={handleHasVatChange} />} label={t("has Taxes")} />
+                        </FormGroup>
+                    </Grid>
+                    {vat && (
+                        <Grid item xs={12}>
+                            <PriceCalculation>
+                                <p>{t('total taxes')}</p>
+                                <p>{formatCurrency(totalTaxes)}</p>
+                            </PriceCalculation>
+                        </Grid>
                     )}
-                </Grid>
-                <Grid item xs={12}>
-                    <CouponWrapper>
-                        <TextField
-                            label={t('Discount Coupon')}
-                            id="coupon-value"
-                            sx={{ flexGrow: '1' }}
-                            value={coupon}
-                            onChange={couponChangeHandler}
-                        />
-                        {couponExists && <ValidationMessage exist>{t('Coupon Exists')}</ValidationMessage>}
-                        {!couponExists && coupon !== '' ? <ValidationMessage notExist>{t(`Coupon Doesn't Exist`)}</ValidationMessage> : null}
-                    </CouponWrapper>
-                </Grid>
-                <Grid item xs={12}>
-                    <FormGroup>
-                        <FormControlLabel control={<Switch checked={vat} onChange={handleHasVatChange} />} label={t("has Taxes")} />
-                    </FormGroup>
-                </Grid>
-                { vat && (
                     <Grid item xs={12}>
                         <PriceCalculation>
-                            <p>{t('total taxes')}</p>
-                            <p>{formatCurrency(totalTaxes)}</p>
+                            <p>{t('price after discount')}</p>
+                            <p>{formatCurrency(totalPrice)}</p>
                         </PriceCalculation>
                     </Grid>
-                )}
-                <Grid item xs={12}>
-                    <PriceCalculation>
-                        <p>{t('price after discount')}</p>
-                        <p>{formatCurrency(totalPrice)}</p>
-                    </PriceCalculation>
+                    <Grid item xs={12}>
+                        <TextField
+                            fullWidth
+                            type="number"
+                            label={t('paid amount')}
+                            id="paid-amount"
+                            sx={{ flexGrow: '1' }}
+                            value={paidAmount}
+                            onChange={paidAmountChangeHandler}
+                        />
+                        {paidAmountError && <ValidationMessage notExist>{t(`you must add the paid Amount`)}</ValidationMessage>}
+                    </Grid>
+                    <Grid item xs={6} sm={6}>
+                        <AmountCalculator>
+                            <p>{t('cash remaing')}</p>
+                            <p>{formatCurrency(cashRemainig)}</p>
+                        </AmountCalculator>
+                    </Grid>
+                    <Grid item xs={6} sm={6}>
+                        <AmountCalculator>
+                            <p>{t('cash to return')}</p>
+                            <p>{formatCurrency(cashToReturn)}</p>
+                        </AmountCalculator>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <CartActions>
+                            <ButtonConfirm disabled={creatingBooking} variant='contained' onClick={purchaseCartHandler}>{t('book')}</ButtonConfirm>
+                            <ButtonConfirm disabled={creatingBooking} variant='contained' onClick={purchasePrintCartHandler}>{t('book & print')}</ButtonConfirm>
+                            <ButtonText variant='text' onClick={resetCartHandler}>{t('reset cart')}</ButtonText>
+                        </CartActions>
+                    </Grid>
                 </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        fullWidth
-                        type="number"
-                        label={t('paid amount')}
-                        id="paid-amount"
-                        sx={{ flexGrow: '1' }}
-                        value={paidAmount}
-                        onChange={paidAmountChangeHandler}
-                    />
-                    {paidAmountError && <ValidationMessage notExist>{t(`you must add the paid Amount`)}</ValidationMessage>}
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <AmountCalculator>
-                        <p>{t('cash remaing')}</p>
-                        <p>{formatCurrency(cashRemainig)}</p>
-                    </AmountCalculator>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <AmountCalculator>
-                        <p>{t('cash to return')}</p>
-                        <p>{formatCurrency(cashToReturn)}</p>
-                    </AmountCalculator>
-                </Grid>
-                <Grid item xs={12}>
-                    <CardActions>
-                        <ButtonText variant='text' onClick={resetCartHandler}>{t('reset cart')}</ButtonText>
-                        <ButtonConfirm disabled={creatingBooking} variant='contained' onClick={purchaseCartHandler}>{t('book')}</ButtonConfirm>
-                        <ButtonConfirm disabled={creatingBooking} variant='contained' onClick={purchasePrintCartHandler}>{t('book & print')}</ButtonConfirm>
-                    </CardActions>
-                </Grid>
-            </Grid>
+            </Box>
             <AddCustomerModal show={addCustomerModalOpened}
                 onClose={addCustomerModalCloseHandler} onConfirm={addCustomerModalConfirmHandler}
                 heading='add new customer' confirmText='add' />

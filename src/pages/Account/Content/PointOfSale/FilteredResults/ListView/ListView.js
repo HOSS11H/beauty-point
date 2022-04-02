@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import Card from '@mui/material/Card';
 import { Grid } from '@mui/material';
-import { useTranslation } from 'react-i18next';
 import Skeleton from '@mui/material/Skeleton';
 import { formatCurrency } from '../../../../../../shared/utility';
 

@@ -50,6 +50,7 @@ export const CardContent = styled.div`
     width: 100%;
     max-height: 60vh;
     overflow-y: auto;
+    min-height: 0;
     padding: 20px;
     // Scroll //
     -webkit-overflow-scrolling: touch;

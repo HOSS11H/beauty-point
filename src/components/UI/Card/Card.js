@@ -1,7 +1,11 @@
 import Card from '@mui/material/Card';
-import styled from'styled-components';
+import styled, { css } from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import Skeleton from '@mui/material/Skeleton';
+import CloseIcon from '@mui/icons-material/Close';
+import { IconButton, useMediaQuery } from '@mui/material';
+import { useContext } from 'react';
+import ThemeContext from '../../../store/theme-context';
 
 export const CustomCardMui = styled(Card)`
     &.MuiPaper-root {
@@ -15,13 +19,34 @@ export const CustomCardMui = styled(Card)`
         &:last-child{
             margin-bottom:0;
         }
+        ${({ isMobileModal }) => isMobileModal && css`
+            @media screen and (max-width: ${({ theme }) => theme.breakpoints.values.md - 1}px) {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                width: 100%;
+                height: 100%;
+                z-index: ${({ theme }) => theme.zIndex.modal};
+                border-radius:0;
+                transform: translateX(-100%);
+                ${({ open }) => open && css`
+                    transform: translateX(0%);
+                `}
+            }
+        `}
     }
 `
 export const CardHeading = styled.div`
     display: flex;
     align-items: center;
+    justify-content: space-between;
     padding: 20px;
-    border-bottom: ${ ( { theme } ) => `1px solid ${ theme.palette.divider }` };
+    border-bottom: ${({ theme }) => `1px solid ${theme.palette.divider}`};
+    @media screen and (max-width: ${({ theme }) => theme.breakpoints.values.md - 1}px) {
+        padding: 10px;
+    }
     h4 {
         font-size: 22px;
         line-height:1.5;
@@ -36,6 +61,32 @@ export const CardBody = styled.div`
     align-items: center;
     justify-content: center;
     flex-grow: 1;
+    @media screen and (max-width: ${({ theme }) => theme.breakpoints.values.md - 1}px) {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    ${({ isMobileModal }) => isMobileModal && css`
+        @media screen and (max-width: ${({ theme }) => theme.breakpoints.values.md - 1}px) {
+            display:block;
+            max-height: calc(100vh - 61px);
+            overflow-y: auto;
+            min-height: 0;
+            // Scroll //
+            -webkit-overflow-scrolling: touch;
+            &::-webkit-scrollbar {
+                height: 7px;
+                width: 8px;
+                background-color: ${({ theme }) => theme.palette.divider};
+                border-radius: 10px;
+            }
+            &::-webkit-scrollbar-thumb {
+                margin-left: 2px;
+                background: ${({ theme }) => theme.vars.primary};
+                border-radius: 10px;
+                cursor: pointer;
+            }
+        }
+    `}
 `
 export const CardContent = styled.div`
     flex-grow: 1;
@@ -49,16 +100,23 @@ export const SkeletonsWrapper = styled.div`
     flex-direction: column;
 `
 
-export default function CustomCard( props ) {
+export default function CustomCard(props) {
+
+    const { isMobileModal, open, handleClose } = props;
+
+    const { theme } = useContext(ThemeContext)
+
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'), { noSsr: true });
 
     const { t } = useTranslation();
 
     return (
-        <CustomCardMui >
+        <CustomCardMui isMobileModal={isMobileModal} open={true} >
             <CardHeading>
                 <h4>{t(props.heading)}{props.total}</h4>
+                {isMobileModal && isMobile && <IconButton onClick={handleClose}><CloseIcon /></IconButton>}
             </CardHeading>
-            <CardBody>
+            <CardBody isMobileModal={isMobileModal} >
                 {props.loading && (
                     <SkeletonsWrapper>
                         <Skeleton sx={{ width: '100%' }} />

@@ -1,5 +1,5 @@
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 
@@ -13,7 +13,7 @@ const ModuleNavWrapper = styled.div`
         justify-content : center;
         bottom          : 40px;
         right           : 40px;
-        background-color: ${ ( { theme } ) => theme.vars.secondary};
+        background-color: ${({ theme }) => theme.vars.secondary};
         color           : #FFF;
         border-radius   : 50%;
         text-align      : center;
@@ -30,13 +30,24 @@ const ModuleNavWrapper = styled.div`
 `
 
 const ModuleNav = props => {
+    const params = useParams();
+    let content ;
+
+    if (params['*'] !== 'point-of-sale'  ) {
+        content = (
+            <ModuleNavWrapper>
+                <NavLink to='point-of-sale' >
+                    <AddShoppingCartIcon />
+                </NavLink>
+            </ModuleNavWrapper>
+        )
+    }
     return (
-        <ModuleNavWrapper>
-            <NavLink to='point-of-sale' >
-                <AddShoppingCartIcon />
-            </NavLink>
-        </ModuleNavWrapper>
-    )
+        <>
+            {content}
+        </>
+    );
+
 }
 
 export default ModuleNav;

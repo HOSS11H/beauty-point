@@ -119,8 +119,6 @@ const GridView = ( props ) => {
     }
 
     let content = data.map( (item, index) => {
-        // type === 'products' && (item.price_after_discount = item.discount_price);
-        // type === 'deals' && (item.price_after_discount = item.price);
         type === 'deals' && (item.name = item.title);
         return (
             <Grid item xs={12} sm={6} key={item.id} >
