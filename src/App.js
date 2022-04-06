@@ -14,74 +14,74 @@ import { PermissibleRender } from '@brainhubeu/react-permissible';
 const Auth = React.lazy(() => import('./pages/Auth/Auth'));
 const Account = React.lazy(() => import('./pages/Account/Account'));
 const Dashboard = React.lazy(() =>
-  import('./pages/Account/Content/Dashboard/Dashboard')
+    import('./pages/Account/Content/Dashboard/Dashboard')
 );
 const Services = React.lazy(() =>
-  import('./pages/Account/Content/Services/Services')
+    import('./pages/Account/Content/Services/Services')
 );
 const Products = React.lazy(() =>
-  import('./pages/Account/Content/Products/Products')
+    import('./pages/Account/Content/Products/Products')
 );
 const Deals = React.lazy(() => import('./pages/Account/Content/Deals/Deals'));
 const Bookings = React.lazy(() =>
-  import('./pages/Account/Content/Bookings/Bookings')
+    import('./pages/Account/Content/Bookings/Bookings')
 );
 const PointOfSale = React.lazy(() =>
-  import('./pages/Account/Content/PointOfSale/PointOfSale')
+    import('./pages/Account/Content/PointOfSale/PointOfSale')
 );
 const BookingCalendar = React.lazy(() =>
-  import('./pages/Account/Content/BookingCalendar/BookingCalendar')
+    import('./pages/Account/Content/BookingCalendar/BookingCalendar')
 );
 const Reports = React.lazy(() =>
-  import('./pages/Account/Content/Reports/Reports')
+    import('./pages/Account/Content/Reports/Reports')
 );
 const Employees = React.lazy(() =>
-  import('./pages/Account/Content/Employees/Employees')
+    import('./pages/Account/Content/Employees/Employees')
 );
 const Customers = React.lazy(() =>
-  import('./pages/Account/Content/Customers/Customers')
+    import('./pages/Account/Content/Customers/Customers')
 );
 
 const Expenses = React.lazy(() =>
-  import('./pages/Account/Content/Expenses/Expenses')
+    import('./pages/Account/Content/Expenses/Expenses')
 );
 const ExpenseCategories = React.lazy(() =>
-  import('./pages/Account/Content/Expenses/ExpenseCategories/ExpenseCategories')
+    import('./pages/Account/Content/Expenses/ExpenseCategories/ExpenseCategories')
 );
 const ExpenseCustomers = React.lazy(() =>
-  import('./pages/Account/Content/Expenses/ExpenseCustomers/ExpenseCustomers')
+    import('./pages/Account/Content/Expenses/ExpenseCustomers/ExpenseCustomers')
 );
 const ExpenseBanks = React.lazy(() =>
-  import('./pages/Account/Content/Expenses/ExpenseBanks/ExpenseBanks')
+    import('./pages/Account/Content/Expenses/ExpenseBanks/ExpenseBanks')
 );
 
 const Units = React.lazy(() => import('./pages/Account/Content/Units/Units'));
 
 const Plans = React.lazy(() =>
-  import('./pages/Account/Content/Plans/Plans')
+    import('./pages/Account/Content/Plans/Plans')
 );
 
 const PaymentStatus = React.lazy(() =>
-  import('./pages/Account/Content/Plans/PaymentStatus/PaymentStatus')
+    import('./pages/Account/Content/Plans/PaymentStatus/PaymentStatus')
 );
 
 const Settings = React.lazy(() =>
-  import('./pages/Account/Content/Settings/Settings')
+    import('./pages/Account/Content/Settings/Settings')
 );
 const GeneralSettings = React.lazy(() =>
-  import('./pages/Account/Content/Settings/GeneralSettings/GeneralSettings')
+    import('./pages/Account/Content/Settings/GeneralSettings/GeneralSettings')
 );
 const VendorPage = React.lazy(() =>
-  import('./pages/Account/Content/Settings/VendorPage/VendorPage')
+    import('./pages/Account/Content/Settings/VendorPage/VendorPage')
 );
 const BookingSettings = React.lazy(() =>
-  import('./pages/Account/Content/Settings/BookingSettings/BookingSettings')
+    import('./pages/Account/Content/Settings/BookingSettings/BookingSettings')
 );
 const EmployeeSettings = React.lazy(() =>
-  import('./pages/Account/Content/Settings/EmployeeSettings/EmployeeSettings')
+    import('./pages/Account/Content/Settings/EmployeeSettings/EmployeeSettings')
 );
 const RolesPermissions = React.lazy(() =>
-  import('./pages/Account/Content/Settings/RolesPermissions/RolesPermissions')
+    import('./pages/Account/Content/Settings/RolesPermissions/RolesPermissions')
 );
 
 const NotFound = React.lazy(() => import('./pages/NotFound/NotFound'));
@@ -89,32 +89,32 @@ const NotFound = React.lazy(() => import('./pages/NotFound/NotFound'));
 const Home = React.lazy(() => import('./pages/Home/Home'));
 const HomePage = React.lazy(() => import('./pages/Home/HomePage/HomePage'));
 const SingleCategory = React.lazy(() =>
-  import('./pages/Home/SingleCategory/SingleCategory')
+    import('./pages/Home/SingleCategory/SingleCategory')
 );
 const SingleService = React.lazy(() =>
-  import('./pages/Home/SingleService/SingleService')
+    import('./pages/Home/SingleService/SingleService')
 );
 const AllDeals = React.lazy(() => import('./pages/Home/AllDeals/AllDeals'));
 const SingleDeal = React.lazy(() =>
-  import('./pages/Home/SingleDeal/SingleDeal')
+    import('./pages/Home/SingleDeal/SingleDeal')
 );
 const SingleSalon = React.lazy(() =>
-  import('./pages/Home/SingleSalon/SingleSalon')
+    import('./pages/Home/SingleSalon/SingleSalon')
 );
 const AllPackages = React.lazy(() =>
-  import('./pages/Home/AllPackages/AllPackages')
+    import('./pages/Home/AllPackages/AllPackages')
 );
 const AllCategories = React.lazy(() =>
-  import('./pages/Home/AllCategories/AllCategories')
+    import('./pages/Home/AllCategories/AllCategories')
 );
 const AllSaloons = React.lazy(() =>
-  import('./pages/Home/AllSaloons/AllSaloons')
+    import('./pages/Home/AllSaloons/AllSaloons')
 );
 const NearbySalons = React.lazy(() =>
-  import('./pages/Home/NearbySalons/NearbySalons')
+    import('./pages/Home/NearbySalons/NearbySalons')
 );
 const AllSpotlights = React.lazy(() =>
-  import('./pages/Home/AllSpotlights/AllSpotlights')
+    import('./pages/Home/AllSpotlights/AllSpotlights')
 );
 const FAQs = React.lazy(() => import('./pages/Home/FAQs/FAQs'));
 const AboutUs = React.lazy(() => import('./pages/Home/AboutUs/AboutUs'));
@@ -122,114 +122,274 @@ const AboutUs = React.lazy(() => import('./pages/Home/AboutUs/AboutUs'));
 const Landing = React.lazy(() => import('./pages/Landing/Landing'));
 
 function App(props) {
-  const { fetchedPermissions } = props;
 
-  const themeCtx = useContext(ThemeContext);
+    const { fetchedPermissions } = props;
 
-  const authCtx = useContext(AuthContext);
+    const permissions = fetchedPermissions.map(permission => {
+        return permission.name
+    })
 
-  const { isLoggedIn } = authCtx;
+    const themeCtx = useContext(ThemeContext);
 
-  let routes = (
-    <Routes>
-      <Route path="/auth" element={<Auth />} />
-      <Route path="/home/*" element={<Home />}>
-        <Route index element={<HomePage />} />
-        <Route path="all-categories" element={<AllCategories />} />
-        <Route path="all-saloons" element={<AllSaloons />} />
-        <Route path="all-deals" element={<AllDeals />} />
-        <Route path="all-spotlights" element={<AllSpotlights />} />
-        <Route path="packages" element={<AllPackages />} />
-        <Route path="faqs" element={<FAQs />} />.
-        <Route path="about-us" element={<AboutUs />} />.
-        <Route path="categories/:categoryId" element={<SingleCategory />} />
-        <Route path="services/:serviceId" element={<SingleService />} />
-        <Route path="deals/:dealId" element={<SingleDeal />} />
-        <Route path="salons/:salonId" element={<SingleSalon />} />
-        <Route path="nearby-salons" element={<NearbySalons />} />
-        <Route path="*" element={<NotFound />} />
-      </Route>
-      <Route path="/" element={<Landing />} />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-  );
-  if (isLoggedIn) {
-    routes = (
-      <Routes>
-        <Route path="/auth" element={<Auth />} />
-        <Route path="/account/*" element={<Account />}>
-          <Route path="services" element={<Services />} />
-          {/* <PermissibleRender
-                        userPermissions={permissions}
-                        requiredPermissions={requiredPermissions}
-                    >
-                    </PermissibleRender> */}
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="products" element={<Products />} />
-          <Route path="expenses" element={<Expenses />} />
-          <Route path="expenses/categories" element={<ExpenseCategories />} />
-          <Route path="expenses/customers" element={<ExpenseCustomers />} />
-          <Route path="expenses/banks" element={<ExpenseBanks />} />
-          <Route path="units" element={<Units />} />
-          <Route path="deals" element={<Deals />} />
-          <Route path="point-of-sale" element={<PointOfSale />} />
-          <Route path="bookings" element={<Bookings />} />
-          <Route path="booking-calendar" element={<BookingCalendar />} />
-          <Route path="reports" element={<Reports />} />
-          <Route path="employees" element={<Employees />} />
-          <Route path="customers" element={<Customers />} />
-          <Route path="plans/*" element={
-            <Routes>
-              <Route index element={<Plans />} />
-              <Route path="status" element={<PaymentStatus />} />
-            </Routes>
-          }
-          />
-          <Route path="settings/*" element={<Settings />}>
-            <Route index element={<GeneralSettings />} />
-            <Route path="vendor-page" element={<VendorPage />} />
-            <Route path="booking-settings" element={<BookingSettings />} />
-            <Route path="employee-settings" element={<EmployeeSettings />} />
-            <Route path="roles-permissions" element={<RolesPermissions />} />
-          </Route>
-        </Route>
-        <Route path="/home/*" element={<Home />}>
-          <Route index element={<HomePage />} />
-          <Route path="all-categories" element={<AllCategories />} />
-          <Route path="all-saloons" element={<AllSaloons />} />
-          <Route path="all-deals" element={<AllDeals />} />
-          <Route path="all-spotlights" element={<AllSpotlights />} />
-          <Route path="packages" element={<AllPackages />} />
-          <Route path="faqs" element={<FAQs />} />.
-          <Route path="about-us" element={<AboutUs />} />.
-          <Route path="categories/:categoryId" element={<SingleCategory />} />
-          <Route path="services/:serviceId" element={<SingleService />} />
-          <Route path="deals/:dealId" element={<SingleDeal />} />
-          <Route path="salons/:salonId" element={<SingleSalon />} />
-          <Route path="nearby-salons" element={<NearbySalons />} />
-          <Route path="*" element={<NotFound />} />
-        </Route>
-        <Route path="/" element={<Landing />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+    const authCtx = useContext(AuthContext);
+
+    const { isLoggedIn } = authCtx;
+
+    let routes = (
+        <Routes>
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/home/*" element={<Home />}>
+                <Route index element={<HomePage />} />
+                <Route path="all-categories" element={<AllCategories />} />
+                <Route path="all-saloons" element={<AllSaloons />} />
+                <Route path="all-deals" element={<AllDeals />} />
+                <Route path="all-spotlights" element={<AllSpotlights />} />
+                <Route path="packages" element={<AllPackages />} />
+                <Route path="faqs" element={<FAQs />} />.
+                <Route path="about-us" element={<AboutUs />} />.
+                <Route path="categories/:categoryId" element={<SingleCategory />} />
+                <Route path="services/:serviceId" element={<SingleService />} />
+                <Route path="deals/:dealId" element={<SingleDeal />} />
+                <Route path="salons/:salonId" element={<SingleSalon />} />
+                <Route path="nearby-salons" element={<NearbySalons />} />
+                <Route path="*" element={<NotFound />} />
+            </Route>
+            <Route path="/" element={<Landing />} />
+            <Route path="*" element={<NotFound />} />
+        </Routes>
     );
-  }
+    if (isLoggedIn) {
+        routes = (
+            <Routes>
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/account/*" element={<Account />}>
+                    <Route path="dashboard" element={<Dashboard />} />
+                    <Route path="bookings" element={<Bookings />} />
+                    <Route path="booking-calendar" element={<BookingCalendar />} />
+                    <Route path="services" element={
+                        <PermissibleRender
+                            userPermissions={permissions}
+                            requiredPermissions={['read_business_service']}
+                            renderOtherwise={<NotFound />}
+                        >
+                            <Services />
+                        </PermissibleRender>
+                    } />
+                    <Route path="units" element={
+                        <PermissibleRender
+                            userPermissions={permissions}
+                            requiredPermissions={['read_business_service']}
+                            renderOtherwise={<NotFound />}
+                        >
+                            <Units />
+                        </PermissibleRender>
+                    } />
+                    <Route path="products" element={
+                        <PermissibleRender
+                            userPermissions={permissions}
+                            requiredPermissions={['read_business_service']}
+                            renderOtherwise={<NotFound />}
+                        >
+                            <Products />
+                        </PermissibleRender>
+                    } />
+                    <Route path="point-of-sale" element={
+                        <PermissibleRender
+                            userPermissions={permissions}
+                            requiredPermissions={['read_business_service']}
+                            renderOtherwise={<NotFound />}
+                        >
+                            <PointOfSale />
+                        </PermissibleRender>
+                    } />
+                    <Route path="customers" element={
+                        <PermissibleRender
+                            userPermissions={permissions}
+                            requiredPermissions={['read_customer']}
+                            renderOtherwise={<NotFound />}
+                        >
+                            <Customers />
+                        </PermissibleRender>
+                    } />
+                    <Route path="employees" element={
+                        <PermissibleRender
+                            userPermissions={permissions}
+                            requiredPermissions={['read_employee']}
+                            renderOtherwise={<NotFound />}
+                        >
+                            <Employees />
+                        </PermissibleRender>
+                    } />
+                    <Route path="deals" element={
+                        <PermissibleRender
+                            userPermissions={permissions}
+                            requiredPermissions={['read_deal']}
+                            renderOtherwise={<NotFound />}
+                        >
+                            <Deals />
+                        </PermissibleRender>
+                    } />
+                    <Route path="expenses" element={
+                        <PermissibleRender
+                            userPermissions={permissions}
+                            requiredPermissions={['read_report']}
+                            renderOtherwise={<NotFound />}
+                        >
+                            <Expenses />
+                        </PermissibleRender>
+                    } />
+                    <Route path="expenses/categories" element={
+                        <PermissibleRender
+                            userPermissions={permissions}
+                            requiredPermissions={['read_report']}
+                            renderOtherwise={<NotFound />}
+                        >
+                            <ExpenseCategories />
+                        </PermissibleRender>
+                    } />
+                    <Route path="expenses/customers" element={
+                        <PermissibleRender
+                            userPermissions={permissions}
+                            requiredPermissions={['read_report']}
+                            renderOtherwise={<NotFound />}
+                        >
+                            <ExpenseCustomers />
+                        </PermissibleRender>
+                    } />
+                    <Route path="expenses/banks" element={
+                        <PermissibleRender
+                            userPermissions={permissions}
+                            requiredPermissions={['read_report']}
+                            renderOtherwise={<NotFound />}
+                        >
+                            <ExpenseBanks />
+                        </PermissibleRender>
+                    } />
+                    <Route path="reports" element={
+                        <PermissibleRender
+                            userPermissions={permissions}
+                            requiredPermissions={['read_report']}
+                            renderOtherwise={<NotFound />}
+                        >
+                            <Reports />
+                        </PermissibleRender>
+                    } />
+                    <Route path="plans/*" element={
+                        <Routes>
+                            <Route index element={
+                                <PermissibleRender
+                                    userPermissions={permissions}
+                                    requiredPermissions={['manage_settings']}
+                                    renderOtherwise={<NotFound />}
+                                >
+                                    <Plans />
+                                </PermissibleRender>
+                            } />
+                            <Route path="status" element={
+                                <PermissibleRender
+                                    userPermissions={permissions}
+                                    requiredPermissions={['manage_settings']}
+                                    renderOtherwise={<NotFound />}
+                                >
+                                    <PaymentStatus />
+                                </PermissibleRender>
+                            } />
+                        </Routes>
+                    }
+                    />
+                    <Route path="settings/*" element={
+                        <PermissibleRender
+                            userPermissions={permissions}
+                            requiredPermissions={['manage_settings']}
+                            renderOtherwise={<NotFound />}
+                        >
+                            <Settings />
+                        </PermissibleRender>
+                    }>
+                        <Route index element={
+                            <PermissibleRender
+                                userPermissions={permissions}
+                                requiredPermissions={['manage_settings']}
+                                renderOtherwise={<NotFound />}
+                            >
+                                <GeneralSettings />
+                            </PermissibleRender>
+                        } />
+                        <Route path="vendor-page" element={
+                            <PermissibleRender
+                                userPermissions={permissions}
+                                requiredPermissions={['manage_settings']}
+                                renderOtherwise={<NotFound />}
+                            >
+                                <VendorPage />
+                            </PermissibleRender>
+                        } />
+                        <Route path="booking-settings" element={
+                            <PermissibleRender
+                                userPermissions={permissions}
+                                requiredPermissions={['manage_settings']}
+                                renderOtherwise={<NotFound />}
+                            >
+                                <BookingSettings />
+                            </PermissibleRender>
+                        } />
+                        <Route path="employee-settings" element={
+                            <PermissibleRender
+                                userPermissions={permissions}
+                                requiredPermissions={['manage_settings']}
+                                renderOtherwise={<NotFound />}
+                            >
+                                <EmployeeSettings />
+                            </PermissibleRender>
+                        } />
+                        <Route path="roles-permissions" element={
+                            <PermissibleRender
+                                userPermissions={permissions}
+                                requiredPermissions={['manage_settings']}
+                                renderOtherwise={<NotFound />}
+                            >
+                                <RolesPermissions />
+                            </PermissibleRender>
+                        } />
+                    </Route>
+                </Route>
+                <Route path="/home/*" element={<Home />}>
+                    <Route index element={<HomePage />} />
+                    <Route path="all-categories" element={<AllCategories />} />
+                    <Route path="all-saloons" element={<AllSaloons />} />
+                    <Route path="all-deals" element={<AllDeals />} />
+                    <Route path="all-spotlights" element={<AllSpotlights />} />
+                    <Route path="packages" element={<AllPackages />} />
+                    <Route path="faqs" element={<FAQs />} />.
+                    <Route path="about-us" element={<AboutUs />} />.
+                    <Route path="categories/:categoryId" element={<SingleCategory />} />
+                    <Route path="services/:serviceId" element={<SingleService />} />
+                    <Route path="deals/:dealId" element={<SingleDeal />} />
+                    <Route path="salons/:salonId" element={<SingleSalon />} />
+                    <Route path="nearby-salons" element={<NearbySalons />} />
+                    <Route path="*" element={<NotFound />} />
+                </Route>
+                <Route path="/" element={<Landing />} />
+                <Route path="*" element={<NotFound />} />
+            </Routes>
+        );
+    }
 
-  return (
-    <StyleSheetManager
-      stylisPlugins={themeCtx.direction === 'rtl' && [rtlPlugin]}
-    >
-      <Layout dir={themeCtx.direction}>
-        <Suspense fallback={<Loader height="100vh" />}>{routes}</Suspense>
-      </Layout>
-    </StyleSheetManager>
-  );
+    return (
+        <StyleSheetManager
+            stylisPlugins={themeCtx.direction === 'rtl' && [rtlPlugin]}
+        >
+            <Layout dir={themeCtx.direction}>
+                <Suspense fallback={<Loader height="100vh" />}>{routes}</Suspense>
+            </Layout>
+        </StyleSheetManager>
+    );
 }
 
 const mapStateToProps = (state) => {
-  return {
-    fetchedPermissions: state.permissions.permissions,
-  };
+    return {
+        fetchedPermissions: state.permissions.permissions,
+    };
 };
 
 export default connect(mapStateToProps, null)(App);

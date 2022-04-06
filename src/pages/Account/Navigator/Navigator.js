@@ -125,13 +125,13 @@ const Navigator = (props) => {
     const params = useParams();
     const { t } = useTranslation();
 
-    const [categories, setCategories] = useState([]);
+    const [links, setLinks] = useState([]);
 
 
     let module = useRef();
 
     useEffect(() => {
-        let fetchedCategories = [{
+        let renderedLinks = [{
             id: 'dashboard',
             children: [
                 {
@@ -144,7 +144,7 @@ const Navigator = (props) => {
             ],
         }];
         if (roleId === 'customer') {
-            setCategories(fetchedCategories);
+            setLinks(renderedLinks);
         } else {
             let addedRoutes = [];
             fetchedPermissions.forEach(permission => {
@@ -182,8 +182,8 @@ const Navigator = (props) => {
                     addedRoutes.push({ id: 'settings', name: 'settings', icon: <SettingsIcon /> });
                 }
             })
-            fetchedCategories[0].children = fetchedCategories[0].children.concat(addedRoutes);
-            setCategories(fetchedCategories);
+            renderedLinks[0].children = renderedLinks[0].children.concat(addedRoutes);
+            setLinks(renderedLinks);
         }
     }, [fetchedPermissions, roleId])
 
@@ -198,7 +198,7 @@ const Navigator = (props) => {
                             }
                         </NavLink>
                     </Logo>
-                    {categories.length > 0 && categories.map(({ id, children }) => (
+                    {links.length > 0 && links.map(({ id, children }) => (
                         <Box key={id}>
                             {children.map(({ id: childId, name, icon, active }) => (
                                 <ListItem disablePadding key={childId}>
