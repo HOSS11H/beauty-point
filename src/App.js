@@ -57,6 +57,10 @@ const ExpenseBanks = React.lazy(() =>
 
 const Units = React.lazy(() => import('./pages/Account/Content/Units/Units'));
 
+const Coupons = React.lazy(() =>
+    import('./pages/Account/Content/Coupons/Coupons')
+);
+
 const Plans = React.lazy(() =>
     import('./pages/Account/Content/Plans/Plans')
 );
@@ -272,6 +276,15 @@ function App(props) {
                             renderOtherwise={<NotFound />}
                         >
                             <Reports />
+                        </PermissibleRender>
+                    } />
+                    <Route path="coupons" element={
+                        <PermissibleRender
+                            userPermissions={permissions}
+                            requiredPermissions={['manage_settings']}
+                            renderOtherwise={<NotFound />}
+                        >
+                            <Coupons />
                         </PermissibleRender>
                     } />
                     <Route path="plans/*" element={

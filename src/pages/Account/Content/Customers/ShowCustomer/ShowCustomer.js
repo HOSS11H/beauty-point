@@ -103,7 +103,7 @@ const ShowCustomer = (props) => {
 
     if (customer) {
         content = (
-            <Fragment>
+            <Fragment> 
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
                         <ClientDetails>

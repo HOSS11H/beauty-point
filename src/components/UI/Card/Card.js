@@ -67,7 +67,7 @@ export const CardBody = styled.div`
         padding-left: 10px;
         padding-right: 10px;
     }
-    ${({ isMobileModal }) => isMobileModal && css`
+    ${({ $isMobileModal }) => $isMobileModal && css`
         @media screen and (max-width: ${({ theme }) => theme.breakpoints.values.md - 1}px) {
             display:block;
             max-height: calc(100vh - 61px);
@@ -118,7 +118,7 @@ export default function CustomCard(props) {
                 <h4>{t(props.heading)}{props.total}</h4>
                 {isMobileModal && isMobile && <IconButton onClick={handleClose}><CloseIcon /></IconButton>}
             </CardHeading>
-            <CardBody isMobileModal={isMobileModal} >
+            <CardBody $isMobileModal={isMobileModal} >
                 {props.loading && (
                     <SkeletonsWrapper>
                         <Skeleton sx={{ width: '100%' }} />

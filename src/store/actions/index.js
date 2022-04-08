@@ -47,6 +47,7 @@ export {
 } from './customers'
 export {
     fetchCoupons,
+    fetchVendorsCoupons,
 } from './coupons'
 export {
     fetchEmployees,

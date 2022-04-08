@@ -27,6 +27,7 @@ import { useTranslation } from 'react-i18next';
 import { useContext, useEffect, useRef } from 'react';
 import AuthContext from '../../../store/auth-context';
 import PeopleIcon from '@mui/icons-material/People';
+import DiscountIcon from '@mui/icons-material/Discount';
 import { useState } from 'react';
 import { connect } from 'react-redux';
 import ModuleNav from './ModuleNav/ModuleNav';
@@ -179,6 +180,7 @@ const Navigator = (props) => {
                 }
                 if (permission.name === 'manage_settings') {
                     addedRoutes.push({ id: 'plans', name: 'plans', icon: <CreditCardIcon /> });
+                    addedRoutes.push({ id: 'coupons', name: 'coupons', icon: <DiscountIcon /> });
                     addedRoutes.push({ id: 'settings', name: 'settings', icon: <SettingsIcon /> });
                 }
             })

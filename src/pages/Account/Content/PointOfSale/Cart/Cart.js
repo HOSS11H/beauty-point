@@ -24,7 +24,7 @@ import CartItem from './CartItem/CartItem';
 import { ButtonText, ButtonConfirm, CustomButton } from '../../../../../components/UI/Button/Button';
 import ValidationMessage from '../../../../../components/UI/ValidationMessage/ValidationMessage';
 import { connect } from 'react-redux';
-import { fetchCoupons, addCustomer, fetchEmployees } from '../../../../../store/actions/index';
+import { fetchVendorsCoupons, addCustomer, fetchEmployees } from '../../../../../store/actions/index';
 import ThemeContext from '../../../../../store/theme-context';
 import VatContext from '../../../../../store/vat-context';
 import AddCustomerModal from './AddCustomerModal/AddCustomerModal';
@@ -330,7 +330,6 @@ const Cart = props => {
     const handleDateChange = (newValue) => {
         setDateTime(newValue);
     };
-
 
     const selectCustomer = useCallback((value) => {
         if (value) {
@@ -806,7 +805,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchCouponsHandler: (lang) => dispatch(fetchCoupons(lang)),
+        fetchCouponsHandler: (lang) => dispatch(fetchVendorsCoupons(lang)),
         fetchedEmployeesHandler: (lang) => dispatch(fetchEmployees(lang)),
         addCustomerHandler: (data) => dispatch(addCustomer(data)),
     }

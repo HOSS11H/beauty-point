@@ -35,3 +35,20 @@ export const fetchCoupons = (language) => {
         })
     }
 }
+
+export const fetchVendorsCoupons = (language) => {
+    return dispatch => {
+        dispatch(fetchCouponsStart())
+        axios.get(`/vendors/coupons`, {
+            headers: {
+                'Accept-Language': language
+            }
+        }).then(response => {
+            dispatch(fetchCouponsSuccess(response.data.data));
+        })
+        .catch(err => {
+            //console.log(err)
+            dispatch(fetchCouponsFailed(err.message))
+        })
+    }
+}

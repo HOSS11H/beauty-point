@@ -513,6 +513,21 @@ const resources = {
             'view employee': 'عرض الموظف',
             'view employee times': 'عرض أوقات الموظف',
             'edit employee times': 'تعديل أوقات الموظف',
+            'coupons': 'الكوبونات',
+            'plans': 'الباقات',
+            'create new coupon': 'إنشاء كوبون جديد',
+            'Create Coupon': 'إنشاء كوبون',
+            'Has End Date ?': 'هل لديه تاريخ انتهاء؟',
+            'coupon code': 'كود الكوبون',
+            'Coupon Created': 'تم إنشاء الكوبون',
+            'code: ': 'كود: ',
+            'discount: ': 'الخصم: ',
+            'start date: ': 'تاريخ البدء: ',
+            'end date: ': 'تاريخ الانتهاء: ',
+            'edit coupon details': 'تعديل تفاصيل الكوبون',
+            'Coupon Details Updated': 'تم تحديث تفاصيل الكوبون',
+            'Coupon Deleted': 'تم حذف الكوبون',
+            'Failed Deleting Coupon': 'فشل حذف الكوبون',
         }
     }
 };
