@@ -18,7 +18,7 @@ const AddPaymentModal = props => {
 
     const { t } = useTranslation();
 
-    const [paidAmount, setPaidAmount] = useState(0.0)
+    const [paidAmount, setPaidAmount] = useState(0)
     const [paidAmountError, setPaidAmountError] = useState(false)
 
     const [paymentGateway, setPaymentGateway] = useState('cash')
