@@ -68,7 +68,7 @@ const SearchFilters = (props) => {
     return (
         <FiltersWrapper>
             <Grid container spacing={2}>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={6} sm={6}>
                     <FormControl fullWidth>
                         <InputLabel id="item-type">{t('Type')}</InputLabel>
                         <Select
@@ -84,7 +84,7 @@ const SearchFilters = (props) => {
                         </Select>
                     </FormControl>
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={6} sm={6}>
                     <FormControl fullWidth>
                         <InputLabel id="item-location">{t('location')}</InputLabel>
                         <Select
@@ -104,7 +104,7 @@ const SearchFilters = (props) => {
                 </Grid>
                 {
                     type === 'services' && (
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={6} sm={6}>
                             <FormControl fullWidth>
                                 <InputLabel id="item-category">{t('Category')}</InputLabel>
                                 <Select

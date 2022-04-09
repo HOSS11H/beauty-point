@@ -169,7 +169,7 @@ const EmployeeReport = props => {
                 <EmployeeTable data={EmployeeTableData.data} />
                 <PriceCalculation>
                     <p>{t('employee comission')}</p>
-                    <p>{`${commission.toFixed(2)} %`}</p>
+                    <p>{formatCurrency(commission)}</p>
                 </PriceCalculation>
                 <PriceCalculation>
                     <p>{t('total amount')}</p>

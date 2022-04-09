@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useContext, useState } from 'react';
 import styled from 'styled-components';
 import GridViewIcon from '@mui/icons-material/GridView';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
@@ -8,6 +8,8 @@ import IconButton from '@mui/material/IconButton';
 import { connect } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import TablePaginationActions from '../../../../../components/UI/Dashboard/Table/TablePagination/TablePagination';
+import { useMediaQuery } from '@mui/material';
+import ThemeContext from '../../../../../store/theme-context';
 
 const ViewBar = styled.div`
     display: flex;
@@ -48,6 +50,11 @@ const FilteredResults = (props) => {
 
     const { t } = useTranslation()
 
+    const themeCtx = useContext(ThemeContext)
+    const { theme } = themeCtx;
+
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'), { noSsr: true });
+
     let fetchedData = { data: [], };
     
 
@@ -59,7 +66,7 @@ const FilteredResults = (props) => {
         fetchedData = fetchedDeals;
     }
 
-    const [isGridView, setIsGridView] = useState(true)
+    const [isGridView, setIsGridView] = useState(isMobile ? false : true)
 
     let content;
 

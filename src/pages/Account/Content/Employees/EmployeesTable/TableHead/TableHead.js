@@ -23,12 +23,6 @@ const headCells = [
         label: 'mobile',
     },
     {
-        id: 'group',
-        numeric: false,
-        disablePadding: false,
-        label: 'group',
-    },
-    {
         id: 'roles',
         numeric: false,
         disablePadding: false,

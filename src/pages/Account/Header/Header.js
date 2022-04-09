@@ -14,6 +14,7 @@ import { ButtonSmall, ButtonText } from '../../../components/UI/Button/Button';
 import AuthContext from '../../../store/auth-context';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { useMediaQuery } from '@mui/material';
 
 const SwitchBtn = styled(ButtonSmall)`
     &.MuiButton-root {
@@ -45,8 +46,11 @@ function Header(props) {
     const {t} = useTranslation();
 
     const { onDrawerToggle } = props;
-
+    
     const themeCtx = useContext(ThemeContext)
+    const { theme } = themeCtx;
+
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'), { noSsr: true });
 
     const authCtx = useContext(AuthContext);
 
@@ -77,14 +81,20 @@ function Header(props) {
                             <IconButton sx={{ mr: 1, color: themeCtx.theme.palette.mode === 'dark' ? themeCtx.theme.vars.white : themeCtx.theme.vars.black }} onClick={themeCtx.toggleMode} >
                                 {themeCtx.theme.palette.mode === 'dark' ? <WbSunnyIcon /> : <Brightness2Icon />}
                             </IconButton>
-                            <SwitchBtn onClick={themeCtx.toggleLanguage} >{themeCtx.lang === 'ar' ? 'switch to EN' : 'الانتقال الي العربية' }</SwitchBtn>
+                            {!isMobile && <SwitchBtn onClick={themeCtx.toggleLanguage} >{themeCtx.lang === 'ar' ? 'switch to EN' : 'الانتقال الي العربية' }</SwitchBtn>}
                         </Grid>
                         <Grid item xs />
                         <Grid item>
-                            <HomeBtn onClick={ ( ) => navigate('/')   }>{t('visit store')}</HomeBtn>
-                            <NavLink to='point-of-sale'>
-                                <HomeBtn  >{t('add new booking')}</HomeBtn>
-                            </NavLink>
+                            {
+                                !isMobile && (
+                                    <>
+                                        <HomeBtn onClick={ ( ) => navigate('/')   }>{t('visit store')}</HomeBtn>
+                                        <NavLink to='point-of-sale'>
+                                            <HomeBtn  >{t('add new booking')}</HomeBtn>
+                                        </NavLink>
+                                    </>
+                                )
+                            }
                             <LogoutBtn variant='text' onClick={logoutHandler}>{t('log out')}</LogoutBtn>
                         </Grid>
                     </Grid>

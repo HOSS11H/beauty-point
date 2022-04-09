@@ -52,15 +52,6 @@ const EnhancedTableBody = props => {
                             </TableData>
                         </TableCell>
                         <TableCell align="center">
-                            {
-                                row.employeeGroup && (
-                                    <TableInfos >
-                                        {row.employeeGroup.name}
-                                    </TableInfos>
-                                )
-                            }
-                        </TableCell>
-                        <TableCell align="center">
                             { 
                                 row.roles && (
                                     row.roles.map((role, index) => {
