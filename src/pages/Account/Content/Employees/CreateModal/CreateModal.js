@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import ThemeContext from '../../../../../store/theme-context'
 
 import { CustomModal } from '../../../../../components/UI/Modal/Modal';
-import { Grid } from '@mui/material';
+import { Grid, InputAdornment } from '@mui/material';
 import TextField from '@mui/material/TextField';
 
 import { connect } from 'react-redux';
@@ -16,6 +16,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
+import PercentIcon from '@mui/icons-material/Percent';
 
 
 const CustomTextField = styled(TextField)`
@@ -42,6 +43,8 @@ const CreateModal = (props) => {
     const [employeeRole, setEmployeeRole] = useState('');
     const [employeeRoleError, setEmployeeRoleError] = useState(false);
 
+    const [employeeCommission, setEmployeeCommission] = useState(100);
+
     useEffect(() => {
         fetchRolesHandler(lang);
     }, [fetchRolesHandler, lang])
@@ -56,10 +59,13 @@ const CreateModal = (props) => {
         setEmployeeEmail(event.target.value);
     }
 
-
     const employeeNumberChangeHandler = (event) => {
         setEmployeeNumber(event.target.value);
         setEmployeeNumberError(false);
+    }
+
+    const employeeCommissionChangeHandler = (event) => {
+        setEmployeeCommission(event.target.value);
     }
     const handleEmployeeRoleChange = (event) => {
         setEmployeeRole(event.target.value);
@@ -74,6 +80,7 @@ const CreateModal = (props) => {
         setEmployeeNameError(false);
         setEmployeeNumber(0);
         setEmployeeNumberError(false);
+        setEmployeeCommission(100);
         setEmployeeEmail('');
         setEmployeeRole('');
         setEmployeeRoleError(false);
@@ -91,7 +98,7 @@ const CreateModal = (props) => {
         if (employeeRole === '') {
             setEmployeeRoleError(true);
             return;
-        }   
+        }
         if (employeeNumber.trim().length === 0) {
             setEmployeeNumberError(true);
             return;
@@ -100,13 +107,14 @@ const CreateModal = (props) => {
             name: employeeName,
             mobile: employeeNumber,
             role_id: employeeRole,
+            commission: employeeCommission,
             calling_code: '5555',
         }
         if (employeeEmail !== '') {
             data.email = employeeEmail;
         }
         onConfirm(data);
-    }, [employeeEmail, employeeName, employeeNumber, employeeRole, onConfirm])
+    }, [employeeCommission, employeeEmail, employeeName, employeeNumber, employeeRole, onConfirm])
 
     let content = (
         <Grid container spacing={2}>
@@ -119,8 +127,15 @@ const CreateModal = (props) => {
                 <ValidationMessage exist>{t(`Password will be 132456`)}</ValidationMessage>
             </Grid>
             <Grid item xs={12} sm={6}>
-                <CustomTextField id="employee-number"label={t('mobile number')} variant="outlined" value={employeeNumber} onChange={employeeNumberChangeHandler} />
+                <CustomTextField id="employee-number" label={t('mobile number')} variant="outlined" value={employeeNumber} onChange={employeeNumberChangeHandler} />
                 {employeeNumberError && <ValidationMessage notExist>{t(`Please add Number`)}</ValidationMessage>}
+            </Grid>
+            <Grid item xs={12} sm={6}>
+                <CustomTextField id="employee-comission" label={t('employee comission')} variant="outlined"
+                    InputProps={{
+                        endAdornment: <InputAdornment position="end"><PercentIcon /></InputAdornment>,
+                    }}
+                    type='number' value={employeeCommission} onChange={employeeCommissionChangeHandler} />
             </Grid>
             <Grid item xs={12} sm={6}>
                 <FormControl fullWidth>

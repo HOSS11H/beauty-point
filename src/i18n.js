@@ -528,6 +528,7 @@ const resources = {
             'Coupon Details Updated': 'تم تحديث تفاصيل الكوبون',
             'Coupon Deleted': 'تم حذف الكوبون',
             'Failed Deleting Coupon': 'فشل حذف الكوبون',
+            'employee comission': 'عمولة الموظف',
         }
     }
 };

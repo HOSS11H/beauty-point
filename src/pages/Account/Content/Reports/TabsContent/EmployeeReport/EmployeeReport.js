@@ -25,6 +25,9 @@ const PriceCalculation = styled.div`
     align-items: center;
     margin-top: 25px;
     padding: 10px 20px;
+    &:last-child {
+        margin-top: 0;
+    }
     p {
         font-size: 20px;
         line-height:1.5;
@@ -51,6 +54,7 @@ const EmployeeReport = props => {
 
     const [EmployeeTableData, setEmployeeTableData] = useState(null)
     const [total, setTotal] = useState(0)
+    const [commission, setCommission] = useState(0)
 
     const [pages, setPages] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -71,7 +75,7 @@ const EmployeeReport = props => {
                 setFetchingEmployees(false)
                 toast.error(t('Error Happened'))
             })
-    }, [lang])
+    }, [lang, t])
 
     const searchHandler = useCallback((employeeId, from, to, page = pages, perPage = rowsPerPage) => {
         setLoading(true);
@@ -100,6 +104,7 @@ const EmployeeReport = props => {
                 setLoading(false);
                 setEmployeeTableData(responses[0].data.data);
                 setTotal(responses[0].data.total);
+                setCommission(responses[0].data.commission);
             }))
             .catch(error => {
                 setLoading(false);
@@ -162,6 +167,10 @@ const EmployeeReport = props => {
                     )}
                 </TablePaginationWrapper>
                 <EmployeeTable data={EmployeeTableData.data} />
+                <PriceCalculation>
+                    <p>{t('employee comission')}</p>
+                    <p>{`${commission.toFixed(2)} %`}</p>
+                </PriceCalculation>
                 <PriceCalculation>
                     <p>{t('total amount')}</p>
                     <p>{formatCurrency(total)}</p>
