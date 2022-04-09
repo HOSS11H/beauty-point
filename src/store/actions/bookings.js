@@ -190,7 +190,7 @@ export const filterBookings = ( searchParams ) => {
                 notEmptySearchParams[key] = searchParams[key]
             }
         }
-        axios.get(`/vendors/bookings?include[]=user&include[]=users&include[]=items`, { params: { ...notEmptySearchParams } } )
+        axios.get(`/vendors/bookings?include[]=user`, { params: { ...notEmptySearchParams } } )
             .then(response => {
                 let editedData = response.data.data.map(item => {
                     const formattedTime = new Date(item.date_time).toLocaleString()
