@@ -165,20 +165,10 @@ const Coupons = props => {
                     position: "bottom-right", autoClose: 4000, hideProgressBar: true,
                     closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
                 });
-                // updateing UI
-                /* setCoupons(
-                    currentCustomers => {
-                        let updatedCustomerIndex = currentCustomers.findIndex(customer => customer.id === coupon.id)
-                        let updatedCustomers = [...currentCustomers]
-                        let updatedCustomer = { ...updatedCustomers[updatedCustomerIndex] }
-                        updatedCustomer = { ...updatedCustomer, ...coupon }
-                        updatedCustomers[updatedCustomerIndex] = updatedCustomer
-                        return updatedCustomers
-                    }
-                ) */
                 setCoupons([])
                 setLastPage(false)
                 setPage(1)
+                fetchCoupons({ page: 1, term: searchWord, per_page: 10, order_by: 'id' })
             })
             .catch(error => {
                 const errs = error.response?.data.errors;
