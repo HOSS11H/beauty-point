@@ -178,7 +178,7 @@ const AllPlans = ({ currentPlanId }) => {
             tokenizationType: "0",
             requestHash: hashSequence,
             udf1: "",
-            udf2: "http://localhost:3000/account/plans/status",
+            udf2: "https://beautypoint.sa/account/plans/status",
             udf3: isMonthly ? "monthly" : "annual",
             udf4: planInfo.id,
             udf5: "",
