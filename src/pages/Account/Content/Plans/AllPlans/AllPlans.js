@@ -1,16 +1,17 @@
-import { Container, Card, Button, Stack, Switch, Grid } from '@mui/material';
-import styled from 'styled-components';
-import { useState, useEffect } from 'react';
-import v1 from '../../../../../utils/axios-instance-v1';
-import v2 from '../../../../../utils/axios-instance';
-import axios from 'axios';
-import { useTranslation } from 'react-i18next';
-import { formatCurrency } from '../../../../../shared/utility';
-import config from '../configuration.json';
-import { v4 as uuidv4 } from 'uuid';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { Button, Card, Container, Grid, Stack, Switch } from '@mui/material';
+import axios from 'axios';
+import CryptoJS from "crypto-js";
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import styled from 'styled-components';
 import Loader from '../../../../../components/UI/Loader/Loader';
-import CryptoJS from "crypto-js"
+import { formatCurrency } from '../../../../../shared/utility';
+import v2 from '../../../../../utils/axios-instance';
+import v1 from '../../../../../utils/axios-instance-v1';
+import config from '../configuration.json';
 
 const PackagesWrapper = styled.div`
     padding: 30px 0 70px;
@@ -120,6 +121,8 @@ const generateHashSHA256 = (hashSequence) => {
 
 const AllPlans = ({ currentPlanId }) => {
 
+    const navigate = useNavigate();
+
     const [isMonthly, setIsMonthly] = useState(true);
 
     const { t } = useTranslation();
@@ -206,7 +209,11 @@ const AllPlans = ({ currentPlanId }) => {
                 }
             })
             .catch(error => {
-                console.log(error);
+                navigate('/account/plans')
+                toast.error('Something went wrong', {
+                    position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                    closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+                });
             }
             );
     }
