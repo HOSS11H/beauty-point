@@ -72,7 +72,7 @@ const EditTicket  = props => {
                 {ticketTitleError && <ValidationMessage notExist>{t(`Please add title`)}</ValidationMessage>}
             </Grid>
             <Grid item xs={12} >
-                <CustomTextField multiline rows={3} id="ticket-subject" type='subject' label={t('subject')} variant="outlined" value={ticketSubject} onChange={ticketSubjectChangeHandler} />
+                <CustomTextField multiline rows={3} id="ticket-subject" type='text' label={t('subject')} variant="outlined" value={ticketSubject} onChange={ticketSubjectChangeHandler} />
                 {ticketSubjectError && <ValidationMessage notExist>{t(`Please add subject`)}</ValidationMessage>}
             </Grid>
         </Grid>

@@ -205,7 +205,7 @@ const SingleTicket = props => {
             {ticketContent}
             {commentsContent}
             <AddComment>
-                <CustomTextField multiline rows={3} id="ticket-subject" type='subject' label={t('subject')} variant="outlined" value={commentInput} onChange={commentInputChangeHandler} />
+                <CustomTextField multiline rows={3} id="ticket-comment" type='text' label={t('comment')} variant="outlined" value={commentInput} onChange={commentInputChangeHandler} />
                 <CustomButton onClick={ addCommentHandler } >{t('add comment')}</CustomButton>
             </AddComment>
         </Fragment>
