@@ -538,6 +538,12 @@ const resources = {
             'No Tickets Found': 'لا توجد تذاكر',
             'edit ticket details': 'تعديل تفاصيل التذكرة',
             'Ticket Details Updated': 'تم تحديث تفاصيل التذكرة',
+            'No Comments Found': 'لا توجد تعليقات',
+            'Comment Added': 'تمت إضافة التعليق',
+            'Failed Adding Comment': 'فشل إضافة التعليق',
+            'Comment Deleted': 'تم حذف التعليق',
+            'Failed Deleting Comment': 'فشل حذف التعليق',
+            'add comment': 'إضافة تعليق',
         }
     }
 };

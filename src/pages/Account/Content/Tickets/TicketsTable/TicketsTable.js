@@ -1,5 +1,6 @@
 import { FormControl, InputLabel, MenuItem, Select, TableHead } from "@mui/material";
 import { Fragment, useCallback, useEffect, useState } from "react";
+import {useNavigate} from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from 'react-toastify';
 import styled from "styled-components";
@@ -49,6 +50,8 @@ const CreateBtn = styled(CustomButton)`
 const intialRowsPerPage = 10;
 
 const TicketsTable = props => {
+
+    const navigate = useNavigate()
 
     const { t } = useTranslation()
 
@@ -169,6 +172,10 @@ const TicketsTable = props => {
             })
     }, [fetchTickets, page, rowsPerPage, searchWord, t])
 
+    const viewTicketHandler = ( id ) => {
+        navigate(`${id}`)
+    }
+
     const handleChangePage = useCallback((event, newPage) => {
         setPage(newPage)
     }, [])
@@ -230,7 +237,8 @@ const TicketsTable = props => {
                                             <TableCell align="center" >{index + 1}</TableCell>
                                             <TableCell align="center" >{ticket.title}</TableCell>
                                             <TableCell align="center" >
-                                                <Actions edit remove
+                                                <Actions edit remove view
+                                                    viewHandler={viewTicketHandler.bind(null, ticket.id)}
                                                     editHandler={openEditTicketHandler.bind(null, ticket)}
                                                     removeHandler={deleteTicketHandler.bind(null, ticket.id)}
                                                 />

@@ -68,6 +68,10 @@ const TicketsTable = React.lazy(() =>
     import('./pages/Account/Content/Tickets/TicketsTable/TicketsTable')
 );
 
+const SingleTicket = React.lazy(() =>
+    import('./pages/Account/Content/Tickets/SingleTicket/SingleTicket')
+);
+
 const Plans = React.lazy(() =>
     import('./pages/Account/Content/Plans/Plans')
 );
@@ -310,6 +314,15 @@ function App(props) {
                                 renderOtherwise={<NotFound />}
                             >
                                 <TicketsTable />
+                            </PermissibleRender>
+                        } />
+                        <Route path=':id' element={
+                            <PermissibleRender
+                                userPermissions={permissions}
+                                requiredPermissions={['manage_settings']}
+                                renderOtherwise={<NotFound />}
+                            >
+                                <SingleTicket />
                             </PermissibleRender>
                         } />
                     </ Route>
