@@ -36,11 +36,8 @@ const PaymentStatus = props => {
 
     const paymentId = searchParams.get("PaymentId")
     const tranId = searchParams.get("TranId")
-    const eci = searchParams.get("ECI")
     const trackId = searchParams.get("TrackId")
-    const authCode = searchParams.get("AuthCode")
     const responseCode = searchParams.get("ResponseCode")
-    const rrn = searchParams.get("RRN")
     const responseHash = searchParams.get("responseHash")
     const amount = searchParams.get("amount")
     const packageType = searchParams.get("UserField3")

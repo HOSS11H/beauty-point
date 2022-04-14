@@ -529,6 +529,14 @@ const resources = {
             'Coupon Deleted': 'تم حذف الكوبون',
             'Failed Deleting Coupon': 'فشل حذف الكوبون',
             'employee comission': 'عمولة الموظف',
+            'create new ticket': 'إنشاء تذكرة جديدة',
+            'Create Ticket': 'إنشاء تذكرة',
+            'subject': 'الموضوع',
+            'Ticket Deleted': 'تم حذف التذكرة',
+            'Failed Deleting Ticket': 'فشل حذف التذكرة',
+            'Ticket Created': 'تم إنشاء التذكرة',
+            'No Tickets Found': 'لا توجد تذاكر',
+            'edit ticket details': 'تعديل تفاصيل التذكرة',
         }
     }
 };

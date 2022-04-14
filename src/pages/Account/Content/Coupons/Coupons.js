@@ -179,7 +179,7 @@ const Coupons = props => {
                     });
                 }
             })
-    }, [t])
+    }, [fetchCoupons, searchWord, t])
 
     const searchCutomersHandler = useCallback((lang, search) => {
         setCoupons([])

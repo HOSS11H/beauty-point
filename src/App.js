@@ -61,6 +61,13 @@ const Coupons = React.lazy(() =>
     import('./pages/Account/Content/Coupons/Coupons')
 );
 
+const Tickets = React.lazy(() =>
+    import('./pages/Account/Content/Tickets/Tickets')
+);
+const TicketsTable = React.lazy(() =>
+    import('./pages/Account/Content/Tickets/TicketsTable/TicketsTable')
+);
+
 const Plans = React.lazy(() =>
     import('./pages/Account/Content/Plans/Plans')
 );
@@ -287,6 +294,25 @@ function App(props) {
                             <Coupons />
                         </PermissibleRender>
                     } />
+                    <Route path="tickets/*" element={
+                        <PermissibleRender
+                            userPermissions={permissions}
+                            requiredPermissions={['manage_settings']}
+                            renderOtherwise={<NotFound />}
+                        >
+                            <Tickets />
+                        </PermissibleRender>
+                    } >
+                        <Route index element={
+                            <PermissibleRender
+                                userPermissions={permissions}
+                                requiredPermissions={['manage_settings']}
+                                renderOtherwise={<NotFound />}
+                            >
+                                <TicketsTable />
+                            </PermissibleRender>
+                        } />
+                    </ Route>
                     <Route path="plans/*" element={
                         <Routes>
                             <Route index element={
