@@ -544,6 +544,7 @@ const resources = {
             'Comment Deleted': 'تم حذف التعليق',
             'Failed Deleting Comment': 'فشل حذف التعليق',
             'add comment': 'إضافة تعليق',
+            'tickets': 'التذاكر',
         }
     }
 };
