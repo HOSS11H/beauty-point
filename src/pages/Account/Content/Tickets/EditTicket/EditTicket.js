@@ -58,11 +58,12 @@ const EditTicket  = props => {
             return;
         }
         const data = {
+            id: ticket.id,
             title: ticketTitle,
             subject: ticketSubject,
         }
         onConfirm(data);
-    }, [ticketSubject, ticketTitle, onConfirm])
+    }, [ticketTitle, ticketSubject, ticket.id, onConfirm])
 
     let content = (
         <Grid container spacing={2}>

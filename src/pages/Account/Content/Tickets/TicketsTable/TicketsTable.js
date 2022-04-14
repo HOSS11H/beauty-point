@@ -143,12 +143,12 @@ const TicketsTable = props => {
         setEditTicketOpened(true)
         setSelectedTicket(ticket)
     }, [])
-    const closeEditTicketHandler = useCallback((data) => {
+    const closeEditTicketHandler = useCallback(( ) => {
         setEditTicketOpened(false)
         setSelectedTicket(null)
     }, [])
-    const editTicketConfirmHandler = useCallback((ticket) => {
-        axios.post(`/vendors/tickets/${ticket.get('id')}`, ticket, { headers: { 'Content-Type': 'multipart/form-data' } })
+    const editTicketConfirmHandler = useCallback((data) => {
+        axios.put(`/vendors/tickets/${data.id}`, data )
             .then(res => {
                 setEditTicketOpened(false)
                 setSelectedTicket(null)

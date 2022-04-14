@@ -537,6 +537,7 @@ const resources = {
             'Ticket Created': 'تم إنشاء التذكرة',
             'No Tickets Found': 'لا توجد تذاكر',
             'edit ticket details': 'تعديل تفاصيل التذكرة',
+            'Ticket Details Updated': 'تم تحديث تفاصيل التذكرة',
         }
     }
 };
