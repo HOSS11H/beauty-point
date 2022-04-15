@@ -9,6 +9,13 @@ import { CustomButton } from "../../../../../components/UI/Button/Button";
 import CommentCard from "../../../../../components/UI/Dashboard/Comment/Comment";
 import Loader from "../../../../../components/UI/Loader/Loader";
 import axios from '../../../../../utils/axios-instance';
+import { TicketStatus } from "../TicketsTable/TicketsTable";
+import moment from 'moment';
+
+
+const TicketDetails = styled.div`
+    margin-bottom: 30px;
+`
 
 const AddComment = styled.div`
     text-align: center;
@@ -153,14 +160,20 @@ const SingleTicket = props => {
 
     if (ticket && !loading) {
         ticketContent = (
-            <Fragment>
+            <TicketDetails>
                 <Typography variant="h3" gutterBottom component="div">
                     {ticket.title}
                 </Typography>
-                <Typography variant="body1" gutterBottom sx={{ marginBottom: '40px'  }} >
+                <Typography variant="body1" gutterBottom sx={{ marginBottom: '30px'  }} >
                     {ticket.subject}
                 </Typography>
-            </Fragment>
+                <Typography variant="body2" gutterBottom>
+                    {moment.utc(ticket.created_at).format('YYYY-MM-DD hh:mm A')}
+                </Typography>
+                <TicketStatus className={ticket.status}>
+                    {t(ticket.status)}
+                </TicketStatus>
+            </TicketDetails>
         )
     }
 

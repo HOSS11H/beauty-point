@@ -545,6 +545,11 @@ const resources = {
             'Failed Deleting Comment': 'فشل حذف التعليق',
             'add comment': 'إضافة تعليق',
             'tickets': 'التذاكر',
+            'in-progress': 'قيد التنفيذ',
+            'closed': 'مغلق',
+            'open': 'مفتوح',
+            'dublicate': 'مكرر',
+            'solved': 'محلول',
         }
     }
 };

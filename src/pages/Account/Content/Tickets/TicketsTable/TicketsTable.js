@@ -19,6 +19,7 @@ import Paper from '@mui/material/Paper';
 import Actions from "../../../../../components/UI/Dashboard/Actions/Actions";
 import SearchMessage from "../../../../../components/Search/SearchMessage/SearchMessage";
 import EditTicket from "../EditTicket/EditTicket";
+import moment from 'moment';
 
 const TablePaginationWrapper = styled.div`
     display: flex;
@@ -47,6 +48,32 @@ const CreateBtn = styled(CustomButton)`
         }
     }
 `
+
+export const TicketStatus = styled.div`
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 30px;
+    padding: 3px 10px;
+    border-radius: 12px;
+    color: ${({ theme }) => theme.palette.common.white};
+    font-size: 14px;
+    text-transform: capitalize;
+    font-weight: 500;
+    &.in-progress {
+        background-color: ${({ theme }) => theme.palette.primary.main};
+    }
+    &.solved {
+        background-color: ${({ theme }) => theme.palette.success.main};
+    }
+    &.closed {
+        background-color: ${({ theme }) => theme.palette.secondary.main};
+    }
+    &.duplicate {
+        background-color: ${({ theme }) => theme.palette.error.main};
+    }
+`
+
 const intialRowsPerPage = 10;
 
 const TicketsTable = props => {
@@ -227,6 +254,8 @@ const TicketsTable = props => {
                                 <TableRow>
                                     <TableCell align="center" >{t('#')}</TableCell>
                                     <TableCell align="center" >{t('title')}</TableCell>
+                                    <TableCell align="center" >{t('date')}</TableCell>
+                                    <TableCell align="center" >{t('status')}</TableCell>
                                     <TableCell align="center" >{t('action')}</TableCell>
                                 </TableRow>
                             </TableHead>
@@ -236,6 +265,12 @@ const TicketsTable = props => {
                                         <TableRow key={ticket.id}>
                                             <TableCell align="center" >{index + 1}</TableCell>
                                             <TableCell align="center" >{ticket.title}</TableCell>
+                                            <TableCell align="center" >{moment.utc(ticket.created_at).format('YYYY-MM-DD')}</TableCell>
+                                            <TableCell align="center" >
+                                                <TicketStatus className={ticket.status}>
+                                                    {t(ticket.status)}
+                                                </TicketStatus>
+                                            </TableCell>
                                             <TableCell align="center" >
                                                 <Actions edit remove view
                                                     viewHandler={viewTicketHandler.bind(null, ticket.id)}
