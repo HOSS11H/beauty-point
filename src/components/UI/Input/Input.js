@@ -217,7 +217,7 @@ const Input = ( props ) => {
                             inputProps={{ 'aria-label': 'controlled' }} />
                         <CustomLabel >
                             <span>{themeCtx.direction === 'rtl' ?  label.ar.text : label.en.text }</span>
-                            <a href={label.link}>{themeCtx.direction === 'rtl' ?  label.ar.linkText : label.en.linkText }</a>
+                            {label.link && <a href={label.link}>{themeCtx.direction === 'rtl' ?  label.ar.linkText : label.en.linkText }</a>}
                         </CustomLabel>
                     </CustomCheckbox>
             }

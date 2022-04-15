@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import v1 from '../../utils/axios-instance-v1';
 import useForm from '../../hooks/useForm';
 import { loginForm, subscribeForm } from '../../utils/formConfig';
@@ -7,11 +7,13 @@ import AuthContext from '../../store/auth-context';
 
 import ThemeContext from '../../store/theme-context';
 import styled from 'styled-components';
-import { Container, Grid, Card } from '@mui/material';
+import { Container, Grid, Card, Button } from '@mui/material';
 import { CustomButton } from '../../components/UI/Button/Button';
 import Logo from '../../images/logo/logo_mobile.png'
 import AuthBgSrc from '../../images/avatars/auth-bg.png'
 import Map from './Map/Map';
+import { useTranslation } from 'react-i18next';
+import Terms from './Terms/Terms';
 
 const AuthContainer = styled.div`
     min-height: 100vh;
@@ -31,6 +33,7 @@ const CustomizedCard = styled(Card)`
 `
 
 const FormWrapper = styled.form`
+    text-align: left;;
 `
 const FormHeading = styled.h1`
     font-size: 26px;
@@ -69,12 +72,21 @@ const FormLink = styled.p`
     }
 `
 
+const TextButton = styled(Button)`
+    &.MuiButton-root {
+        padding: 0;
+        transform: translateY(-20px);
+        margin-top: -20px;
+    }
+`
+
 const LogoImg = styled.img`
     width: 90px;
     height: 90px;
     object-fit: cover;
-    display: inline-flex;
+    display: flex;
     justify-content: center;
+    margin: 0 auto;
 `
 
 const AuthImg = styled.div`
@@ -99,6 +111,7 @@ const Auth = props => {
     const authCtx = useContext(AuthContext);
 
     const themeCtx = useContext(ThemeContext)
+    const { t } = useTranslation()
 
     const navigate = useNavigate();
 
@@ -112,11 +125,12 @@ const Auth = props => {
 
     const { isLoggedIn } = authCtx;
 
-
     const { renderFormInputs: loginInputs, isFormValid: isLoginDataValid, form: loginData } = useForm(loginForm);
     const { renderFormInputs: subscribeInputs, isFormValid: isSubscribeDataValid, form: subscribeData } = useForm(subscribeForm);
 
     const [marker, setMarker] = useState({})
+
+    const [ termsModalOpened, setTermsModalOpened ] = useState(false)
 
     let authIsValid;
 
@@ -195,6 +209,13 @@ const Auth = props => {
             })
     }
 
+    const termsModalCloseHandler = useCallback(() => {
+        setTermsModalOpened(false)
+    }, [])
+    const termsModaOpenHandler = useCallback(() => {
+        setTermsModalOpened(true)
+    }, [])
+
     let loginFormText = {
         heading: 'Login',
         passwordRestoreMessage: 'forget Password ?',
@@ -232,7 +253,7 @@ const Auth = props => {
         <AuthContainer>
             <Container maxWidth="xl">
                 <Grid container spacing={3}  >
-                    <Grid item xs={12} md={6}  >
+                    <Grid item xs={12} md={7} lg={7} >
                         <CustomizedCard>
                             <FormWrapper>
                                 <LogoImg src={Logo} alt="logo" />
@@ -241,6 +262,7 @@ const Auth = props => {
                                     {!isLogin && subscribeFormText.heading}
                                 </FormHeading>
                                 {isLogin ? loginInputs() : subscribeInputs()}
+                                {!isLogin && <TextButton variant='text' onClick={termsModaOpenHandler} >{t('terms & conditions')}</TextButton> }
                                 {!isLogin && <Map assignCoords={assignCoords} marker={marker} /> }
                                 {isLogin && (
                                     <FormLink>
@@ -269,9 +291,10 @@ const Auth = props => {
                                     </FormLink>
                                 )}
                             </FormWrapper>
+                            { !isLogin && termsModalOpened && <Terms open={termsModalOpened} handleClose={termsModalCloseHandler} /> }
                         </CustomizedCard>
                     </Grid>
-                    <Grid item xs={12} md={6} >
+                    <Grid item xs={12} md={5} lg={5} >
                         <AuthImg>
                             <img src={AuthBgSrc} alt="auth Background" />
                         </AuthImg>

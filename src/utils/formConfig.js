@@ -113,7 +113,6 @@ export const subscribeForm = {
         { 
             ar: {text: 'انا موافق علي بند الاستخدام وسياسة الخصوصية وقد قرأتها بالكامل', linkText: 'بنود الاستخدام وسياسة الخصوصية', } , 
             en: {text: 'I have read and agree terms & conditions', linkText: 'view terms & conditions', } ,
-            link: 'https://beautypoint.app',
         },
         undefined  ,'terms', 'checkbox', false ),
         validationRules: [

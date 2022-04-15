@@ -550,6 +550,11 @@ const resources = {
             'open': 'مفتوح',
             'dublicate': 'مكرر',
             'solved': 'محلول',
+            'terms & conditions': 'بنود الاستخدام وسياسة الخصوصية',
+            'Terms Of Services': 'بنود الخدمة',
+            'Last Edit: 04/13/2022': 'آخر تعديل: 04/13/2022',
+            'Grettings Users,': 'أهلا بكم ',
+            'We are glad to see you here!': 'نحن سعداء لرؤيتك هنا!',
         }
     }
 };
