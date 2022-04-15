@@ -78,7 +78,7 @@ const SingleTicket = props => {
             }
         }
         setFetching(true)
-        axios.get(`/vendors/tickets/${id}/comments`, {
+        axios.get(`/vendors/tickets/${id}/comments?include[]=owner`, {
             params: { ...notEmptySearchParams },
         })
             .then(res => {

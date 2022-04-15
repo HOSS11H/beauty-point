@@ -1,10 +1,11 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Button } from '@mui/material';
 import Card from '@mui/material/Card';
-import { Fragment } from 'react';
+import { Fragment, useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled, { css } from 'styled-components';
 import { formatCurrency } from '../../../../shared/utility';
+import AuthContext from '../../../../store/auth-context';
 import { ActionButton } from '../Actions/Actions';
 
 const CustomCardMui = styled(Card)`
@@ -21,7 +22,18 @@ const CustomCardMui = styled(Card)`
         cursor: pointer;
     }
 `
-const CommentName = styled.a`
+const CommentName = styled.h4`
+    display: block;
+    font-size: 16px;
+    line-height:1.5;
+    text-transform: capitalize;
+    font-weight: 600;
+    color: ${({ theme }) => theme.palette.text.primary};
+    transition: 0.3s ease-in-out;
+    margin-bottom: 15px;
+    cursor: pointer;
+`
+const CommentOwner = styled.h4`
     display: block;
     font-size: 16px;
     line-height:1.5;
@@ -30,6 +42,7 @@ const CommentName = styled.a`
     color: ${({ theme }) => theme.palette.text.primary};
     transition: 0.3s ease-in-out;
     margin-bottom: 5px;
+    color: ${({ theme }) => theme.vars.secondary};
     cursor: pointer;
 `
 
@@ -42,18 +55,22 @@ const ButtonWrapper = styled.div`
 const CommentCard = props => {
 
     const { t } = useTranslation()
-
+    const authCtx = useContext(AuthContext);
+    const { userId } = authCtx
     const { comment, deleteHandler } = props;
 
     return (
         <Fragment>
             <CustomCardMui >
                 <CommentName>{comment.comment}</CommentName>
-                <ButtonWrapper>
-                    <Button variant='text' color='secondary' onClick={deleteHandler.bind(null, comment.id)} >
-                        {t('delete')}
-                    </Button>
-                </ButtonWrapper>
+                <CommentOwner>{comment.owner.name}</CommentOwner>
+                {+userId === +comment.owner.id && (
+                    <ButtonWrapper>
+                        <Button variant='text' color='secondary' onClick={deleteHandler.bind(null, comment.id)} >
+                            {t('delete')}
+                        </Button>
+                    </ButtonWrapper>
+                )}
             </CustomCardMui>
         </Fragment>
     )
