@@ -1,6 +1,6 @@
 {
-    "service_url": "https://payments-dev.urway-tech.com/URWAYPGService/transaction/jsonProcess/JSONrequest",
+    "service_url": "https://payments.urway-tech.com/URWAYPGService/transaction/jsonProcess/JSONrequest",
     "terminalId":"conpoint",
-    "merchantkey":"8542e0e3f08efb458271d71533a8459afc819bf5debe523d36ec1babce44d793",
-    "password":"conpoint@123"
+    "merchantkey":"29de0aee175f77d360bbac557687ce2cb512501cafa668a7691f13158f9e020a",
+    "password":"URWAY@1987_con"
 }
