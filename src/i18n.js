@@ -555,6 +555,7 @@ const resources = {
             'Last Edit: 04/13/2022': 'آخر تعديل: 04/13/2022',
             'Grettings Users,': 'أهلا بكم ',
             'We are glad to see you here!': 'نحن سعداء لرؤيتك هنا!',
+            'Add new booking': 'إضافة حجز جديد',
         }
     }
 };

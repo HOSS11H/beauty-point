@@ -9,6 +9,7 @@ import PersonIcon from '@mui/icons-material/Person';
 import { CustomButton } from '../../../../../components/UI/Button/Button';
 import { Fragment } from 'react';
 import ShowBookings from './ShowBookings/ShowBookings';
+import { useNavigate } from 'react-router-dom';
 
 const ClientDetails = styled.div`
     display: flex;
@@ -79,6 +80,7 @@ const BookingActions = styled.div`
     display: flex;
     align-items: center;
     flex-wrap: wrap;
+    gap: 20px;
     margin-top: 10px;
 `
 
@@ -90,6 +92,17 @@ const DeleteButton = styled(CustomButton)`
         flex-shrink: 0;
         background: ${({ theme }) => theme.palette.error.main};
         font-size: 16px;
+        margin-bottom: 0;
+    }
+`
+const AddButton = styled(CustomButton)`
+    &.MuiButton-root {
+        width: auto;
+        padding: 0 20px;
+        height: 40px;
+        flex-shrink: 0;
+        background: ${({ theme }) => theme.palette.success.main};
+        font-size: 16px;
     }
 `
 
@@ -97,9 +110,15 @@ const ShowCustomer = (props) => {
 
     const { show, heading, confirmText, onConfirm, onClose, customer, onDelete } = props;
 
+    const navigate = useNavigate()
+
     const { t } = useTranslation();
 
     let content;
+
+    const addBookingHandler = ( customer ) => { 
+        navigate(`/account/point-of-sale?customer=${customer.id}&name=${customer.name}&number=${customer.mobile}`)
+    }
 
     if (customer) {
         content = (
@@ -134,6 +153,7 @@ const ShowCustomer = (props) => {
                     <Grid item xs={12}>
                         <BookingActions>
                             <DeleteButton onClick={(id) => onDelete(customer.id)} >{t('Delete')}</DeleteButton>
+                            <AddButton onClick={() => addBookingHandler(customer)} >{t('Add new booking')}</AddButton>
                         </BookingActions>
                     </Grid>
                 </Grid>
