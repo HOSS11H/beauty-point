@@ -14,6 +14,12 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { formatCurrency } from '../../../../../../shared/utility';
+import { useCallback, useContext, useEffect, useState } from 'react';
+import ThemeContext from '../../../../../../store/theme-context';
+import Loader from '../../../../../../components/UI/Loader/Loader';
+import { toast } from 'react-toastify';
+import axios from '../../../../../../utils/axios-instance';
+import moment from 'moment';
 
 const DealImg = styled.div`
     width: 100%;
@@ -70,27 +76,54 @@ const DealDesc = styled.div`
 
 const ViewModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, id, fetchedDeals } = props;
+    const { show, heading, confirmText, onConfirm, onClose, id } = props;
 
     const { t } = useTranslation();
 
-    const dealIndex = fetchedDeals.data.findIndex(deal => deal.id === id);
+    const themeCtx = useContext(ThemeContext)
+    const { lang } = themeCtx;
 
-    let dealData = fetchedDeals.data[dealIndex];
+    const [ dealData, setDealData ] = useState(null);
+    const [ loading, setLoading ] = useState(false);
+
+    const fetchData = useCallback(( ) => {
+        setLoading(true);
+        axios.get(`/vendors/deals/${id}?include[]=services&include[]=location`, {
+            headers: {
+                'Accept-Language': lang
+            }
+        }).then(response => {
+            setDealData(response.data);
+            setLoading(false);
+        })
+            .catch(err => {
+                setLoading(false);
+                toast.error(t('Error Happened'), {
+                    position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                    closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+                });
+            })
+    }, [id, lang, t])
+
+    useEffect(() => {
+        if (id) {
+            fetchData();
+        }
+    }, [fetchData, id]);
 
     let content;
 
-    if (dealData) {
+    if (loading) {
+        content = <Loader height='50vh' />
+    }
+
+    if (dealData && !loading) {
 
         const formattedApplyTime = dealData.applied_between_time.split(' - ')
-
-        /* const formattedApplyDays = JSON.parse(dealData.days)
-        //console.log(formattedApplyDays) */
 
         const transformedDealData = {
             ...dealData,
             applied_between_time: formattedApplyTime,
-            /* days: formattedApplyDays, */
         }
 
         const mySafeHTML = DOMPurify.sanitize(dealData.description);
@@ -126,8 +159,8 @@ const ViewModal = (props) => {
                             <DealData>
                                 <DealDataHeading>{t('starts at')}</DealDataHeading>
                                 <TableDate>
-                                    <li><EventNoteIcon sx={{ mr: 1 }} />{transformedDealData.formattedDate.startDate}</li>
-                                    <li><WatchLaterIcon sx={{ mr: 1 }} />{transformedDealData.formattedTime.startTime}</li>
+                                    <li><EventNoteIcon sx={{ mr: 1 }} />{moment(transformedDealData.start_date_time).format('YYYY-MM-DD')}</li>
+                                    <li><WatchLaterIcon sx={{ mr: 1 }} />{moment(transformedDealData.start_date_time).format('hh:mm A')}</li>
                                 </TableDate>
                             </DealData>
                         </Grid>
@@ -135,8 +168,8 @@ const ViewModal = (props) => {
                             <DealData>
                                 <DealDataHeading>{t('ends at')}</DealDataHeading>
                                 <TableDate>
-                                    <li><EventNoteIcon sx={{ mr: 1 }} />{transformedDealData.formattedDate.endDate}</li>
-                                    <li><WatchLaterIcon sx={{ mr: 1 }} />{transformedDealData.formattedTime.endTime}</li>
+                                    <li><EventNoteIcon sx={{ mr: 1 }} />{moment(transformedDealData.end_date_time).format('YYYY-MM-DD')}</li>
+                                    <li><WatchLaterIcon sx={{ mr: 1 }} />{moment(transformedDealData.end_date_time).format('hh:mm A')}</li>
                                 </TableDate>
                             </DealData>
                         </Grid>

@@ -53,6 +53,41 @@ export const fetchDeals = (language, page, perPage, orderBy, orderDir) => {
             })
     }
 }
+export const fetchDealsTable = (language, page, perPage, orderBy, orderDir) => {
+    return dispatch => {
+        dispatch(fetchDealsStart())
+        axios.get(`/vendors/deals?page=${page + 1}&per_page=${perPage}&order_by=${orderBy}&order_dir=${orderDir}&include[]=location`, {
+            headers: {
+                'Accept-Language': language
+            }
+        }).then(response => {
+            let editedData = response.data.data.map(item => {
+                const formattedStartDate = item.start_date_time.split(" ");
+                const formattedEndDate = item.end_date_time.split(" ");
+                let startDate = formattedStartDate[0]
+                let startTime = formattedStartDate[1]
+                let endDate = formattedEndDate[0]
+                let endTime = formattedEndDate[1]
+                return {
+                    ...item,
+                    formattedDate: {
+                        startDate: startDate,
+                        endDate: endDate,
+                    },
+                    formattedTime: {
+                        startTime: startTime,
+                        endTime: endTime,
+                    }
+                }
+            })
+            dispatch(fetchDealsSuccess({ ...response.data, data: editedData }));
+        })
+            .catch(err => {
+                //console.log(err)
+                dispatch(fetchDealsFailed(err.message))
+            })
+    }
+}
 
 export const deleteDealStart = () => {
     return {
@@ -187,7 +222,7 @@ export const searchDealsFailed = (errorMessage) => {
 export const searchDeals = (language, word) => {
     return dispatch => {
         dispatch(searchDealsStart())
-        axios.get(`/vendors/deals?term=${word}&page=1&per_page=15&include[]=services&include[]=location`, {
+        axios.get(`/vendors/deals?term=${word}&page=1&per_page=15&include[]=location`, {
             headers: {
                 'Accept-Language': language
             }
