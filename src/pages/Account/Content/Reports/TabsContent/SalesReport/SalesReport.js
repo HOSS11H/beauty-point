@@ -85,7 +85,7 @@ const SalesReport = props => {
                 setFetchingLocations(false)
                 toast.error(t('Error Happened'))
             })
-    }, [lang])
+    }, [lang, t])
 
     const searchHandler = useCallback((location, year, month, page = pages, perPage = rowsPerPage) => {
         setLoading(true);

@@ -1,43 +1,43 @@
-import CustomCard from '../../../../../components/UI/Card/Card';
-import TextField from '@mui/material/TextField';
-import TimePicker from '@mui/lab/TimePicker';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import DateAdapter from '@mui/lab/AdapterDateFns';
 import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import TimePicker from '@mui/lab/TimePicker';
 import { Box, Grid, IconButton, useMediaQuery } from '@mui/material';
-import styled from 'styled-components';
-import Paper from '@mui/material/Paper';
 import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormGroup from '@mui/material/FormGroup';
+import FormLabel from '@mui/material/FormLabel';
 import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Paper from '@mui/material/Paper';
+import Select from '@mui/material/Select';
+import Switch from '@mui/material/Switch';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
-import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
-
-import FormLabel from '@mui/material/FormLabel';
-import DateAdapter from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import { useState, useEffect, useContext, useCallback } from 'react';
+import TextField from '@mui/material/TextField';
+import { format } from 'date-fns';
+import { Fragment, useCallback, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import SharedTableHead from './SharedTableHead/SharedTableHead';
-import CartItem from './CartItem/CartItem';
-import { ButtonText, ButtonConfirm, CustomButton } from '../../../../../components/UI/Button/Button';
-import ValidationMessage from '../../../../../components/UI/ValidationMessage/ValidationMessage';
 import { connect } from 'react-redux';
-import { fetchVendorsCoupons, addCustomer, fetchEmployees } from '../../../../../store/actions/index';
+import { useSearchParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import styled from 'styled-components';
+import { ButtonConfirm, ButtonText, CustomButton } from '../../../../../components/UI/Button/Button';
+import CustomCard from '../../../../../components/UI/Card/Card';
+import ValidationMessage from '../../../../../components/UI/ValidationMessage/ValidationMessage';
+import { formatCurrency } from '../../../../../shared/utility';
+import { addCustomer, fetchEmployees, fetchVendorsCoupons } from '../../../../../store/actions/index';
 import ThemeContext from '../../../../../store/theme-context';
 import VatContext from '../../../../../store/vat-context';
 import AddCustomerModal from './AddCustomerModal/AddCustomerModal';
-import { formatCurrency } from '../../../../../shared/utility';
-import { Fragment } from 'react';
+import CartItem from './CartItem/CartItem';
 import SearchCustomer from './SearchCustomer/SearchCustomer';
-import { toast } from 'react-toastify';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
-import { format } from 'date-fns';
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import SharedTableHead from './SharedTableHead/SharedTableHead';
+
 
 const CustomerCard = styled.div`
     padding: 20px;
@@ -223,9 +223,21 @@ const Cart = props => {
 
     const { t } = useTranslation()
 
+
     const themeCtx = useContext(ThemeContext);
     const { lang, theme } = themeCtx;
 
+    const  [ searchParams ]  = useSearchParams();
+
+    const hasCustomer = searchParams.get('customer') !== null;
+    const customer = hasCustomer ? searchParams.get('customer') : null;
+    const customerName = hasCustomer ? searchParams.get('name') : null;
+    const customerMobile = hasCustomer ? searchParams.get('number') : null;
+    const intialCustomerData = {
+        id: customer,
+        name: customerName,
+        mobile: customerMobile,
+    }
     const isMobile = useMediaQuery(theme.breakpoints.down('md'), { noSsr: true });
 
     const [ mobileCartOpened, setMobileCartOpened ] = useState(false);
@@ -233,7 +245,7 @@ const Cart = props => {
     const vatCtx = useContext(VatContext);
     const { vat, toggleVat } = vatCtx;
 
-    const [customerData, setCustomerData] = useState(null);
+    const [customerData, setCustomerData] = useState(hasCustomer ? intialCustomerData : null);
     const [customerDataError, setCustomerDataError] = useState(false)
     const [resetSearchData, setResetSearchData] = useState(false)
 
