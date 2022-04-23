@@ -117,6 +117,9 @@ const SingleDeal = React.lazy(() =>
 const SingleSalon = React.lazy(() =>
     import('./pages/Home/SingleSalon/SingleSalon')
 );
+const SingleArtist = React.lazy(() =>
+    import('./pages/Home/SingleArtist/SingleArtist')
+);
 const AllPackages = React.lazy(() =>
     import('./pages/Home/AllPackages/AllPackages')
 );
@@ -125,6 +128,9 @@ const AllCategories = React.lazy(() =>
 );
 const AllSaloons = React.lazy(() =>
     import('./pages/Home/AllSaloons/AllSaloons')
+);
+const AllArtists = React.lazy(() =>
+    import('./pages/Home/AllArtists/AllArtists')
 );
 const NearbySalons = React.lazy(() =>
     import('./pages/Home/NearbySalons/NearbySalons')
@@ -161,6 +167,7 @@ function App(props) {
                 <Route path="all-saloons" element={<AllSaloons />} />
                 <Route path="all-deals" element={<AllDeals />} />
                 <Route path="all-spotlights" element={<AllSpotlights />} />
+                <Route path="all-artists" element={<AllArtists />} />
                 <Route path="packages" element={<AllPackages />} />
                 <Route path="faqs" element={<FAQs />} />.
                 <Route path="about-us" element={<AboutUs />} />.
@@ -168,6 +175,7 @@ function App(props) {
                 <Route path="services/:serviceId" element={<SingleService />} />
                 <Route path="deals/:dealId" element={<SingleDeal />} />
                 <Route path="salons/:salonId" element={<SingleSalon />} />
+                <Route path="artists/:artistId" element={<SingleSalon />} />
                 <Route path="nearby-salons" element={<NearbySalons />} />
                 <Route path="*" element={<NotFound />} />
             </Route>
@@ -411,6 +419,7 @@ function App(props) {
                     <Route index element={<HomePage />} />
                     <Route path="all-categories" element={<AllCategories />} />
                     <Route path="all-saloons" element={<AllSaloons />} />
+                    <Route path="all-artists" element={<AllArtists />} />
                     <Route path="all-deals" element={<AllDeals />} />
                     <Route path="all-spotlights" element={<AllSpotlights />} />
                     <Route path="packages" element={<AllPackages />} />
@@ -420,6 +429,7 @@ function App(props) {
                     <Route path="services/:serviceId" element={<SingleService />} />
                     <Route path="deals/:dealId" element={<SingleDeal />} />
                     <Route path="salons/:salonId" element={<SingleSalon />} />
+                    <Route path="artists/:artistId" element={<SingleArtist />} />
                     <Route path="nearby-salons" element={<NearbySalons />} />
                     <Route path="*" element={<NotFound />} />
                 </Route>

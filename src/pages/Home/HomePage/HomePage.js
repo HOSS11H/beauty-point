@@ -7,6 +7,7 @@ import Deals from "./Deals/Deals";
 import Footer from "../../../components/Footer/Footer";
 import ModuleWhatsapp from '../../../components/Header/Modules/ModuleWhatsapp/ModuleWhatsapp';
 import MobileBar from "../../../components/Header/MobileBar/MobileBar";
+import Artists from "./Artists/Artists";
 
 const HomePage = props => {
     return (
@@ -16,6 +17,7 @@ const HomePage = props => {
             <Hero />
             <CategoriesSlider />
             <Salons />
+            <Artists />
             <Spotlights />
             <Deals />
             <Footer />
