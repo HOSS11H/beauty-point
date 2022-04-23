@@ -175,7 +175,7 @@ function App(props) {
                 <Route path="services/:serviceId" element={<SingleService />} />
                 <Route path="deals/:dealId" element={<SingleDeal />} />
                 <Route path="salons/:salonId" element={<SingleSalon />} />
-                <Route path="artists/:artistId" element={<SingleSalon />} />
+                <Route path="artists/:artistId" element={<SingleArtist />} />
                 <Route path="nearby-salons" element={<NearbySalons />} />
                 <Route path="*" element={<NotFound />} />
             </Route>
