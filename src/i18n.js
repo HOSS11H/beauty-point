@@ -558,8 +558,8 @@ const resources = {
             'Add new booking': 'إضافة حجز جديد',
             'or subscribe as artist': 'أو الاشتراك كارتست',
             'subscribe': 'اشتراك',
-            'artists': 'الارتستس',
-            'popular artists': 'الارتستس الأكثر شهرة',
+            'artists': 'الارتست',
+            'popular artists': 'الارتست الأكثر شهرة',
         }
     }
 };

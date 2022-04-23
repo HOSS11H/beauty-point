@@ -1,9 +1,9 @@
 import axios from '../../../../../utils/axios-instance';
 import { useState } from 'react';
 import { useEffect, useRef } from 'react';
-import styled, {css} from 'styled-components';
+import styled, { css } from 'styled-components';
 import Loader from '../../../../../components/UI/Loader/Loader';
-import { CircularProgress, Grid } from '@mui/material';
+import { CircularProgress, Grid, Typography } from '@mui/material';
 import { useCallback } from 'react';
 import { formatCurrency } from '../../../../../shared/utility';
 
@@ -26,7 +26,7 @@ const Item = styled.div`
     border: 5px solid ;
     border-color: ${props => props.theme.vars.theme};;
     padding: 10px 15px;
-    color: ${ ( { theme } ) => theme.palette.common.white};
+    color: ${({ theme }) => theme.palette.common.white};
     transition: 0.2s ease-in-out;
     cursor: pointer;
     text-align: left;
@@ -37,8 +37,8 @@ const Item = styled.div`
             margin-left: 10px
         }
     }
-    ${ ( { activeItem } ) => activeItem && css`
-        background-color: ${ ( { theme } ) => theme.palette.common.white};
+    ${({ activeItem }) => activeItem && css`
+        background-color: ${({ theme }) => theme.palette.common.white};
         border: 5px solid ${props => props.theme.vars.theme};
         color: ${props => props.theme.vars.theme};
     `}
@@ -63,7 +63,7 @@ const ChooseItem = props => {
     const { type, id, onChoose, cartData } = props;
 
     const [services, setServices] = useState([]);
-    
+
     const [deals, setDeals] = useState([]);
 
     const [lastPage, setLastPage] = useState(false)
@@ -140,26 +140,25 @@ const ChooseItem = props => {
         onChoose(dealData)
     }
 
-
     let content = (
         <Loader height='300px' />
     )
 
-    if (services.length > 0 && type === 'services') {
+    if (services.length > 0 && type === 'services' ) {
         content = (
             <Grid container spacing={2}>
                 <Grid item xs={12}  >
                     <ItemsWrapper>
                         <div>
                             {services.map((service, index) => {
-                                const activeItem = (cartData.services.find( item => item.id === service.id));
+                                const activeItem = (cartData.services.find(item => item.id === service.id));
                                 if (services.length === (index + 1)) {
                                     return (
                                         <Item ref={lastElementRef} key={index} onClick={() => onChooseService(service)} activeItem={activeItem} >
                                             {service.name}
                                             <div>
                                                 <span>{formatCurrency(service.discount_price)}</span>
-                                                { service.discount_price !== service.price && (<span className="original-price" >{formatCurrency(service.price)}</span>)} 
+                                                {service.discount_price !== service.price && (<span className="original-price" >{formatCurrency(service.price)}</span>)}
                                             </div>
                                         </Item>
                                     )
@@ -169,7 +168,7 @@ const ChooseItem = props => {
                                             {service.name}
                                             <div>
                                                 <span>{formatCurrency(service.discount_price)}</span>
-                                                { service.discount_price !== service.price && (<span className="original-price" >{formatCurrency(service.price)}</span>)} 
+                                                {service.discount_price !== service.price && (<span className="original-price" >{formatCurrency(service.price)}</span>)}
                                             </div>
                                         </Item>
                                     )
@@ -186,21 +185,21 @@ const ChooseItem = props => {
             </Grid>
         )
     }
-    if (deals.length > 0 && type === 'deals') {
+    if (deals.length > 0 && type === 'deals' ) {
         content = (
             <Grid container spacing={2}>
                 <Grid item xs={12} >
                     <ItemsWrapper>
                         <div>
                             {deals.map((deal, index) => {
-                                const activeItem = (!!cartData.deals.find( item => item.id === deal.id));
+                                const activeItem = (!!cartData.deals.find(item => item.id === deal.id));
                                 if (deals.length === (index + 1)) {
                                     return (
                                         <Item ref={lastElementRef} key={index} onClick={() => onChooseDeal(deal)} activeItem={activeItem} >
                                             {deal.title}
                                             <div>
                                                 <span>{formatCurrency(deal.discount_price)}</span>
-                                                { deal.discount_price !== deal.price && (<span className="original-price" >{formatCurrency(deal.price)}</span>)} 
+                                                {deal.discount_price !== deal.price && (<span className="original-price" >{formatCurrency(deal.price)}</span>)}
                                             </div>
                                         </Item>
                                     )
@@ -210,7 +209,7 @@ const ChooseItem = props => {
                                             {deal.title}
                                             <div>
                                                 <span>{formatCurrency(deal.discount_price)}</span>
-                                                { deal.discount_price !== deal.price && (<span className="original-price" >{formatCurrency(deal.price)}</span>)} 
+                                                {deal.discount_price !== deal.price && (<span className="original-price" >{formatCurrency(deal.price)}</span>)}
                                             </div>
                                         </Item>
                                     )
@@ -228,6 +227,9 @@ const ChooseItem = props => {
         )
     }
 
+    if ( !loading && (services.length === 0 && deals.length === 0)) {
+        return <Typography sx={{ textAlign: 'center', }} >No Items</Typography>
+    }
 
     return (
         <Wrapper>
