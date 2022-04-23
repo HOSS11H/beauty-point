@@ -282,6 +282,14 @@ const Auth = props => {
                                         </span>
                                     </FormLink>
                                 )}
+                                {isLogin && (
+                                    <FormLink>
+                                        {t('or subscribe as artist')}
+                                        <span onClick={() => navigate('/register-artist')}>
+                                            {t('subscribe')}
+                                        </span>
+                                    </FormLink>
+                                )}
                                 {!isLogin && (
                                     <FormLink>
                                         {subscribeFormText.formSwitchText}

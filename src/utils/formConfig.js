@@ -161,3 +161,63 @@ export const registerForm = {
         ],
     },
 }
+// object representation of Register form
+export const registerArtistForm = {
+    businessName: {
+        ...createFormFieldConfig({ ar: 'اسم البيزنس', en: 'business name' }, 'business Name' ,'businessName', 'text'),
+        validationRules: [
+            requiredRule( {en: `business name required`, ar: `اسم البيزنس مطلوب`} ),
+        ],
+    },
+    name: {
+        ...createFormFieldConfig({ ar: 'الاسم', en: 'name' }, 'Name', 'name', 'text'),
+        validationRules: [
+            requiredRule( {en: `name required`, ar: `الاسم مطلوب`} ),
+        ],
+    },
+    email : {
+        ...createFormFieldConfig( {ar: 'بريد الكتروني', en: 'email' }  ,'admin@example.com', 'email', 'email'),
+        validationRules: [
+            requiredRule('email', {en: `email required`, ar: `بريد الكتروني مطلوب`}),
+            isEmailRule( {en: `email should be a valid email`, ar: `البريد الالكتروني يجب أن يكون بريد الكتروني صحيح`}),
+        ],
+    },
+    password : {
+        ...createFormFieldConfig( { ar: 'الرقم السري', en: 'password' }  ,'......', 'password', 'password',undefined ,undefined , undefined , undefined , false),
+        validationRules : [
+            requiredRule( { en: `password required`, ar: `رقم السر مطلوب` }),
+        ]
+    },
+    confirmPassword : {
+        ...createFormFieldConfig( { ar: 'تأكيد الرقم السري', en: 're-enter password' }  ,'......', 'confirmPassword', 'password',undefined ,undefined , true , undefined , false),
+        validationRules : [
+            passwordMatchRule({ ar: 'يجب تطابق كلمتي المرور', en: `passwords don't match` }),
+        ]
+    },
+    phoneNum: {
+        ...createFormFieldConfig({ ar: 'رقم الهاتف', en: 'phone' }, '123321123' ,'phoneNum', 'phone'),
+        validationRules: [
+            requiredRule( {en: `phone number required`, ar: `رقم الهاتف مطلوب`} ),
+            isNumberRule( {en: `phone number should be a number`, ar: `رقم الهاتف يجب أن يكون رقم`} ),
+        ],
+    },
+    address: {
+        ...createFormFieldConfig({ ar: 'العنوان', en: 'address' }, 'Address' ,'address', 'address'),
+        validationRules: [
+            requiredRule( {en: `address required`, ar: `عنوان الصالون مطلوب`} ),
+            minLengthRule( {en: `address should be at least 10 characters`, ar: `عنوان الصالون يجب أن يكون على الأقل 10 أحرف`} , 10),
+        ],
+    },
+    terms: {
+        ...createFormFieldConfig(
+        { 
+            ar: {text: 'انا موافق علي بند الاستخدام وسياسة الخصوصية وقد قرأتها بالكامل', linkText: 'بنود الاستخدام وسياسة الخصوصية', } , 
+            en: {text: 'I have read and agree terms & conditions', linkText: 'view terms & conditions', } ,
+            link: 'https://beautypoint.app',
+        },
+        undefined  ,'terms', 'checkbox', false ),
+        validationRules: [
+            requiredCheckRule( {en: `you should agree terms & conditions`, ar: `يجب أن توافق علي بنود الاستخدام وسياسة الخصوصية`} ),
+        ],
+    },
+}

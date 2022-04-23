@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 import { PermissibleRender } from '@brainhubeu/react-permissible';
 
 const Auth = React.lazy(() => import('./pages/Auth/Auth'));
+const RegisterArtist = React.lazy(() => import('./pages/RegisterArtist/RegisterArtist'));
 const Account = React.lazy(() => import('./pages/Account/Account'));
 const Dashboard = React.lazy(() =>
     import('./pages/Account/Content/Dashboard/Dashboard')
@@ -153,6 +154,7 @@ function App(props) {
     let routes = (
         <Routes>
             <Route path="/auth" element={<Auth />} />
+            <Route path="/register-artist" element={<RegisterArtist />} />
             <Route path="/home/*" element={<Home />}>
                 <Route index element={<HomePage />} />
                 <Route path="all-categories" element={<AllCategories />} />

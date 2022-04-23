@@ -556,6 +556,8 @@ const resources = {
             'Grettings Users,': 'أهلا بكم ',
             'We are glad to see you here!': 'نحن سعداء لرؤيتك هنا!',
             'Add new booking': 'إضافة حجز جديد',
+            'or subscribe as artist': 'أو الاشتراك كارتست',
+            'subscribe': 'اشتراك',
         }
     }
 };
