@@ -1,25 +1,23 @@
 import { FormControl, InputLabel, MenuItem, Select, TableHead } from "@mui/material";
-import { Fragment, useCallback, useEffect, useState } from "react";
-import {useNavigate} from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import { toast } from 'react-toastify';
-import styled from "styled-components";
-import SearchBar from '../../../../../components/Search/SearchBar/SearchBar';
-import { CustomButton } from "../../../../../components/UI/Button/Button";
-import TablePaginationActions from "../../../../../components/UI/Dashboard/Table/TablePagination/TablePagination";
-import Loader from "../../../../../components/UI/Loader/Loader";
-import axios from '../../../../../utils/axios-instance';
-import CreateSeat from "../CreateSeat/CreateSeat";
+import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import Actions from "../../../../../components/UI/Dashboard/Actions/Actions";
+import { Fragment, useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { toast } from 'react-toastify';
+import styled from "styled-components";
+import SearchBar from '../../../../../components/Search/SearchBar/SearchBar';
 import SearchMessage from "../../../../../components/Search/SearchMessage/SearchMessage";
+import { CustomButton } from "../../../../../components/UI/Button/Button";
+import Actions from "../../../../../components/UI/Dashboard/Actions/Actions";
+import TablePaginationActions from "../../../../../components/UI/Dashboard/Table/TablePagination/TablePagination";
+import Loader from "../../../../../components/UI/Loader/Loader";
+import axios from '../../../../../utils/axios-instance';
+import CreateSeat from "../CreateSeat/CreateSeat";
 import EditSeat from "../EditSeat/EditSeat";
-import moment from 'moment';
 
 const TablePaginationWrapper = styled.div`
     display: flex;
@@ -77,8 +75,6 @@ export const SeatStatus = styled.div`
 const intialRowsPerPage = 10;
 
 const SeatsTable = props => {
-
-    const navigate = useNavigate()
 
     const { t } = useTranslation()
 

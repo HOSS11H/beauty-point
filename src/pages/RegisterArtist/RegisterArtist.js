@@ -2,7 +2,7 @@ import { Button, Card, Container, Grid } from '@mui/material';
 import { useCallback, useContext, useEffect, useState } from 'react';
 //import Map from './Auth/Map/Map';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { CustomButton } from '../../components/UI/Button/Button';
 import useForm from '../../hooks/useForm';
@@ -86,6 +86,7 @@ const AuthImg = styled.div`
         object-fit: contain;
     }
 `
+const isLogin = false;
 
 
 const RegisterArtist = props => {
@@ -97,11 +98,6 @@ const RegisterArtist = props => {
 
     const navigate = useNavigate();
 
-    const [searchParams] = useSearchParams();
-    const packageId = searchParams.get('package');
-
-    const [isLogin, setIsLogin] = useState(false);
-
     const [errorMessage, setErrorMessage] = useState(null);
 
     const { isLoggedIn } = authCtx;
@@ -110,13 +106,13 @@ const RegisterArtist = props => {
 
     const [marker, setMarker] = useState({})
 
-    const [ termsModalOpened, setTermsModalOpened ] = useState(false)
+    const [termsModalOpened, setTermsModalOpened] = useState(false)
 
-    let authIsValid =  isSubscribeDataValid()
+    let authIsValid = isSubscribeDataValid()
 
     useEffect(() => {
         isLoggedIn && navigate('/account/settings?welcome=true', { replace: true })
-    }, [isLoggedIn, isLogin, navigate])
+    }, [isLoggedIn, navigate])
 
     const assignCoords = (lat, lng) => {
         setMarker({
@@ -188,13 +184,13 @@ const RegisterArtist = props => {
                                 <FormHeading>
                                     {!isLogin && subscribeFormText.heading}
                                 </FormHeading>
-                                { subscribeInputs()}
-                                {!isLogin && <TextButton variant='text' onClick={termsModaOpenHandler} >{t('terms & conditions')}</TextButton> }
-                                {!isLogin && <Map assignCoords={assignCoords} marker={marker} /> }
+                                {subscribeInputs()}
+                                {!isLogin && <TextButton variant='text' onClick={termsModaOpenHandler} >{t('terms & conditions')}</TextButton>}
+                                {!isLogin && <Map assignCoords={assignCoords} marker={marker} />}
                                 {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
                                 <CustomButton onClick={submitHandler} disabled={!authIsValid} >{subscribeFormText.button}</CustomButton>
                             </FormWrapper>
-                            { !isLogin && termsModalOpened && <Terms open={termsModalOpened} handleClose={termsModalCloseHandler} /> }
+                            {!isLogin && termsModalOpened && <Terms open={termsModalOpened} handleClose={termsModalCloseHandler} />}
                         </CustomizedCard>
                     </Grid>
                     <Grid item xs={12} md={5} lg={5} >

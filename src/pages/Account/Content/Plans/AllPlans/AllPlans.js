@@ -9,9 +9,9 @@ import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import Loader from '../../../../../components/UI/Loader/Loader';
 import { formatCurrency } from '../../../../../shared/utility';
+import AuthContext from '../../../../../store/auth-context';
 import v2 from '../../../../../utils/axios-instance';
 import v1 from '../../../../../utils/axios-instance-v1';
-import AuthContext from '../../../../../store/auth-context';
 import config from '../configuration.json';
 
 const PackagesWrapper = styled.div`
@@ -151,7 +151,7 @@ const AllPlans = ({ currentPlanId }) => {
         return () => {
             controller.abort();
         }
-    }, []);
+    }, [roleName]);
 
     const handleChange = (event) => {
         setIsMonthly(event.target.checked);

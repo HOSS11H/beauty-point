@@ -63,7 +63,7 @@ const EditSeat  = props => {
             .catch(err => {
                 setLoading(false)
             })
-    }, [])
+    }, [seatId])
 
     useEffect(() => {
         fetchSeat()
