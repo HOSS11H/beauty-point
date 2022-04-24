@@ -32,6 +32,7 @@ import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
 import { useState } from 'react';
 import { connect } from 'react-redux';
 import ModuleNav from './ModuleNav/ModuleNav';
+import EventSeatIcon from '@mui/icons-material/EventSeat';
 import { Fragment } from 'react';
 
 const drawerWidth = 256;
@@ -182,6 +183,7 @@ const Navigator = (props) => {
                 if (permission.name === 'manage_settings') {
                     addedRoutes.push({ id: 'coupons', name: 'coupons', icon: <DiscountIcon /> });
                     addedRoutes.push({ id: 'tickets', name: 'tickets', icon: <ConfirmationNumberIcon /> });
+                    addedRoutes.push({ id: 'seats', name: 'seats', icon: <EventSeatIcon /> });
                     addedRoutes.push({ id: 'plans', name: 'plans', icon: <CreditCardIcon /> });
                     addedRoutes.push({ id: 'settings', name: 'settings', icon: <SettingsIcon /> });
                 }

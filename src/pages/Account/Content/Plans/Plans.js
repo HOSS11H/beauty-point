@@ -1,12 +1,11 @@
-import { Fragment, useEffect, useState } from "react"
-import AllPlans from "./AllPlans/AllPlans"
-import CurrentPlan from "./CurrentPlan/CurrentPlan"
-import v1 from '../../../../utils/axios-instance-v1';
+import { Box, Button } from "@mui/material";
 import axios from 'axios';
-import Loader from "../../../../components/UI/Loader/Loader";
-import { Button } from "@mui/material";
+import { Fragment, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Box } from "@mui/material";
+import Loader from "../../../../components/UI/Loader/Loader";
+import v1 from '../../../../utils/axios-instance-v1';
+import AllPlans from "./AllPlans/AllPlans";
+import CurrentPlan from "./CurrentPlan/CurrentPlan";
 import PlansInvoices from "./PlansInvoices/PlansInvoices";
 
 const Plans = props => {

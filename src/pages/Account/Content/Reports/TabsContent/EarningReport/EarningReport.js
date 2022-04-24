@@ -84,7 +84,7 @@ const EarningReport = props => {
                 setFetchingLocations(false)
                 toast.error(t('Error Happened'))
             })
-    }, [lang])
+    }, [lang, t])
 
     const searchHandler = useCallback((location, dateFrom, dateTo, page = pages, perPage = rowsPerPage) => {
         setLoading(true);

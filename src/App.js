@@ -73,6 +73,17 @@ const SingleTicket = React.lazy(() =>
     import('./pages/Account/Content/Tickets/SingleTicket/SingleTicket')
 );
 
+const Seats = React.lazy(() =>
+    import('./pages/Account/Content/Seats/Seats')
+);
+const SeatsTable = React.lazy(() =>
+    import('./pages/Account/Content/Seats/SeatsTable/SeatsTable')
+);
+
+const SingleSeat = React.lazy(() =>
+    import('./pages/Account/Content/Seats/SingleSeat/SingleSeat')
+);
+
 const Plans = React.lazy(() =>
     import('./pages/Account/Content/Plans/Plans')
 );
@@ -333,6 +344,34 @@ function App(props) {
                                 renderOtherwise={<NotFound />}
                             >
                                 <SingleTicket />
+                            </PermissibleRender>
+                        } />
+                    </ Route>
+                    <Route path="seats/*" element={
+                        <PermissibleRender
+                            userPermissions={permissions}
+                            requiredPermissions={['manage_settings']}
+                            renderOtherwise={<NotFound />}
+                        >
+                            <Seats />
+                        </PermissibleRender>
+                    } >
+                        <Route index element={
+                            <PermissibleRender
+                                userPermissions={permissions}
+                                requiredPermissions={['manage_settings']}
+                                renderOtherwise={<NotFound />}
+                            >
+                                <SeatsTable />
+                            </PermissibleRender>
+                        } />
+                        <Route path=':id' element={
+                            <PermissibleRender
+                                userPermissions={permissions}
+                                requiredPermissions={['manage_settings']}
+                                renderOtherwise={<NotFound />}
+                            >
+                                <SingleSeat />
                             </PermissibleRender>
                         } />
                     </ Route>

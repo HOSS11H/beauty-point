@@ -2,7 +2,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { Button, Card, Container, Grid, Stack, Switch } from '@mui/material';
 import axios from 'axios';
 import CryptoJS from "crypto-js";
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -11,6 +11,7 @@ import Loader from '../../../../../components/UI/Loader/Loader';
 import { formatCurrency } from '../../../../../shared/utility';
 import v2 from '../../../../../utils/axios-instance';
 import v1 from '../../../../../utils/axios-instance-v1';
+import AuthContext from '../../../../../store/auth-context';
 import config from '../configuration.json';
 
 const PackagesWrapper = styled.div`
@@ -121,6 +122,10 @@ const generateHashSHA256 = (hashSequence) => {
 
 const AllPlans = ({ currentPlanId }) => {
 
+    const authCtx = useContext(AuthContext)
+
+    const { roleName } = authCtx;
+
     const navigate = useNavigate();
 
     const [isMonthly, setIsMonthly] = useState(true);
@@ -132,7 +137,7 @@ const AllPlans = ({ currentPlanId }) => {
     useEffect(() => {
         const controller = new AbortController();
         const getCompanyData = v1.get('/vendors/settings/company')
-        const getPackages = v2.get('/packages');
+        const getPackages = v2.get(`/packages${  roleName === 'artist' ? '?type=artist' : ''}` );
         axios.all([getCompanyData, getPackages], {
             signal: controller.signal
         })

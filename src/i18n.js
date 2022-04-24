@@ -560,6 +560,7 @@ const resources = {
             'subscribe': 'اشتراك',
             'artists': 'الارتست',
             'popular artists': 'الارتست الأكثر شهرة',
+            'seats': 'المقاعد',
         }
     }
 };
