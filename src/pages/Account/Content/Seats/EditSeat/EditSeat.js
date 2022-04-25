@@ -1,15 +1,15 @@
-import { Grid, TextField, FormControl, Select, MenuItem, InputAdornment, InputLabel } from '@mui/material';
+import PercentIcon from '@mui/icons-material/Percent';
+import { FormControl, Grid, InputAdornment, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
+import Loader from '../../../../../components/UI/Loader/Loader';
 import { CustomModal } from '../../../../../components/UI/Modal/Modal';
 import ValidationMessage from '../../../../../components/UI/ValidationMessage/ValidationMessage';
-import PercentIcon from '@mui/icons-material/Percent';
-import Loader from '../../../../../components/UI/Loader/Loader';
-import { toast } from 'react-toastify';
-import v1 from '../../../../../utils/axios-instance-v1';
-import axios from '../../../../../utils/axios-instance';
 import ThemeContext from '../../../../../store/theme-context';
+import axios from '../../../../../utils/axios-instance';
+import v1 from '../../../../../utils/axios-instance-v1';
 
 const CustomTextField = styled(TextField)`
     width: 100%;
@@ -110,7 +110,7 @@ const EditSeat  = props => {
             setSeatTitleError(true);
             return;
         }
-        if (seatCommission.trim().length === 0) {
+        if (!seatCommission) {
             setSeatCommissionError(true);
             return;
         }

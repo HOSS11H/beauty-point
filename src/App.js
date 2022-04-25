@@ -84,6 +84,13 @@ const SingleSeat = React.lazy(() =>
     import('./pages/Account/Content/Seats/SingleSeat/SingleSeat')
 );
 
+const SeatsRequests = React.lazy(() =>
+    import('./pages/Account/Content/Seats/SeatsRequests/SeatsRequests')
+);
+
+const ArtistSeats = React.lazy(() =>
+    import('./pages/Account/Content/ArtistSeats/ArtistSeats')
+);
 const Plans = React.lazy(() =>
     import('./pages/Account/Content/Plans/Plans')
 );
@@ -165,6 +172,8 @@ function App(props) {
     const themeCtx = useContext(ThemeContext);
 
     const authCtx = useContext(AuthContext);
+
+    const { roleName } = authCtx;
 
     const { isLoggedIn } = authCtx;
 
@@ -347,34 +356,56 @@ function App(props) {
                             </PermissibleRender>
                         } />
                     </ Route>
-                    <Route path="seats/*" element={
-                        <PermissibleRender
-                            userPermissions={permissions}
-                            requiredPermissions={['manage_settings']}
-                            renderOtherwise={<NotFound />}
-                        >
-                            <Seats />
-                        </PermissibleRender>
-                    } >
-                        <Route index element={
+                    {roleName !== 'artist' && (
+                        <Route path="seats/*" element={
                             <PermissibleRender
                                 userPermissions={permissions}
                                 requiredPermissions={['manage_settings']}
                                 renderOtherwise={<NotFound />}
                             >
-                                <SeatsTable />
+                                <Seats />
                             </PermissibleRender>
-                        } />
-                        <Route path=':id' element={
+                        } >
+                            <Route index element={
+                                <PermissibleRender
+                                    userPermissions={permissions}
+                                    requiredPermissions={['manage_settings']}
+                                    renderOtherwise={<NotFound />}
+                                >
+                                    <SeatsTable />
+                                </PermissibleRender>
+                            } />
+                            <Route path=':id' element={
+                                <PermissibleRender
+                                    userPermissions={permissions}
+                                    requiredPermissions={['manage_settings']}
+                                    renderOtherwise={<NotFound />}
+                                >
+                                    <SingleSeat />
+                                </PermissibleRender>
+                            } />
+                            <Route path='requests' element={
+                                <PermissibleRender
+                                    userPermissions={permissions}
+                                    requiredPermissions={['manage_settings']}
+                                    renderOtherwise={<NotFound />}
+                                >
+                                    <SeatsRequests />
+                                </PermissibleRender>
+                            } />
+                        </ Route>
+                    )}
+                    { roleName === 'artist' && (
+                        <Route path='artist-seats' element={
                             <PermissibleRender
                                 userPermissions={permissions}
                                 requiredPermissions={['manage_settings']}
                                 renderOtherwise={<NotFound />}
                             >
-                                <SingleSeat />
+                                <ArtistSeats />
                             </PermissibleRender>
                         } />
-                    </ Route>
+                    ) }
                     <Route path="plans/*" element={
                         <Routes>
                             <Route index element={

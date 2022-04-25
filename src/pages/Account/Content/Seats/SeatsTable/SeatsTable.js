@@ -7,6 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 import { Fragment, useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router";
 import { toast } from 'react-toastify';
 import styled from "styled-components";
 import SearchBar from '../../../../../components/Search/SearchBar/SearchBar';
@@ -21,9 +22,10 @@ import EditSeat from "../EditSeat/EditSeat";
 
 const TablePaginationWrapper = styled.div`
     display: flex;
-    align-items: flex-end;
-    gap: 30px;
-    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    align-items: center;
+    margin-bottom: 30px;
 `
 
 const ActionsHolder = styled.div`
@@ -58,17 +60,29 @@ export const SeatStatus = styled.div`
     font-size: 14px;
     text-transform: capitalize;
     font-weight: 500;
-    &.in-progress {
-        background-color: ${({ theme }) => theme.palette.primary.main};
-    }
-    &.solved {
+    &.active {
         background-color: ${({ theme }) => theme.palette.success.main};
     }
-    &.closed {
-        background-color: ${({ theme }) => theme.palette.secondary.main};
-    }
-    &.duplicate {
+    &.inactive {
         background-color: ${({ theme }) => theme.palette.error.main};
+    }
+`
+
+const ActionButton = styled(CustomButton)`
+    &.MuiButton-root {
+        width: auto;
+        padding: 0 10px;
+        height: 50px;
+        flex-shrink: 0;
+        background: ${({ theme }) => theme.palette.success.main};
+        font-size: 14px;
+        margin-right: 20px;
+        margin-bottom: 0;
+        svg {
+            width: 14px;
+            height: 14px;
+            margin-right: 10px;
+        }
     }
 `
 
@@ -77,6 +91,8 @@ const intialRowsPerPage = 10;
 const SeatsTable = props => {
 
     const { t } = useTranslation()
+
+    const navigate  = useNavigate()
 
     const [seats, setSeats] = useState({ data: [] })
     const [loading, setLoading] = useState(false)
@@ -100,7 +116,7 @@ const SeatsTable = props => {
             }
         }
         setLoading(true)
-        axios.get(`/vendors/seats?include[]=location`, {
+        axios.get(`/vendors/seats-reservations?include[]=location`, {
             params: { ...notEmptySearchParams },
         })
             .then(res => {
@@ -195,9 +211,9 @@ const SeatsTable = props => {
             })
     }, [fetchSeats, page, rowsPerPage, searchWord, t])
 
-    /* const viewSeatHandler = ( id ) => {
-        navigate(`${id}`)
-    } */
+    const viewRequestsHandler = ( id ) => {
+        navigate(`requests`)
+    }
 
     const handleChangePage = useCallback((event, newPage) => {
         setPage(newPage)
@@ -228,6 +244,7 @@ const SeatsTable = props => {
         content = (
             <Fragment>
                 <TablePaginationWrapper>
+                    <ActionButton onClick={viewRequestsHandler} >{t('see requests')}</ActionButton>
                     <FormControl sx={{ minWidth: '75px', }} variant="filled" >
                         <InputLabel id="show-num">{t('show')}</InputLabel>
                         <Select
@@ -244,56 +261,56 @@ const SeatsTable = props => {
                             <MenuItem value={20}>{t('20')}</MenuItem>
                         </Select>
                     </FormControl>
-                    <TableContainer component={Paper}>
-                        <Table sx={{ minWidth: 650 }} size="large" aria-label="a dense table">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell align="center" >{t('#')}</TableCell>
-                                    <TableCell align="center" >{t('title')}</TableCell>
-                                    <TableCell align="center" >{t('location')}</TableCell>
-                                    <TableCell align="center" >{t('status')}</TableCell>
-                                    <TableCell align="center" >{t('commission')}</TableCell>
-                                    <TableCell align="center" >{t('action')}</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {seats.data.map((seat, index) => {
-                                    return (
-                                        <TableRow key={seat.id}>
-                                            <TableCell align="center" >{index + 1}</TableCell>
-                                            <TableCell align="center" >{seat.title}</TableCell>
-                                            <TableCell align="center" >{seat.location.name}</TableCell>
-                                            <TableCell align="center" >
-                                                <SeatStatus className={seat.status}>
-                                                    {t(seat.status)}
-                                                </SeatStatus>
-                                            </TableCell>
-                                            <TableCell align="center" >{`${seat.commission} %`}</TableCell>
-                                            <TableCell align="center" >
-                                                <Actions edit remove
-                                                    editHandler={openEditSeatHandler.bind(null, seat)}
-                                                    removeHandler={deleteSeatHandler.bind(null, seat.id)}
-                                                />
-                                            </TableCell>
-                                        </TableRow>
-                                    )
-                                })}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                    {rowsPerPage !== 'all' && (
-                        <TablePaginationActions
-                            sx={{ width: '100%' }}
-                            component="div"
-                            count={seats.data.length}
-                            total={seats.meta ? seats.meta.total : 0}
-                            rowsPerPage={+rowsPerPage}
-                            page={page}
-                            onPageChange={handleChangePage}
-                            loading={loading}
-                        />
-                    )}
                 </TablePaginationWrapper>
+                <TableContainer component={Paper}>
+                    <Table sx={{ minWidth: 650 }} size="large" aria-label="a dense table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell align="center" >{t('#')}</TableCell>
+                                <TableCell align="center" >{t('title')}</TableCell>
+                                <TableCell align="center" >{t('location')}</TableCell>
+                                <TableCell align="center" >{t('status')}</TableCell>
+                                <TableCell align="center" >{t('commission')}</TableCell>
+                                <TableCell align="center" >{t('action')}</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {seats.data.map((seat, index) => {
+                                return (
+                                    <TableRow key={seat.id}>
+                                        <TableCell align="center" >{index + 1}</TableCell>
+                                        <TableCell align="center" >{seat.title}</TableCell>
+                                        <TableCell align="center" >{seat.location.name}</TableCell>
+                                        <TableCell align="center" >
+                                            <SeatStatus className={seat.status}>
+                                                {t(seat.status)}
+                                            </SeatStatus>
+                                        </TableCell>
+                                        <TableCell align="center" >{`${seat.commission} %`}</TableCell>
+                                        <TableCell align="center" >
+                                            <Actions edit remove
+                                                editHandler={openEditSeatHandler.bind(null, seat)}
+                                                removeHandler={deleteSeatHandler.bind(null, seat.id)}
+                                            />
+                                        </TableCell>
+                                    </TableRow>
+                                )
+                            })}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                {rowsPerPage !== 'all' && (
+                    <TablePaginationActions
+                        sx={{ width: '100%' }}
+                        component="div"
+                        count={seats.data.length}
+                        total={seats.meta ? seats.meta.total : 0}
+                        rowsPerPage={+rowsPerPage}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        loading={loading}
+                    />
+                )}
             </Fragment>
         )
     }

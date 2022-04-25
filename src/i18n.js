@@ -561,6 +561,8 @@ const resources = {
             'artists': 'الارتست',
             'popular artists': 'الارتست الأكثر شهرة',
             'seats': 'المقاعد',
+            'location: ': 'الموقع: ',
+            'commission: ': 'العمولة: ',
         }
     }
 };

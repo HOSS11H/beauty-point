@@ -123,7 +123,7 @@ const Navigator = (props) => {
     const { open, fetchedPermissions, ...other } = props;
 
     const authCtx = useContext(AuthContext)
-    const { roleId } = authCtx;
+    const { roleId, roleName } = authCtx;
 
     const params = useParams();
     const { t } = useTranslation();
@@ -183,15 +183,20 @@ const Navigator = (props) => {
                 if (permission.name === 'manage_settings') {
                     addedRoutes.push({ id: 'coupons', name: 'coupons', icon: <DiscountIcon /> });
                     addedRoutes.push({ id: 'tickets', name: 'tickets', icon: <ConfirmationNumberIcon /> });
-                    addedRoutes.push({ id: 'seats', name: 'seats', icon: <EventSeatIcon /> });
                     addedRoutes.push({ id: 'plans', name: 'plans', icon: <CreditCardIcon /> });
+                    if (roleName === 'artist') {
+                        addedRoutes.push({ id: 'artist-seats', name: 'seats', icon: <EventSeatIcon /> });
+                        
+                    } else {
+                        addedRoutes.push({ id: 'seats', name: 'seats', icon: <EventSeatIcon /> });
+                    }
                     addedRoutes.push({ id: 'settings', name: 'settings', icon: <SettingsIcon /> });
                 }
             })
             renderedLinks[0].children = renderedLinks[0].children.concat(addedRoutes);
             setLinks(renderedLinks);
         }
-    }, [fetchedPermissions, roleId])
+    }, [fetchedPermissions, roleId, roleName])
 
     return (
         <Fragment>
