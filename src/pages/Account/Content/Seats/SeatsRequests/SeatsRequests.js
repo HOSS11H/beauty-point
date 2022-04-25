@@ -20,10 +20,6 @@ const SeatsRequests = props => {
     const [searchWord, setSearchWord] = useState('')
     const [lastPage, setLastPage] = useState(false)
 
-    const [showRequestOpened, setShowRequestOpened] = useState(false)
-
-    const [selectedRequest, setSelectedRequest] = useState(null)
-
     const [sendingRequest, setSendingRequest] = useState(false)
 
     const ovserver = useRef()
