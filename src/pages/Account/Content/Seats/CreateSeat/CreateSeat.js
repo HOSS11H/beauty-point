@@ -93,7 +93,7 @@ const CreateSeat  = props => {
             setSeatTitleError(true);
             return;
         }
-        if (seatCommission.trim().length === 0) {
+        if (seatCommission < 0 || seatCommission > 100) {
             setSeatCommissionError(true);
             return;
         }
@@ -133,12 +133,13 @@ const CreateSeat  = props => {
                     </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <CustomTextField id="seat-comission" label={t('seat comission')} variant="outlined"
+                    <CustomTextField id="seat-comission" label={t('seat comission')} variant="outlined" 
                         InputProps={{
                             endAdornment: <InputAdornment position="end"><PercentIcon /></InputAdornment>,
+                            max: '100'
                         }}
                         type='number' value={seatCommission} onChange={seatCommissionChangeHandler} />
-                    {seatCommissionError && <ValidationMessage notExist>{t(`Please add seat comission`)}</ValidationMessage>}
+                    {seatCommissionError && <ValidationMessage notExist>{t(`Please add valid seat comission between 0% and 100%`)}</ValidationMessage>}
                 </Grid>
                 <Grid item xs={12} sm={6} >
                     <FormControl fullWidth>

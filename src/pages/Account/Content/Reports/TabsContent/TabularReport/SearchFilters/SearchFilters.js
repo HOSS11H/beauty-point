@@ -19,6 +19,7 @@ import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { format } from 'date-fns';
 import SearchCustomer from '../../../../PointOfSale/Cart/SearchCustomer/SearchCustomer';
 import { useCallback } from 'react';
+import AuthContext from '../../../../../../../store/auth-context';
 
 const FiltersWrapper = styled.div`
     margin-bottom: 30px;
@@ -66,8 +67,10 @@ const SearchFilters = (props) => {
     const { t } = useTranslation()
 
     const themeCtx = useContext(ThemeContext)
+    const authCtx = useContext(AuthContext)
 
     const { lang } = themeCtx;
+    const { roleName } = authCtx;
 
     const [location, setLocation] = useState('');
 
@@ -79,7 +82,7 @@ const SearchFilters = (props) => {
     const [selectedProducts, setSelectedProducts] = useState('');
 
     const [customer, setCustomer] = useState([]);
-    const [ resetSearchData, setResetSearchData ] = useState(false)
+    const [resetSearchData, setResetSearchData] = useState(false)
 
     const [employee, setEmployee] = useState('');
 
@@ -95,8 +98,8 @@ const SearchFilters = (props) => {
         fetchLocationsHandler(lang);
         fetchProductsHandler(lang, 1, 'all', 'name', 'desc');
         fetchServicesHandler(lang, 1, 'all', 'name', 'desc');
-        fetchEmployeesHandler(lang);
-    }, [ fetchEmployeesHandler, fetchLocationsHandler, fetchProductsHandler, fetchServicesHandler, lang])
+        roleName !== 'artist' && fetchEmployeesHandler(lang)
+    }, [fetchEmployeesHandler, fetchLocationsHandler, fetchProductsHandler, fetchServicesHandler, lang, roleName])
 
     const handleLocationChange = (event) => {
         setLocation(event.target.value);
@@ -122,7 +125,7 @@ const SearchFilters = (props) => {
             setCustomer(null);
         }
         setResetSearchData(false)
-    } , [])
+    }, [])
     const handleEmplloyeeChange = (event) => {
         setEmployee(event.target.value);
     }
@@ -257,27 +260,29 @@ const SearchFilters = (props) => {
                         </Select>
                     </FormControl>
                 </Grid>
-                <Grid item xs={12} sm={6} md={4}>
-                    <FormControl fullWidth sx={{ minWidth: '200px' }} >
-                        <InputLabel id="item-employee">{t('Employee')}</InputLabel>
-                        <Select
-                            labelId="item-employee"
-                            id="item-employee-select"
-                            value={employee}
-                            label={t('Employee')}
-                            onChange={handleEmplloyeeChange}
-                        >
-                            {fetchedEmployees.map((employee) => (
-                                <MenuItem
-                                    key={employee.id}
-                                    value={employee.id}
-                                >
-                                    {employee.name}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </Grid>
+                {roleName !== 'artist' && (
+                    <Grid item xs={12} sm={6} md={4}>
+                        <FormControl fullWidth sx={{ minWidth: '200px' }} >
+                            <InputLabel id="item-employee">{t('Employee')}</InputLabel>
+                            <Select
+                                labelId="item-employee"
+                                id="item-employee-select"
+                                value={employee}
+                                label={t('Employee')}
+                                onChange={handleEmplloyeeChange}
+                            >
+                                {fetchedEmployees.map((employee) => (
+                                    <MenuItem
+                                        key={employee.id}
+                                        value={employee.id}
+                                    >
+                                        {employee.name}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+                )}
                 {/* <Grid item xs={12} sm={6} md={4}>
                     <FormControl fullWidth sx={{ minWidth: '200px' }} >
                         <InputLabel id="booking-type">{t('booking type')}</InputLabel>

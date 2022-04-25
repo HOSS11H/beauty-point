@@ -29,7 +29,7 @@ const EnhancedTableBody = props => {
 
     const { t } = useTranslation()
 
-    const {fetchedEmployees, emptyRows, deleteModalOpenHandler, editModalOpenHandler} = props;
+    const { fetchedEmployees, emptyRows, deleteModalOpenHandler, editModalOpenHandler } = props;
 
 
     return (
@@ -52,7 +52,7 @@ const EnhancedTableBody = props => {
                             </TableData>
                         </TableCell>
                         <TableCell align="center">
-                            { 
+                            {
                                 row.roles && (
                                     row.roles.map((role, index) => {
                                         return (
@@ -63,10 +63,12 @@ const EnhancedTableBody = props => {
                             }
                         </TableCell>
                         <TableCell align="center">
-                            <Actions edit remove
-                                editHandler={editModalOpenHandler.bind(null, row.id)}
-                                removeHandler={deleteModalOpenHandler.bind(null, row.id)}
-                            />
+                            {row.roles[0].name !== 'artist' && (
+                                <Actions edit remove
+                                    editHandler={editModalOpenHandler.bind(null, row.id)}
+                                    removeHandler={deleteModalOpenHandler.bind(null, row.id)}
+                                />
+                            )}
                         </TableCell>
                     </TableRow>
                 );

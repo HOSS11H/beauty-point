@@ -249,8 +249,8 @@ const AllPlans = ({ currentPlanId }) => {
                                                 <ul className="pricing-list">
                                                     <li>{`${t('max employees')} : ${plan.max_employees}`}</li>
                                                     <li>{`${t('max services')} : ${plan.max_services}`}</li>
-                                                    <li>{`${t('max deals')} : ${plan.max_services}`}</li>
-                                                    <li>{`${t('max roles')} : ${plan.max_services}`}</li>
+                                                    <li>{`${t('max deals')} : ${plan.max_deals}`}</li>
+                                                    <li>{`${t('max roles')} : ${plan.max_roles}`}</li>
                                                 </ul>
                                                 {plan.package_modules && <h6 className="list-heading">{t('modules')}</h6>}
                                                 <ul className="pricing-list">

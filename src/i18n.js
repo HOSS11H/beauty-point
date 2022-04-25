@@ -566,6 +566,8 @@ const resources = {
             'comment: ': 'التعليق: ',
             'confirm': 'تأكيد',
             'reject': 'رفض',
+            'Please add valid seat comission between 0% and 100%': 'يرجى إضافة عمولة صحيحة بين 0% و 100%',
+            'Product': 'منتجات',
         }
     }
 };

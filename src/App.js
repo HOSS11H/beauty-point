@@ -1,4 +1,4 @@
-import React, { useContext, Suspense } from 'react';
+import React, { useContext, Suspense, Fragment } from 'react';
 import { StyleSheetManager } from 'styled-components';
 import rtlPlugin from 'stylis-plugin-rtl';
 import { Route, Routes } from 'react-router-dom';
@@ -223,7 +223,7 @@ function App(props) {
                     <Route path="units" element={
                         <PermissibleRender
                             userPermissions={permissions}
-                            requiredPermissions={['read_business_service']}
+                            requiredPermissions={['read_product']}
                             renderOtherwise={<NotFound />}
                         >
                             <Units />
@@ -232,7 +232,7 @@ function App(props) {
                     <Route path="products" element={
                         <PermissibleRender
                             userPermissions={permissions}
-                            requiredPermissions={['read_business_service']}
+                            requiredPermissions={['read_product']}
                             renderOtherwise={<NotFound />}
                         >
                             <Products />
@@ -241,7 +241,7 @@ function App(props) {
                     <Route path="point-of-sale" element={
                         <PermissibleRender
                             userPermissions={permissions}
-                            requiredPermissions={['read_business_service']}
+                            requiredPermissions={['create_booking']}
                             renderOtherwise={<NotFound />}
                         >
                             <PointOfSale />
@@ -322,7 +322,7 @@ function App(props) {
                     <Route path="coupons" element={
                         <PermissibleRender
                             userPermissions={permissions}
-                            requiredPermissions={['manage_settings']}
+                            requiredPermissions={['read_coupon']}
                             renderOtherwise={<NotFound />}
                         >
                             <Coupons />
@@ -395,7 +395,7 @@ function App(props) {
                             } />
                         </ Route>
                     )}
-                    { roleName === 'artist' && (
+                    {roleName === 'artist' && (
                         <Route path='artist-seats' element={
                             <PermissibleRender
                                 userPermissions={permissions}
@@ -405,7 +405,7 @@ function App(props) {
                                 <ArtistSeats />
                             </PermissibleRender>
                         } />
-                    ) }
+                    )}
                     <Route path="plans/*" element={
                         <Routes>
                             <Route index element={
@@ -465,24 +465,28 @@ function App(props) {
                                 <BookingSettings />
                             </PermissibleRender>
                         } />
-                        <Route path="employee-settings" element={
-                            <PermissibleRender
-                                userPermissions={permissions}
-                                requiredPermissions={['manage_settings']}
-                                renderOtherwise={<NotFound />}
-                            >
-                                <EmployeeSettings />
-                            </PermissibleRender>
-                        } />
-                        <Route path="roles-permissions" element={
-                            <PermissibleRender
-                                userPermissions={permissions}
-                                requiredPermissions={['manage_settings']}
-                                renderOtherwise={<NotFound />}
-                            >
-                                <RolesPermissions />
-                            </PermissibleRender>
-                        } />
+                        {roleName !== 'artist' && (
+                            <Fragment>
+                                <Route path="employee-settings" element={
+                                    <PermissibleRender
+                                        userPermissions={permissions}
+                                        requiredPermissions={['manage_settings']}
+                                        renderOtherwise={<NotFound />}
+                                    >
+                                        <EmployeeSettings />
+                                    </PermissibleRender>
+                                } />
+                                <Route path="roles-permissions" element={
+                                    <PermissibleRender
+                                        userPermissions={permissions}
+                                        requiredPermissions={['manage_settings']}
+                                        renderOtherwise={<NotFound />}
+                                    >
+                                        <RolesPermissions />
+                                    </PermissibleRender>
+                                } />
+                            </Fragment>
+                        )}
                     </Route>
                 </Route>
                 <Route path="/home/*" element={<Home />}>
