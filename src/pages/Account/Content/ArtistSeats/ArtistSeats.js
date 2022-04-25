@@ -45,7 +45,7 @@ const ArtistSeats = props => {
             }
         }
         setLoading(true)
-        axios.get(`/vendors/seats?include[]=location`, {
+        axios.get(`/vendors/seats?include[]=location&include[]=company`, {
             params: { ...notEmptySearchParams },
         })
             .then(res => {

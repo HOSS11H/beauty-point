@@ -116,7 +116,7 @@ const SeatsTable = props => {
             }
         }
         setLoading(true)
-        axios.get(`/vendors/seats-reservations?include[]=location`, {
+        axios.get(`/vendors/seats?include[]=location`, {
             params: { ...notEmptySearchParams },
         })
             .then(res => {

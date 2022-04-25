@@ -563,6 +563,9 @@ const resources = {
             'seats': 'المقاعد',
             'location: ': 'الموقع: ',
             'commission: ': 'العمولة: ',
+            'comment: ': 'التعليق: ',
+            'confirm': 'تأكيد',
+            'reject': 'رفض',
         }
     }
 };
