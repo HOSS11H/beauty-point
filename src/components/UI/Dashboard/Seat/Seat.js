@@ -91,6 +91,11 @@ const SeatCard = props => {
                 <BookingContent>
                     <SeatName>{seat.title}</SeatName>
                     <SeatInfo>
+                        <li>{t('salon: ')}
+                            <span>
+                                {seat.company.companyName}
+                            </span>
+                        </li>
                         <li>{t('location: ')}
                             <span>
                                 {seat.location.name}

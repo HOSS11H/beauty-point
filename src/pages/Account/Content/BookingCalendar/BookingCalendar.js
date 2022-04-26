@@ -13,6 +13,7 @@ import ViewModal from '../Bookings/ViewModal/ViewModal';
 import { format } from 'date-fns';
 import { useRef } from 'react';
 import moment from 'moment'
+import AuthContext from '../../../../store/auth-context';
 
 const BookingCalendarWrapper = styled.div`
     & .fc-h-event {
@@ -82,8 +83,10 @@ const BookingCalendar = props => {
     const { fetchedBookings, fetchingBookings, fetchBookingsHandler, deleteBookingHandler } = props;
 
     const themeCtx = useContext(ThemeContext)
+    const authCtx = useContext(AuthContext)
 
     const { lang } = themeCtx;
+    const { roleName } = authCtx;
 
     const notIntialRender = useRef(false);
 
@@ -123,7 +126,7 @@ const BookingCalendar = props => {
         let time = moment.utc(booking.date_time).format('hh:mm A');
         return {
             bookingId: booking.id,
-            title: booking.user.name,
+            title: (roleName === 'artist' && booking.source === 'pos') ? booking.company.companyName : booking.user.name,
             date: date,
             time: time,
             status: booking.status,

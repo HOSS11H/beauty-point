@@ -183,7 +183,6 @@ const Navigator = (props) => {
                 }
                 if (permission.name === 'read_report') {
                     addedRoutes.push({ id: 'reports', name: 'reports', icon: <InsertChartIcon /> });
-                    addedRoutes.push({ id: 'expenses', name: 'expenses', icon: <MonetizationOnIcon /> });
                 }
                 if (permission.name === 'read_coupon') {
                     addedRoutes.push({ id: 'coupons', name: 'coupons', icon: <DiscountIcon /> });
@@ -195,6 +194,7 @@ const Navigator = (props) => {
                         addedRoutes.push({ id: 'artist-seats', name: 'seats', icon: <EventSeatIcon /> });
                         
                     } else {
+                        addedRoutes.push({ id: 'expenses', name: 'expenses', icon: <MonetizationOnIcon /> });
                         addedRoutes.push({ id: 'seats', name: 'seats', icon: <EventSeatIcon /> });
                     }
                     addedRoutes.push({ id: 'settings', name: 'settings', icon: <SettingsIcon /> });

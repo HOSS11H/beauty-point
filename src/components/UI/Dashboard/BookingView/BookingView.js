@@ -7,10 +7,11 @@ import EventNoteIcon from '@mui/icons-material/EventNote';
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
 import Skeleton from '@mui/material/Skeleton';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import { Fragment } from 'react';
+import { Fragment, useContext } from 'react';
 import { useTranslation } from "react-i18next";
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import moment from 'moment';
+import AuthContext from '../../../../store/auth-context';
 
 const CustomCardMui = styled(Card)`
     &.MuiPaper-root {
@@ -169,6 +170,9 @@ const BookingView = props => {
 
     const { booking, onClick } = props;
 
+    const authCtx = useContext(AuthContext)
+    const { roleName } = authCtx;
+
     let content = (
         <CustomCardMui>
             <BookingInfos>
@@ -182,6 +186,14 @@ const BookingView = props => {
         </CustomCardMui>
     );
     if (booking) {
+        let name = booking.user.name
+        let email = booking.user.email
+        let mobile = booking.user.mobile
+        if (booking.source === 'pos' && roleName === 'artist') {
+            name = booking.company.companyName
+            email = booking.company.companyEmail
+            mobile = booking.company.companyPhone
+        }
         content = (
             <CustomCardMui onClick={onClick} >
                 <BookingButton>
@@ -202,10 +214,10 @@ const BookingView = props => {
                     </BookingStatus>
                 </BookingInfos>
                 <BookingContent>
-                    <ClientName>{booking.user.name}</ClientName>
+                    <ClientName>{name}</ClientName>
                     <ClientInfo>
-                        {booking.user.email && <li><MailIcon sx={{ mr: 1 }} />{booking.user.email}</li>}
-                        {booking.user.mobile && <li><PhoneAndroidIcon sx={{ mr: 1 }} />{booking.user.mobile}</li>}
+                        {email && <li><MailIcon sx={{ mr: 1 }} />{email}</li>}
+                        {mobile && <li><PhoneAndroidIcon sx={{ mr: 1 }} />{mobile}</li>}
                         <li><AlternateEmailIcon sx={{ mr: 1 }} />{t(`via `)}{booking.source}</li>
                     </ClientInfo>
                 </BookingContent>

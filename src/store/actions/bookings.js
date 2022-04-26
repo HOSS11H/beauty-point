@@ -23,7 +23,7 @@ export const fetchBookingsFailed = (errorMessage) => {
 export const fetchBookings = (language, page, perPage) => {
     return dispatch => {
         dispatch(fetchBookingsStart())
-        axios.get(`/vendors/bookings?page=${page + 1}&per_page=${perPage}&include[]=user`, {
+        axios.get(`/vendors/bookings?page=${page + 1}&per_page=${perPage}&include[]=user&include[]=company`, {
             headers: {
                 'Accept-Language': language,
             }
@@ -190,7 +190,7 @@ export const filterBookings = ( searchParams ) => {
                 notEmptySearchParams[key] = searchParams[key]
             }
         }
-        axios.get(`/vendors/bookings?include[]=user`, { params: { ...notEmptySearchParams } } )
+        axios.get(`/vendors/bookings?include[]=user&include[]=company`, { params: { ...notEmptySearchParams } } )
             .then(response => {
                 let editedData = response.data.data.map(item => {
                     const formattedTime = new Date(item.date_time).toLocaleString()
@@ -264,7 +264,7 @@ export const fetchCalendarBookingsFailed = (errorMessage) => {
 export const fetchCalendarBookings = (language, from, to) => {
     return dispatch => {
         dispatch(fetchCalendarBookingsStart())
-        axios.get(`/vendors/bookings?from=${from}&to=${to}&include[]=user`, {
+        axios.get(`/vendors/bookings?from=${from}&to=${to}&include[]=user&include[]=company`, {
             headers: {
                 'Accept-Language': language,
             }

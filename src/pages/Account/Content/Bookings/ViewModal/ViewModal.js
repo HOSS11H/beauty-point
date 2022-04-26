@@ -22,7 +22,7 @@ import { formatCurrency } from '../../../../../shared/utility';
 import { CustomButton } from '../../../../../components/UI/Button/Button';
 import PrintIcon from '@mui/icons-material/Print';
 import { useReactToPrint } from 'react-to-print';
-import { Fragment, useEffect, useRef, useState } from 'react';
+import { Fragment, useContext, useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import v2 from '../../../../../utils/axios-instance';
 import { useCallback } from 'react';
@@ -32,6 +32,7 @@ import moment from 'moment';
 import { format } from 'date-fns';
 import { LoadingButton } from '@mui/lab';
 import BookingInvoice from './BookingInvoice/BookingInvoice';
+import AuthContext from '../../../../../store/auth-context';
 
 const ClientDetails = styled.div`
     display: flex;
@@ -186,6 +187,9 @@ const ViewModal = (props) => {
 
     const { t } = useTranslation();
 
+    const authCtx = useContext(AuthContext)
+    const { roleName } = authCtx;
+
     const [loading, setLoading] = useState(false);
     const [bookingData, setBookingData] = useState(null);
 
@@ -234,7 +238,7 @@ const ViewModal = (props) => {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
         }
-        const bookingDataEndpoint = `${v2.defaults.baseURL}/vendors/bookings/${id}?include[]=user&include[]=payments`;
+        const bookingDataEndpoint = `${v2.defaults.baseURL}/vendors/bookings/${id}?include[]=user&include[]=payments&include[]=company`;
         const qrCodeEndpoint = `${v2.defaults.baseURL}/vendors/bookings/${id}/qr`;
 
         const getBookingData = axios.get(bookingDataEndpoint, headers);
@@ -403,6 +407,15 @@ const ViewModal = (props) => {
     }
 
     if (bookingData && !loading) {
+        let name = bookingData.user.name
+        let email = bookingData.user.email
+        let mobile = bookingData.user.mobile
+        if (bookingData.source === 'pos' && roleName === 'artist') {
+            name = bookingData.company.companyName
+            email = bookingData.company.companyEmail
+            mobile = bookingData.company.companyPhone
+        }
+        console.log(roleName, bookingData.source)
         content = (
             <Fragment>
                 <Grid container spacing={3}>
@@ -411,15 +424,15 @@ const ViewModal = (props) => {
                             <ClientImg >
                                 <PersonIcon />
                             </ClientImg>
-                            <ClientName>{bookingData.user.name}</ClientName>
+                            <ClientName>{name}</ClientName>
                         </ClientDetails>
                     </Grid>
-                    {bookingData.user.email && (
+                    {email && (
                         <Grid item xs={12} md={6}>
                             <BookingData>
                                 <BookingDataHeading>{t('email')}</BookingDataHeading>
                                 <BookingList>
-                                    <li><MailIcon sx={{ mr: 1 }} />{bookingData.user.email}</li>
+                                    <li><MailIcon sx={{ mr: 1 }} />{email}</li>
                                 </BookingList>
                             </BookingData>
                         </Grid>
@@ -428,7 +441,7 @@ const ViewModal = (props) => {
                         <BookingData>
                             <BookingDataHeading>{t('phone')}</BookingDataHeading>
                             <BookingList>
-                                <li><PhoneAndroidIcon sx={{ mr: 1 }} />{bookingData.user.mobile}</li>
+                                <li><PhoneAndroidIcon sx={{ mr: 1 }} />{mobile}</li>
                             </BookingList>
                         </BookingData>
                     </Grid>
@@ -500,9 +513,11 @@ const ViewModal = (props) => {
                     </Grid>
                     {bookingData.payment_status === 'pending' && (
                         <Grid item xs={12}>
-                            <BookingActions>
-                                <ActionButton onClick={handlePaymentModalOpen}  ><MoneyIcon />{t('add payment')}</ActionButton>
-                            </BookingActions>
+                            {roleName === 'artist' && bookingData?.source === 'pos' ? null : (
+                                <BookingActions>
+                                    <ActionButton onClick={handlePaymentModalOpen}  ><MoneyIcon />{t('add payment')}</ActionButton>
+                                </BookingActions>
+                            ) }
                         </Grid>
                     )}
                     <Grid item xs={12}>
@@ -541,11 +556,6 @@ const ViewModal = (props) => {
                         </BookingActions>
                     </Grid>
                     {qrCode && <BookingInvoice userData={userData} ref={invoiceRef} bookingData={bookingData} items={allItems} qrCode={qrCode} />}
-                    {/*<Grid item xs={12}>
-                        {/* <BookingActions>
-                            <DeleteButton onClick={(id) => onDelete(bookingData.id)} >{t('Delete')}</DeleteButton>
-                        </BookingActions> 
-                    </Grid>*/}
                 </Grid>
                 <AddPaymentModal show={paymentModalOpened} id={id}
                     remainingAmount={bookingData.remaining_amount}
@@ -555,8 +565,10 @@ const ViewModal = (props) => {
         )
     }
 
+    let showEdit = roleName === 'artist' && bookingData?.source === 'pos' ? false : confirmText
+
     return (
-        <CustomModal show={show} heading={heading} confirmText={confirmText} onConfirm={onConfirm} onClose={onClose} >
+        <CustomModal show={show} heading={heading} confirmText={showEdit} onConfirm={onConfirm} onClose={onClose} >
             {content}
         </CustomModal>
     )
