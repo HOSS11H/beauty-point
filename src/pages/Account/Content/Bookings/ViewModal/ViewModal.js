@@ -520,41 +520,45 @@ const ViewModal = (props) => {
                             ) }
                         </Grid>
                     )}
-                    <Grid item xs={12}>
-                        <TableContainer component={Paper} sx={{ my: 2 }}>
-                            <Table aria-label="simple table">
-                                <TableHead>
-                                    <TableRow>
-                                        <TableCell align="center">{t('date')}</TableCell>
-                                        <TableCell align="center">{t('amount')}</TableCell>
-                                        <TableCell align="center">{t('payment method')}</TableCell>
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {bookingData.payments.map((item) => (
-                                        <TableRow
-                                            key={item.id}
-                                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                        >
-                                            <TableCell component="th" scope="row">
-                                                <ItemInfo>
-                                                    {moment(item.paid_on).format('DD/MM/YYYY')}
-                                                </ItemInfo>
-                                            </TableCell>
-                                            <TableCell align="center">{formatCurrency(item.amount)}</TableCell>
-                                            <TableCell align="center">{t(item.gateway)}</TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </Grid>
-                    <Grid item xs={12}>
-                        <BookingActions>
-                            <ActionButton loading={loadingAllItems} onClick={printHandler}  ><PrintIcon />{t('print')}</ActionButton>
-                            {bookingData.payment_status === 'refunded' && <ActionButton loading={loadingAllItems} onClick={printHandler}  ><PrintIcon />{t('print refunded invoice')}</ActionButton>}
-                        </BookingActions>
-                    </Grid>
+                    {roleName === 'artist' && bookingData?.source === 'pos' ? null : (
+                        <Fragment>
+                            <Grid item xs={12}>
+                                <TableContainer component={Paper} sx={{ my: 2 }}>
+                                    <Table aria-label="simple table">
+                                        <TableHead>
+                                            <TableRow>
+                                                <TableCell align="center">{t('date')}</TableCell>
+                                                <TableCell align="center">{t('amount')}</TableCell>
+                                                <TableCell align="center">{t('payment method')}</TableCell>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {bookingData.payments.map((item) => (
+                                                <TableRow
+                                                    key={item.id}
+                                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                                >
+                                                    <TableCell component="th" scope="row">
+                                                        <ItemInfo>
+                                                            {moment(item.paid_on).format('DD/MM/YYYY')}
+                                                        </ItemInfo>
+                                                    </TableCell>
+                                                    <TableCell align="center">{formatCurrency(item.amount)}</TableCell>
+                                                    <TableCell align="center">{t(item.gateway)}</TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <BookingActions>
+                                    <ActionButton loading={loadingAllItems} onClick={printHandler}  ><PrintIcon />{t('print')}</ActionButton>
+                                    {bookingData.payment_status === 'refunded' && <ActionButton loading={loadingAllItems} onClick={printHandler}  ><PrintIcon />{t('print refunded invoice')}</ActionButton>}
+                                </BookingActions>
+                            </Grid>
+                        </Fragment>
+                    )}
                     {qrCode && <BookingInvoice userData={userData} ref={invoiceRef} bookingData={bookingData} items={allItems} qrCode={qrCode} />}
                 </Grid>
                 <AddPaymentModal show={paymentModalOpened} id={id}
