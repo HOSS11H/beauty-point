@@ -462,55 +462,59 @@ const ViewModal = (props) => {
                         </BookingData>
                     </Grid>
                     {viewedItems}
-                    <Grid item xs={12} sm={6} md={6}>
-                        <BookingData>
-                            <BookingDataHeading>{t('payment method')}</BookingDataHeading>
-                            <BookingList>
-                                <li><MoneyIcon sx={{ mr: 1 }} />{t(bookingData.payment_gateway)}</li>
-                            </BookingList>
-                        </BookingData>
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={6}>
-                        <BookingData>
-                            <BookingDataHeading>{t('booking status')}</BookingDataHeading>
-                            <BookingList>
-                                <li>{t(bookingData.status)}</li>
-                            </BookingList>
-                        </BookingData>
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={6}>
-                        <BookingData>
-                            <BookingDataHeading>{t('payment status')}</BookingDataHeading>
-                            <BookingList>
-                                <li>
-                                    {bookingData.payment_status === 'completed' && <CheckCircleIcon sx={{ mr: 1, color: '#568d00' }} />}
-                                    {bookingData.payment_status === 'pending' && <CloseIcon sx={{ mr: 1, color: 'rgb(187 163 46)' }} />}
-                                    {bookingData.payment_status === 'refunded' && <CloseIcon sx={{ mr: 1, color: '#f00' }} />}
-                                    {t(bookingData.payment_status)}
-                                </li>
-                            </BookingList>
-                        </BookingData>
-                    </Grid>
-                    {bookingData.remaining_amount > 0 && (
-                        <Grid item xs={12} sm={6} md={6}>
-                            <BookingData>
-                                <BookingDataHeading>{t('remaining amount')}</BookingDataHeading>
-                                <BookingDataInfo>{formatCurrency(bookingData.remaining_amount)}</BookingDataInfo>
-                            </BookingData>
-                        </Grid>
+                    {roleName === 'artist' && bookingData?.source === 'pos' ? null : (
+                        <Fragment>
+                            <Grid item xs={12} sm={6} md={6}>
+                                <BookingData>
+                                    <BookingDataHeading>{t('payment method')}</BookingDataHeading>
+                                    <BookingList>
+                                        <li><MoneyIcon sx={{ mr: 1 }} />{t(bookingData.payment_gateway)}</li>
+                                    </BookingList>
+                                </BookingData>
+                            </Grid>
+                            <Grid item xs={12} sm={6} md={6}>
+                                <BookingData>
+                                    <BookingDataHeading>{t('booking status')}</BookingDataHeading>
+                                    <BookingList>
+                                        <li>{t(bookingData.status)}</li>
+                                    </BookingList>
+                                </BookingData>
+                            </Grid>
+                            <Grid item xs={12} sm={6} md={6}>
+                                <BookingData>
+                                    <BookingDataHeading>{t('payment status')}</BookingDataHeading>
+                                    <BookingList>
+                                        <li>
+                                            {bookingData.payment_status === 'completed' && <CheckCircleIcon sx={{ mr: 1, color: '#568d00' }} />}
+                                            {bookingData.payment_status === 'pending' && <CloseIcon sx={{ mr: 1, color: 'rgb(187 163 46)' }} />}
+                                            {bookingData.payment_status === 'refunded' && <CloseIcon sx={{ mr: 1, color: '#f00' }} />}
+                                            {t(bookingData.payment_status)}
+                                        </li>
+                                    </BookingList>
+                                </BookingData>
+                            </Grid>
+                            {bookingData.remaining_amount > 0 && (
+                                <Grid item xs={12} sm={6} md={6}>
+                                    <BookingData>
+                                        <BookingDataHeading>{t('remaining amount')}</BookingDataHeading>
+                                        <BookingDataInfo>{formatCurrency(bookingData.remaining_amount)}</BookingDataInfo>
+                                    </BookingData>
+                                </Grid>
+                            )}
+                            <Grid item xs={12} md={6}>
+                                <BookingData>
+                                    <BookingDataHeading>{t('taxes ( 15% )')}</BookingDataHeading>
+                                    <BookingDataInfo>{formatCurrency(bookingData.vat)}</BookingDataInfo>
+                                </BookingData>
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <BookingData>
+                                    <BookingDataHeading>{t('total')}</BookingDataHeading>
+                                    <BookingDataInfo>{formatCurrency(bookingData.price)}</BookingDataInfo>
+                                </BookingData>
+                            </Grid>
+                        </Fragment>
                     )}
-                    <Grid item xs={12} md={6}>
-                        <BookingData>
-                            <BookingDataHeading>{t('taxes ( 15% )')}</BookingDataHeading>
-                            <BookingDataInfo>{formatCurrency(bookingData.vat)}</BookingDataInfo>
-                        </BookingData>
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                        <BookingData>
-                            <BookingDataHeading>{t('total')}</BookingDataHeading>
-                            <BookingDataInfo>{formatCurrency(bookingData.price)}</BookingDataInfo>
-                        </BookingData>
-                    </Grid>
                     {bookingData.payment_status === 'pending' && (
                         <Grid item xs={12}>
                             {roleName === 'artist' && bookingData?.source === 'pos' ? null : (
