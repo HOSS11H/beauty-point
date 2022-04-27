@@ -577,7 +577,7 @@ const resources = {
             'Create Seat': 'إنشاء مقعد',
             'create new seat': 'إنشاء مقعد جديد',
             'Please add title': 'يرجى إضافة عنوان',
-            'seat comission': 'عمولة المقعد',
+            'seat comission': 'نسبة الكرسي للارتست',
             'Please add location': 'يرجى إضافة الموقع',
             'Error Happened': 'حدث خطأ',
             'Request Accepted': 'تم قبول الطلب',
