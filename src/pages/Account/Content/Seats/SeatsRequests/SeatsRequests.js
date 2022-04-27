@@ -96,7 +96,7 @@ const SeatsRequests = props => {
                 setRequests(currentRequests => {
                     return currentRequests.filter(request => request.id !== id)
                 })
-                toast.success(t('Request Accepted'), {
+                toast.success(t('Request Rejected'), {
                     position: "bottom-right", autoClose: 4000, hideProgressBar: true,
                     closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
                 });

@@ -23,7 +23,6 @@ const ReserveSeat  = props => {
         setSeatComment(event.target.value);
     }
 
-
     const closeModalHandler = useCallback(() => {
         onClose();
     }, [onClose])
