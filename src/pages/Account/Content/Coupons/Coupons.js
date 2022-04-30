@@ -157,7 +157,7 @@ const Coupons = props => {
         setSelectedCoupon(null)
     }, [])
     const editCouponConfirmHandler = useCallback((coupon) => {
-        axios.postForm(`/vendors/coupons/${coupon.get('id')}`, coupon, { headers: { 'Content-Type': 'multipart/form-data' } })
+        axios.post(`/vendors/coupons/${coupon.get('id')}`, coupon, { headers: { 'Content-Type': 'multipart/form-data' } })
             .then(res => {
                 setEditCouponOpened(false)
                 setSelectedCoupon(null)

@@ -150,7 +150,7 @@ function ServicesTable(props) {
                 'content-type': 'multipart/form-data'
             }
         }
-        axios.postForm('/vendors/services-csv', formData, config)
+        axios.post('/vendors/services-csv', formData, config)
             .then(res => {
                 fetchServicesHandler(lang, page, rowsPerPage, orderBy, order);
             })

@@ -151,7 +151,7 @@ export const updateServiceFailed = (message) => {
 export const updateService = (data) => {
     return dispatch => {
         dispatch(updateServiceStart())
-        axios.postForm(`/vendors/services/${data.get('id')}`, data, { headers: { 'Content-Type': 'multipart/form-data' } })
+        axios.post(`/vendors/services/${data.get('id')}`, data, { headers: { 'Content-Type': 'multipart/form-data' } })
             .then(response => {
                 dispatch(updateServiceSuccess(data));
                 setTimeout(() => {
@@ -192,7 +192,7 @@ export const createServiceFailed = (message) => {
 export const createService = (data) => {
     return dispatch => {
         dispatch(createServiceStart())
-        axios.postForm(`/vendors/services`, data, { headers: { 'Content-Type': 'multipart/form-data' } })
+        axios.post(`/vendors/services`, data, { headers: { 'Content-Type': 'multipart/form-data' } })
             .then(response => {
                 dispatch(createServiceSuccess(null, { ...data, ...response.data }));
                 setTimeout(() => {

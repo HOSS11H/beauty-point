@@ -145,7 +145,7 @@ export const updateDealFailed = (message) => {
 export const updateDeal = (data) => {
     return dispatch => {
         dispatch(updateDealStart())
-        axios.postForm(`/vendors/deals/${data.get('id')}`, data, {headers: {'Content-Type': 'multipart/form-data'}})
+        axios.post(`/vendors/deals/${data.get('id')}`, data, {headers: {'Content-Type': 'multipart/form-data'}})
             .then(response => {
                 dispatch(updateDealSuccess(data));
                 setTimeout(() => {
@@ -186,7 +186,7 @@ export const createDealFailed = (message) => {
 export const createDeal = (data) => {
     return dispatch => {
         dispatch(createDealStart())
-        axios.postForm(`/vendors/deals`, data, {headers: {'Content-Type': 'multipart/form-data'}})
+        axios.post(`/vendors/deals`, data, {headers: {'Content-Type': 'multipart/form-data'}})
             .then(response => {
                 dispatch(createDealSuccess(response.data));
                 setTimeout(() => {

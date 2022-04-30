@@ -87,7 +87,7 @@ export const updateExpenseFailed = (message) => {
 export const updateExpense = data => {
     return dispatch => {
         dispatch(updateExpenseStart())
-        axios.postForm(`/vendors/expenses/${data.get('id')}`, data, {headers: {   'Content-Type': 'multipart/form-data'}})
+        axios.post(`/vendors/expenses/${data.get('id')}`, data, {headers: {   'Content-Type': 'multipart/form-data'}})
             .then(response => {
                 dispatch(updateExpenseSuccess(data.id));
             })
@@ -154,7 +154,7 @@ export const createExpenseFailed = (message) => {
 export const createExpense = (data) => {
     return dispatch => {
         dispatch(createExpenseStart())
-        axios.postForm(`/vendors/expenses`, data, {headers: {   'Content-Type': 'multipart/form-data'}})
+        axios.post(`/vendors/expenses`, data, {headers: {   'Content-Type': 'multipart/form-data'}})
             .then(response => {
                 dispatch(createExpenseSuccess({ ...data, ...response.data }));
             })
