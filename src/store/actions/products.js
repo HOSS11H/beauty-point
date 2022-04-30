@@ -88,7 +88,7 @@ export const updateProductFailed = (message) => {
 export const updateProduct = (data) => {
     return dispatch => {
         dispatch(updateProductStart())
-        axios.post(`/vendors/products/${data.get('id')}`, data, {headers: {   'Content-Type': 'multipart/form-data'}})
+        axios.postForm(`/vendors/products/${data.get('id')}`, data, {headers: {   'Content-Type': 'multipart/form-data'}})
             .then(response => {
                 dispatch(updateProductSuccess( data));
             })
@@ -126,7 +126,7 @@ export const createProductFailed = (message) => {
 export const createProduct = (data) => {
     return dispatch => {
         dispatch(createProductStart())
-        axios.post(`/vendors/products`, data, {headers: {   'Content-Type': 'multipart/form-data'}})
+        axios.postForm(`/vendors/products`, data, {headers: {   'Content-Type': 'multipart/form-data'}})
             .then(response => {
                 dispatch(createProductSuccess({ ...data, ...response.data }));
                 setTimeout(() => {
