@@ -364,7 +364,10 @@ const EditModal = (props) => {
                             id: item.item_id,
                             quantity: item.quantity,
                             price: item.price,
-                            name: item.name,
+                            item: {
+                                name: item.name,
+                                id: item.item_id,
+                            }
                         }
                         if (item.employee) {
                             obj.employee_id = item.employee.id
@@ -376,6 +379,10 @@ const EditModal = (props) => {
                             id: item.item_id,
                             quantity: item.quantity,
                             price: item.price,
+                            item: {
+                                name: item.name,
+                                id: item.item_id,
+                            }
                         }
                         if (item.employee) {
                             obj.employee_id = item.employee.id
@@ -387,6 +394,10 @@ const EditModal = (props) => {
                             id: item.item_id,
                             quantity: item.quantity,
                             price: item.price,
+                            item: {
+                                name: item.name,
+                                id: item.item_id,
+                            }
                         }
                         if (item.employee) {
                             obj.employee_id = item.employee.id
@@ -422,6 +433,7 @@ const EditModal = (props) => {
     }, [cartData, discount])
 
     const addToCartHandler = useCallback((type, itemData) => {
+        console.log(itemData)
         if (type === 'services') {
             dispatch({
                 type: 'ADD_TO_SERVICES',
