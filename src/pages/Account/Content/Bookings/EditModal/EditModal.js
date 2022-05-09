@@ -35,6 +35,7 @@ import ValidationMessage from '../../../../../components/UI/ValidationMessage/Va
 import Loader from '../../../../../components/UI/Loader/Loader';
 import axios from 'axios';
 import v2 from '../../../../../utils/axios-instance'
+import v1 from '../../../../../utils/axios-instance-v1'
 import moment from 'moment'
 
 const ClientDetails = styled.div`
@@ -323,7 +324,7 @@ const EditModal = (props) => {
 
     const [servicesEmployeeError, setServicesEmployeeError] = useState(false)
 
-    const [hasVat, setHasVat] = useState(false)
+    const [hasVat, setHasVat] = useState(false);
 
     useEffect(() => {
         fetchEmployeesHandler(lang);
@@ -342,21 +343,23 @@ const EditModal = (props) => {
             }
         }
         const bookingDataEndpoint = `${v2.defaults.baseURL}/vendors/bookings/${id}?include[]=user&include[]=items`;
+        const generalSettingsEndpoint = `${v1.defaults.baseURL}/vendors/settings/company`;
 
         const getUserData = axios.get(bookingDataEndpoint, headers);
+        const getGeneralSettingsData = axios.get(generalSettingsEndpoint, headers);
 
         let bookingDataServices = [];
         let bookingDataProducts = [];
         let bookingDataDeals = [];
 
-        axios.all([getUserData])
+        axios.all([getUserData, getGeneralSettingsData])
             .then(axios.spread((...responses) => {
                 setBookingData(responses[0].data);
                 setBookingStatus(responses[0].data.status);
                 setDateTime(moment.utc(responses[0].data.date_time));
                 setPaymentStatus(responses[0].data.payment_status);
                 setPaymentGateway(responses[0].data.payment_gateway);
-                setHasVat(responses[0].data.has_vat);
+                setHasVat(responses[1].data.has_vat);
                 const items = responses[0].data.items;
                 items.forEach(item => {
                     if (item.type === 'service') {
@@ -546,11 +549,6 @@ const EditModal = (props) => {
         }
     }, [])
 
-    const handleHasVatChange = (event) => {
-        setHasVat(event.target.checked);
-    };
-
-
     const handleDateChange = (newValue) => {
         setDateTime(newValue);
     };
@@ -650,10 +648,9 @@ const EditModal = (props) => {
             couponId: bookingData.coupon && bookingData.coupon.id,
             discount: +discount,
             discount_type: 'percent',
-            has_vat: hasVat,
         }
         onConfirm(booking);
-    }, [bookingData.coupon, bookingData.user.id, bookingStatus, cartData.deals, cartData.products, cartData.services, dateTime, discount, hasVat, id, onConfirm, paymentGateway, paymentStatus])
+    }, [bookingData.coupon, bookingData.user.id, bookingStatus, cartData.deals, cartData.products, cartData.services, dateTime, discount, id, onConfirm, paymentGateway, paymentStatus])
 
 
     let content;
@@ -911,11 +908,6 @@ const EditModal = (props) => {
                             startAdornment: <InputAdornment position="start">%</InputAdornment>,
                         }}
                     />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <FormGroup>
-                        <FormControlLabel control={<Switch checked={hasVat} onChange={handleHasVatChange} />} label={t("has Taxes")} />
-                    </FormGroup>
                 </Grid>
                 {
                     hasVat && (

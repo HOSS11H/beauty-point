@@ -82,6 +82,7 @@ export default function GeneralSettings(props) {
         formData.append('address', address);
         formData.append('website', website);
         formData.append('invoice_notes', notes);
+        formData.append('has_vat', vat);
         v1.post('/vendors/settings/company', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
             .then(res => {
                 if (res.status === 204) {

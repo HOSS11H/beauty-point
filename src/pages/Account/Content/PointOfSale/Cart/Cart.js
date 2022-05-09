@@ -296,7 +296,7 @@ const Cart = props => {
                 setLoading(false);
                 setHasVat(settingsRes.data.has_vat);
                 setCoupons(couponsRes.data.data);
-                setEmployees(employeesRes.data);
+                setEmployees(employeesRes.data.data);
             }))
             .catch(err => {
                 setLoading(false);
