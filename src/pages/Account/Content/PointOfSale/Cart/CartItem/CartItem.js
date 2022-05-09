@@ -1,25 +1,23 @@
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
-import { TableData } from '../../../../../../components/UI/Dashboard/Table/Table';
-import Actions from '../../../../../../components/UI/Dashboard/Actions/Actions';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import InputLabel from '@mui/material/InputLabel';
-import Box from '@mui/material/Box';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import Chip from '@mui/material/Chip';
-import { useContext, useState } from 'react';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { useTranslation } from 'react-i18next';
-import { connect } from 'react-redux';
-import Increment from '../../../../../../components/UI/Increment/Increment';
 import { Grid, TextField, useMediaQuery } from '@mui/material';
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import Box from '@mui/material/Box';
+import Chip from '@mui/material/Chip';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import Select from '@mui/material/Select';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
+import { useContext, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
+import Actions from '../../../../../../components/UI/Dashboard/Actions/Actions';
+import { TableData } from '../../../../../../components/UI/Dashboard/Table/Table';
+import Increment from '../../../../../../components/UI/Increment/Increment';
 import ThemeContext from '../../../../../../store/theme-context';
 
 const ITEM_HEIGHT = 48;
@@ -195,10 +193,5 @@ const CartItem = props => {
     )
 }
 
-const mapStateToProps = (state) => {
-    return {
-        fetchedEmployees: state.employees.employees,
-    }
-}
 
-export default connect(mapStateToProps, null)(CartItem);
+export default CartItem;

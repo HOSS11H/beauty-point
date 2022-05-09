@@ -120,7 +120,7 @@ const CustomListItemIcon = styled(ListItemIcon)`
 
 const Navigator = (props) => {
 
-    const { open, fetchedPermissions, ...other } = props;
+    const { open, fetchedPermissions, variant } = props;
 
     const authCtx = useContext(AuthContext)
     const { roleId, roleName } = authCtx;
@@ -131,7 +131,7 @@ const Navigator = (props) => {
     const [links, setLinks] = useState([]);
 
 
-    let module = useRef();
+    let module = useRef(null);
 
     useEffect(() => {
         let renderedLinks = [{
@@ -207,7 +207,7 @@ const Navigator = (props) => {
 
     return (
         <Fragment>
-            <Drawer open={open}  {...other} anchor='left'  >
+            <Drawer open={open}  variant={variant} anchor='left'  >
                 <List disablePadding sx={{ px: open ? '16px' : '0px', py: '16px', }} >
                     <Logo>
                         <NavLink to='/' >
@@ -236,7 +236,7 @@ const Navigator = (props) => {
                     ))}
                 </List>
             </Drawer>
-            {module.current}
+            {module.current && module.current}
         </Fragment>
     );
 }

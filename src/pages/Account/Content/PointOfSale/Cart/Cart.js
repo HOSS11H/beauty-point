@@ -7,18 +7,16 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import TimePicker from '@mui/lab/TimePicker';
 import { Box, Grid, IconButton, useMediaQuery } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormGroup from '@mui/material/FormGroup';
 import FormLabel from '@mui/material/FormLabel';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Paper from '@mui/material/Paper';
 import Select from '@mui/material/Select';
-import Switch from '@mui/material/Switch';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 import TextField from '@mui/material/TextField';
+import axios from 'axios';
 import { format } from 'date-fns';
 import { Fragment, useCallback, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -28,11 +26,13 @@ import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { ButtonConfirm, ButtonText, CustomButton } from '../../../../../components/UI/Button/Button';
 import CustomCard from '../../../../../components/UI/Card/Card';
+import Loader from '../../../../../components/UI/Loader/Loader';
 import ValidationMessage from '../../../../../components/UI/ValidationMessage/ValidationMessage';
 import { formatCurrency } from '../../../../../shared/utility';
-import { addCustomer, fetchEmployees, fetchVendorsCoupons } from '../../../../../store/actions/index';
+import { addCustomer } from '../../../../../store/actions/index';
 import ThemeContext from '../../../../../store/theme-context';
-import VatContext from '../../../../../store/vat-context';
+import v2 from '../../../../../utils/axios-instance';
+import v1 from '../../../../../utils/axios-instance-v1';
 import AddCustomerModal from './AddCustomerModal/AddCustomerModal';
 import CartItem from './CartItem/CartItem';
 import SearchCustomer from './SearchCustomer/SearchCustomer';
@@ -216,8 +216,7 @@ const OpenCartButton = styled(IconButton)`
 
 const Cart = props => {
 
-    const { cartData, removeFromCart, increaseItem, decreaseItem, resetCart, reserved, reset, purchase, print, fetchedCoupons,
-        fetchCouponsHandler, fetchedEmployeesHandler,
+    const { cartData, removeFromCart, increaseItem, decreaseItem, resetCart, reserved, reset, purchase, print,
         addCustomerHandler, addedCustomerData, addingCustomerSuccess, addingCustomerFailed, addingCustomerMessage,
         creatingBooking, bookingCreated, creatingBookingFailed, creatingBookingMessage, priceChangeHandler, changeEmployee } = props;
 
@@ -227,7 +226,7 @@ const Cart = props => {
     const themeCtx = useContext(ThemeContext);
     const { lang, theme } = themeCtx;
 
-    const  [ searchParams ]  = useSearchParams();
+    const [searchParams] = useSearchParams();
 
     const hasCustomer = searchParams.get('customer') !== null;
     const customer = hasCustomer ? searchParams.get('customer') : null;
@@ -240,10 +239,7 @@ const Cart = props => {
     }
     const isMobile = useMediaQuery(theme.breakpoints.down('md'), { noSsr: true });
 
-    const [ mobileCartOpened, setMobileCartOpened ] = useState(false);
-
-    const vatCtx = useContext(VatContext);
-    const { vat, toggleVat } = vatCtx;
+    const [mobileCartOpened, setMobileCartOpened] = useState(false);
 
     const [customerData, setCustomerData] = useState(hasCustomer ? intialCustomerData : null);
     const [customerDataError, setCustomerDataError] = useState(false)
@@ -274,10 +270,39 @@ const Cart = props => {
 
     const [addCustomerModalOpened, setAddCustomerModalOpened] = useState(false);
 
+    const [loading, setLoading] = useState(true);
+    const [hasVat, setHasVat] = useState(false);
+    const [coupons, setCoupons] = useState([]);
+    const [employees, setEmployees] = useState([]);
+
     useEffect(() => {
-        fetchCouponsHandler(lang);
-        fetchedEmployeesHandler(lang);
-    }, [fetchCouponsHandler, fetchedEmployeesHandler, lang])
+        const headers = {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        }
+        const generalSettingsEndpoint = `${v1.defaults.baseURL}/vendors/settings/company`;
+        const vendorCouponsEndpoint = `${v2.defaults.baseURL}/vendors/coupons`;
+        const vendorEmployeesEndpoint = `${v2.defaults.baseURL}/vendors/employees`;
+
+        const getGeneralSettingsData = axios.get(generalSettingsEndpoint, headers);
+        const getVendorCouponsData = axios.get(vendorCouponsEndpoint, headers);
+        const getVendorEmployeesData = axios.get(vendorEmployeesEndpoint, headers);
+
+        axios.all([getGeneralSettingsData, getVendorCouponsData, getVendorEmployeesData])
+            .then(axios.spread((settingsRes, couponsRes, employeesRes) => {
+                setLoading(false);
+                setHasVat(settingsRes.data.has_vat);
+                setCoupons(couponsRes.data.data);
+                setEmployees(employeesRes.data);
+            }))
+            .catch(err => {
+                setLoading(false);
+                toast.error('Something Went Wrong While Fetching Data')
+            })
+    }, [lang])
 
     useEffect(() => {
         if (addedCustomerData && addingCustomerSuccess) {
@@ -373,7 +398,7 @@ const Cart = props => {
 
     const couponChangeHandler = (event) => {
         setCoupon(event.target.value)
-        const enteredCoupon = fetchedCoupons.filter(coupon => coupon.code === event.target.value)
+        const enteredCoupon = coupons.filter(coupon => coupon.code === event.target.value)
         if (enteredCoupon.length > 0) {
             setCouponExists(true)
             setCouponData(enteredCoupon[0])
@@ -407,9 +432,9 @@ const Cart = props => {
         }
     }
 
-    const mobileCartCloseHandler = useCallback( () => {
+    const mobileCartCloseHandler = useCallback(() => {
         setMobileCartOpened(false)
-    }, [] )
+    }, [])
 
     const resetCartHandler = useCallback(() => {
         setCustomerData(null);
@@ -455,10 +480,6 @@ const Cart = props => {
         reserved && isMobile && mobileCartCloseHandler();
     }, [isMobile, mobileCartCloseHandler, reserved, reset, resetCartHandler])
 
-    const handleHasVatChange = (event) => {
-        toggleVat();
-    };
-
     const purchaseCartHandler = (e) => {
         e.preventDefault();
         if (cartData.services.length === 0 && cartData.products.length === 0 && cartData.deals.length === 0) {
@@ -486,7 +507,6 @@ const Cart = props => {
             discount_type: discountType,
             payment_gateway: paymentGateway,
             paid_amount: paidAmount,
-            has_vat: vat,
         }
         purchase(data);
     }
@@ -518,20 +538,23 @@ const Cart = props => {
             discount_type: discountType,
             payment_gateway: paymentGateway,
             paid_amount: paidAmount,
-            has_vat: vat,
         }
         print(data);
     }
 
-    let content;
 
+    if (loading) {
+        return <Loader height='80vh' />;
+    }
+
+    let mobileContent;
     if (isMobile) {
-        content = <OpenCartButton onClick={ (  ) => setMobileCartOpened(true)} ><ShoppingCartIcon /></OpenCartButton>
+        mobileContent = <OpenCartButton onClick={() => setMobileCartOpened(true)} ><ShoppingCartIcon /></OpenCartButton>
     }
 
     return (
         <>
-            <CustomCard heading='Add To Cart' isMobileModal open={mobileCartOpened} handleClose={mobileCartCloseHandler} >
+            <CustomCard heading='Add To Cart' isMobileModal={true} open={mobileCartOpened} handleClose={mobileCartCloseHandler} >
                 <Box>
                     <Grid container spacing={{ xs: 2, md: 3 }} >
                         <Grid item xs={12} >
@@ -597,7 +620,9 @@ const Cart = props => {
                                             <SharedTableHead name='services' />
                                             <TableBody>
                                                 {cartData.services.map((row) => (
-                                                    <CartItem type='services' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} priceChangeHandler={priceChangeHandler} changeEmployee={changeEmployee} />
+                                                    <CartItem type='services' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem}
+                                                        fetchedEmployees={employees}
+                                                        priceChangeHandler={priceChangeHandler} changeEmployee={changeEmployee} />
                                                 ))}
                                             </TableBody>
                                         </Table>
@@ -608,7 +633,9 @@ const Cart = props => {
                                 <Grid container spacing={2}>
                                     {cartData.services.map((row) => (
                                         <Grid item xs={12} key={row.id}>
-                                            <CartItem type='services' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} priceChangeHandler={priceChangeHandler} changeEmployee={changeEmployee} />
+                                            <CartItem type='services' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem}
+                                                fetchedEmployees={employees}
+                                                priceChangeHandler={priceChangeHandler} changeEmployee={changeEmployee} />
                                         </Grid>
                                     ))}
                                 </Grid>
@@ -620,25 +647,15 @@ const Cart = props => {
                                     <p>{t('No Products')}</p>
                                 </CustomMessage>
                             )}
-                            {cartData.products.length > 0 && (
-                                <TableContainer component={Paper} sx={{ my: 2 }}>
-                                    <Table aria-label="products table">
-                                        <SharedTableHead name='products' />
-                                        <TableBody>
-                                            {cartData.products.map((row) => (
-                                                <CartItem type='products' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} priceChangeHandler={priceChangeHandler} changeEmployee={changeEmployee} />
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                </TableContainer>
-                            )}
                             {cartData.products.length > 0 && !isMobile && (
                                 <TableContainer component={Paper} sx={{ my: 2 }}>
                                     <Table aria-label="products table">
                                         <SharedTableHead name='products' />
                                         <TableBody>
                                             {cartData.products.map((row) => (
-                                                <CartItem type='products' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} priceChangeHandler={priceChangeHandler} changeEmployee={changeEmployee} />
+                                                <CartItem type='products' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem}
+                                                    fetchedEmployees={employees}
+                                                    priceChangeHandler={priceChangeHandler} changeEmployee={changeEmployee} />
                                             ))}
                                         </TableBody>
                                     </Table>
@@ -648,7 +665,9 @@ const Cart = props => {
                                 <Grid container spacing={2}>
                                     {cartData.products.map((row) => (
                                         <Grid item xs={12} key={row.id}>
-                                            <CartItem type='products' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} priceChangeHandler={priceChangeHandler} changeEmployee={changeEmployee} />
+                                            <CartItem type='products' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem}
+                                                fetchedEmployees={employees}
+                                                priceChangeHandler={priceChangeHandler} changeEmployee={changeEmployee} />
                                         </Grid>
                                     ))}
                                 </Grid>
@@ -666,7 +685,9 @@ const Cart = props => {
                                         <SharedTableHead name='deals' />
                                         <TableBody>
                                             {cartData.deals.map((row) => (
-                                                <CartItem type='deals' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} priceChangeHandler={priceChangeHandler} changeEmployee={changeEmployee} />
+                                                <CartItem type='deals' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem}
+                                                    fetchedEmployees={employees}
+                                                    priceChangeHandler={priceChangeHandler} changeEmployee={changeEmployee} />
                                             ))}
                                         </TableBody>
                                     </Table>
@@ -676,7 +697,9 @@ const Cart = props => {
                                 <Grid container spacing={2}>
                                     {cartData.deals.map((row) => (
                                         <Grid item xs={12} key={row.id}>
-                                            <CartItem type='deals' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} priceChangeHandler={priceChangeHandler} changeEmployee={changeEmployee} />
+                                            <CartItem type='deals' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem}
+                                                fetchedEmployees={employees}
+                                                priceChangeHandler={priceChangeHandler} changeEmployee={changeEmployee} />
                                         </Grid>
                                     ))}
                                 </Grid>
@@ -740,12 +763,7 @@ const Cart = props => {
                                 {!couponExists && coupon !== '' ? <ValidationMessage notExist>{t(`Coupon Doesn't Exist`)}</ValidationMessage> : null}
                             </CouponWrapper>
                         </Grid>
-                        <Grid item xs={12}>
-                            <FormGroup>
-                                <FormControlLabel control={<Switch checked={vat} onChange={handleHasVatChange} />} label={t("has Taxes")} />
-                            </FormGroup>
-                        </Grid>
-                        {vat && (
+                        {hasVat && (
                             <Grid item xs={12}>
                                 <PriceCalculation>
                                     <p>{t('total taxes')}</p>
@@ -796,7 +814,7 @@ const Cart = props => {
                     onClose={addCustomerModalCloseHandler} onConfirm={addCustomerModalConfirmHandler}
                     heading='add new customer' confirmText='add' />
             </CustomCard>
-            {content}
+            {mobileContent}
         </>
     )
 }
@@ -807,7 +825,6 @@ const mapStateToProps = (state) => {
         addingCustomerSuccess: state.customers.addingCustomerSuccess,
         addingCustomerFailed: state.customers.addingCustomerFailed,
         addingCustomerMessage: state.customers.addingCustomerMessage,
-        fetchedCoupons: state.coupons.coupons,
         creatingBooking: state.bookings.creatingBooking,
         bookingCreated: state.bookings.bookingCreated,
         creatingBookingFailed: state.bookings.creatingBookingFailed,
@@ -817,8 +834,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchCouponsHandler: (lang) => dispatch(fetchVendorsCoupons(lang)),
-        fetchedEmployeesHandler: (lang) => dispatch(fetchEmployees(lang)),
         addCustomerHandler: (data) => dispatch(addCustomer(data)),
     }
 }

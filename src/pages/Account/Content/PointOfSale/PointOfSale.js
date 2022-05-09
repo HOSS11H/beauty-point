@@ -1,17 +1,16 @@
 import { Backdrop, CircularProgress, Grid } from '@mui/material';
-import { useContext, useState, useEffect, useCallback, useReducer, Fragment } from 'react';
-import CustomCard from '../../../../components/UI/Card/Card';
-import FilteredResults from './FilteredResults/FilteredResults';
-import SearchFilters from './SearchFilters/SearchFilters';
+import { Fragment, useCallback, useContext, useEffect, useReducer, useState } from 'react';
 import { connect } from 'react-redux';
-import { filterServices, filterProducts, filterDeals, createBooking } from '../../../../store/actions/index';
-import ThemeContext from '../../../../store/theme-context';
-import Cart from './Cart/Cart';
-import { updateObject } from '../../../../shared/utility';
-import axios from '../../../../utils/axios-instance';
-import PrintBookingModal from './PrintBookingModal/PrintBookingModal';
 import { toast } from 'react-toastify';
-import { VatContextProvider } from '../../../../store/vat-context';
+import CustomCard from '../../../../components/UI/Card/Card';
+import { updateObject } from '../../../../shared/utility';
+import { createBooking, filterDeals, filterProducts, filterServices } from '../../../../store/actions/index';
+import ThemeContext from '../../../../store/theme-context';
+import axios from '../../../../utils/axios-instance';
+import Cart from './Cart/Cart';
+import FilteredResults from './FilteredResults/FilteredResults';
+import PrintBookingModal from './PrintBookingModal/PrintBookingModal';
+import SearchFilters from './SearchFilters/SearchFilters';
 
 const cartReducer = (state, action) => {
     switch (action.type) {
@@ -423,7 +422,7 @@ const PointOfSale = (props) => {
             })
             .catch(err => {
                 setReservingBokking(false);
-                const errs = err.response.data ? err.response.data.errors : { message : [ err.response.data.message ] };
+                const errs = err.response.data ? err.response.data.errors : { message: [err.response.data.message] };
                 for (let key in errs) {
                     toast.error(errs[key][0], {
                         position: "bottom-right", autoClose: 4000, hideProgressBar: true,
@@ -440,33 +439,31 @@ const PointOfSale = (props) => {
 
     return (
         <Fragment>
-            <VatContextProvider>
-                <Grid container spacing={2}>
-                    <Grid item xs={12} md={6}>
-                        <CustomCard heading='view items' >
-                            <SearchFilters handleChangePage={handleChangePage} resultsHandler={handleResultsChange} />
-                            <FilteredResults rowsPerPage={rowsPerPage} page={page} onPageChange={handleChangePage} results={shownType} addToCart={addToCartHandler} />
-                        </CustomCard>
-                    </Grid>
-                    <Grid item xs={12} md={6}>
-                        <Cart cartData={cart} removeFromCart={removeFromCartHandler} increaseItem={increaseItemHandler} decreaseItem={decreaseItemHandler}
-                            resetCart={resetCartHandler} reserved={reservedBookingData}
-                            purchase={purchaseCartHandler} print={purchasePrintBookingHandler}
-                            priceChangeHandler={changeItemPriceHandler} changeEmployee={changeEmployeeHandler} />
-                    </Grid>
-                    <Backdrop
-                        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                        open={creatingBooking || reservingBokking}
-                    >
-                        <CircularProgress color="secondary" />
-                    </Backdrop>
-                    {
-                        printBookingModalOpened && (
-                            <PrintBookingModal show={printBookingModalOpened} onClose={printBookingModalCloseHandler} bookingData={reservedBookingData} reset={resetPrintedBookingData} />
-                        )
-                    }
+            <Grid container spacing={2}>
+                <Grid item xs={12} md={6}>
+                    <CustomCard heading='view items' isMobileModal={false} >
+                        <SearchFilters handleChangePage={handleChangePage} resultsHandler={handleResultsChange} />
+                        <FilteredResults rowsPerPage={rowsPerPage} page={page} onPageChange={handleChangePage} results={shownType} addToCart={addToCartHandler} />
+                    </CustomCard>
                 </Grid>
-            </VatContextProvider>
+                <Grid item xs={12} md={6}>
+                    <Cart cartData={cart} removeFromCart={removeFromCartHandler} increaseItem={increaseItemHandler} decreaseItem={decreaseItemHandler}
+                        resetCart={resetCartHandler} reserved={reservedBookingData}
+                        purchase={purchaseCartHandler} print={purchasePrintBookingHandler}
+                        priceChangeHandler={changeItemPriceHandler} changeEmployee={changeEmployeeHandler} />
+                </Grid>
+                <Backdrop
+                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                    open={creatingBooking || reservingBokking}
+                >
+                    <CircularProgress color="secondary" />
+                </Backdrop>
+                {
+                    printBookingModalOpened && (
+                        <PrintBookingModal show={printBookingModalOpened} onClose={printBookingModalCloseHandler} bookingData={reservedBookingData} reset={resetPrintedBookingData} />
+                    )
+                }
+            </Grid>
         </Fragment>
     )
 }

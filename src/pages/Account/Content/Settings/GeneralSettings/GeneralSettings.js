@@ -3,7 +3,7 @@ import v1 from '../../../../../utils/axios-instance-v1'
 import { useTranslation } from 'react-i18next';
 import CssBaseline from '@mui/material/CssBaseline';
 import Stack from '@mui/material/Stack';
-import { Alert, Backdrop, Button, CircularProgress, Grid, Skeleton, Snackbar, TextField } from "@mui/material";
+import { Alert, Backdrop, Button, CircularProgress, FormControlLabel, FormGroup, Grid, Skeleton, Snackbar, Switch, TextField } from "@mui/material";
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import styled from 'styled-components';
 
@@ -52,6 +52,7 @@ export default function GeneralSettings(props) {
     const [show, setShow] = useState(true);
     const [open, setOpen] = useState(false);
     const [success, setSuccess] = useState(false)
+    const [vat, setVat] = useState(false);
 
     useEffect(() => {
         v1.get('/vendors/settings/company')
@@ -64,6 +65,7 @@ export default function GeneralSettings(props) {
                 setAddress(res.data.address)
                 setNotes(res.data.invoice_notes ?? '')
                 setWebsite(res.data.website)
+                setVat(res.data.has_vat)
                 setShow(false)
             })
     }, []);
@@ -81,8 +83,8 @@ export default function GeneralSettings(props) {
         formData.append('website', website);
         formData.append('invoice_notes', notes);
         v1.post('/vendors/settings/company', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
-        .then(res => {
-            if (res.status === 204) {
+            .then(res => {
+                if (res.status === 204) {
                     setSuccess(true)
                 }
                 setOpen(false)
@@ -97,13 +99,7 @@ export default function GeneralSettings(props) {
     }
     const onImageChangeHandler = (imageList, addUpdateIndex) => {
         handleformIsDirty(true)
-        // data for submit
         setUploadedLogo(imageList);
-        /* if (imageList.length === 1) {
-            setDefaultImage(imageList[0].data_url);
-        } else {
-            setDefaultImage(image);
-        } */
     };
     const nameChangeHandler = (e) => {
         handleformIsDirty(true)
@@ -132,6 +128,10 @@ export default function GeneralSettings(props) {
     const phoneChangeHandler = (e) => {
         handleformIsDirty(true)
         setPhone(e.target.value)
+    }
+    const toggleVat = () => {
+        handleformIsDirty(true)
+        setVat(prevState => !prevState);
     }
 
     return (
@@ -202,6 +202,11 @@ export default function GeneralSettings(props) {
                                                 </Grid>
                                                 <Grid item xs={12} >
                                                     <TextField value={tax} onChange={taxChangeHandler} fullWidth label={t("Tax Record")} variant="outlined" required />
+                                                </Grid>
+                                                <Grid item xs={12} >
+                                                    <FormGroup>
+                                                        <FormControlLabel control={<Switch checked={vat} onChange={toggleVat} />} label={t("has Taxes")} />
+                                                    </FormGroup>
                                                 </Grid>
                                             </Grid>
                                         </Grid>

@@ -19,7 +19,7 @@ export const CustomCardMui = styled(Card)`
         &:last-child{
             margin-bottom:0;
         }
-        ${({ isMobileModal }) => isMobileModal && css`
+        ${({ $isMobileModal }) => $isMobileModal && css`
             @media screen and (max-width: ${({ theme }) => theme.breakpoints.values.md - 1}px) {
                 position: fixed;
                 top: 0;
@@ -113,7 +113,7 @@ export default function CustomCard(props) {
     const { t } = useTranslation();
 
     return (
-        <CustomCardMui isMobileModal={isMobileModal} open={open} >
+        <CustomCardMui $isMobileModal={isMobileModal} open={open} >
             <CardHeading>
                 <h4>{t(props.heading)}{props.total}</h4>
                 {isMobileModal && isMobile && <IconButton onClick={handleClose}><CloseIcon /></IconButton>}
