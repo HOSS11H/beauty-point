@@ -52,7 +52,7 @@ export default function GeneralSettings(props) {
     const [show, setShow] = useState(true);
     const [open, setOpen] = useState(false);
     const [success, setSuccess] = useState(false)
-    const [vat, setVat] = useState(false);
+    const [vat, setVat] = useState(true);
 
     useEffect(() => {
         v1.get('/vendors/settings/company')
