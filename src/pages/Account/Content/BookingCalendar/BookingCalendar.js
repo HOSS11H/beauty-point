@@ -98,11 +98,22 @@ const BookingCalendar = props => {
     const [ toDate, setToDate ] = useState(new Date());
 
     const [userData, setUserData] = useState(null);
-    
+
+    const calendarRef = useRef()
     
     useEffect( ( ) => {
-        fetchBookingsHandler(lang, fromDate , toDate);
+        if (calendarRef.current)  {
+            fetchBookingsHandler(lang, fromDate , toDate);
+        }
     } , [fetchBookingsHandler, fromDate, lang, toDate])
+    
+    console.log(calendarRef.current)
+    console.log(fromDate, toDate)
+
+    useEffect( ( ) => {
+        // let date = calendarRef.current.getDate();
+        // console.log(date)
+    }, [])
 
     useEffect( ( ) =>{
         if ( notIntialRender.current ) {
@@ -162,16 +173,17 @@ const BookingCalendar = props => {
 
     let content = (
         <FullCalendar
+            ref={calendarRef}
             plugins={[dayGridPlugin, interactionPlugin]}
             initialView="dayGridMonth"
             events={formattedBookingsData}
             eventContent={renderEventContent}
             eventClick={dateClickHandler}
-            datesSet={(dateInfo) => {
+            /* datesSet={(dateInfo) => {
                 setFromDate(format(dateInfo.start, 'yyyy-MM-dd'));
                 setToDate(format(dateInfo.end, 'yyyy-MM-dd'));
                 //console.log('excuted')
-            }}
+            }} */
         />
     )
 

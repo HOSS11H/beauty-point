@@ -14,6 +14,7 @@ import AuthBgSrc from '../../images/avatars/auth-bg.png'
 import Map from './Map/Map';
 import { useTranslation } from 'react-i18next';
 import Terms from './Terms/Terms';
+import { toast } from 'react-toastify';
 
 const AuthContainer = styled.div`
     min-height: 100vh;
@@ -184,6 +185,7 @@ const Auth = props => {
                 business_name: subscribeData.sallonName.value,
                 email: subscribeData.email.value,
                 contact: subscribeData.phoneNum.value,
+                mobile: subscribeData.phoneNum.value,
                 address: subscribeData.address.value,
                 password: subscribeData.password.value,
                 address_latitude: marker.lat,
@@ -205,7 +207,15 @@ const Auth = props => {
                 }
             })
             .catch(err => {
-                setErrorMessage(err.response.data.message);
+                if ( err.response.data.errors ) {
+                    const errs = err.response.data.errors;
+                    for (let key in errs) {
+                        toast.error(errs[key][0])
+                    }
+
+                } else {
+                    toast.error(err.response.data.message)
+                }
             })
     }
 

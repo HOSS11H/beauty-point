@@ -3,6 +3,7 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 //import Map from './Auth/Map/Map';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { CustomButton } from '../../components/UI/Button/Button';
 import useForm from '../../hooks/useForm';
@@ -147,7 +148,15 @@ const RegisterArtist = props => {
                 navigate('/account/settings?welcome=true', { replace: true })
             })
             .catch(err => {
-                setErrorMessage('Something went wrong. Please try again.');
+                if ( err.response.data.errors ) {
+                    const errs = err.response.data.errors;
+                    for (let key in errs) {
+                        toast.error(errs[key][0])
+                    }
+
+                } else {
+                    toast.error(err.response.data.message)
+                }
             })
     }
 
