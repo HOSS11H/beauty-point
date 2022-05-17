@@ -1,5 +1,5 @@
-import * as actionTypes from './actionTypes';
 import axios from '../../utils/axios-instance';
+import * as actionTypes from './actionTypes';
 
 export const fetchDealsStart = () => {
     return {
@@ -194,9 +194,14 @@ export const createDeal = (data) => {
                 }, 1000)
             })
             .catch(err => {
-                const errs = err.response.data ? err.response.data.errors : { message : [ err.response.data.message ] };
-                for (let key in errs) {
-                    dispatch(createDealFailed(errs[key][0]))
+                if ( err.response.data.errors ) {
+                    const errs = err.response.data.errors;
+                    for (let key in errs) {
+                        dispatch(createDealFailed(errs[key][0]))
+                    }
+
+                } else {
+                    dispatch(createDealFailed(err.response.data.message))
                 }
             })
     }

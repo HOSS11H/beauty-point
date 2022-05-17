@@ -1,5 +1,5 @@
-import * as actionTypes from './actionTypes';
 import axios from '../../utils/axios-instance';
+import * as actionTypes from './actionTypes';
 
 
 export const fetchServicesStart = () => {
@@ -200,9 +200,14 @@ export const createService = (data) => {
                 }, 2000)
             })
             .catch(err => {
-                const errs = err.response.data ? err.response.data.errors : { message : [ err.response.data.message ] };
-                for (let key in errs) {
-                    dispatch(createServiceFailed(errs[key][0]))
+                if ( err.response.data.errors ) {
+                    const errs = err.response.data.errors;
+                    for (let key in errs) {
+                        dispatch(createServiceFailed(errs[key][0]))
+                    }
+
+                } else {
+                    dispatch(createServiceFailed(err.response.data.message))
                 }
             })
     }

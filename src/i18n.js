@@ -588,6 +588,8 @@ const resources = {
             'Seat Deleted': 'تم حذف المقعد',
             'Failed Deleting Seat': 'فشل حذف المقعد',
             'Seat Created': 'تم إنشاء المقعد',
+            'Empolyee Added': 'تمت إضافة الموظف',
+            'Employee Deleted': 'تم حذف الموظف',
         }
     }
 };

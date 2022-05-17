@@ -1,17 +1,19 @@
-import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin!
-import interactionPlugin from "@fullcalendar/interaction"; // needed for dayClick
-import FullCalendar from '@fullcalendar/react'; // must go before plugins
+import FullCalendar from '@fullcalendar/react' // must go before plugins
+import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
+import interactionPlugin from "@fullcalendar/interaction" // needed for dayClick
+import { connect } from 'react-redux'
+import { fetchCalendarBookings, deleteCalendarBooking } from "../../../../store/actions/index";
+import { useContext, useEffect, useState, useCallback } from 'react';
 import Card from '@mui/material/Card';
 import CircularProgress from '@mui/material/CircularProgress';
-import moment from 'moment';
-import { useCallback, useContext, useEffect, useRef, useState } from 'react';
-import { connect } from 'react-redux';
-import styled from 'styled-components';
-import { deleteCalendarBooking, fetchCalendarBookings } from "../../../../store/actions/index";
-import AuthContext from '../../../../store/auth-context';
 import ThemeContext from '../../../../store/theme-context';
+import styled from 'styled-components';
 import v1 from '../../../../utils/axios-instance-v1';
 import ViewModal from '../Bookings/ViewModal/ViewModal';
+import { format } from 'date-fns';
+import { useRef } from 'react';
+import moment from 'moment'
+import AuthContext from '../../../../store/auth-context';
 
 const BookingCalendarWrapper = styled.div`
     & .fc-h-event {
