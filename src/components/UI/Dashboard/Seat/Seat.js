@@ -14,7 +14,6 @@ const CustomCardMui = styled(Card)`
         background-color: ${({ theme }) => theme.palette.background.default};
         display: flex;
         position: relative;
-        cursor: pointer;
         @media screen and (max-width: 889.98px) {
             flex-direction: column;
             justify-content: center;
@@ -52,7 +51,7 @@ const SeatName = styled.a`
     font-weight: 600;
     color: ${({ theme }) => theme.palette.primary.main};
     transition: 0.3s ease-in-out;
-    margin-bottom: 5px;
+    margin-bottom: 15px;
     cursor: pointer;
 `
 const SeatInfo = styled.ul`
@@ -69,6 +68,11 @@ const SeatInfo = styled.ul`
         &:last-child {
             margin-bottom: 0px;
         }
+        &:first-child {
+            span {
+                cursor: pointer;
+            }
+        }
         span {
             margin-left: 10px;
             color: ${({ theme }) => theme.palette.secondary.main};
@@ -80,25 +84,25 @@ const SeatCard = props => {
 
     const { t } = useTranslation()
 
-    const { seat, onClick } = props;
+    const { seat, onClick, navigate } = props;
 
     return (
         <Fragment>
-            <CustomCardMui onClick={onClick.bind(null, seat)} >
+            <CustomCardMui >
                 <SeatStatus active={seat.status === 'active'} inactive={seat.status === 'inactive'} >
                     {t(seat.status)}
                 </SeatStatus>
                 <BookingContent>
-                    <SeatName>{seat.title}</SeatName>
+                    <SeatName onClick={onClick.bind(null, seat)}>{seat.title}</SeatName>
                     <SeatInfo>
-                        <li>{t('salon: ')}
+                        <li onClick={navigate.bind(null, seat.company.id)} >{t('salon: ')}
                             <span>
                                 {seat.company.companyName}
                             </span>
                         </li>
                         <li>{t('location: ')}
                             <span>
-                                {seat.location.name}
+                                {seat.company.address}
                             </span>
                         </li>
                         <li>{t('commission: ')}

@@ -169,7 +169,7 @@ const ActionButton = styled(CustomButton)`
         }
     }
 `
-const DeleteButton = styled(CustomButton)`
+/* const DeleteButton = styled(CustomButton)`
     &.MuiButton-root {
         width: auto;
         padding: 0 20px;
@@ -178,12 +178,12 @@ const DeleteButton = styled(CustomButton)`
         background: ${({ theme }) => theme.palette.error.main};
         font-size: 16px;
     }
-`
+` */
 
 
 const ViewModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, id, onDelete, userData } = props;
+    const { show, heading, confirmText, onConfirm, onClose, id, userData } = props;
 
     const { t } = useTranslation();
 

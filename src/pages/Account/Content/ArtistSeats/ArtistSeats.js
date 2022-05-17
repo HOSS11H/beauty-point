@@ -1,6 +1,7 @@
 import { Grid } from '@mui/material';
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import SearchBar from '../../../../components/Search/SearchBar/SearchBar';
 import SearchMessage from "../../../../components/Search/SearchMessage/SearchMessage";
@@ -12,6 +13,7 @@ import ReserveSeat from './ReserveSeat/ReserveSeat';
 const ArtistSeats = props => {
 
     const { t } = useTranslation()
+    const navigate = useNavigate()
 
     const [seats, setSeats] = useState([])
     const [loading, setLoading] = useState(false)
@@ -102,6 +104,10 @@ const ArtistSeats = props => {
         setPage(1)
     }, [])
 
+    const navigateToSalonHandler = useCallback(( id ) => {
+        navigate(`/home/salons/${id}`)
+    }, [navigate])
+
     let content;
 
     if (loading && seats.length === 0) {
@@ -125,13 +131,13 @@ const ArtistSeats = props => {
                     if (seats.length === (index + 1)) {
                         return (
                             <Grid item xs={12} sm={6} key={index} ref={lastElementRef} >
-                                <SeatCard seat={seat} onClick={openShowSeatHandler} />
+                                <SeatCard seat={seat} onClick={openShowSeatHandler} navigate={navigateToSalonHandler} />
                             </Grid>
                         )
                     } else {
                         return (
                             <Grid item xs={12} sm={6} key={index}>
-                                <SeatCard seat={seat} onClick={openShowSeatHandler} />
+                                <SeatCard seat={seat} onClick={openShowSeatHandler} navigate={navigateToSalonHandler} />
                             </Grid>
                         )
                     }
