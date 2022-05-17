@@ -68,6 +68,17 @@ const ClientAddress = styled.p`
     transition: 0.3s ease-in-out;
     margin-bottom: 5px;
 `
+const InvoiceNotes = styled.p`
+    display: block;
+    font-size: 14px;
+    line-height:1.5;
+    text-transform: capitalize;
+    font-weight: 600;
+    color: #000;
+    transition: 0.3s ease-in-out;
+    margin-top: 25px;
+	text-align: center;
+`
 const ClientBill = styled.p`
     display: block;
     font-size: 14px;
@@ -178,7 +189,7 @@ const ItemEmployee = styled.span`
 	text-align: center;
 `
 const QrWrapper = styled.div`
-	margin-top: 40px;
+	margin-top: 20px;
 `
 const BookingCopyright = styled.p`
 	font-size: 11px;
@@ -364,6 +375,9 @@ const Invoice = React.forwardRef((props, ref) => {
 									})
 								}
 							</Grid>
+							<InvoiceNotes>
+								{userData.user.company.invoice_notes}
+							</InvoiceNotes>
 							<QrWrapper>
 								{<QRCode value={qrCode} />}
 							</QrWrapper>

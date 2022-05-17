@@ -415,7 +415,6 @@ const ViewModal = (props) => {
             email = bookingData.company.companyEmail
             mobile = bookingData.company.companyPhone
         }
-        console.log(roleName, bookingData.source)
         content = (
             <Fragment>
                 <Grid container spacing={3}>
