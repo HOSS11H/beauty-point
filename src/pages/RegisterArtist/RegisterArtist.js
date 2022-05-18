@@ -13,7 +13,7 @@ import AuthContext from '../../store/auth-context';
 import ThemeContext from '../../store/theme-context';
 import v1 from '../../utils/axios-instance-v1';
 import { registerArtistForm } from '../../utils/formConfig';
-import Map from '../Auth/Map/Map';
+import RegisterMap from '../Auth/RegisterMap/RegisterMap';
 import Terms from '../Auth/Terms/Terms';
 
 
@@ -195,7 +195,7 @@ const RegisterArtist = props => {
                                 </FormHeading>
                                 {subscribeInputs()}
                                 {!isLogin && <TextButton variant='text' onClick={termsModaOpenHandler} >{t('terms & conditions')}</TextButton>}
-                                {!isLogin && <Map assignCoords={assignCoords} marker={marker} />}
+                                {!isLogin && <RegisterMap assignCoords={assignCoords} />}
                                 {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
                                 <CustomButton onClick={submitHandler} disabled={!authIsValid} >{subscribeFormText.button}</CustomButton>
                             </FormWrapper>

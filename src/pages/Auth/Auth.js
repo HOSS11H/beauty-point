@@ -274,8 +274,7 @@ const Auth = props => {
                                 </FormHeading>
                                 {isLogin ? loginInputs() : subscribeInputs()}
                                 {!isLogin && <TextButton variant='text' onClick={termsModaOpenHandler} >{t('terms & conditions')}</TextButton> }
-                                {!isLogin && <Map assignCoords={assignCoords} marker={marker} /> }
-                                {!isLogin && <RegisterMap /> }
+                                {!isLogin && <RegisterMap assignCoords={assignCoords} /> }
                                 {isLogin && (
                                     <FormLink>
                                         {loginFormText.passwordRestoreMessage}
