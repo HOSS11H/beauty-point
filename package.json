@@ -11,6 +11,7 @@
     "@mui-treasury/layout": "^5.0.0-alpha.21",
     "@mui-treasury/mockup": "^5.0.0-alpha.15",
     "@react-google-maps/api": "^2.7.0",
+    "@react-leaflet/core": "^1.0.2",
     "@sentry/react": "^6.19.4",
     "@sentry/tracing": "^6.19.4",
     "@testing-library/jest-dom": "^5.15.0",
@@ -21,7 +22,7 @@
     "file-saver": "^2.0.5",
     "google-map-react": "^2.1.10",
     "http-proxy-middleware": "^2.0.1",
-    "leaflet": "^1.8.0",
+    "leaflet": "^1.6.0",
     "moment": "^2.29.1",
     "morgan": "^1.10.0",
     "react": "^17.0.2",
@@ -29,6 +30,7 @@
     "react-debounce-input": "^3.2.5",
     "react-dom": "^17.0.2",
     "react-joyride": "^2.3.2",
+    "react-leaflet": "^3.2.0",
     "react-scripts": "4.0.3",
     "react-tagsinput": "^3.19.0",
     "react-toastify": "^8.1.0",
@@ -56,9 +58,9 @@
       "not op_mini all"
     ],
     "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
     ]
   },
   "devDependencies": {

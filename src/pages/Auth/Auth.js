@@ -15,6 +15,7 @@ import Map from './Map/Map';
 import { useTranslation } from 'react-i18next';
 import Terms from './Terms/Terms';
 import { toast } from 'react-toastify';
+import RegisterMap from './RegisterMap/RegisterMap';
 
 const AuthContainer = styled.div`
     min-height: 100vh;
@@ -274,6 +275,7 @@ const Auth = props => {
                                 {isLogin ? loginInputs() : subscribeInputs()}
                                 {!isLogin && <TextButton variant='text' onClick={termsModaOpenHandler} >{t('terms & conditions')}</TextButton> }
                                 {!isLogin && <Map assignCoords={assignCoords} marker={marker} /> }
+                                {!isLogin && <RegisterMap /> }
                                 {isLogin && (
                                     <FormLink>
                                         {loginFormText.passwordRestoreMessage}
