@@ -11,7 +11,6 @@ import { Container, Grid, Card, Button } from '@mui/material';
 import { CustomButton } from '../../components/UI/Button/Button';
 import Logo from '../../images/logo/logo_mobile.png'
 import AuthBgSrc from '../../images/avatars/auth-bg.png'
-import Map from './Map/Map';
 import { useTranslation } from 'react-i18next';
 import Terms from './Terms/Terms';
 import { toast } from 'react-toastify';

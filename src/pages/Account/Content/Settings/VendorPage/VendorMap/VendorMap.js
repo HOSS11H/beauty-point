@@ -1,8 +1,8 @@
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet'
 import { useMemo, useRef, useState } from 'react';
 
-const LocationMarker = ( { assignCoords } ) => {
-    const [position, setPosition] = useState(null)
+const LocationMarker = ( { assignCoords, marker } ) => {
+    const [position, setPosition] = useState(marker ? [marker.lat, marker.lng] :null)
     const markerRef = useRef(null)
     const map = useMapEvents({
         click() {
@@ -35,18 +35,18 @@ const LocationMarker = ( { assignCoords } ) => {
     )
 }
 
-const RegisterMap = (props) => {
-    const { assignCoords } = props;
+const VendorMap = (props) => {
+    const { assignCoords, marker } = props;
     return (
         <div style={{ height: '400px', margin: "20px auto" }}>
-            <MapContainer center={[24.635588, 46.724565]} zoom={13}>
+            <MapContainer center={marker ? [ marker.lat, marker.lng ] : [24.635588, 46.724565]} zoom={13}>
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                <LocationMarker assignCoords={assignCoords} />
+                <LocationMarker assignCoords={assignCoords} marker={marker} />
             </MapContainer>
         </div>
     )
 }
-export default RegisterMap;
+export default VendorMap;

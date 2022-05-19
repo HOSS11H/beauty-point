@@ -1,36 +1,35 @@
-import { Container, Grid } from "@mui/material";
-import styled from 'styled-components';
-import { useState, useEffect } from 'react';
-import axios from '../../../utils/axios-instance';
-import { useTranslation } from "react-i18next";
-import Box from '@mui/material/Box';
-import * as React from 'react';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
-import { useParams, useSearchParams } from "react-router-dom";
+import EventIcon from '@mui/icons-material/Event';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PushPinIcon from '@mui/icons-material/PushPin';
-import DealPanel from '../../../components/UI/DealPanel/DealPanel';
-import { a11yProps } from "../../../shared/utility";
+import ShareIcon from '@mui/icons-material/Share';
+import { Container, Grid } from "@mui/material";
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import Tab from '@mui/material/Tab';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import TablePaginationActions from "../../../components/UI/Dashboard/Table/TablePagination/TablePagination";
+import Tabs from '@mui/material/Tabs';
+import Typography from '@mui/material/Typography';
+import * as React from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from "react-i18next";
+import { useParams, useSearchParams } from "react-router-dom";
+import styled from 'styled-components';
 import HomeLayout from "../../../components/HomeLayout/HomeLayout";
 import { CustomButton } from "../../../components/UI/Button/Button";
-import { useCallback } from "react";
-import Cart from "./Cart/Cart";
-import TabPanel from "../../../components/UI/TabPanel/TabPanel";
-import ShareIcon from '@mui/icons-material/Share';
-import CustomizedSnackbars from "../../../components/UI/SnackBar/SnackBar";
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import ServicePanel from "../../../components/UI/ServicePanel/ServicePanel";
-import Map from "./Map/Map";
+import TablePaginationActions from "../../../components/UI/Dashboard/Table/TablePagination/TablePagination";
+import DealPanel from '../../../components/UI/DealPanel/DealPanel';
 import Loader from "../../../components/UI/Loader/Loader";
-import EventIcon from '@mui/icons-material/Event';
+import ServicePanel from "../../../components/UI/ServicePanel/ServicePanel";
+import CustomizedSnackbars from "../../../components/UI/SnackBar/SnackBar";
+import TabPanel from "../../../components/UI/TabPanel/TabPanel";
+import { a11yProps } from "../../../shared/utility";
+import axios from '../../../utils/axios-instance';
+import Cart from "./Cart/Cart";
+import VendorMap from "./VendorMap/VendorMap";
 
 
 
@@ -89,8 +88,6 @@ const SingleArtist = props => {
     const [showModal, setShowModal] = useState(navedTo === 'cart' ? true : false);
 
     const [messageShown, setMessageShown] = useState(false);
-
-    console.log(param)
 
     useEffect(() => {
         setLoading(true);
@@ -285,7 +282,7 @@ const SingleArtist = props => {
                             </TableContainer>
                         </Grid>
                         <Grid  item xs={12}>
-                            <Map marker={ { lat: +artist.vendor_page.latitude, lng: +artist.vendor_page.longitude } } />
+                            <VendorMap marker={ { lat: +artist.vendor_page.latitude, lng: +artist.vendor_page.longitude } } />
                         </Grid>
                     </Grid>
                 </TabPanel>

@@ -5,7 +5,7 @@ import { Alert, Backdrop, Button, CircularProgress, Grid, Skeleton, Snackbar, Te
 import TagsInput from 'react-tagsinput'
 import 'react-tagsinput/react-tagsinput.css'
 import v1 from '../../../../../utils/axios-instance-v1';
-import Map from "./Map/Map";
+import RegisterMap from "./VendorMap/VendorMap";
 import { useOutletContext } from "react-router-dom";
 
 
@@ -22,7 +22,7 @@ export default function VendorPage(props) {
     const [show, setShow] = useState(true);
     const [open, setOpen] = useState(false);
     const [success, setSuccess] = useState(false)
-    const [marker, setMarker] = useState({})
+    const [marker, setMarker] = useState(null)
 
     useEffect(() => {
         v1.get('/vendors/settings/vendor_page')
@@ -126,7 +126,7 @@ export default function VendorPage(props) {
                                 <TextField value={seo_description} onChange={seoChangeHandler} multiline minRows={4} fullWidth label={t('SEO Description')} variant="outlined" />
                             </Grid>
                             <Grid item xs={12}>
-                                <Map assignCoords={assignCoords} marker={marker} />
+                                <RegisterMap assignCoords={assignCoords} marker={marker} />
                             </Grid>
                             <Grid item xs={12} md={12} sx={{ textAlign: 'center' }}>
                                 <Button variant="contained" color="secondary" sx={{ minWidth: '30%' }} size="large" onClick={submitForm}>{t('Save')}</Button>
