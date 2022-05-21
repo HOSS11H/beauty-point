@@ -1,5 +1,6 @@
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet'
 import { useMemo, useRef, useState } from 'react';
+import Locate from './Locate/Locate';
 
 const LocationMarker = ( { assignCoords, marker } ) => {
     const [position, setPosition] = useState(marker ? [marker.lat, marker.lng] :null)
@@ -45,6 +46,7 @@ const VendorMap = (props) => {
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
                 <LocationMarker assignCoords={assignCoords} marker={marker} />
+                <Locate />
             </MapContainer>
         </div>
     )
