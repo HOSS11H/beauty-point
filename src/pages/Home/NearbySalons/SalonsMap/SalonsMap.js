@@ -1,11 +1,10 @@
-import { Map, MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
-import styled from 'styled-components';
-import SalonsCarousel from './SalonsCarousel/SalonsCarousel';
-import Locate from './Locate/Locate';
-import { NavLink } from 'react-router-dom';
 import L from 'leaflet';
+import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
+import { NavLink } from 'react-router-dom';
+import styled from 'styled-components';
 import markerImg from '../../../../images/marker/marker.png';
-import { useCallback, useRef } from 'react';
+import Locate from './Locate/Locate';
+import SalonsCarousel from './SalonsCarousel/SalonsCarousel';
 
 
 let markerIcon = L.icon({

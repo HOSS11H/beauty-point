@@ -1,15 +1,15 @@
-import styled from 'styled-components'
 import Card from '@mui/material/Card';
-// Import Swiper React components
-import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
-
+import { useMap } from 'react-leaflet';
+import styled from 'styled-components';
 // import Swiper core and required modules
 import SwiperCore, {
     Autoplay
 } from 'swiper';
-
+// Import Swiper React components
+import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
 import 'swiper/swiper.min.css';
-import { useMap, useMapEvents } from 'react-leaflet';
+
+
 
 // install Swiper modules
 SwiperCore.use([Autoplay]);
