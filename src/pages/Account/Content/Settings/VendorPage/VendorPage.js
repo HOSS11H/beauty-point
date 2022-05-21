@@ -1,13 +1,14 @@
+import { Alert, Backdrop, Button, CircularProgress, Grid, Skeleton, Snackbar, TextField } from "@mui/material";
+import CssBaseline from '@mui/material/CssBaseline';
 import { Fragment, useEffect, useState } from "react";
 import { useTranslation } from 'react-i18next';
-import CssBaseline from '@mui/material/CssBaseline';
-import { Alert, Backdrop, Button, CircularProgress, Grid, Skeleton, Snackbar, TextField } from "@mui/material";
+import { useOutletContext } from "react-router-dom";
 import TagsInput from 'react-tagsinput'
-import 'react-tagsinput/react-tagsinput.css'
+
 import v1 from '../../../../../utils/axios-instance-v1';
 import RegisterMap from "./VendorMap/VendorMap";
-import { useOutletContext } from "react-router-dom";
 
+import 'react-tagsinput/react-tagsinput.css'
 
 export default function VendorPage(props) {
     const [ formIsDirty, handleformIsDirty ] = useOutletContext()

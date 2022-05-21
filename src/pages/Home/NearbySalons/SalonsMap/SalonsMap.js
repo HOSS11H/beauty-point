@@ -2,10 +2,10 @@ import L from 'leaflet';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
+
 import markerImg from '../../../../images/marker/marker.png';
 import Locate from './Locate/Locate';
 import SalonsCarousel from './SalonsCarousel/SalonsCarousel';
-
 
 let markerIcon = L.icon({
     iconUrl: markerImg,
@@ -58,7 +58,7 @@ const SalonsMap = ({ salons, center }) => {
 
     return (
         <MapWrapper>
-            <MapContainer  center={center} zoom={8}>
+            <MapContainer center={center} zoom={8}>
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

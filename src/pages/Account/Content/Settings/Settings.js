@@ -1,13 +1,14 @@
-import { Fragment, useEffect, useState } from "react";
-import { Outlet } from "react-router";
+import { Card, CardContent } from "@mui/material";
 import CssBaseline from '@mui/material/CssBaseline';
 import Stack from '@mui/material/Stack';
-import Sidebar from "./Sidebar";
-import { Card, CardContent } from "@mui/material";
 import { Box } from "@mui/system";
-import { useParams, useNavigate} from "react-router-dom";
-import { usePrompt } from "../../../../hooks/useBlocker";
+import { Fragment, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { Outlet } from "react-router";
+import { useNavigate, useParams } from "react-router-dom";
+
+import { usePrompt } from "../../../../hooks/useBlocker";
+import Sidebar from "./Sidebar";
 
 export default function Settings() {
 

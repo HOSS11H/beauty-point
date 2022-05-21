@@ -1,20 +1,20 @@
+import { Button, Card, Container, Grid } from '@mui/material';
 import { useCallback, useContext, useEffect, useState } from 'react';
-import v1 from '../../utils/axios-instance-v1';
-import useForm from '../../hooks/useForm';
-import { loginForm, subscribeForm } from '../../utils/formConfig';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import AuthContext from '../../store/auth-context';
-
-import ThemeContext from '../../store/theme-context';
-import styled from 'styled-components';
-import { Container, Grid, Card, Button } from '@mui/material';
-import { CustomButton } from '../../components/UI/Button/Button';
-import Logo from '../../images/logo/logo_mobile.png'
-import AuthBgSrc from '../../images/avatars/auth-bg.png'
 import { useTranslation } from 'react-i18next';
-import Terms from './Terms/Terms';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import styled from 'styled-components';
+
+import { CustomButton } from '../../components/UI/Button/Button';
+import useForm from '../../hooks/useForm';
+import AuthBgSrc from '../../images/avatars/auth-bg.png'
+import Logo from '../../images/logo/logo_mobile.png'
+import AuthContext from '../../store/auth-context';
+import ThemeContext from '../../store/theme-context';
+import v1 from '../../utils/axios-instance-v1';
+import { loginForm, subscribeForm } from '../../utils/formConfig';
 import RegisterMap from './RegisterMap/RegisterMap';
+import Terms from './Terms/Terms';
 
 const AuthContainer = styled.div`
     min-height: 100vh;

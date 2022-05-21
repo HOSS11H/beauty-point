@@ -2,14 +2,11 @@ import Card from '@mui/material/Card';
 import { useMap } from 'react-leaflet';
 import styled from 'styled-components';
 // import Swiper core and required modules
-import SwiperCore, {
-    Autoplay
-} from 'swiper';
+import SwiperCore, { Autoplay } from 'swiper';
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react';
+
 import 'swiper/swiper.min.css';
-
-
 
 // install Swiper modules
 SwiperCore.use([Autoplay]);
@@ -81,7 +78,7 @@ const SalonsCarousel = ({ salons, handleClick }) => {
 
     const map = useMap();
     const handleSalonClick = ((coords) => {
-        map.flyTo(coords, map.getZoom())
+        map.flyTo(coords, 14)
     })
 
     let content = salons.map(salon => {

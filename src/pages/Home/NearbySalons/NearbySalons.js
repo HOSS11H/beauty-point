@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import SalonsMap from "./SalonsMap/SalonsMap";
-import axios from '../../../utils/axios-instance'
-import Loader from "../../../components/UI/Loader/Loader";
 import { toast } from "react-toastify";
+
+import Loader from "../../../components/UI/Loader/Loader";
+import axios from '../../../utils/axios-instance'
+import SalonsMap from "./SalonsMap/SalonsMap";
 
 const NearbySalons = props => {
 

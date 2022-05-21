@@ -1,5 +1,6 @@
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet'
 import { useMemo, useRef, useState } from 'react';
+import { MapContainer, Marker, Popup, TileLayer, useMapEvents } from 'react-leaflet'
+
 import Locate from './Locate/Locate';
 
 const LocationMarker = ( { assignCoords, marker } ) => {

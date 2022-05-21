@@ -1,9 +1,10 @@
-import Box from '@mui/material/Box';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
 import { Card } from "@mui/material";
-import { useTranslation } from "react-i18next";
+import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
 import { useContext } from 'react';
+import { useTranslation } from "react-i18next";
+
 import AuthContext from '../../../../store/auth-context';
 
 export default function Sidebar(props) {

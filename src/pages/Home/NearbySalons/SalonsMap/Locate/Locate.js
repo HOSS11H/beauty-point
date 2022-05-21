@@ -1,5 +1,6 @@
 import { useMap } from 'react-leaflet';
 import styled from 'styled-components';
+
 import compassImg from './compass.svg';
 
 const LocateBtn = styled.button`
@@ -21,7 +22,7 @@ const  Locate = (  ) => {
     const handleCompassClick = (() => {
         map.locate()
         map.on('locationfound', (e) => {
-            map.flyTo(e.latlng, map.getZoom())
+            map.flyTo(e.latlng, 14)
         })
     })
     
