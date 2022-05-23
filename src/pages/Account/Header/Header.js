@@ -1,20 +1,20 @@
-import { Fragment, useContext } from 'react';
-import styled from 'styled-components';
-import PropTypes from 'prop-types';
+import Brightness2Icon from '@mui/icons-material/Brightness2';
+import MenuIcon from '@mui/icons-material/Menu';
+import WbSunnyIcon from '@mui/icons-material/WbSunny';
+import { Box, useMediaQuery } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
-import ThemeContext from '../../../store/theme-context';
-import WbSunnyIcon from '@mui/icons-material/WbSunny';
-import Brightness2Icon from '@mui/icons-material/Brightness2';
+import PropTypes from 'prop-types';
+import { Fragment, useContext } from 'react';
+import { useTranslation } from 'react-i18next';
+import { NavLink, useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
 import { ButtonSmall, ButtonText } from '../../../components/UI/Button/Button';
 import AuthContext from '../../../store/auth-context';
-import { useTranslation } from 'react-i18next';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { Box, useMediaQuery } from '@mui/material';
+import ThemeContext from '../../../store/theme-context';
 import Notifications from './Notifications/Notifications';
 
 const SwitchBtn = styled(ButtonSmall)`
@@ -88,9 +88,9 @@ function Header(props) {
                                 <IconButton sx={{ mr: 1, color: themeCtx.theme.palette.mode === 'dark' ? themeCtx.theme.vars.white : themeCtx.theme.vars.black }} onClick={themeCtx.toggleMode} >
                                     {themeCtx.theme.palette.mode === 'dark' ? <WbSunnyIcon /> : <Brightness2Icon />}
                                 </IconButton>
-                                <Box sx={{ mr: 1 }} >
+                                {/* <Box sx={{ mr: 1 }} >
                                     <Notifications />
-                                </Box>
+                                </Box> */}
                                 {!isMobile && <SwitchBtn onClick={themeCtx.toggleLanguage} >{themeCtx.lang === 'ar' ? 'switch to EN' : 'الانتقال الي العربية' }</SwitchBtn>}
                             </LeftIconsWrapper>
                         </Grid>

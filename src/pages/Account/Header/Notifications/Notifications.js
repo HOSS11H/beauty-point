@@ -1,16 +1,17 @@
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { Badge, IconButton, Popover, Typography } from '@mui/material';
-import { Fragment, useCallback, useContext, useEffect, useRef, useState } from 'react';
-import ThemeContext from '../../../../store/theme-context';
+import { Badge, IconButton, Popover } from '@mui/material';
+import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Divider from '@mui/material/Divider';
-import axios from '../../../../utils/axios-instance'
-import styled, { css } from 'styled-components';
+import { Fragment, useCallback, useContext, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import styled, { css } from 'styled-components';
+
+import ThemeContext from '../../../../store/theme-context';
+
+// import axios from '../../../../utils/axios-instance'
 
 const data = [
     {
@@ -205,7 +206,9 @@ const Notifications = props => {
     };
 
     const handleNotifaicationClick = (type) => {
+        // request to make the notification status to be read
         navigate(`bookings`)
+        handleClose()
     }
 
     const open = Boolean(anchorEl);
@@ -216,7 +219,7 @@ const Notifications = props => {
             {notifications.map((notification, index) => {
                 if (notifications.length === (index + 1)) {
                     return (
-                        <ListItem ref={lastElementRef} key={notification.id}  >
+                        <ListItem disablePadding ref={lastElementRef} key={index}  >
                             <CustomListItemButton $unread={!notification.read_at} onClick={handleNotifaicationClick} >
                                 <ListItemText primary={notification.title} secondary={notification.message} />
                             </CustomListItemButton>
@@ -224,11 +227,14 @@ const Notifications = props => {
                     )
                 } else {
                     return (
-                        <ListItem key={notification.id} >
-                            <CustomListItemButton $unread={!notification.read_at} onClick={handleNotifaicationClick} >
-                                <ListItemText primary={notification.title} secondary={notification.message} />
-                            </CustomListItemButton>
-                        </ListItem>
+                        <Fragment>
+                            <ListItem disablePadding key={index} >
+                                <CustomListItemButton $unread={!notification.read_at} onClick={handleNotifaicationClick} >
+                                    <ListItemText primary={notification.title} secondary={notification.message} />
+                                </CustomListItemButton>
+                            </ListItem>
+                            <Divider />
+                        </Fragment>
                     )
                 }
             })}
@@ -240,7 +246,7 @@ const Notifications = props => {
         <>
             <IconButton onClick={handleClick}
                 sx={{ color: themeCtx.theme.palette.mode === 'dark' ? themeCtx.theme.vars.white : themeCtx.theme.vars.black }}>
-                <Badge badgeContent={notifications.length} color="secondary">
+                <Badge badgeContent={notifications.filter( n => !n.read_at).length} color="secondary">
                     <NotificationsIcon />
                 </Badge>
             </IconButton>
