@@ -24,6 +24,7 @@ import { connect } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
+
 import { ButtonConfirm, ButtonText, CustomButton } from '../../../../../components/UI/Button/Button';
 import CustomCard from '../../../../../components/UI/Card/Card';
 import Loader from '../../../../../components/UI/Loader/Loader';
@@ -37,7 +38,6 @@ import AddCustomerModal from './AddCustomerModal/AddCustomerModal';
 import CartItem from './CartItem/CartItem';
 import SearchCustomer from './SearchCustomer/SearchCustomer';
 import SharedTableHead from './SharedTableHead/SharedTableHead';
-
 
 const CustomerCard = styled.div`
     padding: 20px;
@@ -276,6 +276,46 @@ const Cart = props => {
     const [employees, setEmployees] = useState([]);
 
     useEffect(() => {
+        const interval = setInterval(() =>
+            setDateTime(new Date())
+        , 1000);
+        return () => clearInterval(interval);
+    } , [])
+
+    useEffect(() => {
+        const headers = {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        }
+        const vendorCouponsEndpoint = `${v2.defaults.baseURL}/vendors/coupons`;
+        const vendorEmployeesEndpoint = `${v2.defaults.baseURL}/vendors/employees`;
+
+        const getVendorCouponsData = axios.get(vendorCouponsEndpoint, headers);
+        const getVendorEmployeesData = axios.get(vendorEmployeesEndpoint, headers);
+
+        axios.all([getVendorCouponsData, getVendorEmployeesData])
+            .then(axios.spread(( couponsRes, employeesRes) => {
+                setLoading(false);
+                setCoupons(couponsRes.data.data);
+                setEmployees(employeesRes.data.data);
+            }))
+            .catch(err => {
+                setLoading(false);
+                if ( err.response.data.errors ) {
+                    const errs = err.response.data.errors;
+                    for (let key in errs) {
+                        toast.error(errs[key][0])
+                    }
+
+                } else {
+                    toast.error(err.response.data.message)
+                }
+            })
+    }, [lang])
+    useEffect(() => {
         const headers = {
             headers: {
                 'Accept': 'application/json',
@@ -284,23 +324,24 @@ const Cart = props => {
             }
         }
         const generalSettingsEndpoint = `${v1.defaults.baseURL}/vendors/settings/company`;
-        const vendorCouponsEndpoint = `${v2.defaults.baseURL}/vendors/coupons`;
-        const vendorEmployeesEndpoint = `${v2.defaults.baseURL}/vendors/employees`;
 
         const getGeneralSettingsData = axios.get(generalSettingsEndpoint, headers);
-        const getVendorCouponsData = axios.get(vendorCouponsEndpoint, headers);
-        const getVendorEmployeesData = axios.get(vendorEmployeesEndpoint, headers);
 
-        axios.all([getGeneralSettingsData, getVendorCouponsData, getVendorEmployeesData])
-            .then(axios.spread((settingsRes, couponsRes, employeesRes) => {
+        axios.all([getGeneralSettingsData])
+            .then(axios.spread((settingsRes) => {
                 setLoading(false);
                 setHasVat(settingsRes.data.has_vat);
-                setCoupons(couponsRes.data.data);
-                setEmployees(employeesRes.data.data);
             }))
             .catch(err => {
                 setLoading(false);
-                toast.error('Something Went Wrong While Fetching Data')
+                if ( err.response.data.errors ) {
+                    const errs = err.response.data.errors;
+                    for (let key in errs) {
+                        toast.error(errs[key][0])
+                    }
+                } else {
+                    toast.error(err.response.data.message)
+                }
             })
     }, [lang])
 

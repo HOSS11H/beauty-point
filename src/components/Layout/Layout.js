@@ -18,7 +18,7 @@ const Layout = props => {
         <Main dir={props.dir}>
             <Wrapper>
                 <StyledToastifyContainer
-                    position="center-right"
+                    position="bottom-right"
                     autoClose={4000}
                     hideProgressBar={true}
                     newestOnTop={false}

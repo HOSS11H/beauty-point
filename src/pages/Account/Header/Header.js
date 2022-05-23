@@ -1,7 +1,7 @@
 import Brightness2Icon from '@mui/icons-material/Brightness2';
 import MenuIcon from '@mui/icons-material/Menu';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
-import { Box, useMediaQuery } from '@mui/material';
+import { useMediaQuery } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
@@ -15,7 +15,8 @@ import styled from 'styled-components';
 import { ButtonSmall, ButtonText } from '../../../components/UI/Button/Button';
 import AuthContext from '../../../store/auth-context';
 import ThemeContext from '../../../store/theme-context';
-import Notifications from './Notifications/Notifications';
+
+// import Notifications from './Notifications/Notifications';
 
 const SwitchBtn = styled(ButtonSmall)`
     &.MuiButton-root {
