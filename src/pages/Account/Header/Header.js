@@ -14,7 +14,8 @@ import { ButtonSmall, ButtonText } from '../../../components/UI/Button/Button';
 import AuthContext from '../../../store/auth-context';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { useMediaQuery } from '@mui/material';
+import { Box, useMediaQuery } from '@mui/material';
+import Notifications from './Notifications/Notifications';
 
 const SwitchBtn = styled(ButtonSmall)`
     &.MuiButton-root {
@@ -37,6 +38,11 @@ const LogoutBtn = styled(ButtonText)`
     &.MuiButton-root {
         font-weight: bold;
     }
+`
+
+const LeftIconsWrapper = styled.div`
+    display: flex;
+    align-items: center;
 `
 
 function Header(props) {
@@ -78,10 +84,15 @@ function Header(props) {
                             </IconButton>
                         </Grid>
                         <Grid item>
-                            <IconButton sx={{ mr: 1, color: themeCtx.theme.palette.mode === 'dark' ? themeCtx.theme.vars.white : themeCtx.theme.vars.black }} onClick={themeCtx.toggleMode} >
-                                {themeCtx.theme.palette.mode === 'dark' ? <WbSunnyIcon /> : <Brightness2Icon />}
-                            </IconButton>
-                            {!isMobile && <SwitchBtn onClick={themeCtx.toggleLanguage} >{themeCtx.lang === 'ar' ? 'switch to EN' : 'الانتقال الي العربية' }</SwitchBtn>}
+                            <LeftIconsWrapper>
+                                <IconButton sx={{ mr: 1, color: themeCtx.theme.palette.mode === 'dark' ? themeCtx.theme.vars.white : themeCtx.theme.vars.black }} onClick={themeCtx.toggleMode} >
+                                    {themeCtx.theme.palette.mode === 'dark' ? <WbSunnyIcon /> : <Brightness2Icon />}
+                                </IconButton>
+                                <Box sx={{ mr: 1 }} >
+                                    <Notifications />
+                                </Box>
+                                {!isMobile && <SwitchBtn onClick={themeCtx.toggleLanguage} >{themeCtx.lang === 'ar' ? 'switch to EN' : 'الانتقال الي العربية' }</SwitchBtn>}
+                            </LeftIconsWrapper>
                         </Grid>
                         <Grid item xs />
                         <Grid item>

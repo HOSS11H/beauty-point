@@ -67,7 +67,7 @@ const SalonsMap = ({ salons, center }) => {
                     return (
                         <Marker key={index} position={[+marker.lat, +marker.lng]} icon={markerIcon}>
                             <Popup>
-                                <InfoBody>
+                                <InfoBody >
                                     <NavLink to={`../salons/${marker.data.id}`}>
                                         {marker.data.name}
                                     </NavLink>

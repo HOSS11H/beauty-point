@@ -7,14 +7,11 @@ import axios from '../../../utils/axios-instance'
 import SalonsMap from "./SalonsMap/SalonsMap";
 
 const NearbySalons = props => {
-
-    const [loading, setLoading] = useState(true);
     const [salons, setSalons] = useState([]);
     const [center, setCenter] = useState({})
 
     useEffect(() => {
         if ( salons.length === 0 ) {
-            setLoading(true);
             navigator.geolocation.getCurrentPosition((position) => {
                 const { latitude, longitude } = position.coords;
                 setCenter({ lat: latitude, lng: longitude });
@@ -34,7 +31,6 @@ const NearbySalons = props => {
                             }
                         });
                         setSalons(fetchedSalons);
-                        setLoading(false);
                     })
                     .catch(err => {
                         console.log(err);
