@@ -406,6 +406,8 @@ const ViewModal = (props) => {
         )
     }
 
+    const editBookingDisabled = (roleName === 'artist' ||  roleName === 'customer') && bookingData?.source === 'pos'
+
     if (bookingData && !loading) {
         let name = bookingData.user.name
         let email = bookingData.user.email
@@ -461,7 +463,7 @@ const ViewModal = (props) => {
                         </BookingData>
                     </Grid>
                     {viewedItems}
-                    {roleName === 'artist' && bookingData?.source === 'pos' ? null : (
+                    {editBookingDisabled ? null : (
                         <Fragment>
                             <Grid item xs={12} sm={6} md={6}>
                                 <BookingData>
@@ -516,14 +518,14 @@ const ViewModal = (props) => {
                     )}
                     {bookingData.payment_status === 'pending' && (
                         <Grid item xs={12}>
-                            {roleName === 'artist' && bookingData?.source === 'pos' ? null : (
+                            {editBookingDisabled ? null : (
                                 <BookingActions>
                                     <ActionButton onClick={handlePaymentModalOpen}  ><MoneyIcon />{t('add payment')}</ActionButton>
                                 </BookingActions>
                             ) }
                         </Grid>
                     )}
-                    {roleName === 'artist' && bookingData?.source === 'pos' ? null : (
+                    {editBookingDisabled ? null : (
                         <Fragment>
                             <Grid item xs={12}>
                                 <TableContainer component={Paper} sx={{ my: 2 }}>
@@ -572,7 +574,7 @@ const ViewModal = (props) => {
         )
     }
 
-    let showEdit = roleName === 'artist' && bookingData?.source === 'pos' ? false : confirmText
+    let showEdit = editBookingDisabled ? false : confirmText
 
     return (
         <CustomModal show={show} heading={heading} confirmText={showEdit} onConfirm={onConfirm} onClose={onClose} >
