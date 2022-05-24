@@ -1,19 +1,24 @@
-import FullCalendar from '@fullcalendar/react' // must go before plugins
-import dayGridPlugin from '@fullcalendar/daygrid' // a plugin!
-import interactionPlugin from "@fullcalendar/interaction" // needed for dayClick
-import { connect } from 'react-redux'
-import { fetchCalendarBookings, deleteCalendarBooking } from "../../../../store/actions/index";
-import { useContext, useEffect, useState, useCallback } from 'react';
+// Always on top
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+// must go before plugins
+import interactionPlugin from "@fullcalendar/interaction";
+import { Backdrop, CircularProgress } from "@mui/material";
+// a plugin!
 import Card from '@mui/material/Card';
-import CircularProgress from '@mui/material/CircularProgress';
-import ThemeContext from '../../../../store/theme-context';
+import { format } from 'date-fns';
+import moment from 'moment';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+// needed for dayClick
+import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { deleteCalendarBooking, fetchCalendarBookings } from "../../../../store/actions/index";
+import AuthContext from '../../../../store/auth-context';
+import ThemeContext from '../../../../store/theme-context';
 import v1 from '../../../../utils/axios-instance-v1';
 import ViewModal from '../Bookings/ViewModal/ViewModal';
-import { format } from 'date-fns';
-import { useRef } from 'react';
-import moment from 'moment'
-import AuthContext from '../../../../store/auth-context';
+
+
 
 const BookingCalendarWrapper = styled.div`
     & .fc-h-event {
@@ -49,13 +54,13 @@ const BookingCustomer = styled.div`
         font-size: 10px;
         font-weight: 500;
         padding: 0 10px;
-        color: ${ props => props.theme.palette.common.white };
+        color: ${props => props.theme.palette.common.white};
     }
     span {
         font-size: 10px;
         font-weight: 500;
         padding: 0 10px;
-        color: ${ props => props.theme.palette.common.white };
+        color: ${props => props.theme.palette.common.white};
     }
 `
 
@@ -94,29 +99,21 @@ const BookingCalendar = props => {
 
     const [selectedBookingId, setSelectedBookingId] = useState(null);
 
-    const [ fromDate, setFromDate ] = useState(new Date());
-    const [ toDate, setToDate ] = useState(new Date());
+    const [fromDate, setFromDate] = useState(new Date());
+    const [toDate, setToDate] = useState(new Date());
 
     const [userData, setUserData] = useState(null);
 
     const calendarRef = useRef()
-    
-    useEffect( ( ) => {
-        if (calendarRef.current)  {
-            fetchBookingsHandler(lang, fromDate , toDate);
+
+    useEffect(() => {
+        if (calendarRef.current) {
+            fetchBookingsHandler(lang, fromDate, toDate);
         }
-    } , [fetchBookingsHandler, fromDate, lang, toDate])
-    
-    console.log(calendarRef.current)
-    console.log(fromDate, toDate)
+    }, [fetchBookingsHandler, fromDate, lang, toDate])
 
-    useEffect( ( ) => {
-        // let date = calendarRef.current.getDate();
-        // console.log(date)
-    }, [])
-
-    useEffect( ( ) =>{
-        if ( notIntialRender.current ) {
+    useEffect(() => {
+        if (notIntialRender.current) {
             return;
         } else {
             v1.get('/auth/me')
@@ -179,21 +176,12 @@ const BookingCalendar = props => {
             events={formattedBookingsData}
             eventContent={renderEventContent}
             eventClick={dateClickHandler}
-            /* datesSet={(dateInfo) => {
+            datesSet={(dateInfo) => {
                 setFromDate(format(dateInfo.start, 'yyyy-MM-dd'));
                 setToDate(format(dateInfo.end, 'yyyy-MM-dd'));
-                //console.log('excuted')
-            }} */
+            }}
         />
     )
-
-    if(fetchingBookings) {
-        content = (
-            <Loader>
-                <CircularProgress color="secondary" />
-            </Loader>
-        )
-    }
 
     return (
         <BookingCalendarWrapper>
@@ -202,9 +190,15 @@ const BookingCalendar = props => {
                 viewModalOpened && userData && (
                     <ViewModal show={viewModalOpened} id={selectedBookingId} fetchedBookings={fetchedBookings}
                         onClose={viewModalCloseHandler} onConfirm={viewModalConfirmHandler.bind(null, selectedBookingId)}
-                        heading='view booking details' confirmText='save'  onDelete={viewModalDeleteHandler} userData={userData} />
+                        heading='view booking details' confirmText='save' onDelete={viewModalDeleteHandler} userData={userData} />
                 )
             }
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={fetchingBookings}
+            >
+                <CircularProgress color="secondary" />
+            </Backdrop>
         </BookingCalendarWrapper>
     )
 }
