@@ -99,15 +99,15 @@ const BookingCalendar = props => {
 
     const [selectedBookingId, setSelectedBookingId] = useState(null);
 
-    const [fromDate, setFromDate] = useState(new Date());
-    const [toDate, setToDate] = useState(new Date());
+    const [fromDate, setFromDate] = useState(null);
+    const [toDate, setToDate] = useState(null);
 
     const [userData, setUserData] = useState(null);
 
     const calendarRef = useRef()
 
     useEffect(() => {
-        if (calendarRef.current) {
+        if (calendarRef.current && fromDate && toDate) {
             fetchBookingsHandler(lang, fromDate, toDate);
         }
     }, [fetchBookingsHandler, fromDate, lang, toDate])
@@ -126,7 +126,7 @@ const BookingCalendar = props => {
                 })
             notIntialRender.current = true;
         }
-    })
+    }, [])
 
     const formattedBookingsData = fetchedBookings.data.map(booking => {
         const formattedTime = booking.date_time.split('T')
