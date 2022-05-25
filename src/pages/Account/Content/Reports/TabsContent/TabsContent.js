@@ -4,6 +4,7 @@ import SalesReport from './SalesReport/SalesReport';
 import TabPanel from './TabPanel/TabPanel';
 import TabularReport from './TabularReport/TabularReport';
 import EmployeeReport from './EmployeeReport/EmployeeReport';
+import TaxesReport from './TaxesReport/TaxesReport';
 
 const TabsContent = props => {
 
@@ -22,6 +23,9 @@ const TabsContent = props => {
             </TabPanel>
             <TabPanel value={current} index={3}>
                 <EmployeeReport />
+            </TabPanel>
+            <TabPanel value={current} index={4}>
+                <TaxesReport />
             </TabPanel>
         </Fragment>
     )

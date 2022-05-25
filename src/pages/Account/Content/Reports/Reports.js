@@ -1,7 +1,7 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
-import TabsHead from './TabsHead/TabsHead';
+import * as React from 'react';
 import TabsContent from './TabsContent/TabsContent';
+import TabsHead from './TabsHead/TabsHead';
 
 
 

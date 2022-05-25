@@ -114,11 +114,11 @@ const SwitcherLabel = styled.p`
     color: ${props => props.theme.palette.text.primary};
 `
 
-const generateHashSHA256 = (hashSequence) => {
+/* const generateHashSHA256 = (hashSequence) => {
     // hashSequence = trackid | terminalId | password | secret | amount | currency
     let hash = CryptoJS.SHA256(hashSequence).toString()
     return hash;
-}
+} */
 
 const AllPlans = ({ currentPlanId }) => {
 
@@ -158,60 +158,13 @@ const AllPlans = ({ currentPlanId }) => {
     };
 
     const handleSubscribe = (planInfo) => {
-
-        const currency = 'SAR';
-        const amount = isMonthly ? parseFloat(planInfo.monthly_price) : parseFloat(planInfo.annual_price)
-        const trackId = Date.now();
-        let hashSequence=generateHashSHA256(trackId+"|"+config.terminalId+"|"+config.password+"|"+config.merchantkey+"|"+amount+"|"+currency)
-        const data = {
-            firstName: companyData.companyName,
-            lastName: "",
-            address: companyData.address,
-            city: "",
-            state: "",
-            zipCode: "",
-            phoneNumber: companyData.companyPhone,
-            trackid: trackId,
-            terminalId: config.terminalId,
-            customerEmail: companyData.companyEmail,
-            action: "1",
-            merchantIp: "197.54.136.206",
-            password: config.password,
-            currency: currency,
-            country: "SA",
-            transid: "",
-            amount: amount,
-            tokenOperation: null,
-            cardToken: "",
-            tokenizationType: "0",
-            requestHash: hashSequence,
-            udf1: "",
-            udf2: "https://beautypoint.sa/account/plans/status",
-            udf3: isMonthly ? "monthly" : "annual",
-            udf4: planInfo.id,
-            udf5: "",
-        }
-        axios.post(config.service_url, data)
+        v2.post('/plans/redirect_url', {
+            packageId: planInfo.id,
+            isMonthly: isMonthly,
+            callback_url: "http://localhost:3000/account/plans/status",
+        })
             .then(res => {
-                let index=0;
-                let count=0;
-                let queryParam="";
-                let resParameter = res.data;
-                if (resParameter.targetUrl + "" === "null") {
-                    for (let [key, value] of Object.entries(resParameter)) {
-                        index = ++index;
-                        console.log(`${key} ${value}`);
-                    }
-                    for (let [key, value] of Object.entries(resParameter)) {
-                        count = ++count;
-                        queryParam = queryParam + key + "=" + value;
-                        if (count < index)
-                            queryParam = queryParam + "&"
-                    }
-                    window.history.push('/status?' + queryParam)
-                } else {
-                    window.location.assign(res.data.targetUrl.replace('?', '') + "?paymentid=" + res.data.payid);
-                }
+                window.location.assign(res.data.redirect_url);
             })
             .catch(error => {
                 navigate('/account/plans')
