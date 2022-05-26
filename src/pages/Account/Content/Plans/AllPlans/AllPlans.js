@@ -161,7 +161,7 @@ const AllPlans = ({ currentPlanId }) => {
         v2.post('/plans/redirect_url', {
             packageId: planInfo.id,
             isMonthly: isMonthly,
-            callback_url: "http://localhost:3000/account/plans/status",
+            callback_url: "https://beautypoint.sa/account/plans/status",
         })
             .then(res => {
                 window.location.assign(res.data.redirect_url);
