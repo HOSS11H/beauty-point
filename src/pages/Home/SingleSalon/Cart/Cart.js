@@ -1,29 +1,28 @@
-import Backdrop from '@mui/material/Backdrop';
-import Modal from '@mui/material/Modal';
-import Fade from '@mui/material/Fade';
-import Card from '@mui/material/Card';
-import styled from 'styled-components';
-import { useTranslation } from 'react-i18next';
 import { Box, Button, Grid } from '@mui/material';
-import { useCallback, useEffect, useReducer, useState } from 'react';
-import CartHeadliner from './CartHeadliner/CartHeadliner';
-import ChooseType from './ChooseType/ChooseType';
-import ChooseItem from './ChooseItem/ChooseItem';
-import ChooseAppointment from './ChooseAppointment/ChooseAppointment';
-import UserAuth from './UserAuth/UserAuth';
-import ChoosePayment from './ChoosePayment/ChoosePayment';
-import axios from '../../../../utils/axios-instance';
+import Backdrop from '@mui/material/Backdrop';
+import Card from '@mui/material/Card';
+import Fade from '@mui/material/Fade';
+import Modal from '@mui/material/Modal';
+import { format } from 'date-fns/esm';
+import { Fragment, useCallback, useContext, useEffect, useReducer, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { connect } from 'react-redux';
+import { useSearchParams } from 'react-router-dom';
+import styled from 'styled-components';
 import { updateObject } from '../../../../shared/utility';
+import { fetchCoupons } from '../../../../store/actions/index';
+import AuthContext from '../../../../store/auth-context';
+import ThemeContext from '../../../../store/theme-context';
+import axios from '../../../../utils/axios-instance';
+import CartHeadliner from './CartHeadliner/CartHeadliner';
+import CartSummary from './CartSummary/CartSummary';
+import ChooseAppointment from './ChooseAppointment/ChooseAppointment';
+import ChooseItem from './ChooseItem/ChooseItem';
+import ChoosePayment from './ChoosePayment/ChoosePayment';
+import ChooseType from './ChooseType/ChooseType';
 import ItemsReview from './ItemsReview/ItemsReview';
 import PrintBooking from './PrintBooking/PrintBooking';
-import { format } from 'date-fns/esm';
-import CartSummary from './CartSummary/CartSummary';
-import { Fragment } from 'react';
-import { connect } from 'react-redux';
-import { fetchCoupons } from '../../../../store/actions/index';
-import { useContext } from 'react';
-import ThemeContext from '../../../../store/theme-context';
-import { useSearchParams } from 'react-router-dom';
+import UserAuth from './UserAuth/UserAuth';
 
 const CustomCardMui = styled(Card)`
     &.MuiPaper-root {
@@ -186,6 +185,8 @@ const Cart = props => {
 
     const themeCtx = useContext(ThemeContext);
     const { lang } = themeCtx;
+    const authCtx = useContext(AuthContext);
+    const { token } = authCtx;
 
     const { show, onClose, salonData, fetchCouponsHandler } = props;
 
@@ -352,6 +353,14 @@ const Cart = props => {
         setBookingDone(true);
     }, [])
 
+    const itemsReviewClickHandler = ( ) => {
+        if (token) {
+            setActiveStep((prevActiveStep) => prevActiveStep + 2);
+        } else {
+            setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        }
+    }
+
     const ResetCart = () => {
         if (bookingDone) {
             handleReset();
@@ -467,7 +476,7 @@ const Cart = props => {
                                                     {t('Back')}
                                                 </Button>
                                                 <Box sx={{ flex: '1 1 auto' }} />
-                                                <CartButton color="secondary" variant='contained' onClick={handleNext} disabled={!hasSelectedAppointment} >
+                                                <CartButton color="secondary" variant='contained' onClick={itemsReviewClickHandler} disabled={!hasSelectedAppointment} >
                                                     {t('Next')}
                                                 </CartButton>
                                             </Box>

@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { Fragment, useContext, useEffect, useState } from "react";
+import { Fragment, useContext, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import styled from "styled-components";
@@ -29,8 +29,6 @@ const UserAuth = props => {
 
     const [nameRequired, setNameRequired] = useState(false)
 
-    const { token } = authCtx;
-
     const { t } = useTranslation();
 
     const [errorMessage, setErrorMessage] = useState(null);
@@ -38,14 +36,6 @@ const UserAuth = props => {
     const { renderFormInputs: loginInputs, isFormValid: isLoginDataValid, form: loginData } = useForm(onlineLoginForm);
     const { renderFormInputs: OTPInputs, isFormValid: OTPDataValid, form: OTPData } = useForm(onlineOTPForm);
     const { renderFormInputs: nameInputs, isFormValid: nameDataValid, form: nameData } = useForm(onlineNameForm);
-
-
-
-    useEffect(() => {
-        if (token) {
-            handleNext()
-        }
-    }, [handleNext, token])
 
     /*
     v1.post(url, authData)
@@ -94,7 +84,7 @@ const UserAuth = props => {
         url = `/auth/sign-in-otp`;
         authData = {
             mobile: loginData.mobile.value,
-            otp: +OTPData.otp.value,
+            otp: OTPData.otp.value,
             fcm_token: 'asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231',
             device_name: 'Y621312',
         }
@@ -103,12 +93,12 @@ const UserAuth = props => {
             .then(res => {
                 storeUserData(res.data);
                 // if user already registered
+                if (res.data.user.roles[0].name === 'customer') {
+                    authCtx.login(res.data.token, res.data.user.roles[0].name);
+                } else {
+                    authCtx.login(res.data.token, res.data.user.roles[0].id);
+                }
                 if (!nameRequired) {
-                    if (res.data.user.roles[0].name === 'customer') {
-                        authCtx.login(res.data.token, res.data.user.roles[0].name);
-                    } else {
-                        authCtx.login(res.data.token, res.data.user.roles[0].id);
-                    }
                     handleNext();
                 } else if ( nameRequired) {
                     setStep(2);
@@ -158,43 +148,40 @@ const UserAuth = props => {
     let content = (
         <Loader height='300px' />
     )
-    if (!token) {
-        if (step === 0) {
-            content = (
-                <Fragment>
-                    <Box sx={{ padding: '15px 10px' }} >
-                        {loginInputs()}
-                    </Box>
-                    {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-                    <CustomButton onClick={submitFirstStepHandler} disabled={!isLoginDataValid()} >{t('log in')}</CustomButton>
-                </Fragment>
-            )
-        }
-        if (step === 1) {
-            content = (
-                <Fragment>
-                    <Box sx={{ padding: '15px 10px' }} >
-                        {OTPInputs()}
-                    </Box>
-                    {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-                    <CustomButton onClick={submitOTPStepHandler} disabled={!OTPDataValid()} >{t('confirm')}</CustomButton>
-                </Fragment>
-            )
-        }
-        if (step === 2) {
-            content = (
-                <Fragment>
-                    <Box sx={{ padding: '15px 10px' }} >
-                        {nameInputs()}
-                    </Box>
-                    {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-                    <CustomButton onClick={submitNameStepHandler} disabled={!nameDataValid()} >{t('confirm')}</CustomButton>
-                </Fragment>
-            )
-        }
-
+    if (step === 0) {
+        content = (
+            <Fragment>
+                <Box sx={{ padding: '15px 10px' }} >
+                    {loginInputs()}
+                </Box>
+                {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+                <CustomButton onClick={submitFirstStepHandler} disabled={!isLoginDataValid()} >{t('log in')}</CustomButton>
+            </Fragment>
+        )
     }
-
+    if (step === 1) {
+        content = (
+            <Fragment>
+                <Box sx={{ padding: '15px 10px' }} >
+                    {OTPInputs()}
+                </Box>
+                {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+                <CustomButton onClick={submitOTPStepHandler} disabled={!OTPDataValid()} >{t('confirm')}</CustomButton>
+            </Fragment>
+        )
+    }
+    if (step === 2) {
+        content = (
+            <Fragment>
+                <Box sx={{ padding: '15px 10px' }} >
+                    {nameInputs()}
+                </Box>
+                {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+                <CustomButton onClick={submitNameStepHandler} disabled={!nameDataValid()} >{t('confirm')}</CustomButton>
+            </Fragment>
+        )
+    }
+    
     return (
         <Fragment>
             {content}
