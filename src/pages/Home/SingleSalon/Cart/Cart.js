@@ -80,8 +80,8 @@ const CartBody = styled.div`
 
 const CartButton = styled(Button)`
     &.MuiButton-root {
-        background: ${ ( { theme } ) => theme.vars.primary};
-        color: ${ ( { theme } ) => theme.palette.common.white};
+        background: ${({ theme }) => theme.vars.primary};
+        color: ${({ theme }) => theme.palette.common.white};
         transition: 0.3s ease-in-out;
         border-radius: 10px;
         &:disabled {
@@ -90,7 +90,7 @@ const CartButton = styled(Button)`
             box-shadow: none;
         }
         &:hover {
-            background: ${ ( { theme } ) => theme.palette.secondary.dark};
+            background: ${({ theme }) => theme.palette.secondary.dark};
         }
     }
 `
@@ -160,7 +160,7 @@ const Cart = props => {
     };
     let intialType = '';
     if (itemType) {
-        const purchasedItem  = {
+        const purchasedItem = {
             id: +itemId,
             name: itemName,
             price: +itemPrice,
@@ -329,7 +329,6 @@ const Cart = props => {
             let data = {
                 company_id: salonData.id,
                 dateTime: combined,
-                //dateTime: format(dateTime, 'yyyy-MM-dd hh:mm a'),
                 payment_gateway: payment,
                 cart: cart,
                 couponId: couponId,
@@ -394,7 +393,7 @@ const Cart = props => {
                         <Grid item xs={12} md={3}>
                             <CartHeadliner activeStep={activeStep} salonName={salonData.companyName} steps={steps} />
                         </Grid>
-                        <Grid item xs={12} md={ activeStep === 0 || activeStep === 6 ? 9 : 6}>
+                        <Grid item xs={12} md={activeStep === 0 || activeStep === 6 ? 9 : 6}>
                             <CartContent sx={{ width: '100%' }}>
                                 <CartBody>
                                     {
@@ -431,7 +430,7 @@ const Cart = props => {
                                                     {t('Back')}
                                                 </Button>
                                                 <Box sx={{ flex: '1 1 auto' }} />
-                                                <CartButton color="secondary" variant='contained' onClick={handleNext} disabled={cart.services.length === 0 && cart.deals.length === 0 } >
+                                                <CartButton color="secondary" variant='contained' onClick={handleNext} disabled={cart.services.length === 0 && cart.deals.length === 0} >
                                                     {t('Next')}
                                                 </CartButton>
                                             </Box>
@@ -439,16 +438,19 @@ const Cart = props => {
                                     }
                                     {
                                         activeStep === 2 && (
-                                            <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>
+                                            <Box sx={{ pb: 2, }}>
                                                 <Button
                                                     color="inherit"
                                                     onClick={handleBack}
                                                     sx={{ mr: 1 }}
-                                                >
+                                                    >
                                                     {t('Back')}
                                                 </Button>
-                                                <Box sx={{ flex: '1 1 auto' }} />
-                                                <CartButton color="secondary" variant='contained' onClick={handleNext} disabled={cart.services.length === 0 && cart.deals.length === 0 } >
+                                                <CartButton color="secondary" variant='contained' onClick={handleReset}
+                                                    sx={{ mr: 1 }} >
+                                                    {t('Go Back To Items')}
+                                                </CartButton>
+                                                <CartButton color="secondary" variant='contained' onClick={handleNext} disabled={cart.services.length === 0 && cart.deals.length === 0} >
                                                     {t('Next')}
                                                 </CartButton>
                                             </Box>
@@ -495,7 +497,7 @@ const Cart = props => {
                                                 <Button
                                                     color="inherit"
                                                     disabled={activeStep === 0}
-                                                    onClick={( ) => setActiveStep(activeStep - 2)}
+                                                    onClick={() => setActiveStep(activeStep - 2)}
                                                     sx={{ mr: 1 }}
                                                 >
                                                     {t('Back')}
@@ -517,7 +519,7 @@ const Cart = props => {
                                 </Fragment>
                             </CartContent>
                         </Grid>
-                        <Grid item xs={12} md={3} sx={{ display: activeStep === 0 || activeStep === 6 ? 'none' : 'block'}} >
+                        <Grid item xs={12} md={3} sx={{ display: activeStep === 0 || activeStep === 6 ? 'none' : 'block' }} >
                             <CartSummary cartData={cart} taxes={totalTaxes} total={totalPrice} hasSelectedAppointment={hasSelectedAppointment} appointment={appointment} slot={slot} hasSelectedCoupon={couponId} couponDiscount={couponData.amount} />
                         </Grid>
                     </Grid>

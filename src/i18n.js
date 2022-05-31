@@ -590,6 +590,7 @@ const resources = {
             'Seat Created': 'تم إنشاء المقعد',
             'Empolyee Added': 'تمت إضافة الموظف',
             'Employee Deleted': 'تم حذف الموظف',
+            'Go Back To Items': 'العودة إلى العناصر',
         }
     }
 };

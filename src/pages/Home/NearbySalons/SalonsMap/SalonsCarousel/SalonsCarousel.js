@@ -16,29 +16,23 @@ SwiperCore.use([Autoplay]);
 const SalonCard = styled(Card)`
     &.MuiPaper-root {
         box-shadow: rgb(90 114 123 / 11%) 0px 7px 30px 0px;
-        border-radius: 20px;
-        padding: 20px;
+        border-radius: 12px;
+        padding: 10px 10px;
         background-color: ${({ theme }) => theme.palette.background.default};
         display: flex;
         position: relative;
         cursor: pointer;
         margin-bottom: 0px;
-        @media screen and (max-width: 500px) {
-            display: block;
-        }
+        height: 120px;
     }
-`
+    `
 const CardImg = styled.div`
-    flex-basis: 50%;
+    flex-basis: 40%;
     flex-shrink:0;
     margin-right: 10px;
-    height: 150px;
-    @media screen and (max-width: 500px) {
-        margin-bottom: 10px;
-        margin-right: 0px;
-        height: 125px;
-    }
+    height: 100px;
     img {
+        border-radius: 12px;
         display: block;
         width: 100%;
         height: 100%;
@@ -56,8 +50,8 @@ const CardBody = styled.div`
         margin-bottom: 5px;
         color: ${({ theme }) => theme.vars.theme};
         overflow: hidden;
+        max-height: 42px;
         @media screen and (max-width: 500px) {
-            max-height: 42px;
         }
     }
     h4 {
@@ -66,11 +60,8 @@ const CardBody = styled.div`
         font-weight: 600;
         font-family: ${({ theme }) => theme.fonts.ar};
         color: ${({ theme }) => theme.palette.text.primary};
-        max-height: 63px;
+        max-height: 42px;
         overflow: hidden;
-        @media screen and (max-width: 500px) {
-            max-height: 42px;
-        }
     }
 `
 
@@ -78,7 +69,7 @@ const SalonsCarousel = ({ salons, handleClick }) => {
 
     const map = useMap();
     const handleSalonClick = ((coords) => {
-        map.flyTo(coords, 14)
+        map.flyTo(coords, 16)
     })
 
     let content = salons.map(salon => {

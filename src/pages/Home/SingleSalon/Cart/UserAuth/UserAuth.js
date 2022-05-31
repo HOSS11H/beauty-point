@@ -1,16 +1,14 @@
-import { Box, Tab, Tabs } from "@mui/material";
-import { Fragment, useEffect, useState } from "react";
+import { Box } from "@mui/material";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import TabPanel from "../../../../../components/UI/TabPanel/TabPanel";
-import useForm from "../../../../../hooks/useForm";
-import { a11yProps } from "../../../../../shared/utility";
-import { registerForm, loginForm } from "../../../../../utils/formConfig";
+import { toast } from "react-toastify";
 import styled from "styled-components";
 import { CustomButton } from "../../../../../components/UI/Button/Button";
-import { useContext } from "react";
+import Loader from "../../../../../components/UI/Loader/Loader";
+import useForm from "../../../../../hooks/useForm";
 import AuthContext from "../../../../../store/auth-context";
 import v1 from '../../../../../utils/axios-instance-v1';
-import Loader from "../../../../../components/UI/Loader/Loader";
+import { onlineLoginForm, onlineNameForm, onlineOTPForm } from "../../../../../utils/formConfig";
 
 const ErrorMessage = styled.p`
     font-size: 18px;
@@ -26,26 +24,22 @@ const UserAuth = props => {
     const { handleNext, id, storeUserData } = props;
 
     const authCtx = useContext(AuthContext);
-    
+
+    const [step, setStep] = useState(0)
+
+    const [nameRequired, setNameRequired] = useState(false)
+
     const { token } = authCtx;
 
     const { t } = useTranslation();
 
-    const [value, setValue] = useState(0);
-
     const [errorMessage, setErrorMessage] = useState(null);
 
-    const { renderFormInputs: registerInputs, isFormValid: isRegisterDataValid, form: registerData } = useForm(registerForm);
+    const { renderFormInputs: loginInputs, isFormValid: isLoginDataValid, form: loginData } = useForm(onlineLoginForm);
+    const { renderFormInputs: OTPInputs, isFormValid: OTPDataValid, form: OTPData } = useForm(onlineOTPForm);
+    const { renderFormInputs: nameInputs, isFormValid: nameDataValid, form: nameData } = useForm(onlineNameForm);
 
-    const { renderFormInputs: loginInputs, isFormValid: isLoginDataValid, form: loginData } = useForm(loginForm);
 
-    let authIsValid;
-
-    if (value === 0) {
-        authIsValid = isRegisterDataValid()
-    } else {
-        authIsValid = isLoginDataValid()
-    }
 
     useEffect(() => {
         if (token) {
@@ -53,53 +47,38 @@ const UserAuth = props => {
         }
     }, [handleNext, token])
 
-
-    const handleChange = (event, newValue) => {
-        setValue(newValue);
-        setErrorMessage(null);
-    };
-
-    const submitHandler = () => {
+    /*
+    v1.post(url, authData)
+                .then(res => {
+                    if (res.data.user.roles[0].name === 'customer') {
+                        authCtx.login(res.data.token, res.data.user.roles[0].name);
+                    } else {
+                        authCtx.login(res.data.token, res.data.user.roles[0].id);
+                    }
+                    storeUserData(res.data);
+                })
+                .catch(err => {
+                    if (err.response.status === 500) {
+                        setErrorMessage(t('serverError'));
+                    } else {
+                        setErrorMessage(t(err.response.data.message))
+                    }
+                })
+    */
+    const submitFirstStepHandler = () => {
         let url;
         let authData;
-        if (value === 0) {
-            url = '/auth/sign-up';
-            authData = {
-                company_id: id,
-                name: registerData.name.value,
-                mobile: registerData.phoneNum.value,
-                password: registerData.password.value,
-                fcm_token: 'asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231',
-                device_name: 'Y621312',
-            }
-        } else {
-            url = `/auth/sign-in`;
-            const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-            if (pattern.test(loginData.email.value)) {
-                authData = {
-                    email: loginData.email.value,
-                    password: loginData.password.value,
-                    fcm_token: 'asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231',
-                    device_name: 'Y621312',
-                }
-            } else {
-                authData = {
-                    mobile: loginData.email.value,
-                    password: loginData.password.value,
-                    fcm_token: 'asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231',
-                    device_name: 'Y621312',
-                }
-            }
+        url = `/auth/send-otp`;
+        authData = {
+            mobile: loginData.mobile.value,
         }
         setErrorMessage(null);
         v1.post(url, authData)
             .then(res => {
-                if (res.data.user.roles[0].name === 'customer') {
-                    authCtx.login(res.data.token, res.data.user.roles[0].name);
-                } else {
-                    authCtx.login(res.data.token, res.data.user.roles[0].id);
+                setStep(1);
+                if (!res.data.registered) {
+                    setNameRequired(true);
                 }
-                storeUserData(res.data);
             })
             .catch(err => {
                 if (err.response.status === 500) {
@@ -109,29 +88,111 @@ const UserAuth = props => {
                 }
             })
     }
+    const submitOTPStepHandler = () => {
+        let url;
+        let authData;
+        url = `/auth/sign-in-otp`;
+        authData = {
+            mobile: loginData.mobile.value,
+            otp: +OTPData.otp.value,
+            fcm_token: 'asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231',
+            device_name: 'Y621312',
+        }
+        setErrorMessage(null);
+        v1.post(url, authData)
+            .then(res => {
+                storeUserData(res.data);
+                // if user already registered
+                if (!nameRequired) {
+                    if (res.data.user.roles[0].name === 'customer') {
+                        authCtx.login(res.data.token, res.data.user.roles[0].name);
+                    } else {
+                        authCtx.login(res.data.token, res.data.user.roles[0].id);
+                    }
+                    handleNext();
+                } else if ( nameRequired) {
+                    setStep(2);
+                }
+            })
+            .catch(err => {
+                if ( err.response.data.errors ) {
+                    const errs = err.response.data.errors;
+                    for (let key in errs) {
+                        toast.error(errs[key][0])
+                    }
+
+                } else {
+                    setErrorMessage(t(err.response.data.message))
+                    toast.error(err.response.data.message)
+                }
+            })
+    }
+    const submitNameStepHandler = () => {
+        let url;
+        let authData;
+        url = `/auth/update-name`;
+        authData = {
+            name: nameData.name.value,
+        }
+        setErrorMessage(null);
+        v1.post(url, authData)
+            .then(res => {
+                if ( res.status === 204 ) {
+                    handleNext();
+                }
+            })
+            .catch(err => {
+                if ( err.response.data.errors ) {
+                    const errs = err.response.data.errors;
+                    for (let key in errs) {
+                        toast.error(errs[key][0])
+                    }
+
+                } else {
+                    setErrorMessage(t(err.response.data.message))
+                    toast.error(err.response.data.message)
+                }
+            })
+    }
 
     let content = (
         <Loader height='300px' />
     )
-    if ( !token ) {
-        content = (
-            <Fragment>
-                <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                    <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                        <Tab label={t('new registeration')} {...a11yProps(0)} />
-                        <Tab label={t('have an account ?')} {...a11yProps(1)} />
-                    </Tabs>
-                </Box>
-                <TabPanel value={value} index={0} padding='15px 10px' >
-                    {registerInputs()}
-                </TabPanel>
-                <TabPanel value={value} index={1} padding='15px 10px' >
-                    {loginInputs()}
-                </TabPanel>
-                {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-                <CustomButton onClick={submitHandler} disabled={!authIsValid} >{value === 0 ? t('register') : t('log in')}</CustomButton>
-            </Fragment>
-        )
+    if (!token) {
+        if (step === 0) {
+            content = (
+                <Fragment>
+                    <Box sx={{ padding: '15px 10px' }} >
+                        {loginInputs()}
+                    </Box>
+                    {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+                    <CustomButton onClick={submitFirstStepHandler} disabled={!isLoginDataValid()} >{t('log in')}</CustomButton>
+                </Fragment>
+            )
+        }
+        if (step === 1) {
+            content = (
+                <Fragment>
+                    <Box sx={{ padding: '15px 10px' }} >
+                        {OTPInputs()}
+                    </Box>
+                    {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+                    <CustomButton onClick={submitOTPStepHandler} disabled={!OTPDataValid()} >{t('confirm')}</CustomButton>
+                </Fragment>
+            )
+        }
+        if (step === 2) {
+            content = (
+                <Fragment>
+                    <Box sx={{ padding: '15px 10px' }} >
+                        {nameInputs()}
+                    </Box>
+                    {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+                    <CustomButton onClick={submitNameStepHandler} disabled={!nameDataValid()} >{t('confirm')}</CustomButton>
+                </Fragment>
+            )
+        }
+
     }
 
     return (

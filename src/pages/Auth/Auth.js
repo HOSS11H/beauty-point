@@ -88,6 +88,7 @@ const LogoImg = styled.img`
     display: flex;
     justify-content: center;
     margin: 0 auto;
+    cursor: pointer;
 `
 
 const AuthImg = styled.div`
@@ -226,6 +227,10 @@ const Auth = props => {
         setTermsModalOpened(true)
     }, [])
 
+    const logoClickHandler = () => {
+        navigate('/')
+    }
+
     let loginFormText = {
         heading: 'Login',
         passwordRestoreMessage: 'forget Password ?',
@@ -266,7 +271,7 @@ const Auth = props => {
                     <Grid item xs={12} md={7} lg={7} >
                         <CustomizedCard>
                             <FormWrapper>
-                                <LogoImg src={Logo} alt="logo" />
+                                <LogoImg onClick={logoClickHandler} src={Logo} alt="logo" />
                                 <FormHeading>
                                     {isLogin && loginFormText.heading}
                                     {!isLogin && subscribeFormText.heading}

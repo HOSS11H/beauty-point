@@ -48,7 +48,7 @@ function createFormFieldConfig(label, placeholder, name, type, defaultValue = ''
 // object representation of Login form
 export const loginForm = {
     email : {
-        ...createFormFieldConfig( {ar: 'بريد الكتروني أو رقم هاتف', en: 'email or number' }  ,'0123456789', 'email', 'email'),
+        ...createFormFieldConfig( {ar: 'بريد الكتروني أو رقم هاتف', en: 'email or number' }  ,'059 *******', 'email', 'email'),
         validationRules: [
             requiredRule({en: `email or phone required`, ar: `بريد الكتروني أو رقم هاتف مطلوب`}),
         ],
@@ -218,6 +218,33 @@ export const registerArtistForm = {
         undefined  ,'terms', 'checkbox', false ),
         validationRules: [
             requiredCheckRule( {en: `you should agree terms & conditions`, ar: `يجب أن توافق علي بنود الاستخدام وسياسة الخصوصية`} ),
+        ],
+    },
+}
+// object representation of Online login form
+export const onlineLoginForm = {
+    mobile : {
+        ...createFormFieldConfig( {ar: 'رقم الهاتف', en: 'mobile' }  ,'059 *******', 'mobile', 'text'),
+        validationRules: [
+            requiredRule({en: `phone required`, ar: `رقم الهاتف مطلوب`}),
+        ],
+    },
+}
+// object representation of Online OTP form
+export const onlineOTPForm = {
+    otp : {
+        ...createFormFieldConfig( {ar: 'رمز OTP ', en: 'OTP' }  ,'******', 'otp', 'text'),
+        validationRules: [
+            requiredRule({en: `OTP required`, ar: `رمز OTP مطلوب`}),
+        ],
+    },
+}
+// object representation of Online NAME form
+export const onlineNameForm = {
+    name : {
+        ...createFormFieldConfig( {ar: 'اسم العميل', en: 'Customer Name' }  ,'Ahmed', 'name', 'text'),
+        validationRules: [
+            requiredRule({en: `Name required`, ar: `اسم العميل مطلوب`}),
         ],
     },
 }
