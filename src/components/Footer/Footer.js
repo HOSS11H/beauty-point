@@ -1,16 +1,38 @@
 import { Container, Grid } from "@mui/material"
 import styled from 'styled-components';
-import {NavLink} from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import logoSrc from '../../assets/images/logo/logo-light.png';
 import { useTranslation } from "react-i18next";
+import identifierLogo  from '../../images/logo/indentifier_logo.png';
+import vatLogo  from '../../images/logo/vat_logo.png';
 
 const Logo = styled(NavLink)`
     display: flex;
     align-items: center;
+    margin-bottom: 30px;
     img {
         max-width: 100%;
     }
-` 
+`
+
+const VatLogos = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    img {
+        max-width: 100%;
+    }
+    a {
+        & img {
+            width: 125px;
+        }
+    }
+    div {
+        & img {
+            width: 70px;
+        }
+    }
+`
 
 const FooterWrapper = styled.div`
     background-color: #161616;
@@ -48,14 +70,14 @@ const FooterWrapper = styled.div`
                 li {
                     display: block;
                     a {
-                        color         : ${ ( { theme } ) => theme.palette.common.white};
+                        color         : ${({ theme }) => theme.palette.common.white};
                         font-size     : 16px;
                         font-weight   : 400;
                         line-height   : 33px;
                         text-transform: capitalize;
                         transition : all 0.3s ease-in-out;
                         &:hover {
-                            color: ${ ( { theme } ) => theme.vars.secondary};
+                            color: ${({ theme }) => theme.vars.secondary};
                         }
                     }
                 }
@@ -66,7 +88,7 @@ const FooterWrapper = styled.div`
 
 const Footer = props => {
 
-    const {t} = useTranslation()
+    const { t } = useTranslation()
 
     return (
         <FooterWrapper>
@@ -76,6 +98,14 @@ const Footer = props => {
                         <Logo to='/'>
                             <img src={logoSrc} alt="logo" />
                         </Logo>
+                        <VatLogos>
+                            <a href='https://maroof.sa/215840'>
+                                <img src={identifierLogo} alt="logo" />
+                            </a>
+                            <div>
+                                <img src={vatLogo} />
+                            </div>
+                        </VatLogos>
                     </Grid>
                     <Grid item xs={12} md={3}>
                         <div className="footer-widget widget-links">
