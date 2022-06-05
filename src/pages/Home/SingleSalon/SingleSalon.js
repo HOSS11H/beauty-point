@@ -239,7 +239,7 @@ const SingleSalon = props => {
                                 {salon.vendor_page.has_coffee && (
                                     <FacilitiesItem>
                                         <CoffeeIcon />
-                                        <FaclilityText>{t('cofffe')}</FaclilityText>
+                                        <FaclilityText>{t('coffee')}</FaclilityText>
                                     </FacilitiesItem>
                                 ) }
                                 {salon.vendor_page.has_lounge && (

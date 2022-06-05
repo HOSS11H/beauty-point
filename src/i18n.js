@@ -593,7 +593,7 @@ const resources = {
             'Go Back To Items': 'العودة إلى العناصر',
             'facilities': 'المرافق',
             'wifi': 'واي فاي مجاني',
-            'cofffee': 'كوفي',
+            'coffee': 'كوفي',
             'lounge': 'صالة انتظار',
             'masjid': 'مصلي',
             'TV': 'تلفيزيون',
