@@ -103,7 +103,7 @@ const Footer = props => {
                                 <img src={identifierLogo} alt="logo" />
                             </a>
                             <div>
-                                <img src={vatLogo} />
+                                <img src={vatLogo} alt='logo' />
                             </div>
                         </VatLogos>
                     </Grid>

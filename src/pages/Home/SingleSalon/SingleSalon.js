@@ -30,8 +30,12 @@ import { a11yProps } from "../../../shared/utility";
 import axios from '../../../utils/axios-instance';
 import Cart from "./Cart/Cart";
 import VendorMap from "./VendorMap/VendorMap";
-
-
+import SignalWifi3BarIcon from '@mui/icons-material/SignalWifi3Bar';
+import CoffeeIcon from '@mui/icons-material/Coffee';
+import TvIcon from '@mui/icons-material/Tv';
+import WeekendIcon from '@mui/icons-material/Weekend';
+import MosqueIcon from '@mui/icons-material/Mosque';
+import WcIcon from '@mui/icons-material/Wc';
 
 const Wrapper = styled.section`
     padding: 70px 0px;
@@ -55,6 +59,28 @@ const ActionButton = styled(CustomButton)`
             margin-right: 0;
         }
     }
+`
+
+const FacilitiesList = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+`
+const FacilitiesItem = styled.div`
+    display: flex;
+    align-items: center;
+    & .MuiSvgIcon-root {
+        color: ${ ( { theme } ) => theme.vars.primary };
+        margin-right: 10px;
+        font-size: 16px;
+    }
+`
+const FaclilityText = styled.h6`
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.5;
+    color: ${ ( { theme } ) => theme.palette.text.primary };
+    text-transform: capitalize;
 `
 
 
@@ -198,6 +224,49 @@ const SingleSalon = props => {
                             <Typography component="div" variant="h6" sx={{ marginBottom: '10px' }} >
                                 {salon.vendor_page.description}
                             </Typography>
+                        </Grid>
+                        <Grid item xs={12} md={6}>
+                            <Typography component="div" variant="h5" sx={{ marginBottom: '10px' }} >
+                                {t('facilities')}
+                            </Typography>
+                            <FacilitiesList>
+                                {salon.vendor_page.has_wifi && (
+                                    <FacilitiesItem>
+                                        <SignalWifi3BarIcon />
+                                        <FaclilityText>{t('wifi')}</FaclilityText>
+                                    </FacilitiesItem>
+                                ) }
+                                {salon.vendor_page.has_coffee && (
+                                    <FacilitiesItem>
+                                        <CoffeeIcon />
+                                        <FaclilityText>{t('cofffe')}</FaclilityText>
+                                    </FacilitiesItem>
+                                ) }
+                                {salon.vendor_page.has_lounge && (
+                                    <FacilitiesItem>
+                                        <WeekendIcon />
+                                        <FaclilityText>{t('lounge')}</FaclilityText>
+                                    </FacilitiesItem>
+                                ) }
+                                {salon.vendor_page.has_masjid && (
+                                    <FacilitiesItem>
+                                        <MosqueIcon />
+                                        <FaclilityText>{t('masjid')}</FaclilityText>
+                                    </FacilitiesItem>
+                                ) }
+                                {salon.vendor_page.has_tv && (
+                                    <FacilitiesItem>
+                                        <TvIcon />
+                                        <FaclilityText>{t('TV')}</FaclilityText>
+                                    </FacilitiesItem>
+                                ) }
+                                {salon.vendor_page.has_wc && (
+                                    <FacilitiesItem>
+                                        <WcIcon />
+                                        <FaclilityText>{t('WC')}</FaclilityText>
+                                    </FacilitiesItem>
+                                ) }
+                            </FacilitiesList>
                         </Grid>
                         <Grid item xs={12} md={6}>
                             <Typography component="div" variant="h5" sx={{ marginBottom: '10px' }} >
