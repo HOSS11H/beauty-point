@@ -33,6 +33,7 @@ import { useState } from 'react';
 import { connect } from 'react-redux';
 import ModuleNav from './ModuleNav/ModuleNav';
 import EventSeatIcon from '@mui/icons-material/EventSeat';
+import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
 import { Fragment } from 'react';
 
 const drawerWidth = 256;
@@ -144,6 +145,7 @@ const Navigator = (props) => {
                 },
                 { id: 'bookings', name: 'bookings', icon: <BookIcon /> },
                 { id: 'booking-calendar', name: 'booking calendar', icon: <EventIcon /> },
+                { id: 'notifications', name: 'notifications', icon: <CircleNotificationsIcon /> },
             ],
         }];
         if (roleId === 'customer') {

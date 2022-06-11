@@ -28,7 +28,7 @@ const TabsHead = props => {
                 <Tab label={t("Earning Report")} {...a11yProps(1)} />
                 <Tab label={t("Sales Report")} {...a11yProps(2)} />
                 {roleName !== 'artist' && <Tab label={t("Employee Report")} {...a11yProps(3)} />}
-                {/* <Tab label={t("Taxes Report")} {...a11yProps(4)} /> */}
+                <Tab label={t("Taxes Report")} {...a11yProps(4)} />
             </Tabs>
         </Box>
     )

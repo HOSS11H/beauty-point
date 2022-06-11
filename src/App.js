@@ -117,6 +117,9 @@ const EmployeeSettings = React.lazy(() =>
 const RolesPermissions = React.lazy(() =>
     import('./pages/Account/Content/Settings/RolesPermissions/RolesPermissions')
 );
+const Notifications = React.lazy(() => import('./pages/Account/Content/Notifications/Notifications'));
+const AllNotifications = React.lazy(() => import('./pages/Account/Content/Notifications/AllNotifications/AllNotifications'));
+const SingleNotification = React.lazy(() => import('./pages/Account/Content/Notifications/SingleNotification/SingleNotification'));
 
 const NotFound = React.lazy(() => import('./pages/NotFound/NotFound'));
 
@@ -160,6 +163,7 @@ const FAQs = React.lazy(() => import('./pages/Home/FAQs/FAQs'));
 const AboutUs = React.lazy(() => import('./pages/Home/AboutUs/AboutUs'));
 
 const Landing = React.lazy(() => import('./pages/Landing/Landing'));
+
 
 function App(props) {
 
@@ -211,6 +215,10 @@ function App(props) {
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="bookings" element={<Bookings />} />
                     <Route path="booking-calendar" element={<BookingCalendar />} />
+                    <Route path="notifications/*" element={<Notifications />} >
+                        <Route index element={<AllNotifications />} />
+                        <Route path=':id' element={<SingleNotification />} />
+                    </Route>
                     <Route path="services" element={
                         <PermissibleRender
                             userPermissions={permissions}

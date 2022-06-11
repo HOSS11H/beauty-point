@@ -598,6 +598,9 @@ const resources = {
             'masjid': 'مصلي',
             'TV': 'تلفيزيون',
             'WC': 'دورة مياة',
+            'No notifications': 'لا توجد إشعارات',
+            'notifications': 'الإشعارات',
+            'See All Notifications': 'مشاهدة جميع الإشعارات',
         }
     }
 };
