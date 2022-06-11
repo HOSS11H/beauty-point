@@ -10,7 +10,6 @@ import Loader from '../../../../../components/UI/Loader/Loader';
 import ThemeContext from '../../../../../store/theme-context';
 import axios from '../../../../../utils/axios-instance';
 
-
 const CustomCard = styled(Card)`
     &.MuiPaper-root {
         display: flex;

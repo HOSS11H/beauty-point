@@ -1,11 +1,11 @@
 import { Card, Typography } from '@mui/material';
 import axios from 'axios';
 import moment from 'moment';
-import { Fragment, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import styled from 'styled-components';
 import Loader from '../../../../../components/UI/Loader/Loader';
-import styled from 'styled-components'
 
 const CustomCard = styled(Card)`
     &.MuiPaper-root {

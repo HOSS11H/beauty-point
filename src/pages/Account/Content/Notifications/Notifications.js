@@ -3,7 +3,6 @@ import { Outlet } from 'react-router-dom';
 
 const Notifications = props => {
 
-
     return (
         <Fragment>
             <Outlet />

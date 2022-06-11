@@ -53,6 +53,8 @@ export default function GeneralSettings(props) {
     const [open, setOpen] = useState(false);
     const [success, setSuccess] = useState(false)
     const [vat, setVat] = useState(true);
+    const [ webBokking, setWebBokking ] = useState(true);
+    const [ appBokking, setAppBokking ] = useState(true);
 
     useEffect(() => {
         v1.get('/vendors/settings/company')
@@ -66,6 +68,8 @@ export default function GeneralSettings(props) {
                 setNotes(res.data.invoice_notes ?? '')
                 setWebsite(res.data.website)
                 setVat(res.data.has_vat)
+                setWebBokking(res.data.web_bokking)
+                setAppBokking(res.data.app_bokking)
                 setShow(false)
             })
     }, []);
@@ -133,6 +137,14 @@ export default function GeneralSettings(props) {
     const toggleVat = () => {
         handleformIsDirty(true)
         setVat(prevState => !prevState);
+    }
+    const toogleWebBooking = () => {
+        handleformIsDirty(true)
+        setWebBokking(prevState => !prevState);
+    }
+    const toogleAppBooking = () => {
+        handleformIsDirty(true)
+        setAppBokking(prevState => !prevState);
     }
 
     return (
@@ -207,6 +219,8 @@ export default function GeneralSettings(props) {
                                                 <Grid item xs={12} >
                                                     <FormGroup>
                                                         <FormControlLabel control={<Switch checked={vat} onChange={toggleVat} />} label={t("has Taxes")} />
+                                                        <FormControlLabel control={<Switch checked={webBokking} onChange={toogleWebBooking} />} label={t("allow web booking")} />
+                                                        <FormControlLabel control={<Switch checked={appBokking} onChange={toogleAppBooking} />} label={t("allow app booking")} />
                                                     </FormGroup>
                                                 </Grid>
                                             </Grid>

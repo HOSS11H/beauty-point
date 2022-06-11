@@ -6,6 +6,7 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { Grid } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { format } from 'date-fns';
+import moment from 'moment';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
@@ -52,7 +53,7 @@ const SearchFilters = (props) => {
 
     const { t } = useTranslation()
 
-    const [dateFrom, setDateFrom] = useState(new Date());
+    const [dateFrom, setDateFrom] = useState(moment().subtract(1, 'month'));
     const [dateTo, setDateTo] = useState(new Date());
 
     const handleDateFromChange = (val) => {
@@ -66,16 +67,18 @@ const SearchFilters = (props) => {
 
     const ConfirmFilteringHandler = () => {
         const selectedSearchParams = {
-            from_date: dateFrom,
-            to_date: dateTo,
+            dateFrom: moment(dateFrom).format('YYYY-MM-DD'),
+            dateTo: moment(dateTo).format('YYYY-MM-DD'),
         }
         handleFilters(selectedSearchParams);
     }
 
     const resetFilteringHandler = () => {
         const searchParams = {
+            dateFrom: moment().subtract(1, 'month').format('YYYY-MM-DD'),
+            dateTo: moment().format('YYYY-MM-DD'),
         }
-        setDateFrom(new Date());
+        setDateFrom(moment().subtract(1, 'month'));
         setDateTo(new Date());
         handleFilters(searchParams);
     }
