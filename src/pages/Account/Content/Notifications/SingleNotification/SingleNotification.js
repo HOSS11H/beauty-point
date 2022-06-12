@@ -1,5 +1,5 @@
 import { Card, Typography } from '@mui/material';
-import axios from 'axios';
+import axios from '../../../../../utils/axios-instance';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -18,16 +18,6 @@ const CustomCard = styled(Card)`
     }
 `
 
-
-const cdata = {
-    "id": "ab21961d-3629-4143-81e5-6bb7bd9c7cb8",
-    "type": "App\\Notifications\\BookingCreated",
-    "message": "مرحباً بك تم تأكيد حجزك رقم 12227 لدى صالون صالون منيرة",
-    "title": "تم تأكيد حجزك",
-    "read_at": null,
-    "created_at": "2022-06-11T00:45:53.000000Z"
-}
-
 const SingleNotification = props => {
 
     let { id } = useParams();
@@ -36,27 +26,28 @@ const SingleNotification = props => {
     const [data, setData] = useState(null)
 
     useEffect(() => {
+        setLoading(true)
         axios.get(`/notifications/${id}`)
             .then(res => {
+                setData(res.data)
                 setLoading(false)
-                setData(res.data.data)
             })
             .catch(err => {
                 setLoading(false)
-                toast.error(err.response.data.message)
+                toast.error(err.response)
             })
     }, [id])
 
-    if (loading) {
-        return <Loader height='80vh' />
-    }
+    if (loading) return <Loader />
+
+    if ( !data ) return <Typography variant="h6">Notification not found</Typography>
 
     return (
         <CustomCard>
-            <Typography color='secondary' variant='h4' gutterBottom >{cdata.title}</Typography>
-            <Typography variant='h5'>{cdata.message}</Typography>
+            <Typography color='secondary' variant='h4' gutterBottom >{data.title}</Typography>
+            <Typography variant='h5'>{data.message}</Typography>
             <Typography color='secondary' variant="caption" display="block" sx={{ textAlign: 'left', alignSelf: 'flex-end' }}  gutterBottom >
-                <bdi>{moment(cdata.created_at).fromNow()}</bdi>
+                <bdi>{moment(data.created_at).fromNow()}</bdi>
             </Typography>
         </CustomCard>
     )

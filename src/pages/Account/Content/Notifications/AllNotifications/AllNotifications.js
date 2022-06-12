@@ -2,12 +2,11 @@ import { Card, Grid, Typography } from '@mui/material';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import moment from 'moment';
-import { Fragment, useCallback, useContext, useRef, useState } from 'react';
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import Loader from '../../../../../components/UI/Loader/Loader';
-import ThemeContext from '../../../../../store/theme-context';
 import axios from '../../../../../utils/axios-instance';
 
 const CustomCard = styled(Card)`
@@ -23,33 +22,14 @@ const CustomCard = styled(Card)`
     }
 `
 
-const data = [
-    {
-        "id": "ab21961d-3629-4143-81e5-6bb7bd9c7cb8",
-        "type": "App\\Notifications\\BookingCreated",
-        "message": "مرحباً بك تم تأكيد حجزك رقم 12227 لدى صالون صالون منيرة",
-        "title": "تم تأكيد حجزك",
-        "read_at": null,
-        "created_at": "2022-06-11T00:45:53.000000Z"
-    },
-    {
-        "id": "e2a5e677-a0fc-4b3a-88d3-a2126a0628f9",
-        "type": "App\\Notifications\\BookingCreated",
-        "message": "مرحباً بك تم تأكيد حجزك رقم 12227 لدى صالون صالون منيرة",
-        "title": "تم تأكيد حجزك",
-        "read_at": null,
-        "created_at": "2022-06-11T00:45:53.000000Z"
-    },
-]
 
 const AllNotifications = props => {
 
     const { t } = useTranslation()
 
     const navigate = useNavigate()
-    const themeCtx = useContext(ThemeContext)
 
-    const [notifications, setNotifications] = useState(data)
+    const [notifications, setNotifications] = useState([])
 
     const [lastPage, setLastPage] = useState(false)
     const [loading, setLoading] = useState(true)
@@ -62,29 +42,32 @@ const AllNotifications = props => {
         if (ovserver.current) ovserver.current.disconnect()
         ovserver.current = new IntersectionObserver(entries => {
             if (entries[0].isIntersecting && !lastPage) {
-                setPage(_page => _page + 1)
+                // setPage(_page => _page + 1)
             }
         })
         if (node) ovserver.current.observe(node)
     }, [lastPage, loading])
 
-    /* useEffect(() => {
+    useEffect(() => {
         setLoading(true)
         axios.get(`/notifications?page=${page}&per_page=5`)
             .then(res => {
                 setLoading(false)
                 setNotifications(currentNotifications => {
+                    return [...currentNotifications, ...res.data]
+                });
+                /* setNotifications(currentNotifications => {
                     return [...currentNotifications, ...res.data.data]
                 });
                 if (res.data.meta.last_page === page) {
                     setLastPage(true)
-                }
+                } */
             })
             .catch(err => {
                 setLoading(false)
                 //console.log(err);
             })
-    }, [page]) */
+    }, [page])
 
 
     const handleNotifaicationClick = (id, type) => {

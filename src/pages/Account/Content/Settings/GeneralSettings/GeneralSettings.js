@@ -68,8 +68,8 @@ export default function GeneralSettings(props) {
                 setNotes(res.data.invoice_notes ?? '')
                 setWebsite(res.data.website)
                 setVat(res.data.has_vat)
-                setWebBokking(res.data.web_bokking)
-                setAppBokking(res.data.app_bokking)
+                setWebBokking(res.data.web_bookings)
+                setAppBokking(res.data.app_bookings)
                 setShow(false)
             })
     }, []);
@@ -87,6 +87,8 @@ export default function GeneralSettings(props) {
         formData.append('website', website);
         formData.append('invoice_notes', notes);
         formData.append('has_vat', vat);
+        formData.append('web_bookings', webBokking);
+        formData.append('app_bookings', appBokking);
         v1.post('/vendors/settings/company', formData, { headers: { 'Content-Type': 'multipart/form-data' } })
             .then(res => {
                 if (res.status === 204) {

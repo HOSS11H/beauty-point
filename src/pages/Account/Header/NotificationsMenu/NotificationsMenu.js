@@ -6,7 +6,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import moment from 'moment';
-import { Fragment, useCallback, useContext, useRef, useState } from 'react';
+import { Fragment, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
@@ -14,10 +14,8 @@ import Loader from '../../../../components/UI/Loader/Loader';
 import ThemeContext from '../../../../store/theme-context';
 import axios from '../../../../utils/axios-instance';
 
-
 const CustomList = styled(List)`
     &.MuiList-root {
-        position: relative;
         padding-bottom: 52px;
         min-width:200px;
         @media screen and (min-height: 900px) {
@@ -42,31 +40,11 @@ const CustomListItemButton = styled(ListItemButton)`
 
 const SeeAllButton = styled(Button)`
     &.MuiButton-root {
-        position: absolute;
-        bottom: 8px;
-        left: 0;
-        right: 0;
+        background-color: ${({ theme }) => theme.palette.mode === 'dark' ? 'rgba(0, 0, 0, 1)' : 'rgba(255,255,255,1)'} ;
+        border-radius: 0;
+        width: 100%;
     }
 `
-
-const data = [
-    {
-        "id": "ab21961d-3629-4143-81e5-6bb7bd9c7cb8",
-        "type": "App\\Notifications\\BookingCreated",
-        "message": "مرحباً بك تم تأكيد حجزك رقم 12227 لدى صالون صالون منيرة",
-        "title": "تم تأكيد حجزك",
-        "read_at": null,
-        "created_at": "2022-06-11T00:45:53.000000Z"
-    },
-    {
-        "id": "e2a5e677-a0fc-4b3a-88d3-a2126a0628f9",
-        "type": "App\\Notifications\\BookingCreated",
-        "message": "مرحباً بك تم تأكيد حجزك رقم 12227 لدى صالون صالون منيرة",
-        "title": "تم تأكيد حجزك",
-        "read_at": null,
-        "created_at": "2022-06-11T00:45:53.000000Z"
-    },
-]
 
 const NotificationsMenu = props => {
 
@@ -77,7 +55,7 @@ const NotificationsMenu = props => {
 
     const [anchorEl, setAnchorEl] = useState(null);
 
-    const [notifications, setNotifications] = useState(data)
+    const [notifications, setNotifications] = useState([])
 
     const [lastPage, setLastPage] = useState(false)
     const [loading, setLoading] = useState(true)
@@ -90,29 +68,32 @@ const NotificationsMenu = props => {
         if (ovserver.current) ovserver.current.disconnect()
         ovserver.current = new IntersectionObserver(entries => {
             if (entries[0].isIntersecting && !lastPage) {
-                setPage(_page => _page + 1)
+                // setPage(_page => _page + 1)
             }
         })
         if (node) ovserver.current.observe(node)
     }, [lastPage, loading])
 
-    /* useEffect(() => {
+    useEffect(() => {
         setLoading(true)
         axios.get(`/notifications?page=${page}&per_page=5`)
             .then(res => {
                 setLoading(false)
                 setNotifications(currentNotifications => {
-                    return [...currentNotifications, ...res.data.data]
+                    return [...currentNotifications, ...res.data]
                 });
-                if (res.data.meta.last_page === page) {
-                    setLastPage(true)
-                }
+                /* setNotifications(currentNotifications => {
+                    return [...currentNotifications, ...res.data.data]
+                }); */
+                /*  if (res.data.meta.last_page === page) {
+                        setLastPage(true)
+                 } */
             })
             .catch(err => {
                 setLoading(false)
                 //console.log(err);
             })
-    }, [page]) */
+    }, [page])
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -128,7 +109,7 @@ const NotificationsMenu = props => {
         const updatedNotifications = [...notifications]
         navigate(`notifications/${id}`)
         handleClose()
-        if(updatedNotifications[notificationIndex].read_at) return;
+        if (updatedNotifications[notificationIndex].read_at) return;
         updatedNotifications[notificationIndex].read_at = moment().format()
         axios.post(`/notifications/${id}/read`)
             .then(res => {
@@ -163,7 +144,7 @@ const NotificationsMenu = props => {
                     if (notifications.length === (index + 1)) {
                         return (
                             <ListItem disablePadding ref={lastElementRef} key={notification.id} >
-                                <CustomListItemButton $unread={!notification.read_at} onClick={() => handleNotifaicationClick( notification.id, notification.type  )} >
+                                <CustomListItemButton $unread={!notification.read_at} onClick={() => handleNotifaicationClick(notification.id, notification.type)} >
                                     <ListItemText primary={notification.title} secondary={notification.message} />
                                     <Typography variant="caption" display="block" sx={{ textAlign: 'left', alignSelf: 'flex-end' }} >
                                         <bdi>{moment(notification.created_at).fromNow()}</bdi>
@@ -175,7 +156,7 @@ const NotificationsMenu = props => {
                         return (
                             <Fragment>
                                 <ListItem disablePadding key={notification.id} >
-                                    <CustomListItemButton $unread={!notification.read_at} onClick={() => handleNotifaicationClick( notification.id, notification.type  )} >
+                                    <CustomListItemButton $unread={!notification.read_at} onClick={() => handleNotifaicationClick(notification.id, notification.type)} >
                                         <ListItemText primary={notification.title} secondary={notification.message} />
                                         <Typography variant="caption" display="block" sx={{ textAlign: 'left', alignSelf: 'flex-end' }} >
                                             <bdi>{moment(notification.created_at).fromNow()}</bdi>
@@ -215,8 +196,8 @@ const NotificationsMenu = props => {
                 }}
             >
                 <CustomList>
+                    <SeeAllButton color='secondary' onClick={viewAllNotificationsHandler} >{t('See All Notifications')}</SeeAllButton>
                     {popoverContent}
-                    <SeeAllButton color='secondary' onClick={ viewAllNotificationsHandler } >{t('See All Notifications')}</SeeAllButton>
                 </CustomList>
             </Popover>
         </Fragment>
