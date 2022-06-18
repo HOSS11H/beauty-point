@@ -1,16 +1,12 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
-import { Fragment, useState, useCallback, useContext, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { formatCurrency } from '../../../../../../shared/utility';
-import SearchFilters from './SearchFilters/SearchFilters';
-import ThemeContext from '../../../../../../store/theme-context';
-import v1 from '../../../../../../utils/axios-instance-v1';
-import Loader from '../../../../../../components/UI/Loader/Loader';
 import moment from 'moment';
+import { Fragment, useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import Loader from '../../../../../../components/UI/Loader/Loader';
+import { formatCurrency } from '../../../../../../shared/utility';
+import v1 from '../../../../../../utils/axios-instance-v1';
+import SearchFilters from './SearchFilters/SearchFilters';
 const TaxesReport = props => {
-
-    const themeCtx = useContext(ThemeContext);
-    const { lang } = themeCtx;
 
 
     const [loading, setLoading] = useState(false);
@@ -22,7 +18,7 @@ const TaxesReport = props => {
         setLoading(true);
         const todayDate = moment().format('YYYY-MM-DD')
         const monthBeforeDate = moment().subtract(1, 'month').format('YYYY-MM-DD')
-        v1.get(`vendors/reports/vat?from_date=${todayDate}&to_date=${monthBeforeDate}`)
+        v1.get(`vendors/reports/vat?from_date=${monthBeforeDate}&to_date=${todayDate}`)
             .then(res => {
                 setData(res.data);
                 setLoading(false);
@@ -62,7 +58,7 @@ const TaxesReport = props => {
                         <TableHead>
                             <TableRow>
                                 <TableCell >{t('title')}</TableCell>
-                                <TableCell >{t('tax percentage %')}</TableCell>
+                                <TableCell >{t('tax percentage 15%')}</TableCell>
                                 <TableCell >{t('amount')}</TableCell>
                                 <TableCell >{t('modification')}</TableCell>
                                 <TableCell >{t('vat')}</TableCell>
@@ -136,7 +132,7 @@ const TaxesReport = props => {
                         <TableHead>
                             <TableRow>
                                 <TableCell >{t('title')}</TableCell>
-                                <TableCell >{t('tax percentage %')}</TableCell>
+                                <TableCell >{t('tax percentage 15%')}</TableCell>
                                 <TableCell >{t('amount')}</TableCell>
                                 <TableCell >{t('modification')}</TableCell>
                                 <TableCell >{t('vat')}</TableCell>
@@ -210,7 +206,7 @@ const TaxesReport = props => {
                         <TableHead>
                             <TableRow>
                                 <TableCell >{t('title')}</TableCell>
-                                <TableCell >{t('tax percentage %')}</TableCell>
+                                <TableCell >{t('tax percentage 15%')}</TableCell>
                                 <TableCell >{t('amount')}</TableCell>
                                 <TableCell >{t('modification')}</TableCell>
                                 <TableCell >{t('vat')}</TableCell>
@@ -242,9 +238,9 @@ const TaxesReport = props => {
                             >
                                 <TableCell component="th" scope="row" >{t('Tax payable for the tax period')}</TableCell>
                                 <TableCell>0.00</TableCell>
+                                <TableCell>0.00</TableCell>
+                                <TableCell>0.00</TableCell>
                                 <TableCell>{formatCurrency(data.total_vat)}</TableCell>
-                                <TableCell>0.00</TableCell>
-                                <TableCell>0.00</TableCell>
                             </TableRow>
                         </TableBody>
                     </Table>

@@ -454,7 +454,7 @@ const CreateModal = (props) => {
                 <Grid item xs={12} sm={6} >
                     <LocalizationProvider dateAdapter={DateAdapter}>
                         <DesktopDatePicker
-                            label={t("Date from")}
+                            label={t("Invoice Date")}
                             inputFormat="MM/dd/yyyy"
                             value={date}
                             onChange={handleDateChange}
@@ -511,7 +511,7 @@ const CreateModal = (props) => {
                     {expenseDescriptionError && <ValidationMessage notExist>{t(`Please add Description`)}</ValidationMessage>}
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                    <CustomTextField id="expense-amount" type='number' label={t('amount')} variant="outlined" value={expenseAmount} onChange={expenseAmountChangeHandler} />
+                    <CustomTextField id="expense-amount" type='number' label={t('total amount with taxes')} variant="outlined" value={expenseAmount} onChange={expenseAmountChangeHandler} />
                     {expenseAmountError && <ValidationMessage notExist>{t(`Please add amount`)}</ValidationMessage>}
                 </Grid>
                 <Grid item xs={12} sm={6}>

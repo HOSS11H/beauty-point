@@ -603,7 +603,7 @@ const resources = {
             'See All Notifications': 'مشاهدة جميع الإشعارات',
             'Taxes Report': 'التقرير الضريبي',
             'Vat on sales and other outputs': 'ضريبة القيمة المضافة علي المبيعات والمخرجات الأخري',
-            'tax percentage %': 'نسبة الضريبة %',
+            'tax percentage 15%': 'نسبة الضريبة %15',
             'modification': 'التعديل',
             'vat': 'ضريبة القيمة المضافة',
             'sales under main perecntage in KSA': 'المبيعات الخاضعة للنسبة الأساسية للمملكة العربية السعودية',
@@ -623,6 +623,18 @@ const resources = {
             'Tax payable for the tax period': 'الضريبة المستحقة الدفع للفترة الضريبية',
             'allow web booking': 'السماح بحجز من خلال الويب',
             'allow app booking': 'السماح بحجز من خلال التطبيق',
+            'Bookings Report': 'تقرير الحجوزات',
+            'Customers App': 'تطبيق العملاء',
+            'Number': 'العدد',
+            'App percentage (9 %)': 'نسبة التطبيق (9 %)',
+            "Website Bookings": 'حجوزات الموقع',
+            "Website percentage": 'نسبة الموقع',
+            'Pending Bookings': 'الحجوزات المعلقة',
+            'Cancelled Bookings': 'الحجوزات الملغاة',
+            'Confirmed Bookings': 'الحجوزات المؤكدة',
+            'Indoor Bookings': 'الحجوزات الداخلية',
+            'Invoice Date': 'تاريخ الفاتورة',
+            'total amount with taxes': 'المبلغ الإجمالي مع الضريبة',
         }
     }
 };
