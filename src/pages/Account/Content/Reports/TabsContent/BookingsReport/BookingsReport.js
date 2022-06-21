@@ -1,4 +1,4 @@
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Grid } from '@mui/material';
 import moment from 'moment';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -6,6 +6,27 @@ import Loader from '../../../../../../components/UI/Loader/Loader';
 import { formatCurrency } from '../../../../../../shared/utility';
 import v1 from '../../../../../../utils/axios-instance-v1';
 import SearchFilters from './SearchFilters/SearchFilters';
+import styled from 'styled-components';
+const PriceCalculation = styled.div`
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    &:last-child{
+        padding-bottom:0;
+    }
+    p {
+        font-size: 20px;
+        line-height:1.5;
+        text-transform: uppercase;
+        font-weight: 600;
+        color: ${({ theme }) => theme.palette.text.primary};
+        margin-right: 20px;
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+`
+
 const BookingsReport = props => {
 
 
@@ -18,7 +39,7 @@ const BookingsReport = props => {
         setLoading(true);
         const todayDate = moment().format('YYYY-MM-DD')
         const monthBeforeDate = moment().subtract(1, 'month').format('YYYY-MM-DD')
-        v1.get(`vendors/reports/vat?from_date=${monthBeforeDate}&to_date=${todayDate}`)
+        v1.get(`vendors/reports/bookings?from_date=${monthBeforeDate}&to_date=${todayDate}`)
             .then(res => {
                 setData(res.data);
                 setLoading(false);
@@ -31,7 +52,7 @@ const BookingsReport = props => {
 
     const searchHandler = useCallback(({ dateFrom, dateTo }) => {
         setLoading(true);
-        v1.get(`vendors/reports/vat?from_date=${dateFrom}&to_date=${dateTo}`)
+        v1.get(`vendors/reports/bookings?from_date=${dateFrom}&to_date=${dateTo}`)
             .then(res => {
                 setData(res.data);
                 setLoading(false);
@@ -64,36 +85,19 @@ const BookingsReport = props => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            <TableRow
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                            >
-                                <TableCell component="th" scope="row">
-                                    {t('Pending Bookings')}
-                                </TableCell>
-                                <TableCell>0</TableCell>
-                                <TableCell>0</TableCell>
-                                <TableCell>0</TableCell>
-                            </TableRow>
-                            <TableRow
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                            >
-                                <TableCell component="th" scope="row">
-                                    {t('Cancelled Bookings')}
-                                </TableCell>
-                                <TableCell>0</TableCell>
-                                <TableCell>0</TableCell>
-                                <TableCell>0</TableCell>
-                            </TableRow>
-                            <TableRow
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                            >
-                                <TableCell component="th" scope="row">
-                                    {t('Confirmed Bookings')}
-                                </TableCell>
-                                <TableCell>0</TableCell>
-                                <TableCell>0</TableCell>
-                                <TableCell>0</TableCell>
-                            </TableRow>
+                            {
+                                data.external.map(item => {
+                                    return (
+                                        <TableRow key={item.id}>
+                                            <TableCell component="th" scope="row">
+                                                {t('bookings')} {t(item.status)}
+                                            </TableCell>
+                                            <TableCell>{item.total_count}</TableCell>
+                                            <TableCell>{formatCurrency(item.total)}</TableCell>
+                                            <TableCell>{item.status !== 'canceled' ? item.commission : 0} %</TableCell>
+                                        </TableRow>
+                                    )
+                                })}
                         </TableBody>
                     </Table>
                 </TableContainer>
@@ -111,41 +115,24 @@ const BookingsReport = props => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            <TableRow
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                            >
-                                <TableCell component="th" scope="row">
-                                    {t('Pending Bookings')}
-                                </TableCell>
-                                <TableCell>0</TableCell>
-                                <TableCell>0</TableCell>
-                                <TableCell>0</TableCell>
-                            </TableRow>
-                            <TableRow
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                            >
-                                <TableCell component="th" scope="row">
-                                    {t('Cancelled Bookings')}
-                                </TableCell>
-                                <TableCell>0</TableCell>
-                                <TableCell>0</TableCell>
-                                <TableCell>0</TableCell>
-                            </TableRow>
-                            <TableRow
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                            >
-                                <TableCell component="th" scope="row">
-                                    {t('Confirmed Bookings')}
-                                </TableCell>
-                                <TableCell>0</TableCell>
-                                <TableCell>0</TableCell>
-                                <TableCell>0</TableCell>
-                            </TableRow>
+                            {
+                                data.external.map(item => {
+                                    return (
+                                        <TableRow key={item.id}>
+                                            <TableCell component="th" scope="row">
+                                                {t('bookings')} {t(item.status)}
+                                            </TableCell>
+                                            <TableCell>{item.total_count}</TableCell>
+                                            <TableCell>{formatCurrency(item.total)}</TableCell>
+                                            <TableCell>{item.status !== 'canceled' ? item.commission : 0} %</TableCell>
+                                        </TableRow>
+                                    )
+                                })}
                         </TableBody>
                     </Table>
                 </TableContainer>
                 <TableContainer component={Paper}>
-                <Typography sx={{ p: 3 }} variant="h6" gutterBottom component="div">
+                    <Typography sx={{ p: 3 }} variant="h6" gutterBottom component="div">
                         {t('Indoor Bookings')}
                     </Typography>
                     <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -157,36 +144,37 @@ const BookingsReport = props => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            <TableRow
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                            >
-                                <TableCell component="th" scope="row">
-                                    {t('Pending Bookings')}
-                                </TableCell>
-                                <TableCell>0</TableCell>
-                                <TableCell>0</TableCell>
-                            </TableRow>
-                            <TableRow
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                            >
-                                <TableCell component="th" scope="row">
-                                    {t('Cancelled Bookings')}
-                                </TableCell>
-                                <TableCell>0</TableCell>
-                                <TableCell>0</TableCell>
-                            </TableRow>
-                            <TableRow
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                            >
-                                <TableCell component="th" scope="row">
-                                    {t('Confirmed Bookings')}
-                                </TableCell>
-                                <TableCell>0</TableCell>
-                                <TableCell>0</TableCell>
-                            </TableRow>
+                            {
+                                data.internal.map(item => {
+                                    return (
+                                        <TableRow key={item.id}>
+                                            <TableCell component="th" scope="row">
+                                                {t('bookings')} {t(item.status)}
+                                            </TableCell>
+                                            <TableCell>{item.total_count}</TableCell>
+                                            <TableCell>{formatCurrency(item.total)}</TableCell>
+                                        </TableRow>
+                                    )
+                                })}
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <Grid sx={{ mt: 3 }} container spacing={2}>
+                    <Grid item xs={12} md={6}>
+                        <PriceCalculation>
+                            <p>{t('total bookings')}</p>
+                            <p>{data.total.total_count}</p>
+                        </PriceCalculation>
+                        <PriceCalculation>
+                            <p>{t('commission')}</p>
+                            <p>{data.total.commission} %</p>
+                        </PriceCalculation>
+                        <PriceCalculation>
+                            <p>{t('total amount')}</p>
+                            <p>{formatCurrency(data.total.total)}</p>
+                        </PriceCalculation>
+                    </Grid>
+                </Grid>
             </Fragment>
         )
     }

@@ -635,6 +635,11 @@ const resources = {
             'Indoor Bookings': 'الحجوزات الداخلية',
             'Invoice Date': 'تاريخ الفاتورة',
             'total amount with taxes': 'المبلغ الإجمالي مع الضريبة',
+            'total bookings': 'مجموع الحجوزات',
+            'percentage %': 'نسبة %',
+            'Commissions Report': 'تقرير العمولات',
+            'Commissions': 'العمولات',
+            'request / purchase': 'طلب / دفع',
         }
     }
 };
