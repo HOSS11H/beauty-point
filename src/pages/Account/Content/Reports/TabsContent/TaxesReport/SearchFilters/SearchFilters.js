@@ -53,7 +53,7 @@ const SearchFilters = (props) => {
 
     const { t } = useTranslation()
 
-    const [dateFrom, setDateFrom] = useState(moment().subtract(1, 'month'));
+    const [dateFrom, setDateFrom] = useState(moment().subtract(3, 'month'));
     const [dateTo, setDateTo] = useState(new Date());
 
     const handleDateFromChange = (val) => {

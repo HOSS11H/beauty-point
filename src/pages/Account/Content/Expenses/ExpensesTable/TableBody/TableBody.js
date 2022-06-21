@@ -11,6 +11,7 @@ import { IconButton } from '@mui/material';
 import DownloadIcon from '@mui/icons-material/Download';
 import { saveAs } from 'file-saver'
 import { useCallback } from 'react';
+import moment from 'moment';
 
 
 const EnhancedTableBody = props => {
@@ -51,7 +52,7 @@ const EnhancedTableBody = props => {
                             </TableData>
                         </TableCell>
                         <TableCell align="center">
-                            <TableData>{row.expense_date}</TableData>
+                            <TableData>{moment(row.expense_date).format( 'YYYY-MM-DD')}</TableData>
                         </TableCell>
                         <TableCell align="center">
                             <TableData>{row.customer.name}</TableData>

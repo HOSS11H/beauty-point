@@ -7,22 +7,10 @@ import { formatCurrency } from '../../../../../../shared/utility';
 import v1 from '../../../../../../utils/axios-instance-v1';
 import SearchFilters from './SearchFilters/SearchFilters';
 import styled from 'styled-components';
-const PriceCalculation = styled.div`
-    display: flex;
-    align-items: center;
-    padding: 10px 0;
-    &:last-child{
-        padding-bottom:0;
-    }
-    p {
-        font-size: 20px;
-        line-height:1.5;
-        text-transform: uppercase;
-        font-weight: 600;
-        color: ${({ theme }) => theme.palette.text.primary};
-        margin-right: 20px;
-        &:last-child {
-            margin-right: 0;
+const DisabledRow = styled(TableRow)`
+    &.MuiTableRow-root {
+        & .MuiTableCell-root {
+            color: red;
         }
     }
 `
@@ -71,66 +59,6 @@ const BookingsReport = props => {
     if (data && !loading) {
         content = (
             <Fragment>
-                <TableContainer component={Paper} sx={{ mb: 3 }}>
-                    <Typography sx={{ p: 3 }} variant="h6" gutterBottom component="div">
-                        {t('Customers App')}
-                    </Typography>
-                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell >{t('Type')}</TableCell>
-                                <TableCell >{t('Number')}</TableCell>
-                                <TableCell >{t('amount')}</TableCell>
-                                <TableCell >{t('App percentage (9 %)')}</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {
-                                data.external.map(item => {
-                                    return (
-                                        <TableRow key={item.id}>
-                                            <TableCell component="th" scope="row">
-                                                {t('bookings')} {t(item.status)}
-                                            </TableCell>
-                                            <TableCell>{item.total_count}</TableCell>
-                                            <TableCell>{formatCurrency(item.total)}</TableCell>
-                                            <TableCell>{item.status !== 'canceled' ? item.commission : 0} %</TableCell>
-                                        </TableRow>
-                                    )
-                                })}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-                <TableContainer component={Paper} sx={{ mb: 3 }}>
-                    <Typography sx={{ p: 3 }} variant="h6" gutterBottom component="div">
-                        {t('Website Bookings')}
-                    </Typography>
-                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                        <TableHead>
-                            <TableRow>
-                                <TableCell >{t('Type')}</TableCell>
-                                <TableCell >{t('Number')}</TableCell>
-                                <TableCell >{t('amount')}</TableCell>
-                                <TableCell >{t('Website percentage')}</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {
-                                data.external.map(item => {
-                                    return (
-                                        <TableRow key={item.id}>
-                                            <TableCell component="th" scope="row">
-                                                {t('bookings')} {t(item.status)}
-                                            </TableCell>
-                                            <TableCell>{item.total_count}</TableCell>
-                                            <TableCell>{formatCurrency(item.total)}</TableCell>
-                                            <TableCell>{item.status !== 'canceled' ? item.commission : 0} %</TableCell>
-                                        </TableRow>
-                                    )
-                                })}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
                 <TableContainer component={Paper}>
                     <Typography sx={{ p: 3 }} variant="h6" gutterBottom component="div">
                         {t('Indoor Bookings')}
@@ -146,6 +74,17 @@ const BookingsReport = props => {
                         <TableBody>
                             {
                                 data.internal.map(item => {
+                                    if (item.status === 'canceled') {
+                                        return (
+                                            <DisabledRow key={item.id}>
+                                                <TableCell component="th" scope="row">
+                                                    {t('bookings')} {t(item.status)}
+                                                </TableCell>
+                                                <TableCell>{item.total_count}</TableCell>
+                                                <TableCell>{formatCurrency(item.total)}</TableCell>
+                                            </DisabledRow>
+                                        )
+                                    }
                                     return (
                                         <TableRow key={item.id}>
                                             <TableCell component="th" scope="row">
@@ -156,25 +95,74 @@ const BookingsReport = props => {
                                         </TableRow>
                                     )
                                 })}
+                            <TableRow>
+                                <TableCell component="th" scope="row" sx={{ fontWeight: 700 }}>
+                                    {t('total')}
+                                </TableCell>
+                                <TableCell sx={{ fontWeight: 700 }}>{
+                                    data.internal.reduce((acc, curr) => {
+                                        return acc + curr.total_count
+                                    }, 0)
+                                }</TableCell>
+                                <TableCell sx={{ fontWeight: 700 }}>{formatCurrency(
+                                    data.internal.reduce((acc, curr) => {
+                                        return acc + curr.total
+                                    }, 0)
+                                )}</TableCell>
+                            </TableRow>
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <Grid sx={{ mt: 3 }} container spacing={2}>
-                    <Grid item xs={12} md={6}>
-                        <PriceCalculation>
-                            <p>{t('total bookings')}</p>
-                            <p>{data.total.total_count}</p>
-                        </PriceCalculation>
-                        <PriceCalculation>
-                            <p>{t('commission')}</p>
-                            <p>{data.total.commission} %</p>
-                        </PriceCalculation>
-                        <PriceCalculation>
-                            <p>{t('total amount')}</p>
-                            <p>{formatCurrency(data.total.total)}</p>
-                        </PriceCalculation>
-                    </Grid>
-                </Grid>
+                <TableContainer component={Paper} sx={{ mb: 3 }}>
+                    <Typography sx={{ p: 3 }} variant="h6" gutterBottom component="div">
+                        {t('External Bookings')}
+                    </Typography>
+                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell >{t('Type')}</TableCell>
+                                <TableCell >{t('Number')}</TableCell>
+                                <TableCell >{t('amount')}</TableCell>
+                                <TableCell >{t('Website percentage')} ( 9 %)</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {
+                                data.external.map(item => {
+                                    if (item.status === 'canceled') {
+                                        return (
+                                            <DisabledRow key={item.id}  >
+                                                <TableCell component="th" scope="row">
+                                                    {t('bookings')} {t(item.status)}
+                                                </TableCell>
+                                                <TableCell>{item.total_count}</TableCell>
+                                                <TableCell>{formatCurrency(item.total)}</TableCell>
+                                                <TableCell>{formatCurrency(item.status !== 'canceled' ? item.commission : 0)}</TableCell>
+                                            </DisabledRow>
+                                        )
+                                    }
+                                    return (
+                                        <TableRow key={item.id}  >
+                                            <TableCell component="th" scope="row">
+                                                {t('bookings')} {t(item.status)}
+                                            </TableCell>
+                                            <TableCell>{item.total_count}</TableCell>
+                                            <TableCell>{formatCurrency(item.total)}</TableCell>
+                                            <TableCell>{formatCurrency(item.status !== 'canceled' ? item.commission : 0)}</TableCell>
+                                        </TableRow>
+                                    )
+                                })}
+                            <TableRow>
+                                <TableCell component="th" scope="row" sx={{ fontWeight: 700 }}>
+                                    {t('total')}
+                                </TableCell>
+                                <TableCell sx={{ fontWeight: 700 }}>{data.total.total_count}</TableCell>
+                                <TableCell sx={{ fontWeight: 700 }}>{formatCurrency(data.total.total)}</TableCell>
+                                <TableCell sx={{ fontWeight: 700 }}>{formatCurrency(data.total.commission)}</TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             </Fragment>
         )
     }

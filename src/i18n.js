@@ -603,7 +603,7 @@ const resources = {
             'See All Notifications': 'مشاهدة جميع الإشعارات',
             'Taxes Report': 'التقرير الضريبي',
             'Vat on sales and other outputs': 'ضريبة القيمة المضافة علي المبيعات والمخرجات الأخري',
-            'tax percentage 15%': 'نسبة الضريبة %15',
+            'tax percentage  %': ' نسبة الضريبة %',
             'modification': 'التعديل',
             'vat': 'ضريبة القيمة المضافة',
             'sales under main perecntage in KSA': 'المبيعات الخاضعة للنسبة الأساسية للمملكة العربية السعودية',
@@ -640,6 +640,7 @@ const resources = {
             'Commissions Report': 'تقرير العمولات',
             'Commissions': 'العمولات',
             'request / purchase': 'طلب / دفع',
+            'External Bookings': 'الحجوزات الخارجية',
         }
     }
 };

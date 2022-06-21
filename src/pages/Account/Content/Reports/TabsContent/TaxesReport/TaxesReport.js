@@ -17,7 +17,7 @@ const TaxesReport = props => {
     useEffect( ( ) => {
         setLoading(true);
         const todayDate = moment().format('YYYY-MM-DD')
-        const monthBeforeDate = moment().subtract(1, 'month').format('YYYY-MM-DD')
+        const monthBeforeDate = moment().subtract(3, 'month').format('YYYY-MM-DD')
         v1.get(`vendors/reports/vat?from_date=${monthBeforeDate}&to_date=${todayDate}`)
             .then(res => {
                 setData(res.data);
@@ -58,7 +58,7 @@ const TaxesReport = props => {
                         <TableHead>
                             <TableRow>
                                 <TableCell >{t('title')}</TableCell>
-                                <TableCell >{t('tax percentage 15%')}</TableCell>
+                                <TableCell >{t('tax percentage  %')}</TableCell>
                                 <TableCell >{t('amount')}</TableCell>
                                 <TableCell >{t('modification')}</TableCell>
                                 <TableCell >{t('vat')}</TableCell>
@@ -132,7 +132,7 @@ const TaxesReport = props => {
                         <TableHead>
                             <TableRow>
                                 <TableCell >{t('title')}</TableCell>
-                                <TableCell >{t('tax percentage 15%')}</TableCell>
+                                <TableCell >{t('tax percentage  %')}</TableCell>
                                 <TableCell >{t('amount')}</TableCell>
                                 <TableCell >{t('modification')}</TableCell>
                                 <TableCell >{t('vat')}</TableCell>
@@ -206,7 +206,7 @@ const TaxesReport = props => {
                         <TableHead>
                             <TableRow>
                                 <TableCell >{t('title')}</TableCell>
-                                <TableCell >{t('tax percentage 15%')}</TableCell>
+                                <TableCell >{t('tax percentage  %')}</TableCell>
                                 <TableCell >{t('amount')}</TableCell>
                                 <TableCell >{t('modification')}</TableCell>
                                 <TableCell >{t('vat')}</TableCell>
