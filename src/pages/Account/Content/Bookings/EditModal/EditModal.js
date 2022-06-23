@@ -1,42 +1,41 @@
-import { CustomModal } from '../../../../../components/UI/Modal/Modal';
-import styled from 'styled-components';
-import { useTranslation } from 'react-i18next';
-import { FormControlLabel, FormGroup, Grid, Switch } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import TimePicker from '@mui/lab/TimePicker';
-import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import InputLabel from '@mui/material/InputLabel';
 import MailIcon from '@mui/icons-material/Mail';
+import MoneyIcon from '@mui/icons-material/Money';
+import PersonIcon from '@mui/icons-material/Person';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import DateAdapter from '@mui/lab/AdapterMoment';
+import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import TextField from '@mui/material/TextField';
+import TimePicker from '@mui/lab/TimePicker';
+import { Grid } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Paper from '@mui/material/Paper';
+import Select from '@mui/material/Select';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
+import TextField from '@mui/material/TextField';
+import { useTranslation } from 'react-i18next';
+import styled from 'styled-components';
+import { CustomModal } from '../../../../../components/UI/Modal/Modal';
+import { formatCurrency, updateObject } from '../../../../../shared/utility';
 import CartItem from './CartItem/CartItem';
 import SharedTableHead from './SharedTableHead/SharedTableHead';
-import Paper from '@mui/material/Paper';
-import Avatar from '@mui/material/Avatar';
-import PersonIcon from '@mui/icons-material/Person';
-import MoneyIcon from '@mui/icons-material/Money';
-import { formatCurrency, updateObject } from '../../../../../shared/utility';
 //import { CustomButton } from '../../../../../components/UI/Button/Button';
 import CloseIcon from '@mui/icons-material/Close';
+import InputAdornment from '@mui/material/InputAdornment';
+import axios from 'axios';
+import moment from 'moment';
 import { useCallback, useContext, useEffect, useReducer, useState } from 'react';
 import { connect } from 'react-redux';
-import { fetchEmployees, fetchProducts, fetchServices, fetchDeals } from '../../../../../store/actions/index';
-import InputAdornment from '@mui/material/InputAdornment';
-import ThemeContext from '../../../../../store/theme-context';
-import ValidationMessage from '../../../../../components/UI/ValidationMessage/ValidationMessage';
 import Loader from '../../../../../components/UI/Loader/Loader';
-import axios from 'axios';
-import v2 from '../../../../../utils/axios-instance'
-import v1 from '../../../../../utils/axios-instance-v1'
-import moment from 'moment'
+import ValidationMessage from '../../../../../components/UI/ValidationMessage/ValidationMessage';
+import { fetchDeals, fetchEmployees, fetchProducts, fetchServices } from '../../../../../store/actions/index';
+import ThemeContext from '../../../../../store/theme-context';
+import v2 from '../../../../../utils/axios-instance';
 
 const ClientDetails = styled.div`
     display: flex;
@@ -343,23 +342,21 @@ const EditModal = (props) => {
             }
         }
         const bookingDataEndpoint = `${v2.defaults.baseURL}/vendors/bookings/${id}?include[]=user&include[]=items`;
-        const generalSettingsEndpoint = `${v1.defaults.baseURL}/vendors/settings/company`;
 
         const getUserData = axios.get(bookingDataEndpoint, headers);
-        const getGeneralSettingsData = axios.get(generalSettingsEndpoint, headers);
 
         let bookingDataServices = [];
         let bookingDataProducts = [];
         let bookingDataDeals = [];
 
-        axios.all([getUserData, getGeneralSettingsData])
+        axios.all([getUserData])
             .then(axios.spread((...responses) => {
                 setBookingData(responses[0].data);
                 setBookingStatus(responses[0].data.status);
                 setDateTime(moment.utc(responses[0].data.date_time));
                 setPaymentStatus(responses[0].data.payment_status);
                 setPaymentGateway(responses[0].data.payment_gateway);
-                setHasVat(responses[1].data.has_vat);
+                setHasVat(responses[0].data.has_vat);
                 const items = responses[0].data.items;
                 items.forEach(item => {
                     if (item.type === 'service') {
