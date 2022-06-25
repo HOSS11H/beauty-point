@@ -1,4 +1,4 @@
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Grid } from '@mui/material';
+import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Grid, Button } from '@mui/material';
 import moment from 'moment';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -11,6 +11,25 @@ const DisabledRow = styled(TableRow)`
     &.MuiTableRow-root {
         & .MuiTableCell-root {
             color: red;
+        }
+    }
+`
+const PriceCalculation = styled.div`
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    &:last-child{
+        padding-bottom:0;
+    }
+    p {
+        font-size: 20px;
+        line-height:1.5;
+        text-transform: uppercase;
+        font-weight: 600;
+        color: ${({ theme }) => theme.palette.text.primary};
+        margin-right: 20px;
+        &:last-child {
+            margin-right: 0;
         }
     }
 `
@@ -163,6 +182,54 @@ const BookingsReport = props => {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <TableContainer component={Paper} sx={{ mb: 3 }}>
+                    <Typography sx={{ p: 3 }} variant="h6" gutterBottom component="div">
+                        {t('Commissions')}
+                    </Typography>
+                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell >{t('Type')}</TableCell>
+                                <TableCell >{t('Number')}</TableCell>
+                                <TableCell >{t('amount')}</TableCell>
+                                <TableCell >{t('percentage %')}</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            <TableRow>
+                                <TableCell >{t('Customers App')}</TableCell>
+                                <TableCell >{data.external[1].total_count}</TableCell>
+                                <TableCell >{formatCurrency(data.external[1].total)}</TableCell>
+                                <TableCell >{data.external[0].commission} %</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell >{t('Website Bookings')}</TableCell>
+                                <TableCell >{data.external[1].total_count}</TableCell>
+                                <TableCell >{formatCurrency(data.external[1].total)}</TableCell>
+                                <TableCell >{data.external[0].commission} %</TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                <Grid sx={{ mt: 3 }} container spacing={3}>
+                    <Grid item xs={12} md={6}>
+                        <PriceCalculation>
+                            <p>{t('total bookings')}</p>
+                            <p>{28}</p>
+                        </PriceCalculation>
+                        <PriceCalculation>
+                            <p>{t('commission')}</p>
+                            <p>{9} %</p>
+                        </PriceCalculation>
+                        <PriceCalculation>
+                            <p>{t('total amount')}</p>
+                            <p>{formatCurrency(9125)}</p>
+                        </PriceCalculation>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Button variant='contained' color="secondary">{t('request / purchase')}</Button>
+                    </Grid>
+                </Grid>
             </Fragment>
         )
     }
