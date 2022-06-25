@@ -104,15 +104,15 @@ const CommissionsReport = props => {
                     <Grid item xs={12} md={6}>
                         <PriceCalculation>
                             <p>{t('total bookings')}</p>
-                            <p>{data.total.total_count}</p>
+                            <p>{28}</p>
                         </PriceCalculation>
                         <PriceCalculation>
                             <p>{t('commission')}</p>
-                            <p>{data.total.commission} %</p>
+                            <p>{9} %</p>
                         </PriceCalculation>
                         <PriceCalculation>
                             <p>{t('total amount')}</p>
-                            <p>{formatCurrency(data.total.total)}</p>
+                            <p>{formatCurrency(9125)}</p>
                         </PriceCalculation>
                     </Grid>
                     <Grid item xs={12}>
