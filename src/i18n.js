@@ -641,6 +641,16 @@ const resources = {
             'Commissions': 'العمولات',
             'request / purchase': 'طلب / دفع',
             'External Bookings': 'الحجوزات الخارجية',
+            'Employees Report': 'تقرير بيانات الموظفين',
+            'Time from': 'الوقت من',
+            'Time to': 'الوقت الي',
+            'Time ': 'الوقت ',
+            'Date ': 'التاريخ ',
+            ' From: ': ' من: ',
+            ' - To: ': ' - الي: ',
+            'services number': 'عدد الخدمات',
+            'total services': 'مجموع الخدمات',
+            'employee percentage': 'نسبة الموظف',
         }
     }
 };
