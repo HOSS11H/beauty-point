@@ -51,6 +51,9 @@ const Notification = () => {
         if (notification?.title) {
             notify()
         }
+        return () => {
+            setNotification({ title: '', body: '' })
+        }
     }, [notification, notify])
 
     onMessageListener()
