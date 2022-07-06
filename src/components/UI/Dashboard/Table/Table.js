@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 
 export const TableHeading = styled.p`
     font-size: 14px;
@@ -50,6 +50,10 @@ export const TableData = styled.p`
     font-weight: 500;
     color: ${({ theme }) => theme.palette.text.disabled};
     margin-bottom: 0px;
+    ${({ $hasIcon }) => $hasIcon && css`
+        display: flex;
+        align-items: center;
+    `}
 `
 export const TableEmployees = styled.ul`
     margin: 0;

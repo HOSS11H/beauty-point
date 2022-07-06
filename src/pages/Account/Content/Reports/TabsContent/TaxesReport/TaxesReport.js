@@ -143,7 +143,7 @@ const TaxesReport = props => {
                 <CustomCard ref={reportRef} >
                     <CardHead>
                         <h4>{userData.user.name}</h4>
-                        <h3>{t('Employees Report')}</h3>
+                        <h3>{t('Taxes Report')}</h3>
                         <h4>{userData.user.company.companyName}</h4>
                     </CardHead>
                     <CardDate>

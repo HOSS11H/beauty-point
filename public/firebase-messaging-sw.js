@@ -4,13 +4,13 @@ importScripts('https://www.gstatic.com/firebasejs/8.2.0/firebase-messaging.js');
 
 // Initialize the Firebase app in the service worker by passing the generated config
 const firebaseConfig = {
-    apiKey: "AIzaSyCA4cA65cm_yFgy59avVpMpSf9BH9gpALM",
-    authDomain: "beauty-notifications.firebaseapp.com",
-    projectId: "beauty-notifications",
-    storageBucket: "beauty-notifications.appspot.com",
-    messagingSenderId: "409127048244",
-    appId: "1:409127048244:web:db2491cfc7807b2c4f2661",
-    measurementId: "G-KXMXTJSYNC"
+    apiKey: "AIzaSyDjpCr5-dIX-vU4BqE2vkk_MWlMgPuLQ0U",
+    authDomain: "beauty-point-d2edc.firebaseapp.com",
+    projectId: "beauty-point-d2edc",
+    storageBucket: "beauty-point-d2edc.appspot.com",
+    messagingSenderId: "994870938989",
+    appId: "1:994870938989:web:0b05605f07bf4981661e64",
+    measurementId: "G-PLDYRB39MM"
 };
 
 firebase.initializeApp(firebaseConfig);

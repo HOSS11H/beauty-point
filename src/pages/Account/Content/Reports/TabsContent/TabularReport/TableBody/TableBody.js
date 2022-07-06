@@ -7,6 +7,7 @@ import { TableData } from '../../../../../../../components/UI/Dashboard/Table/Ta
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PendingIcon from '@mui/icons-material/Pending';
+import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
@@ -131,7 +132,7 @@ const EnhancedTableBody = props => {
                             <TableStatus className={row.booking_status}>{t(row.booking_status)}</TableStatus>
                         </TableCell>
                         <TableCell align="center">
-                            <TableData>{row.tax}</TableData>
+                            <TableData $hasIcon>{row.payment_status === 'refunded' &&<KeyboardReturnIcon sx={{ mr: 1, color: '#f00' }} />}{row.tax}</TableData>
                         </TableCell>
                         <TableCell align="center">
                             <TableData>{t(row.payment_gateway)}</TableData>

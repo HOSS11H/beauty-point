@@ -63,7 +63,7 @@ const EmployeesReport = props => {
             date_to: to,
             time_from: timeFrom,
             time_to: timeTo,
-            page: page,
+            page: page + 1,
             per_page: perPage,
         }
 

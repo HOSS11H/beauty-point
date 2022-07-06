@@ -328,6 +328,7 @@ const SearchFilters = (props) => {
                         >
                             <MenuItem value='completed'>{t('completed')}</MenuItem>
                             <MenuItem value='pending'>{t('pending')}</MenuItem>
+                            <MenuItem value='refunded'>{t('refunded')}</MenuItem>
                         </Select>
                     </FormControl>
                 </Grid>

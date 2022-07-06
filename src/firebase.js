@@ -8,13 +8,13 @@ import { getMessaging, getToken, onMessage } from "firebase/messaging";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyCA4cA65cm_yFgy59avVpMpSf9BH9gpALM",
-    authDomain: "beauty-notifications.firebaseapp.com",
-    projectId: "beauty-notifications",
-    storageBucket: "beauty-notifications.appspot.com",
-    messagingSenderId: "409127048244",
-    appId: "1:409127048244:web:db2491cfc7807b2c4f2661",
-    measurementId: "G-KXMXTJSYNC"
+    apiKey: "AIzaSyDjpCr5-dIX-vU4BqE2vkk_MWlMgPuLQ0U",
+    authDomain: "beauty-point-d2edc.firebaseapp.com",
+    projectId: "beauty-point-d2edc",
+    storageBucket: "beauty-point-d2edc.appspot.com",
+    messagingSenderId: "994870938989",
+    appId: "1:994870938989:web:0b05605f07bf4981661e64",
+    measurementId: "G-PLDYRB39MM"
 
 };
 
@@ -23,7 +23,7 @@ initializeApp(firebaseConfig);
 const messaging = getMessaging();
 
 export const getNotificationToken = (setTokenFound) => {
-    return getToken(messaging, { vapidKey: 'BK1293IpBkw_Xvsx-cD6DmK7TsOIIaevZbQrfmAmzLw5sTHnSe3Bq9W9exYiefQCoEOxmRaDkxeVrmDGIU6LSnc' })
+    return getToken(messaging, { vapidKey: 'BErUUCNfX5otVZgUTD1Fi5fs9CqPgu9rZpZl3VNJu3hyi-HpkEglYiIE38cqx3wzpfx5wn6R3EwvTbAqicmuUlI' })
         .then((currentToken) => {
             if (currentToken) {
                 //console.log('current token for client: ', currentToken);

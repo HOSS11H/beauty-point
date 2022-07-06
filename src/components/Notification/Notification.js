@@ -48,11 +48,8 @@ const Notification = () => {
     }), [handleNotifaicationClick, notification]);
 
     useEffect(() => {
-        if (notification?.title) {
+        if (notification?.title && notification?.title !== '' ) {
             notify()
-        }
-        return () => {
-            setNotification({ title: '', body: '' })
         }
     }, [notification, notify])
 
