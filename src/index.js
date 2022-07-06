@@ -1,33 +1,36 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
-import reportWebVitals from './reportWebVitals'
+import reportWebVitals from './reportWebVitals';
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
-import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
+
+
 import { Provider } from 'react-redux';
+import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
 
-import bookingsReducer from './store/reducers/bookings'
-import servicesReducer from './store/reducers/services'
-import productsReducer from './store/reducers/products'
-import dealsReducer from './store/reducers/deals'
-import locationsReducer from './store/reducers/locations'
-import categoriesReducer from './store/reducers/categories'
-import employeesReducer from './store/reducers/employees'
-import couponsReducer from './store/reducers/coupons'
-import customersReducer from './store/reducers/customers'
-import reportsReducer from './store/reducers/reports'
-import expensesReducer from './store/reducers/expenses'
-import unitsReducer from './store/reducers/units'
-import permissionsReducer from './store/reducers/permissions'
+import bookingsReducer from './store/reducers/bookings';
+import categoriesReducer from './store/reducers/categories';
+import couponsReducer from './store/reducers/coupons';
+import customersReducer from './store/reducers/customers';
+import dealsReducer from './store/reducers/deals';
+import employeesReducer from './store/reducers/employees';
+import expensesReducer from './store/reducers/expenses';
+import locationsReducer from './store/reducers/locations';
+import permissionsReducer from './store/reducers/permissions';
+import productsReducer from './store/reducers/products';
+import reportsReducer from './store/reducers/reports';
+import servicesReducer from './store/reducers/services';
+import unitsReducer from './store/reducers/units';
 
 import { BrowserRouter } from 'react-router-dom';
 
 import './i18n';
 
+import { AuthContextProvider } from './store/auth-context';
 import { ThemeContextProvider } from './store/theme-context';
 import GlobalStyle from './styles/globalStyles';
-import { AuthContextProvider } from './store/auth-context';
 
 import * as Sentry from "@sentry/react";
 import { BrowserTracing } from "@sentry/tracing";
@@ -92,6 +95,11 @@ const app = (
 
 ReactDOM.render(app, document.getElementById('root')
 );
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://cra.link/PWA
+serviceWorkerRegistration.unregister();
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(//console.log))

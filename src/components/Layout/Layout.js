@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { StyledToastifyContainer } from '../UI/StyledToastContainer/StyledToastContainer.styled';
 
 import "react-toastify/dist/ReactToastify.css";
+import Notification from '../Notification/Notification';
 
 const Wrapper = styled.div`
     max-width: 100%;
@@ -28,6 +29,7 @@ const Layout = props => {
                     progress={undefined}
                     draggable={false}
                 />
+                <Notification />
                 {props.children}
             </Wrapper>
         </Main>

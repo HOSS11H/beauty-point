@@ -10,6 +10,7 @@ import Layout from './components/Layout/Layout';
 import Loader from './components/UI/Loader/Loader';
 import { connect } from 'react-redux';
 import { PermissibleRender } from '@brainhubeu/react-permissible';
+import { getNotificationToken } from './firebase';
 
 const Auth = React.lazy(() => import('./pages/Auth/Auth'));
 const RegisterArtist = React.lazy(() => import('./pages/RegisterArtist/RegisterArtist'));
@@ -180,6 +181,8 @@ function App(props) {
     const { roleName } = authCtx;
 
     const { isLoggedIn } = authCtx;
+
+    getNotificationToken();
 
     let routes = (
         <Routes>

@@ -35,6 +35,7 @@ const Account = (props) => {
 	const authCtx = useContext(AuthContext)
     const { roleId } = authCtx;
 
+
 	const [searchParams] = useSearchParams();
     const hasWelcomeModal = searchParams.get('welcome') === 'true';
 	const [welcomeModal, setWelcomeModal] = useState(hasWelcomeModal);

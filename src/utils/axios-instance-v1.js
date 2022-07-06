@@ -13,4 +13,12 @@ instance.interceptors.request.use(function (config) {
     //console.log(error.message);
 });
 
+instance.interceptors.response.use(undefined
+    , function (error) {
+        if (error.response.status === 401) {
+            localStorage.removeItem('token');
+            window.location.href = '/';
+        }
+    });
+
 export default instance;

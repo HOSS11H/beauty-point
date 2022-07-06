@@ -3,6 +3,7 @@ import axios from 'axios';
 const instance = axios.create({
     baseURL: 'https://test.beautypoint.sa/api/v2',
 });
+
 instance.interceptors.request.use(function (config) {
     let token =  localStorage.getItem('token');
     config.headers['Accept'] = 'application/json';
@@ -12,7 +13,15 @@ instance.interceptors.request.use(function (config) {
 }, function (error) {
     if (error.response.status === 401) {
         localStorage.removeItem('token');
-        window.location.href = '/';
+        window.location.href = '/auth';
+    }
+});
+
+instance.interceptors.response.use(undefined
+, function (error) {
+    if (error.response.status === 401) {
+        localStorage.removeItem('token');
+        window.location.href = '/auth';
     }
 });
 

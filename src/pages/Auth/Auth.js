@@ -161,6 +161,7 @@ const Auth = props => {
     const submitHandler = () => {
         let url;
         let authData;
+        const fcmToken = localStorage.getItem('fcm_token') || 'asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231'
         if (isLogin) {
             url = `/auth/sign-in`;
             const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -168,14 +169,14 @@ const Auth = props => {
                 authData = {
                     email: loginData.email.value,
                     password: loginData.password.value,
-                    fcm_token: 'asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231',
+                    fcm_token: fcmToken,
                     device_name: 'Y621312',
                 }
             } else {
                 authData = {
                     mobile: loginData.email.value,
                     password: loginData.password.value,
-                    fcm_token: 'asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231',
+                    fcm_token: fcmToken,
                     device_name: 'Y621312',
                 }
             }
