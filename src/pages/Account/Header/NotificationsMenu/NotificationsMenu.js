@@ -74,7 +74,7 @@ const NotificationsMenu = props => {
         if (node) ovserver.current.observe(node)
     }, [lastPage, loading])
 
-    useEffect(() => {
+    const fetchNotifications = useCallback(() => {
         setLoading(true)
         axios.get(`/notifications?page=${page}&per_page=5`)
             .then(res => {
@@ -94,6 +94,10 @@ const NotificationsMenu = props => {
                 //console.log(err);
             })
     }, [page])
+
+    useEffect(() => {
+        fetchNotifications()
+    }, [fetchNotifications, page])
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
