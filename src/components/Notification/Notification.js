@@ -1,8 +1,10 @@
 import { Typography } from '@mui/material';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import styled from 'styled-components';
 import { onMessageListener } from '../../firebase';
+import AuthContext from '../../store/auth-context';
+import {useNavigate} from 'react-router-dom';
 
 const NotificationTitle = styled(Typography)`
     font-size: 18px;
@@ -26,26 +28,19 @@ function ToastDisplay({ notification, clickHandler }) {
 
 const Notification = () => {
 
-    //const authCtx = useContext(AuthContext)
+    const authCtx = useContext(AuthContext)
 
-    // const navigate = useNavigate()
+    const navigate = useNavigate()
 
     const [notification, setNotification] = useState({ title: '', body: '' });
 
 
     const handleNotifaicationClick = useCallback((id, type) => {
-        return;
         // request to make the notification status to be read
-        /* if( authCtx.isLoggedIn ) {
-            navigate(`/account/dashboard/notifications/${notification.id}`)
-            axios.post(`/notifications/${notification.id}/read`)
-                .then(res => {
-                    //console.log(res);
-                }).catch(err => {
-                    //console.log(err);
-                })
-        } */
-    }, [])
+        if( authCtx.isLoggedIn ) {
+            navigate(`/account/bookings`)
+        }
+    }, [authCtx.isLoggedIn, navigate])
 
     const notify = useCallback(() => toast(<ToastDisplay clickHandler={handleNotifaicationClick} notification={notification} />, {
         toastId: notification.id,
