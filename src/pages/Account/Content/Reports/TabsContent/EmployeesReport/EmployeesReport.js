@@ -10,6 +10,7 @@ import ThemeContext from "../../../../../../store/theme-context";
 import v1 from "../../../../../../utils/axios-instance-v1";
 import EmployeeTable from "./EmployeesTable/EmployeesTable";
 import SearchFilters from "./SearchFilters/SearchFilters";
+import { toast } from 'react-toastify';
 
 const TablePaginationWrapper = styled.div`
     display: flex;
@@ -19,34 +20,6 @@ const TablePaginationWrapper = styled.div`
     margin-bottom: 40px; 
 `
 
-const initialData = {
-    data :  [
-        {
-            name: 'sdsdsd',
-            services_number: 4,
-            total_services: 15,
-            employee_amount: 150,
-            employee_percentage: 5
-        },
-        {
-            name: 'sdsdsd',
-            services_number: 4,
-            total_services: 15,
-            employee_amount: 150,
-            employee_percentage: 5
-        },
-        {
-            name: 'sdsdsd',
-            services_number: 4,
-            total_services: 15,
-            employee_amount: 150,
-            employee_percentage: 5
-        },
-    ],
-    meta: {
-        
-    }
-} 
 
 const EmployeesReport = props => {
 
@@ -55,9 +28,8 @@ const EmployeesReport = props => {
     const themeCtx = useContext(ThemeContext);
     const { lang } = themeCtx;
 
-    const [EmployeeTableData, setEmployeeTableData] = useState(initialData)
-    const [total, setTotal] = useState(0)
-    const [commission, setCommission] = useState(0)
+    const [ userData, setUserData ] = useState(null)
+    const [EmployeesTableData, setEmployeesTableData] = useState(null)
 
     const [pages, setPages] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -87,13 +59,12 @@ const EmployeesReport = props => {
         setLoading(true);
 
         const employeeTableParams = {
-            from,
-            to,
-            timeFrom,
-            timeTo,
+            date_from: from,
+            date_to: to,
+            time_from: timeFrom,
+            time_to: timeTo,
             page: page,
             per_page: perPage,
-            employeeId: '1'
         }
 
         const headers = {
@@ -103,19 +74,21 @@ const EmployeesReport = props => {
             'Accept-Language': lang
         }
 
-        const employeeTableEndPoint = `${v1.defaults.baseURL}/vendors/reports/employee-share`;
+        const employeeTableEndPoint = `${v1.defaults.baseURL}/vendors/reports/employees-details`;
+        const userDataEndpoint = `${v1.defaults.baseURL}/auth/me`;
 
         const getEmployeeTableData = axios.get(employeeTableEndPoint, { params: employeeTableParams, headers: headers });
+        const getUserData = axios.get(userDataEndpoint, {headers: headers});
 
-        axios.all([getEmployeeTableData])
+        axios.all([getEmployeeTableData, getUserData])
             .then(axios.spread((...responses) => {
                 setLoading(false);
-                //setEmployeeTableData(responses[0].data.data);
-                setTotal(responses[0].data.total);
-                setCommission(responses[0].data.commission);
+                setEmployeesTableData(responses[0].data);
+                setUserData(responses[1].data);
             }))
             .catch(error => {
                 setLoading(false);
+                toast.error('Error Getting Data.')
             });
     }, [lang, pages, rowsPerPage])
 
@@ -143,7 +116,7 @@ const EmployeesReport = props => {
         content = <Loader height='70vh' />
     }
 
-    if (EmployeeTableData && !loading) {
+    if (EmployeesTableData && userData && !loading) {
         content = (
             <Fragment>
                 <TablePaginationWrapper>
@@ -167,8 +140,8 @@ const EmployeesReport = props => {
                         <TablePaginationActions
                             sx={{ width: '100%' }}
                             component="div"
-                            count={EmployeeTableData.data.length}
-                            total={EmployeeTableData.meta.total}
+                            count={EmployeesTableData.data.length}
+                            total={EmployeesTableData.meta.total}
                             rowsPerPage={+rowsPerPage}
                             page={pages}
                             onPageChange={handleChangePage}
@@ -176,7 +149,7 @@ const EmployeesReport = props => {
                         />
                     )}
                 </TablePaginationWrapper>
-                <EmployeeTable data={EmployeeTableData.data} 
+                <EmployeeTable data={EmployeesTableData.data} userData={userData}
                     dateFrom={dateFrom} dateTo={dateTo} timeFrom={timeFrom} timeTo={timeTo} 
                 />
             </Fragment>

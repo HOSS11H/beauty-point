@@ -82,16 +82,21 @@ const CardDate = styled.div`
 
 const EmployeesTable = props => {
 
-    const { data, dateFrom, dateTo, timeFrom, timeTo } = props;
+    const { data, dateFrom, dateTo, timeFrom, timeTo, userData } = props;
+
 
     const { t } = useTranslation()
+
+    const allBookingsAmount = data.reduce((acc, curr) => {
+        return acc + curr.booking_items_sum_amount
+    }, 0)
 
     return (
         <CustomCard>
             <CardHead>
-                <h4>خلود</h4>
+                <h4>{userData.user.name}</h4>
                 <h3>{t('Employees Report')}</h3>
-                <h4>مارش صالون</h4>
+                <h4>{userData.user.company.companyName}</h4>
             </CardHead>
             <CardDate>
                 <Grid container spacing={2}>
@@ -108,9 +113,9 @@ const EmployeesTable = props => {
                         <p>
                             <span>{t('Time ')}</span>
                             <span>{t(' From: ')}</span>
-                            <span>{timeFrom.format('hh:MM A')}</span>
+                            <span>{timeFrom.format('hh:mm A')}</span>
                             <span>{t(' - To: ')}</span>
-                            <span>{timeTo.format('hh:MM A')}</span>
+                            <span>{timeTo.format('hh:mm A')}</span>
                         </p>
                     </Grid>
                 </Grid>
@@ -148,13 +153,13 @@ const EmployeesTable = props => {
                                     </TableData>
                                 </TableCell>
                                 <TableCell align="center">
-                                    <TableData>{row.services_number}</TableData>
+                                    <TableData>{row.booking_items_count}</TableData>
                                 </TableCell>
                                 <TableCell align="center">
-                                    <TableData>{row.total_services}</TableData>
+                                    <TableData>{formatCurrency(row.booking_items_sum_amount)}</TableData>
                                 </TableCell>
                                 <TableCell align="center">
-                                    <TableData>{`${formatCurrency(row.employee_amount)} (${row.employee_percentage} %)`}</TableData>
+                                    <TableData>{`${formatCurrency( (row.booking_items_sum_amount * (row.commission / 100)).toFixed(2) )  } (${row.commission} %)`}</TableData>
                                 </TableCell>
                             </TableRow>
                         );
@@ -165,26 +170,26 @@ const EmployeesTable = props => {
                         </TableCell>
                         <TableCell align="center" sx={{ fontWeight: 700 }}>{
                             data.reduce((acc, curr) => {
-                                return acc + curr.services_number
+                                return acc + curr.booking_items_count
                             }, 0)
                         }</TableCell>
                         <TableCell align="center" sx={{ fontWeight: 700 }}>{
-                            data.reduce((acc, curr) => {
-                                return acc + curr.total_services
-                            }, 0)
+                            formatCurrency(data.reduce((acc, curr) => {
+                                return acc + curr.booking_items_sum_amount
+                            }, 0))
                         }</TableCell>
                         <TableCell align="center" sx={{ fontWeight: 700 }}>{
-                            data.reduce((acc, curr) => {
-                                return acc + curr.employee_amount
-                            }, 0)
+                            formatCurrency(data.reduce((acc, curr) => {
+                                return acc + (curr.booking_items_sum_amount *  (curr.commission / 100 )  )
+                            }, 0).toFixed(2))
                         }</TableCell>
                     </TableRow>
                 </TableBody>
             </Table>
             <EmployeeInfo>
                 <p>
-                    خلود
-                    <span>(  150 )</span>
+                    {userData.user.name}
+                    <span>{`( ${  formatCurrency((( userData.user.commission / 100 ) * allBookingsAmount).toFixed(2))  } )`}</span>
                 </p>
             </EmployeeInfo>
         </CustomCard>
