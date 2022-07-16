@@ -64,15 +64,6 @@ const BookingCustomer = styled.div`
     }
 `
 
-const Loader = styled(Card)`
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    min-height: 100vh;
-    flex-grow: 1;
-`
-
 function renderEventContent(eventInfo) {
     return (
         <BookingCustomer className={eventInfo.event.extendedProps.status}>
