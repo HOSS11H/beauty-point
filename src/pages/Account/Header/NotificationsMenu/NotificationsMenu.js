@@ -13,15 +13,21 @@ import styled, { css } from 'styled-components';
 import Loader from '../../../../components/UI/Loader/Loader';
 import ThemeContext from '../../../../store/theme-context';
 import axios from '../../../../utils/axios-instance';
+import DOMPurify from "dompurify";
+
 
 const CustomList = styled(List)`
     &.MuiList-root {
         padding-bottom: 52px;
-        min-width:200px;
-        @media screen and (min-height: 900px) {
+        width:280px;
+        @media screen and (min-width: 900px) {
             max-height: 50vh;
+            width:350px;
         }
-        @media screen and (max-height: 900px) {
+        @media (min-width: 600px) and (max-width: 900px) {
+            width:350px;
+        }
+        @media screen and (max-width: 900px) {
             max-height: 80vh;
         }
     }
@@ -35,6 +41,13 @@ const CustomListItemButton = styled(ListItemButton)`
             text-decoration: none;
             background-color: ${({ theme }) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0,0,0,0.04)'} ;
         `}
+        & .MuiListItemText-root {
+            & .MuiListItemText-secondary {
+                a {
+                    color: ${({ theme }) => theme.vars.primary}
+                }
+            }
+        }
     }
 `
 
@@ -145,11 +158,12 @@ const NotificationsMenu = props => {
         popoverContent = (
             <Fragment>
                 {notifications.map((notification, index) => {
+                    const mySafeHTML = DOMPurify.sanitize(notification.message);
                     if (notifications.length === (index + 1)) {
                         return (
-                            <ListItem disablePadding ref={lastElementRef} key={notification.id} >
+                            <ListItem disablePadding ref={lastElementRef} key={index} >
                                 <CustomListItemButton $unread={!notification.read_at} onClick={() => handleNotifaicationClick(notification.id, notification.type)} >
-                                    <ListItemText primary={notification.title} secondary={notification.message} />
+                                    <ListItemText primary={notification.title} secondary={<span dangerouslySetInnerHTML={{ __html: mySafeHTML }} /> } />
                                     <Typography variant="caption" display="block" sx={{ textAlign: 'left', alignSelf: 'flex-end' }} >
                                         <bdi>{moment(notification.created_at).fromNow()}</bdi>
                                     </Typography>
@@ -158,10 +172,10 @@ const NotificationsMenu = props => {
                         )
                     } else {
                         return (
-                            <Fragment>
-                                <ListItem disablePadding key={notification.id} >
+                            <Fragment key={index} >
+                                <ListItem disablePadding >
                                     <CustomListItemButton $unread={!notification.read_at} onClick={() => handleNotifaicationClick(notification.id, notification.type)} >
-                                        <ListItemText primary={notification.title} secondary={notification.message} />
+                                        <ListItemText primary={notification.title} secondary={<span dangerouslySetInnerHTML={{ __html: mySafeHTML }} /> } />
                                         <Typography variant="caption" display="block" sx={{ textAlign: 'left', alignSelf: 'flex-end' }} >
                                             <bdi>{moment(notification.created_at).fromNow()}</bdi>
                                         </Typography>

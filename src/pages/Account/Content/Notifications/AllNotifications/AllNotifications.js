@@ -8,6 +8,7 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import styled, { css } from 'styled-components';
 import Loader from '../../../../../components/UI/Loader/Loader';
 import axios from '../../../../../utils/axios-instance';
+import DOMPurify from "dompurify";
 
 const CustomCard = styled(Card)`
     &.MuiPaper-root {
@@ -19,6 +20,13 @@ const CustomCard = styled(Card)`
             text-decoration: none;
             background-color: ${({ theme }) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0,0,0,0.04)'} ;
         `}
+        & .MuiListItemText-root {
+            & .MuiListItemText-secondary {
+                a {
+                    color: ${({ theme }) => theme.vars.primary}
+                }
+            }
+        }
     }
 `
 
@@ -101,11 +109,12 @@ const AllNotifications = props => {
         content = (
             <Fragment>
                 {notifications.map((notification, index) => {
+                    const mySafeHTML = DOMPurify.sanitize(notification.message);
                     if (notifications.length === (index + 1)) {
                         return (
                             <Grid item key={notification.id} xs={12} sm={6} md={4} >
                                 <CustomCard ref={lastElementRef} $unread={!notification.read_at} onClick={() => handleNotifaicationClick(notification.id, notification.type)} >
-                                    <ListItemText primary={notification.title} secondary={notification.message} />
+                                    <ListItemText primary={notification.title} secondary={<span dangerouslySetInnerHTML={{ __html: mySafeHTML }} /> } />
                                     <Typography variant="caption" display="block" sx={{ textAlign: 'left', alignSelf: 'flex-end' }} >
                                         <bdi>{moment(notification.created_at).fromNow()}</bdi>
                                     </Typography>
@@ -116,7 +125,7 @@ const AllNotifications = props => {
                         return (
                             <Grid item key={notification.id} xs={12} sm={6} md={4} >
                                 <CustomCard $unread={!notification.read_at} onClick={() => handleNotifaicationClick(notification.id, notification.type)} >
-                                    <ListItemText primary={notification.title} secondary={notification.message} />
+                                    <ListItemText primary={notification.title} secondary={<span dangerouslySetInnerHTML={{ __html: mySafeHTML }} />} />
                                     <Typography variant="caption" display="block" sx={{ textAlign: 'left', alignSelf: 'flex-end' }} >
                                         <bdi>{moment(notification.created_at).fromNow()}</bdi>
                                     </Typography>
