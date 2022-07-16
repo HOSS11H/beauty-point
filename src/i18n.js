@@ -651,6 +651,10 @@ const resources = {
             'services number': 'عدد الخدمات',
             'total services': 'مجموع الخدمات',
             'employee percentage': 'نسبة الموظف',
+            'Bookings Places': 'أماكن الحجوزات',
+            'in house':'في المنزل',
+            'in saloon':'في الصالون',
+            'in customer house':'في منزل العميل',
         }
     }
 };

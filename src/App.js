@@ -178,9 +178,7 @@ function App(props) {
 
     const authCtx = useContext(AuthContext);
 
-    const { roleName } = authCtx;
-
-    const { isLoggedIn } = authCtx;
+    const { roleName, isLoggedIn } = authCtx;
 
     getNotificationToken();
 

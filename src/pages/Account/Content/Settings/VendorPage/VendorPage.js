@@ -1,6 +1,6 @@
 import { Alert, Backdrop, Button, CircularProgress, Grid, Skeleton, Snackbar, TextField } from "@mui/material";
 import CssBaseline from '@mui/material/CssBaseline';
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { useTranslation } from 'react-i18next';
 import { useOutletContext } from "react-router-dom";
 import TagsInput from 'react-tagsinput';
@@ -14,10 +14,18 @@ import v1 from '../../../../../utils/axios-instance-v1';
 import RegisterMap from "./VendorMap/VendorMap";
 
 import 'react-tagsinput/react-tagsinput.css'
+import AuthContext from "../../../../../store/auth-context";
 
 export default function VendorPage(props) {
     const [formIsDirty, handleformIsDirty] = useOutletContext()
+
     const { t } = useTranslation()
+
+    const authCtx = useContext(AuthContext);
+
+    const { roleName } = authCtx;
+
+
     const [primary_contact, setPrimaryContact] = useState('');
     const [secondary_contact, setSecondaryContact] = useState('');
     const [address, setAddress] = useState('');
@@ -28,6 +36,9 @@ export default function VendorPage(props) {
     const [hasLounge, setHasLounge] = useState(false);
     const [hasCoffee, setHasCoffee] = useState(false);
     const [hasMasjid, setHasMasjid] = useState(false);
+    const [inHouse, setInHouse] = useState(false);
+    const [inSaloon, setInSaloon] = useState(false);
+    const [inCustomerHouse, setInCustomerHouse] = useState(false);
     const [tags, setTags] = useState([])
     const [seo_keywords, setKeywords] = useState('');
     const [seo_description, setSeoDescription] = useState('');
@@ -53,6 +64,9 @@ export default function VendorPage(props) {
                 setHasLounge(res.data.has_lounge)
                 setHasCoffee(res.data.has_coffee)
                 setHasMasjid(res.data.has_masjid)
+                setInHouse(res.data.in_house)
+                setInSaloon(res.data.in_saloon)
+                setInCustomerHouse(res.data.in_customer_house)
                 setSeoDescription(res.data.seo_description ?? '')
                 setShow(false)
             })
@@ -78,7 +92,10 @@ export default function VendorPage(props) {
             has_tv: hasTv,
             has_lounge: hasLounge,
             has_coffee: hasCoffee,
-            has_masjid: hasMasjid
+            has_masjid: hasMasjid,
+            in_house: inHouse,
+            in_saloon: inSaloon,
+            in_customer_house: inCustomerHouse,
         }).then(res => {
             setSuccess(true)
             setOpen(false)
@@ -146,6 +163,19 @@ export default function VendorPage(props) {
         setHasMasjid(e.target.checked)
     }
 
+    const inHouseChangeHandler = (e) => {
+        handleformIsDirty(true)
+        setInHouse(e.target.checked)
+    }
+    const inSaloonChangeHandler = (e) => {
+        handleformIsDirty(true)
+        setInSaloon(e.target.checked)
+    }
+    const inCustomerHouseChangeHandler = (e) => {
+        handleformIsDirty(true)
+        setInCustomerHouse(e.target.checked)
+    }
+
     return (
         <>
             {
@@ -167,7 +197,7 @@ export default function VendorPage(props) {
                             <Grid item xs={12} md={6}>
                                 <TextField value={description} onChange={descriptionChangeHandler} multiline minRows={4} fullWidth label={t('Description')} variant="outlined" />
                             </Grid>
-                            <Grid item xs={12}>
+                            <Grid item xs={12} md={6}>
                                 <FormControl component="fieldset" variant="standard">
                                     <FormLabel sx={{ mb: 2 }} component="legend">{t('facilities')}</FormLabel>
                                     <FormGroup>
@@ -210,6 +240,33 @@ export default function VendorPage(props) {
                                     </FormGroup>
                                 </FormControl>
                             </Grid>
+                            {roleName === 'artist' && (
+                                <Grid item xs={12} md={6} >
+                                    <FormControl component="fieldset" variant="standard">
+                                        <FormLabel sx={{ mb: 2 }} component="legend">{t('Bookings Places')}</FormLabel>
+                                        <FormGroup>
+                                            <FormControlLabel
+                                                control={
+                                                    <Switch checked={inHouse} onChange={inHouseChangeHandler} name='wifi' />
+                                                }
+                                                label={t('in house')}
+                                            />
+                                            <FormControlLabel
+                                                control={
+                                                    <Switch checked={inSaloon} onChange={inSaloonChangeHandler} name='coffee' />
+                                                }
+                                                label={t('in saloon')}
+                                            />
+                                            <FormControlLabel
+                                                control={
+                                                    <Switch checked={inCustomerHouse} onChange={inCustomerHouseChangeHandler} name='lounge' />
+                                                }
+                                                label={t('in customer house')}
+                                            />
+                                        </FormGroup>
+                                    </FormControl>
+                                </Grid>
+                            )}
                             <Grid item xs={12}>
                                 <TagsInput value={tags} onChange={handleTagChange} inputProps={{ placeholder: t("Keywords") }} />
                             </Grid>
