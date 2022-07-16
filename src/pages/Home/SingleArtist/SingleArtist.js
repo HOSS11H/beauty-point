@@ -184,66 +184,12 @@ const SingleArtist = props => {
                 <Cart artistData={artist} show={showModal} onClose={closeShowModalHandler} />
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                        <Tab label={t('services')} {...a11yProps(0)} />
-                        <Tab label={t('deals')} {...a11yProps(1)} />
-                        <Tab label={t('overview')} {...a11yProps(2)} />
+                        <Tab label={t('overview')} {...a11yProps(0)} />
+                        <Tab label={t('services')} {...a11yProps(1)} />
+                        <Tab label={t('deals')} {...a11yProps(2)} />
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
-                    {
-                        services.data.length > 0 && (
-                            <>
-                                <Grid container spacing={2}>
-                                    {services.data.map(service => {
-                                        return (
-                                            <Grid item xs={12} sm={6} md={4} key={service.id}>
-                                                <ServicePanel service={service} path='../services' />
-                                            </Grid>
-                                        )
-                                    })
-                                    }
-                                </Grid>
-                                <TablePaginationActions
-                                    component="div"
-                                    count={services.data.length}
-                                    total={services.meta ? services.meta.total : null}
-                                    rowsPerPage={dealsRowsPerPage}
-                                    page={servicesPage}
-                                    onPageChange={handleServiceChangePage}
-                                    loading={loadingServices}
-                                />
-                            </>
-                        )
-                    }
-                </TabPanel>
-                <TabPanel value={value} index={1}>
-                    {
-                        deals.data.length > 0 && (
-                            <>
-                                <Grid container spacing={2}>
-                                    {deals.data.map(deal => {
-                                        return (
-                                            <Grid item xs={12} sm={6} md={4} key={deal.id}>
-                                                <DealPanel deal={deal} path='../deals' />
-                                            </Grid>
-                                        )
-                                    })
-                                    }
-                                </Grid>
-                                <TablePaginationActions
-                                    component="div"
-                                    count={deals.data.length}
-                                    total={deals.meta ? deals.meta.total : null}
-                                    rowsPerPage={dealsRowsPerPage}
-                                    page={dealsPage}
-                                    onPageChange={handleDealChangePage}
-                                    loading={loadingDeals}
-                                />
-                            </>
-                        )
-                    }
-                </TabPanel>
-                <TabPanel value={value} index={2}>
                     <Grid container spacing={2}>
                         <Grid item xs={12} md={6}>
                             <Typography component="div" variant="h5" sx={{ marginBottom: '10px' }} >
@@ -285,6 +231,60 @@ const SingleArtist = props => {
                             <VendorMap marker={ { lat: +artist.vendor_page.latitude, lng: +artist.vendor_page.longitude } } />
                         </Grid>
                     </Grid>
+                </TabPanel>
+                <TabPanel value={value} index={1}>
+                    {
+                        services.data.length > 0 && (
+                            <>
+                                <Grid container spacing={2}>
+                                    {services.data.map(service => {
+                                        return (
+                                            <Grid item xs={12} sm={6} md={4} key={service.id}>
+                                                <ServicePanel service={service} path='../services' />
+                                            </Grid>
+                                        )
+                                    })
+                                    }
+                                </Grid>
+                                <TablePaginationActions
+                                    component="div"
+                                    count={services.data.length}
+                                    total={services.meta ? services.meta.total : null}
+                                    rowsPerPage={dealsRowsPerPage}
+                                    page={servicesPage}
+                                    onPageChange={handleServiceChangePage}
+                                    loading={loadingServices}
+                                />
+                            </>
+                        )
+                    }
+                </TabPanel>
+                <TabPanel value={value} index={2}>
+                    {
+                        deals.data.length > 0 && (
+                            <>
+                                <Grid container spacing={2}>
+                                    {deals.data.map(deal => {
+                                        return (
+                                            <Grid item xs={12} sm={6} md={4} key={deal.id}>
+                                                <DealPanel deal={deal} path='../deals' />
+                                            </Grid>
+                                        )
+                                    })
+                                    }
+                                </Grid>
+                                <TablePaginationActions
+                                    component="div"
+                                    count={deals.data.length}
+                                    total={deals.meta ? deals.meta.total : null}
+                                    rowsPerPage={dealsRowsPerPage}
+                                    page={dealsPage}
+                                    onPageChange={handleDealChangePage}
+                                    loading={loadingDeals}
+                                />
+                            </>
+                        )
+                    }
                 </TabPanel>
             </Box>
         )

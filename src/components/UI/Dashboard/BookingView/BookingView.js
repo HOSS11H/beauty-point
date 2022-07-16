@@ -12,6 +12,7 @@ import { useTranslation } from "react-i18next";
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import moment from 'moment';
 import AuthContext from '../../../../store/auth-context';
+import RoomIcon from '@mui/icons-material/Room';
 
 const CustomCardMui = styled(Card)`
     &.MuiPaper-root {
@@ -197,7 +198,7 @@ const BookingView = props => {
         content = (
             <CustomCardMui onClick={onClick} >
                 <BookingButton>
-                    <IconButton  size="medium" >
+                    <IconButton size="medium" >
                         <ArrowBackIosNewIcon />
                     </IconButton>
                 </BookingButton>
@@ -219,6 +220,11 @@ const BookingView = props => {
                         {email && <li><MailIcon sx={{ mr: 1 }} />{email}</li>}
                         {mobile && <li><PhoneAndroidIcon sx={{ mr: 1 }} />{mobile}</li>}
                         <li><AlternateEmailIcon sx={{ mr: 1 }} />{t(`via `)}{booking.source}</li>
+                        {booking.booking_place && <li><RoomIcon sx={{ mr: 1 }} />
+                            {booking.bookingPlace === 'in_house' && t('in house')}
+                            {booking.bookingPlace === 'in_saloon' && t('in saloon')}
+                            {booking.bookingPlace === 'in_customer_house' && t('in customer house')}
+                        </li>}
                     </ClientInfo>
                 </BookingContent>
             </CustomCardMui>
