@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import SendIcon from '@mui/icons-material/Send';
+import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 
 
 const ModuleChatWrapper = styled.div`
@@ -32,7 +32,7 @@ const ModuleChat = props => {
     return (
         <ModuleChatWrapper>
             <a href="https://tawk.to/chat/629cf1b2b0d10b6f3e75cc7f/1g6dn5e19" >
-                <SendIcon />
+                <ChatBubbleIcon />
             </a>
         </ModuleChatWrapper>
     )
