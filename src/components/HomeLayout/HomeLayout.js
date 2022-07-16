@@ -4,17 +4,20 @@ import MobileBar from '../Header/MobileBar/MobileBar';
 import Footer from '../Footer/Footer';
 import PageTitle from '../PageTitle/PageTitle';
 import { Fragment } from 'react';
-import ModuleWhatsapp from '../Header/Modules/ModuleWhatsapp/ModuleWhatsapp';
+import ModuleChat from '../Header/Modules/ModuleChat/ModuleChat';
 
 const HomeLayout = props => {
+
+    const { mainPage } = props;
+
     return (
         <Fragment>
             <Header />
             <MobileBar />
-            <PageTitle imgSrc={pageTitleImage}  />
+            {!mainPage &&  <PageTitle imgSrc={pageTitleImage}  />}
             { props.children }
             <Footer />
-            <ModuleWhatsapp />
+            <ModuleChat />
         </Fragment>
     )
 };

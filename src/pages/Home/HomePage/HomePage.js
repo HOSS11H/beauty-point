@@ -1,27 +1,22 @@
-import Header from "../../../components/Header/Header";
-import Hero from "./Hero/Hero";
+import HomeLayout from "../../../components/HomeLayout/HomeLayout";
+import Artists from "./Artists/Artists";
 import CategoriesSlider from "./CategoriesSlider/CategoriesSlider";
+import Deals from "./Deals/Deals";
+import Hero from "./Hero/Hero";
 import Salons from "./Salons/Salons";
 import Spotlights from "./Spotlights/Spotlights";
-import Deals from "./Deals/Deals";
-import Footer from "../../../components/Footer/Footer";
-import ModuleWhatsapp from '../../../components/Header/Modules/ModuleWhatsapp/ModuleWhatsapp';
-import MobileBar from "../../../components/Header/MobileBar/MobileBar";
-import Artists from "./Artists/Artists";
 
 const HomePage = props => {
     return (
         <div className="landing">
-            <MobileBar />
-            <Header />
-            <Hero />
-            <CategoriesSlider />
-            <Salons />
-            <Artists />
-            <Spotlights />
-            <Deals />
-            <Footer />
-            <ModuleWhatsapp />
+            <HomeLayout mainPage={true}>
+                <Hero />
+                <CategoriesSlider />
+                <Salons />
+                <Artists />
+                <Spotlights />
+                <Deals />
+            </HomeLayout>
         </div>
     );
 }

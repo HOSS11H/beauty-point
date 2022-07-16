@@ -1,8 +1,8 @@
-import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import styled from 'styled-components';
+import SendIcon from '@mui/icons-material/Send';
 
 
-const ModuleWhatsappWrapper = styled.div`
+const ModuleChatWrapper = styled.div`
     a {
         position        : fixed;
         width           : 60px;
@@ -28,14 +28,14 @@ const ModuleWhatsappWrapper = styled.div`
     }
 `
 
-const ModuleWhatsapp = props => {
+const ModuleChat = props => {
     return (
-        <ModuleWhatsappWrapper>
+        <ModuleChatWrapper>
             <a href="https://tawk.to/chat/629cf1b2b0d10b6f3e75cc7f/1g6dn5e19" >
-                <WhatsAppIcon />
+                <SendIcon />
             </a>
-        </ModuleWhatsappWrapper>
+        </ModuleChatWrapper>
     )
 }
 
-export default ModuleWhatsapp;
+export default ModuleChat;
