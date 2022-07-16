@@ -15,6 +15,17 @@ import RegisterMap from "./VendorMap/VendorMap";
 
 import 'react-tagsinput/react-tagsinput.css'
 import AuthContext from "../../../../../store/auth-context";
+import styled from 'styled-components';
+
+const SwitchWrapper = styled.div`
+    display: flex;
+    align-items: center;
+    @media screen and ( max-width: 600px ) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+`
 
 export default function VendorPage(props) {
     const [formIsDirty, handleformIsDirty] = useOutletContext()
@@ -37,8 +48,11 @@ export default function VendorPage(props) {
     const [hasCoffee, setHasCoffee] = useState(false);
     const [hasMasjid, setHasMasjid] = useState(false);
     const [inHouse, setInHouse] = useState(false);
+    const [inHousePrice, setInHousePrice] = useState(0);
     const [inSaloon, setInSaloon] = useState(false);
+    const [inSaloonPrice, setInSaloonPrice] = useState(0);
     const [inCustomerHouse, setInCustomerHouse] = useState(false);
+    const [inCustomerHousePrice, setInCustomerHousePrice] = useState(0);
     const [tags, setTags] = useState([])
     const [seo_keywords, setKeywords] = useState('');
     const [seo_description, setSeoDescription] = useState('');
@@ -64,9 +78,12 @@ export default function VendorPage(props) {
                 setHasLounge(res.data.has_lounge)
                 setHasCoffee(res.data.has_coffee)
                 setHasMasjid(res.data.has_masjid)
-                setInHouse(res.data.in_house)
-                setInSaloon(res.data.in_saloon)
-                setInCustomerHouse(res.data.in_customer_house)
+                setInHouse(res.data.in_house_available)
+                setInHousePrice(res.data.in_house)
+                setInSaloon(res.data.in_saloon_available)
+                setInSaloonPrice(res.data.in_saloon)
+                setInCustomerHouse(res.data.in_customer_house_available)
+                setInCustomerHousePrice(res.data.in_customer_house)
                 setSeoDescription(res.data.seo_description ?? '')
                 setShow(false)
             })
@@ -78,6 +95,7 @@ export default function VendorPage(props) {
     }
     function submitForm() {
         setOpen(true)
+        console.log(inCustomerHouse)
         v1.post('/vendors/settings/vendor_page', {
             address,
             description,
@@ -93,9 +111,12 @@ export default function VendorPage(props) {
             has_lounge: hasLounge,
             has_coffee: hasCoffee,
             has_masjid: hasMasjid,
-            in_house: inHouse,
-            in_saloon: inSaloon,
-            in_customer_house: inCustomerHouse,
+            in_house_available: inHouse,
+            in_house: +inHousePrice,
+            in_saloon_available: inSaloon,
+            in_saloon: +inSaloonPrice,
+            in_customer_house_available: inCustomerHouse,
+            in_customer_house: +inCustomerHousePrice,
         }).then(res => {
             setSuccess(true)
             setOpen(false)
@@ -167,14 +188,28 @@ export default function VendorPage(props) {
         handleformIsDirty(true)
         setInHouse(e.target.checked)
     }
+    const inHousePriceChangeHandler = (e) => {
+        handleformIsDirty(true)
+        setInHousePrice(e.target.value)
+    }
     const inSaloonChangeHandler = (e) => {
         handleformIsDirty(true)
         setInSaloon(e.target.checked)
+    }
+    const inSaloonPriceChangeHandler = (e) => {
+        handleformIsDirty(true)
+        setInSaloonPrice(e.target.value)
     }
     const inCustomerHouseChangeHandler = (e) => {
         handleformIsDirty(true)
         setInCustomerHouse(e.target.checked)
     }
+    const inCustomerHousePriceChangeHandler = (e) => {
+        handleformIsDirty(true)
+        setInCustomerHousePrice(e.target.value)
+    }
+
+    console.log(inHouse)
 
     return (
         <>
@@ -244,25 +279,34 @@ export default function VendorPage(props) {
                                 <Grid item xs={12} md={6} >
                                     <FormControl component="fieldset" variant="standard">
                                         <FormLabel sx={{ mb: 2 }} component="legend">{t('Bookings Places')}</FormLabel>
-                                        <FormGroup>
-                                            <FormControlLabel
-                                                control={
-                                                    <Switch checked={inHouse} onChange={inHouseChangeHandler} name='wifi' />
-                                                }
-                                                label={t('in house')}
-                                            />
-                                            <FormControlLabel
-                                                control={
-                                                    <Switch checked={inSaloon} onChange={inSaloonChangeHandler} name='coffee' />
-                                                }
-                                                label={t('in saloon')}
-                                            />
-                                            <FormControlLabel
-                                                control={
-                                                    <Switch checked={inCustomerHouse} onChange={inCustomerHouseChangeHandler} name='lounge' />
-                                                }
-                                                label={t('in customer house')}
-                                            />
+                                        <FormGroup sx={{ gap: 2 }} >
+                                            <SwitchWrapper>
+                                                <FormControlLabel
+                                                    control={
+                                                        <Switch checked={inHouse} onChange={inHouseChangeHandler} name='house-price' />
+                                                    }
+                                                    label={t('in house')}
+                                                />
+                                                {inHouse && <TextField id="house-price" type='number' label={t('price')} variant="outlined" value={inHousePrice} onChange={inHousePriceChangeHandler} />}
+                                            </SwitchWrapper>
+                                            <SwitchWrapper>
+                                                <FormControlLabel
+                                                    control={
+                                                        <Switch checked={inSaloon} onChange={inSaloonChangeHandler} name='saloon-price' />
+                                                    }
+                                                    label={t('in saloon')}
+                                                />
+                                                {inSaloon && <TextField id="saloon-price" type='number' label={t('price')} variant="outlined" value={inSaloonPrice} onChange={inSaloonPriceChangeHandler} />}
+                                            </SwitchWrapper>
+                                            <SwitchWrapper>
+                                                <FormControlLabel
+                                                    control={
+                                                        <Switch checked={inCustomerHouse} onChange={inCustomerHouseChangeHandler} name='customer-price' />
+                                                    }
+                                                    label={t('in customer house')}
+                                                />
+                                                {inCustomerHouse && <TextField id="customer-price" type='number' label={t('price')} variant="outlined" value={inCustomerHousePrice} onChange={inCustomerHousePriceChangeHandler} />}
+                                            </SwitchWrapper>
                                         </FormGroup>
                                     </FormControl>
                                 </Grid>
