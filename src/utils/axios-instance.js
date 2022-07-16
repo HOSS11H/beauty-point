@@ -17,12 +17,12 @@ instance.interceptors.request.use(function (config) {
     }
 });
 
-instance.interceptors.response.use(undefined
+/* instance.interceptors.response.use(undefined
 , function (error) {
     if (error.response.status === 401) {
         localStorage.removeItem('token');
         window.location.href = '/auth';
     }
-});
+}); */
 
 export default instance;

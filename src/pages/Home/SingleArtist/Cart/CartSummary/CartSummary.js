@@ -108,7 +108,7 @@ const BookingInfos = styled.div`
 
 const CartOverview = props => {
 
-    const { cartData, taxes, total, hasSelectedAppointment, appointment, slot, hasSelectedCoupon, couponDiscount } = props;
+    const { cartData, taxes, total, hasSelectedAppointment, appointment, slot, hasSelectedCoupon, couponDiscount, bookingPlace } = props;
 
     const { t } = useTranslation()
 
@@ -151,6 +151,16 @@ const CartOverview = props => {
                             }
                         </OverviewBody>
                         <div>
+                            {
+                                bookingPlace && (
+                                    <BookingInfos>
+                                        <p>{t('booking place')}</p>
+                                        <p>{bookingPlace === 'in_house' &&  t('in house') }</p>
+                                        <p>{bookingPlace === 'in_saloon' &&  t('in saloon') }</p>
+                                        <p>{bookingPlace === 'in_customer_house' &&  t('in customer house') }</p>
+                                    </BookingInfos>
+                                )
+                            }
                             {
                                 hasSelectedAppointment && (
                                     <BookingInfos>

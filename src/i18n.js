@@ -655,6 +655,7 @@ const resources = {
             'in house':'في المنزل',
             'in saloon':'في الصالون',
             'in customer house':'في منزل العميل',
+            'booking place': 'مكان الحجز'
         }
     }
 };

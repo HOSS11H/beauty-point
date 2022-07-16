@@ -165,7 +165,7 @@ const NotificationsMenu = props => {
                                 <CustomListItemButton $unread={!notification.read_at} onClick={() => handleNotifaicationClick(notification.id, notification.type)} >
                                     <ListItemText primary={notification.title} secondary={<span dangerouslySetInnerHTML={{ __html: mySafeHTML }} /> } />
                                     <Typography variant="caption" display="block" sx={{ textAlign: 'left', alignSelf: 'flex-end' }} >
-                                        <bdi>{moment(notification.created_at).fromNow()}</bdi>
+                                        <bdi>{moment.utc(notification.created_at).fromNow()}</bdi>
                                     </Typography>
                                 </CustomListItemButton>
                             </ListItem>
@@ -177,7 +177,7 @@ const NotificationsMenu = props => {
                                     <CustomListItemButton $unread={!notification.read_at} onClick={() => handleNotifaicationClick(notification.id, notification.type)} >
                                         <ListItemText primary={notification.title} secondary={<span dangerouslySetInnerHTML={{ __html: mySafeHTML }} /> } />
                                         <Typography variant="caption" display="block" sx={{ textAlign: 'left', alignSelf: 'flex-end' }} >
-                                            <bdi>{moment(notification.created_at).fromNow()}</bdi>
+                                            <bdi>{moment.utc(notification.created_at).fromNow()}</bdi>
                                         </Typography>
                                     </CustomListItemButton>
                                 </ListItem>

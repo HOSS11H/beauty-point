@@ -55,7 +55,7 @@ const SingleNotification = props => {
             <Typography color='secondary' variant='h4' gutterBottom >{data.title}</Typography>
             <Typography variant='h5'  dangerouslySetInnerHTML={{ __html: mySafeHTML }} />
             <Typography color='secondary' variant="caption" display="block" sx={{ textAlign: 'left', alignSelf: 'flex-end' }}  gutterBottom >
-                <bdi>{moment(data.created_at).fromNow()}</bdi>
+                <bdi>{moment.utc(data.created_at).fromNow()}</bdi>
             </Typography>
         </CustomCard>
     )

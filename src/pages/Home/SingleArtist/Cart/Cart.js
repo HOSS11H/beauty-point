@@ -203,6 +203,8 @@ const Cart = props => {
     const [slot, setSlot] = useState('');
     const [hasSelectedAppointment, setHasSelectedAppointment] = useState(false);
 
+    const [ bookingPlace, setBookingPlace] = useState(null)
+
     const [userInfos, setUserInfos] = useState('');
 
     const [paymentMethod, setPaymentMethod] = useState('');
@@ -309,6 +311,10 @@ const Cart = props => {
         setSlot('');
     }, [])
 
+    const bookingPlaceHandler = useCallback((val) => {
+        setBookingPlace(val)
+    }, [])
+
     const handleSlot = useCallback((slot) => {
         setSlot(slot);
         setHasSelectedAppointment(true);
@@ -329,11 +335,13 @@ const Cart = props => {
             let data = {
                 company_id: artistData.id,
                 dateTime: combined,
-                //dateTime: format(dateTime, 'yyyy-MM-dd hh:mm a'),
                 payment_gateway: payment,
                 cart: cart,
                 couponId: couponId,
             };
+            if( bookingPlace ) {
+                data.booking_place = bookingPlace
+            }
             axios.post(`/bookings`, data)
                 .then(response => {
                     setReservedBookingData(response.data);
@@ -343,7 +351,7 @@ const Cart = props => {
                     //console.log(err);
                 })
         }
-    }, [appointment, cart, couponId, artistData.id, slot])
+    }, [appointment, slot, artistData.id, cart, couponId, bookingPlace])
 
     const storeUserInfos = useCallback((infos) => {
         setUserInfos(infos);
@@ -404,10 +412,13 @@ const Cart = props => {
                                         activeStep === 1 && <ChooseItem id={artistData.id} cartData={cart} type={selectedType} onChoose={addToCartHandler} />
                                     }
                                     {
-                                        activeStep === 2 && <ItemsReview cartData={cart} removeFromCart={removeFromCartHandler} /* increaseItem={increaseItemHandler} decreaseItem={decreaseItemHandler} */ />
+                                        activeStep === 2 && <ItemsReview cartData={cart} removeFromCart={removeFromCartHandler}  />
                                     }
                                     {
-                                        activeStep === 3 && <ChooseAppointment id={artistData.id} appointment={appointment} handleAppointment={handleAppointment} handleSlot={handleSlot} activeSlot={slot} />
+                                        activeStep === 3 && <ChooseAppointment 
+                                                                                    id={artistData.id} vendotPage={artistData.vendor_page} appointment={appointment} 
+                                                                                    bookingPlace={bookingPlace} chooseBookingPlace={bookingPlaceHandler}
+                                                                                    handleAppointment={handleAppointment} handleSlot={handleSlot} activeSlot={slot} />
                                     }
                                     {
                                         activeStep === 4 && <UserAuth id={artistData.id} handleNext={handleNext} storeUserData={storeUserInfos} />
@@ -518,7 +529,8 @@ const Cart = props => {
                             </CartContent>
                         </Grid>
                         <Grid item xs={12} md={3} sx={{ display: activeStep === 0 || activeStep === 6 ? 'none' : 'block'}} >
-                            <CartSummary cartData={cart} taxes={totalTaxes} total={totalPrice} hasSelectedAppointment={hasSelectedAppointment} appointment={appointment} slot={slot} hasSelectedCoupon={couponId} couponDiscount={couponData.amount} />
+                            <CartSummary cartData={cart} taxes={totalTaxes} total={totalPrice} hasSelectedAppointment={hasSelectedAppointment} 
+                                appointment={appointment} slot={slot} bookingPlace={bookingPlace} hasSelectedCoupon={couponId} couponDiscount={couponData.amount} />
                         </Grid>
                     </Grid>
                 </CustomCardMui>

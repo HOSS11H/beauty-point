@@ -21,7 +21,7 @@ const ErrorMessage = styled.p`
 
 const UserAuth = props => {
 
-    const { handleNext, id, storeUserData } = props;
+    const { handleNext, storeUserData } = props;
 
     const authCtx = useContext(AuthContext);
 
@@ -37,24 +37,6 @@ const UserAuth = props => {
     const { renderFormInputs: OTPInputs, isFormValid: OTPDataValid, form: OTPData } = useForm(onlineOTPForm);
     const { renderFormInputs: nameInputs, isFormValid: nameDataValid, form: nameData } = useForm(onlineNameForm);
 
-    /*
-    v1.post(url, authData)
-                .then(res => {
-                    if (res.data.user.roles[0].name === 'customer') {
-                        authCtx.login(res.data.token, res.data.user.roles[0].name);
-                    } else {
-                        authCtx.login(res.data.token, res.data.user.roles[0].id);
-                    }
-                    storeUserData(res.data);
-                })
-                .catch(err => {
-                    if (err.response.status === 500) {
-                        setErrorMessage(t('serverError'));
-                    } else {
-                        setErrorMessage(t(err.response.data.message))
-                    }
-                })
-    */
     const submitFirstStepHandler = () => {
         let url;
         let authData;

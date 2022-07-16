@@ -116,7 +116,7 @@ const AllNotifications = props => {
                                 <CustomCard ref={lastElementRef} $unread={!notification.read_at} onClick={() => handleNotifaicationClick(notification.id, notification.type)} >
                                     <ListItemText primary={notification.title} secondary={<span dangerouslySetInnerHTML={{ __html: mySafeHTML }} /> } />
                                     <Typography variant="caption" display="block" sx={{ textAlign: 'left', alignSelf: 'flex-end' }} >
-                                        <bdi>{moment(notification.created_at).fromNow()}</bdi>
+                                        <bdi>{moment.utc(notification.created_at).fromNow()}</bdi>
                                     </Typography>
                                 </CustomCard>
                             </Grid>
@@ -127,7 +127,7 @@ const AllNotifications = props => {
                                 <CustomCard $unread={!notification.read_at} onClick={() => handleNotifaicationClick(notification.id, notification.type)} >
                                     <ListItemText primary={notification.title} secondary={<span dangerouslySetInnerHTML={{ __html: mySafeHTML }} />} />
                                     <Typography variant="caption" display="block" sx={{ textAlign: 'left', alignSelf: 'flex-end' }} >
-                                        <bdi>{moment(notification.created_at).fromNow()}</bdi>
+                                        <bdi>{moment.utc(notification.created_at).fromNow()}</bdi>
                                     </Typography>
                                 </CustomCard>
                             </Grid>

@@ -11,8 +11,11 @@ import Loader from '../../../../../components/UI/Loader/Loader';
 import { Fragment } from 'react';
 import { useContext } from 'react';
 import ThemeContext from '../../../../../store/theme-context';
-import { useMediaQuery } from '@mui/material';
+import { Grid, useMediaQuery } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import HouseIcon from '@mui/icons-material/House';
+import StoreIcon from '@mui/icons-material/Store';
+import DirectionsWalkIcon from '@mui/icons-material/DirectionsWalk';
 
 
 const SlotsWrapper = styled.div`
@@ -51,9 +54,31 @@ const MobilePickerWrapper = styled.div`
     }
 `
 
+const BookingPlaceCard = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 20px 10px;
+    border-radius: 8px;
+    border: 2px solid ${({ theme }) => theme.vars.theme};
+    background-color: ${({ theme }) => theme.vars.theme};
+    color: ${({ theme }) => theme.palette.common.white};
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+    svg {
+        margin-bottom: 5px;
+    }
+    ${({ active }) => active && css`
+        background-color: ${({ theme }) => theme.palette.common.white};
+        color: ${props => props.theme.vars.theme};
+    `}
+`
+
 const ChooseAppointment = props => {
 
-    const { appointment, handleAppointment, id, handleSlot, activeSlot } = props;
+    const { appointment, handleAppointment, id, handleSlot, activeSlot, vendotPage, bookingPlace, chooseBookingPlace } = props;
 
     const {t} = useTranslation()
 
@@ -79,6 +104,38 @@ const ChooseAppointment = props => {
 
     return (
         <Fragment>
+            <Grid container  spacing={2} sx={{ marginBottom: '20px' }} >
+                {
+                    vendotPage.in_house_available && (
+                        <Grid item xs={6}  sm={4}>
+                            <BookingPlaceCard  active={ bookingPlace === 'in_house' } onClick={  ( ) => chooseBookingPlace('in_house')  }>
+                                <HouseIcon />
+                                <p>{t('in house')}</p>
+                            </BookingPlaceCard>
+                        </Grid>
+                    )
+                }
+                {
+                    vendotPage.in_saloon_available && (
+                        <Grid item xs={6}  sm={4}>
+                            <BookingPlaceCard  active={ bookingPlace === 'in_saloon' } onClick={  ( ) => chooseBookingPlace('in_saloon')  }>
+                                <StoreIcon />
+                                <p>{t('in saloon')}</p>
+                            </BookingPlaceCard>
+                        </Grid>
+                    )
+                }
+                {
+                    vendotPage.in_customer_house_available && (
+                        <Grid item xs={6}  sm={4}>
+                            <BookingPlaceCard  active={ bookingPlace === 'in_customer_house' } onClick={  ( ) => chooseBookingPlace('in_customer_house')  }>
+                                <DirectionsWalkIcon />
+                                <p>{t('in customer house')}</p>
+                            </BookingPlaceCard>
+                        </Grid>
+                    )
+                }
+            </Grid>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
                 {
                     isMobile ? (
