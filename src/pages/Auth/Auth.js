@@ -121,6 +121,7 @@ const Auth = props => {
     const navedTo = searchParams.get('page');
     const packageId = searchParams.get('package');
 
+    
     const [isLogin, setIsLogin] = useState(navedTo === 'join-us' ? false : true);
 
     const [errorMessage, setErrorMessage] = useState(null);
@@ -133,6 +134,12 @@ const Auth = props => {
     const [marker, setMarker] = useState({})
 
     const [ termsModalOpened, setTermsModalOpened ] = useState(false)
+    
+    const referealCompanyId =  searchParams.get('cid');
+
+    if  (referealCompanyId) {
+        localStorage.setItem('cid', referealCompanyId)
+    }
 
     let authIsValid;
 
@@ -193,10 +200,14 @@ const Auth = props => {
                 address_latitude: marker.lat,
                 address_longitude: marker.lng,
                 calling_code: '+91',
-                fcm_token: 'asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231asdasd1231',
+                fcm_token: fcmToken,
             }
             if (packageId) {
                 authData.package_id = packageId
+            }
+            const referalId = localStorage.getItem('cid')
+            if (referalId) {
+                authData.cid = referalId
             }
         }
         setErrorMessage(null);

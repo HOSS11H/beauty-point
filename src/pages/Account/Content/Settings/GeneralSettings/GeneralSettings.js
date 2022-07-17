@@ -1,14 +1,17 @@
-import { Fragment, useEffect, useState } from "react";
-import v1 from '../../../../../utils/axios-instance-v1'
-import { useTranslation } from 'react-i18next';
+import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import { Alert, Backdrop, Box, Button, CircularProgress, FormControlLabel, FormGroup, Grid, IconButton, Skeleton, Snackbar, Switch, TextField } from "@mui/material";
 import CssBaseline from '@mui/material/CssBaseline';
 import Stack from '@mui/material/Stack';
-import { Alert, Backdrop, Button, CircularProgress, FormControlLabel, FormGroup, Grid, Skeleton, Snackbar, Switch, TextField } from "@mui/material";
-import PhotoCamera from '@mui/icons-material/PhotoCamera';
+import { Fragment, useEffect, useState } from "react";
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
+import v1 from '../../../../../utils/axios-instance-v1';
 
+import ShareIcon from '@mui/icons-material/Share';
 import ImageUploading from 'react-images-uploading';
 import { useOutletContext } from "react-router-dom";
+import { toast } from "react-toastify";
+
 
 
 const UploadImageTopBar = styled.div`
@@ -55,6 +58,7 @@ export default function GeneralSettings(props) {
     const [vat, setVat] = useState(true);
     const [ webBokking, setWebBokking ] = useState(true);
     const [ appBokking, setAppBokking ] = useState(true);
+    const [ referalUrl, setReferalUrl ] = useState('');
 
     useEffect(() => {
         v1.get('/vendors/settings/company')
@@ -70,6 +74,7 @@ export default function GeneralSettings(props) {
                 setVat(res.data.has_vat)
                 setWebBokking(res.data.web_bookings)
                 setAppBokking(res.data.app_bookings)
+                setReferalUrl(res.data.referral_url)
                 setShow(false)
             })
     }, []);
@@ -147,6 +152,11 @@ export default function GeneralSettings(props) {
     const toogleAppBooking = () => {
         handleformIsDirty(true)
         setAppBokking(prevState => !prevState);
+    }
+
+    const copyReferalUrlHandler = () => {
+        navigator.clipboard.writeText(referalUrl);
+        toast.success(t('Copied to clipoard.'));
     }
 
     return (
@@ -240,6 +250,12 @@ export default function GeneralSettings(props) {
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
                                     <TextField value={phone} onChange={phoneChangeHandler} fullWidth label={t("Business Phone")} variant="outlined" required />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <Box sx={{ display: 'flex', alignItems: 'center'}} >
+                                        <TextField value={referalUrl} disabled fullWidth label={t("Referal Url")} variant="outlined" />
+                                        <IconButton sx={{ marginLeft: '15px'}}  onClick={copyReferalUrlHandler}><ShareIcon /></IconButton>
+                                    </Box>
                                 </Grid>
                                 <Grid item xs={12} md={12} sx={{ textAlign: 'center' }}>
                                     <Button variant="contained" color="secondary" sx={{ minWidth: '30%' }} size="large" onClick={submitForm}>{t('Save')}</Button>
