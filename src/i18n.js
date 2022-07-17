@@ -657,7 +657,9 @@ const resources = {
             'in customer house':'في منزل العميل',
             'booking place': 'مكان الحجز',
             'Referal Url': 'رمز الدعوة',
-            'Copied to clipoard.': 'تم النسخ'
+            'Copied to clipoard.': 'تم النسخ',
+            'Request sent  successfully!': 'تم ارسال الطلب بنجاح !',
+            'Failed to send requset!': 'فشل ارسال الطلب'
         }
     }
 };

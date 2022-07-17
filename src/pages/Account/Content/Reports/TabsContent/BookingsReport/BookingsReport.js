@@ -5,8 +5,11 @@ import { useTranslation } from 'react-i18next';
 import Loader from '../../../../../../components/UI/Loader/Loader';
 import { formatCurrency } from '../../../../../../shared/utility';
 import v1 from '../../../../../../utils/axios-instance-v1';
+import v2 from '../../../../../../utils/axios-instance';
 import SearchFilters from './SearchFilters/SearchFilters';
 import styled from 'styled-components';
+import { toast } from 'react-toastify'
+import { LoadingButton } from '@mui/lab';
 const DisabledRow = styled(TableRow)`
     &.MuiTableRow-root {
         & .MuiTableCell-root {
@@ -40,6 +43,8 @@ const BookingsReport = props => {
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState(null)
 
+    const [ sendingRequest, setSendingRequest] = useState(false)
+
     const { t } = useTranslation();
 
     useEffect(() => {
@@ -68,7 +73,20 @@ const BookingsReport = props => {
                 setLoading(false);
                 console.log(err);
             })
-    }, [])
+        }, [])
+        
+        const SubmitRequestHandler = ( ) => {
+            setSendingRequest(true);
+            v2.get(`/vendors/request-payment`)
+                .then(res => {
+                    setSendingRequest(false);
+                    toast.success(t('Request sent  successfully!'))
+                })
+                .catch(err => {
+                    setSendingRequest(false);
+                    toast.error(t('Failed to send requset!'))
+                })
+    }
 
     let content;
     if (loading) {
@@ -76,6 +94,9 @@ const BookingsReport = props => {
     }
 
     if (data && !loading) {
+        
+        const completedExternalBookings = data.external.find( item => item.status === 'approved')
+
         content = (
             <Fragment>
                 <TableContainer component={Paper}>
@@ -192,21 +213,17 @@ const BookingsReport = props => {
                                 <TableCell >{t('Type')}</TableCell>
                                 <TableCell >{t('Number')}</TableCell>
                                 <TableCell >{t('amount')}</TableCell>
-                                <TableCell >{t('percentage %')}</TableCell>
+                                <TableCell >{t('Website percentage')} ( 9 %)</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            <TableRow>
-                                <TableCell >{t('Customers App')}</TableCell>
-                                <TableCell >{data.external[1].total_count}</TableCell>
-                                <TableCell >{formatCurrency(data.external[1].total)}</TableCell>
-                                <TableCell >{data.external[0].commission} %</TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell >{t('Website Bookings')}</TableCell>
-                                <TableCell >{data.external[1].total_count}</TableCell>
-                                <TableCell >{formatCurrency(data.external[1].total)}</TableCell>
-                                <TableCell >{data.external[0].commission} %</TableCell>
+                            <TableRow key={completedExternalBookings.id}  >
+                                <TableCell component="th" scope="row">
+                                    {t('bookings')} {t(completedExternalBookings.status)}
+                                </TableCell>
+                                <TableCell>{completedExternalBookings.total_count}</TableCell>
+                                <TableCell>{formatCurrency(completedExternalBookings.total)}</TableCell>
+                                <TableCell>{formatCurrency(completedExternalBookings.status !== 'canceled' ? completedExternalBookings.commission : 0)}</TableCell>
                             </TableRow>
                         </TableBody>
                     </Table>
@@ -215,7 +232,7 @@ const BookingsReport = props => {
                     <Grid item xs={12} md={6}>
                         <PriceCalculation>
                             <p>{t('total bookings')}</p>
-                            <p>{28}</p>
+                            <p>{completedExternalBookings.total_count}</p>
                         </PriceCalculation>
                         <PriceCalculation>
                             <p>{t('commission')}</p>
@@ -223,11 +240,11 @@ const BookingsReport = props => {
                         </PriceCalculation>
                         <PriceCalculation>
                             <p>{t('total amount')}</p>
-                            <p>{formatCurrency(9125)}</p>
+                            <p>{formatCurrency(  (  (  9 / 100 ) * completedExternalBookings.total ) )}</p>
                         </PriceCalculation>
                     </Grid>
                     <Grid item xs={12}>
-                        <Button variant='contained' color="secondary">{t('request / purchase')}</Button>
+                        <LoadingButton loading={sendingRequest}  onClick={SubmitRequestHandler} variant='contained' color="secondary">{t('request / purchase')}</LoadingButton>
                     </Grid>
                 </Grid>
             </Fragment>
