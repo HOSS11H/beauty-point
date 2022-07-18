@@ -221,9 +221,9 @@ const BookingView = props => {
                         {mobile && <li><PhoneAndroidIcon sx={{ mr: 1 }} />{mobile}</li>}
                         <li><AlternateEmailIcon sx={{ mr: 1 }} />{t(`via `)}{booking.source}</li>
                         {booking.booking_place && <li><RoomIcon sx={{ mr: 1 }} />
-                            {booking.bookingPlace === 'in_house' && t('in house')}
-                            {booking.bookingPlace === 'in_saloon' && t('in saloon')}
-                            {booking.bookingPlace === 'in_customer_house' && t('in customer house')}
+                            {booking.booking_place === 'in_house' && t('in house')}
+                            {booking.booking_place === 'in_saloon' && t('in saloon')}
+                            {booking.booking_place === 'in_customer_house' && t('in customer house')}
                         </li>}
                     </ClientInfo>
                 </BookingContent>
