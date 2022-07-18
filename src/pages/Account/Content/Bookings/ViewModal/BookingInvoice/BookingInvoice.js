@@ -246,6 +246,14 @@ const BookingInvoice = React.forwardRef((props, ref) => {
 								<span>{moment.utc(bookingData.date_time).format('hh:mm a')}</span>
 								<span> : وقت الحجز</span>
 							</ClientDate>
+							{bookingData.booking_place && (
+								<ClientDate>
+									{bookingData.booking_place === 'in_house' && <span>{t('in house')}</span>}
+									{bookingData.booking_place === 'in_saloon' &&  <span>{t('in saloon')}</span> }
+									{bookingData.booking_place === 'in_customer_house' &&  <span>{t('in customer house')}</span> }
+									<span>مكان الحجز : </span>
+								</ClientDate>
+							)  }
 							<Grid sx={{ width: '100%' }} container spacing={2}>
 								<Grid item xs={6}>
 									{
