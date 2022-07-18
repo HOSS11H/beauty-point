@@ -16,6 +16,7 @@ import { useTranslation } from 'react-i18next';
 import HouseIcon from '@mui/icons-material/House';
 import StoreIcon from '@mui/icons-material/Store';
 import DirectionsWalkIcon from '@mui/icons-material/DirectionsWalk';
+import { formatCurrency } from '../../../../../shared/utility';
 
 
 const SlotsWrapper = styled.div`
@@ -111,6 +112,7 @@ const ChooseAppointment = props => {
                             <BookingPlaceCard  active={ bookingPlace === 'in_house' } onClick={  ( ) => chooseBookingPlace('in_house')  }>
                                 <HouseIcon />
                                 <p>{t('in house')}</p>
+                                <p>{formatCurrency(vendotPage.in_house)}</p>
                             </BookingPlaceCard>
                         </Grid>
                     )
@@ -121,6 +123,7 @@ const ChooseAppointment = props => {
                             <BookingPlaceCard  active={ bookingPlace === 'in_saloon' } onClick={  ( ) => chooseBookingPlace('in_saloon')  }>
                                 <StoreIcon />
                                 <p>{t('in saloon')}</p>
+                                <p>{formatCurrency(vendotPage.in_saloon)}</p>
                             </BookingPlaceCard>
                         </Grid>
                     )
@@ -131,6 +134,7 @@ const ChooseAppointment = props => {
                             <BookingPlaceCard  active={ bookingPlace === 'in_customer_house' } onClick={  ( ) => chooseBookingPlace('in_customer_house')  }>
                                 <DirectionsWalkIcon />
                                 <p>{t('in customer house')}</p>
+                                <p>{formatCurrency(vendotPage.in_customer_house)}</p>
                             </BookingPlaceCard>
                         </Grid>
                     )

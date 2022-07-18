@@ -204,6 +204,7 @@ const Cart = props => {
     const [hasSelectedAppointment, setHasSelectedAppointment] = useState(false);
 
     const [ bookingPlace, setBookingPlace] = useState(null)
+    const [ bookingPlacePrice, setBookingPlacePrice] = useState(null)
 
     const [userInfos, setUserInfos] = useState('');
 
@@ -313,7 +314,8 @@ const Cart = props => {
 
     const bookingPlaceHandler = useCallback((val) => {
         setBookingPlace(val)
-    }, [])
+        setBookingPlacePrice(artistData.vendor_page[val])
+    }, [artistData.vendor_page])
 
     const handleSlot = useCallback((slot) => {
         setSlot(slot);
@@ -476,7 +478,7 @@ const Cart = props => {
                                                     {t('Back')}
                                                 </Button>
                                                 <Box sx={{ flex: '1 1 auto' }} />
-                                                <CartButton color="secondary" variant='contained' onClick={handleNext} disabled={!hasSelectedAppointment} >
+                                                <CartButton color="secondary" variant='contained' onClick={handleNext} disabled={!hasSelectedAppointment || !bookingPlace} >
                                                     {t('Next')}
                                                 </CartButton>
                                             </Box>
@@ -529,7 +531,7 @@ const Cart = props => {
                             </CartContent>
                         </Grid>
                         <Grid item xs={12} md={3} sx={{ display: activeStep === 0 || activeStep === 6 ? 'none' : 'block'}} >
-                            <CartSummary cartData={cart} taxes={totalTaxes} total={totalPrice} hasSelectedAppointment={hasSelectedAppointment} 
+                            <CartSummary cartData={cart} taxes={totalTaxes} total={totalPrice} hasSelectedAppointment={hasSelectedAppointment} bookingPlacePrice={bookingPlacePrice}
                                 appointment={appointment} slot={slot} bookingPlace={bookingPlace} hasSelectedCoupon={couponId} couponDiscount={couponData.amount} />
                         </Grid>
                     </Grid>
