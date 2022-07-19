@@ -1,15 +1,17 @@
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, Grid, Button } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import { Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
 import moment from 'moment';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+import styled from 'styled-components';
 import Loader from '../../../../../../components/UI/Loader/Loader';
 import { formatCurrency } from '../../../../../../shared/utility';
-import v1 from '../../../../../../utils/axios-instance-v1';
 import v2 from '../../../../../../utils/axios-instance';
+import v1 from '../../../../../../utils/axios-instance-v1';
 import SearchFilters from './SearchFilters/SearchFilters';
-import styled from 'styled-components';
-import { toast } from 'react-toastify'
-import { LoadingButton } from '@mui/lab';
+import { format } from 'date-fns';
+
 const DisabledRow = styled(TableRow)`
     &.MuiTableRow-root {
         & .MuiTableCell-root {
@@ -39,11 +41,14 @@ const PriceCalculation = styled.div`
 
 const BookingsReport = props => {
 
+    const [dateFrom, setDateFrom] = useState(moment().subtract(1, 'month'));
+    const [dateTo, setDateTo] = useState(new Date());
+
 
     const [loading, setLoading] = useState(false);
     const [data, setData] = useState(null)
 
-    const [ sendingRequest, setSendingRequest] = useState(false)
+    const [sendingRequest, setSendingRequest] = useState(false)
 
     const { t } = useTranslation();
 
@@ -73,19 +78,45 @@ const BookingsReport = props => {
                 setLoading(false);
                 console.log(err);
             })
-        }, [])
-        
-        const SubmitRequestHandler = ( ) => {
-            setSendingRequest(true);
-            v2.get(`/vendors/request-payment`)
-                .then(res => {
-                    setSendingRequest(false);
-                    toast.success(t('Request sent  successfully!'))
-                })
-                .catch(err => {
-                    setSendingRequest(false);
-                    toast.error(t('Failed to send requset!'))
-                })
+    }, [])
+    const handleDateFromChange = (val) => {
+        const formattedVal = format(val, 'yyyy-MM-dd')
+        setDateFrom(formattedVal);
+    }
+    const handleDateToChange = (val) => {
+        const formattedVal = format(val, 'yyyy-MM-dd')
+        setDateTo(formattedVal);
+    }
+
+    const ConfirmFilteringHandler = () => {
+        const selectedSearchParams = {
+            dateFrom: moment(dateFrom).format('YYYY-MM-DD'),
+            dateTo: moment(dateTo).format('YYYY-MM-DD'),
+        }
+        searchHandler(selectedSearchParams);
+    }
+
+    const resetFilteringHandler = () => {
+        const searchParams = {
+            dateFrom: moment().subtract(1, 'month').format('YYYY-MM-DD'),
+            dateTo: moment().format('YYYY-MM-DD'),
+        }
+        setDateFrom(moment().subtract(1, 'month'));
+        setDateTo(new Date());
+        searchHandler(searchParams);
+    }
+
+    const SubmitRequestHandler = () => {
+        setSendingRequest(true);
+        v2.get(`/vendors/request-payment?date_from=${dateFrom}&date_to=${dateTo}`)
+            .then(res => {
+                setSendingRequest(false);
+                toast.success(t('Request sent  successfully!'))
+            })
+            .catch(err => {
+                setSendingRequest(false);
+                toast.error(t('Failed to send requset!'))
+            })
     }
 
     let content;
@@ -94,8 +125,8 @@ const BookingsReport = props => {
     }
 
     if (data && !loading) {
-        
-        const completedExternalBookings = data.external.find( item => item.status === 'approved')
+
+        const completedExternalBookings = data.external.find(item => item.status === 'approved')
 
         content = (
             <Fragment>
@@ -240,11 +271,11 @@ const BookingsReport = props => {
                         </PriceCalculation>
                         <PriceCalculation>
                             <p>{t('total amount')}</p>
-                            <p>{formatCurrency(  (  (  9 / 100 ) * completedExternalBookings.total ) )}</p>
+                            <p>{formatCurrency(((9 / 100) * completedExternalBookings.total))}</p>
                         </PriceCalculation>
                     </Grid>
                     <Grid item xs={12}>
-                        <LoadingButton loading={sendingRequest}  onClick={SubmitRequestHandler} variant='contained' color="secondary">{t('request / purchase')}</LoadingButton>
+                        <LoadingButton loading={sendingRequest} onClick={SubmitRequestHandler} variant='contained' color="secondary">{t('request / purchase')}</LoadingButton>
                     </Grid>
                 </Grid>
             </Fragment>
@@ -253,7 +284,10 @@ const BookingsReport = props => {
 
     return (
         <Fragment>
-            <SearchFilters perPage={15} handleFilters={searchHandler} />
+            <SearchFilters perPage={15} handleFilters={searchHandler} 
+                    handleDateFromChange={handleDateFromChange} handleDateToChange={handleDateToChange}
+                    confirmFiltering={ConfirmFilteringHandler} resetFiltering={resetFilteringHandler}
+                    dateFrom={dateFrom} dateTo={dateTo} />
             {content}
         </Fragment>
     )

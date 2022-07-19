@@ -5,9 +5,6 @@ import DesktopDatePicker from '@mui/lab/DesktopDatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import { Grid } from '@mui/material';
 import TextField from '@mui/material/TextField';
-import { format } from 'date-fns';
-import moment from 'moment';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { CustomButton } from '../../../../../../../components/UI/Button/Button';
@@ -49,40 +46,9 @@ const ResetButton = styled(CustomButton)`
 
 const SearchFilters = (props) => {
 
-    const { handleFilters } = props;
+    const { dateFrom, dateTo, handleDateFromChange, handleDateToChange, confirmFiltering, resetFiltering } = props;
 
     const { t } = useTranslation()
-
-    const [dateFrom, setDateFrom] = useState(moment().subtract(1, 'month'));
-    const [dateTo, setDateTo] = useState(new Date());
-
-    const handleDateFromChange = (val) => {
-        const formattedVal = format(val, 'yyyy-MM-dd')
-        setDateFrom(formattedVal);
-    }
-    const handleDateToChange = (val) => {
-        const formattedVal = format(val, 'yyyy-MM-dd')
-        setDateTo(formattedVal);
-    }
-
-    const ConfirmFilteringHandler = () => {
-        const selectedSearchParams = {
-            dateFrom: moment(dateFrom).format('YYYY-MM-DD'),
-            dateTo: moment(dateTo).format('YYYY-MM-DD'),
-        }
-        handleFilters(selectedSearchParams);
-    }
-
-    const resetFilteringHandler = () => {
-        const searchParams = {
-            dateFrom: moment().subtract(1, 'month').format('YYYY-MM-DD'),
-            dateTo: moment().format('YYYY-MM-DD'),
-        }
-        setDateFrom(moment().subtract(1, 'month'));
-        setDateTo(new Date());
-        handleFilters(searchParams);
-    }
-
 
     return (
         <FiltersWrapper>
@@ -111,8 +77,8 @@ const SearchFilters = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={4}>
                     <ActionsWrapper>
-                        <FilterButton onClick={ConfirmFilteringHandler} endIcon={<FilterAltIcon />} >{t('filter')}</FilterButton>
-                        <ResetButton onClick={resetFilteringHandler} endIcon={<RestartAltIcon />} >{t('reset')}</ResetButton>
+                        <FilterButton onClick={confirmFiltering} endIcon={<FilterAltIcon />} >{t('filter')}</FilterButton>
+                        <ResetButton onClick={resetFiltering} endIcon={<RestartAltIcon />} >{t('reset')}</ResetButton>
                     </ActionsWrapper>
                 </Grid>
             </Grid>
