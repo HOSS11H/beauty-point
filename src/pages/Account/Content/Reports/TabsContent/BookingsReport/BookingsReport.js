@@ -108,7 +108,13 @@ const BookingsReport = props => {
 
     const SubmitRequestHandler = () => {
         setSendingRequest(true);
-        v2.get(`/vendors/request-payment?date_from=${dateFrom}&date_to=${dateTo}`)
+        const selectedSearchParams = {
+            from_date: moment(dateFrom).format('YYYY-MM-DD'),
+            to_date: moment(dateTo).format('YYYY-MM-DD'),
+        }
+        v2.post(`/vendors/request-payment`, null,{
+            params: {...selectedSearchParams}
+        })
             .then(res => {
                 setSendingRequest(false);
                 toast.success(t('Request sent  successfully!'))
@@ -248,14 +254,16 @@ const BookingsReport = props => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            <TableRow key={completedExternalBookings.id}  >
-                                <TableCell component="th" scope="row">
-                                    {t('bookings')} {t(completedExternalBookings.status)}
-                                </TableCell>
-                                <TableCell>{completedExternalBookings.total_count}</TableCell>
-                                <TableCell>{formatCurrency(completedExternalBookings.total)}</TableCell>
-                                <TableCell>{formatCurrency(completedExternalBookings.status !== 'canceled' ? completedExternalBookings.commission : 0)}</TableCell>
-                            </TableRow>
+                            {completedExternalBookings && (
+                                <TableRow key={completedExternalBookings?.id}  >
+                                    <TableCell component="th" scope="row">
+                                        {t('bookings')} {t(completedExternalBookings?.status)}
+                                    </TableCell>
+                                    <TableCell>{completedExternalBookings?.total_count}</TableCell>
+                                    <TableCell>{formatCurrency(completedExternalBookings?.total)}</TableCell>
+                                    <TableCell>{formatCurrency(completedExternalBookings?.status !== 'canceled' ? completedExternalBookings?.commission : 0)}</TableCell>
+                                </TableRow>
+                            )}
                         </TableBody>
                     </Table>
                 </TableContainer>
@@ -263,7 +271,7 @@ const BookingsReport = props => {
                     <Grid item xs={12} md={6}>
                         <PriceCalculation>
                             <p>{t('total bookings')}</p>
-                            <p>{completedExternalBookings.total_count}</p>
+                            <p>{completedExternalBookings?.total_count}</p>
                         </PriceCalculation>
                         <PriceCalculation>
                             <p>{t('commission')}</p>
@@ -271,7 +279,7 @@ const BookingsReport = props => {
                         </PriceCalculation>
                         <PriceCalculation>
                             <p>{t('total amount')}</p>
-                            <p>{formatCurrency(((9 / 100) * completedExternalBookings.total))}</p>
+                            <p>{formatCurrency(((9 / 100) * completedExternalBookings?.total))}</p>
                         </PriceCalculation>
                     </Grid>
                     <Grid item xs={12}>
@@ -284,10 +292,10 @@ const BookingsReport = props => {
 
     return (
         <Fragment>
-            <SearchFilters perPage={15} handleFilters={searchHandler} 
-                    handleDateFromChange={handleDateFromChange} handleDateToChange={handleDateToChange}
-                    confirmFiltering={ConfirmFilteringHandler} resetFiltering={resetFilteringHandler}
-                    dateFrom={dateFrom} dateTo={dateTo} />
+            <SearchFilters perPage={15} handleFilters={searchHandler}
+                handleDateFromChange={handleDateFromChange} handleDateToChange={handleDateToChange}
+                confirmFiltering={ConfirmFilteringHandler} resetFiltering={resetFilteringHandler}
+                dateFrom={dateFrom} dateTo={dateTo} />
             {content}
         </Fragment>
     )
