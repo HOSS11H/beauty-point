@@ -36,6 +36,7 @@ import TvIcon from '@mui/icons-material/Tv';
 import WeekendIcon from '@mui/icons-material/Weekend';
 import MosqueIcon from '@mui/icons-material/Mosque';
 import WcIcon from '@mui/icons-material/Wc';
+import { Helmet } from 'react-helmet';
 
 const Wrapper = styled.section`
     padding: 70px 0px;
@@ -190,6 +191,11 @@ const SingleSalon = props => {
     if (salon && !loading) {
         content = (
             <Box sx={{ width: '100%' }}>
+                <Helmet>
+                    {salon.companyName && <title>{salon.companyName}</title>}
+                    {salon.vendor_page.description && <meta name="description" content={salon.vendor_page.description} />}
+                    {salon.vendor_page.seo_keywords && <meta name="keywords" content={salon.vendor_page.seo_keywords} />}
+                </Helmet>
                 <Typography component="div" variant="h4" sx={{ marginBottom: '10px' }} >
                     {salon.companyName}
                 </Typography>

@@ -15,6 +15,7 @@ import Tabs from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { useTranslation } from "react-i18next";
 import { useParams, useSearchParams } from "react-router-dom";
 import styled from 'styled-components';
@@ -164,6 +165,11 @@ const SingleArtist = props => {
     if ( artist && !loading) {
         content = (
             <Box sx={{ width: '100%' }}>
+                <Helmet>
+                    {artist.companyName && <title>{artist.companyName}</title>}
+                    {artist.vendor_page.description && <meta name="description" content={artist.vendor_page.description} />}
+                    {artist.vendor_page.seo_keywords && <meta name="keywords" content={artist.vendor_page.seo_keywords} />}
+                </Helmet>
                 <Typography component="div" variant="h4" sx={{ marginBottom: '10px' }} >
                     {artist.companyName}
                 </Typography>
