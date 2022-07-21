@@ -25,7 +25,7 @@ const SearchMessage = ( props ) => {
     const { height } = props;
 
     return (
-        <CustomMessage height={height} >
+        <CustomMessage {...props} height={height} >
             <p>{props.children}</p>
         </CustomMessage>
     )

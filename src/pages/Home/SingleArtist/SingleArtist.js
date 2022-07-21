@@ -24,12 +24,12 @@ import { CustomButton } from "../../../components/UI/Button/Button";
 import TablePaginationActions from "../../../components/UI/Dashboard/Table/TablePagination/TablePagination";
 import DealPanel from '../../../components/UI/DealPanel/DealPanel';
 import Loader from "../../../components/UI/Loader/Loader";
-import ServicePanel from "../../../components/UI/ServicePanel/ServicePanel";
 import CustomizedSnackbars from "../../../components/UI/SnackBar/SnackBar";
 import TabPanel from "../../../components/UI/TabPanel/TabPanel";
 import { a11yProps } from "../../../shared/utility";
 import axios from '../../../utils/axios-instance';
 import Cart from "./Cart/Cart";
+import Services from './Services/Services';
 import VendorMap from "./VendorMap/VendorMap";
 
 
@@ -58,8 +58,6 @@ const ActionButton = styled(CustomButton)`
     }
 `
 
-
-const servicesRowsPerPage = 9
 const dealsRowsPerPage = 9
 
 const SingleArtist = props => {
@@ -73,15 +71,11 @@ const SingleArtist = props => {
 
     const [value, setValue] = useState(0);
 
-    const [servicesPage, setServicesPage] = useState(0);
-
     const [dealsPage, setDealsPage] = useState(0);
 
     const [artist, setArtist] = useState();
     const [ loading, setLoading ] = useState(false);
 
-    const [services, setServices] = useState({data: []});
-    const [loadingServices, setLoadingServices] = useState(false);
 
     const [deals, setDeals] = useState({data: []});
     const [loadingDeals, setLoadingDeals] = useState(false);
@@ -102,17 +96,7 @@ const SingleArtist = props => {
                 //console.log(err);
             })
     }, [param.artistId])
-    useEffect(() => {
-        setLoadingServices(true);
-        axios.get(`/companies/${param.artistId}/services?page=${servicesPage + 1}&per_page=${servicesRowsPerPage}`)
-            .then(res => {
-                setLoadingServices(false);
-                setServices(res.data);
-            })
-            .catch(err => {
-                //console.log(err);
-            })
-    }, [param.artistId, servicesPage])
+
     useEffect(() => {
         setLoadingDeals(true);
         axios.get(`/companies/${param.artistId}/deals?page=${dealsPage + 1}&per_page=${dealsRowsPerPage}&include[]=company`)
@@ -123,11 +107,8 @@ const SingleArtist = props => {
             .catch(err => {
                 //console.log(err);
             })
-    }, [dealsPage, param.artistId, servicesPage])
+    }, [dealsPage, param.artistId])
 
-    const handleServiceChangePage = React.useCallback((event, newPage) => {
-        setServicesPage(newPage);
-    }, []);
     const handleDealChangePage = React.useCallback((event, newPage) => {
         setDealsPage(newPage);
     }, []);
@@ -157,7 +138,7 @@ const SingleArtist = props => {
 
     let content ;
 
-    if ( loading || loadingServices || loadingDeals ) {
+    if ( loading || loadingDeals ) {
         content = (
             <Loader height='200px' />
         );
@@ -239,31 +220,7 @@ const SingleArtist = props => {
                     </Grid>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    {
-                        services.data.length > 0 && (
-                            <>
-                                <Grid container spacing={2}>
-                                    {services.data.map(service => {
-                                        return (
-                                            <Grid item xs={12} sm={6} md={4} key={service.id}>
-                                                <ServicePanel service={service} path='../services' />
-                                            </Grid>
-                                        )
-                                    })
-                                    }
-                                </Grid>
-                                <TablePaginationActions
-                                    component="div"
-                                    count={services.data.length}
-                                    total={services.meta ? services.meta.total : null}
-                                    rowsPerPage={dealsRowsPerPage}
-                                    page={servicesPage}
-                                    onPageChange={handleServiceChangePage}
-                                    loading={loadingServices}
-                                />
-                            </>
-                        )
-                    }
+                    <Services artistId={artist.id} />
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                     {

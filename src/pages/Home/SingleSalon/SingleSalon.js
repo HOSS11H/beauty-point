@@ -1,7 +1,13 @@
+import CoffeeIcon from '@mui/icons-material/Coffee';
 import EventIcon from '@mui/icons-material/Event';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import MosqueIcon from '@mui/icons-material/Mosque';
 import PushPinIcon from '@mui/icons-material/PushPin';
 import ShareIcon from '@mui/icons-material/Share';
+import SignalWifi3BarIcon from '@mui/icons-material/SignalWifi3Bar';
+import TvIcon from '@mui/icons-material/Tv';
+import WcIcon from '@mui/icons-material/Wc';
+import WeekendIcon from '@mui/icons-material/Weekend';
 import { Container, Grid } from "@mui/material";
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
@@ -15,6 +21,7 @@ import Tabs from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
+import { Helmet } from 'react-helmet';
 import { useTranslation } from "react-i18next";
 import { useParams, useSearchParams } from "react-router-dom";
 import styled from 'styled-components';
@@ -23,20 +30,13 @@ import { CustomButton } from "../../../components/UI/Button/Button";
 import TablePaginationActions from "../../../components/UI/Dashboard/Table/TablePagination/TablePagination";
 import DealPanel from '../../../components/UI/DealPanel/DealPanel';
 import Loader from "../../../components/UI/Loader/Loader";
-import ServicePanel from "../../../components/UI/ServicePanel/ServicePanel";
 import CustomizedSnackbars from "../../../components/UI/SnackBar/SnackBar";
 import TabPanel from "../../../components/UI/TabPanel/TabPanel";
 import { a11yProps } from "../../../shared/utility";
 import axios from '../../../utils/axios-instance';
 import Cart from "./Cart/Cart";
+import Services from './Services/Services';
 import VendorMap from "./VendorMap/VendorMap";
-import SignalWifi3BarIcon from '@mui/icons-material/SignalWifi3Bar';
-import CoffeeIcon from '@mui/icons-material/Coffee';
-import TvIcon from '@mui/icons-material/Tv';
-import WeekendIcon from '@mui/icons-material/Weekend';
-import MosqueIcon from '@mui/icons-material/Mosque';
-import WcIcon from '@mui/icons-material/Wc';
-import { Helmet } from 'react-helmet';
 
 const Wrapper = styled.section`
     padding: 70px 0px;
@@ -84,8 +84,6 @@ const FaclilityText = styled.h6`
     text-transform: capitalize;
 `
 
-
-const servicesRowsPerPage = 9
 const dealsRowsPerPage = 9
 
 const SingleSalon = props => {
@@ -99,15 +97,11 @@ const SingleSalon = props => {
 
     const [value, setValue] = useState(0);
 
-    const [servicesPage, setServicesPage] = useState(0);
 
     const [dealsPage, setDealsPage] = useState(0);
 
     const [salon, setSalon] = useState();
     const [loading, setLoading] = useState(false);
-
-    const [services, setServices] = useState({ data: [] });
-    const [loadingServices, setLoadingServices] = useState(false);
 
     const [deals, setDeals] = useState({ data: [] });
     const [loadingDeals, setLoadingDeals] = useState(false);
@@ -128,17 +122,7 @@ const SingleSalon = props => {
                 //console.log(err);
             })
     }, [param.salonId])
-    useEffect(() => {
-        setLoadingServices(true);
-        axios.get(`/companies/${param.salonId}/services?page=${servicesPage + 1}&per_page=${servicesRowsPerPage}`)
-            .then(res => {
-                setLoadingServices(false);
-                setServices(res.data);
-            })
-            .catch(err => {
-                //console.log(err);
-            })
-    }, [param.salonId, servicesPage])
+
     useEffect(() => {
         setLoadingDeals(true);
         axios.get(`/companies/${param.salonId}/deals?page=${dealsPage + 1}&per_page=${dealsRowsPerPage}&include[]=company`)
@@ -149,11 +133,9 @@ const SingleSalon = props => {
             .catch(err => {
                 //console.log(err);
             })
-    }, [dealsPage, param.salonId, servicesPage])
+    }, [dealsPage, param.salonId])
 
-    const handleServiceChangePage = React.useCallback((event, newPage) => {
-        setServicesPage(newPage);
-    }, []);
+
     const handleDealChangePage = React.useCallback((event, newPage) => {
         setDealsPage(newPage);
     }, []);
@@ -183,7 +165,7 @@ const SingleSalon = props => {
 
     let content;
 
-    if (loading || loadingServices || loadingDeals) {
+    if (loading || loadingDeals) {
         content = (
             <Loader height='200px' />
         );
@@ -308,31 +290,7 @@ const SingleSalon = props => {
                     </Grid>
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    {
-                        services.data.length > 0 && (
-                            <>
-                                <Grid container spacing={2}>
-                                    {services.data.map(service => {
-                                        return (
-                                            <Grid item xs={12} sm={6} md={4} key={service.id}>
-                                                <ServicePanel service={service} path='../services' />
-                                            </Grid>
-                                        )
-                                    })
-                                    }
-                                </Grid>
-                                <TablePaginationActions
-                                    component="div"
-                                    count={services.data.length}
-                                    total={services.meta ? services.meta.total : null}
-                                    rowsPerPage={dealsRowsPerPage}
-                                    page={servicesPage}
-                                    onPageChange={handleServiceChangePage}
-                                    loading={loadingServices}
-                                />
-                            </>
-                        )
-                    }
+                    <Services salonId={salon.id} />
                 </TabPanel>
                 <TabPanel value={value} index={2}>
                     {
