@@ -323,8 +323,8 @@ const EditModal = (props) => {
             setDealStatus(status);
             setUsesTime(uses_limit);
             setUserLimit(used_time);
-            setDateFrom(new Date(start_date_time));
-            setDateTo(new Date(end_date_time));
+            setDateFrom(new Date(start_date_time.split(' ')[0]));
+            setDateTo(new Date(end_date_time.split(' ')[0]));
             setOpenTime(new Date(`2021-02-03 ${convertTime12to24(open_time)}`));
             setCloseTime(new Date(`2021-02-03 ${convertTime12to24(close_time)}`));
             let obj = {};
@@ -356,6 +356,8 @@ const EditModal = (props) => {
                 });
             })
     }, [id, lang, t])
+
+    console.log(dateFrom, dateTo)
 
     useEffect(() => {
         if (id) {
@@ -726,7 +728,6 @@ const EditModal = (props) => {
                                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                                     {selected.map((value) => {
                                         const item = cartData.services.find(service => service.id === value);
-                                        console.log(cartData.services, value, item)
                                         return (
                                             <Chip key={item.id} label={item.name} />
                                         )
