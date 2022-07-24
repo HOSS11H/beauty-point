@@ -267,25 +267,27 @@ const BookingsReport = props => {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <Grid sx={{ mt: 3 }} container spacing={3}>
-                    <Grid item xs={12} md={6}>
-                        <PriceCalculation>
-                            <p>{t('total bookings')}</p>
-                            <p>{completedExternalBookings?.total_count}</p>
-                        </PriceCalculation>
-                        <PriceCalculation>
-                            <p>{t('commission')}</p>
-                            <p>{9} %</p>
-                        </PriceCalculation>
-                        <PriceCalculation>
-                            <p>{t('total amount')}</p>
-                            <p>{formatCurrency(((9 / 100) * completedExternalBookings?.total))}</p>
-                        </PriceCalculation>
+                {completedExternalBookings && (
+                    <Grid sx={{ mt: 3 }} container spacing={3}>
+                        <Grid item xs={12} md={6}>
+                            <PriceCalculation>
+                                <p>{t('total bookings')}</p>
+                                <p>{completedExternalBookings?.total_count}</p>
+                            </PriceCalculation>
+                            <PriceCalculation>
+                                <p>{t('commission')}</p>
+                                <p>{9} %</p>
+                            </PriceCalculation>
+                            <PriceCalculation>
+                                <p>{t('total amount')}</p>
+                                <p>{formatCurrency(((9 / 100) * completedExternalBookings?.total))}</p>
+                            </PriceCalculation>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <LoadingButton loading={sendingRequest} onClick={SubmitRequestHandler} variant='contained' color="secondary">{t('request / purchase')}</LoadingButton>
+                        </Grid>
                     </Grid>
-                    <Grid item xs={12}>
-                        <LoadingButton loading={sendingRequest} onClick={SubmitRequestHandler} variant='contained' color="secondary">{t('request / purchase')}</LoadingButton>
-                    </Grid>
-                </Grid>
+                )}
             </Fragment>
         )
     }
