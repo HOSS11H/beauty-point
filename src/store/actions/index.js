@@ -96,3 +96,10 @@ export {
 export {
     fetchPermissions
 } from './permissions'
+export {
+    addToServices,
+    removeService,
+    addToDeals,
+    removeDeal,
+    resetCart,
+} from './cart'

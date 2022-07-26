@@ -15,7 +15,7 @@ import Tabs from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
 import { useCallback, useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { useTranslation } from "react-i18next";
 import { useParams, useSearchParams } from "react-router-dom";
 import styled from 'styled-components';
@@ -255,10 +255,12 @@ const SingleArtist = props => {
     return (
         <HomeLayout>
             <Wrapper>
-                <Container maxWidth="lg">
-                    {content}
-                </Container>
-                <CustomizedSnackbars show={messageShown} message={t('Copied !')} type='success' onClose={closeMessageHandler} />
+                <HelmetProvider>
+                    <Container maxWidth="lg">
+                        {content}
+                    </Container>
+                    <CustomizedSnackbars show={messageShown} message={t('Copied !')} type='success' onClose={closeMessageHandler} />
+                </HelmetProvider>
             </Wrapper>
         </HomeLayout>
     )

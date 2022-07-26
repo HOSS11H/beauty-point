@@ -23,6 +23,7 @@ import productsReducer from './store/reducers/products';
 import reportsReducer from './store/reducers/reports';
 import servicesReducer from './store/reducers/services';
 import unitsReducer from './store/reducers/units';
+import cartReducer from './store/reducers/cart';
 
 import { BrowserRouter } from 'react-router-dom';
 
@@ -49,6 +50,7 @@ const rootReducer = combineReducers({
 	expenses: expensesReducer,
 	units: unitsReducer,
 	permissions: permissionsReducer,
+	cart: cartReducer,
 });
 
 

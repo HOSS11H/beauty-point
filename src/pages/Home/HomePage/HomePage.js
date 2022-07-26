@@ -1,6 +1,6 @@
 import HomeLayout from "../../../components/HomeLayout/HomeLayout";
 import Artists from "./Artists/Artists";
-import CategoriesSlider from "./CategoriesSlider/CategoriesSlider";
+// import CategoriesSlider from "./CategoriesSlider/CategoriesSlider";
 import Deals from "./Deals/Deals";
 import Hero from "./Hero/Hero";
 import Salons from "./Salons/Salons";
@@ -11,7 +11,7 @@ const HomePage = props => {
         <div className="landing">
             <HomeLayout mainPage={true}>
                 <Hero />
-                <CategoriesSlider />
+                {/* <CategoriesSlider /> */}
                 <Salons />
                 <Artists />
                 <Spotlights />

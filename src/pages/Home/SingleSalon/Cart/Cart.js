@@ -94,6 +94,11 @@ const CartButton = styled(Button)`
     }
 `
 
+const intialState = {
+    services: [],
+    deals: [],
+}
+
 const cartReducer = (state, action) => {
     switch (action.type) {
         case 'ADD_TO_SERVICES':
@@ -129,11 +134,6 @@ const cartReducer = (state, action) => {
                 deals: filteredDeals,
             })
         case 'RESET_CART':
-            const intialState = {
-                services: [],
-                products: [],
-                deals: [],
-            }
             return updateObject(state, intialState)
         default:
             return state;

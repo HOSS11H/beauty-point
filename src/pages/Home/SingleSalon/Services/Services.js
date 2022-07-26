@@ -141,8 +141,8 @@ const Services = props => {
         categoriesContent = <Fragment>
             <Grid container spacing={2} sx={{ mb: 3 }} >
                 {categories.map((category, index) => {
-                    return <Grid item xs="auto">
-                        <Category key={index} active={selectedCategory === category.id} onClick={() => setSelectedCategory(category.id)}  >{category.name}</Category>
+                    return <Grid key={index} item xs="auto">
+                        <Category active={selectedCategory === category.id} onClick={() => setSelectedCategory(category.id)}  >{category.name}</Category>
                     </Grid>
                 })}
             </Grid>
