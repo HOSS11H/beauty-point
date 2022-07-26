@@ -98,6 +98,7 @@ const TaxesReport = props => {
                 console.log(err);
             })
     }, [dateFrom, dateTo])
+    
     useEffect(() => {
         setLoadingUserData(true);
         v1.get(`/auth/me`)

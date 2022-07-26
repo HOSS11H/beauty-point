@@ -357,6 +357,7 @@ const EditModal = (props) => {
                 setPaymentStatus(responses[0].data.payment_status);
                 setPaymentGateway(responses[0].data.payment_gateway);
                 setHasVat(responses[0].data.has_vat);
+                setDiscount(responses[0].data.discount_percent)
                 const items = responses[0].data.items;
                 items.forEach(item => {
                     if (item.type === 'service') {
