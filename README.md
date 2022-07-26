@@ -1,1 +1,1 @@
-Seats Atble For Mockup 
+Seats TAble For Mockup 
