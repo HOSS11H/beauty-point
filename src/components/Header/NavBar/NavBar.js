@@ -13,6 +13,7 @@ import { useState } from 'react';
 import {ModuleSearchWrapper} from '../Modules/ModuleSearch/ModuleSearch';
 import {ModuleButton} from '../Modules/ModuleAuth/ModuleAuth';
 import ModuleLocation from '../Modules/ModuleLocation/ModuleLocation';
+import ModuleCart, { Wrapper as CartWrapper } from '../Modules/ModuleCart/ModuleCart';
 
 const fadeInDown = keyframes`
     from {
@@ -124,6 +125,11 @@ const Nav = styled.nav`
                     color: ${ ( { theme } ) => theme.palette.mode === 'dark' ? theme.palette.common.white : theme.vars.secondary};
                 }
             }
+            & ${CartWrapper} {
+                & .MuiSvgIcon-root {
+                    color: ${ ( { theme } ) => theme.palette.mode === 'dark' ? theme.palette.common.white : theme.vars.secondary};
+                }
+            }
             & ${ModuleSearchWrapper} {
                 .module-icon {
                     background: ${ ( { theme } ) => theme.vars.secondary};
@@ -229,6 +235,7 @@ const NavBar = () => {
                             }
                         </NavbarNav>
                         <ModulesHolder>
+                            <ModuleCart />
                             <ModuleMood />
                             <ModuleLocation />
                             <ModuleAuth />

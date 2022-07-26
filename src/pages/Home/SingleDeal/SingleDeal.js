@@ -39,7 +39,7 @@ const SingleDeal = props => {
     if (deal) {
         content = (
             <SingleCard image={deal.image} title={deal.title} name={deal.company.companyName} 
-                compnyId={deal.company.id} price={deal.price} time={`${t('from')} ${deal.open_time} ${t('to')} ${deal.close_time}`} 
+                companyId={deal.company.id} price={deal.price} time={`${t('from')} ${deal.open_time} ${t('to')} ${deal.close_time}`} 
                 location={deal.location.name} type='deal' id={deal.id} />
         )
     }

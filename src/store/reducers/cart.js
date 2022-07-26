@@ -11,15 +11,12 @@ const intialState = {
 const reudcer = (state = intialState, action) => {
     switch (action.type) {
         case (actionTypes.ADD_TO_SERVICES):
-            const serviceIndex = state.services.findIndex(service => service.item.id === action.payload.id);
+            const serviceIndex = state.services.findIndex(service => service.id === action.payload.id);
             const updatedServices = [...state.services]
             if (serviceIndex === -1) {
                 const obj = {
-                    id: action.payload.id,
-                    quantity: 0,
-                    price: action.payload.price,
-                    companyId: action.payload.company.id,
-                    companyName: action.payload.company.companyName
+                    ...action.payload,
+                    quantity: 1,
                 }
                 updatedServices.push(obj)
             } else {
@@ -36,15 +33,12 @@ const reudcer = (state = intialState, action) => {
                 services: filteredServices,
             })
         case (actionTypes.ADD_TO_DEALS):
-            const dealIndex = state.deals.findIndex(deal => deal.item.id === action.payload.id);
+            const dealIndex = state.deals.findIndex(deal => deal.id === action.payload.id);
             const updatedDeals = [...state.deals]
             if (dealIndex === -1) {
                 const obj = {
-                    id: action.payload.id,
-                    quantity: 0,
-                    price: action.payload.price,
-                    companyId: action.payload.company.id,
-                    companyName: action.payload.company.companyName
+                    ...action.payload,
+                    quantity: 1,
                 }
                 updatedDeals.push(obj)
             } else {

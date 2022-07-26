@@ -4,11 +4,14 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
 import PushPinIcon from '@mui/icons-material/PushPin';
 import Typography from '@mui/material/Typography';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { formatCurrency } from '../../../shared/utility';
 import { useTranslation } from 'react-i18next';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { Fragment } from 'react';
+import { addToDeals, addToServices } from '../../../store/actions';
+import { connect } from 'react-redux';
+import { Button } from '@mui/material';
 
 const CustomCard = styled(Card)`
     display: flex;
@@ -69,72 +72,53 @@ const CustomCard = styled(Card)`
         }
     }
 `
-const Bounce = keyframes`
-    0% {
-        transform:         translateY(0px) translateX(-50%)
-    }
-    50% {
-        transform:         translateY(5px) translateX(-50%)
-    }
-    100% {
-        transform:         translateY(0px) translateX(-50%)
-    }
-`;
 
-const Scale = keyframes`
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.1);
-    }
-    100% {
-        transform: scale(1);
-    }
-`
-
-const CatButton = styled.div`
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 50%;
-    background-color: ${props => props.theme.vars.primary};
-    color: ${props => props.theme.palette.common.white};
-    width: 60px;
-    height: 60px;
-    position: fixed;
-    bottom: 40px;
-    right: 50%;
-    transform: translateX(50%);
-    animation: ${Bounce} 1s ease-in-out infinite;
-    cursor: pointer;
-    z-index: 1200;
-    @media screen and ( max-width: 899.98px) {
-        width           : 50px;
-        height          : 50px;
-        bottom : 130px;
-        right  : 15px;
-        transform: translate(0);
-        animation: ${Scale} 1s ease-in-out infinite;
+const CatButton = styled(Button)`
+    &.MuiButton-root {
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        background-color: ${props => props.theme.vars.primary};
+        color: ${props => props.theme.palette.common.white};
+        width: max-content;
+        margin-top: 20px;
+        &:hover {
+            background-color: ${props => props.theme.vars.primary};
+        }
+        & .MuiSvgIcon-root {
+            margin-left: 5px;
+        }
     }
 `
 
 const SingleCard = props => {
 
-    const { image, title, name, price, time, timeType, location, compnyId, category, categoryId, type, id } = props;
+    const { image, title, name, price, time, timeType, location, companyId, category, categoryId, type, id, addServiceHandler, addDealHandler } = props;
 
     const { t } = useTranslation();
 
     const navigate = useNavigate()
 
     const handleClick = () => {
-        navigate(`../salons/${compnyId}`)
+        navigate(`../salons/${companyId}`)
     }
     const handleCartClick = () => {
         if (type === 'service') {
-            navigate(`../salons/${compnyId}?tab=cart&t=${type}&i=${id}&n=${title}&p=${price}`)
+            addServiceHandler({
+                    id: id,
+                    name: title,
+                    price,
+                    companyId,
+                    companyName: name,
+            })
         } else if (type === 'deal') {
-            navigate(`../salons/${compnyId}?tab=cart&t=${type}&i=${id}&n=${title}&p=${price}`)
+            addDealHandler({
+                    id: id,
+                    name: title,
+                    price,
+                    companyId,
+                    companyName: name,
+            })
         }
     }
 
@@ -169,14 +153,23 @@ const SingleCard = props => {
                         <Typography component="div" variant="subtitle1" sx={{ display: 'flex', alignItems: 'center' }}>
                             <PushPinIcon sx={{ mr: 1, width: '15px', height: '15px' }} />{location}
                         </Typography>
+                        <CatButton onClick={handleCartClick} >
+                            {t('Add to Cart')}
+                            <ShoppingCartIcon />
+                        </CatButton>
                     </CardContent>
                 </div>
             </CustomCard>
-            <CatButton onClick={handleCartClick} >
-                <ShoppingCartIcon />
-            </CatButton>
         </Fragment>
     )
 }
 
-export default SingleCard;
+const mapDispatchToProps = dispatch => {
+    return {
+        addServiceHandler: (data) => dispatch(addToServices(data)),
+        addDealHandler: (data) => dispatch(addToDeals(data)),
+    }
+}
+
+
+export default connect(null, mapDispatchToProps)(SingleCard);

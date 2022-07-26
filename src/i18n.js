@@ -659,7 +659,8 @@ const resources = {
             'Referal Url': 'رمز الدعوة',
             'Copied to clipoard.': 'تم النسخ',
             'Request sent  successfully!': 'تم ارسال الطلب بنجاح !',
-            'Failed to send requset!': 'فشل ارسال الطلب'
+            'Failed to send requset!': 'فشل ارسال الطلب',
+            'Add to Cart': 'اضافة الي عربة التسوق'
         }
     }
 };
