@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import styled from 'styled-components';
 import { formatCurrency } from '../../../shared/utility';
 import { useTranslation } from 'react-i18next';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useSearchParams } from 'react-router-dom';
 import { Fragment } from 'react';
 import { addToDeals, addToServices } from '../../../store/actions';
 import { connect } from 'react-redux';
@@ -98,11 +98,18 @@ const SingleCard = props => {
     const { t } = useTranslation();
 
     const navigate = useNavigate()
+    let [searchParams, setSearchParams] = useSearchParams();
+    const exisitongCompanyId = searchParams.get('cId');
 
     const handleClick = () => {
         navigate(`../salons/${companyId}`)
     }
     const handleCartClick = () => {
+
+        if ( !exisitongCompanyId ) {
+            setSearchParams({ cId: companyId })
+        }
+
         if (type === 'service') {
             addServiceHandler({
                     id: id,

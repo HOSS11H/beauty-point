@@ -5,23 +5,24 @@ import Card from '@mui/material/Card';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { Box, Button, Grid } from '@mui/material';
-import { useCallback, useEffect, useReducer, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import CartHeadliner from './CartHeadliner/CartHeadliner';
 import ChooseAppointment from './ChooseAppointment/ChooseAppointment';
 import UserAuth from './UserAuth/UserAuth';
 import ChoosePayment from './ChoosePayment/ChoosePayment';
 import axios from '../../../../../utils/axios-instance';
-import { updateObject } from '../../../../../shared/utility';
 import ItemsReview from './ItemsReview/ItemsReview';
 import PrintBooking from './PrintBooking/PrintBooking';
 import { format } from 'date-fns/esm';
 import CartSummary from './CartSummary/CartSummary';
 import { Fragment } from 'react';
 import { connect } from 'react-redux';
-import { fetchCoupons } from '../../../../../store/actions/index';
+import { fetchCoupons, removeDeal, removeService } from '../../../../../store/actions/index';
 import { useContext } from 'react';
 import ThemeContext from '../../../../../store/theme-context';
 import { useSearchParams } from 'react-router-dom';
+import Loader from '../../../../UI/Loader/Loader';
+import { toast } from 'react-toastify';
 
 const CustomCardMui = styled(Card)`
     &.MuiPaper-root {
@@ -78,8 +79,8 @@ const CartBody = styled.div`
 
 const CartButton = styled(Button)`
     &.MuiButton-root {
-        background: ${ ( { theme } ) => theme.vars.primary};
-        color: ${ ( { theme } ) => theme.palette.common.white};
+        background: ${({ theme }) => theme.vars.primary};
+        color: ${({ theme }) => theme.palette.common.white};
         transition: 0.3s ease-in-out;
         border-radius: 10px;
         &:disabled {
@@ -88,123 +89,65 @@ const CartButton = styled(Button)`
             box-shadow: none;
         }
         &:hover {
-            background: ${ ( { theme } ) => theme.palette.secondary.dark};
+            background: ${({ theme }) => theme.palette.secondary.dark};
         }
     }
 `
 
-const cartReducer = (state, action) => {
-    switch (action.type) {
-        case 'ADD_TO_SERVICES':
-            const serviceIndex = state.services.findIndex(service => service.id === action.payload.id);
-            const updatedServices = [...state.services]
-            if (serviceIndex === -1) {
-                updatedServices.push(action.payload)
-            } else {
-                updatedServices.splice(serviceIndex, 1)
-            }
-            return updateObject(state, {
-                services: updatedServices,
-            })
-        case 'REMOVE_SERVICE':
-            const filteredServices = state.services.filter(service => service.id !== action.payload)
-            return updateObject(state, {
-                services: filteredServices,
-            })
-        case 'ADD_TO_DEALS':
-            const dealIndex = state.deals.findIndex(deal => deal.id === action.payload.id);
-            const updatedDeals = [...state.deals]
-            if (dealIndex === -1) {
-                updatedDeals.push(action.payload)
-            } else {
-                updatedDeals.splice(dealIndex, 1)
-            }
-            return updateObject(state, {
-                deals: updatedDeals,
-            })
-        case 'REMOVE_DEAL':
-            const filteredDeals = state.deals.filter(deal => deal.id !== action.payload)
-            return updateObject(state, {
-                deals: filteredDeals,
-            })
-        case 'RESET_CART':
-            const intialState = {
-                services: [],
-                products: [],
-                deals: [],
-            }
-            return updateObject(state, intialState)
-        default:
-            return state;
+const CustomMessage = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100%;
+    flex-grow: 1;
+    padding: 20px;
+    p {
+        font-size: 24px;
+        line-height:1.5;
+        text-transform: capitalize;
+        font-weight: 500;
+        color: ${({ theme }) => theme.palette.text.disabled};
     }
-}
+`
 
 const steps = ['review items', 'Select appointment', 'user infos', 'choose Payment', 'print receipt'];
 
 const Cart = props => {
 
+    const { show, onClose, fetchCouponsHandler, cart, removeDeal, removeService } = props;
+
     const { t } = useTranslation();
 
     const [searchParams] = useSearchParams();
 
-    const itemType = searchParams.get('t');
-    const itemId = searchParams.get('i');
-    const itemName = searchParams.get('n');
-    const itemPrice = searchParams.get('p');
-
-    let intialCart = {
-        services: [],
-        deals: [],
-    };
-    let intialType = '';
-    if (itemType) {
-        const purchasedItem  = {
-            id: +itemId,
-            name: itemName,
-            price: +itemPrice,
-            quantity: 1,
-        }
-        if (itemType === 'service') {
-            intialCart = {
-                services: [purchasedItem],
-                deals: [],
-            }
-        } else if (itemType === 'deal') {
-            intialCart = {
-                services: [],
-                deals: [purchasedItem],
-            }
-        }
-        if (itemType === 'service') {
-            intialType = 'services'
-        } else if (itemType === 'deal') {
-            intialType = 'deals'
-        }
-    }
+    const companyId = searchParams.get('cId');
 
     const themeCtx = useContext(ThemeContext);
     const { lang } = themeCtx;
 
-    const { show, onClose, fetchCouponsHandler } = props;
+    const [companyData, setCompanyData] = useState({
+        id: companyId || null,
+        companyName: '',
+        vendor_page: {}
+    })
 
-    const companyData = {id: 1}
-
-    const [cart, dispatch] = useReducer(cartReducer, intialCart);
+    const [fetchingCompanyData, setFetchingCompanyData] = useState(false)
+    const [companyDataFetched, setCompanyDataFetched] = useState(false)
+    const [companyDataFetchError, setCompanyDataFetchError] = useState(false)
 
     const [totalPrice, setTotalPrice] = useState(0)
 
     const [totalTaxes, setTotalTaxes] = useState(0)
 
-    const [activeStep, setActiveStep] = useState(itemType ? 1 : 0);
-
-    const [selectedType, setSelectedType] = useState(intialType);
+    const [activeStep, setActiveStep] = useState(0);
 
     const [appointment, setAppointment] = useState(new Date());
     const [slot, setSlot] = useState('');
     const [hasSelectedAppointment, setHasSelectedAppointment] = useState(false);
 
-    const [ bookingPlace, setBookingPlace] = useState(null)
-    const [ bookingPlacePrice, setBookingPlacePrice] = useState(null)
+    const [bookingPlace, setBookingPlace] = useState(null)
+    const [bookingPlacePrice, setBookingPlacePrice] = useState(null)
 
     const [userInfos, setUserInfos] = useState('');
 
@@ -217,7 +160,23 @@ const Cart = props => {
 
     const [bookingDone, setBookingDone] = useState(false);
 
-
+    useEffect(() => {
+        if (!companyId) return;
+        setFetchingCompanyData(true);
+        setCompanyDataFetched(false)
+        setCompanyDataFetchError(false)
+        axios.get(`/companies/${companyId}?include[]=vendor_page&include[]=booking_times`)
+            .then(res => {
+                setFetchingCompanyData(false);
+                setCompanyData(res.data);
+                setCompanyDataFetched(true)
+            })
+            .catch(err => {
+                setFetchingCompanyData(false);
+                toast.error('Can not get Company data')
+                setCompanyDataFetchError(true)
+            })
+    }, [companyId])
 
     useEffect(() => {
         let total = 0;
@@ -254,55 +213,6 @@ const Cart = props => {
     };
 
 
-    const addToCartHandler = useCallback((itemData) => {
-        if (selectedType === 'services') {
-            dispatch({
-                type: 'ADD_TO_SERVICES',
-                payload: itemData
-            })
-        }
-        if (selectedType === 'products') {
-            dispatch({
-                type: 'ADD_TO_PRODUCTS',
-                payload: itemData
-            })
-        }
-        if (selectedType === 'deals') {
-            dispatch({
-                type: 'ADD_TO_DEALS',
-                payload: itemData
-            })
-        }
-    }, [selectedType])
-
-    const removeFromCartHandler = useCallback((type, itemId) => {
-        //console.log(type, itemId)
-        if (type === 'services') {
-            dispatch({
-                type: 'REMOVE_SERVICE',
-                payload: itemId
-            })
-        }
-        if (type === 'products') {
-            dispatch({
-                type: 'REMOVE_PRODUCT',
-                payload: itemId
-            })
-        }
-        if (type === 'deals') {
-            dispatch({
-                type: 'REMOVE_DEAL',
-                payload: itemId
-            })
-        }
-    }, [])
-
-    const resetCartHandler = useCallback(() => {
-        dispatch({
-            type: 'RESET_CART',
-        })
-    }, [])
-
     const handleAppointment = useCallback((date) => {
         setAppointment(date);
         setSlot('');
@@ -337,7 +247,7 @@ const Cart = props => {
                 cart: cart,
                 couponId: couponId,
             };
-            if( bookingPlace ) {
+            if (bookingPlace) {
                 data.booking_place = bookingPlace
             }
             axios.post(`/bookings`, data)
@@ -362,7 +272,6 @@ const Cart = props => {
     const ResetCart = () => {
         if (bookingDone) {
             handleReset();
-            setSelectedType('');
             setAppointment(new Date());
             setSlot('');
             setHasSelectedAppointment(false);
@@ -371,10 +280,138 @@ const Cart = props => {
             setCouponId(null);
             setReservedBookingData(null);
             setBookingDone(false);
-            resetCartHandler();
             onClose();
         }
     }
+
+    let content;
+
+    if (fetchingCompanyData) {
+        content = <Loader height={300} />
+    }
+    if (companyDataFetchError) {
+        content = (
+            <CustomMessage>
+                <p>{t('no company data')}</p>
+            </CustomMessage>
+        )
+    }
+    if (!companyData.id) {
+        content = <ItemsReview cartData={cart} removeService={removeService} removeDeal={removeDeal} />
+    }
+
+    if (!fetchingCompanyData && companyData.id && companyDataFetched) {
+        const bookingPlaceDisabled = !companyData.vendor_page.in_customer_house_available && !companyData.vendor_page.in_house_available && !companyData.vendor_page.in_saloon_available
+        content = (
+            <Grid container spacing={0} >
+                <Grid item xs={12} md={3}>
+                    <CartHeadliner activeStep={activeStep} salonName={companyData.companyName} steps={steps} />
+                </Grid>
+                <Grid item xs={12} md={activeStep === 4 ? 9 : 6}>
+                    <CartContent sx={{ width: '100%' }}>
+                        <CartBody>
+                            {
+                                activeStep === 0 && <ItemsReview cartData={cart} removeService={removeService} removeDeal={removeDeal} />
+                            }
+                            {
+                                activeStep === 1 && <ChooseAppointment
+                                    id={companyData.id} vendotPage={companyData.vendor_page} appointment={appointment}
+                                    bookingPlace={bookingPlace} chooseBookingPlace={bookingPlaceHandler}
+                                    handleAppointment={handleAppointment} handleSlot={handleSlot} activeSlot={slot} />
+                            }
+                            {
+                                activeStep === 2 && <UserAuth id={companyData.id} handleNext={handleNext} storeUserData={storeUserInfos} />
+                            }
+                            {
+                                activeStep === 3 && <ChoosePayment handlePayment={handleChoosePayment} assignCoupon={handleCoupon} assignCouponData={handleCouponData} couponData={couponData} />
+                            }
+                            {
+                                activeStep === 4 && <PrintBooking bookingData={resevedBookingData} userData={userInfos} handleBookingDone={handleBookingDone} salonName={companyData.companyName} appointment={appointment} slot={slot} />
+                            }
+                        </CartBody>
+                        <Fragment>
+                            {
+                                activeStep === 0 && (
+                                    <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>
+                                        <Box sx={{ flex: '1 1 auto' }} />
+                                        <CartButton color="secondary" variant='contained' onClick={handleNext} disabled={cart.services.length === 0 && cart.deals.length === 0} >
+                                            {t('Next')}
+                                        </CartButton>
+                                    </Box>
+                                )
+                            }
+                            {
+                                activeStep === 1 && (
+                                    <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>
+                                        <Button
+                                            color="inherit"
+                                            onClick={handleBack}
+                                            sx={{ mr: 1 }}
+                                        >
+                                            {t('Back')}
+                                        </Button>
+                                        <Box sx={{ flex: '1 1 auto' }} />
+                                        <CartButton color="secondary" variant='contained' onClick={handleNext} disabled={!hasSelectedAppointment || (!bookingPlaceDisabled && !bookingPlace)} >
+                                            {t('Next')}
+                                        </CartButton>
+                                    </Box>
+                                )
+                            }
+                            {
+                                activeStep === 2 && (
+                                    <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>
+                                        <Button
+                                            color="inherit"
+                                            disabled={activeStep === 0}
+                                            onClick={handleBack}
+                                            sx={{ mr: 1 }}
+                                        >
+                                            {t('Back')}
+                                        </Button>
+                                        <Box sx={{ flex: '1 1 auto' }} />
+                                        <CartButton color="secondary" variant='contained' onClick={handleNext} disabled >
+                                            {t('Next')}
+                                        </CartButton>
+                                    </Box>
+                                )
+                            }
+                            {
+                                activeStep === 3 && (
+                                    <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>
+                                        <Button
+                                            color="inherit"
+                                            disabled={activeStep === 0}
+                                            onClick={() => setActiveStep(activeStep - 2)}
+                                            sx={{ mr: 1 }}
+                                        >
+                                            {t('Back')}
+                                        </Button>
+                                        <Box sx={{ flex: '1 1 auto' }} />
+                                    </Box>
+                                )
+                            }
+                            {
+                                activeStep === 4 && (
+                                    <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>
+                                        <Box sx={{ flex: '1 1 auto' }} />
+                                        <CartButton color="secondary" variant='contained' onClick={ResetCart} disabled={!bookingDone} >
+                                            {t('Finish')}
+                                        </CartButton>
+                                    </Box>
+                                )
+                            }
+                        </Fragment>
+                    </CartContent>
+                </Grid>
+                <Grid item xs={12} md={3} sx={{ display: activeStep === 4 ? 'none' : 'block' }} >
+                    <CartSummary cartData={cart} taxes={totalTaxes} total={totalPrice} hasSelectedAppointment={hasSelectedAppointment} bookingPlacePrice={bookingPlacePrice}
+                        appointment={appointment} slot={slot} bookingPlace={bookingPlace} hasSelectedCoupon={couponId} couponDiscount={couponData.amount} />
+                </Grid>
+            </Grid>
+        )
+    }
+
+
 
     return (
         <Modal
@@ -396,128 +433,24 @@ const Cart = props => {
         >
             <Fade in={show}>
                 <CustomCardMui>
-                    <Grid container spacing={0} >
-                        <Grid item xs={12} md={3}>
-                            <CartHeadliner activeStep={activeStep} salonName={companyData.companyName} steps={steps} />
-                        </Grid>
-                        <Grid item xs={12} md={  activeStep === 4 ? 9 : 6}>
-                            <CartContent sx={{ width: '100%' }}>
-                                <CartBody>
-                                    {
-                                        activeStep === 0 && <ItemsReview cartData={cart} removeFromCart={removeFromCartHandler}  />
-                                    }
-                                    {
-                                        activeStep === 1 && <ChooseAppointment 
-                                                                                    id={companyData.id} vendotPage={companyData.vendor_page} appointment={appointment} 
-                                                                                    bookingPlace={bookingPlace} chooseBookingPlace={bookingPlaceHandler}
-                                                                                    handleAppointment={handleAppointment} handleSlot={handleSlot} activeSlot={slot} />
-                                    }
-                                    {
-                                        activeStep === 2 && <UserAuth id={companyData.id} handleNext={handleNext} storeUserData={storeUserInfos} />
-                                    }
-                                    {
-                                        activeStep === 3 && <ChoosePayment handlePayment={handleChoosePayment} assignCoupon={handleCoupon} assignCouponData={handleCouponData} couponData={couponData} />
-                                    }
-                                    {
-                                        activeStep === 4 && <PrintBooking bookingData={resevedBookingData} userData={userInfos} handleBookingDone={handleBookingDone} salonName={companyData.companyName} appointment={appointment} slot={slot} />
-                                    }
-                                </CartBody>
-                                <Fragment>
-                                    {
-                                        activeStep === 0 && (
-                                            <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>
-                                                <Button
-                                                    color="inherit"
-                                                    onClick={handleBack}
-                                                    sx={{ mr: 1 }}
-                                                >
-                                                    {t('Back')}
-                                                </Button>
-                                                <Box sx={{ flex: '1 1 auto' }} />
-                                                <CartButton color="secondary" variant='contained' onClick={handleNext} disabled={cart.services.length === 0 && cart.deals.length === 0 } >
-                                                    {t('Next')}
-                                                </CartButton>
-                                            </Box>
-                                        )
-                                    }
-                                    {
-                                        activeStep === 1 && (
-                                            <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>
-                                                <Button
-                                                    color="inherit"
-                                                    onClick={handleBack}
-                                                    sx={{ mr: 1 }}
-                                                >
-                                                    {t('Back')}
-                                                </Button>
-                                                <Box sx={{ flex: '1 1 auto' }} />
-                                                <CartButton color="secondary" variant='contained' onClick={handleNext} disabled={!hasSelectedAppointment || !bookingPlace} >
-                                                    {t('Next')}
-                                                </CartButton>
-                                            </Box>
-                                        )
-                                    }
-                                    {
-                                        activeStep === 2 && (
-                                            <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>
-                                                <Button
-                                                    color="inherit"
-                                                    disabled={activeStep === 0}
-                                                    onClick={handleBack}
-                                                    sx={{ mr: 1 }}
-                                                >
-                                                    {t('Back')}
-                                                </Button>
-                                                <Box sx={{ flex: '1 1 auto' }} />
-                                                <CartButton color="secondary" variant='contained' onClick={handleNext} disabled >
-                                                    {t('Next')}
-                                                </CartButton>
-                                            </Box>
-                                        )
-                                    }
-                                    {
-                                        activeStep === 3 && (
-                                            <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>
-                                                <Button
-                                                    color="inherit"
-                                                    disabled={activeStep === 0}
-                                                    onClick={( ) => setActiveStep(activeStep - 2)}
-                                                    sx={{ mr: 1 }}
-                                                >
-                                                    {t('Back')}
-                                                </Button>
-                                                <Box sx={{ flex: '1 1 auto' }} />
-                                            </Box>
-                                        )
-                                    }
-                                    {
-                                        activeStep === 4 && (
-                                            <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2 }}>
-                                                <Box sx={{ flex: '1 1 auto' }} />
-                                                <CartButton color="secondary" variant='contained' onClick={ResetCart} disabled={!bookingDone} >
-                                                    {t('Finish')}
-                                                </CartButton>
-                                            </Box>
-                                        )
-                                    }
-                                </Fragment>
-                            </CartContent>
-                        </Grid>
-                        <Grid item xs={12} md={3} sx={{ display: activeStep === 4 ? 'none' : 'block'}} >
-                            <CartSummary cartData={cart} taxes={totalTaxes} total={totalPrice} hasSelectedAppointment={hasSelectedAppointment} bookingPlacePrice={bookingPlacePrice}
-                                appointment={appointment} slot={slot} bookingPlace={bookingPlace} hasSelectedCoupon={couponId} couponDiscount={couponData.amount} />
-                        </Grid>
-                    </Grid>
+                    {content}
                 </CustomCardMui>
             </Fade>
         </Modal>
     )
 }
 
+const mapStateToProps = (state) => {
+    return {
+        cart: state.cart
+    }
+}
 const mapDispatchToProps = (dispatch) => {
     return {
         fetchCouponsHandler: (lang) => dispatch(fetchCoupons(lang)),
+        removeService: (type, id) => dispatch(removeService(id)),
+        removeDeal: (type, id) => dispatch(removeDeal(id))
     }
 }
 
-export default connect(null, mapDispatchToProps)(Cart);
+export default connect(mapStateToProps, mapDispatchToProps)(Cart);

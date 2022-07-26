@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Cart from './Cart/Cart';
 import { useState } from 'react';
+import { connect } from 'react-redux';
 
 export const Wrapper = styled.div`
     margin-right: 20px;
@@ -19,6 +20,8 @@ export const Wrapper = styled.div`
 
 const ModuleCart = props => {
 
+    const { cart } = props
+
     const [ showCart, setShowCart ] = useState(false)
 
     const toggleCartHandler = ( ) => {
@@ -29,10 +32,12 @@ const ModuleCart = props => {
         setShowCart(false)
     }
 
+    const cartLength = cart.services.length + cart.deals.length
+
     return (
         <Wrapper>
             <IconButton onClick={toggleCartHandler} >
-                <Badge badgeContent={4} color="secondary">
+                <Badge badgeContent={cartLength} color="secondary">
                     <ShoppingCartIcon />
                 </Badge>
             </IconButton>
@@ -40,4 +45,11 @@ const ModuleCart = props => {
         </Wrapper>
     )
 }
-export default ModuleCart;
+
+const mapStateToProps = (state) => {
+    return {
+        cart: state.cart
+    }
+}
+
+export default connect(mapStateToProps, null)(ModuleCart);

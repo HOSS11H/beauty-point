@@ -4,7 +4,6 @@ import { updateObject } from '../../shared/utility'
 
 const intialState = {
     services: [],
-    products: [],
     deals: [],
 }
 

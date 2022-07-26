@@ -27,7 +27,7 @@ const CustomMessage = styled.div`
 
 const ItemsReview = props => {
 
-    const { cartData, removeFromCart, increaseItem, decreaseItem } = props;
+    const { cartData, removeService, removeDeal, increaseItem, decreaseItem } = props;
 
     const { t } = useTranslation();
 
@@ -40,7 +40,7 @@ const ItemsReview = props => {
                             <SharedTableHead name='services' />
                             <TableBody>
                                 {cartData.services.map((row) => (
-                                    <CartItem type='services' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} />
+                                    <CartItem type='services' key={row.id} row={row} remove={removeService} increase={increaseItem} decrease={decreaseItem} />
                                 ))}
                             </TableBody>
                         </Table>
@@ -54,7 +54,7 @@ const ItemsReview = props => {
                             <SharedTableHead name='deals' />
                             <TableBody>
                                 {cartData.deals.map((row) => (
-                                    <CartItem type='deals' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem} />
+                                    <CartItem type='deals' key={row.id} row={row} remove={removeDeal} increase={increaseItem} decrease={decreaseItem} />
                                 ))}
                             </TableBody>
                         </Table>
@@ -66,9 +66,7 @@ const ItemsReview = props => {
     if ( cartData.services.length === 0 && cartData.deals.length === 0 ) {
         content = (
             <CustomMessage>
-                <CustomMessage>
                     <p>{t('no items')}</p>
-                </CustomMessage>
             </CustomMessage>
         )
     }
