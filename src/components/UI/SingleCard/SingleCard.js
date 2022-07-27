@@ -1,17 +1,19 @@
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import PushPinIcon from '@mui/icons-material/PushPin';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
-import PushPinIcon from '@mui/icons-material/PushPin';
+import { Button } from '@mui/material';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
+import { Fragment, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { connect } from 'react-redux';
+import { NavLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { formatCurrency } from '../../../shared/utility';
-import { useTranslation } from 'react-i18next';
-import { NavLink, useNavigate, useSearchParams } from 'react-router-dom';
-import { Fragment } from 'react';
-import { addToDeals, addToServices } from '../../../store/actions';
-import { connect } from 'react-redux';
-import { Button } from '@mui/material';
+import { addToDeals, addToServices, resetCart } from '../../../store/actions';
+import { CustomModal } from '../Modal/Modal';
 
 const CustomCard = styled(Card)`
     display: flex;
@@ -91,42 +93,87 @@ const CatButton = styled(Button)`
     }
 `
 
+const Content = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    flex-direction: column;
+    svg {
+        width: 120px;
+        height: 120px;
+        color: ${({ theme }) => theme.vars.primary};
+        margin-bottom: 20px;
+    }
+    h4 {
+        font-size: 17px;
+        line-height:1.5;
+        text-transform: uppercase;
+        font-weight: 600;
+        color: ${({ theme }) => theme.palette.text.primary};
+        margin-bottom: 0;
+    }
+`
+
+
 const SingleCard = props => {
 
-    const { image, title, name, price, time, timeType, location, companyId, category, categoryId, type, id, addServiceHandler, addDealHandler } = props;
+    const { image, title, name, price, time, timeType, location, companyId, category, categoryId, type, id, addServiceHandler, addDealHandler, resetCartHandler, cart  } = props;
 
     const { t } = useTranslation();
 
     const navigate = useNavigate()
-    let [searchParams, setSearchParams] = useSearchParams();
-    const exisitongCompanyId = searchParams.get('cId');
+    const exisitongCompanyId = localStorage.getItem('cId')
+
+    const [showConfirmModal, setShowConfirmModal] = useState(false)
 
     const handleClick = () => {
         navigate(`../salons/${companyId}`)
     }
-    const handleCartClick = () => {
 
-        if ( !exisitongCompanyId ) {
-            setSearchParams({ cId: companyId })
-        }
-
+    const addToCart = ( ) => {
         if (type === 'service') {
             addServiceHandler({
-                    id: id,
-                    name: title,
-                    price,
-                    companyId,
-                    companyName: name,
+                id: id,
+                name: title,
+                price,
+                companyId,
+                companyName: name,
             })
         } else if (type === 'deal') {
             addDealHandler({
-                    id: id,
-                    name: title,
-                    price,
-                    companyId,
-                    companyName: name,
+                id: id,
+                name: title,
+                price,
+                companyId,
+                companyName: name,
             })
         }
+    }
+
+    const handleCartClick = () => {
+        if (!exisitongCompanyId) {
+            localStorage.setItem('cId', companyId)
+            addToCart()
+        } else if ( exisitongCompanyId && (companyId ===  exisitongCompanyId)  ) {
+            addToCart()
+        } else  if ( exisitongCompanyId && (companyId !==  exisitongCompanyId) && ( cart.services.length === 0 || cart.desls.length === 0  ) ) {
+            localStorage.setItem('cId', companyId)
+            addToCart()
+        } else if ( exisitongCompanyId && (companyId !==  exisitongCompanyId) && (  cart.services.length > 0 || cart.desls.length > 0  ) ) {
+            setShowConfirmModal(true)
+        }
+    }
+
+    const closeConfirmModal = ( ) => {
+        setShowConfirmModal(false)
+    }
+
+    const confirmModalAcceptHandler = ( ) => {
+        resetCartHandler()
+        setTimeout( ( ) => {
+            addToCart()
+        }  , 500)
     }
 
     return (
@@ -167,16 +214,28 @@ const SingleCard = props => {
                     </CardContent>
                 </div>
             </CustomCard>
+            <CustomModal show={showConfirmModal} heading='you have items from another company'  confirmText='delete' onConfirm={confirmModalAcceptHandler} onClose={closeConfirmModal} >
+            <Content>
+                <ErrorOutlineIcon />
+                <h4>{t('you have items from another company and adding this item will remove them, do you want to procceed?')}</h4>
+            </Content>
+        </CustomModal>
         </Fragment>
     )
 }
 
+const mapStateToProps = (state)=> {
+    return {
+        cart: state.cart
+    }
+}
 const mapDispatchToProps = dispatch => {
     return {
         addServiceHandler: (data) => dispatch(addToServices(data)),
         addDealHandler: (data) => dispatch(addToDeals(data)),
+        resetCartHandler: ( ) => dispatch(resetCart())
     }
 }
 
 
-export default connect(null, mapDispatchToProps)(SingleCard);
+export default connect(mapStateToProps, mapDispatchToProps)(SingleCard);

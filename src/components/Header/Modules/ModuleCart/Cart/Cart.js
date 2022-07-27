@@ -281,6 +281,7 @@ const Cart = props => {
             setReservedBookingData(null);
             setBookingDone(false);
             onClose();
+            localStorage.removeItem('cId')
         }
     }
 
