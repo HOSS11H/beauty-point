@@ -9,7 +9,7 @@ export const addToServices = (data) => {
 
 export const removeService = (id) => {
     return {
-        type: actionTypes.ADD_TO_SERVICES,
+        type: actionTypes.REMOVE_SERVICE,
         payload: id,
     }
 }

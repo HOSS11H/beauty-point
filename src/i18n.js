@@ -662,7 +662,7 @@ const resources = {
             'Failed to send requset!': 'فشل ارسال الطلب',
             'Add to Cart': 'اضافة الي عربة التسوق',
             'you have items from another company': 'لديك عناصر من شركة أخرى',
-            'you have items from another company and adding this item will remove them, do you want to procceed?': 'لديك عناصر من شركة أخرى وستؤدي إضافة هذا العنصر إلى إزالتها ، هل تريد المتابعة؟'
+            'you have items from another salon / artist and adding this item will remove them, do you want to procceed?': 'لديك عناصر من صالون / ارتست  أخرى وستؤدي إضافة هذا العنصر إلى إزالتها ، هل تريد المتابعة؟'
         }
     }
 };

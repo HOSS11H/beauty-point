@@ -123,7 +123,7 @@ const SingleCard = props => {
     const { t } = useTranslation();
 
     const navigate = useNavigate()
-    const exisitongCompanyId = localStorage.getItem('cId')
+    const exisitingCompanyId = +localStorage.getItem('cId')
 
     const [showConfirmModal, setShowConfirmModal] = useState(false)
 
@@ -152,15 +152,19 @@ const SingleCard = props => {
     }
 
     const handleCartClick = () => {
-        if (!exisitongCompanyId) {
+        if (!exisitingCompanyId) {
+            console.log('1')
             localStorage.setItem('cId', companyId)
             addToCart()
-        } else if ( exisitongCompanyId && (companyId ===  exisitongCompanyId)  ) {
+        } else if ( exisitingCompanyId && (companyId ===  exisitingCompanyId)  ) {
+            console.log('2')
             addToCart()
-        } else  if ( exisitongCompanyId && (companyId !==  exisitongCompanyId) && ( cart.services.length === 0 || cart.desls.length === 0  ) ) {
+        } else  if ( exisitingCompanyId && (companyId !==  exisitingCompanyId) && ( cart.services.length === 0 && cart.deals.length === 0  ) ) {
+            console.log('3')
             localStorage.setItem('cId', companyId)
             addToCart()
-        } else if ( exisitongCompanyId && (companyId !==  exisitongCompanyId) && (  cart.services.length > 0 || cart.desls.length > 0  ) ) {
+        } else if ( exisitingCompanyId && (companyId !==  exisitingCompanyId) && (  cart.services.length > 0 || cart.deals.length > 0  ) ) {
+            console.log('4')
             setShowConfirmModal(true)
         }
     }
@@ -168,11 +172,13 @@ const SingleCard = props => {
     const closeConfirmModal = ( ) => {
         setShowConfirmModal(false)
     }
-
+    
     const confirmModalAcceptHandler = ( ) => {
         resetCartHandler()
         setTimeout( ( ) => {
+            localStorage.setItem('cId', companyId)
             addToCart()
+            setShowConfirmModal(false)
         }  , 500)
     }
 
@@ -217,7 +223,7 @@ const SingleCard = props => {
             <CustomModal show={showConfirmModal} heading='you have items from another company'  confirmText='delete' onConfirm={confirmModalAcceptHandler} onClose={closeConfirmModal} >
             <Content>
                 <ErrorOutlineIcon />
-                <h4>{t('you have items from another company and adding this item will remove them, do you want to procceed?')}</h4>
+                <h4>{t('you have items from another salon / artist and adding this item will remove them, do you want to procceed?')}</h4>
             </Content>
         </CustomModal>
         </Fragment>

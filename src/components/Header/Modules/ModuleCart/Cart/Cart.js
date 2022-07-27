@@ -119,9 +119,7 @@ const Cart = props => {
 
     const { t } = useTranslation();
 
-    const [searchParams] = useSearchParams();
-
-    const companyId = searchParams.get('cId');
+    const companyId = +localStorage.getItem('cId')
 
     const themeCtx = useContext(ThemeContext);
     const { lang } = themeCtx;
@@ -449,7 +447,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         fetchCouponsHandler: (lang) => dispatch(fetchCoupons(lang)),
-        removeService: (type, id) => dispatch(removeService(id)),
+        removeService: (type, id) => {
+            dispatch(removeService(id))
+        },
         removeDeal: (type, id) => dispatch(removeDeal(id))
     }
 }

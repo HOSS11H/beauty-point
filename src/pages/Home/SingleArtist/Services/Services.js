@@ -66,14 +66,35 @@ const Services = props => {
     }, [])
 
     useEffect(() => {
+
+        const searchParams = {
+            page: servicesPage,
+            per_page: servicesRowsPerPage,
+            category_id: selectedCategory,
+            term: searchTerm,
+        }
+
+
+        const notEmptySearchParams = {};
+
+        for (let key in searchParams) {
+            if (key === 'page') {
+                notEmptySearchParams[key] = (searchParams[key] + 1);
+            } else if (searchParams[key] !== '' || searchParams[key] !== null) {
+                notEmptySearchParams[key] = searchParams[key]
+            }
+        }
+
         const headers = {
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
-            }
+            },
+            params: notEmptySearchParams
         }
-        const servicesEndpoint = `${v2.defaults.baseURL}/companies/${artistId}/services?page=${servicesPage + 1}&per_page=${servicesRowsPerPage}&category_id=${selectedCategory}&term=${searchTerm}`;
+
+        const servicesEndpoint = `${v2.defaults.baseURL}/companies/${artistId}/services`;
 
         const getServices = axios.get(servicesEndpoint, headers);
 
@@ -106,7 +127,7 @@ const Services = props => {
         categoriesContent = <Loader height='150px' />
     }
     if (!loadingServices && services.data.length === 0) {
-        servicesContent = <SearchMessage height='150px' sx={{ mt:3 }} >{t('There is no services')}</SearchMessage>
+        servicesContent = <SearchMessage height='150px' sx={{ mt: 3 }} >{t('There is no services')}</SearchMessage>
     }
     if (!loadingCategories && categories.length === 0) {
         categoriesContent = <Fragment>
@@ -140,9 +161,12 @@ const Services = props => {
     if (!loadingCategories && categories.length > 0) {
         categoriesContent = <Fragment>
             <Grid container spacing={2} sx={{ mb: 3 }} >
+                <Grid item xs="auto">
+                    <Category active={selectedCategory === null} onClick={() => setSelectedCategory(null)}  >{t('all')}</Category>
+                </Grid>
                 {categories.map((category, index) => {
                     return <Grid key={index} item xs="auto">
-                        <Category  active={selectedCategory === category.id} onClick={() => setSelectedCategory(category.id)}  >{category.name}</Category>
+                        <Category active={selectedCategory === category.id} onClick={() => setSelectedCategory(category.id)}  >{category.name}</Category>
                     </Grid>
                 })}
             </Grid>
