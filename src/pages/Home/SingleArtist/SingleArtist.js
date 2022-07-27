@@ -1,4 +1,4 @@
-import EventIcon from '@mui/icons-material/Event';
+//import EventIcon from '@mui/icons-material/Event';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PushPinIcon from '@mui/icons-material/PushPin';
 import ShareIcon from '@mui/icons-material/Share';
@@ -117,9 +117,9 @@ const SingleArtist = props => {
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
-    const openShowModalHandler = useCallback(() => {
+    /* const openShowModalHandler = useCallback(() => {
         setShowModal(true);
-    }, [])
+    }, []) */
     const closeShowModalHandler = useCallback(() => {
         setShowModal(false);
     }, [])
@@ -162,7 +162,7 @@ const SingleArtist = props => {
                     </Grid>
                     <Grid item xs={12} sm={12} md={4} >
                         <ActionsWrapper>
-                            <ActionButton onClick={openShowModalHandler}><EventIcon sx={{ mr: '5px' }} />{t('book')}</ActionButton>
+                            {/* <ActionButton onClick={openShowModalHandler}><EventIcon sx={{ mr: '5px' }} />{t('book')}</ActionButton> */}
                             <ActionButton onClick={copyArtistUrlHandler}><ShareIcon sx={{ mr: '5px' }} /> {t('share')}</ActionButton>
                             <ActionButton onClick={copyArtistLocationHandler}><LocationOnIcon sx={{ mr: '5px' }} /> {t('location')}</ActionButton>
                         </ActionsWrapper>

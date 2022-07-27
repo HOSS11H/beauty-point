@@ -1,5 +1,5 @@
 import CoffeeIcon from '@mui/icons-material/Coffee';
-import EventIcon from '@mui/icons-material/Event';
+// import EventIcon from '@mui/icons-material/Event';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import MosqueIcon from '@mui/icons-material/Mosque';
 import PushPinIcon from '@mui/icons-material/PushPin';
@@ -144,9 +144,9 @@ const SingleSalon = props => {
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
-    const openShowModalHandler = useCallback(() => {
+    /* const openShowModalHandler = useCallback(() => {
         setShowModal(true);
-    }, [])
+    }, []) */
     const closeShowModalHandler = useCallback(() => {
         setShowModal(false);
     }, [])
@@ -189,7 +189,7 @@ const SingleSalon = props => {
                     </Grid>
                     <Grid item xs={12} sm={12} md={4} >
                         <ActionsWrapper>
-                            <ActionButton onClick={openShowModalHandler}><EventIcon sx={{ mr: '5px' }} />{t('book')}</ActionButton>
+                            {/* <ActionButton onClick={openShowModalHandler}><EventIcon sx={{ mr: '5px' }} />{t('book')}</ActionButton> */}
                             <ActionButton onClick={copySalonUrlHandler}><ShareIcon sx={{ mr: '5px' }} /> {t('share')}</ActionButton>
                             <ActionButton onClick={copySalonLocationHandler}><LocationOnIcon sx={{ mr: '5px' }} /> {t('location')}</ActionButton>
                         </ActionsWrapper>
