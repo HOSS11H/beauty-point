@@ -1,6 +1,6 @@
 {
   "name": "beauty-point",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "private": true,
   "dependencies": {
     "@brainhubeu/react-permissible": "^1.9.16",
