@@ -118,7 +118,7 @@ const Content = styled.div`
 
 const SingleCard = props => {
 
-    const { image, title, name, price, time, timeType, location, companyId, category, categoryId, type, id, addServiceHandler, addDealHandler, resetCartHandler, cart  } = props;
+    const { image, title, name, price, time, timeType, location, companyId, category, categoryId, type, id, addServiceHandler, addDealHandler, resetCartHandler, cart } = props;
 
     const { t } = useTranslation();
 
@@ -131,7 +131,7 @@ const SingleCard = props => {
         navigate(`../salons/${companyId}`)
     }
 
-    const addToCart = ( ) => {
+    const addToCart = () => {
         if (type === 'service') {
             addServiceHandler({
                 id: id,
@@ -153,33 +153,29 @@ const SingleCard = props => {
 
     const handleCartClick = () => {
         if (!exisitingCompanyId) {
-            console.log('1')
             localStorage.setItem('cId', companyId)
             addToCart()
-        } else if ( exisitingCompanyId && (companyId ===  exisitingCompanyId)  ) {
-            console.log('2')
+        } else if (exisitingCompanyId && (companyId === exisitingCompanyId)) {
             addToCart()
-        } else  if ( exisitingCompanyId && (companyId !==  exisitingCompanyId) && ( cart.services.length === 0 && cart.deals.length === 0  ) ) {
-            console.log('3')
+        } else if (exisitingCompanyId && (companyId !== exisitingCompanyId) && (cart.services.length === 0 && cart.deals.length === 0)) {
             localStorage.setItem('cId', companyId)
             addToCart()
-        } else if ( exisitingCompanyId && (companyId !==  exisitingCompanyId) && (  cart.services.length > 0 || cart.deals.length > 0  ) ) {
-            console.log('4')
+        } else if (exisitingCompanyId && (companyId !== exisitingCompanyId) && (cart.services.length > 0 || cart.deals.length > 0)) {
             setShowConfirmModal(true)
         }
     }
 
-    const closeConfirmModal = ( ) => {
+    const closeConfirmModal = () => {
         setShowConfirmModal(false)
     }
-    
-    const confirmModalAcceptHandler = ( ) => {
+
+    const confirmModalAcceptHandler = () => {
         resetCartHandler()
-        setTimeout( ( ) => {
+        setTimeout(() => {
             localStorage.setItem('cId', companyId)
             addToCart()
             setShowConfirmModal(false)
-        }  , 500)
+        }, 500)
     }
 
     return (
@@ -220,17 +216,17 @@ const SingleCard = props => {
                     </CardContent>
                 </div>
             </CustomCard>
-            <CustomModal show={showConfirmModal} heading='you have items from another company'  confirmText='delete' onConfirm={confirmModalAcceptHandler} onClose={closeConfirmModal} >
-            <Content>
-                <ErrorOutlineIcon />
-                <h4>{t('you have items from another salon / artist and adding this item will remove them, do you want to procceed?')}</h4>
-            </Content>
-        </CustomModal>
+            <CustomModal show={showConfirmModal} heading='you have items from another company' confirmText='delete' onConfirm={confirmModalAcceptHandler} onClose={closeConfirmModal} >
+                <Content>
+                    <ErrorOutlineIcon />
+                    <h4>{t('you have items from another salon / artist and adding this item will remove them, do you want to procceed?')}</h4>
+                </Content>
+            </CustomModal>
         </Fragment>
     )
 }
 
-const mapStateToProps = (state)=> {
+const mapStateToProps = (state) => {
     return {
         cart: state.cart
     }
@@ -239,7 +235,7 @@ const mapDispatchToProps = dispatch => {
     return {
         addServiceHandler: (data) => dispatch(addToServices(data)),
         addDealHandler: (data) => dispatch(addToDeals(data)),
-        resetCartHandler: ( ) => dispatch(resetCart())
+        resetCartHandler: () => dispatch(resetCart())
     }
 }
 

@@ -79,6 +79,7 @@ const Services = props => {
             per_page: servicesRowsPerPage,
             category_id: selectedCategory,
             term: searchTerm,
+            'include[]': 'company'
         }
 
 
