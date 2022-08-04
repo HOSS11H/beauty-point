@@ -132,7 +132,7 @@ const BookingsReport = props => {
 
     if (data && !loading) {
 
-        const completedExternalBookings = data.external.find(item => item.status === 'approved')
+        const completedExternalBookings = data.external.find(item => item.status === 'completed')
 
         content = (
             <Fragment>
