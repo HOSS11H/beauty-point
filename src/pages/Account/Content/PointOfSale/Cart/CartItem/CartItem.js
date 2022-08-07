@@ -1,5 +1,5 @@
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Grid, TextField, useMediaQuery } from '@mui/material';
+import { Grid, TextField } from '@mui/material';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -10,15 +10,12 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import Select from '@mui/material/Select';
-import TableCell from '@mui/material/TableCell';
-import TableRow from '@mui/material/TableRow';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import Actions from '../../../../../../components/UI/Dashboard/Actions/Actions';
 import { TableData } from '../../../../../../components/UI/Dashboard/Table/Table';
 import Increment from '../../../../../../components/UI/Increment/Increment';
-import ThemeContext from '../../../../../../store/theme-context';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -60,7 +57,7 @@ const CartItem = props => {
 
     const { t } = useTranslation()
 
-    const { row, remove, increase, decrease, type, priceChangeHandler, changeEmployee, fetchedEmployees, name } = props;
+    const { row, remove, increase, decrease, type, priceChangeHandler, changeEmployee, fetchedEmployees } = props;
 
     const [employeeName, setEmployeeName] = useState([]);
 

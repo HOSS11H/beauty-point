@@ -6,11 +6,15 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import styled from 'styled-components';
 import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper, Switch, Card, Grid, Backdrop, Snackbar, Alert } from "@mui/material";
 import { useTranslation } from 'react-i18next';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import v1 from '../../../../../../utils/axios-instance-v1';
 import { useState } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import { useCallback } from 'react';
+import { fetchPermissions } from '../../../../../../store/actions/index';
+import { connect } from 'react-redux';
+import ThemeContext from '../../../../../../store/theme-context';
+import AuthContext from '../../../../../../store/auth-context';
 
 const Loader = styled(Card)`
     display: flex;
@@ -39,7 +43,13 @@ const RoleMembersBtn = styled.button`
 
 const Role = props => {
 
-    const { roleData, openMembersHandler } = props;
+    const { roleData, openMembersHandler, getPermissions } = props;
+
+    const themeCtx = useContext(ThemeContext)
+	const {  lang } = themeCtx;
+
+	const authCtx = useContext(AuthContext)
+    const { roleId } = authCtx;
 
     const [loading, setLoading] = useState(true)
 
@@ -81,22 +91,23 @@ const Role = props => {
         getModulePermissions()
     }, [getModulePermissions])
 
-    const changeStatusHandler = useCallback((roleId) => {
-        const newPermissionStatus = permissions.findIndex(permission => permission.id === roleId)
+    const changeStatusHandler = useCallback(( id) => {
+        const newPermissionStatus = permissions.findIndex(permission => permission.id === id)
         const newPermissionNum = newPermissionStatus === -1 ? 1 : 0;
         setSuccess(false)
         setOpen(true)
         v1.post(`/vendors/settings/permissions`, {
             roleId: roleData.id,
-            permissionId: roleId,
+            permissionId: id,
             assignPermission: newPermissionNum
         })
             .then(res => {
                 getModulePermissions()
                 setOpen(false)
                 setSuccess(true)
+                getPermissions(roleId, lang);
             })
-    }, [getModulePermissions, permissions, roleData.id])
+    }, [getModulePermissions, getPermissions, lang, permissions, roleData.id, roleId])
 
     let content = (
         <Loader>
@@ -176,4 +187,11 @@ const Role = props => {
         </>
     )
 }
-export default Role;
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        getPermissions: (roleId, lang) => dispatch(fetchPermissions(roleId, lang)),
+    }
+}
+
+export default connect(null, mapDispatchToProps)(Role);

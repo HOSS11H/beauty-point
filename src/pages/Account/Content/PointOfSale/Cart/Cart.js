@@ -10,15 +10,11 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import Paper from '@mui/material/Paper';
 import Select from '@mui/material/Select';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableContainer from '@mui/material/TableContainer';
 import TextField from '@mui/material/TextField';
 import axios from 'axios';
 import { format } from 'date-fns';
-import { Fragment, useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { connect } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
@@ -37,7 +33,6 @@ import v1 from '../../../../../utils/axios-instance-v1';
 import AddCustomerModal from './AddCustomerModal/AddCustomerModal';
 import CartItem from './CartItem/CartItem';
 import SearchCustomer from './SearchCustomer/SearchCustomer';
-import SharedTableHead from './SharedTableHead/SharedTableHead';
 
 const CustomerCard = styled.div`
     padding: 20px;
