@@ -1,40 +1,32 @@
-import { NavLink, useParams } from 'react-router-dom';
-import styled from 'styled-components';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import BookIcon from '@mui/icons-material/Book';
+import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
+import CreditCardIcon from '@mui/icons-material/CreditCard';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import DiscountIcon from '@mui/icons-material/Discount';
+import EventIcon from '@mui/icons-material/Event';
+import EventSeatIcon from '@mui/icons-material/EventSeat';
+import InsertChartIcon from '@mui/icons-material/InsertChart';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import PeopleIcon from '@mui/icons-material/People';
+import SettingsIcon from '@mui/icons-material/Settings';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
-import Box from '@mui/material/Box';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import PersonIcon from '@mui/icons-material/Person';
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import BookIcon from '@mui/icons-material/Book';
-import SettingsIcon from '@mui/icons-material/Settings'
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
-import LocalOfferIcon from '@mui/icons-material/LocalOffer';
-import CreditCardIcon from '@mui/icons-material/CreditCard';
-import EventIcon from '@mui/icons-material/Event';
-import InsertChartIcon from '@mui/icons-material/InsertChart';
-import openedLogo from '../../../images/logo/logo_dark.png'
-import closedLogo from '../../../images/logo/logo_mobile.png'
-import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
-import LinearScaleIcon from '@mui/icons-material/LinearScale';
+import { Fragment, useContext, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useContext, useEffect, useRef } from 'react';
-import AuthContext from '../../../store/auth-context';
-import PeopleIcon from '@mui/icons-material/People';
-import DiscountIcon from '@mui/icons-material/Discount';
-import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
-import { useState } from 'react';
 import { connect } from 'react-redux';
-import ModuleNav from './ModuleNav/ModuleNav';
-import EventSeatIcon from '@mui/icons-material/EventSeat';
-import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
-import { Fragment } from 'react';
+import { NavLink, useParams } from 'react-router-dom';
+import styled from 'styled-components';
+import openedLogo from '../../../images/logo/logo_dark.png';
+import closedLogo from '../../../images/logo/logo_mobile.png';
+import AuthContext from '../../../store/auth-context';
 
 const drawerWidth = 256;
 const openedMixin = (theme) => ({
