@@ -145,6 +145,8 @@ const Navigator = (props) => {
                 },
                 { id: 'bookings', name: 'bookings', icon: <BookIcon /> },
                 { id: 'booking-calendar', name: 'booking calendar', icon: <EventIcon /> },
+                { id: 'products', name: 'products', icon: <ShoppingCartIcon /> },
+                { id: 'users', name: 'users', icon: <PeopleIcon /> }
                 /* { id: 'notifications', name: 'notifications', icon: <CircleNotificationsIcon /> }, */
             ],
         }];
@@ -153,21 +155,6 @@ const Navigator = (props) => {
         } else {
             let addedRoutes = [];
             fetchedPermissions.forEach(permission => {
-                if (permission.name === 'read_business_service') {
-                    addedRoutes.push({ id: 'services', name: 'services', icon: <FormatListBulletedIcon /> });
-                    module.current = <ModuleNav />;
-                }
-                if (permission.name === 'read_product') {
-                    addedRoutes.splice(1,0,{ id: 'units', name: 'units', icon: <LinearScaleIcon /> } )
-                    addedRoutes.splice(2,0,{ id: 'products', name: 'products', icon: <ShoppingCartIcon /> } )
-                    module.current = <ModuleNav />;
-                }
-                if (permission.name === 'read_customer') {
-                    
-                }
-                if (permission.name === 'read_employee') {
-                    addedRoutes.push({ id: 'users', name: 'users', icon: <PeopleIcon /> });
-                }
                 if (permission.name === 'read_employee_group') {
                     
                 }
@@ -179,9 +166,6 @@ const Navigator = (props) => {
                 }
                 if (permission.name === 'create_booking') {
                     addedRoutes.push({ id: 'point-of-sale', name: 'points of sales', icon: <AddShoppingCartIcon /> });
-                }
-                if (permission.name === 'read_deal') {
-                    addedRoutes.push({ id: 'deals', name: 'deals', icon: <LocalOfferIcon /> });
                 }
                 if (permission.name === 'read_report') {
                     addedRoutes.push({ id: 'reports', name: 'reports', icon: <InsertChartIcon /> });
