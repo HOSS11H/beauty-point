@@ -42,16 +42,25 @@ const CustomTextField = styled(TextField)`
         }
     }
 `
+const DataCell = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap:20px;
+    justify-content: center;
+    align-items: center;
+    span {
+        font-weight: 500;
+        font-size: 0.875rem;
+        line-height: 1.5rem;
+        text-align: center;
+    }
+`
 
 const CartItem = props => {
 
     const { t } = useTranslation()
 
-    const { row, remove, increase, decrease, type, priceChangeHandler, changeEmployee, fetchedEmployees } = props;
-
-    const { theme } = useContext(ThemeContext)
-
-    const isMobile = useMediaQuery(theme.breakpoints.down('md'), { noSsr: true });
+    const { row, remove, increase, decrease, type, priceChangeHandler, changeEmployee, fetchedEmployees, name } = props;
 
     const [employeeName, setEmployeeName] = useState([]);
 
@@ -66,81 +75,39 @@ const CartItem = props => {
         changeEmployee(type, row.id, value)
     };
 
-    let content = (
-        <TableRow
-            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-        >
-            <TableCell component="th" sx={{ padding: '16px 8px' }} scope="row">
-                <TableData>{row.name}</TableData>
-            </TableCell>
-            <TableCell align="center" sx={{ padding: '16px 8px' }}>
-                <CustomTextField id="price" type='number' label={t('price')} variant="outlined" value={row.price} onChange={e => priceChangeHandler(type, row.id, e.target.value)} />
-            </TableCell>
-            <TableCell align="center" sx={{ padding: '16px 8px' }}>
-                <Increment id={row.id} type={type} increment={increase} decrement={decrease} value={row.quantity} />
-            </TableCell>
-            <TableCell align="center" sx={{ padding: '16px 8px' }}>
-                <TableData>{(row.quantity * row.price)}</TableData>
-            </TableCell>
-            <TableCell align="center" sx={{ padding: '16px 8px' }}>
-                <FormControl sx={{ width: '100%', minWidth: '90px' }}>
-                    <InputLabel id="employee-label">{t('employee')}</InputLabel>
-                    <Select
-                        label={t('employee')}
-                        labelId="employee-label"
-                        id="select-multiple-employees"
-                        value={employeeName}
-                        onChange={handleEmployeesChange}
-                        input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
-                        MenuProps={MenuProps}
-                        renderValue={(val) => {
-                            const selected = fetchedEmployees?.find(employee => employee.id === val);
-                            return (
-                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                    <Chip key={selected.id} label={selected.name} />
-                                </Box>
-                            )
-                        }}
-                    >
-                        {fetchedEmployees.map((employee) => (
-                            <MenuItem
-                                key={employee.id}
-                                value={employee.id}
-                            >
-                                {employee.name}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-            </TableCell>
-            <TableCell align="center" sx={{ padding: '16px 8px' }}>
-                <Actions remove
-                    removeHandler={(id) => remove(type, row.id)}
-                />
-            </TableCell>
-        </TableRow>
-    )
-
-    if (isMobile) {
-        content = (
+    return (
             <Accordion>
                 <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                 >
                     <Grid container spacing={2}>
                         <Grid item xs sx ={{ alignSelf: 'center' }}>
-                            <TableData>{row.name}</TableData>
+                            <DataCell>
+                                <span>{t(type)}</span>
+                                <TableData>
+                                    {row.name}
+                                </TableData>
+                            </DataCell>
                         </Grid>
                         <Grid item xs sx ={{ alignSelf: 'center' }}>
-                            <Increment id={row.id} type={type} increment={increase} decrement={decrease} value={row.quantity} />
+                            <DataCell>
+                                <span>{t('quantity')}</span>
+                                <Increment id={row.id} type={type} increment={increase} decrement={decrease} value={row.quantity} />
+                            </DataCell>
                         </Grid>
                         <Grid item xs sx ={{ alignSelf: 'center' }}>
-                            <TableData>{(row.quantity * row.price)}</TableData>
+                            <DataCell>
+                                <span>{t('price')}</span>
+                                <TableData>{(row.quantity * row.price)}</TableData>
+                            </DataCell>
                         </Grid>
                         <Grid item xs sx ={{ alignSelf: 'center' }}>
-                            <Actions remove
-                                removeHandler={(id) => remove(type, row.id)}
-                            />
+                            <DataCell>
+                                <span>{t('action')}</span>
+                                <Actions remove
+                                    removeHandler={(id) => remove(type, row.id)}
+                                />
+                            </DataCell>
                         </Grid>
                     </Grid>
                 </AccordionSummary>
@@ -183,13 +150,6 @@ const CartItem = props => {
                     </Grid>
                 </AccordionDetails>
             </Accordion>
-        )
-    }
-
-    return (
-        <>
-            { content }
-        </>
     )
 }
 

@@ -640,23 +640,7 @@ const Cart = props => {
                                     <p>{t('No Services')}</p>
                                 </CustomMessage>
                             )}
-                            {cartData.services.length > 0 && !isMobile && (
-                                <Fragment>
-                                    <TableContainer component={Paper} sx={{ my: 2 }}>
-                                        <Table aria-label="services table">
-                                            <SharedTableHead name='services' />
-                                            <TableBody>
-                                                {cartData.services.map((row) => (
-                                                    <CartItem type='services' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem}
-                                                        fetchedEmployees={employees}
-                                                        priceChangeHandler={priceChangeHandler} changeEmployee={changeEmployee} />
-                                                ))}
-                                            </TableBody>
-                                        </Table>
-                                    </TableContainer>
-                                </Fragment>
-                            )}
-                            {cartData.services.length > 0 && isMobile && (
+                            {cartData.services.length > 0 && (
                                 <Grid container spacing={2}>
                                     {cartData.services.map((row) => (
                                         <Grid item xs={12} key={row.id}>
@@ -674,21 +658,7 @@ const Cart = props => {
                                     <p>{t('No Products')}</p>
                                 </CustomMessage>
                             )}
-                            {cartData.products.length > 0 && !isMobile && (
-                                <TableContainer component={Paper} sx={{ my: 2 }}>
-                                    <Table aria-label="products table">
-                                        <SharedTableHead name='products' />
-                                        <TableBody>
-                                            {cartData.products.map((row) => (
-                                                <CartItem type='products' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem}
-                                                    fetchedEmployees={employees}
-                                                    priceChangeHandler={priceChangeHandler} changeEmployee={changeEmployee} />
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                </TableContainer>
-                            )}
-                            {cartData.products.length > 0 && isMobile && (
+                            {cartData.products.length > 0 && (
                                 <Grid container spacing={2}>
                                     {cartData.products.map((row) => (
                                         <Grid item xs={12} key={row.id}>
@@ -706,21 +676,7 @@ const Cart = props => {
                                     <p>{t('No Deals')}</p>
                                 </CustomMessage>
                             )}
-                            {cartData.deals.length > 0 && !isMobile && (
-                                <TableContainer component={Paper} sx={{ my: 2 }}>
-                                    <Table aria-label="deals table">
-                                        <SharedTableHead name='deals' />
-                                        <TableBody>
-                                            {cartData.deals.map((row) => (
-                                                <CartItem type='deals' key={row.id} row={row} remove={removeFromCart} increase={increaseItem} decrease={decreaseItem}
-                                                    fetchedEmployees={employees}
-                                                    priceChangeHandler={priceChangeHandler} changeEmployee={changeEmployee} />
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                </TableContainer>
-                            )}
-                            {cartData.deals.length > 0 && isMobile && (
+                            {cartData.deals.length > 0 && (
                                 <Grid container spacing={2}>
                                     {cartData.deals.map((row) => (
                                         <Grid item xs={12} key={row.id}>

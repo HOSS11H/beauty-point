@@ -329,7 +329,6 @@ const PointOfSale = (props) => {
         }
     }, [])
     const changeItemPriceHandler = useCallback((type, itemId, price) => {
-        //console.log(type, itemId, price);
         if (type === 'services') {
             dispatch({
                 type: 'CHANGE_SERVICE_PRICE',
