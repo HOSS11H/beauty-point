@@ -439,13 +439,13 @@ const PointOfSale = (props) => {
     return (
         <Fragment>
             <Grid container spacing={2}>
-                <Grid item xs={12} md={6}>
-                    <CustomCard heading='view items' isMobileModal={false} >
+                <Grid item xs={12} md={6} lg={7} xl={8}>
+                    <CustomCard heading='view items' isMobileModal={false} fixedHeight fullwidth >
                         <SearchFilters handleChangePage={handleChangePage} resultsHandler={handleResultsChange} />
                         <FilteredResults rowsPerPage={rowsPerPage} page={page} onPageChange={handleChangePage} results={shownType} addToCart={addToCartHandler} />
                     </CustomCard>
                 </Grid>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={6} lg={5} xl={4} >
                     <Cart cartData={cart} removeFromCart={removeFromCartHandler} increaseItem={increaseItemHandler} decreaseItem={decreaseItemHandler}
                         resetCart={resetCartHandler} reserved={reservedBookingData}
                         purchase={purchaseCartHandler} print={purchasePrintBookingHandler}

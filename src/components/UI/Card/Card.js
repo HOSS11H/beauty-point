@@ -19,6 +19,9 @@ export const CustomCardMui = styled(Card)`
         &:last-child{
             margin-bottom:0;
         }
+        ${({ $fullwidth }) => $fullwidth && css`
+            max-width: 100%;
+        `}
         ${({ $isMobileModal }) => $isMobileModal && css`
             @media screen and (max-width: ${({ theme }) => theme.breakpoints.values.md - 1}px) {
                 position: fixed;
@@ -67,6 +70,30 @@ export const CardBody = styled.div`
         padding-left: 10px;
         padding-right: 10px;
     }
+    ${({ $fixedHeight }) => $fixedHeight && css`
+        @media screen and (min-width: ${({ theme }) => theme.breakpoints.values.md}px) {
+            display:block;
+            position:sticky;
+            top:0;
+            max-height: calc(100vh - 80px - 64px - 74px);
+            overflow-y: auto;
+            min-height: 0;
+            // Scroll //
+            -webkit-overflow-scrolling: touch;
+            &::-webkit-scrollbar {
+                height: 7px;
+                width: 8px;
+                background-color: ${({ theme }) => theme.palette.divider};
+                border-radius: 10px;
+            }
+            &::-webkit-scrollbar-thumb {
+                margin-left: 2px;
+                background: ${({ theme }) => theme.vars.primary};
+                border-radius: 10px;
+                cursor: pointer;
+            }
+        }
+    `}
     ${({ $isMobileModal }) => $isMobileModal && css`
         @media screen and (max-width: ${({ theme }) => theme.breakpoints.values.md - 1}px) {
             display:block;
@@ -104,7 +131,7 @@ export const SkeletonsWrapper = styled.div`
 
 export default function CustomCard(props) {
 
-    const { isMobileModal, open, handleClose } = props;
+    const { isMobileModal, open, handleClose, fixedHeight, fullwidth } = props;
 
     const { theme } = useContext(ThemeContext)
 
@@ -113,12 +140,12 @@ export default function CustomCard(props) {
     const { t } = useTranslation();
 
     return (
-        <CustomCardMui $isMobileModal={isMobileModal} open={open} >
+        <CustomCardMui $isMobileModal={isMobileModal} open={open} $fullwidth={fullwidth} >
             <CardHeading>
                 <h4>{t(props.heading)}{props.total}</h4>
                 {isMobileModal && isMobile && <IconButton onClick={handleClose}><CloseIcon /></IconButton>}
             </CardHeading>
-            <CardBody $isMobileModal={isMobileModal} >
+            <CardBody $isMobileModal={isMobileModal} $fixedHeight={fixedHeight} >
                 {props.loading && (
                     <SkeletonsWrapper>
                         <Skeleton sx={{ width: '100%' }} />

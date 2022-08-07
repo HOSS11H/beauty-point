@@ -577,7 +577,7 @@ const Cart = props => {
 
     return (
         <>
-            <CustomCard heading='Add To Cart' isMobileModal={true} open={mobileCartOpened} handleClose={mobileCartCloseHandler} >
+            <CustomCard heading='Add To Cart' isMobileModal={true} fixedHeight open={mobileCartOpened} handleClose={mobileCartCloseHandler} >
                 <Box>
                     <Grid container spacing={{ xs: 2, md: 3 }} >
                         <Grid item xs={12} >
@@ -686,7 +686,7 @@ const Cart = props => {
                                 <ValidationMessage notExist>{t('Please Add Something')}</ValidationMessage>
                             )}
                         </Grid>
-                        <Grid item xs={12} sm={6} >
+                        <Grid item xs={12} sm={6} md={12} lg={6} >
                             <CustomFormGroup>
                                 <CustomTextField
                                     type="number"
@@ -708,7 +708,7 @@ const Cart = props => {
                                 </FormControl>
                             </CustomFormGroup>
                         </Grid>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12} sm={6} md={12} lg={6}>
                             <FormControl sx={{ width: '100%' }}>
                                 <InputLabel id="payment-label">{t('payment method')}</InputLabel>
                                 <Select

@@ -60,10 +60,10 @@ const ResultContent = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    padding:20px;
+    padding:15px;
 `
 const ResultName = styled.h3`
-    font-size: 20px;
+    font-size: 18px;
     line-height:1.5;
     text-transform: capitalize;
     font-weight: 600;
@@ -76,14 +76,14 @@ const PriceHolder = styled.div`
     margin-bottom: 15px;
 `
 const ResultPrice = styled.h4`
-    font-size: 16px;
+    font-size: 15px;
     line-height:1.5;
     font-weight: 600;
     color: ${({ theme }) => theme.palette.common.white};
     margin-right:15px;
 `
 const ResultDiscount = styled.h4`
-    font-size: 16px;
+    font-size: 15px;
     line-height:1.5;
     font-weight: 600;
     color: ${({ theme }) => theme.palette.error.main};
@@ -91,9 +91,9 @@ const ResultDiscount = styled.h4`
 `
 const AddResult = styled(CustomButton)`
     &.MuiButton-root {
-        font-size: 16px;
+        font-size: 15px;
         width: max-content;
-        padding: 0 25px;
+        padding: 0 15px;
         height: 40px;
     }
 `
@@ -121,7 +121,7 @@ const GridView = ( props ) => {
     let content = data.map( (item, index) => {
         type === 'deals' && (item.name = item.title);
         return (
-            <Grid item xs={12} sm={6} key={item.id} >
+            <Grid item xs={6} sm={4}md={6}  lg={3} key={item.id} >
                 <ResultCard>
                     <ResultImg>
                         <img  src={item.image}  alt="Result" />
