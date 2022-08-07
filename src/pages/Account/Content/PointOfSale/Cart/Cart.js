@@ -173,15 +173,7 @@ const AddCustomer = styled(CustomButton)`
         }
     }
 `
-const AddPassingCustomer = styled(AddCustomer)`
-    &.MuiButton-root {
-        margin-left:0;
-        margin-top: 20px;
-        @media screen and (max-width: ${({ theme }) => theme.breakpoints.values.md - 1}px) {
-            margin-top: 10px;
-        }
-    }
-`
+
 
 const CustomTextField = styled(TextField)`
     width: 100%;
@@ -241,7 +233,10 @@ const Cart = props => {
 
     const [mobileCartOpened, setMobileCartOpened] = useState(false);
 
-    const [customerData, setCustomerData] = useState(hasCustomer ? intialCustomerData : null);
+    const [customerData, setCustomerData] = useState(hasCustomer ? intialCustomerData : {
+        id: '',
+        name: t('passing customer'),
+    });
     const [customerDataError, setCustomerDataError] = useState(false)
     const [resetSearchData, setResetSearchData] = useState(false)
 
@@ -419,14 +414,6 @@ const Cart = props => {
         }
         setResetSearchData(false)
     }, [])
-
-    const addPassingCustomer = () => {
-        setCustomerData({
-            id: '',
-            name: t('passing customer'),
-        })
-        setCustomerDataError(false)
-    }
 
     const discountTypeChangeHandler = (event) => {
         setDiscountType(event.target.value);
@@ -629,11 +616,10 @@ const Cart = props => {
                                 </FormControl>
                                 <AddCustomer onClick={addCustomerModalOpenHandler} >{isMobile ? <PersonAddIcon /> : t('add')}</AddCustomer>
                             </ActionsWrapper>
-                            <AddPassingCustomer sx={{ marginLeft: 0 }} onClick={addPassingCustomer} >{t('add passing customer')}</AddPassingCustomer>
                             {customerDataError && <ValidationMessage notExist>{t(`Please Choose Customer`)}</ValidationMessage>}
                         </Grid>
                         {
-                            customerData && (
+                            customerData && customerData.id !== '' && (
                                 <Grid item xs={12}>
                                     <CustomerCard>
                                         <CustomerName>{customerData.name}</CustomerName>

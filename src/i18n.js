@@ -145,7 +145,7 @@ const resources = {
             'Delete': 'حذف',
             'add services': 'إضافة خدمات',
             'completed': 'مكتمل',
-            'pending': 'قيد الانتظار',
+            'pending': 'أجل',
             'edit booking details': 'تعديل تفاصيل الحجز',
             'confirm edit': 'تأكيد التعديل',
             'approved': 'موافق',

@@ -28,7 +28,7 @@ const SearchFilters = (props) => {
 
     const themeCtx = useContext(ThemeContext)
 
-    const { lang, city } = themeCtx
+    const { lang, city, selectCity } = themeCtx
 
     const [type, setType] = useState('services');
     const [category, setCategory] = useState('');
@@ -54,6 +54,7 @@ const SearchFilters = (props) => {
     };
     const handleLocationChange = (event) => {
         setLocation(event.target.value);
+        selectCity(event.target.value);
         resultsHandler(type, category, event.target.value, search);
     };
     const handleSearchChange = (event) => {
