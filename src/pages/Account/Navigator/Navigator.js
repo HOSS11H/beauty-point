@@ -145,7 +145,7 @@ const Navigator = (props) => {
                 },
                 { id: 'bookings', name: 'bookings', icon: <BookIcon /> },
                 { id: 'booking-calendar', name: 'booking calendar', icon: <EventIcon /> },
-                { id: 'notifications', name: 'notifications', icon: <CircleNotificationsIcon /> },
+                /* { id: 'notifications', name: 'notifications', icon: <CircleNotificationsIcon /> }, */
             ],
         }];
         if (roleId === 'customer') {
@@ -163,10 +163,10 @@ const Navigator = (props) => {
                     module.current = <ModuleNav />;
                 }
                 if (permission.name === 'read_customer') {
-                    addedRoutes.push({ id: 'customers', name: 'customers', icon: <PeopleIcon /> });
+                    
                 }
                 if (permission.name === 'read_employee') {
-                    addedRoutes.push({ id: 'employees', name: 'employees', icon: <PersonIcon /> },);
+                    addedRoutes.push({ id: 'users', name: 'users', icon: <PeopleIcon /> });
                 }
                 if (permission.name === 'read_employee_group') {
                     
@@ -194,7 +194,6 @@ const Navigator = (props) => {
                     addedRoutes.push({ id: 'plans', name: 'plans', icon: <CreditCardIcon /> });
                     if (roleName === 'artist') {
                         addedRoutes.push({ id: 'artist-seats', name: 'seats', icon: <EventSeatIcon /> });
-                        
                     } else {
                         addedRoutes.push({ id: 'expenses', name: 'expenses', icon: <MonetizationOnIcon /> });
                         addedRoutes.push({ id: 'seats', name: 'seats', icon: <EventSeatIcon /> });

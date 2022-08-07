@@ -11,6 +11,7 @@ import Loader from './components/UI/Loader/Loader';
 import { connect } from 'react-redux';
 import { PermissibleRender } from '@brainhubeu/react-permissible';
 import { getNotificationToken } from './firebase';
+import Users from './pages/Account/Content/Users/Users';
 
 const Auth = React.lazy(() => import('./pages/Auth/Auth'));
 const RegisterArtist = React.lazy(() => import('./pages/RegisterArtist/RegisterArtist'));
@@ -247,33 +248,6 @@ function App(props) {
                             <Products />
                         </PermissibleRender>
                     } />
-                    <Route path="point-of-sale" element={
-                        <PermissibleRender
-                            userPermissions={permissions}
-                            requiredPermissions={['create_booking']}
-                            renderOtherwise={<NotFound />}
-                        >
-                            <PointOfSale />
-                        </PermissibleRender>
-                    } />
-                    <Route path="customers" element={
-                        <PermissibleRender
-                            userPermissions={permissions}
-                            requiredPermissions={['read_customer']}
-                            renderOtherwise={<NotFound />}
-                        >
-                            <Customers />
-                        </PermissibleRender>
-                    } />
-                    <Route path="employees" element={
-                        <PermissibleRender
-                            userPermissions={permissions}
-                            requiredPermissions={['read_employee']}
-                            renderOtherwise={<NotFound />}
-                        >
-                            <Employees />
-                        </PermissibleRender>
-                    } />
                     <Route path="deals" element={
                         <PermissibleRender
                             userPermissions={permissions}
@@ -283,46 +257,62 @@ function App(props) {
                             <Deals />
                         </PermissibleRender>
                     } />
-                    {roleName !== 'artist' && (
-                        <Fragment>
-                            <Route path="expenses" element={
-                                <PermissibleRender
-                                    userPermissions={permissions}
-                                    requiredPermissions={['read_report']}
-                                    renderOtherwise={<NotFound />}
-                                >
-                                    <Expenses />
-                                </PermissibleRender>
-                            } />
-                            <Route path="expenses/categories" element={
-                                <PermissibleRender
-                                    userPermissions={permissions}
-                                    requiredPermissions={['read_report']}
-                                    renderOtherwise={<NotFound />}
-                                >
-                                    <ExpenseCategories />
-                                </PermissibleRender>
-                            } />
-                            <Route path="expenses/customers" element={
-                                <PermissibleRender
-                                    userPermissions={permissions}
-                                    requiredPermissions={['read_report']}
-                                    renderOtherwise={<NotFound />}
-                                >
-                                    <ExpenseCustomers />
-                                </PermissibleRender>
-                            } />
-                            <Route path="expenses/banks" element={
-                                <PermissibleRender
-                                    userPermissions={permissions}
-                                    requiredPermissions={['read_report']}
-                                    renderOtherwise={<NotFound />}
-                                >
-                                    <ExpenseBanks />
-                                </PermissibleRender>
-                            } />
-                        </Fragment>
-                    )}
+                    <Route path="point-of-sale" element={
+                        <PermissibleRender
+                            userPermissions={permissions}
+                            requiredPermissions={['create_booking']}
+                            renderOtherwise={<NotFound />}
+                        >
+                            <PointOfSale />
+                        </PermissibleRender>
+                    } />
+                    {/* <Route path="customers" element={
+                        <PermissibleRender
+                            userPermissions={permissions}
+                            requiredPermissions={['read_customer']}
+                            renderOtherwise={<NotFound />}
+                        >
+                            <Customers />
+                        </PermissibleRender>
+                    } /> */}
+                    {/* <Route path="employees" element={
+                        <PermissibleRender
+                            userPermissions={permissions}
+                            requiredPermissions={['read_employee']}
+                            renderOtherwise={<NotFound />}
+                        >
+                            <Employees />
+                        </PermissibleRender>
+                    } /> */}
+                    <Route path='users/*' element={<Users />} >
+                        <Route index element={
+                            <PermissibleRender
+                                userPermissions={permissions}
+                                requiredPermissions={['read_employee']}
+                                renderOtherwise={<NotFound />}
+                            >
+                                <Employees />
+                            </PermissibleRender>
+                        } />
+                        <Route path="customers" element={
+                            <PermissibleRender
+                                userPermissions={permissions}
+                                requiredPermissions={['read_customer']}
+                                renderOtherwise={<NotFound />}
+                            >
+                                <Customers />
+                            </PermissibleRender>
+                        } />
+                        <Route path="agents" element={
+                            <PermissibleRender
+                                userPermissions={permissions}
+                                requiredPermissions={['read_report']}
+                                renderOtherwise={<NotFound />}
+                            >
+                                <ExpenseCustomers />
+                            </PermissibleRender>
+                        } />
+                    </Route>
                     <Route path="reports" element={
                         <PermissibleRender
                             userPermissions={permissions}
@@ -407,6 +397,46 @@ function App(props) {
                                 </PermissibleRender>
                             } />
                         </ Route>
+                    )}
+                    {roleName !== 'artist' && (
+                        <Fragment>
+                            <Route path="expenses" element={
+                                <PermissibleRender
+                                    userPermissions={permissions}
+                                    requiredPermissions={['read_report']}
+                                    renderOtherwise={<NotFound />}
+                                >
+                                    <Expenses />
+                                </PermissibleRender>
+                            } />
+                            <Route path="expenses/categories" element={
+                                <PermissibleRender
+                                    userPermissions={permissions}
+                                    requiredPermissions={['read_report']}
+                                    renderOtherwise={<NotFound />}
+                                >
+                                    <ExpenseCategories />
+                                </PermissibleRender>
+                            } />
+                            {/* <Route path="expenses/customers" element={
+                                <PermissibleRender
+                                    userPermissions={permissions}
+                                    requiredPermissions={['read_report']}
+                                    renderOtherwise={<NotFound />}
+                                >
+                                    <ExpenseCustomers />
+                                </PermissibleRender>
+                            } /> */}
+                            <Route path="expenses/banks" element={
+                                <PermissibleRender
+                                    userPermissions={permissions}
+                                    requiredPermissions={['read_report']}
+                                    renderOtherwise={<NotFound />}
+                                >
+                                    <ExpenseBanks />
+                                </PermissibleRender>
+                            } />
+                        </Fragment>
                     )}
                     {roleName === 'artist' && (
                         <Route path='artist-seats' element={
