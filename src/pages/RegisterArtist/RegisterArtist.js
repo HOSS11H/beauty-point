@@ -112,7 +112,7 @@ const RegisterArtist = props => {
     let authIsValid = isSubscribeDataValid()
 
     useEffect(() => {
-        isLoggedIn && navigate('/account/settings?welcome=true', { replace: true })
+        isLoggedIn && navigate('/account/sources/settings?welcome=true', { replace: true })
     }, [isLoggedIn, navigate])
 
     const assignCoords = (lat, lng) => {
@@ -145,7 +145,7 @@ const RegisterArtist = props => {
                 } else {
                     authCtx.login(res.data.token, res.data.user.roles[0].id, res.data.user.name[0], res.data.user.id, res.data.user.roles[0].name);
                 }
-                navigate('/account/settings?welcome=true', { replace: true })
+                navigate('/account/sources/settings?welcome=true', { replace: true })
             })
             .catch(err => {
                 if ( err.response.data.errors ) {

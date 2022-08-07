@@ -124,7 +124,7 @@ const NotificationsMenu = props => {
         // request to make the notification status to be read
         const notificationIndex = notifications.findIndex(notification => notification.id === id)
         const updatedNotifications = [...notifications]
-        navigate(`notifications/${id}`)
+        navigate(`/account/sources/notifications/${id}`)
         handleClose()
         if (updatedNotifications[notificationIndex].read_at) return;
         updatedNotifications[notificationIndex].read_at = moment().format()
@@ -137,7 +137,7 @@ const NotificationsMenu = props => {
     }
 
     const viewAllNotificationsHandler = () => {
-        navigate(`notifications`)
+        navigate(`/account/sources/notifications`)
         handleClose()
     }
 

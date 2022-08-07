@@ -14,6 +14,7 @@ import { getNotificationToken } from './firebase';
 
 const Users = React.lazy(() => import('./pages/Account/Content/Users/Users'));
 const Collection = React.lazy(() => import('./pages/Account/Content/Collection/Collection'));
+const Sources = React.lazy(() => import('./pages/Account/Content/Sources/Sources'));
 
 const Auth = React.lazy(() => import('./pages/Auth/Auth'));
 const RegisterArtist = React.lazy(() => import('./pages/RegisterArtist/RegisterArtist'));
@@ -219,10 +220,6 @@ function App(props) {
                     <Route path="dashboard" element={<Dashboard />} />
                     <Route path="bookings" element={<Bookings />} />
                     <Route path="booking-calendar" element={<BookingCalendar />} />
-                    <Route path="notifications/*" element={<Notifications />} >
-                        <Route index element={<AllNotifications />} />
-                        <Route path=':id' element={<SingleNotification />} />
-                    </Route>
                     <Route path="products/*" element={<Collection />} >
                         <Route index element={
                             <PermissibleRender
@@ -308,51 +305,82 @@ function App(props) {
                             <Reports />
                         </PermissibleRender>
                     } />
-                    <Route path="coupons" element={
-                        <PermissibleRender
-                            userPermissions={permissions}
-                            requiredPermissions={['read_coupon']}
-                            renderOtherwise={<NotFound />}
-                        >
-                            <Coupons />
-                        </PermissibleRender>
-                    } />
-                    <Route path="tickets/*" element={
-                        <PermissibleRender
-                            userPermissions={permissions}
-                            requiredPermissions={['manage_settings']}
-                            renderOtherwise={<NotFound />}
-                        >
-                            <Tickets />
-                        </PermissibleRender>
-                    } >
-                        <Route index element={
+                    <Route path='sources' element={<Sources />} >
+                        <Route path="settings/*" element={
                             <PermissibleRender
                                 userPermissions={permissions}
                                 requiredPermissions={['manage_settings']}
                                 renderOtherwise={<NotFound />}
                             >
-                                <TicketsTable />
+                                <Settings />
+                            </PermissibleRender>
+                        }>
+                            <Route index element={
+                                <PermissibleRender
+                                    userPermissions={permissions}
+                                    requiredPermissions={['manage_settings']}
+                                    renderOtherwise={<NotFound />}
+                                >
+                                    <GeneralSettings />
+                                </PermissibleRender>
+                            } />
+                            <Route path="vendor-page" element={
+                                <PermissibleRender
+                                    userPermissions={permissions}
+                                    requiredPermissions={['manage_settings']}
+                                    renderOtherwise={<NotFound />}
+                                >
+                                    <VendorPage />
+                                </PermissibleRender>
+                            } />
+                            <Route path="booking-settings" element={
+                                <PermissibleRender
+                                    userPermissions={permissions}
+                                    requiredPermissions={['manage_settings']}
+                                    renderOtherwise={<NotFound />}
+                                >
+                                    <BookingSettings />
+                                </PermissibleRender>
+                            } />
+                            {roleName !== 'artist' && (
+                                <Fragment>
+                                    <Route path="employee-settings" element={
+                                        <PermissibleRender
+                                            userPermissions={permissions}
+                                            requiredPermissions={['manage_settings']}
+                                            renderOtherwise={<NotFound />}
+                                        >
+                                            <EmployeeSettings />
+                                        </PermissibleRender>
+                                    } />
+                                    <Route path="roles-permissions" element={
+                                        <PermissibleRender
+                                            userPermissions={permissions}
+                                            requiredPermissions={['manage_settings']}
+                                            renderOtherwise={<NotFound />}
+                                        >
+                                            <RolesPermissions />
+                                        </PermissibleRender>
+                                    } />
+                                </Fragment>
+                            )}
+                        </Route>
+                        <Route path="coupons" element={
+                            <PermissibleRender
+                                userPermissions={permissions}
+                                requiredPermissions={['read_coupon']}
+                                renderOtherwise={<NotFound />}
+                            >
+                                <Coupons />
                             </PermissibleRender>
                         } />
-                        <Route path=':id' element={
+                        <Route path="tickets/*" element={
                             <PermissibleRender
                                 userPermissions={permissions}
                                 requiredPermissions={['manage_settings']}
                                 renderOtherwise={<NotFound />}
                             >
-                                <SingleTicket />
-                            </PermissibleRender>
-                        } />
-                    </ Route>
-                    {roleName !== 'artist' && (
-                        <Route path="seats/*" element={
-                            <PermissibleRender
-                                userPermissions={permissions}
-                                requiredPermissions={['manage_settings']}
-                                renderOtherwise={<NotFound />}
-                            >
-                                <Seats />
+                                <Tickets />
                             </PermissibleRender>
                         } >
                             <Route index element={
@@ -361,7 +389,7 @@ function App(props) {
                                     requiredPermissions={['manage_settings']}
                                     renderOtherwise={<NotFound />}
                                 >
-                                    <SeatsTable />
+                                    <TicketsTable />
                                 </PermissibleRender>
                             } />
                             <Route path=':id' element={
@@ -370,20 +398,88 @@ function App(props) {
                                     requiredPermissions={['manage_settings']}
                                     renderOtherwise={<NotFound />}
                                 >
-                                    <SingleSeat />
+                                    <SingleTicket />
                                 </PermissibleRender>
                             } />
-                            <Route path='requests' element={
+                        </ Route>
+                        {roleName !== 'artist' && (
+                            <Route path="seats/*" element={
                                 <PermissibleRender
                                     userPermissions={permissions}
                                     requiredPermissions={['manage_settings']}
                                     renderOtherwise={<NotFound />}
                                 >
-                                    <SeatsRequests />
+                                    <Seats />
+                                </PermissibleRender>
+                            } >
+                                <Route index element={
+                                    <PermissibleRender
+                                        userPermissions={permissions}
+                                        requiredPermissions={['manage_settings']}
+                                        renderOtherwise={<NotFound />}
+                                    >
+                                        <SeatsTable />
+                                    </PermissibleRender>
+                                } />
+                                <Route path=':id' element={
+                                    <PermissibleRender
+                                        userPermissions={permissions}
+                                        requiredPermissions={['manage_settings']}
+                                        renderOtherwise={<NotFound />}
+                                    >
+                                        <SingleSeat />
+                                    </PermissibleRender>
+                                } />
+                                <Route path='requests' element={
+                                    <PermissibleRender
+                                        userPermissions={permissions}
+                                        requiredPermissions={['manage_settings']}
+                                        renderOtherwise={<NotFound />}
+                                    >
+                                        <SeatsRequests />
+                                    </PermissibleRender>
+                                } />
+                            </ Route>
+                        )}
+                        {roleName === 'artist' && (
+                            <Route path='artist-seats' element={
+                                <PermissibleRender
+                                    userPermissions={permissions}
+                                    requiredPermissions={['manage_settings']}
+                                    renderOtherwise={<NotFound />}
+                                >
+                                    <ArtistSeats />
                                 </PermissibleRender>
                             } />
-                        </ Route>
-                    )}
+                        )}
+                        <Route path="plans/*" element={
+                            <Routes>
+                                <Route index element={
+                                    <PermissibleRender
+                                        userPermissions={permissions}
+                                        requiredPermissions={['manage_settings']}
+                                        renderOtherwise={<NotFound />}
+                                    >
+                                        <Plans />
+                                    </PermissibleRender>
+                                } />
+                                <Route path="status" element={
+                                    <PermissibleRender
+                                        userPermissions={permissions}
+                                        requiredPermissions={['manage_settings']}
+                                        renderOtherwise={<NotFound />}
+                                    >
+                                        <PaymentStatus />
+                                    </PermissibleRender>
+                                } />
+                            </Routes>
+                        }
+                        />
+                        <Route path="notifications/*" element={<Notifications />} >
+                            <Route index element={<AllNotifications />} />
+                            <Route path=':id' element={<SingleNotification />} />
+                        </Route>
+                    </Route>
                     {roleName !== 'artist' && (
                         <Fragment>
                             <Route path="expenses" element={
@@ -415,99 +511,6 @@ function App(props) {
                             } />
                         </Fragment>
                     )}
-                    {roleName === 'artist' && (
-                        <Route path='artist-seats' element={
-                            <PermissibleRender
-                                userPermissions={permissions}
-                                requiredPermissions={['manage_settings']}
-                                renderOtherwise={<NotFound />}
-                            >
-                                <ArtistSeats />
-                            </PermissibleRender>
-                        } />
-                    )}
-                    <Route path="plans/*" element={
-                        <Routes>
-                            <Route index element={
-                                <PermissibleRender
-                                    userPermissions={permissions}
-                                    requiredPermissions={['manage_settings']}
-                                    renderOtherwise={<NotFound />}
-                                >
-                                    <Plans />
-                                </PermissibleRender>
-                            } />
-                            <Route path="status" element={
-                                <PermissibleRender
-                                    userPermissions={permissions}
-                                    requiredPermissions={['manage_settings']}
-                                    renderOtherwise={<NotFound />}
-                                >
-                                    <PaymentStatus />
-                                </PermissibleRender>
-                            } />
-                        </Routes>
-                    }
-                    />
-                    <Route path="settings/*" element={
-                        <PermissibleRender
-                            userPermissions={permissions}
-                            requiredPermissions={['manage_settings']}
-                            renderOtherwise={<NotFound />}
-                        >
-                            <Settings />
-                        </PermissibleRender>
-                    }>
-                        <Route index element={
-                            <PermissibleRender
-                                userPermissions={permissions}
-                                requiredPermissions={['manage_settings']}
-                                renderOtherwise={<NotFound />}
-                            >
-                                <GeneralSettings />
-                            </PermissibleRender>
-                        } />
-                        <Route path="vendor-page" element={
-                            <PermissibleRender
-                                userPermissions={permissions}
-                                requiredPermissions={['manage_settings']}
-                                renderOtherwise={<NotFound />}
-                            >
-                                <VendorPage />
-                            </PermissibleRender>
-                        } />
-                        <Route path="booking-settings" element={
-                            <PermissibleRender
-                                userPermissions={permissions}
-                                requiredPermissions={['manage_settings']}
-                                renderOtherwise={<NotFound />}
-                            >
-                                <BookingSettings />
-                            </PermissibleRender>
-                        } />
-                        {roleName !== 'artist' && (
-                            <Fragment>
-                                <Route path="employee-settings" element={
-                                    <PermissibleRender
-                                        userPermissions={permissions}
-                                        requiredPermissions={['manage_settings']}
-                                        renderOtherwise={<NotFound />}
-                                    >
-                                        <EmployeeSettings />
-                                    </PermissibleRender>
-                                } />
-                                <Route path="roles-permissions" element={
-                                    <PermissibleRender
-                                        userPermissions={permissions}
-                                        requiredPermissions={['manage_settings']}
-                                        renderOtherwise={<NotFound />}
-                                    >
-                                        <RolesPermissions />
-                                    </PermissibleRender>
-                                } />
-                            </Fragment>
-                        )}
-                    </Route>
                 </Route>
                 <Route path="/home/*" element={<Home />}>
                     <Route index element={<HomePage />} />

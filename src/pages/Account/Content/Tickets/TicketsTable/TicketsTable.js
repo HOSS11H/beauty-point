@@ -200,7 +200,7 @@ const TicketsTable = props => {
     }, [fetchTickets, page, rowsPerPage, searchWord, t])
 
     const viewTicketHandler = ( id ) => {
-        navigate(`${id}`)
+        navigate(`/account/sources/tickets/${id}`)
     }
 
     const handleChangePage = useCallback((event, newPage) => {

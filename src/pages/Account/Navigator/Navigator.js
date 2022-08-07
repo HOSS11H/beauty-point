@@ -1,11 +1,7 @@
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import BookIcon from '@mui/icons-material/Book';
-import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
-import CreditCardIcon from '@mui/icons-material/CreditCard';
 import DashboardIcon from '@mui/icons-material/Dashboard';
-import DiscountIcon from '@mui/icons-material/Discount';
 import EventIcon from '@mui/icons-material/Event';
-import EventSeatIcon from '@mui/icons-material/EventSeat';
 import InsertChartIcon from '@mui/icons-material/InsertChart';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import PeopleIcon from '@mui/icons-material/People';
@@ -138,8 +134,8 @@ const Navigator = (props) => {
                 { id: 'bookings', name: 'bookings', icon: <BookIcon /> },
                 { id: 'booking-calendar', name: 'booking calendar', icon: <EventIcon /> },
                 { id: 'products', name: 'products', icon: <ShoppingCartIcon /> },
-                { id: 'users', name: 'users', icon: <PeopleIcon /> }
-                /* { id: 'notifications', name: 'notifications', icon: <CircleNotificationsIcon /> }, */
+                { id: 'users', name: 'users', icon: <PeopleIcon /> },
+                { id: 'sources/settings', name: 'settings', icon: <SettingsIcon /> },
             ],
         }];
         if (roleId === 'customer') {
@@ -147,34 +143,12 @@ const Navigator = (props) => {
         } else {
             let addedRoutes = [];
             fetchedPermissions.forEach(permission => {
-                if (permission.name === 'read_employee_group') {
-                    
-                }
-                if (permission.name === 'read_employee_leave') {
-
-                }
-                if (permission.name === 'read_employee_schedule') {
-                    
-                }
                 if (permission.name === 'create_booking') {
                     addedRoutes.push({ id: 'point-of-sale', name: 'points of sales', icon: <AddShoppingCartIcon /> });
                 }
                 if (permission.name === 'read_report') {
                     addedRoutes.push({ id: 'reports', name: 'reports', icon: <InsertChartIcon /> });
-                }
-                if (permission.name === 'read_coupon') {
-                    addedRoutes.push({ id: 'coupons', name: 'coupons', icon: <DiscountIcon /> });
-                }
-                if (permission.name === 'manage_settings') {
-                    addedRoutes.push({ id: 'tickets', name: 'tickets', icon: <ConfirmationNumberIcon /> });
-                    addedRoutes.push({ id: 'plans', name: 'plans', icon: <CreditCardIcon /> });
-                    if (roleName === 'artist') {
-                        addedRoutes.push({ id: 'artist-seats', name: 'seats', icon: <EventSeatIcon /> });
-                    } else {
-                        addedRoutes.push({ id: 'expenses', name: 'expenses', icon: <MonetizationOnIcon /> });
-                        addedRoutes.push({ id: 'seats', name: 'seats', icon: <EventSeatIcon /> });
-                    }
-                    addedRoutes.push({ id: 'settings', name: 'settings', icon: <SettingsIcon /> });
+                    addedRoutes.push({ id: 'expenses', name: 'expenses', icon: <MonetizationOnIcon /> });
                 }
             })
             renderedLinks[0].children = renderedLinks[0].children.concat(addedRoutes);

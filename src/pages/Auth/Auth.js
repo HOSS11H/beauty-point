@@ -151,7 +151,7 @@ const Auth = props => {
 
     useEffect(() => {
         isLoggedIn && isLogin && navigate('/account/dashboard', { replace: true })
-        isLoggedIn && !isLogin && navigate('/account/settings?welcome=true', { replace: true })
+        isLoggedIn && !isLogin && navigate('/account/sources/settings?welcome=true', { replace: true })
     }, [isLoggedIn, isLogin, navigate])
 
     const switchAuthModeHandler = () => {

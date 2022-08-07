@@ -72,14 +72,14 @@ const PaymentStatus = props => {
                         closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
                     });
                 })
-            navigate('/account/plans')
+            navigate('/account/sources/plans')
         } else {
             setSendReq(false)
             toast.error(t('Paid Failed'), {
                 position: "bottom-right", autoClose: 4000, hideProgressBar: true,
                 closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
             });
-            navigate('/account/plans')
+            navigate('/account/sources/plans')
         }
     }, [amount, navigate, packageId, packageType, paymentId, responseCode, responseHash, searchParams, t, trackId, tranId])
 

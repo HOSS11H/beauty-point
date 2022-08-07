@@ -82,7 +82,7 @@ const AllNotifications = props => {
         // request to make the notification status to be read
         const notificationIndex = notifications.findIndex(notification => notification.id === id)
         const updatedNotifications = [...notifications]
-        navigate(`${id}`)
+        navigate(`/account/sources/notifications/${id}`)
         if(updatedNotifications[notificationIndex].read_at) return;
         updatedNotifications[notificationIndex].read_at = moment().format()
         axios.post(`/notifications/${id}/read`)

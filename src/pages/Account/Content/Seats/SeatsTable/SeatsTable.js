@@ -212,7 +212,7 @@ const SeatsTable = props => {
     }, [fetchSeats, page, rowsPerPage, searchWord, t])
 
     const viewRequestsHandler = ( id ) => {
-        navigate(`requests`)
+        navigate(`/account/sources/seats/requests`)
     }
 
     const handleChangePage = useCallback((event, newPage) => {

@@ -165,7 +165,7 @@ const AllPlans = ({ currentPlanId }) => {
                 window.location.assign(res.data.redirect_url);
             })
             .catch(error => {
-                navigate('/account/plans')
+                navigate('/account/sources/plans')
                 toast.error('Something went wrong', {
                     position: "bottom-right", autoClose: 4000, hideProgressBar: true,
                     closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
