@@ -10,7 +10,9 @@ import { Provider } from 'react-redux';
 import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
 
+import { ErrorFallback } from "./components/ErrorFallback/ErrorFallback";
 import bookingsReducer from './store/reducers/bookings';
+import cartReducer from './store/reducers/cart';
 import categoriesReducer from './store/reducers/categories';
 import couponsReducer from './store/reducers/coupons';
 import customersReducer from './store/reducers/customers';
@@ -23,7 +25,6 @@ import productsReducer from './store/reducers/products';
 import reportsReducer from './store/reducers/reports';
 import servicesReducer from './store/reducers/services';
 import unitsReducer from './store/reducers/units';
-import cartReducer from './store/reducers/cart';
 
 import { BrowserRouter } from 'react-router-dom';
 
@@ -35,6 +36,7 @@ import GlobalStyle from './styles/globalStyles';
 
 import * as Sentry from "@sentry/react";
 import { BrowserTracing } from "@sentry/tracing";
+import { ErrorBoundary } from 'react-error-boundary';
 
 const rootReducer = combineReducers({
 	bookings: bookingsReducer,
@@ -82,16 +84,18 @@ Sentry.init({
 
 const app = (
 	<React.StrictMode>
-		<Provider store={store}>
-			<AuthContextProvider>
-				<BrowserRouter>
-					<ThemeContextProvider>
-						<GlobalStyle />
-						<App />
-					</ThemeContextProvider>
-				</BrowserRouter>
-			</AuthContextProvider>
-		</Provider >
+		<ErrorBoundary FallbackComponent={ErrorFallback} onReset={() => window.location.reload(false)} >
+			<Provider store={store}>
+				<AuthContextProvider>
+					<BrowserRouter>
+						<ThemeContextProvider>
+							<GlobalStyle />
+							<App />
+						</ThemeContextProvider>
+					</BrowserRouter>
+				</AuthContextProvider>
+			</Provider >
+		</ErrorBoundary>
 	</React.StrictMode>
 )
 
