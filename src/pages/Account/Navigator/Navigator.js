@@ -133,7 +133,7 @@ const Navigator = (props) => {
                 },
                 { id: 'bookings', name: 'bookings', icon: <BookIcon /> },
                 { id: 'booking-calendar', name: 'booking calendar', icon: <EventIcon /> },
-                { id: 'products', name: 'items', icon: <ShoppingCartIcon /> },
+                { id: 'products', name: 'products', icon: <ShoppingCartIcon /> },
                 { id: 'users', name: 'users', icon: <PeopleIcon /> },
                 { id: 'sources/settings', name: 'settings', icon: <SettingsIcon /> },
             ],
