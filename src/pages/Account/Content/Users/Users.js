@@ -26,8 +26,8 @@ const Users = ({ fetchedPermissions }) => {
         <Fragment>
             <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
                 <Tabs value={selected} onChange={handleChange} aria-label="basic tabs example">
-                    {permissions.includes('read_employee') && <Tab label={t('employees')} value='/account/users' /> }
-                    {permissions.includes('read_customer') && <Tab label={t('customers')} value='/account/users/customers'  /> }
+                    {permissions.includes('read_customer') && <Tab label={t('customers')} value='/account/users' /> }
+                    {permissions.includes('read_employee') && <Tab label={t('employees')} value='/account/users/employees'  /> }
                     {permissions.includes('read_report') && <Tab label={t('agents')} value='/account/users/agents' /> }
                 </Tabs>
             </Box>

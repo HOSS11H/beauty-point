@@ -271,19 +271,19 @@ function App(props) {
                         <Route index element={
                             <PermissibleRender
                                 userPermissions={permissions}
-                                requiredPermissions={['read_employee']}
-                                renderOtherwise={<NotFound />}
-                            >
-                                <Employees />
-                            </PermissibleRender>
-                        } />
-                        <Route path="customers" element={
-                            <PermissibleRender
-                                userPermissions={permissions}
                                 requiredPermissions={['read_customer']}
                                 renderOtherwise={<NotFound />}
                             >
                                 <Customers />
+                            </PermissibleRender>
+                        } />
+                        <Route path='employees' element={
+                            <PermissibleRender
+                                userPermissions={permissions}
+                                requiredPermissions={['read_employee']}
+                                renderOtherwise={<NotFound />}
+                            >
+                                <Employees />
                             </PermissibleRender>
                         } />
                         <Route path="agents" element={
