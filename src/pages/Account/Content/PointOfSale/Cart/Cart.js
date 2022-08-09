@@ -460,7 +460,10 @@ const Cart = props => {
     }, [])
 
     const resetCartHandler = useCallback(() => {
-        setCustomerData(null);
+        setCustomerData({
+            id: '',
+            name: t('passing customer'),
+        });
         setCustomerDataError(false)
         setDiscount(0)
         setDiscountType('percent')
@@ -475,7 +478,7 @@ const Cart = props => {
         setCartDataError(false)
         setResetSearchData(true)
         resetCart();
-    }, [resetCart])
+    }, [resetCart, t])
 
 
     useEffect(() => {
