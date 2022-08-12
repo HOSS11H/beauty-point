@@ -4,7 +4,7 @@ import JoyRide, { ACTIONS, EVENTS, STATUS } from "react-joyride";
 
 const TOUR_STEPS = [
     {
-        target: "#settings",
+        target: "#sources\\/settings",
         content: 'مرحباً بك في صفحة الأعدادات هنا يمكنك تغيير اعدادات النظام',
         spotlightClicks: true,
         title: 'الأعدادات',

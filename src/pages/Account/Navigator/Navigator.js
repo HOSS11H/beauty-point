@@ -126,11 +126,7 @@ const Navigator = (props) => {
         let renderedLinks = [{
             id: 'dashboard',
             children: [
-                {
-                    id: 'dashboard',
-                    name: 'dashboard',
-                    icon: <DashboardIcon />,
-                },
+                { id: 'dashboard', name: 'dashboard', icon: <DashboardIcon />,},
                 { id: 'bookings', name: 'bookings', icon: <BookIcon /> },
                 { id: 'booking-calendar', name: 'booking calendar', icon: <EventIcon /> },
                 { id: 'products', name: 'products', icon: <ShoppingCartIcon /> },
