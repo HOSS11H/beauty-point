@@ -14,6 +14,7 @@ const Wrapper = styled.div`
 const rowsPerPage = 25;
 
 const Results = props => {
+    const { addToCart } = props;
 
     const { t } = useTranslation()
     const themeCtx = useContext(ThemeContext)
@@ -101,7 +102,7 @@ const Results = props => {
     return (
         <Wrapper>
             <Filters data={filters} handleFiltersChange={filtersChangeHandler}  />
-            <Items data={results} type={type} loading={loadingResults} lastElementRef={lastElementRef} />
+            <Items data={results} type={type} loading={loadingResults} lastElementRef={lastElementRef} addToCart={addToCart} />
         </Wrapper>
     )
 }

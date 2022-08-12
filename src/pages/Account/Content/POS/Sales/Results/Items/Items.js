@@ -67,7 +67,21 @@ const OldPrice = styled.p`
 `
 
 const Items = props => {
-    const { data, loading, lastElementRef, type } = props;
+    const { data, loading, lastElementRef, type, addToCart } = props;
+
+    const clickHandler = ( id ) => {
+        const addedItemIndex = data.findIndex( item  => item.id === id );
+        const addedItem = data[addedItemIndex];
+        type === 'deals' && (addedItem.name = addedItem.title);
+        const itemData = {
+            id: addedItem.id,
+            name: addedItem.name,
+            price: addedItem.discount_price,
+            quantity: 1,
+            type: type,
+        }
+        addToCart(type, itemData)
+    }
 
     let content;
 
@@ -87,8 +101,8 @@ const Items = props => {
                 {data.map( (item , index) => {
                     if ( data.length - 1 === index ) {
                         return (
-                            <Grid item xs={6} sm={4} lg={3} ref={lastElementRef} >
-                                <Item key={index}>
+                            <Grid key={index} item xs={6} sm={4} lg={3} ref={lastElementRef} >
+                                <Item onClick={clickHandler.bind(null, item.id)}>
                                     <h6>{item.name || item.title}</h6>
                                     <Price>{formatCurrency(item.discount_price)}</Price>
                                     {item.price !== item.discount_price ? <OldPrice>{formatCurrency(item.price)}</OldPrice> : null}
@@ -97,8 +111,8 @@ const Items = props => {
                         )
                     }
                     return (
-                        <Grid item xs={6} sm={4} lg={3} >
-                            <Item key={index}>
+                        <Grid key={index} item xs={6} sm={4} lg={3} >
+                            <Item onClick={clickHandler.bind(null, item.id)}>
                                 <h6>{item.name || item.title}</h6>
                                 <Price>{formatCurrency(item.discount_price)}</Price>
                                 {item.price !== item.discount_price ? <OldPrice>{formatCurrency(item.price)}</OldPrice> : null}

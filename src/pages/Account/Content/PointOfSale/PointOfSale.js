@@ -396,7 +396,6 @@ const PointOfSale = (props) => {
         setPage(newPage);
     }, []);
 
-
     const purchaseCartHandler = useCallback((purchasedData) => {
         createBookingHandler({
             ...purchasedData,
