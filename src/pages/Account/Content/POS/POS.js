@@ -14,17 +14,25 @@ const Wrapper = styled.div`
 
 const POS = props => {
 
-    const [ view, setView ] = useState('sales')
+    const [view, setView] = useState('sales')
 
-    const viewChangeHandler = useCallback( ( val ) => {
-        setView( val );
-    } , [])
+    const viewChangeHandler = useCallback((val) => {
+        setView(val);
+    }, [])
 
+
+    let content;
+    switch (view) {
+        case 'sales':
+            content = <Sales />
+            break;
+        default:
+    }
 
     return (
         <Fragment>
             <Topbar view={view} changeView={viewChangeHandler} />
-            <Sales />
+            {content}
         </Fragment>
     )
 }

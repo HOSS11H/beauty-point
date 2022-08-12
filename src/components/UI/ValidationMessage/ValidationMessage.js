@@ -2,7 +2,6 @@ import styled, { css } from 'styled-components'
 
 const ValidationMessage = styled.p`
     flex-basis: 100%;
-    font-size: 15px;
     line-height:1.5;
     text-transform: uppercase;
     font-weight: 400;
@@ -14,6 +13,9 @@ const ValidationMessage = styled.p`
     `}
     ${({ notExist }) => notExist && css`
         color: ${({ theme }) => theme.palette.error.main};
+    `}
+    ${({ small }) => small && css`
+        font-size: 14px;
     `}
 `
 
