@@ -15,7 +15,7 @@ const ValidationMessage = styled.p`
         color: ${({ theme }) => theme.palette.error.main};
     `}
     ${({ small }) => small && css`
-        font-size: 14px;
+        font-size: 13px;
     `}
 `
 

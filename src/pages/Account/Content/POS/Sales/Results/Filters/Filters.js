@@ -17,11 +17,12 @@ const Wrapper = styled(Card)`
         height: max-content;
         display: flex;
         gap: 10px;
+        margin-bottom: 10px;
         & .MuiFormControl-root {
             min-width: 100px;
         } 
     }
-    `
+`
 
 const SearchWrapper = styled.div`
     flex-grow: 1;
@@ -82,7 +83,7 @@ const Filters = props => {
         content = (
             <Fragment>
                 <SearchWrapper>
-                    <DebounceInput element={TextField} debounceTimeout={500} id="item-search" label={t('search')} variant="standard" value={data.search} onChange={handleChange} />
+                    <DebounceInput element={TextField} debounceTimeout={500} id="item-search" label={t('search')} variant="standard" name='search' value={data.search} onChange={handleChange} />
                     <ValidationMessage exist small >{t('write at least 3 chars')}</ValidationMessage>
                 </SearchWrapper>
                 <FormControl variant="standard" >
@@ -105,6 +106,7 @@ const Filters = props => {
                     <Select
                         labelId="item-location"
                         label={t('location')}
+                        name='location'
                         id="item-location-select"
                         value={data.location}
                         onChange={handleChange}
