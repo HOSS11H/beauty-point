@@ -71,7 +71,7 @@ const Items = props => {
 
     let content;
 
-    if ( loading ) {
+    if ( data.length === 0 && loading ) {
         content = (
             <Loader height="500px" />
         )
@@ -81,13 +81,24 @@ const Items = props => {
             <Lottie animationData={noDataAnimation} loop />
         )
     }
-    if ( data.length > 0 && !loading ) {
+    if ( data.length > 0 ) {
         content = (
             <Grid container spacing={1} >
                 {data.map( (item , index) => {
+                    if ( data.length - 1 === index ) {
+                        return (
+                            <Grid item xs={6} sm={4} lg={3} ref={lastElementRef} >
+                                <Item key={index}>
+                                    <h6>{item.name || item.title}</h6>
+                                    <Price>{formatCurrency(item.discount_price)}</Price>
+                                    {item.price !== item.discount_price ? <OldPrice>{formatCurrency(item.price)}</OldPrice> : null}
+                                </Item>
+                            </Grid>
+                        )
+                    }
                     return (
                         <Grid item xs={6} sm={4} lg={3} >
-                            <Item key={index} >
+                            <Item key={index}>
                                 <h6>{item.name || item.title}</h6>
                                 <Price>{formatCurrency(item.discount_price)}</Price>
                                 {item.price !== item.discount_price ? <OldPrice>{formatCurrency(item.price)}</OldPrice> : null}

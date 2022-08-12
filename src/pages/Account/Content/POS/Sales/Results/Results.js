@@ -28,7 +28,7 @@ const Results = props => {
     })
     const { type, search, location, category } = filters;
 
-    const [page, setPage] = useState(0);
+    const [page, setPage] = useState(1);
     const [lastPage, setLastPage] = useState(false)
     
     const [ results, setResults] = useState([]);
@@ -78,7 +78,7 @@ const Results = props => {
 
     useEffect(() => {
         const params = {
-            page: page +1 ,
+            page: page ,
             per_page: rowsPerPage,
             term: search,
             location_id: location,
