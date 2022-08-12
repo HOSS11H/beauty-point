@@ -20,20 +20,23 @@ const Auth = React.lazy(() => import('./pages/Auth/Auth'));
 const RegisterArtist = React.lazy(() => import('./pages/RegisterArtist/RegisterArtist'));
 const Account = React.lazy(() => import('./pages/Account/Account'));
 const Dashboard = React.lazy(() =>
-    import('./pages/Account/Content/Dashboard/Dashboard')
+import('./pages/Account/Content/Dashboard/Dashboard')
 );
 const Services = React.lazy(() =>
-    import('./pages/Account/Content/Services/Services')
+import('./pages/Account/Content/Services/Services')
 );
 const Products = React.lazy(() =>
     import('./pages/Account/Content/Products/Products')
 );
 const Deals = React.lazy(() => import('./pages/Account/Content/Deals/Deals'));
 const Bookings = React.lazy(() =>
-    import('./pages/Account/Content/Bookings/Bookings')
+import('./pages/Account/Content/Bookings/Bookings')
 );
 const PointOfSale = React.lazy(() =>
-    import('./pages/Account/Content/PointOfSale/PointOfSale')
+import('./pages/Account/Content/PointOfSale/PointOfSale')
+);
+const POS = React.lazy(() =>
+import('./pages/Account/Content/POS/POS')
 );
 const BookingCalendar = React.lazy(() =>
     import('./pages/Account/Content/BookingCalendar/BookingCalendar')
@@ -265,6 +268,15 @@ function App(props) {
                             renderOtherwise={<NotFound />}
                         >
                             <PointOfSale />
+                        </PermissibleRender>
+                    } />
+                    <Route path="pos" element={
+                        <PermissibleRender
+                            userPermissions={permissions}
+                            requiredPermissions={['create_booking']}
+                            renderOtherwise={<NotFound />}
+                        >
+                            <POS />
                         </PermissibleRender>
                     } />
                     <Route path='users/*' element={<Users />} >
