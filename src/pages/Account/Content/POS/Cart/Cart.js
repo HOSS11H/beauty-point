@@ -15,6 +15,8 @@ const Wrapper = styled(Card)`
 
 const Cart = props => {
 
+    const { items, removeItem, increaseItem, decreaseItem, changePrice, changeEmployee, resetCart } = props; 
+
     const { t } = useTranslation()
 
     const defaultCustomer = useMemo( () => {
@@ -25,6 +27,7 @@ const Cart = props => {
     }, [t])
     const [customerData, setCustomerData] = useState(defaultCustomer);
 
+    
 
 
     const customerAddHandler = useCallback((val) => {

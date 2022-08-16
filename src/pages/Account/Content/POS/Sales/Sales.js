@@ -352,7 +352,8 @@ const Sales = props => {
     return (
         <Wrapper>
             <Results addToCart={addToCartHandler} />
-            <Cart />
+            <Cart items={cart} removeItem={removeFromCartHandler} increaseItem={increaseItemHandler} decreaseItem={decreaseItemHandler} 
+                        changePrice={changeItemPriceHandler}  changeEmployee={changeEmployeeHandler} resetCart={resetCartHandler}  />
         </Wrapper>
     )
 }

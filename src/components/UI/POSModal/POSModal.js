@@ -48,12 +48,12 @@ export const CardHeading = styled.div`
     }
 `
 export const CardBody = styled.div`
-    
 `
 export const CardContent = styled.div`
     width: 100%;
     //max-height: 60vh;
     overflow-y: auto;
+    padding-top: 10px;
     min-height: 0;
     // Scroll //
     -webkit-overflow-scrolling: touch;

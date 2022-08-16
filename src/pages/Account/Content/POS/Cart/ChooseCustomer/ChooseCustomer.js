@@ -7,8 +7,15 @@ import { AsyncPaginate } from 'react-select-async-paginate';
 import { components } from 'react-select';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import { useCallback } from "react";
-import { IconButton } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
+import AddCustomer from "./AddCustomer/AddCustomer";
+import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 
+const Wrapper = styled.div`
+    display: flex;
+    align-items: center;
+    gap: 10px;
+`
 
 const CustomerSelectOption = styled.div`
     display: flex;
@@ -131,6 +138,16 @@ const ChooseCustomer = props => {
     const [loadedCustomers, setLoadedCustomers] = useState([])
     const [customer, setCustomer] = useState(null);
 
+    const [ addCustomerOpened, setAddCustomerOpened] = useState(false)
+
+    const addCustomerOpenHandler = ( ) => {
+        setAddCustomerOpened(true)
+    }
+    
+    const addCustomerCloseHandler =  useCallback( ( ) => {
+        setAddCustomerOpened(false)
+    }, [])
+
     const loadOptions = useCallback(async (inputValue) => {
         if (inputValue === '') return {
             options: []
@@ -204,15 +221,25 @@ const ChooseCustomer = props => {
     }
 
     return (
-        <AsyncPaginate
-            cacheOptions
-            debounceTimeout={500}
-            loadOptions={loadOptions}
-            components={{ Option }}
-            styles={customStyles} isClearable isRtl={lang === 'ar'}
-            value={customer} onChange={handleSelectCustomer}
-            filterOption={filterOption}
-        />
+        <Fragment>
+            <Wrapper>
+                <Box sx={{ flexGrow: 1 }}>
+                    <AsyncPaginate
+                        cacheOptions
+                        debounceTimeout={500}
+                        loadOptions={loadOptions}
+                        components={{ Option }}
+                        styles={customStyles} isClearable isRtl={lang === 'ar'}
+                        value={customer} onChange={handleSelectCustomer}
+                        filterOption={filterOption}
+                    />
+                </Box>
+                <IconButton onClick={addCustomerOpenHandler} >
+                    <PersonAddAltIcon />
+                </IconButton>
+            </Wrapper>
+            {addCustomerOpened && <AddCustomer open={addCustomerOpened} handleClose={addCustomerCloseHandler} addCustomer={chooseCustomer}  />}
+        </Fragment>
     )
 }
 export default ChooseCustomer;

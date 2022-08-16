@@ -119,6 +119,7 @@ const resources = {
             'Please Choose Customer': 'يرجى اختيار العميل',
             'Customer': 'العميل',
             'add': 'إضافة',
+            'Add': 'إضافة',
             'Time': 'وقت',
             'Date desktop': 'التاريخ',
             'view items': 'عرض العناصر',
