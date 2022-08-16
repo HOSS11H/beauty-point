@@ -83,7 +83,6 @@ const SearchCustomer = props => {
 
     const { selectCustomer, resetSearchData } = props;
 
-
     const themeCtx = useContext(ThemeContext);
     const { lang } = themeCtx;
 

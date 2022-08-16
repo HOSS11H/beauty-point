@@ -36,14 +36,14 @@ const Item = styled(Card)`
     align-items: center;
     padding: 8px;
     text-align: center;
-    background-color: ${ ({ theme }) =>  theme.palette.secondary.main};
+    background-color: ${ ({ theme }) =>  theme.palette.grey[400]};
     color: ${ ({ theme }) => theme.palette.text.white};
     min-height: 120px;
     height: 100%;
     cursor: pointer;
     h6 {
         font-size: 16px;
-        color: ${ ({ theme }) => theme.palette.common.white};
+        color: ${ ({ theme }) => theme.palette.common.black};
         margin-bottom: 10px;
     }
 `
@@ -63,7 +63,7 @@ const OldPrice = styled.p`
     background-color: transparent;
     padding: 0;
     font-weight: 500;
-    color: ${ ({ theme }) => theme.palette.common.white};
+    color: ${ ({ theme }) => theme.palette.common.black};
 `
 
 const Items = props => {

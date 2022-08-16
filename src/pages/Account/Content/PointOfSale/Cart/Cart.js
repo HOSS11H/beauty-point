@@ -49,7 +49,7 @@ const CustomerName = styled.h4`
     color: ${({ theme }) => theme.palette.primary.main};
     transition: 0.3s ease-in-out;
     margin-bottom: 5px;
-    `
+`
 const CustomerInfo = styled.ul`
     margin: 0;
     padding: 0;
