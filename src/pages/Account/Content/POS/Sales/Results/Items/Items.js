@@ -9,7 +9,7 @@ const Wrapper = styled(Card)`
     &.MuiPaper-root {
         padding: 8px;
         width: 100%;
-        max-height: calc(100vh - 280px);
+        max-height: calc(100vh - 299px);
         padding-right: 16px;
         overflow-y: auto;
         min-height: 0;

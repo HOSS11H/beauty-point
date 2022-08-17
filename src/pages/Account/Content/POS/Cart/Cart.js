@@ -20,8 +20,9 @@ const Wrapper = styled(Card)`
 
 const ItemsWrapper = styled.div`
     margin-top: 5px;
-    height: calc(100vh - 490px);
-    max-height: calc(100vh - 490px);
+    margin-bottom: 5px;
+    height: calc(100vh - 510px);
+    max-height: calc(100vh - 510px);
     padding-right: 10px;
     overflow-y: auto;
     min-height: 0;
