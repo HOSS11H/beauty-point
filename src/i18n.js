@@ -15,6 +15,7 @@ const resources = {
         translation: {
             'total bookings: ': ' : مجموع الحجوزات',
             'of': 'من',
+            'none': 'لا يوجد',
             'image': 'الصورة',
             'name': 'الاسم',
             'location': 'الموقع',
