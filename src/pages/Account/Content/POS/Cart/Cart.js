@@ -1,5 +1,5 @@
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import { Button, Card, FormControl, MenuItem, Select, TextField } from "@mui/material";
+import { Box, Button, Card, FormControl, MenuItem, Select, TextField } from "@mui/material";
 import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
@@ -11,6 +11,9 @@ import v1 from '../../../../../utils/axios-instance-v1';
 import CartItem from "./CartItem/CartItem";
 import ChooseCustomer from "./ChooseCustomer/ChooseCustomer";
 import PaymentModal from "./PaymentModal/PaymentModal";
+import DateAdapter from '@mui/lab/AdapterMoment';
+import DateTimePicker from '@mui/lab/DateTimePicker';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
 const Wrapper = styled(Card)`
     &.MuiPaper-root {
@@ -21,8 +24,8 @@ const Wrapper = styled(Card)`
 const ItemsWrapper = styled.div`
     margin-top: 5px;
     margin-bottom: 5px;
-    height: calc(100vh - 510px);
-    max-height: calc(100vh - 510px);
+    height: calc(100vh - 574px);
+    max-height: calc(100vh - 574px);
     padding-right: 10px;
     overflow-y: auto;
     min-height: 0;
@@ -103,6 +106,15 @@ const Cart = props => {
     const [discountType, setDiscountType] = useState('percent');
 
     const [paymentModalOpened, setPaymentModalOpened] = useState(false)
+
+    const [dateTime, setDateTime] = useState(new Date());
+
+    useEffect(() => {
+        const interval = setInterval(() =>
+            setDateTime(new Date())
+            , 60000);
+        return () => clearInterval(interval);
+    }, [])
 
     useEffect(() => {
         let total = 0;
@@ -205,6 +217,10 @@ const Cart = props => {
         setPaymentModalOpened(false)
     }, [])
 
+    const handleDateChange = (newValue) => {
+        setDateTime(newValue);
+    };
+
     const formatedItems = useMemo(() => {
         let returnedItems = [];
         Object.keys(items).forEach(item => {
@@ -239,6 +255,17 @@ const Cart = props => {
         <Fragment>
             <Wrapper>
                 <ChooseCustomer customerData={customerData} chooseCustomer={customerAddHandler} deleteCustomer={customerDeleteHandler} />
+                <Box sx={{ mt: '8px' }} >
+                    <LocalizationProvider dateAdapter={DateAdapter}>
+                        <DateTimePicker
+                            label={t("Booking Date & time")}
+                            inputFormat="DD-MM-YYYY hh:mm a"
+                            value={dateTime}
+                            onChange={handleDateChange}
+                            renderInput={(params) => <TextField sx={{ width: '100%' }} {...params} />}
+                        />
+                    </LocalizationProvider>
+                </Box>
                 <ItemsWrapper>
                     {formatedItems.map((item, index) => {
                         return (
@@ -283,9 +310,13 @@ const Cart = props => {
                     </Button>
                 </CartActions>
             </Wrapper>
-            <PaymentModal
-                open={paymentModalOpened} handleClose={closePaymentModalHandler}
-                items={items} discount={discount} discountType={discountType} />
+            {paymentModalOpened && (
+                <PaymentModal
+                    open={paymentModalOpened} handleClose={closePaymentModalHandler}
+                    dateTime={dateTime}
+                    items={items} discount={discount} discountType={discountType}
+                    resetCart={resetCartHandler} />
+            )}
         </Fragment>
     )
 }

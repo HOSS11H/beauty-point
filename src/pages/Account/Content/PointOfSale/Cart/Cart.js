@@ -100,7 +100,7 @@ const CouponWrapper = styled.div`
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    `
+`
 
 const PriceCalculation = styled.div`
     display: flex;

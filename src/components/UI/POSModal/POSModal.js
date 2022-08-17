@@ -21,7 +21,7 @@ export const CustomCardMui = styled(Card)`
         background-color: ${({ theme }) => theme.palette.background.default};
         margin-bottom:0;
         padding: 20px;
-        @media screen and ( min-width: ${({ theme }) =>  theme.breakpoints.values.md}px  ) {
+        @media screen and ( min-width: ${({ theme }) => theme.breakpoints.values.md}px  ) {
             height: auto;
             width: 500px;
         }
@@ -51,10 +51,14 @@ export const CardBody = styled.div`
 `
 export const CardContent = styled.div`
     width: 100%;
-    //max-height: 60vh;
+    max-height: calc(100vh - 91px) ;
     overflow-y: auto;
     padding-top: 10px;
     min-height: 0;
+    padding-right: 10px;
+    @media screen and ( min-width: ${({ theme }) => theme.breakpoints.values.md}px  ) {
+        max-height: calc(90vh - 91px) ;
+    }
     // Scroll //
     -webkit-overflow-scrolling: touch;
     &::-webkit-scrollbar {
