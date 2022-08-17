@@ -1,12 +1,11 @@
+import LoadingButton from '@mui/lab/LoadingButton';
+import { Button, Grid, TextField } from "@mui/material";
 import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { POSModal } from "../../../../../../../components/UI/POSModal/POSModal";
-import styled from 'styled-components';
-import { TextField, Grid, Button } from "@mui/material";
-import ValidationMessage from "../../../../../../../components/UI/ValidationMessage/ValidationMessage";
-import LoadingButton from '@mui/lab/LoadingButton'
-import axios from "../../../../../../../utils/axios-instance";
 import { toast } from "react-toastify";
+import styled from 'styled-components';
+import { POSModal } from "../../../../../../../components/UI/POSModal/POSModal";
+import axios from "../../../../../../../utils/axios-instance";
 const CustomTextField = styled(TextField)`
     width: 100%;
 `
@@ -109,7 +108,6 @@ const AddCustomer = props => {
                 </Grid>
             </Grid>
         </POSModal>
-
     )
 }
 export default AddCustomer;

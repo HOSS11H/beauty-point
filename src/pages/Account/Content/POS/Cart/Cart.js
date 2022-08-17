@@ -1,5 +1,6 @@
-import { Button, Card, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import { Button, Card, FormControl, MenuItem, Select, TextField } from "@mui/material";
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import styled from "styled-components";
@@ -9,7 +10,7 @@ import axios from '../../../../../utils/axios-instance';
 import v1 from '../../../../../utils/axios-instance-v1';
 import CartItem from "./CartItem/CartItem";
 import ChooseCustomer from "./ChooseCustomer/ChooseCustomer";
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import PaymentModal from "./PaymentModal/PaymentModal";
 
 const Wrapper = styled(Card)`
     &.MuiPaper-root {
@@ -19,8 +20,8 @@ const Wrapper = styled(Card)`
 
 const ItemsWrapper = styled.div`
     margin-top: 5px;
-    height: calc(100vh - 410px);
-    max-height: calc(100vh - 410px);
+    height: calc(100vh - 490px);
+    max-height: calc(100vh - 490px);
     padding-right: 10px;
     overflow-y: auto;
     min-height: 0;
@@ -93,35 +94,14 @@ const Cart = props => {
     const [loading, setLoading] = useState(true);
     const [hasVat, setHasVat] = useState(false);
 
-    const [dateTime, setDateTime] = useState(new Date());
-
     const [totalPrice, setTotalPrice] = useState(0)
 
     const [totalTaxes, setTotalTaxes] = useState(0)
 
-    const [coupon, setCoupon] = useState('')
-    const [couponExists, setCouponExists] = useState(false)
-    const [couponData, setCouponData] = useState({ amount: 0 })
-
     const [discount, setDiscount] = useState(0)
     const [discountType, setDiscountType] = useState('percent');
 
-    const [paymentGateway, setPaymentGateway] = useState('card')
-    const [paymentGatewayError, setPaymentGatewayError] = useState(false)
-
-    const [paidAmount, setPaidAmount] = useState(0)
-    const [paidAmountError, setPaidAmountError] = useState(false)
-    const [cashToReturn, setCashToReturn] = useState(0)
-    const [cashRemainig, setCashRemainig] = useState(0)
-
-    const [coupons, setCoupons] = useState([]);
-
-    useEffect(() => {
-        const interval = setInterval(() =>
-            setDateTime(new Date())
-            , 60000);
-        return () => clearInterval(interval);
-    }, [])
+    const [paymentModalOpened, setPaymentModalOpened] = useState(false)
 
     useEffect(() => {
         let total = 0;
@@ -137,7 +117,6 @@ const Cart = props => {
         }
         setTotalTaxes(total - (total / 1.15))
         setTotalPrice(total);
-        setPaidAmount(total);
     }, [items, discount, discountType])
 
     const ovserver = useRef()
@@ -218,6 +197,13 @@ const Cart = props => {
         setCustomerData(defaultCustomer)
     }, [defaultCustomer])
 
+    const openPaymentModalHandler = useCallback(() => {
+        setPaymentModalOpened(true)
+    }, [])
+    const closePaymentModalHandler = useCallback(() => {
+        setPaymentModalOpened(false)
+    }, [])
+
     const formatedItems = useMemo(() => {
         let returnedItems = [];
         Object.keys(items).forEach(item => {
@@ -225,7 +211,6 @@ const Cart = props => {
         })
         return returnedItems
     }, [items])
-
 
     const payDisabled = formatedItems.length <= 0
 
@@ -238,7 +223,7 @@ const Cart = props => {
         }
     }
 
-    const resetCartHandler = (  ) => {
+    const resetCartHandler = () => {
         setCustomerData(defaultCustomer)
         resetCart()
         setDiscount(0)
@@ -250,49 +235,57 @@ const Cart = props => {
     }
 
     return (
-        <Wrapper>
-            <ChooseCustomer customerData={customerData} chooseCustomer={customerAddHandler} deleteCustomer={customerDeleteHandler} />
-            <ItemsWrapper>
-                {formatedItems.map((item, index) => {
-                    return (
-                        <CartItem key={index} item={item} remove={removeItem} increase={increaseItem} decrease={decreaseItem}
-                            type={item.type} changePrice={changePrice} changeEmployee={changeEmployee}
-                            employees={employees} lastElementRef={lastElementRef} />
-                    )
-                })}
-            </ItemsWrapper>
-            <div>
-                <CartInfoWrapper>
-                    <span>{t('Discount Type')}</span>
-                    <FormControl variant="standard" sx={{ minWidth: 120 }}>
-                        <Select id="discount-type" value={discountType} onChange={discountTypeChangeHandler} inputProps={{ 'aria-label': 'Without label' }} label={t('Discount Type')} >
-                            <MenuItem value='percent'>{t('percent')}</MenuItem>
-                            <MenuItem value='fixed'>{t('Fixed')}</MenuItem>
-                        </Select>
-                    </FormControl>
-                </CartInfoWrapper>
-                <CartInfoWrapper>
-                    <span>{t('Discount')}</span>
-                    <TextField type="number" sx={{ width: 120 }} id="discount-value" variant='standard' value={discount} onChange={discountChangeHandler} />
-                </CartInfoWrapper>
-                {hasVat && (
+        <Fragment>
+            <Wrapper>
+                <ChooseCustomer customerData={customerData} chooseCustomer={customerAddHandler} deleteCustomer={customerDeleteHandler} />
+                <ItemsWrapper>
+                    {formatedItems.map((item, index) => {
+                        return (
+                            <CartItem key={index} item={item} remove={removeItem} increase={increaseItem} decrease={decreaseItem}
+                                type={item.type} changePrice={changePrice} changeEmployee={changeEmployee}
+                                employees={employees} lastElementRef={lastElementRef} />
+                        )
+                    })}
+                </ItemsWrapper>
+                <div>
                     <CartInfoWrapper>
-                        <span>{t('total taxes')}</span>
-                        <span>{formatCurrency(totalTaxes)}</span>
+                        <span>{t('Discount Type')}</span>
+                        <FormControl variant="standard" sx={{ minWidth: 120 }}>
+                            <Select id="discount-type" value={discountType} onChange={discountTypeChangeHandler} inputProps={{ 'aria-label': 'Without label' }} label={t('Discount Type')} >
+                                <MenuItem value='percent'>{t('percent')}</MenuItem>
+                                <MenuItem value='fixed'>{t('Fixed')}</MenuItem>
+                            </Select>
+                        </FormControl>
                     </CartInfoWrapper>
-                )}
-                <CartInfoWrapper>
-                    <span>{t('price after discount')}</span>
-                    <span>{formatCurrency(totalPrice)}</span>
-                </CartInfoWrapper>
-            </div>
-            <Button disabled={payDisabled} variant='contained' color='secondary' sx={{ width: '100%', mt: 1 }} >{t('pay')}</Button>
-            <CartActions>
-                <Button onClick={resetCartHandler} >
-                    <HighlightOffIcon color='error' sx={{ mr: 1 }} />
-                </Button>
-            </CartActions>
-        </Wrapper>
+                    <CartInfoWrapper>
+                        <span>{t('Discount')}</span>
+                        <TextField type="number" sx={{ width: 120 }} id="discount-value" variant='standard' value={discount} onChange={discountChangeHandler} />
+                    </CartInfoWrapper>
+                    {hasVat && (
+                        <CartInfoWrapper>
+                            <span>{t('total taxes')}</span>
+                            <span>{formatCurrency(totalTaxes)}</span>
+                        </CartInfoWrapper>
+                    )}
+                    <CartInfoWrapper>
+                        <span>{t('price after discount')}</span>
+                        <span>{formatCurrency(totalPrice)}</span>
+                    </CartInfoWrapper>
+                </div>
+                <Button
+                    disabled={payDisabled} variant='contained'
+                    onClick={openPaymentModalHandler}
+                    color='secondary' sx={{ width: '100%', mt: 1 }} >{t('pay')}</Button>
+                <CartActions>
+                    <Button onClick={resetCartHandler} >
+                        <HighlightOffIcon color='error' sx={{ mr: 1 }} />
+                    </Button>
+                </CartActions>
+            </Wrapper>
+            <PaymentModal
+                open={paymentModalOpened} handleClose={closePaymentModalHandler}
+                items={items} discount={discount} discountType={discountType} />
+        </Fragment>
     )
 }
 export default Cart;
