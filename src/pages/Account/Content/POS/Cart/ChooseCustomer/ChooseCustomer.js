@@ -177,7 +177,6 @@ const ChooseCustomer = props => {
 
     const handleSelectCustomer = (value, actions) => {
         if (value) {
-            setCustomer(value);
             const customerIndex = loadedCustomers.findIndex(customer => customer.value === value.value);
             const updatedCustomerData = loadedCustomers[customerIndex];
             chooseCustomer(updatedCustomerData)
