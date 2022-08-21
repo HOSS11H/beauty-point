@@ -1,7 +1,7 @@
 import { useCallback, useReducer } from 'react';
 import styled from 'styled-components'
 import { updateObject } from '../../../../../shared/utility';
-import Cart from '../Cart/Cart';
+import Cart from './Cart/Cart';
 import Results from './Results/Results';
 
 const Wrapper = styled.div`
