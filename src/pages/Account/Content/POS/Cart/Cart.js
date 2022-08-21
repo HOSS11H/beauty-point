@@ -24,8 +24,8 @@ const Wrapper = styled(Card)`
 const ItemsWrapper = styled.div`
     margin-top: 5px;
     margin-bottom: 5px;
-    height: calc(100vh - 574px);
-    max-height: calc(100vh - 574px);
+    height: calc(100vh - 576px);
+    max-height: calc(100vh - 576px);
     padding-right: 10px;
     overflow-y: auto;
     min-height: 0;
@@ -255,7 +255,7 @@ const Cart = props => {
         <Fragment>
             <Wrapper>
                 <ChooseCustomer customerData={customerData} chooseCustomer={customerAddHandler} deleteCustomer={customerDeleteHandler} />
-                <Box sx={{ mt: '8px' }} >
+                <Box sx={{ mt: '10px' }} >
                     <LocalizationProvider dateAdapter={DateAdapter}>
                         <DateTimePicker
                             label={t("Booking Date & time")}

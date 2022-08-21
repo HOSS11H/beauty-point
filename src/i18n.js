@@ -122,6 +122,7 @@ const resources = {
             'add': 'إضافة',
             'Add': 'إضافة',
             'Time': 'وقت',
+            'Booking Date & time':'تاريخ و وقت الحجز',
             'Date desktop': 'التاريخ',
             'view items': 'عرض العناصر',
             'Add To Cart': 'إضافة إلى السلة',

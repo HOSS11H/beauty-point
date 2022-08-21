@@ -24,6 +24,7 @@ export const CustomCardMui = styled(Card)`
         @media screen and ( min-width: ${({ theme }) => theme.breakpoints.values.md}px  ) {
             height: auto;
             width: 500px;
+            padding: 20px 15px;
         }
     }
 `
