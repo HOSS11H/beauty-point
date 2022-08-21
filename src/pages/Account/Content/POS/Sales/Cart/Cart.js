@@ -16,6 +16,10 @@ import DateTimePicker from '@mui/lab/DateTimePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import CloseIcon from '@mui/icons-material/Close';
 import ThemeContext from '../../../../../../store/theme-context';
+import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
+import SavedOrders from './SavedOrders/SavedOrders';
+import { v4 as uuidv4 } from 'uuid';
+import moment from 'moment';
 
 const Wrapper = styled(Card)`
     &.MuiPaper-root {
@@ -35,7 +39,7 @@ const Wrapper = styled(Card)`
             ${ ( { $show } ) => $show && css`
                 opacity: 1;
                 visibility: visible;
-                transform: translateY(0)
+                transform: translateY(0);
             ` }
         }
     }
@@ -103,7 +107,11 @@ const Cart = props => {
 
     const isTablet = useMediaQuery(themeCtx.theme.breakpoints.down('md'), { noSsr: true });
 
-    const { items, removeItem, increaseItem, decreaseItem, changePrice, changeEmployee, resetCart, showCart, hideCart } = props;
+    const { items, removeItem, increaseItem, decreaseItem, changePrice, changeEmployee, resetCartItems,assignCartItems, showCart, hideCart } = props;
+
+    const initialStoredItems = JSON.parse(localStorage.getItem("savedOrders")) || [];
+
+    const [ storedItems, setStoredItems ] = useState(initialStoredItems)
 
     const { t } = useTranslation();
 
@@ -268,10 +276,42 @@ const Cart = props => {
 
     const resetCartHandler = () => {
         setCustomerData(defaultCustomer)
-        resetCart()
+        resetCartItems()
         setDiscount(0)
         setDiscountType('percent')
     }
+
+    const saveCartData = (  ) => {
+        const obj = {
+            id: uuidv4(),
+            items:items,
+            customerData: customerData,
+            discount: discount,
+            discountType: discountType,
+            dateTime: dateTime,
+        }
+        const updatedStoredItems = [ ...storedItems ]
+        updatedStoredItems.push(obj)
+        localStorage.setItem("savedOrders", JSON.stringify(updatedStoredItems));
+        setStoredItems(updatedStoredItems);
+        resetCartHandler();
+    }
+
+    const deleteStoredItem = useCallback(( index ) => {
+        let updatedOrders = [...storedItems]
+        updatedOrders.splice(index, 1)
+        setStoredItems(updatedOrders)
+        localStorage.setItem("savedOrders", JSON.stringify(updatedOrders));
+    }, [storedItems])
+
+    const restoreOrder = useCallback(( item, index ) => {
+        deleteStoredItem(index)
+        assignCartItems(item.items)
+        setCustomerData(item.customerData)
+        setDiscount(item.discount)
+        setDiscountType(item.discountType)
+        setDateTime(moment(item.dateTime))
+    }, [assignCartItems, deleteStoredItem])
 
     if (loading) {
         return <Loader height='75vh' />
@@ -341,6 +381,10 @@ const Cart = props => {
                     <Button onClick={resetCartHandler} >
                         <HighlightOffIcon color='error' sx={{ mr: 1 }} />
                     </Button>
+                    <Button onClick={saveCartData} >
+                        <PauseCircleOutlineIcon color='warning' sx={{ mr: 1 }} />
+                    </Button>
+                    <SavedOrders storedItems={storedItems}  deleteOrder={deleteStoredItem} restoreOrder={restoreOrder}  />
                 </CartActions>
             </Wrapper>
             {paymentModalOpened && (

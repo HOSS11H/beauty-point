@@ -33,6 +33,8 @@ const CartMobileButton = styled(IconButton)`
 
 const cartReducer = (state, action) => {
     switch (action.type) {
+        case 'ADD_TO_CART':
+            return updateObject(state, action.payload)
         case 'ADD_TO_SERVICES':
             const serviceIndex = state.services.findIndex(service => service.id === action.payload.id);
             const updatedServices = [...state.services]
@@ -231,6 +233,10 @@ const Sales = props => {
         deals: [],
     });
 
+    const assignCartHandler = useCallback( ( data ) => {
+        dispatch({ type: 'ADD_TO_CART', payload: data });
+    } , [])
+
     const addToCartHandler = useCallback((type, itemData) => {
         if (type === 'services') {
             dispatch({
@@ -389,8 +395,8 @@ const Sales = props => {
         <Wrapper>
             <Results addToCart={addToCartHandler} />
             <Cart items={cart} removeItem={removeFromCartHandler} increaseItem={increaseItemHandler} decreaseItem={decreaseItemHandler} 
-                        showCart={showTabletCart} hideCart={hideTabletCartHandler}
-                        changePrice={changeItemPriceHandler}  changeEmployee={changeEmployeeHandler} resetCart={resetCartHandler}  />
+                        showCart={showTabletCart} hideCart={hideTabletCartHandler} assignCartItems={assignCartHandler}
+                        changePrice={changeItemPriceHandler}  changeEmployee={changeEmployeeHandler} resetCartItems={resetCartHandler}  />
             <CartMobileButton onClick={showTabletCartHandler} >
                 <AddShoppingCartIcon />
             </CartMobileButton>
