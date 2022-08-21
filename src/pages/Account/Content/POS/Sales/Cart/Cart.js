@@ -1,9 +1,9 @@
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import { Box, Button, Card, FormControl, MenuItem, Select, TextField } from "@mui/material";
-import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Box, Button, Card, FormControl, IconButton, MenuItem, Select, TextField, useMediaQuery } from "@mui/material";
+import { Fragment, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
-import styled from "styled-components";
+import styled, {css} from "styled-components";
 import Loader from "../../../../../../components/UI/Loader/Loader";
 import { formatCurrency } from "../../../../../../shared/utility";
 import axios from '../../../../../../utils/axios-instance';
@@ -14,10 +14,30 @@ import PaymentModal from "./PaymentModal/PaymentModal";
 import DateAdapter from '@mui/lab/AdapterMoment';
 import DateTimePicker from '@mui/lab/DateTimePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import CloseIcon from '@mui/icons-material/Close';
+import ThemeContext from '../../../../../../store/theme-context';
 
 const Wrapper = styled(Card)`
     &.MuiPaper-root {
         padding: 8px;
+        @media screen and (max-width: ${ ({theme}) => theme.breakpoints.values.md }px ) {
+            position: fixed;
+            top: 0;
+            right: 0;
+            left:0;
+            botom: 0;
+            height: 100vh;
+            z-index: ${ ({ theme }) => theme.zIndex.modal - 2 };
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-100%);
+            transition: 0.3s ease-in-out;
+            ${ ( { $show } ) => $show && css`
+                opacity: 1;
+                visibility: visible;
+                transform: translateY(0)
+            ` }
+        }
     }
 `
 
@@ -29,6 +49,10 @@ const ItemsWrapper = styled.div`
     padding-right: 10px;
     overflow-y: auto;
     min-height: 0;
+    @media screen and (max-width: ${ ({theme}) => theme.breakpoints.values.md }px ) {
+        height: calc(100vh - 435px);
+        max-height: calc(100vh - 435px);
+    }
     // Scroll //
     -webkit-overflow-scrolling: touch;
     &::-webkit-scrollbar {
@@ -71,13 +95,15 @@ const CartActions = styled.div`
         flex-basis: 30%;
     }
 `
-
-
 const rowsPerPage = 20;
 
 const Cart = props => {
 
-    const { items, removeItem, increaseItem, decreaseItem, changePrice, changeEmployee, resetCart } = props;
+    const themeCtx = useContext(ThemeContext)
+
+    const isTablet = useMediaQuery(themeCtx.theme.breakpoints.down('md'), { noSsr: true });
+
+    const { items, removeItem, increaseItem, decreaseItem, changePrice, changeEmployee, resetCart, showCart, hideCart } = props;
 
     const { t } = useTranslation();
 
@@ -253,7 +279,14 @@ const Cart = props => {
 
     return (
         <Fragment>
-            <Wrapper>
+            <Wrapper $show={showCart} >
+                {isTablet && (
+                    <Box sx={{ display:'flex', alignItems: 'center', height: '40px', mb:1 }}>
+                        <IconButton onClick={hideCart} >
+                            <CloseIcon />
+                        </IconButton>
+                    </Box>
+                ) }
                 <ChooseCustomer customerData={customerData} chooseCustomer={customerAddHandler} deleteCustomer={customerDeleteHandler} />
                 <Box sx={{ mt: '10px' }} >
                     <LocalizationProvider dateAdapter={DateAdapter}>

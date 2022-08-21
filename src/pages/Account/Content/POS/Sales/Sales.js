@@ -1,14 +1,36 @@
-import { useCallback, useReducer } from 'react';
+import { IconButton, useMediaQuery } from '@mui/material';
+import { useCallback, useContext, useReducer, useState } from 'react';
 import styled from 'styled-components'
 import { updateObject } from '../../../../../shared/utility';
+import ThemeContext from '../../../../../store/theme-context';
 import Cart from './Cart/Cart';
 import Results from './Results/Results';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 
 const Wrapper = styled.div`
     display: grid;
     grid-template-columns: auto 468px;
     grid-gap: 20px;
+    @media screen and (max-width: ${ ({theme}) => theme.breakpoints.values.md }px ) {
+        grid-template-columns: auto;
+    }
 `
+
+const CartMobileButton = styled(IconButton)`
+    &.MuiIconButton-root {
+        position: fixed;
+        right: 40px;
+        bottom: 30px;
+        background-color: ${ ({ theme }) => theme.palette.secondary.main  };
+        color: ${ ({ theme }) => theme.palette.common.white  };
+        width: 46px;
+        height: 46px;
+        @media screen and (min-width: ${ ({theme}) => theme.breakpoints.values.md }px ) {
+            display: none;
+        }
+    }
+`
+
 const cartReducer = (state, action) => {
     switch (action.type) {
         case 'ADD_TO_SERVICES':
@@ -198,11 +220,17 @@ const cartReducer = (state, action) => {
 }
 
 const Sales = props => {
+    const themeCtx = useContext(ThemeContext)
+    const isTablet = useMediaQuery(themeCtx.theme.breakpoints.down('md'), { noSsr: true });
+
+    const [ showTabletCart, setShowTabletCart ] = useState(false)
+
     const [cart, dispatch] = useReducer(cartReducer, {
         services: [],
         products: [],
         deals: [],
     });
+
     const addToCartHandler = useCallback((type, itemData) => {
         if (type === 'services') {
             dispatch({
@@ -349,11 +377,23 @@ const Sales = props => {
             type: 'RESET_CART',
         })
     }, [])
+
+    const showTabletCartHandler = ( ) => {
+        isTablet && setShowTabletCart(true)
+    }
+    const hideTabletCartHandler = useCallback(( ) => {
+        isTablet && setShowTabletCart(false)
+    }, [isTablet])
+
     return (
         <Wrapper>
             <Results addToCart={addToCartHandler} />
             <Cart items={cart} removeItem={removeFromCartHandler} increaseItem={increaseItemHandler} decreaseItem={decreaseItemHandler} 
+                        showCart={showTabletCart} hideCart={hideTabletCartHandler}
                         changePrice={changeItemPriceHandler}  changeEmployee={changeEmployeeHandler} resetCart={resetCartHandler}  />
+            <CartMobileButton onClick={showTabletCartHandler} >
+                <AddShoppingCartIcon />
+            </CartMobileButton>
         </Wrapper>
     )
 }

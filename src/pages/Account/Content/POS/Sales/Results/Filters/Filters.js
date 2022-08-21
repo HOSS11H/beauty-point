@@ -18,6 +18,9 @@ const Wrapper = styled(Card)`
         display: flex;
         gap: 10px;
         margin-bottom: 10px;
+        @media screen and (max-width: ${ ({ theme }) => theme.breakpoints.values.md }px ) {
+            flex-wrap: wrap;
+        }
         & .MuiFormControl-root {
             min-width: 100px;
         } 
