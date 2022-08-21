@@ -1,18 +1,19 @@
-import { FormControl, Grid, IconButton, MenuItem, Select, TextField } from "@mui/material";
-import { Fragment, useCallback, useEffect, useState } from "react";
-import { POSModal } from "../../../../../../components/UI/POSModal/POSModal";
-import DateAdapter from '@mui/lab/AdapterMoment';
-import DateTimePicker from '@mui/lab/DateTimePicker';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import { useTranslation } from "react-i18next";
-import styled from 'styled-components';
-import ValidationMessage from "../../../../../../components/UI/ValidationMessage/ValidationMessage";
-import axios from '../../../../../../utils/axios-instance';
-import { toast } from 'react-toastify';
-import { formatCurrency } from "../../../../../../shared/utility";
-import Loader from "../../../../../../components/UI/Loader/Loader";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { LoadingButton } from '@mui/lab';
+import { FormControl, Grid, IconButton, MenuItem, Select, TextField } from "@mui/material";
+import moment from "moment";
+import { Fragment, useCallback, useContext, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { toast } from 'react-toastify';
+import styled from 'styled-components';
+import Loader from "../../../../../../components/UI/Loader/Loader";
+import { POSModal } from "../../../../../../components/UI/POSModal/POSModal";
+import ValidationMessage from "../../../../../../components/UI/ValidationMessage/ValidationMessage";
+import { formatCurrency } from "../../../../../../shared/utility";
+import ThemeContext from "../../../../../../store/theme-context";
+import axios from '../../../../../../utils/axios-instance';
+import PrintBooking from './PrintBooking/PrintBooking';
 
 const CouponWrapper = styled.div`
     display: flex;
@@ -91,9 +92,13 @@ const Chip = styled.span`
 
 const PaymentModal = props => {
 
-    const { open, handleClose, items, discount, discountType, resetCart, dateTime } = props;
+    const { open, handleClose, items, discount, discountType, hasVat, resetCart, dateTime, customerId } = props;
 
     const { t } = useTranslation()
+
+    const themeCtx = useContext(ThemeContext)
+
+    const { city } = themeCtx
 
     const [totalPrice, setTotalPrice] = useState(0)
 
@@ -103,7 +108,6 @@ const PaymentModal = props => {
 
     const [amountToPay, setAmountToPay] = useState(0)
 
-    const [cashRemainig, setCashRemainig] = useState(0)
 
     const [payments, setPayments] = useState([])
 
@@ -114,6 +118,8 @@ const PaymentModal = props => {
     const [couponExists, setCouponExists] = useState(false)
     const [couponData, setCouponData] = useState({ discountType: 'amount', amount: 0 })
 
+    const [reservingBooking, setReservingBooking] = useState(false)
+    const [ reservedBookingData, setReservedBookingData ] = useState(null)
 
     const fetchCoupons = useCallback((searchParams) => {
         setLoadingCoupons(true)
@@ -151,9 +157,9 @@ const PaymentModal = props => {
             total = total - couponData.amount;
         }
 
-        setTotalTaxes(total - (total / 1.15))
-        setTotalPrice(total);
-        setAmountToPay(total);
+        setTotalTaxes((total - (total / 1.15)).toFixed(2))
+        setTotalPrice(total.toFixed(2));
+        setAmountToPay(total.toFixed(2));
     }, [couponData, discount, discountType, items])
 
     useEffect(() => {
@@ -206,8 +212,44 @@ const PaymentModal = props => {
         setCouponExists(false)
     }
 
-    return (
-        <POSModal open={open} handleClose={handleClose} heading='Pay' >
+    const bookOrderHandler = () => {
+        const data = {
+            customerId: customerId,
+            dateTime: moment(dateTime).format('YYYY-MM-DD hh:mm A'),
+            cart: items,
+            couponId: couponData.id ? couponData.id : null,
+            discount: discount,
+            discount_type: discountType,
+            payments: payments,
+            location_id: city,
+        }
+        setReservingBooking(true);
+        axios.post(`/vendors/bookings`, data)
+            .then(response => {
+                setReservingBooking(false);
+                setReservedBookingData(response.data);
+                resetCart()
+            })
+            .catch(err => {
+                setReservingBooking(false);
+                const errs = err.response.data ? err.response.data.errors : { message: [err.response.data.message] };
+                for (let key in errs) {
+                    toast.error(errs[key][0], {
+                        position: "bottom-right", autoClose: 4000, hideProgressBar: true,
+                        closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
+                    });
+                }
+            })
+    }
+
+    let content;
+
+    if (reservedBookingData) {
+        content = (
+            <PrintBooking bookingData={reservedBookingData} />
+        )
+    } else {
+        content = (
             <Grid container spacing={1}>
                 <Grid item xs={12}>
                     {loadingCoupons ? <Loader height='40px' /> : (
@@ -276,16 +318,31 @@ const PaymentModal = props => {
                             <span>{formatCurrency(couponData.amount)}</span>
                         </CartInfoWrapper>
                     )}
-                    <CartInfoWrapper>
-                        <span>{t('total taxes')}</span>
-                        <span>{formatCurrency(totalTaxes)}</span>
-                    </CartInfoWrapper>
+                    {hasVat && (
+                        <CartInfoWrapper>
+                            <span>{t('total taxes')}</span>
+                            <span>{formatCurrency(totalTaxes)}</span>
+                        </CartInfoWrapper>
+                    )}
                     <CartInfoWrapper>
                         <span>{t('price after discount')}</span>
                         <span>{formatCurrency(totalPrice)}</span>
                     </CartInfoWrapper>
                 </Grid>
+                <Grid item xs={12}>
+                    <LoadingButton
+                        loading={reservingBooking}
+                        disabled={payments.length <= 0} variant='contained'
+                        onClick={bookOrderHandler}
+                        color='secondary' sx={{ width: '100%', mt: 1 }} >{t('book')}</LoadingButton>
+                </Grid>
             </Grid>
+        )
+    }
+
+    return (
+        <POSModal open={open} handleClose={handleClose} heading='Pay' >
+            {content}
         </POSModal>
     )
 }

@@ -128,8 +128,8 @@ const Cart = props => {
         } else if (discountType === 'fixed') {
             total = total - discount;
         }
-        setTotalTaxes(total - (total / 1.15))
-        setTotalPrice(total);
+        setTotalTaxes((total - (total / 1.15)).toFixed(2))
+        setTotalPrice(total.toFixed(2));
     }, [items, discount, discountType])
 
     const ovserver = useRef()
@@ -235,8 +235,8 @@ const Cart = props => {
         setDiscountType(event.target.value);
     }
     const discountChangeHandler = (event) => {
-        if (event.target.value >= 0) {
-            setDiscount(event.target.value)
+        if (+event.target.value >= 0) {
+            setDiscount(+event.target.value)
         }
     }
 
@@ -313,7 +313,7 @@ const Cart = props => {
             {paymentModalOpened && (
                 <PaymentModal
                     open={paymentModalOpened} handleClose={closePaymentModalHandler}
-                    dateTime={dateTime}
+                    dateTime={dateTime} hasVat={hasVat}customerId={customerData.id}
                     items={items} discount={discount} discountType={discountType}
                     resetCart={resetCartHandler} />
             )}
