@@ -214,7 +214,7 @@ const Cart = props => {
 
 
     const fetchVatInfos = useCallback(() => {
-        setLoadingEmployees(true)
+        setLoading(true)
         v1.get(`/vendors/settings/company`)
             .then(response => {
                 setLoading(false);

@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { Fragment } from 'react'
 import styled from 'styled-components'
-import Cart from './Cart/Cart'
+import Returns from './Returns/Returns'
 import Sales from './Sales/Sales'
 import Topbar from './Topbar/Topbar'
 
@@ -25,6 +25,9 @@ const POS = props => {
     switch (view) {
         case 'sales':
             content = <Sales />
+            break;
+        case 'returns':
+            content = <Returns />
             break;
         default:
     }

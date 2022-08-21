@@ -1,11 +1,10 @@
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
-import ThemeContext from "../../../../../../store/theme-context";
-import Filters from "./Filters/Filters";
-import v2 from '../../../../../../utils/axios-instance'
-import { toast } from "react-toastify";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import Items from "./Items/Items";
+import { toast } from "react-toastify";
 import styled from 'styled-components';
+import v2 from '../../../../../../utils/axios-instance';
+import Filters from "./Filters/Filters";
+import Items from "./Items/Items";
 
 const Wrapper = styled.div`
 
@@ -13,21 +12,15 @@ const Wrapper = styled.div`
 
 const rowsPerPage = 25;
 
-const Results = props => {
-    const { addToCart } = props;
+const Orders = props => {
+    const { assignCart, addBookingData } = props;
 
     const { t } = useTranslation()
-    const themeCtx = useContext(ThemeContext)
-
-    const { city, selectCity } = themeCtx
 
     const [ filters, setFilters ] = useState({
-        type: 'services',
         search: '',
-        location: city,
-        category: '',
     })
-    const { type, search, location, category } = filters;
+    const { search } = filters;
 
     const [page, setPage] = useState(1);
     const [lastPage, setLastPage] = useState(false)
@@ -47,12 +40,9 @@ const Results = props => {
         setResults([])
         setPage(1)
         setLastPage(false)
-        if ( name === 'location' ) {
-            selectCity(val)
-        }
     }
 
-    const fetchResults = useCallback( ( type, searchParams ) => {
+    const fetchResults = useCallback( ( searchParams ) => {
         const notEmptySearchParams = {};
         for (let key in searchParams) {
             if (searchParams[key] !== '') {
@@ -60,7 +50,7 @@ const Results = props => {
             }
         }
         setLoadingResults(true)
-        v2.get(`/vendors/${type}`, {
+        v2.get(`/vendors/bookings?include[]=items&include[]=user`, {
             params: { ...notEmptySearchParams },
         }).then(response => {
             setResults(currentSeats => {
@@ -72,7 +62,7 @@ const Results = props => {
             setLoadingResults(false)
         })
         .catch(err => {
-            toast.error(t('Error Getting Results'))
+            toast.error(t('Error Getting Orders'))
             setLoadingResults(false)
         })
     }, [page, t])
@@ -82,11 +72,9 @@ const Results = props => {
             page: page ,
             per_page: rowsPerPage,
             term: search,
-            location_id: location,
-            category_id: category
         }
-        fetchResults(type, params )
-    }, [category, fetchResults, location, page, search, type])
+        fetchResults( params )
+    }, [fetchResults, page, search])
 
     const lastElementRef = useCallback((node) => {
         if (loadingResults) return;
@@ -102,8 +90,8 @@ const Results = props => {
     return (
         <Wrapper>
             <Filters data={filters} handleFiltersChange={filtersChangeHandler}  />
-            <Items data={results} type={type} loading={loadingResults} lastElementRef={lastElementRef} addToCart={addToCart} />
+            <Items data={results} loading={loadingResults} lastElementRef={lastElementRef} assignCart={assignCart} addBookingData={addBookingData} />
         </Wrapper>
     )
 }
-export default Results;
+export default Orders;
