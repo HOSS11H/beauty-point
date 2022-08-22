@@ -90,7 +90,7 @@ const Cart = props => {
 
     const isTablet = useMediaQuery(themeCtx.theme.breakpoints.down('md'), { noSsr: true });
 
-    const { items, bookingData, removeItem, increaseItem, resetCartItems, showCart, hideCart } = props;
+    const { items, bookingData, removeItem, increaseItem, resetCartItems,resetBooking,  showCart, hideCart } = props;
 
     const { t } = useTranslation();
 
@@ -172,6 +172,7 @@ const Cart = props => {
 
     const resetCartHandler = () => {
         resetCartItems()
+        resetBooking()
     }
 
     if (loading) {

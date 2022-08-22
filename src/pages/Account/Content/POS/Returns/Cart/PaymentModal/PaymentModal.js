@@ -124,12 +124,7 @@ const PaymentModal = props => {
     }, [payments, totalPrice])
 
     const amountToPayChangeHandler = (e) => {
-        if(e.target.value === ''  || +e.target.value > 0) {
-            setAmountToPay(0)
-            return;
-        }
-        const value = +e.target.value;
-        !isNaN(value) && setAmountToPay(value)
+        setAmountToPay(e.target.value)
     }
 
     const paymentGatewayChangeHandler = (event) => {
@@ -137,8 +132,12 @@ const PaymentModal = props => {
     }
 
     const addPaymentHandler = () => {
-        if (+amountToPay === 0) return ;
-        if (+amountToPay <+totalPrice ) {return; }
+        if (+amountToPay < totalPrice) return ;
+        if (+amountToPay >= 0) return ;
+        let totalPaid = payments.reduce((acc, cur) => {
+            return acc + cur?.amount
+        }, 0)
+        if ((+amountToPay + totalPaid) < totalPrice  ) {return; }
         const obj = {
             amount: +amountToPay,
             type: paymentGateway
@@ -168,7 +167,6 @@ const PaymentModal = props => {
         setReturningOrder(true);
         axios.post(`/vendors/returns`, data)
             .then(response => {
-                setReturningOrder(false);
                 setReturnedOrderData(response.data);
                 resetCart()
                 toast.success(t('Your Return has been sent successfully'))
@@ -216,20 +214,20 @@ const PaymentModal = props => {
                 </Grid>
                 <Grid item xs={12}>
                     <PaymentAction>
+                        <CustomTextField type="number" sx={{ width: 120 }} id="amount-value" variant='standard' value={amountToPay} onChange={amountToPayChangeHandler} />
+                        <FormControl variant="standard" sx={{ minWidth: 120 }}>
+                            <Select id="payment-type" value={paymentGateway} onChange={paymentGatewayChangeHandler} inputProps={{ 'aria-label': 'Without label' }} label={t('Payment Type')} >
+                                <MenuItem value='cash'>{t('cash')}</MenuItem>
+                                <MenuItem value='card'>{t('card')}</MenuItem>
+                                <MenuItem value='transfer'>{t('transfer')}</MenuItem>
+                                <MenuItem value='online'>{t('online')}</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <IconButton color='secondary' onClick={addPaymentHandler} >
+                            <AddCircleIcon />
+                        </IconButton>
                         {amountToPay <= 0 && (
                             <Fragment>
-                                <CustomTextField type="number" sx={{ width: 120 }} id="amount-value" variant='standard' value={amountToPay} onChange={amountToPayChangeHandler} />
-                                <FormControl variant="standard" sx={{ minWidth: 120 }}>
-                                    <Select id="payment-type" value={paymentGateway} onChange={paymentGatewayChangeHandler} inputProps={{ 'aria-label': 'Without label' }} label={t('Payment Type')} >
-                                        <MenuItem value='cash'>{t('cash')}</MenuItem>
-                                        <MenuItem value='card'>{t('card')}</MenuItem>
-                                        <MenuItem value='transfer'>{t('transfer')}</MenuItem>
-                                        <MenuItem value='online'>{t('online')}</MenuItem>
-                                    </Select>
-                                </FormControl>
-                                <IconButton color='secondary' onClick={addPaymentHandler} >
-                                    <AddCircleIcon />
-                                </IconButton>
                             </Fragment>
                         )}
                     </PaymentAction>

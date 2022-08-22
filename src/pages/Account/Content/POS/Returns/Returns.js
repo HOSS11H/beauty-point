@@ -164,6 +164,9 @@ const Returns = props => {
     const addBookingData = useCallback((data) => {
         setBookingData(data)
     }, [])
+    const resetBookingData = useCallback((data) => {
+        setBookingData(null)
+    }, [])
 
     const showTabletCartHandler = () => {
         isTablet && setShowTabletCart(true)
@@ -177,7 +180,7 @@ const Returns = props => {
             <Orders assignCart={assignCartHandler} addBookingData={addBookingData} />
             <Cart
                 bookingData={bookingData} items={cart} removeItem={removeFromCartHandler} increaseItem={increaseItemHandler}
-                showCart={showTabletCart} hideCart={hideTabletCartHandler} resetCartItems={resetCartHandler} />
+                showCart={showTabletCart} hideCart={hideTabletCartHandler} resetCartItems={resetCartHandler}  resetBooking={resetBookingData} />
             <CartMobileButton onClick={showTabletCartHandler} >
                 <AddShoppingCartIcon />
             </CartMobileButton>

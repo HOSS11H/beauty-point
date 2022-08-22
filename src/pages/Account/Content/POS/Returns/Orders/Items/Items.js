@@ -114,7 +114,6 @@ const Items = props => {
         content = (
             <List>
                 {data.map((item, index) => {
-                    console.log(item)
                     if (data.length - 1 === index) {
                         return (
                             <ListItemButton key={item.id} ref={lastElementRef} onClick={clickHandler.bind(null, item.id)} >
