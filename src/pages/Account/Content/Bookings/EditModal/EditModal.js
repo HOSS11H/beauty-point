@@ -283,54 +283,18 @@ const cartReducer = (state, action) => {
 
 const EditModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, id, onDelete, fetchedEmployees, fetchEmployeesHandler, fetchedProducts, fetchProductsHandler, fetchedServices, fetchServicesHandler, fetchedDeals, fetchDealsHandler } = props;
+    const { show, heading, confirmText, onConfirm, onClose, id, } = props;
 
     const { t } = useTranslation();
 
-    const themeCtx = useContext(ThemeContext)
-
-    const { lang } = themeCtx;
-
     const [bookingData, setBookingData] = useState({ items: [], user: { name: '', email: '', mobile: '' } });
-
 
     const [loading, setLoading] = useState(true);
 
-    const [cartData, dispatch] = useReducer(cartReducer, {
-        services: [],
-        products: [],
-        deals: [],
-    });
     const [dateTime, setDateTime] = useState(new Date());
 
     const [bookingStatus, setBookingStatus] = useState('');
 
-    const [selectedServices, setSelectedServices] = useState('');
-
-    const [selectedProducts, setSelectedProducts] = useState('');
-
-    const [selectedDeals, setSelectedDeals] = useState('');
-
-    const [totalPrice, setTotalPrice] = useState(0)
-
-    const [totalTaxes, setTotalTaxes] = useState(0)
-
-    const [discount, setDiscount] = useState(0)
-
-    const [paymentGateway, setPaymentGateway] = useState('')
-
-    const [paymentStatus, setPaymentStatus] = useState('');
-
-    const [servicesEmployeeError, setServicesEmployeeError] = useState(false)
-
-    const [hasVat, setHasVat] = useState(false);
-
-    useEffect(() => {
-        fetchEmployeesHandler(lang);
-        fetchProductsHandler(lang, 1, 'all', 'name', 'desc');
-        fetchServicesHandler(lang, 1, 'all', 'name', 'desc');
-        fetchDealsHandler(lang, 1, 'all', 'name', 'desc');
-    }, [fetchDealsHandler, fetchEmployeesHandler, fetchProductsHandler, fetchServicesHandler, lang])
 
     const fetchData = useCallback(() => {
         setLoading(true);
@@ -343,71 +307,13 @@ const EditModal = (props) => {
         }
         const bookingDataEndpoint = `${v2.defaults.baseURL}/vendors/bookings/${id}?include[]=user&include[]=items`;
 
-        const getUserData = axios.get(bookingDataEndpoint, headers);
+        const getBookingData = axios.get(bookingDataEndpoint, headers);
 
-        let bookingDataServices = [];
-        let bookingDataProducts = [];
-        let bookingDataDeals = [];
-
-        axios.all([getUserData])
+        axios.all([getBookingData])
             .then(axios.spread((...responses) => {
                 setBookingData(responses[0].data);
                 setBookingStatus(responses[0].data.status);
                 setDateTime(moment.utc(responses[0].data.date_time));
-                setPaymentStatus(responses[0].data.payment_status);
-                setPaymentGateway(responses[0].data.payment_gateway);
-                setHasVat(responses[0].data.has_vat);
-                setDiscount(responses[0].data.discount_percent)
-                const items = responses[0].data.items;
-                items.forEach(item => {
-                    if (item.type === 'service') {
-                        const obj = {
-                            id: item.item_id,
-                            quantity: item.quantity,
-                            price: item.price,
-                            item: {
-                                name: item.name,
-                                id: item.item_id,
-                            }
-                        }
-                        if (item.employee) {
-                            obj.employee_id = item.employee.id
-                            obj.employee = item.employee;
-                        }
-                        bookingDataServices.push(obj)
-                    } if (item.type === 'product') {
-                        const obj = {
-                            id: item.item_id,
-                            quantity: item.quantity,
-                            price: item.price,
-                            item: {
-                                name: item.name,
-                                id: item.item_id,
-                            }
-                        }
-                        if (item.employee) {
-                            obj.employee_id = item.employee.id
-                            obj.employee = item.employee;
-                        }
-                        bookingDataProducts.push(obj)
-                    } if (item.type === 'deal') {
-                        const obj = {
-                            id: item.item_id,
-                            quantity: item.quantity,
-                            price: item.price,
-                            item: {
-                                name: item.name,
-                                id: item.item_id,
-                            }
-                        }
-                        if (item.employee) {
-                            obj.employee_id = item.employee.id
-                            obj.employee = item.employee;
-                        }
-                        bookingDataDeals.push(obj)
-                    }
-                })
-                dispatch({ type: 'ADD_TO_CART', payload: { services: bookingDataServices, products: bookingDataProducts, deals: bookingDataDeals } });
                 setLoading(false);
             }))
             .catch(error => {
@@ -420,132 +326,6 @@ const EditModal = (props) => {
         }
     }, [fetchData, id]);
 
-    useEffect(() => {
-        let total = 0;
-        for (let section in cartData) {
-            for (let item of cartData[section]) {
-                total += item.price * item.quantity;
-            }
-        }
-        total = total - ((total * discount / 100));
-        setTotalTaxes(total - (total / 1.15))
-        setTotalPrice(total);
-
-    }, [cartData, discount])
-
-    const addToCartHandler = useCallback((type, itemData) => {
-        console.log(itemData)
-        if (type === 'services') {
-            dispatch({
-                type: 'ADD_TO_SERVICES',
-                payload: itemData
-            })
-        }
-        if (type === 'products') {
-            dispatch({
-                type: 'ADD_TO_PRODUCTS',
-                payload: itemData
-            })
-        }
-        if (type === 'deals') {
-            dispatch({
-                type: 'ADD_TO_DEALS',
-                payload: itemData
-            })
-        }
-    }, [])
-
-    const removeFromCartHandler = useCallback((type, itemId) => {
-        if (type === 'services') {
-            dispatch({
-                type: 'REMOVE_SERVICE',
-                payload: itemId
-            })
-        }
-        if (type === 'products') {
-            dispatch({
-                type: 'REMOVE_PRODUCT',
-                payload: itemId
-            })
-        }
-        if (type === 'deals') {
-            dispatch({
-                type: 'REMOVE_DEAL',
-                payload: itemId
-            })
-        }
-    }, [])
-
-    const increaseItemHandler = useCallback((type, itemId) => {
-        if (type === 'services') {
-            dispatch({
-                type: 'INCREASE_SERVICE',
-                payload: itemId
-            })
-        }
-        if (type === 'products') {
-            dispatch({
-                type: 'INCREASE_PRODUCT',
-                payload: itemId
-            })
-        }
-        if (type === 'deals') {
-            dispatch({
-                type: 'INCREASE_DEAL',
-                payload: itemId
-            })
-        }
-    }, [])
-    const decreaseItemHandler = useCallback((type, itemId) => {
-        if (type === 'services') {
-            dispatch({
-                type: 'DECREASE_SERVICE',
-                payload: itemId
-            })
-        }
-        if (type === 'products') {
-            dispatch({
-                type: 'DECREASE_PRODUCT',
-                payload: itemId
-            })
-        }
-        if (type === 'deals') {
-            dispatch({
-                type: 'DECREASE_DEAL',
-                payload: itemId
-            })
-        }
-    }, [])
-
-    const changeEmployeeHandler = useCallback((type, itemId, employeeId) => {
-        if (type === 'services') {
-            dispatch({
-                type: 'CHANGE_SERVICE_EMPLOYEE',
-                payload: {
-                    id: itemId,
-                    employeeId: employeeId,
-                },
-            })
-        }
-        if (type === 'products') {
-            dispatch({
-                type: 'CHANGE_PRODUCT_EMPLOYEE',
-                payload: {
-                    id: itemId,
-                    employeeId: employeeId,
-                },
-            })
-        }
-        if (type === 'deals') {
-            dispatch({
-                type: 'CHANGE_DEAL_EMPLOYEE',
-                payload: {
-                    id: itemId,
-                    employeeId: employeeId,
-                },
-            })
-        }
-    }, [])
 
     const handleDateChange = (newValue) => {
         setDateTime(newValue);
@@ -554,101 +334,14 @@ const EditModal = (props) => {
         setBookingStatus(event.target.value);
     }
 
-    const selectedServicesChangeHandler = (event) => {
-        setSelectedServices('');
-        const selectedServiceIndex = fetchedServices.data.findIndex(service => service.id === event.target.value);
-        const selectedServiceData = { ...fetchedServices.data[selectedServiceIndex] }
-        const serviceData = {
-            id: selectedServiceData.id,
-            quantity: 1,
-            price: selectedServiceData.price,
-            total: selectedServiceData.price,
-            item: {
-                id: selectedServiceData.id,
-                name: selectedServiceData.name,
-                type: 'service',
-                price: selectedServiceData.price,
-            }
-        }
-        addToCartHandler('services', serviceData)
-    }
-    const selectedProductsChangeHandler = (event) => {
-        setSelectedProducts('');
-        const selectedProductIndex = fetchedProducts.data.findIndex(product => product.id === event.target.value);
-        const selectedProductData = { ...fetchedProducts.data[selectedProductIndex] }
-        const productData = {
-            id: selectedProductData.id,
-            quantity: 1,
-            price: selectedProductData.price,
-            total: selectedProductData.price,
-            item: {
-                id: selectedProductData.id,
-                name: selectedProductData.name,
-                type: 'product',
-                price: selectedProductData.price,
-            }
-        }
-        addToCartHandler('products', productData)
-    }
-    const selectedDealsChangeHandler = (event) => {
-        setSelectedDeals('');
-        const selectedDealIndex = fetchedDeals.data.findIndex(deal => deal.id === event.target.value);
-        const selectedDealData = { ...fetchedDeals.data[selectedDealIndex] }
-        const dealData = {
-            id: selectedDealData.id,
-            quantity: 1,
-            price: selectedDealData.price,
-            total: selectedDealData.price,
-            item: {
-                id: selectedDealData.id,
-                name: selectedDealData.title,
-                type: 'deal',
-                price: selectedDealData.price,
-            }
-        }
-        addToCartHandler('deals', dealData)
-    }
-
-    const discountChangeHandler = (event) => {
-        if (event.target.value >= 0) {
-            setDiscount(event.target.value)
-        }
-    }
-    const paymentStatusChangeHandler = (event) => {
-        setPaymentStatus(event.target.value);
-    }
-    const paymentGatewayChangeHandler = (event) => {
-        setPaymentGateway(event.target.value);
-    }
     const EditBookingConfirmHandler = useCallback(() => {
-        if (cartData.services.length > 0 && cartData.services.find(item => item.employee_id === null)) {
-            setServicesEmployeeError(true)
-            return;
-        }
         const booking = {
             id: id,
-            customerId: bookingData.user.id,
             dateTime: dateTime.format('YYYY-MM-DD hh:mm A'),
-            payment_gateway: paymentGateway,
-            payment_status: paymentStatus,
             status: bookingStatus,
-            booking: {
-                services: [
-                    ...cartData.services,
-                ],
-                products: [
-                    ...cartData.products,
-                ],
-                deals: [
-                    ...cartData.deals,
-                ],
-            },
-            couponId: bookingData.coupon && bookingData.coupon.id,
-            discount: +discount,
-            discount_type: 'percent',
         }
         onConfirm(booking);
-    }, [bookingData.coupon, bookingData.user.id, bookingStatus, cartData.deals, cartData.products, cartData.services, dateTime, discount, id, onConfirm, paymentGateway, paymentStatus])
+    }, [bookingStatus, dateTime, id, onConfirm])
 
 
     let content;
@@ -724,209 +417,6 @@ const EditModal = (props) => {
                             <MenuItem value='pending'>{t('pending')}</MenuItem>
                         </Select>
                     </FormControl>
-                </Grid>
-                <Grid item xs={12}>
-                    <FormControl sx={{ width: '100%' }}>
-                        <InputLabel id="services-label">{t('add services')}</InputLabel>
-                        <Select
-                            label={t('add services')}
-                            labelId="services-label"
-                            id="select-services"
-                            value={selectedServices}
-                            onChange={selectedServicesChangeHandler}
-                        >
-                            {fetchedServices.data.map((service) => (
-                                <MenuItem
-                                    key={service.id}
-                                    value={service.id}
-                                >
-                                    {service.name}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </Grid>
-                <Grid item xs={12}>
-                    {cartData.services.length > 0 && (
-                        <TableContainer component={Paper} sx={{ my: 2 }}>
-                            <Table aria-label="services table">
-                                <SharedTableHead name='services' />
-                                <TableBody>
-                                    {cartData.services.map((row) => (
-                                        <CartItem type='services' key={row.id} row={row} remove={removeFromCartHandler} increase={increaseItemHandler}
-                                            decrease={decreaseItemHandler} fetchedEmployees={fetchedEmployees}
-                                            changeEmployee={changeEmployeeHandler}
-                                        />
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    )}
-                    {
-                        servicesEmployeeError && (
-                            <ValidationMessage notExist>{t('Eash service must have an employee')}</ValidationMessage>
-                        )
-                    }
-                </Grid>
-                <Grid item xs={12}>
-                    <FormControl sx={{ width: '100%' }}>
-                        <InputLabel id="products-label">{t('add products')}</InputLabel>
-                        <Select
-                            label={t('add products')}
-                            labelId="products-label"
-                            id="select-products"
-                            value={selectedProducts}
-                            onChange={selectedProductsChangeHandler}
-                        >
-                            {fetchedProducts.data.map((product) => (
-                                <MenuItem
-                                    key={product.id}
-                                    value={product.id}
-                                >
-                                    {product.name}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </Grid>
-                <Grid item xs={12}>
-                    {cartData.products.length > 0 && (
-                        <TableContainer component={Paper} sx={{ my: 2 }}>
-                            <Table aria-label="products table">
-                                <SharedTableHead name='products' />
-                                <TableBody>
-                                    {cartData.products.map((row) => (
-                                        <CartItem type='products' key={row.id} row={row} remove={removeFromCartHandler} increase={increaseItemHandler} decrease={decreaseItemHandler}
-                                            fetchedEmployees={fetchedEmployees} changeEmployee={changeEmployeeHandler} />
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    )}
-                </Grid>
-                <Grid item xs={12}>
-                    <FormControl sx={{ width: '100%' }}>
-                        <InputLabel id="deals-label">{t('add deals')}</InputLabel>
-                        <Select
-                            label={t('add deals')}
-                            labelId="deals-label"
-                            id="select-deals"
-                            value={selectedDeals}
-                            onChange={selectedDealsChangeHandler}
-                        >
-                            {fetchedDeals.data.map((deal) => (
-                                <MenuItem
-                                    key={deal.id}
-                                    value={deal.id}
-                                >
-                                    {deal.title}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </Grid>
-                <Grid item xs={12}>
-                    {cartData.deals.length > 0 && (
-                        <TableContainer component={Paper} sx={{ my: 2 }}>
-                            <Table aria-label="deals table">
-                                <SharedTableHead name='deals' />
-                                <TableBody>
-                                    {cartData.deals.map((row) => (
-                                        <CartItem type='deals' key={row.id} row={row} remove={removeFromCartHandler} increase={increaseItemHandler} decrease={decreaseItemHandler}
-                                            fetchedEmployees={fetchedEmployees} changeEmployee={changeEmployeeHandler} />
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    )}
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <BookingData>
-                        <BookingDataHeading>{t('payment method')}</BookingDataHeading>
-                        <BookingList>
-                            <li><MoneyIcon sx={{ mr: 1 }} />{t(paymentGateway)}</li>
-                        </BookingList>
-                    </BookingData>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                    <BookingData>
-                        <BookingDataHeading>{t('payment status')}</BookingDataHeading>
-                        <BookingList>
-                            <li>
-                                {paymentStatus === 'completed' && <CheckCircleIcon sx={{ mr: 1, color: '#568d00' }} />}
-                                {paymentStatus === 'pending' && <CloseIcon sx={{ mr: 1, color: 'rgb(187 163 46)' }} />}
-                                {paymentStatus === 'refunded' && <CloseIcon sx={{ mr: 1, color: '#f00' }} />}
-                                {t(paymentStatus)}
-                            </li>
-                        </BookingList>
-                    </BookingData>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <FormControl sx={{ width: '100%' }}>
-                        <InputLabel id="payment-label">{t('payment method')}</InputLabel>
-                        <Select
-                            label={t('payment method')}
-                            labelId="payment-label"
-                            value={paymentGateway}
-                            onChange={paymentGatewayChangeHandler}
-                            inputProps={{ 'aria-label': 'Without label' }}
-                        >
-                            <MenuItem value='cash'>{t('cash')}</MenuItem>
-                            <MenuItem value='card'>{t('card')}</MenuItem>
-                            <MenuItem value='transfer'>{t('transfer')}</MenuItem>
-                            <MenuItem value='online'>{t('online')}</MenuItem>
-                        </Select>
-                    </FormControl>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <FormControl sx={{ width: '100%' }}>
-                        <InputLabel id="payment-status">{t('payment status')}</InputLabel>
-                        <Select
-                            labelId="payment-status"
-                            label={t('payment status')}
-                            value={paymentStatus}
-                            onChange={paymentStatusChangeHandler}
-                            inputProps={{ 'aria-label': 'Without label' }}
-                        >
-                            <MenuItem value='completed'>{t('completed')}</MenuItem>
-                            <MenuItem value='pending'>{t('pending')}</MenuItem>
-                            <MenuItem value='refunded'>{t('refunded')}</MenuItem>
-                        </Select>
-                    </FormControl>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                    <TextField
-                        type="number"
-                        label={t('Discount')}
-                        id="discount-value"
-                        sx={{ width: '100%' }}
-                        value={discount}
-                        onChange={discountChangeHandler}
-                        InputProps={{
-                            startAdornment: <InputAdornment position="start">%</InputAdornment>,
-                        }}
-                    />
-                </Grid>
-                {
-                    hasVat && (
-                        <Grid item xs={12} md={6}>
-                            <BookingData>
-                                <BookingDataHeading>{t('taxes ( 15% )')}</BookingDataHeading>
-                                <BookingDataInfo>{formatCurrency(totalTaxes)}</BookingDataInfo>
-                            </BookingData>
-                        </Grid>
-                    )
-                }
-                <Grid item xs={12} md={6}>
-                    <BookingData>
-                        <BookingDataHeading>{t('total')}</BookingDataHeading>
-                        <BookingDataInfo>{formatCurrency(totalPrice)}</BookingDataInfo>
-                    </BookingData>
-                </Grid>
-                <Grid item xs={12}>
-                    {/* <BookingActions>
-                        <DeleteButton onClick={(id) => onDelete(bookingData.id)} >{t('Delete')}</DeleteButton>
-                    </BookingActions> */}
                 </Grid>
             </Grid>
         )

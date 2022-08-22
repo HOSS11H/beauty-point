@@ -124,6 +124,10 @@ const PaymentModal = props => {
     }, [payments, totalPrice])
 
     const amountToPayChangeHandler = (e) => {
+        if(e.target.value === ''  || +e.target.value > 0) {
+            setAmountToPay(0)
+            return;
+        }
         const value = +e.target.value;
         !isNaN(value) && setAmountToPay(value)
     }
@@ -133,8 +137,10 @@ const PaymentModal = props => {
     }
 
     const addPaymentHandler = () => {
+        if (+amountToPay === 0) return ;
+        if (+amountToPay <+totalPrice ) {return; }
         const obj = {
-            amount: amountToPay,
+            amount: +amountToPay,
             type: paymentGateway
         }
         setPayments(prevState => {
@@ -165,6 +171,8 @@ const PaymentModal = props => {
                 setReturningOrder(false);
                 setReturnedOrderData(response.data);
                 resetCart()
+                toast.success(t('Your Return has been sent successfully'))
+                handleClose()
             })
             .catch(err => {
                 setReturningOrder(false);
@@ -208,7 +216,7 @@ const PaymentModal = props => {
                 </Grid>
                 <Grid item xs={12}>
                     <PaymentAction>
-                        {amountToPay < 0 && (
+                        {amountToPay <= 0 && (
                             <Fragment>
                                 <CustomTextField type="number" sx={{ width: 120 }} id="amount-value" variant='standard' value={amountToPay} onChange={amountToPayChangeHandler} />
                                 <FormControl variant="standard" sx={{ minWidth: 120 }}>

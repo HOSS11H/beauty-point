@@ -182,8 +182,9 @@ const PaymentModal = props => {
     }
 
     const addPaymentHandler = () => {
+        if (+amountToPay >+totalPrice ) {return; }
         const obj = {
-            amount: amountToPay,
+            amount: +amountToPay,
             type: paymentGateway
         }
         setPayments(prevState => {

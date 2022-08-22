@@ -216,7 +216,7 @@ const Cart = props => {
                         </CartInfoWrapper>
                     )}
                     <CartInfoWrapper>
-                        <span>{t('price after discount')}</span>
+                        <span>{t('amount')}</span>
                         <span>{formatCurrency(totalPrice)}</span>
                     </CartInfoWrapper>
                 </div>
