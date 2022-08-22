@@ -390,7 +390,7 @@ const Cart = props => {
             {paymentModalOpened && (
                 <PaymentModal
                     open={paymentModalOpened} handleClose={closePaymentModalHandler}
-                    dateTime={dateTime} hasVat={hasVat}customerId={customerData.id}
+                    dateTime={dateTime} hasVat={hasVat}customerId={customerData.value || customerData.id}
                     items={items} discount={discount} discountType={discountType}
                     resetCart={resetCartHandler} />
             )}
