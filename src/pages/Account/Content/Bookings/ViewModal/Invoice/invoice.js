@@ -12,6 +12,7 @@ import TableRow from '@mui/material/TableRow';
 import { useTranslation } from 'react-i18next';
 import { formatCurrency } from '../../../../../../shared/utility';
 import moment from 'moment'
+import { Fragment } from 'react';
 
 const Wrapper = styled.div`
 	max-width: 95%;
@@ -58,7 +59,7 @@ const ClientName = styled.p`
     transition: 0.3s ease-in-out;
     margin-bottom: 5px;
 `
-const ClientAddress = styled.p`
+const CompanyInfo = styled.p`
     display: block;
     font-size: 14px;
     line-height:1.5;
@@ -89,7 +90,7 @@ const ClientBill = styled.p`
     transition: 0.3s ease-in-out;
     margin-bottom: 5px;
 `
-const ClientDate = styled.p`
+const BookingTimeInfo = styled.p`
     display: flex;
 	align-items: center;
     font-size: 12px;
@@ -100,11 +101,11 @@ const ClientDate = styled.p`
     transition: 0.3s ease-in-out;
     margin-bottom: 5px;
 `
-const ClientInfos = styled.p`
+const BookingStatusInfo = styled.p`
     display: flex;
 	align-items: center;
 	justify-content: flex-start;
-    font-size: 12px;
+    font-size: 11px;
     line-height:1.5;
     text-transform: capitalize;
     font-weight: 700;
@@ -117,18 +118,26 @@ const ClientInfos = styled.p`
 		}
 	}
 `
-const BillTotal = styled.p`
+const BillPricesWrapper = styled.div`
+
+`
+
+const BillPrice = styled.p`
     display: flex;
 	align-items: center;
 	justify-content: space-between;
 	margin-left: auto;
 	margin-right: auto;
-    font-size: 14px;
+    font-size: 13px;
     line-height:1;
     text-transform: capitalize;
     font-weight: 700;
     color: #000;
     transition: 0.3s ease-in-out;
+	margin-bottom: 10px;
+	&:last-child {
+		margin-bottom: 0px;
+	}
     cursor: pointer;
 	i {
 		font-style: normal;
@@ -170,6 +179,7 @@ const CustomTableHead = styled(TableCell)`
 const CustomTableCell = styled(TableCell)`
 	padding-left: 5px;
 	padding-right: 5px;
+	color: #000;
 `
 
 const BookingDataBody = styled.p`
@@ -206,6 +216,59 @@ const Invoice = React.forwardRef((props, ref) => {
 
 	const { bookingData, userData, qrCode } = props
 
+
+
+	let billNumber;
+	let billTitle;
+	if (bookingData.payment_status === 'refunded') {
+		billTitle = (
+			<Fragment>
+				<span>فاتورة استرجاع</span>
+				<span>Refunded Invoice</span>
+			</Fragment>
+		)
+		billNumber = (
+			<Fragment>
+				<ClientBill>رقم فاتورة الاسترجاع : {bookingData.refunded_id ?? 1}</ClientBill>
+				<ClientBill>رقم الفاتورة الأصلية : {bookingData.id}</ClientBill>
+			</Fragment>
+		)
+	} else {
+		billTitle = (
+			<Fragment>
+				<span>فاتورة ضريبية مبسطة</span>
+				<span>Simplified Tax Invoice</span>
+			</Fragment>
+		)
+		billNumber = <ClientBill>رقم الفاتورة : {bookingData.id}</ClientBill>
+	}
+
+	let BookingPlace;
+
+	if (bookingData.booking_place) {
+		BookingPlace = (
+			<Fragment>
+				<BookingTimeInfo>
+					{bookingData.booking_place === 'in_house' && <span>{t('in house')}</span>}
+					{bookingData.booking_place === 'in_saloon' && <span>{t('in saloon')}</span>}
+					{bookingData.booking_place === 'in_customer_house' && <span>{t('in customer house')}</span>}
+					<span> : مكان الحجز</span>
+				</BookingTimeInfo>
+			</Fragment>
+		)
+	}
+
+	let paidTo;
+
+	if (bookingData.status === 'completed' || bookingData.status === 'approved') {
+		paidTo = (
+			<BookingStatusInfo>
+				<span>{t(userData.user.name)}</span>
+				<span>: دفع الي</span>
+			</BookingStatusInfo>
+		)
+	}
+
 	return (
 		<div style={{ display: 'none' }} >
 			<Wrapper ref={ref} >
@@ -213,176 +276,148 @@ const Invoice = React.forwardRef((props, ref) => {
 					<Grid item xs={12}>
 						<ClientDetails>
 							<InvoiceTitle>
-								{bookingData.payment_status === 'refunded' ? (
-									<>
-										<span>فاتورة استرجاع</span>
-										<span>Refunded Invoice</span>
-									</>
-								) :
-									<>
-										<span>فاتورة ضريبية مبسطة</span>
-										<span>Simplified Tax Invoice</span>
-									</>
-								}
+								{billTitle}
 							</InvoiceTitle>
 							<ClientImg src={userData.user.company?.logo_url} />
 							<ClientName>{userData.user.company?.companyName}</ClientName>
-							<ClientAddress>{userData.user.company?.address}</ClientAddress>
-							<ClientAddress>رقم التليفون : {userData.user.company?.companyPhone}</ClientAddress>
-							<ClientAddress><span>{userData.user.company?.tax_record}</span> : الرقم الضريبي</ClientAddress>
-							{bookingData.payment_status === 'refunded' ? (
-								<>
-									<ClientBill>رقم فاتورة الاسترجاع : {bookingData.refunded_id ?? 1}</ClientBill>
-									<ClientBill>رقم الفاتورة الأصلية : {bookingData.id}</ClientBill>
-								</>
-							) : (
-								<ClientBill>رقم الفاتورة : {bookingData.id}</ClientBill>
-							)}
-							<ClientDate>
+							<CompanyInfo>{userData.user.company?.address}</CompanyInfo>
+							<CompanyInfo>رقم التليفون : {userData.user.company?.companyPhone}</CompanyInfo>
+							<CompanyInfo><span>{userData.user.company?.tax_record}</span> : الرقم الضريبي</CompanyInfo>
+							{billNumber}
+							<BookingTimeInfo>
 								تاريخ الحجز : {moment.utc(bookingData.date_time).format('YYYY-MM-DD')}
-							</ClientDate>
-							<ClientDate>
+							</BookingTimeInfo>
+							<BookingTimeInfo>
 								<span>{moment.utc(bookingData.date_time).format('hh:mm a')}</span>
 								<span> : وقت الحجز</span>
-							</ClientDate>
-							{bookingData.booking_place && (
-								<ClientDate>
-									{bookingData.booking_place === 'in_house' && <span>{t('in house')}</span>}
-									{bookingData.booking_place === 'in_saloon' &&  <span>{t('in saloon')}</span> }
-									{bookingData.booking_place === 'in_customer_house' &&  <span>{t('in customer house')}</span> }
-									<span> : مكان الحجز</span>
-								</ClientDate>
-							)  }
-							<Grid sx={{ width: '100%' }} container spacing={2}>
+							</BookingTimeInfo>
+							{BookingPlace}
+							<Grid sx={{ width: '100%' }} container spacing={1}>
 								<Grid item xs={6}>
-									{
-										bookingData.status === 'completed' || bookingData.status === 'approved' ? (
-											<ClientInfos>
-												<span>{t(userData.user.name)}</span>
-												<span>: دفع الي</span>
-											</ClientInfos>
-										) : null
-									}
-									<ClientInfos>
+									{paidTo}
+									<BookingStatusInfo>
 										<span>{t(bookingData.payment_status)}</span>
 										<span>: حالة الدفع</span>
-									</ClientInfos>
+									</BookingStatusInfo>
 								</Grid>
 								<Grid item xs={6}>
-									<ClientInfos>
+									<BookingStatusInfo>
 										<span>{t(bookingData.user.name)}</span>
 										<span>: العميل</span>
-									</ClientInfos>
-									<ClientInfos>
+									</BookingStatusInfo>
+									<BookingStatusInfo>
 										<span>{t(bookingData.status)}</span>
 										<span>: حالة الحجز</span>
-									</ClientInfos>
+									</BookingStatusInfo>
 								</Grid>
 							</Grid>
 							<BookingDataHeading>{t('booking items')}</BookingDataHeading>
 							<TableContainer sx={{ my: 2, bakground: 'transparent' }}>
-								<Table aria-label="simple table">
+								<Table aria-label="simple table"size="small" >
 									<TableHead>
 										<TableRow>
 											<CustomTableHead align="center">
-												<span>item</span>
+												<span>Item</span>
 												<span>{t('item')}</span>
 											</CustomTableHead>
 											<CustomTableHead align="center">
-												<span>price x quantity</span>
+												<span>Price x Quantity</span>
 												<span>الكمية X السعر</span>
 											</CustomTableHead>
 											<CustomTableHead align="center">
-												<span>amount</span>
+												<span>Amount</span>
 												<span>{t('amount')}</span>
 											</CustomTableHead>
 										</TableRow>
 									</TableHead>
 									<TableBody>
-										{
-											bookingData.items && bookingData.items.map((item, index) => {
-												return (
-													<TableRow
-														key={index}
-														sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-													>
-														<CustomTableCell component="th" scope="row" align="center">
-															{<BookingDataBody>{item.name}</BookingDataBody>}
-															{item.employee && <ItemEmployee>( {item.employee.name} )</ItemEmployee>}
-														</CustomTableCell>
-														<CustomTableCell align="center">
-															{<BookingDataBody>{`${item.quantity} x ${item.price}`}</BookingDataBody>}
-														</CustomTableCell>
-														<CustomTableCell align="center">
-															{<BookingDataBody>{formatCurrency(item.amount)}</BookingDataBody>}
-														</CustomTableCell>
-													</TableRow>
-												)
-											})
+										{bookingData.items && bookingData.items.map((item, index) => {
+											return (
+												<TableRow
+													key={index}
+													sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+												>
+													<CustomTableCell component="th" scope="row" align="center">
+														{<BookingDataBody>{item.name}</BookingDataBody>}
+														{item.employee && <ItemEmployee>( {item.employee.name} )</ItemEmployee>}
+													</CustomTableCell>
+													<CustomTableCell align="center">
+														{<BookingDataBody>{`${item.quantity} x ${item.price}`}</BookingDataBody>}
+													</CustomTableCell>
+													<CustomTableCell align="center">
+														{<BookingDataBody>{formatCurrency(item.amount)}</BookingDataBody>}
+													</CustomTableCell>
+												</TableRow>
+											)
+										})
 										}
 									</TableBody>
 								</Table>
 							</TableContainer>
-							<Grid sx={{ width: '100%' }} container spacing={2}>
-								<Grid item xs={12} md={6} >
-									<BillTotal>
-										<i>المجموع قبل الضريبة :</i>
-										<span>{formatCurrency((bookingData.price + bookingData.discount - bookingData.vat))}</span>
-									</BillTotal>
-								</Grid>
-								<Grid item xs={12} md={6} >
-									<BillTotal>
-										<i>ضريبة القيمة المضافة %15 : </i>
-										<span>{formatCurrency(bookingData.vat)}</span>
-									</BillTotal>
-								</Grid>
-								<Grid item xs={12} md={6} >
-									<BillTotal>
-										<span>المجموع : </span>
-										<span>{formatCurrency(bookingData.price + bookingData.discount)}</span>
-									</BillTotal>
-								</Grid>
-								<Grid item xs={12} md={6} >
-									<BillTotal>
-										<span>قيمة الخصم : </span>
-										<span>{formatCurrency(bookingData.discount)}</span>
-									</BillTotal>
-								</Grid>
-								<Grid item xs={12} md={6} >
-									<BillTotal>
-										<span>الاجمالي : </span>
-										<span>{formatCurrency(bookingData.price)}</span>
-									</BillTotal>
-								</Grid>
+							<BillPricesWrapper>
+								<BillPrice>
+									<i>المجموع قبل الضريبة :</i>
+									<span>{formatCurrency((bookingData.price + bookingData.discount - bookingData.vat))}</span>
+								</BillPrice>
+								<BillPrice>
+									<i>ضريبة القيمة المضافة %15 : </i>
+									<span>{formatCurrency(bookingData.vat)}</span>
+								</BillPrice>
+								<BillPrice>
+									<span>المجموع : </span>
+									<span>{formatCurrency(bookingData.price + bookingData.discount)}</span>
+								</BillPrice>
+								<BillPrice>
+									<span>قيمة الخصم : </span>
+									<span>{formatCurrency(bookingData.discount)}</span>
+								</BillPrice>
+								<BillPrice>
+									<span>الاجمالي : </span>
+									<span>{formatCurrency(bookingData.price)}</span>
+								</BillPrice>
 								{bookingData.remaining_amount > 0 && (
-									<Grid item xs={12} md={6} >
-										<BillTotal>
-											<span>المبلغ المدفوع : </span>
-											<span>{formatCurrency(bookingData.price - bookingData.remaining_amount)}</span>
-										</BillTotal>
-									</Grid>
+									<BillPrice>
+										<span>المبلغ المدفوع : </span>
+										<span>{formatCurrency(bookingData.price - bookingData.remaining_amount)}</span>
+									</BillPrice>
 								)}
 								{bookingData.remaining_amount > 0 && (
-									<Grid item xs={12} md={6} >
-										<BillTotal>
-											<span>المبلغ المتبقي : </span>
-											<span>{formatCurrency(bookingData.remaining_amount)}</span>
-										</BillTotal>
-									</Grid>
+									<BillPrice>
+										<span>المبلغ المتبقي : </span>
+										<span>{formatCurrency(bookingData.remaining_amount)}</span>
+									</BillPrice>
 								)}
-								{
-									bookingData.payments.map(payment => {
-										return (
-											<Grid item xs={12} md={6} key={payment.id}>
-												<BillTotal>
-													<span>طريقة الدفع : </span>
-													<span>{formatCurrency(payment.amount)} {t(payment.gateway)}</span>
-												</BillTotal>
-											</Grid>
-										)
-									})
-								}
-							</Grid>
+								<TableContainer sx={{ mt: 2, bakground: 'transparent'}}>
+									<Table aria-label="payment-table" size="small">
+										<TableHead>
+											<TableRow>
+												<CustomTableHead align="center">
+													<span>Amount</span>
+													<span>{t('amount')}</span>
+												</CustomTableHead>
+												<CustomTableHead align="center">
+													<span>Type</span>
+													<span>{t('type')}</span>
+												</CustomTableHead>
+											</TableRow>
+										</TableHead>
+										<TableBody>
+											{bookingData.payments.map((payment, index) => {
+												return (
+													<TableRow key={index} >
+														<CustomTableCell component="th" scope="row" align="center">
+															<span>{formatCurrency(payment.amount)}</span>
+														</CustomTableCell>
+														<CustomTableCell component="th" scope="row" align="center">
+															<span>{t(payment.gateway)}</span>
+														</CustomTableCell>
+													</TableRow>
+												)
+											})}
+										</TableBody>
+									</Table>
+								</TableContainer>
+							</BillPricesWrapper>
 							<InvoiceNotes>
 								{userData.user.company.invoice_notes}
 							</InvoiceNotes>
