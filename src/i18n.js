@@ -668,7 +668,8 @@ const resources = {
             'you have items from another salon / artist and adding this item will remove them, do you want to procceed?': 'لديك عناصر من صالون / ارتست  أخرى وستؤدي إضافة هذا العنصر إلى إزالتها ، هل تريد المتابعة؟',
             'users': 'المستخدمين',
             'returned from booking #': 'مسترجع من حجز رقم # ',
-            'returned items': 'العناصر المسترجعة'
+            'returned items': 'العناصر المسترجعة',
+            'returns': 'المسترجع',
         }
     }
 };
