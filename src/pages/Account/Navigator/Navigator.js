@@ -127,7 +127,7 @@ const Navigator = (props) => {
             id: 'dashboard',
             children: [
                 { id: 'dashboard', name: 'dashboard', icon: <DashboardIcon />,},
-                { id: 'bookings', name: 'bookings', icon: <BookIcon /> },
+                { id: 'orders', name: 'bookings', icon: <BookIcon /> },
                 { id: 'booking-calendar', name: 'booking calendar', icon: <EventIcon /> },
                 { id: 'products', name: 'products', icon: <ShoppingCartIcon /> },
                 { id: 'users', name: 'users', icon: <PeopleIcon /> },

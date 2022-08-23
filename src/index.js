@@ -12,6 +12,7 @@ import thunk from 'redux-thunk';
 
 import { ErrorFallback } from "./components/ErrorFallback/ErrorFallback";
 import bookingsReducer from './store/reducers/bookings';
+import returnsReducer from './store/reducers/returns';
 import cartReducer from './store/reducers/cart';
 import categoriesReducer from './store/reducers/categories';
 import couponsReducer from './store/reducers/coupons';
@@ -40,6 +41,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 
 const rootReducer = combineReducers({
 	bookings: bookingsReducer,
+	returns: returnsReducer,
 	services: servicesReducer,
 	products: productsReducer,
 	deals: dealsReducer,

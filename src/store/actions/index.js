@@ -9,6 +9,13 @@ export {
     deleteCalendarBooking
 } from './bookings'
 export {
+    fetchReturns,
+    deleteReturn,
+    updateReturn,
+    createReturn,
+    filterReturns,
+} from './returns'
+export {
     fetchServices,
     fetchServicesTable,
     deleteService,

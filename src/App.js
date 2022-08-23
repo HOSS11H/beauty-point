@@ -32,6 +32,12 @@ const Deals = React.lazy(() => import('./pages/Account/Content/Deals/Deals'));
 const Bookings = React.lazy(() =>
 import('./pages/Account/Content/Bookings/Bookings')
 );
+const Orders = React.lazy(() =>
+import('./pages/Account/Content/Orders/Orders')
+);
+const Returns = React.lazy(() =>
+import('./pages/Account/Content/Returns/Returns')
+);
 const PointOfSale = React.lazy(() =>
 import('./pages/Account/Content/PointOfSale/PointOfSale')
 );
@@ -221,7 +227,10 @@ function App(props) {
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/account/*" element={<Account />}>
                     <Route path="dashboard" element={<Dashboard />} />
-                    <Route path="bookings" element={<Bookings />} />
+                    <Route path="orders/*" element={<Orders />} >
+                        <Route index  element={<Bookings />} />
+                        <Route path='returns'  element={<Returns />} />
+                    </Route>
                     <Route path="booking-calendar" element={<BookingCalendar />} />
                     <Route path="products/*" element={<Collection />} >
                         <Route index element={
