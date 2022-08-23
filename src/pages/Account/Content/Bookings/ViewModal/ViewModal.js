@@ -31,7 +31,7 @@ import AddPaymentModal from './AddPaymentModal/AddPaymentModal';
 import moment from 'moment';
 import { format } from 'date-fns';
 import { LoadingButton } from '@mui/lab';
-import BookingInvoice from './BookingInvoice/BookingInvoice';
+import Invoice from './Invoice/Invoice';
 import AuthContext from '../../../../../store/auth-context';
 
 const ClientDetails = styled.div`
@@ -564,7 +564,7 @@ const ViewModal = (props) => {
                             </Grid>
                         </Fragment>
                     )}
-                    {qrCode && <BookingInvoice userData={userData} ref={invoiceRef} bookingData={bookingData} items={allItems} qrCode={qrCode} />}
+                    {qrCode && <Invoice userData={userData} ref={invoiceRef} bookingData={bookingData} items={allItems} qrCode={qrCode} />}
                 </Grid>
                 <AddPaymentModal show={paymentModalOpened} id={id}
                     remainingAmount={bookingData.remaining_amount}
