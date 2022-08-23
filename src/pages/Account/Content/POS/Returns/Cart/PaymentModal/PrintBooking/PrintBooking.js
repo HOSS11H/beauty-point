@@ -7,7 +7,7 @@ import { useReactToPrint } from "react-to-print";
 import Loader from "../../../../../../../../components/UI/Loader/Loader";
 import styled from 'styled-components';
 import { Button } from "@mui/material";
-import Invoice from "../../../../../Bookings/ViewModal/Invoice/Invoice";
+import Invoice from "../../../../../../../../components/Invoice/Invoice";
 import PrintIcon from '@mui/icons-material/Print';
 import { Fragment } from "react";
 

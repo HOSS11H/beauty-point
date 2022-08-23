@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import { CustomButton } from "../../../../../components/UI/Button/Button";
 import Loader from "../../../../../components/UI/Loader/Loader";
 import PrintIcon from '@mui/icons-material/Print';
-import Invoice from "../../Bookings/ViewModal/Invoice/Invoice";
+import Invoice from "../../../../../components/Invoice/Invoice";
 import { useState } from "react";
 import v2 from '../../../../../utils/axios-instance';
 import v1 from '../../../../../utils/axios-instance-v1';

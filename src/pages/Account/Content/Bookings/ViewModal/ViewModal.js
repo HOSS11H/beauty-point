@@ -31,7 +31,7 @@ import AddPaymentModal from './AddPaymentModal/AddPaymentModal';
 import moment from 'moment';
 import { format } from 'date-fns';
 import { LoadingButton } from '@mui/lab';
-import Invoice from './Invoice/Invoice';
+import Invoice from '../../../../../components/Invoice/Invoice';
 import AuthContext from '../../../../../store/auth-context';
 
 const ClientDetails = styled.div`

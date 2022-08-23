@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useRef, useState } from "react";
-import Invoice from "../../../../Account/Content/Bookings/ViewModal/Invoice/Invoice";
+import Invoice from "../../../../../components/Invoice/Invoice";
 import PrintIcon from '@mui/icons-material/Print';
 import { useReactToPrint } from 'react-to-print';
 import axios from "../../../../../utils/axios-instance";
