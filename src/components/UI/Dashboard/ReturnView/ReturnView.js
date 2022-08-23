@@ -7,10 +7,9 @@ import Card from '@mui/material/Card';
 import IconButton from '@mui/material/IconButton';
 import Skeleton from '@mui/material/Skeleton';
 import moment from 'moment';
-import { Fragment, useContext } from 'react';
+import { Fragment } from 'react';
 import { useTranslation } from "react-i18next";
 import styled from 'styled-components';
-import AuthContext from '../../../../store/auth-context';
 
 const CustomCardMui = styled(Card)`
     &.MuiPaper-root {
@@ -156,9 +155,6 @@ const ReturnView = props => {
     const { t } = useTranslation()
 
     const { returned, onClick } = props;
-
-    const authCtx = useContext(AuthContext)
-    const { roleName } = authCtx;
 
     let content = (
         <CustomCardMui>

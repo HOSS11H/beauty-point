@@ -119,7 +119,7 @@ const PaymentModal = props => {
     const [couponData, setCouponData] = useState({ discountType: 'amount', amount: 0 })
 
     const [reservingBooking, setReservingBooking] = useState(false)
-    const [ reservedBookingData, setReservedBookingData ] = useState(null)
+    const [reservedBookingData, setReservedBookingData] = useState(null)
 
     const fetchCoupons = useCallback((searchParams) => {
         setLoadingCoupons(true)
@@ -182,7 +182,12 @@ const PaymentModal = props => {
     }
 
     const addPaymentHandler = () => {
-        if (+amountToPay >+totalPrice ) {return; }
+        if (+amountToPay > +totalPrice) { return; }
+        if (+amountToPay <= 0) return ;
+        let totalPaid = payments.reduce((acc, cur) => {
+            return acc + cur?.amount
+        }, 0)
+        if ((+amountToPay + totalPaid) > totalPrice  ) {return; }
         const obj = {
             amount: +amountToPay,
             type: paymentGateway
@@ -290,22 +295,18 @@ const PaymentModal = props => {
                 </Grid>
                 <Grid item xs={12}>
                     <PaymentAction>
-                        {amountToPay > 0 && (
-                            <Fragment>
-                                <CustomTextField type="number" sx={{ width: 120 }} id="amount-value" variant='standard' value={amountToPay} onChange={amountToPayChangeHandler} />
-                                <FormControl variant="standard" sx={{ minWidth: 120 }}>
-                                    <Select id="payment-type" value={paymentGateway} onChange={paymentGatewayChangeHandler} inputProps={{ 'aria-label': 'Without label' }} label={t('Payment Type')} >
-                                        <MenuItem value='cash'>{t('cash')}</MenuItem>
-                                        <MenuItem value='card'>{t('card')}</MenuItem>
-                                        <MenuItem value='transfer'>{t('transfer')}</MenuItem>
-                                        <MenuItem value='online'>{t('online')}</MenuItem>
-                                    </Select>
-                                </FormControl>
-                                <IconButton color='secondary' onClick={addPaymentHandler} >
-                                    <AddCircleIcon />
-                                </IconButton>
-                            </Fragment>
-                        )}
+                        <CustomTextField type="number" sx={{ width: 120 }} id="amount-value" variant='standard' value={amountToPay} onChange={amountToPayChangeHandler} />
+                        <FormControl variant="standard" sx={{ minWidth: 120 }}>
+                            <Select id="payment-type" value={paymentGateway} onChange={paymentGatewayChangeHandler} inputProps={{ 'aria-label': 'Without label' }} label={t('Payment Type')} >
+                                <MenuItem value='cash'>{t('cash')}</MenuItem>
+                                <MenuItem value='card'>{t('card')}</MenuItem>
+                                <MenuItem value='transfer'>{t('transfer')}</MenuItem>
+                                <MenuItem value='online'>{t('online')}</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <IconButton color='secondary' onClick={addPaymentHandler} >
+                            <AddCircleIcon />
+                        </IconButton>
                     </PaymentAction>
                 </Grid>
                 <Grid item xs={12}>
