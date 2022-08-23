@@ -89,7 +89,7 @@ const PrintBooking = (props) => {
             <Wrapper>
                 <Message>{t('Your order has been booked successfully')}</Message>
                 <Button onClick={handlePrint} color='secondary' variant='contained' ><PrintIcon />{t('print')}</Button>
-                {qrCode && <Invoice userData={userData} ref={invoiceRef} bookingData={bookingData} qrCode={qrCode} />}
+                {qrCode && <Invoice userData={userData} ref={invoiceRef} data={bookingData} qrCode={qrCode} />}
             </Wrapper>
         )
     }

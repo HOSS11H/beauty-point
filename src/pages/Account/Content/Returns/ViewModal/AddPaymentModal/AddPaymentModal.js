@@ -78,7 +78,7 @@ const AddPaymentModal = props => {
             return;
         }
         const data = {
-            booking_id: id,
+            return_id: id,
             amount: paidAmount,
             gateway: paymentGateway
         }

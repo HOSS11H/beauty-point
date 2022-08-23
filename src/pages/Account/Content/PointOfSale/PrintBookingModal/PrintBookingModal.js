@@ -133,7 +133,7 @@ const PrintBookingModal = props => {
             <Wrapper>
                 <Message>{t('Your order has been booked successfully')}</Message>
                 <ActionButton onClick={handlePrint}  ><PrintIcon />{t('print')}</ActionButton>
-                {qrCode && <Invoice userData={userData} ref={invoiceRef} bookingData={bookingData} qrCode={qrCode} />}
+                {qrCode && <Invoice userData={userData} ref={invoiceRef} data={bookingData} qrCode={qrCode} />}
             </Wrapper>
         )
     }

@@ -564,7 +564,7 @@ const ViewModal = (props) => {
                             </Grid>
                         </Fragment>
                     )}
-                    {qrCode && <Invoice userData={userData} ref={invoiceRef} bookingData={bookingData} items={allItems} qrCode={qrCode} />}
+                    {qrCode && <Invoice userData={userData} ref={invoiceRef} data={bookingData} items={allItems} qrCode={qrCode} />}
                 </Grid>
                 <AddPaymentModal show={paymentModalOpened} id={id}
                     remainingAmount={bookingData.remaining_amount}

@@ -1,18 +1,16 @@
-import styled from 'styled-components';
-import Card from '@mui/material/Card';
-import IconButton from '@mui/material/IconButton';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import EventNoteIcon from '@mui/icons-material/EventNote';
 import MailIcon from '@mui/icons-material/Mail';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
-import EventNoteIcon from '@mui/icons-material/EventNote';
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
+import Card from '@mui/material/Card';
+import IconButton from '@mui/material/IconButton';
 import Skeleton from '@mui/material/Skeleton';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import moment from 'moment';
 import { Fragment, useContext } from 'react';
 import { useTranslation } from "react-i18next";
-import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
-import moment from 'moment';
+import styled from 'styled-components';
 import AuthContext from '../../../../store/auth-context';
-import RoomIcon from '@mui/icons-material/Room';
 
 const CustomCardMui = styled(Card)`
     &.MuiPaper-root {
@@ -101,21 +99,9 @@ const ReturnStatus = styled.div`
     font-weight: 500;
     margin-top: 10px;
     border: 2px solid;
-    &.in.progress {
-        border-color: ${({ theme }) => theme.palette.warning.light};
-        color: ${({ theme }) => theme.palette.warning.light};
-    }
     &.pending {
         border-color: ${({ theme }) => theme.palette.secondary.dark};
         color: ${({ theme }) => theme.palette.secondary.dark};
-    }
-    &.canceled {
-        border-color: ${({ theme }) => theme.palette.error.main};
-        color: ${({ theme }) => theme.palette.error.main};
-    }
-    &.approved {
-        border-color: ${({ theme }) => theme.palette.primary.main};
-        color: ${({ theme }) => theme.palette.primary.main};
     }
     &.completed {
         border-color: ${({ theme }) => theme.palette.success.main};
@@ -187,9 +173,10 @@ const ReturnView = props => {
         </CustomCardMui>
     );
     if (returned) {
-        let name = returned.customer.name
-        let email = returned.customer.email
-        let mobile = returned.customer.mobile
+        let name = returned.user.name
+        let email = returned.user.email
+        let mobile = returned.user.mobile
+
         content = (
             <CustomCardMui onClick={onClick} >
                 <ReturnButton>
@@ -198,15 +185,15 @@ const ReturnView = props => {
                     </IconButton>
                 </ReturnButton>
                 <ReturnInfos>
-                    <ReturnAppointment className={returned.status} >
+                    <ReturnAppointment className='canceled' >
                         <ul>
                             <li className="id" >{`# ${returned.id}`}</li>
                             <li><EventNoteIcon sx={{ mr: 1 }} />{returned.date}</li>
                             <li><WatchLaterIcon sx={{ mr: 1 }} />{moment.utc(returned.date_time).format('hh:mm A')}</li>
                         </ul>
                     </ReturnAppointment>
-                    <ReturnStatus className={returned.status}>
-                        {t(returned.status)}
+                    <ReturnStatus className={returned.payment_status}>
+                        {t(returned.payment_status)}
                     </ReturnStatus>
                 </ReturnInfos>
                 <ReturnContent>
@@ -214,6 +201,7 @@ const ReturnView = props => {
                     <ClientInfo>
                         {email && <li><MailIcon sx={{ mr: 1 }} />{email}</li>}
                         {mobile && <li><PhoneAndroidIcon sx={{ mr: 1 }} />{mobile}</li>}
+                        <li>{`${t('returned from booking #')} ${returned.booking_id}`}</li>
                     </ClientInfo>
                 </ReturnContent>
             </CustomCardMui>

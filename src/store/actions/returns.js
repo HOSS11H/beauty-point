@@ -4,25 +4,25 @@ import axios from '../../utils/axios-instance';
 
 export const fetchReturnsStart = () => {
     return {
-        type: actionTypes.FETCH_BOOKINGS_START,
+        type: actionTypes.FETCH_RETURNS_START,
     }
 }
 export const fetchReturnsSuccess = (returnsData) => {
     return {
-        type: actionTypes.FETCH_BOOKINGS_SUCCESS,
+        type: actionTypes.FETCH_RETURNS_SUCCESS,
         returns: returnsData
     }
 }
 export const fetchReturnsFailed = (errorMessage) => {
     return {
-        type: actionTypes.FETCH_BOOKINGS_FAILED,
+        type: actionTypes.FETCH_RETURNS_FAILED,
         error: errorMessage,
     }
 }
 export const fetchReturns = (language, page, perPage) => {
     return dispatch => {
         dispatch(fetchReturnsStart())
-        axios.get(`/vendors/returns?page=${page + 1}&per_page=${perPage}&include[]=user&include[]=booking&include[]=items`, {
+        axios.get(`/vendors/returns?page=${page + 1}&per_page=${perPage}&include[]=user&include[]=items&include[]=payments`, {
             headers: {
                 'Accept-Language': language,
             }
@@ -49,19 +49,19 @@ export const fetchReturns = (language, page, perPage) => {
 
 export const deleteReturnStart = () => {
     return {
-        type: actionTypes.DELETE_BOOKING_START,
+        type: actionTypes.DELETE_RETURN_START,
     }
 }
 export const deleteReturnSuccess = (message, deletedReturnId) => {
     return {
-        type: actionTypes.DELETE_BOOKING_SUCCESS,
+        type: actionTypes.DELETE_RETURN_SUCCESS,
         message: message,
         returnId: deletedReturnId,
     }
 }
 export const deleteReturnFailed = (message) => {
     return {
-        type: actionTypes.DELETE_BOOKING_FAILED,
+        type: actionTypes.DELETE_RETURN_FAILED,
         message: message,
     }
 }
@@ -81,23 +81,23 @@ export const deleteReturn = (id) => {
 
 export const updateReturnStart = () => {
     return {
-        type: actionTypes.UPDATE_BOOKING_START,
+        type: actionTypes.UPDATE_RETURN_START,
     }
 }
 export const updateReturnSuccess = (updatedReturnData) => {
     return {
-        type: actionTypes.UPDATE_BOOKING_SUCCESS,
+        type: actionTypes.UPDATE_RETURN_SUCCESS,
         returnData: updatedReturnData,
     }
 }
 export const resetUpdateReturnSuccess = (updatedDealData) => {
     return {
-        type: actionTypes.RESET_UPDATE_BOOKING_SUCCESS,
+        type: actionTypes.RESET_UPDATE_RETURN_SUCCESS,
     }
 }
 export const updateReturnFailed = (message) => {
     return {
-        type: actionTypes.UPDATE_BOOKING_FAILED,
+        type: actionTypes.UPDATE_RETURN_FAILED,
         message: message,
     }
 }
@@ -123,22 +123,22 @@ export const updateReturn = (data) => {
 
 export const createReturnStart = () => {
     return {
-        type: actionTypes.CREATE_BOOKING_START,
+        type: actionTypes.CREATE_RETURN_START,
     }
 }
 export const createReturnSuccess = () => {
     return {
-        type: actionTypes.CREATE_BOOKING_SUCCESS,
+        type: actionTypes.CREATE_RETURN_SUCCESS,
     }
 }
 export const resetCreateReturnSuccess = () => {
     return {
-        type: actionTypes.RESET_CREATE_BOOKING_SUCCESS,
+        type: actionTypes.RESET_CREATE_RETURN_SUCCESS,
     }
 }
 export const createReturnFailed = (message) => {
     return {
-        type: actionTypes.CREATE_BOOKING_FAILED,
+        type: actionTypes.CREATE_RETURN_FAILED,
         message: message,
     }
 }
@@ -164,18 +164,18 @@ export const createReturn = (data) => {
 
 export const filterReturnsStart = () => {
     return {
-        type: actionTypes.FILTER_BOOKINGS_START,
+        type: actionTypes.FILTER_RETURNS_START,
     }
 }
 export const filterReturnsSuccess = (returnsData) => {
     return {
-        type: actionTypes.FILTER_BOOKINGS_SUCCESS,
+        type: actionTypes.FILTER_RETURNS_SUCCESS,
         returns: returnsData
     }
 }
 export const filterReturnsFailed = (errorMessage) => {
     return {
-        type: actionTypes.FILTER_BOOKINGS_FAILED,
+        type: actionTypes.FILTER_RETURNS_FAILED,
         error: errorMessage,
     }
 }
@@ -189,7 +189,7 @@ export const filterReturns = ( searchParams ) => {
                 notEmptySearchParams[key] = searchParams[key]
             }
         }
-        axios.get(`/vendors/returns?include[]=user&include[]=booking&include[]=items`, { params: { ...notEmptySearchParams } } )
+        axios.get(`/vendors/returns?include[]=user&include[]=items&include[]=payments`, { params: { ...notEmptySearchParams } } )
             .then(response => {
                 let editedData = response.data.data.map(item => {
                     const formattedTime = new Date(item.date_time).toLocaleString()

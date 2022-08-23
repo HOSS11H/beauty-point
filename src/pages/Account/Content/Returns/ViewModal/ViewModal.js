@@ -30,7 +30,6 @@ import Loader from '../../../../../components/UI/Loader/Loader';
 import AddPaymentModal from './AddPaymentModal/AddPaymentModal';
 import moment from 'moment';
 import { format } from 'date-fns';
-import { LoadingButton } from '@mui/lab';
 import Invoice from '../../../../../components/Invoice/Invoice';
 import AuthContext from '../../../../../store/auth-context';
 
@@ -130,20 +129,6 @@ const ItemType = styled.div`
         background-color: ${({ theme }) => theme.palette.success.main};
     }
 `
-const ServiceEmployee = styled.div`
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    height: 20px;
-    padding: 0 10px;
-    border-radius: 6px;
-    font-size: 12px;
-    text-transform: capitalize;
-    font-weight: 500;
-    margin-left: 10px;
-    color: ${({ theme }) => theme.palette.common.white};
-    background-color: ${({ theme }) => theme.palette.warning.dark};
-`
 const ReturnActions = styled.div`
     display: flex;
     align-items: center;
@@ -183,7 +168,7 @@ const ActionButton = styled(CustomButton)`
 
 const ViewModal = (props) => {
 
-    const { show, heading, confirmText, onConfirm, onClose, id, userData } = props;
+    const { show, heading, onClose, id, userData } = props;
 
     const { t } = useTranslation();
 
@@ -191,43 +176,12 @@ const ViewModal = (props) => {
     const { roleName } = authCtx;
 
     const [loading, setLoading] = useState(false);
-    const [bookingData, setReturnData] = useState(null);
-
-    const [loadingIntialItems, setLoadingIntialItems] = useState(false);
-
-    const [loadingItems, setLoadingItems] = useState(false);
-    const [items, setItems] = useState({ data: [], meta: { current_page: 1, last_page: 2, }, links: { next: null } });
-
-    const [loadingAllItems, setLoadingAllItems] = useState(null);
-    const [allItems, setAllItems] = useState(null)
+    const [retrunData, setReturnData] = useState(null);
 
     const [qrCode, setQrCode] = useState(null);
 
     const [paymentModalOpened, setPaymentModalOpened] = useState(false);
 
-    const getItems = useCallback(() => {
-        setLoadingIntialItems(true)
-        const headers = {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
-            }
-        }
-        const bookingItemsEndpoint = `${v2.defaults.baseURL}/vendors/returns/${id}/items`;
-
-        const getItemsData = axios.get(bookingItemsEndpoint, headers);
-
-        axios.all([getItemsData])
-            .then(axios.spread((...responses) => {
-                setLoadingIntialItems(false)
-                setItems(responses[0].data)
-            }))
-            .catch(error => {
-                setLoadingIntialItems(false)
-                console.log(error);
-            });
-    }, [id])
 
     const fetchData = useCallback(() => {
         setLoading(true);
@@ -238,10 +192,10 @@ const ViewModal = (props) => {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
         }
-        const bookingDataEndpoint = `${v2.defaults.baseURL}/vendors/returns/${id}?include[]=user&include[]=items&include[]=booking`;
+        const retrunDataEndpoint = `${v2.defaults.baseURL}/vendors/returns/${id}?include[]=user&include[]=items&include[]=payments`;
         const qrCodeEndpoint = `${v2.defaults.baseURL}/vendors/returns/${id}/qr`;
 
-        const getReturnData = axios.get(bookingDataEndpoint, headers);
+        const getReturnData = axios.get(retrunDataEndpoint, headers);
         const getQrCode = axios.get(qrCodeEndpoint, headers);
 
         axios.all([getReturnData, getQrCode])
@@ -249,44 +203,11 @@ const ViewModal = (props) => {
                 setReturnData(responses[0].data);
                 setQrCode(responses[1].data.data);
                 setLoading(false);
-                getItems()
             }))
             .catch(error => {
                 setLoading(false);
             });
-    }, [getItems, id])
-
-    const getMoreItems = useCallback(() => {
-        if (items.meta.current_page === items.meta.last_page) {
-            return;
-        }
-        const nextPage = items.links.next.slice(-1);
-        const headers = {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
-            }
-        }
-
-        const bookingItemsEndpoint = `${v2.defaults.baseURL}/vendors/returns/${id}/items?page=${nextPage}`;
-
-        const getItemsData = axios.get(bookingItemsEndpoint, headers);
-        setLoadingItems(true)
-        axios.all([getItemsData])
-            .then(axios.spread((...responses) => {
-                setItems(prevItems => {
-                    return {
-                        ...responses[0].data,
-                        data: [...prevItems.data, ...responses[0].data.data]
-                    }
-                })
-                setLoadingItems(false);
-            }))
-            .catch(error => {
-                setLoadingItems(false);
-            });
-    }, [id, items.links.next, items.meta.current_page, items.meta.last_page])
+    }, [ id])
 
     useEffect(() => {
         if (id) {
@@ -311,35 +232,6 @@ const ViewModal = (props) => {
         fetchData();
     }, [fetchData])
 
-    const getAllItems = useCallback(() => {
-        const headers = {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
-            }
-        }
-
-        const bookingItemsEndpoint = `${v2.defaults.baseURL}/vendors/returns/${id}/items?per_page=${items.meta.total}`;
-
-        const getAllItemsData = axios.get(bookingItemsEndpoint, headers);
-        setLoadingAllItems(true)
-        axios.all([getAllItemsData])
-            .then(axios.spread((...responses) => {
-                setAllItems(responses[0].data.data)
-                setLoadingAllItems(false);
-                if (qrCode) {
-                    printReturnHandler();
-                }
-            }))
-            .catch(error => {
-                setLoadingAllItems(false);
-            });
-    }, [id, items.meta.total, printReturnHandler, qrCode])
-
-    const printHandler = useCallback(() => {
-        getAllItems()
-    }, [getAllItems])
 
     let content;
     let viewedItems;
@@ -348,31 +240,23 @@ const ViewModal = (props) => {
         content = (
             <Loader height='50vh' />
         )
-    }
-    if (loadingIntialItems) {
-        viewedItems = (
-            <Loader height='150px' />
-        )
-    }
-
-    if (items && !loadingIntialItems && items.data.length > 0) {
+    } else if ( !loading && retrunData) {
         viewedItems = (
             <Grid item xs={12}>
                 <ReturnData>
-                    <ReturnDataHeading>{t('booking items')}</ReturnDataHeading>
+                    <ReturnDataHeading>{t('returned items')}</ReturnDataHeading>
                     <TableContainer component={Paper} sx={{ my: 2 }}>
                         <Table aria-label="simple table">
                             <TableHead>
                                 <TableRow>
                                     <TableCell align="center">{t('item')}</TableCell>
-                                    <TableCell align="center">{t('employee')}</TableCell>
                                     <TableCell align="center">{t('price')}</TableCell>
                                     <TableCell align="center">{t('quantity')}</TableCell>
                                     <TableCell align="center">{t('total')}</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {items.data.map((item) => (
+                                {retrunData.items.map((item) => (
                                     <TableRow
                                         key={item.id}
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -383,15 +267,6 @@ const ViewModal = (props) => {
                                                 <ItemType className={item.type}>{t(item.type)}</ItemType>
                                             </ItemInfo>
                                         </TableCell>
-                                        <TableCell align="center">
-                                            {
-                                                item.employee && (
-                                                    <ServiceEmployee>
-                                                        <span>{item.employee.name}</span>
-                                                    </ServiceEmployee>
-                                                )
-                                            }
-                                        </TableCell>
                                         <TableCell align="center">{item.price}</TableCell>
                                         <TableCell align="center">{item.quantity}</TableCell>
                                         <TableCell align="center">{formatCurrency(item.amount)}</TableCell>
@@ -401,22 +276,17 @@ const ViewModal = (props) => {
                         </Table>
                     </TableContainer>
                 </ReturnData>
-                {items.meta.current_page !== items.meta.last_page && <LoadingButton loading={loadingItems} onClick={getMoreItems} variant='text'>{t('Show more')}</LoadingButton>}
             </Grid>
         )
     }
 
-    const editReturnDisabled = (roleName === 'artist' ||  roleName === 'customer') && bookingData?.source === 'pos'
+    const editReturnDisabled = (roleName === 'artist' ||  roleName === 'customer')
 
-    if (bookingData && !loading) {
-        let name = bookingData.user.name
-        let email = bookingData.user.email
-        let mobile = bookingData.user.mobile
-        if (bookingData.source === 'pos' && roleName === 'artist') {
-            name = bookingData.company.companyName
-            email = bookingData.company.companyEmail
-            mobile = bookingData.company.companyPhone
-        }
+    if (retrunData && !loading) {
+        let name = retrunData.user.name
+        let email = retrunData.user.email
+        let mobile = retrunData.user.mobile
+
         content = (
             <Fragment>
                 <Grid container spacing={3}>
@@ -448,17 +318,17 @@ const ViewModal = (props) => {
                     </Grid>
                     <Grid item xs={12} md={6}>
                         <ReturnData>
-                            <ReturnDataHeading>{t('booking date')}</ReturnDataHeading>
+                            <ReturnDataHeading>{t('return date')}</ReturnDataHeading>
                             <ReturnList>
-                                <li><EventNoteIcon sx={{ mr: 1 }} />{format(new Date(bookingData.date_time), 'Y-MM-dd')}</li>
+                                <li><EventNoteIcon sx={{ mr: 1 }} />{format(new Date(retrunData.date_time), 'Y-MM-dd')}</li>
                             </ReturnList>
                         </ReturnData>
                     </Grid>
                     <Grid item xs={12} md={6}>
                         <ReturnData>
-                            <ReturnDataHeading>{t('booking time')}</ReturnDataHeading>
+                            <ReturnDataHeading>{t('return time')}</ReturnDataHeading>
                             <ReturnList>
-                                <li><WatchLaterIcon sx={{ mr: 1 }} />{moment.utc(bookingData.date_time).format('hh:mm A')}</li>
+                                <li><WatchLaterIcon sx={{ mr: 1 }} />{moment.utc(retrunData.date_time).format('hh:mm A')}</li>
                             </ReturnList>
                         </ReturnData>
                     </Grid>
@@ -467,56 +337,39 @@ const ViewModal = (props) => {
                         <Fragment>
                             <Grid item xs={12} sm={6} md={6}>
                                 <ReturnData>
-                                    <ReturnDataHeading>{t('payment method')}</ReturnDataHeading>
-                                    <ReturnList>
-                                        <li><MoneyIcon sx={{ mr: 1 }} />{t(bookingData.payment_gateway)}</li>
-                                    </ReturnList>
-                                </ReturnData>
-                            </Grid>
-                            <Grid item xs={12} sm={6} md={6}>
-                                <ReturnData>
-                                    <ReturnDataHeading>{t('booking status')}</ReturnDataHeading>
-                                    <ReturnList>
-                                        <li>{t(bookingData.status)}</li>
-                                    </ReturnList>
-                                </ReturnData>
-                            </Grid>
-                            <Grid item xs={12} sm={6} md={6}>
-                                <ReturnData>
                                     <ReturnDataHeading>{t('payment status')}</ReturnDataHeading>
                                     <ReturnList>
                                         <li>
-                                            {bookingData.payment_status === 'completed' && <CheckCircleIcon sx={{ mr: 1, color: '#568d00' }} />}
-                                            {bookingData.payment_status === 'pending' && <CloseIcon sx={{ mr: 1, color: 'rgb(187 163 46)' }} />}
-                                            {bookingData.payment_status === 'refunded' && <CloseIcon sx={{ mr: 1, color: '#f00' }} />}
-                                            {t(bookingData.payment_status)}
+                                            {retrunData.payment_status === 'completed' && <CheckCircleIcon sx={{ mr: 1, color: '#568d00' }} />}
+                                            {retrunData.payment_status === 'pending' && <CloseIcon sx={{ mr: 1, color: 'rgb(187 163 46)' }} />}
+                                            {t(retrunData.payment_status)}
                                         </li>
                                     </ReturnList>
                                 </ReturnData>
                             </Grid>
-                            {bookingData.remaining_amount > 0 && (
+                            {retrunData.remaining_amount > 0 && (
                                 <Grid item xs={12} sm={6} md={6}>
                                     <ReturnData>
                                         <ReturnDataHeading>{t('remaining amount')}</ReturnDataHeading>
-                                        <ReturnDataInfo>{formatCurrency(bookingData.remaining_amount)}</ReturnDataInfo>
+                                        <ReturnDataInfo>{formatCurrency(retrunData.remaining_amount)}</ReturnDataInfo>
                                     </ReturnData>
                                 </Grid>
                             )}
                             <Grid item xs={12} md={6}>
                                 <ReturnData>
                                     <ReturnDataHeading>{t('taxes ( 15% )')}</ReturnDataHeading>
-                                    <ReturnDataInfo>{formatCurrency(bookingData.vat)}</ReturnDataInfo>
+                                    <ReturnDataInfo>{formatCurrency(retrunData.vat)}</ReturnDataInfo>
                                 </ReturnData>
                             </Grid>
                             <Grid item xs={12} md={6}>
                                 <ReturnData>
                                     <ReturnDataHeading>{t('total')}</ReturnDataHeading>
-                                    <ReturnDataInfo>{formatCurrency(bookingData.price)}</ReturnDataInfo>
+                                    <ReturnDataInfo>{formatCurrency(retrunData.total)}</ReturnDataInfo>
                                 </ReturnData>
                             </Grid>
                         </Fragment>
                     )}
-                    {bookingData.payment_status === 'pending' && (
+                    {retrunData.payment_status === 'pending' && (
                         <Grid item xs={12}>
                             {editReturnDisabled ? null : (
                                 <ReturnActions>
@@ -538,7 +391,7 @@ const ViewModal = (props) => {
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
-                                            {bookingData.payments.map((item) => (
+                                            {retrunData.payments.map((item) => (
                                                 <TableRow
                                                     key={item.id}
                                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -558,26 +411,23 @@ const ViewModal = (props) => {
                             </Grid>
                             <Grid item xs={12}>
                                 <ReturnActions>
-                                    <ActionButton loading={loadingAllItems} onClick={printHandler}  ><PrintIcon />{t('print')}</ActionButton>
-                                    {bookingData.payment_status === 'refunded' && <ActionButton loading={loadingAllItems} onClick={printHandler}  ><PrintIcon />{t('print refunded invoice')}</ActionButton>}
+                                    <ActionButton onClick={printReturnHandler}  ><PrintIcon />{t('print')}</ActionButton>
                                 </ReturnActions>
                             </Grid>
                         </Fragment>
                     )}
-                    {qrCode && <Invoice userData={userData} ref={invoiceRef} bookingData={bookingData} items={allItems} qrCode={qrCode} />}
+                    {qrCode && <Invoice userData={userData} ref={invoiceRef} data={retrunData} qrCode={qrCode} refunded />}
                 </Grid>
                 <AddPaymentModal show={paymentModalOpened} id={id}
-                    remainingAmount={bookingData.remaining_amount}
+                    remainingAmount={retrunData.remaining_amount}
                     onClose={handlePaymentModalClose} onConfirm={handlePaymentModalConfirm}
                     heading='add new payment' confirmText='add' />
             </Fragment>
         )
     }
 
-    let showEdit = editReturnDisabled ? false : confirmText
-
     return (
-        <CustomModal show={show} heading={heading} confirmText={showEdit} onConfirm={onConfirm} onClose={onClose} >
+        <CustomModal show={show} heading={heading} onClose={onClose} >
             {content}
         </CustomModal>
     )

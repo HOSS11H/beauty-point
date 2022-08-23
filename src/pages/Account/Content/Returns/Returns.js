@@ -1,17 +1,15 @@
 import { Grid } from "@mui/material";
-import { useState, useContext, useEffect, useCallback, Fragment } from "react";
-import { connect } from "react-redux";
-import ReturnView from "../../../../components/UI/Dashboard/ReturnView/ReturnView";
-import { fetchReturns, deleteReturn, updateReturn, filterReturns } from "../../../../store/actions/index";
-import ThemeContext from "../../../../store/theme-context";
-import ViewModal from "./ViewModal/ViewModal";
-import EditModal from "./EditModal/EditModal";
-import SearchFilters from "./SearchFilters/SearchFilters";
-import SearchMessage from "../../../../components/Search/SearchMessage/SearchMessage";
+import { Fragment, useCallback, useContext, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import v1 from '../../../../utils/axios-instance-v1'
+import { connect } from "react-redux";
+import SearchMessage from "../../../../components/Search/SearchMessage/SearchMessage";
+import ReturnView from "../../../../components/UI/Dashboard/ReturnView/ReturnView";
 import TablePaginationActions from '../../../../components/UI/Dashboard/Table/TablePagination/TablePagination';
-import { toast } from "react-toastify";
+import { deleteReturn, fetchReturns, filterReturns } from "../../../../store/actions/index";
+import ThemeContext from "../../../../store/theme-context";
+import v1 from '../../../../utils/axios-instance-v1';
+import SearchFilters from "./SearchFilters/SearchFilters";
+import ViewModal from "./ViewModal/ViewModal";
 
 const rowsPerPage = 15;
 
@@ -19,8 +17,7 @@ function Returns(props) {
 
     const { t } = useTranslation()
 
-    const { fetchedReturns, fetchReturnsHandler, fetchingReturns, deleteReturnHandler, updateReturnHandler, 
-            updatingReturnSuccess, updatingReturnFailed, updatingReturnMessage,
+    const { fetchedReturns, fetchReturnsHandler, fetchingReturns, deleteReturnHandler,
             filteringReturns, filteringReturnsSuccess, filterReturnsHandler } = props;
 
     const themeCtx = useContext(ThemeContext)
@@ -30,8 +27,6 @@ function Returns(props) {
     const [selectedReturnId, setSelectedReturnId] = useState(null);
 
     const [viewModalOpened, setViewModalOpened] = useState(false);
-
-    const [editModalOpened, setEditModalOpened] = useState(false);
 
     const [page, setPage] = useState(0);
 
@@ -55,27 +50,6 @@ function Returns(props) {
     }, [userData]);
 
 
-    useEffect(() => {
-        if (updatingReturnSuccess) {
-            setEditModalOpened(false);
-            setSelectedReturnId(null);
-            fetchReturnsHandler(lang, page, rowsPerPage);
-            toast.success(t('Return Edited'), {
-                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
-                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
-            });
-        }
-    }, [updatingReturnSuccess, fetchReturnsHandler, lang, page, t]);
-
-    useEffect(() => {
-        if( updatingReturnFailed &&  updatingReturnMessage ) {
-            toast.error(updatingReturnMessage, {
-                position: "bottom-right", autoClose: 4000, hideProgressBar: true,
-                closeOnClick: true, pauseOnHover: false, draggable: false, progress: undefined
-            });
-        }
-    }, [updatingReturnFailed, updatingReturnMessage, t]);
-
 
     const filterReturnHandler = useCallback((filters) => {
         filterReturnsHandler({ ...filters, page: 1, per_page: rowsPerPage });
@@ -86,25 +60,6 @@ function Returns(props) {
         setPage(newPage);
         fetchReturnsHandler(lang, newPage, rowsPerPage);
     }, [fetchReturnsHandler, lang]);
-
-    // Edit Modal
-    const editModalOpenHandler = useCallback((id) => {
-        setEditModalOpened(true);
-        setSelectedReturnId(id);
-    }, [])
-    const editModalCloseHandler = useCallback(() => {
-        setEditModalOpened(false);
-        setSelectedReturnId(null);
-    }, [])
-    const editModalDeleteHandler = useCallback((id) => {
-        setEditModalOpened(false);
-        setSelectedReturnId(null);
-        deleteReturnHandler(id);
-    }, [deleteReturnHandler])
-
-    const editModalConfirmHandler = useCallback((data) => {
-        updateReturnHandler(data);
-    }, [updateReturnHandler])
 
     // View Modal
     const viewModalOpenHandler = useCallback((id) => {
@@ -120,13 +75,6 @@ function Returns(props) {
         setSelectedReturnId(null);
         deleteReturnHandler(id);
     }, [deleteReturnHandler])
-
-    const viewModalConfirmHandler = useCallback((id) => {
-        setViewModalOpened(false);
-        setSelectedReturnId(null);
-        setEditModalOpened(true);
-        editModalOpenHandler(id);
-    }, [editModalOpenHandler])
 
     let content;
 
@@ -190,15 +138,8 @@ function Returns(props) {
             {
                 viewModalOpened && (
                     <ViewModal show={viewModalOpened} id={selectedReturnId}
-                        onClose={viewModalCloseHandler} onConfirm={viewModalConfirmHandler.bind(null, selectedReturnId)}
-                        heading='view return details' confirmText='edit' onDelete={viewModalDeleteHandler} userData={userData} />
-                )
-            }
-            {
-                editModalOpened && (
-                    <EditModal show={editModalOpened} id={selectedReturnId}
-                        onClose={editModalCloseHandler} onConfirm={editModalConfirmHandler}
-                        heading='edit return details' confirmText='confirm edit' onDelete={editModalDeleteHandler} />
+                        onClose={viewModalCloseHandler}
+                        heading='view return details'  onDelete={viewModalDeleteHandler} userData={userData} />
                 )
             }
         </Grid>
@@ -211,9 +152,6 @@ const mapStateToProps = state => {
         fetchingReturns: state.returns.fetchingReturns,
         filteringReturns: state.returns.filteringReturns,
         filteringReturnsSuccess: state.returns.filteringReturnsSuccess,
-        updatingReturnSuccess: state.returns.updatingReturnSuccess,
-        updatingReturnFailed: state.returns.updatingReturnFailed,
-        updatingReturnMessage: state.returns.updatingReturnMessage,
     }
 }
 
@@ -222,7 +160,6 @@ const mapDispatchToProps = dispatch => {
         fetchReturnsHandler: (language, page, perPage) => dispatch(fetchReturns(language, page, perPage)),
         filterReturnsHandler: (params) => dispatch(filterReturns(params)),
         deleteReturnHandler: (id) => dispatch(deleteReturn(id)),
-        updateReturnHandler: (data) => dispatch(updateReturn(data)),
     }
 }
 

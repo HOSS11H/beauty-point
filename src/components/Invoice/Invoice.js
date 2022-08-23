@@ -214,13 +214,13 @@ const BookingCopyright = styled.p`
 const Invoice = React.forwardRef((props, ref) => {
 	const { t } = useTranslation();
 
-	const { bookingData, userData, qrCode } = props
+	const { data, userData, qrCode, refunded } = props
 
 
 
 	let billNumber;
 	let billTitle;
-	if (bookingData.payment_status === 'refunded') {
+	if (refunded) {
 		billTitle = (
 			<Fragment>
 				<span>فاتورة استرجاع</span>
@@ -229,8 +229,8 @@ const Invoice = React.forwardRef((props, ref) => {
 		)
 		billNumber = (
 			<Fragment>
-				<ClientBill>رقم فاتورة الاسترجاع : {bookingData.refunded_id ?? 1}</ClientBill>
-				<ClientBill>رقم الفاتورة الأصلية : {bookingData.id}</ClientBill>
+				<ClientBill>رقم فاتورة الاسترجاع : {data.id}</ClientBill>
+				<ClientBill>رقم الفاتورة الأصلية : {data.booking_id}</ClientBill>
 			</Fragment>
 		)
 	} else {
@@ -240,18 +240,18 @@ const Invoice = React.forwardRef((props, ref) => {
 				<span>Simplified Tax Invoice</span>
 			</Fragment>
 		)
-		billNumber = <ClientBill>رقم الفاتورة : {bookingData.id}</ClientBill>
+		billNumber = <ClientBill>رقم الفاتورة : {data.id}</ClientBill>
 	}
 
 	let BookingPlace;
 
-	if (bookingData.booking_place) {
+	if (data.booking_place) {
 		BookingPlace = (
 			<Fragment>
 				<BookingTimeInfo>
-					{bookingData.booking_place === 'in_house' && <span>{t('in house')}</span>}
-					{bookingData.booking_place === 'in_saloon' && <span>{t('in saloon')}</span>}
-					{bookingData.booking_place === 'in_customer_house' && <span>{t('in customer house')}</span>}
+					{data.booking_place === 'in_house' && <span>{t('in house')}</span>}
+					{data.booking_place === 'in_saloon' && <span>{t('in saloon')}</span>}
+					{data.booking_place === 'in_customer_house' && <span>{t('in customer house')}</span>}
 					<span> : مكان الحجز</span>
 				</BookingTimeInfo>
 			</Fragment>
@@ -260,14 +260,23 @@ const Invoice = React.forwardRef((props, ref) => {
 
 	let paidTo;
 
-	if (bookingData.status === 'completed' || bookingData.status === 'approved') {
+	if ( (data.status === 'completed' || data.status === 'approved') && !refunded ) {
 		paidTo = (
 			<BookingStatusInfo>
 				<span>{t(userData.user.name)}</span>
 				<span>: دفع الي</span>
 			</BookingStatusInfo>
 		)
+	} else if ( refunded ) {
+		paidTo = (
+			<BookingStatusInfo>
+				<span>{t(data.user.name)}</span>
+				<span>: دفع الي</span>
+			</BookingStatusInfo>
+		)
 	}
+
+	let total = refunded ? data.total : data.price;
 
 	return (
 		<div style={{ display: 'none' }} >
@@ -285,33 +294,35 @@ const Invoice = React.forwardRef((props, ref) => {
 							<CompanyInfo><span>{userData.user.company?.tax_record}</span> : الرقم الضريبي</CompanyInfo>
 							{billNumber}
 							<BookingTimeInfo>
-								تاريخ الحجز : {moment.utc(bookingData.date_time).format('YYYY-MM-DD')}
+								تاريخ الفاتورة : {moment.utc(data.date_time).format('YYYY-MM-DD')}
 							</BookingTimeInfo>
 							<BookingTimeInfo>
-								<span>{moment.utc(bookingData.date_time).format('hh:mm a')}</span>
-								<span> : وقت الحجز</span>
+								<span>{moment.utc(data.date_time).format('hh:mm a')}</span>
+								<span> : وقت الفاتورة</span>
 							</BookingTimeInfo>
 							{BookingPlace}
 							<Grid sx={{ width: '100%' }} container spacing={1}>
 								<Grid item xs={6}>
 									{paidTo}
 									<BookingStatusInfo>
-										<span>{t(bookingData.payment_status)}</span>
+										<span>{t(data.payment_status)}</span>
 										<span>: حالة الدفع</span>
 									</BookingStatusInfo>
 								</Grid>
 								<Grid item xs={6}>
 									<BookingStatusInfo>
-										<span>{t(bookingData.user.name)}</span>
+										<span>{t(data.user.name)}</span>
 										<span>: العميل</span>
 									</BookingStatusInfo>
-									<BookingStatusInfo>
-										<span>{t(bookingData.status)}</span>
-										<span>: حالة الحجز</span>
-									</BookingStatusInfo>
+									{!refunded && (
+										<BookingStatusInfo>
+											<span>{t(data.status)}</span>
+											<span>: حالة الحجز</span>
+										</BookingStatusInfo>
+									) }
 								</Grid>
 							</Grid>
-							<BookingDataHeading>{t('booking items')}</BookingDataHeading>
+							<BookingDataHeading>{!refunded ? t('booking items') : t('returned items')}</BookingDataHeading>
 							<TableContainer sx={{ my: 2, bakground: 'transparent' }}>
 								<Table aria-label="simple table"size="small" >
 									<TableHead>
@@ -331,7 +342,7 @@ const Invoice = React.forwardRef((props, ref) => {
 										</TableRow>
 									</TableHead>
 									<TableBody>
-										{bookingData.items && bookingData.items.map((item, index) => {
+										{data.items && data.items.map((item, index) => {
 											return (
 												<TableRow
 													key={index}
@@ -357,34 +368,38 @@ const Invoice = React.forwardRef((props, ref) => {
 							<BillPricesWrapper>
 								<BillPrice>
 									<i>المجموع قبل الضريبة :</i>
-									<span>{formatCurrency((bookingData.price + bookingData.discount - bookingData.vat))}</span>
+									<span>{formatCurrency((total + (data.discount || 0) - data.vat))}</span>
 								</BillPrice>
 								<BillPrice>
 									<i>ضريبة القيمة المضافة %15 : </i>
-									<span>{formatCurrency(bookingData.vat)}</span>
+									<span>{formatCurrency(data.vat)}</span>
 								</BillPrice>
-								<BillPrice>
-									<span>المجموع : </span>
-									<span>{formatCurrency(bookingData.price + bookingData.discount)}</span>
-								</BillPrice>
-								<BillPrice>
-									<span>قيمة الخصم : </span>
-									<span>{formatCurrency(bookingData.discount)}</span>
-								</BillPrice>
+								{!refunded && (
+									<Fragment>
+										<BillPrice>
+											<span>المجموع : </span>
+											<span>{formatCurrency(total + data.discount)}</span>
+										</BillPrice>
+										<BillPrice>
+											<span>قيمة الخصم : </span>
+											<span>{formatCurrency(data.discount)}</span>
+										</BillPrice>
+									</Fragment>
+								) }
 								<BillPrice>
 									<span>الاجمالي : </span>
-									<span>{formatCurrency(bookingData.price)}</span>
+									<span>{formatCurrency(total)}</span>
 								</BillPrice>
-								{bookingData.remaining_amount > 0 && (
+								{data.remaining_amount > 0 && (
 									<BillPrice>
 										<span>المبلغ المدفوع : </span>
-										<span>{formatCurrency(bookingData.price - bookingData.remaining_amount)}</span>
+										<span>{formatCurrency(total - data.remaining_amount)}</span>
 									</BillPrice>
 								)}
-								{bookingData.remaining_amount > 0 && (
+								{data.remaining_amount > 0 && (
 									<BillPrice>
 										<span>المبلغ المتبقي : </span>
-										<span>{formatCurrency(bookingData.remaining_amount)}</span>
+										<span>{formatCurrency(data.remaining_amount)}</span>
 									</BillPrice>
 								)}
 								<TableContainer sx={{ mt: 2, bakground: 'transparent'}}>
@@ -402,7 +417,7 @@ const Invoice = React.forwardRef((props, ref) => {
 											</TableRow>
 										</TableHead>
 										<TableBody>
-											{bookingData.payments.map((payment, index) => {
+											{data.payments.map((payment, index) => {
 												return (
 													<TableRow key={index} >
 														<CustomTableCell component="th" scope="row" align="center">
