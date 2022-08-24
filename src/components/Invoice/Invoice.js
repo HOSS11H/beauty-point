@@ -258,9 +258,15 @@ const Invoice = React.forwardRef((props, ref) => {
 		)
 	}
 
+	let customer;
 	let paidTo;
-
 	if ( (data.status === 'completed' || data.status === 'approved') && !refunded ) {
+		customer = (
+			<BookingStatusInfo>
+				<span>{t(data.user.name)}</span>
+				<span>: العميل</span>
+			</BookingStatusInfo>
+		)
 		paidTo = (
 			<BookingStatusInfo>
 				<span>{t(userData.user.name)}</span>
@@ -268,6 +274,12 @@ const Invoice = React.forwardRef((props, ref) => {
 			</BookingStatusInfo>
 		)
 	} else if ( refunded ) {
+		customer = (
+			<BookingStatusInfo>
+				<span>{t(userData.user.name)}</span>
+				<span>: الموظف</span>
+			</BookingStatusInfo>
+		)
 		paidTo = (
 			<BookingStatusInfo>
 				<span>{t(data.user.name)}</span>
@@ -310,10 +322,7 @@ const Invoice = React.forwardRef((props, ref) => {
 									</BookingStatusInfo>
 								</Grid>
 								<Grid item xs={6}>
-									<BookingStatusInfo>
-										<span>{t(data.user.name)}</span>
-										<span>: العميل</span>
-									</BookingStatusInfo>
+									{customer}
 									{!refunded && (
 										<BookingStatusInfo>
 											<span>{t(data.status)}</span>
