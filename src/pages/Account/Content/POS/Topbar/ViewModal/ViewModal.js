@@ -19,6 +19,11 @@ const ViewModal = props => {
                         <ListItemText primary={t('returns')} />
                     </ListItemButton>
                 </ListItem>
+                <ListItem disablePadding>
+                    <ListItemButton onClick={() => changeView('bookings')} selected={view === 'bookings'} >
+                        <ListItemText primary={t('bookings')} />
+                    </ListItemButton>
+                </ListItem>
             </List>
         </POSModal>
     )

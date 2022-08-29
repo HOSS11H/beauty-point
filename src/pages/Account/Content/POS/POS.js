@@ -1,16 +1,9 @@
 import { useCallback, useState } from 'react'
 import { Fragment } from 'react'
-import styled from 'styled-components'
+import Bookings from './Bookings/Bookings'
 import Returns from './Returns/Returns'
 import Sales from './Sales/Sales'
 import Topbar from './Topbar/Topbar'
-
-const Wrapper = styled.div`
-    display: grid;
-    grid-template-columns: auto 468px;
-    grid-gap: 20px;
-    min-height: 100vh;
-`
 
 const POS = props => {
 
@@ -28,6 +21,9 @@ const POS = props => {
             break;
         case 'returns':
             content = <Returns />
+            break;
+        case 'bookings':
+            content = <Bookings />
             break;
         default:
     }
