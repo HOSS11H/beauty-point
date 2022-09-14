@@ -38,9 +38,9 @@ import('./pages/Account/Content/Orders/Orders')
 const Returns = React.lazy(() =>
 import('./pages/Account/Content/Returns/Returns')
 );
-const PointOfSale = React.lazy(() =>
+/* const PointOfSale = React.lazy(() =>
 import('./pages/Account/Content/PointOfSale/PointOfSale')
-);
+); */
 const POS = React.lazy(() =>
 import('./pages/Account/Content/POS/POS')
 );
