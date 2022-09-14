@@ -270,7 +270,7 @@ function App(props) {
                             </PermissibleRender>
                         } />
                     </Route>
-                    <Route path="point-of-sale" element={
+                    {/* <Route path="point-of-sale" element={
                         <PermissibleRender
                             userPermissions={permissions}
                             requiredPermissions={['create_booking']}
@@ -278,8 +278,8 @@ function App(props) {
                         >
                             <PointOfSale />
                         </PermissibleRender>
-                    } />
-                    <Route path="pos" element={
+                    } /> */}
+                    <Route path="point-of-sale" element={
                         <PermissibleRender
                             userPermissions={permissions}
                             requiredPermissions={['create_booking']}
