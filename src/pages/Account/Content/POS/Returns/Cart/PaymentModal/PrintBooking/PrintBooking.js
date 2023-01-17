@@ -7,7 +7,7 @@ import { useReactToPrint } from "react-to-print";
 import Loader from "../../../../../../../../components/UI/Loader/Loader";
 import styled from 'styled-components';
 import { Button } from "@mui/material";
-import Invoice from "../../../../../../../../components/Invoice/Invoice";
+import ReturnInvoice from "../../../../../../../../components/ReturnInvoice/ReturnInvoice";
 import PrintIcon from '@mui/icons-material/Print';
 import { Fragment } from "react";
 
@@ -48,7 +48,7 @@ const PrintBooking = (props) => {
             }
         }
         const userDataEndpoint = `${v1.defaults.baseURL}/auth/me`;
-        const qrCodeEndpoint = `${v2.defaults.baseURL}/vendors/bookings/${bookingData.id}/qr`;
+        const qrCodeEndpoint = `${v2.defaults.baseURL}/vendors/returns/${bookingData.id}/qr`;
 
         const getUserData = axios.get(userDataEndpoint, headers);
         const getQrCode = axios.get(qrCodeEndpoint, headers);
@@ -89,7 +89,7 @@ const PrintBooking = (props) => {
             <Wrapper>
                 <Message>{t('Your order has been booked successfully')}</Message>
                 <Button onClick={handlePrint} color='secondary' variant='contained' ><PrintIcon />{t('print')}</Button>
-                {qrCode && <Invoice userData={userData} ref={invoiceRef} data={bookingData} qrCode={qrCode} />}
+                {qrCode && <ReturnInvoice userData={userData} ref={invoiceRef} data={bookingData} qrCode={qrCode} />}
             </Wrapper>
         )
     }

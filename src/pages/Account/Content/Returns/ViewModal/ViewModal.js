@@ -30,7 +30,7 @@ import Loader from '../../../../../components/UI/Loader/Loader';
 import AddPaymentModal from './AddPaymentModal/AddPaymentModal';
 import moment from 'moment';
 import { format } from 'date-fns';
-import Invoice from '../../../../../components/Invoice/Invoice';
+import ReturnInvoice from '../../../../../components/ReturnInvoice/ReturnInvoice';
 import AuthContext from '../../../../../store/auth-context';
 
 const ClientDetails = styled.div`
@@ -416,7 +416,7 @@ const ViewModal = (props) => {
                             </Grid>
                         </Fragment>
                     )}
-                    {qrCode && <Invoice userData={userData} ref={invoiceRef} data={retrunData} qrCode={qrCode} refunded />}
+                    {qrCode && <ReturnInvoice userData={userData} ref={invoiceRef} data={retrunData} qrCode={qrCode} />}
                 </Grid>
                 <AddPaymentModal show={paymentModalOpened} id={id}
                     remainingAmount={retrunData.remaining_amount}

@@ -49,7 +49,6 @@ const Orders = props => {
     }
     console.log(resetFilters)
     useEffect(() => {
-        console.log('ex')
         refetchResults()
     }, [resetFilters])
 
@@ -85,7 +84,6 @@ const Orders = props => {
             term: search,
         }
         fetchResults( params )
-        console.log('ex 2')
     }, [fetchResults, page, search, resetFilters])
 
     const lastElementRef = useCallback((node) => {

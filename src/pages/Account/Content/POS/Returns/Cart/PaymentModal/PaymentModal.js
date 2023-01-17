@@ -170,7 +170,7 @@ const PaymentModal = props => {
                 setReturnedOrderData(response.data);
                 resetCart()
                 toast.success(t('Your Return has been sent successfully'))
-                handleClose()
+                //handleClose()
             })
             .catch(err => {
                 setReturningOrder(false);
