@@ -1,6 +1,6 @@
 import DeleteIcon from '@mui/icons-material/Delete';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Accordion, AccordionDetails, AccordionSummary, Grid, IconButton, TextField } from "@mui/material";
+import ExpandCircleDownIcon from '@mui/icons-material/ExpandCircleDown';
+import { Accordion, AccordionDetails, AccordionSummary, Grid, IconButton, TextField, Tooltip } from "@mui/material";
 import Box from '@mui/material/Box';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
@@ -45,7 +45,7 @@ const CustomAccordion = styled(Accordion)`
 
 const CartItem = props => {
 
-    const { item, remove, increase, decrease, type, changePrice, changeEmployee, employees, lastElementRef} = props;
+    const { item, remove, increase, decrease, type, changePrice, changeEmployee, employees, lastElementRef } = props;
 
     const { t } = useTranslation()
 
@@ -72,7 +72,10 @@ const CartItem = props => {
     return (
         <CustomAccordion expanded={expanded} >
             <AccordionSummary
-                expandIcon={<ExpandMoreIcon sx={{ cursor: 'pointer' }} onClick={toggleAcordion} />}
+                expandIcon={<Tooltip title={t('click to change price and add employee')}>
+                    <ExpandCircleDownIcon sx={{ cursor: 'pointer' }} onClick={toggleAcordion} />
+                </Tooltip>
+                }
             >
                 <Box sx={{ flexBasis: '200px' }} >
                     <TableData>
@@ -110,13 +113,13 @@ const CartItem = props => {
                                     {t('none')}
                                 </MenuItem>
                                 {employees.map((employee, index) => {
-                                    if (employees.length - 1 === index  ) {
+                                    if (employees.length - 1 === index) {
                                         return (
                                             <MenuItem key={index} value={employee.id} ref={lastElementRef}>
                                                 {employee.name}
                                             </MenuItem>
                                         )
-                                    } 
+                                    }
                                     return (
                                         <MenuItem key={index} value={employee.id} >
                                             {employee.name}

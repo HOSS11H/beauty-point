@@ -115,6 +115,7 @@ const Items = props => {
         content = (
             <List>
                 {data.map((item, index) => {
+                    console.log(item)
                     if (data.length - 1 === index) {
                         return (
                             <ListItemButton key={item.id} ref={lastElementRef} onClick={clickHandler.bind(null, item.id)} >
@@ -125,6 +126,7 @@ const Items = props => {
                                     <EventNoteIcon />
                                     {moment(item.dateTime).format('YYYY-MM-DD hh:mm: a')}
                                 </Chip>
+                                <Chip  color='secondary' >{item.user.name}</Chip>
                             </ListItemButton>
                         )
                     }
@@ -137,6 +139,7 @@ const Items = props => {
                                 <EventNoteIcon />
                                 {moment(item.dateTime).format('YYYY-MM-DD hh:mm: a')}
                             </Chip>
+                            <Chip  color='secondary' >{item.user.name}</Chip>
                         </ListItemButton>
                     )
                 })}

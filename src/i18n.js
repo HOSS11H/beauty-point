@@ -670,6 +670,7 @@ const resources = {
             'returned from booking #': 'مسترجع من حجز رقم # ',
             'returned items': 'العناصر المسترجعة',
             'returns': 'المسترجع',
+            'click to change price and add employee': 'انقر لتغيير السعر وإضافة الموظف',
         }
     }
 };
