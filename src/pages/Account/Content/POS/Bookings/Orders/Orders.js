@@ -13,7 +13,7 @@ const Wrapper = styled.div`
 const rowsPerPage = 25;
 
 const Orders = props => {
-    const { assignCart, addBookingData } = props;
+    const { assignCart, addBookingData, resetFilters } = props;
 
     const { t } = useTranslation()
 
@@ -41,6 +41,17 @@ const Orders = props => {
         setPage(1)
         setLastPage(false)
     }
+
+    const refetchResults = () => {
+        setResults([])
+        setPage(1)
+        setLastPage(false)
+    }
+    console.log(resetFilters)
+    useEffect(() => {
+        console.log('ex')
+        refetchResults()
+    }, [resetFilters])
 
     const fetchResults = useCallback( ( searchParams ) => {
         const notEmptySearchParams = {};
@@ -74,7 +85,8 @@ const Orders = props => {
             term: search,
         }
         fetchResults( params )
-    }, [fetchResults, page, search])
+        console.log('ex 2')
+    }, [fetchResults, page, search, resetFilters])
 
     const lastElementRef = useCallback((node) => {
         if (loadingResults) return;

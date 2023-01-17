@@ -90,6 +90,7 @@ const Bookings = props => {
     const [bookingData, setBookingData] = useState(null)
     const [dateTime, setDateTime] = useState(moment());
     const [bookingStatus, setBookingStatus] = useState('')
+    const [resetFilters, setResetFilters] = useState(0)
 
     useEffect(() => {
         if (bookingData) {
@@ -229,6 +230,7 @@ const Bookings = props => {
         dispatch({
             type: 'RESET_CART',
         })
+        setResetFilters(prevState => prevState + 1)
     }, [])
 
     const handleDateChange = (newValue) => {
@@ -260,7 +262,7 @@ const Bookings = props => {
 
     return (
         <Wrapper>
-            <Orders assignCart={assignCartHandler} addBookingData={addBookingData} />
+            <Orders assignCart={assignCartHandler} addBookingData={addBookingData} resetFilters={resetFilters} />
             <Cart
                 bookingData={bookingData} items={cart} removeItem={removeFromCartHandler} increaseItem={increaseItemHandler}
                 decreaseItem={decreaseItemHandler} changePrice={changeItemPriceHandler} changeEmployee={changeEmployeeHandler}

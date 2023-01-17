@@ -210,16 +210,18 @@ const Cart = props => {
     }
 
     const bookOrderHandler = () => {
-        console.log(items)
         let flattenedItems = [...items.services, ...items.deals, ...items.products]
         let formattedItems = []
         flattenedItems.forEach( item => {
-            return formattedItems.push( { item_id: item.id , employee_id: item.employee_id || null  } )
+            if (!item.employee_id || item.employee_id === 'none') {
+                return formattedItems.push( { item_id: item.id , employee_id: null  } )
+            }
+            return formattedItems.push( { item_id: item.id , employee_id: item.employee_id  } )
         } )
         const data = {
             items: formattedItems,
             dateTime: moment(dateTime).format('YYYY-MM-DD hh:mm A'),
-            status: bookingData.status,
+            status,
         }
         setSubmitting(true);
         axios.put(`/vendors/bookings/${bookingData.id}`, data)
@@ -269,7 +271,7 @@ const Cart = props => {
                 <ItemsWrapper>
                     {formatedItems.map((item, index) => {
                         return (
-                            <CartItem key={index} item={item}
+                            <CartItem key={item.id} item={item}
                                 type={item.type} changeEmployee={changeEmployee}
                                 employees={employees} lastElementRef={lastElementRef} />
                         )
