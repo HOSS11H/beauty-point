@@ -60,6 +60,12 @@ const headCells = [
         disablePadding: false,
         label: 'total amount',
     },
+    {
+        id: 'payment_status',
+        numeric: false,
+        disablePadding: false,
+        label: 'payment status',
+    },
 ];
 
 

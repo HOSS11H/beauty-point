@@ -12,6 +12,8 @@ import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
+import { Box } from '@mui/material';
+import { formatCurrency } from '../../../../../../../shared/utility';
 
 const TableStatus = styled.div`
     display: flex;
@@ -135,10 +137,25 @@ const EnhancedTableBody = props => {
                             <TableData $hasIcon>{row.payment_status === 'refunded' &&<KeyboardReturnIcon sx={{ mr: 1, color: '#f00' }} />}{row.tax}</TableData>
                         </TableCell>
                         <TableCell align="center">
-                            <TableData>{t(row.payment_gateway)}</TableData>
+                            <TableData>{row.payments.map((payment, index) => {
+                                return (
+                                    <Box sx={{mb: 1}} key={index}>
+                                        {t(payment.gateway)}
+                                    </Box>
+                                )
+                            })}</TableData>
                         </TableCell>
                         <TableCell align="center">
-                            <TableData style= { {display: 'flex'} } >{row.payment_status === 'completed' ? <CheckCircleIcon sx={{ mr: 1, color: '#568d00' }} /> : <PendingIcon sx={{ mr: 1, color: '#f9b904' }} />}{row.amount}</TableData>
+                            <TableData>{row.payments.map((payment, index) => {
+                                    return (
+                                        <Box sx={{mb: 1}} key={index}>
+                                            {formatCurrency(payment.amount)}
+                                        </Box>
+                                    )
+                                })}</TableData>
+                        </TableCell>
+                        <TableCell align="center">
+                            <TableData style= { {display: 'flex', justifyContent: 'center'} } >{row.payment_status === 'completed' ? <CheckCircleIcon sx={{ color: '#568d00' }} /> : <PendingIcon sx={{ color: '#f9b904' }} />}</TableData>
                         </TableCell>
                     </TableRow>
                 );
