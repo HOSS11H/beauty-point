@@ -340,6 +340,7 @@ const ViewModal = (props) => {
     const printHandler = useCallback(() => {
         getAllItems()
     }, [getAllItems])
+    console.log(allItems)
 
     let content;
     let viewedItems;

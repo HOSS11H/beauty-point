@@ -214,7 +214,7 @@ const BookingCopyright = styled.p`
 const Invoice = React.forwardRef((props, ref) => {
 	const { t } = useTranslation();
 
-	const { data, userData, qrCode, refunded } = props
+	const { data, userData, qrCode, refunded, items } = props
 
 
 
@@ -369,8 +369,26 @@ const Invoice = React.forwardRef((props, ref) => {
 													</CustomTableCell>
 												</TableRow>
 											)
-										})
-										}
+										})}
+										{items&& items.map((item, index) => {
+											return (
+												<TableRow
+													key={index}
+													sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+												>
+													<CustomTableCell component="th" scope="row" align="center">
+														{<BookingDataBody>{item.name}</BookingDataBody>}
+														{item.employee && <ItemEmployee>( {item.employee.name} )</ItemEmployee>}
+													</CustomTableCell>
+													<CustomTableCell align="center">
+														{<BookingDataBody>{`${item.quantity} x ${item.price}`}</BookingDataBody>}
+													</CustomTableCell>
+													<CustomTableCell align="center">
+														{<BookingDataBody>{formatCurrency(item.amount)}</BookingDataBody>}
+													</CustomTableCell>
+												</TableRow>
+											)
+										})}
 									</TableBody>
 								</Table>
 							</TableContainer>
